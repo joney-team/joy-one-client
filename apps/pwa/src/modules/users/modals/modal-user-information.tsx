@@ -5,16 +5,16 @@ import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
-import { UseList, useList } from "@/components/list/use-list";
+import { useList, type UseList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { useColor } from "@/modules/theme/use-color";
-import { UserWorkspaceSettings } from "@/modules/users/components/user-workspace-settings-form";
 import { getUserPublicInformation } from "@/modules/users/users-service";
 import { UserPublicInformation } from "@/modules/users/users-types";
+import { WorkspaceMemberSetting } from "@/modules/workspace-members/components/workspace-member-setting";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
@@ -223,7 +223,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
         {!!member && (
           <Tabs.Panel value="workspace-settings" pt={16}>
-            <UserWorkspaceSettings userId={user._id} onClose={props.onClose} removeable />
+            <WorkspaceMemberSetting userId={user._id} onClose={props.onClose} removeable />
           </Tabs.Panel>
         )}
       </Tabs>

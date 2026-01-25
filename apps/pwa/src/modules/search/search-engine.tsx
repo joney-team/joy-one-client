@@ -43,7 +43,6 @@ import {
 import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
-import { useTaskRouter } from "../tasks/hooks/use-task-router";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
 import {
   useAvailableWorkspaceModules,
@@ -52,12 +51,11 @@ import {
 } from "../workspaces/workspace-modules";
 
 export const SearchEngine: FC = () => {
+  const { i18n, t } = useLingui();
   const workspace = useWorkspace();
   const { getModule } = useWorkspaceModules();
   const { isModuleAvailable, availableModules } = useAvailableWorkspaceModules();
   const router = useRouter();
-  const taskRouter = useTaskRouter();
-  const { i18n, t } = useLingui();
 
   const [query, setQuery] = useState("");
   const [searchResult, setSearchResult] = useState<SearchResult | undefined>(undefined);

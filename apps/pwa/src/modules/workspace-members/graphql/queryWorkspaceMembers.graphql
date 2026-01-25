@@ -6,17 +6,19 @@ query WorkspaceMembers(
   $userId: [String!]
   $limit: Float
   $offset: Float
+  $query: JSONObject
 ) {
-  workspaceMembers(
+  list: workspaceMembers(
     ignoreSelf: $ignoreSelf
     ids: $ids
     userId: $userId
     limit: $limit
     offset: $offset
+    query: $query
   ) {
-    data {
+    results {
       ...WorkspaceMemberData
     }
-    count
+    total
   }
 }

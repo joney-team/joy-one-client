@@ -3,8 +3,6 @@
 import { Layout, renderPage } from "@/layout/layout-page";
 
 const Content = renderPage(() =>
-  import("@/modules/workspace-settings/workspace-setting-file-manager").then(
-    (mod) => mod.WorkspaceFileManager
-  )
+  import("@/modules/files/files-manager").then((mod) => mod.FilesManager)
 );
 export default () => <Layout component={Content} />;

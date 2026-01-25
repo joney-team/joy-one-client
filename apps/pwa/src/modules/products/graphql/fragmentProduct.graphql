@@ -1,0 +1,3 @@
+fragment ProductData on Product { 
+  _id
+}

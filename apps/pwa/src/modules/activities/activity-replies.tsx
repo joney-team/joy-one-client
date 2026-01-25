@@ -3,13 +3,13 @@
 import { useQuery } from "@apollo/client/react";
 import { Group, Stack } from "@mantine/core";
 import { type FC } from "react";
-import { ActivityInput } from "./activity-input";
 import { ActivitiesProps } from "./activities-types";
+import { ActivityCard } from "./activity-card";
+import { ActivityInput } from "./activity-input";
 import QUERY_ACTIVITIES, {
   type ActivitiesQuery,
   type ActivitiesQueryVariables,
 } from "./graphql/queryActivities.graphql";
-import { ActivityCard } from "./activity-card";
 
 export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFocus?: boolean }> = ({
   activityId,
@@ -29,7 +29,7 @@ export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFoc
   return (
     <Stack pl="lg" gap={0}>
       <Stack gap={0}>
-        {data?.activities.data.map((activity) => (
+        {data?.activities.results.map((activity) => (
           <ActivityCard key={activity._id} activity={activity} />
         ))}
       </Stack>

@@ -7,7 +7,7 @@ export type CustomersQueryVariables = Types.Exact<{
 }>;
 
 
-export type CustomersQuery = { __typename: 'Query', customers: { __typename: 'CustomersPaginated', count: number, data: Array<{ __typename: 'Customer', _id: string, code: string, name: string, avatar: string | null, phone: string | null }> } };
+export type CustomersQuery = { __typename: 'Query', list: { __typename: 'CustomersPaginated', total: number, results: Array<{ __typename: 'Customer', refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, _id: string, code: string, codePrefix: string | null, plainCode: string | null, name: string, birthday: number | null, birthdayDate: number | null, birthdayMonth: number | null, phone: string | null, avatar: string | null, email: string | null, presenterCustomerId: string | null, gender: Types.Gender | null, medicalHistory: Array<string> | null, assigneeUserIds: Array<string> | null, tagIds: Array<string> | null, salaryAmount: number | null, relatedCustomerIds: Array<string> | null }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

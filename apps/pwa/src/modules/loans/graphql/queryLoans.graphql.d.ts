@@ -6,10 +6,11 @@ export type LoansQueryVariables = Types.Exact<{
   limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   sortCreatedAt?: Types.InputMaybe<Types.SortDirection>;
+  query?: Types.InputMaybe<Types.Scalars['JSONObject']['input']>;
 }>;
 
 
-export type LoansQuery = { __typename: 'Query', loans: { __typename: 'LoansPaginated', count: number, data: Array<{ __typename: 'Loan', id: string, code: string, status: Types.LoanStatus, amount: number, customerCidNumber: string | null, assetType: Types.LoanAssetType, rejectReason: string | null, createdAt: number | null, isHasLateInterestReceipt: boolean | null }> } };
+export type LoansQuery = { __typename: 'Query', list: { __typename: 'LoansPaginated', total: number, results: Array<{ __typename: 'Loan', id: string, code: string, customerId: string, customerCidNumber: string | null, workspaceBranchId: string | null, amount: number, packageId: string, package: any, packagePeriodDays: number, paymentPeriods: any | null, assetType: Types.LoanAssetType, assetData: any | null, paymentProgress: any | null, metadata: any | null, status: Types.LoanStatus, rejectReason: string | null, payment: any | null, createdAt: number | null, nextReceiptAt: number | null, isHasLateInterestReceipt: boolean | null, isLiquidated: boolean | null, fulfilledAt: number | null, customer: { __typename: 'Customer', _id: string, name: string } }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

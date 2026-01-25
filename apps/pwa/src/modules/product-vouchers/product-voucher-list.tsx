@@ -3,14 +3,14 @@ import { type FC } from "react";
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
+import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import { getProducts } from "@/modules/products/products-service";
 import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useList } from "@/components/list/use-list";
 import { Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import InfiniteScroll from "react-infinite-scroller";
 

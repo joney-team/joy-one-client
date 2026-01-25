@@ -1,0 +1,35 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+query ProductStockRecords($query: JSONObject, $offset: Float, $limit: Float) {
+  productStockRecords(query: $query, offset: $offset, limit: $limit) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      id
+      _count
+      _id
+      ref
+      stockCode
+      type
+      quantity
+      productId
+      product {
+        _id
+        name
+      }
+      productStockId
+      relatedProductId
+      relatedProduct {
+        _id
+        name
+      }
+      relatedOrderId
+      note
+      createdByUser {
+        ...WorkspaceMemberData
+      }
+    }
+  }
+}

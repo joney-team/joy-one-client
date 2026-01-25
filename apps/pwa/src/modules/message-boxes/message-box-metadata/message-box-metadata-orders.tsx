@@ -1,10 +1,10 @@
+import { Empty } from "@/components/empty";
 import { useList } from "@/components/list/use-list";
-import { AccordionItemComponent } from "./message-box-metadata-types";
+import { EventType } from "@/graphql/enums.graphql";
+import { OrderCard } from "@/modules/orders/order-card";
 import { getOrders } from "@/modules/orders/orders-service";
 import { Stack } from "@mantine/core";
-import { Empty } from "@/components/empty";
-import { OrderCard } from "@/modules/orders/order-card";
-import { EventType } from "@/graphql/enums.graphql";
+import { AccordionItemComponent } from "./message-box-metadata-types";
 
 export const MessageBoxMetadataOrders: AccordionItemComponent = ({ customer }) => {
   const orders = useList({

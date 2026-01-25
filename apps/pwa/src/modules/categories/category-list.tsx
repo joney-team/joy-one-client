@@ -13,6 +13,8 @@ import { categoryTypes } from "./category-constants";
 import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
 
+import QUERY_CATEGORIES from "./graphql/queryCategories.graphql";
+
 export const CategoryList: FC = () => {
   return (
     <Stack p={16}>
@@ -20,7 +22,7 @@ export const CategoryList: FC = () => {
         id="categories"
         name={<Trans>Categories</Trans>}
         icon={IconCategory}
-        route="/categories"
+        query={QUERY_CATEGORIES}
         columns={{
           name: {
             name: <Trans>Name</Trans>,

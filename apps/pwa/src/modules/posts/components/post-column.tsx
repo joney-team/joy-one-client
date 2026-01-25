@@ -31,7 +31,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
         ...args?.filter,
         multiple: true,
         listRoute: "/posts",
-        getOptions: async (ids: string[]) => {
+        getSelectedOptions: async (ids: string[]) => {
           const options = await api.get<PostEntity[]>("/posts/ids", { params: { ids } });
           return options.map((v) => ({
             label: v.title,

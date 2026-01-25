@@ -25,4 +25,5 @@ fragment WorkspaceMemberData on WorkspaceMember {
   permissions
   workingTimeType
   memberDisplayName
+  joinedAt
 }

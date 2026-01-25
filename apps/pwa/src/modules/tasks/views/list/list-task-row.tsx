@@ -32,7 +32,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { taskPriorities } from "../../task-constants";
+import { taskPriorities } from "../../tasks-constants";
 
 import { Button } from "@/components/buttons/button";
 import Link from "next/link";
@@ -49,10 +49,10 @@ import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
-import { useTaskMenu } from "../../modules/task-menu/task-menu";
-import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
-import { TaskRowDraggable } from "../../modules/task-row-draggable/task-row-draggable";
-import { TaskSelectionBox } from "../../modules/task-selections/task-selection-box";
+import { useTaskMenu } from "../../components/task-menu/task-menu";
+import { TaskMenuAction } from "../../components/task-menu/task-menu-types";
+import { TaskRowDraggable } from "../../components/task-row-draggable/task-row-draggable";
+import { TaskSelectionBox } from "../../components/task-selections/task-selection-box";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import { ListTaskRowHeadProps } from "./list-task-row-head";

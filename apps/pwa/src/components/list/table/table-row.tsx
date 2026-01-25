@@ -67,6 +67,8 @@ export function TableRow({
     <tr
       data-id={id}
       onContextMenu={(e) => {
+        if (e.target instanceof HTMLAnchorElement) return;
+
         e.preventDefault();
         e.stopPropagation();
 

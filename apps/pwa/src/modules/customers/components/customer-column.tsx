@@ -57,7 +57,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
         ...args?.filter,
         listRoute: "/customers",
         multiple: true,
-        getOptions: async (ids: string[]) => {
+        getSelectedOptions: async (ids: string[]) => {
           const options = await getCustomerByIds(ids);
           return options.map((v) => ({
             label: v.name,

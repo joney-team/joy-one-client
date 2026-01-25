@@ -12,6 +12,17 @@ export const AppLocale = {
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
+/** Booking statuses */
+export const BookingStatus = {
+  Cancelled: 'CANCELLED',
+  CheckIn: 'CHECK_IN',
+  Completed: 'COMPLETED',
+  InProgress: 'IN_PROGRESS',
+  JustCreated: 'JUST_CREATED',
+  Rescheduled: 'RESCHEDULED'
+} as const;
+
+export type BookingStatus = typeof BookingStatus[keyof typeof BookingStatus];
 /** Available category types */
 export const CategoryType = {
   Common: 'COMMON',
@@ -20,6 +31,21 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+/** Available coupon rule benefit types */
+export const CouponRuleBenefitType = {
+  DiscountOnProduct: 'DISCOUNT_ON_PRODUCT',
+  DiscountOnTotal: 'DISCOUNT_ON_TOTAL',
+  FreeOnProduct: 'FREE_ON_PRODUCT'
+} as const;
+
+export type CouponRuleBenefitType = typeof CouponRuleBenefitType[keyof typeof CouponRuleBenefitType];
+/** Available coupon rule term types */
+export const CouponRuleTermType = {
+  LimitProducts: 'LIMIT_PRODUCTS',
+  MinimumTotal: 'MINIMUM_TOTAL'
+} as const;
+
+export type CouponRuleTermType = typeof CouponRuleTermType[keyof typeof CouponRuleTermType];
 /** Available custom field types */
 export const CustomFieldType = {
   Date: 'DATE',
@@ -33,6 +59,14 @@ export const CustomFieldType = {
 } as const;
 
 export type CustomFieldType = typeof CustomFieldType[keyof typeof CustomFieldType];
+/** Available customer form statuses */
+export const CustomerFormStatus = {
+  Cancelled: 'CANCELLED',
+  Completed: 'COMPLETED',
+  Pending: 'PENDING'
+} as const;
+
+export type CustomerFormStatus = typeof CustomerFormStatus[keyof typeof CustomerFormStatus];
 /** Available event channels */
 export const EventChannel = {
   None: 'NONE',
@@ -217,6 +251,7 @@ export const EventType = {
   WorkspaceBranchNew: 'WORKSPACE_BRANCH_NEW',
   WorkspaceBranchUpdated: 'WORKSPACE_BRANCH_UPDATED',
   WorkspaceInviteCodeUpdated: 'WORKSPACE_INVITE_CODE_UPDATED',
+  WorkspaceMemberAssignRoles: 'WORKSPACE_MEMBER_ASSIGN_ROLES',
   WorkspaceMemberJoined: 'WORKSPACE_MEMBER_JOINED',
   WorkspaceMemberLeaved: 'WORKSPACE_MEMBER_LEAVED',
   WorkspaceMemberOffline: 'WORKSPACE_MEMBER_OFFLINE',
@@ -294,12 +329,59 @@ export const LoanStatus = {
 } as const;
 
 export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
+/** Order discount type */
+export const OrderDiscountType = {
+  Combo: 'COMBO',
+  Coupon: 'COUPON',
+  Direct: 'DIRECT',
+  Promotion: 'PROMOTION',
+  Voucher: 'VOUCHER'
+} as const;
+
+export type OrderDiscountType = typeof OrderDiscountType[keyof typeof OrderDiscountType];
+/** Order payment status */
+export const OrderPaymentStatus = {
+  Completed: 'COMPLETED',
+  Processing: 'PROCESSING'
+} as const;
+
+export type OrderPaymentStatus = typeof OrderPaymentStatus[keyof typeof OrderPaymentStatus];
+/** Order type */
+export const OrderType = {
+  Common: 'COMMON'
+} as const;
+
+export type OrderType = typeof OrderType[keyof typeof OrderType];
+/** Available plugin e-invoices provider types */
+export const PluginEInvoicesProviderType = {
+  Matbao: 'MATBAO',
+  MatbaoDemo: 'MATBAO_DEMO'
+} as const;
+
+export type PluginEInvoicesProviderType = typeof PluginEInvoicesProviderType[keyof typeof PluginEInvoicesProviderType];
 /** Available external storage providers */
 export const PluginExternalStorageProvider = {
   AwsS3: 'AWS_S3'
 } as const;
 
 export type PluginExternalStorageProvider = typeof PluginExternalStorageProvider[keyof typeof PluginExternalStorageProvider];
+/** Product combo status */
+export const ProductComboStatus = {
+  Active: 'ACTIVE',
+  Expired: 'EXPIRED',
+  Inactive: 'INACTIVE',
+  OutOfStock: 'OUT_OF_STOCK',
+  SourceUnavailable: 'SOURCE_UNAVAILABLE'
+} as const;
+
+export type ProductComboStatus = typeof ProductComboStatus[keyof typeof ProductComboStatus];
+/** Product stock record type */
+export const ProductStockRecordType = {
+  StockIn: 'STOCK_IN',
+  StockOut: 'STOCK_OUT'
+} as const;
+
+export type ProductStockRecordType = typeof ProductStockRecordType[keyof typeof ProductStockRecordType];
 /** Available product types */
 export const ProductType = {
   Combo: 'COMBO',
@@ -309,6 +391,30 @@ export const ProductType = {
 } as const;
 
 export type ProductType = typeof ProductType[keyof typeof ProductType];
+/** Product voucher status */
+export const ProductVoucherStatus = {
+  Active: 'ACTIVE',
+  Expired: 'EXPIRED',
+  Inactive: 'INACTIVE',
+  OutOfAmount: 'OUT_OF_AMOUNT'
+} as const;
+
+export type ProductVoucherStatus = typeof ProductVoucherStatus[keyof typeof ProductVoucherStatus];
+/** Promotion status */
+export const PromotionStatus = {
+  Active: 'ACTIVE',
+  Closed: 'CLOSED',
+  Expired: 'EXPIRED'
+} as const;
+
+export type PromotionStatus = typeof PromotionStatus[keyof typeof PromotionStatus];
+/** Promotion type */
+export const PromotionType = {
+  DiscountAmount: 'DISCOUNT_AMOUNT',
+  DiscountRate: 'DISCOUNT_RATE'
+} as const;
+
+export type PromotionType = typeof PromotionType[keyof typeof PromotionType];
 /** Available reaction types */
 export const ReactionType = {
   Angry: 'ANGRY',
@@ -322,6 +428,28 @@ export const ReactionType = {
 } as const;
 
 export type ReactionType = typeof ReactionType[keyof typeof ReactionType];
+/** Receipt payment method */
+export const ReceiptPaymentMethod = {
+  BankCard: 'BANK_CARD',
+  BankTransfer: 'BANK_TRANSFER',
+  Cash: 'CASH'
+} as const;
+
+export type ReceiptPaymentMethod = typeof ReceiptPaymentMethod[keyof typeof ReceiptPaymentMethod];
+/** Receipt status */
+export const ReceiptStatus = {
+  Paid: 'PAID',
+  Pending: 'PENDING'
+} as const;
+
+export type ReceiptStatus = typeof ReceiptStatus[keyof typeof ReceiptStatus];
+/** Receipt type */
+export const ReceiptType = {
+  Expense: 'EXPENSE',
+  Income: 'INCOME'
+} as const;
+
+export type ReceiptType = typeof ReceiptType[keyof typeof ReceiptType];
 /** Available sort directions */
 export const SortDirection = {
   Asc: 'ASC',

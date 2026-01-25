@@ -3,7 +3,9 @@
 import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps, Radio } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
-import { getId, Selector } from "@/components/selector";
+import { Selector } from "@/components/selector";
+import { ApolloClient } from "@apollo/client";
+import { useApolloClient } from "@apollo/client/react";
 import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
@@ -21,14 +23,19 @@ export interface DynamicSelectorFilterConfig {
   dropdownProps?: ComboboxDropdownProps;
   listRoute?: string;
   listParams?: Record<string, any>;
-  getOptions: (ids: string[]) => Promise<DynamicSelectorFilterOption[]>;
+  getSelectedOptions: (
+    ids: string[],
+    client: ApolloClient
+  ) => Promise<DynamicSelectorFilterOption[]>;
   pinnedOptions?: DynamicSelectorFilterOption[];
-  search: (query: string) => Promise<DynamicSelectorFilterOption[]>;
+  search: (query: string, client: ApolloClient) => Promise<DynamicSelectorFilterOption[]>;
   render?: FC<{ data: any; isSelected: boolean }>;
+  getOptionId?: (item: any) => string;
 }
 
 export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) => {
   const { list, fixedParams } = useListContext();
+  const client = useApolloClient();
   const isReadonly = Boolean(fixedParams?.[column.columnKey]);
   const config = column.filter?.dynamicSelector ?? ({} as Partial<DynamicSelectorFilterConfig>);
   const [options, setOptions] = useState<DynamicSelectorFilterOption[]>(config.pinnedOptions ?? []);
@@ -40,7 +47,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
   useEffect(() => {
     const missingIds = querySelectedOptions.filter((v) => !options.find((v2) => v2.value === v));
     if (missingIds.length > 0) {
-      config?.getOptions?.(missingIds).then((options) => {
+      config?.getSelectedOptions?.(missingIds, client).then((options) => {
         setOptions((prevOptions) => [
           ...prevOptions.filter(
             (prevOption) => !options.find((option) => option.value === prevOption.value)
@@ -61,6 +68,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
       listRoute={config.listRoute}
       listParams={config.listParams}
       autoCloseOnChange={!multiple}
+      getOptionId={config.getOptionId}
       pinnedOptions={options.map((v) => ({ id: v.value, ...v }))}
       target={(ctx) => {
         return (
@@ -94,11 +102,11 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
           </Wrapper>
         );
       }}
-      renderOption={(item) => {
+      renderOption={(item, key) => {
         const selectedOptions = options.filter((v) => querySelectedOptions.includes(v.value));
 
         return (
-          <Combobox.Option value={getId(item)} key={getId(item)} fz={14}>
+          <Combobox.Option value={item.value} key={key} fz="sm">
             <Group gap={8}>
               {multiple ? (
                 <Checkbox
@@ -129,7 +137,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
         );
       }}
       onSearch={async (q) => {
-        const value = await column?.filter?.dynamicSelector?.search?.(q);
+        const value = await column?.filter?.dynamicSelector?.search?.(q, client);
         return (value || []).map((v) => ({
           id: v.value,
           ...v,

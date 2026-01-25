@@ -18,6 +18,8 @@ import { type FC } from "react";
 import { ModalProductStockIn } from "./modals/modal-product-stock-in";
 import { ProductStockEntity } from "./product-stocks-entity";
 
+import QUERY_PRODUCT_STOCKS from "./graphql/queryProductStocks.graphql";
+
 export const ProductStockList: FC = () => {
   return (
     <ModalProductStockIn>
@@ -27,7 +29,7 @@ export const ProductStockList: FC = () => {
             id="psks"
             icon={IconBuildingWarehouse}
             name={<Trans>Stocks</Trans>}
-            route="/product-stocks"
+            query={QUERY_PRODUCT_STOCKS}
             columns={{
               createdAt: dateTimeColumn({ sortable: true, name: <Trans>Time</Trans> }),
               productId: ProductColumn({

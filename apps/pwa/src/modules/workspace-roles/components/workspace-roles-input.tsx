@@ -2,14 +2,14 @@
 
 import { Hovered } from "@/components/hovered";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
 import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { FC, useState } from "react";
-import { WorkspaceRolesSelector } from "./workspace-roles-selector";
+import { FC, useMemo } from "react";
+import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 import { useNormalizeRoles } from "../hooks/use-normalize-roles";
+import { WorkspaceRolesSelector } from "./workspace-roles-selector";
 
-type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
+type WorkspaceRoleOption = Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">;
 
 interface WorkspaceRolesInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value: WorkspaceRoleOption[];
@@ -22,20 +22,19 @@ export const WorkspaceRolesInput: FC<WorkspaceRolesInputProps> = (props) => {
   const color = useColor();
   const { value, onChange, disabled, autoHide, ...rest } = props;
   const { normalizeRole } = useNormalizeRoles();
-  const [roles, setRoles] = useState<WorkspaceRoleOption[]>(value.map(normalizeRole));
+
+  const roles = useMemo(() => value.map(normalizeRole), [value]);
 
   const onAdd = (role: WorkspaceRoleOption) => {
     const isSelected = roles.some((v) => role?._id === v._id);
     const workspaceRoles = isSelected
       ? roles.filter((v) => v._id !== role._id)
       : [...roles, normalizeRole(role)];
-    setRoles(workspaceRoles);
     props.onChange(workspaceRoles);
   };
 
   const onRemove = (roleId: string) => {
     const workspaceRoles = roles.filter((v) => v._id !== roleId);
-    setRoles(workspaceRoles);
     props.onChange(workspaceRoles);
   };
 

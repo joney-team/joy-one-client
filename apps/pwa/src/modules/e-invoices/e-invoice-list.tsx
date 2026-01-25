@@ -18,6 +18,8 @@ import { type PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoi
 import { type PluginEInvoicesProviderInformations } from "../plugins/e-invoices/plugin-e-invoices.types";
 import { type ModalReceiptDetailRef } from "../receipts/modals/modal-receipt-detail";
 
+import QUERY_E_INVOICES from "./graphql/queryEInvoices.graphql";
+
 const ModalReceiptDetail = dynamic(
   () => import("../receipts/modals/modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
   {
@@ -37,9 +39,9 @@ export const EInvoiceList: FC = () => {
       <List<PluginEInvoicesEntity>
         id="eis"
         name={t`E-Invoices`}
+        query={QUERY_E_INVOICES}
         limit={18}
         icon={IconFileInvoice}
-        route="/plugins/e-invoices"
         columns={{
           receiptCode: codeColumn({
             defaultWidth: 200,

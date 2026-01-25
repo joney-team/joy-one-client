@@ -28,7 +28,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
               type: args.type,
             }
           : undefined,
-        getOptions: async (ids: string[]) => {
+        getSelectedOptions: async (ids: string[]) => {
           const options = await getCustomerByIds(ids);
           return options.map((v) => ({
             label: v.name,

@@ -21,7 +21,7 @@ const TaskTabActions = dynamic(
 );
 
 const TaskDetail = dynamic(
-  () => import("../modules/task-detail/task-detail").then((mod) => mod.TaskDetail),
+  () => import("../components/task-detail/task-detail").then((mod) => mod.TaskDetail),
   {
     ssr: false,
     loading: nonLoading,
@@ -54,7 +54,7 @@ const TaskViewsGateway = dynamic(
 
 const TaskContextMenuDropdown = dynamic(
   () =>
-    import("../modules/task-menu/task-context-menu-dropdown").then(
+    import("../components/task-menu/task-context-menu-dropdown").then(
       (mod) => mod.TaskContextMenuDropdown
     ),
   {

@@ -1,0 +1,3 @@
+mutation DeleteWorkspaceRole($id: String!) {
+  deleteWorkspaceRole(_id: $id)
+}

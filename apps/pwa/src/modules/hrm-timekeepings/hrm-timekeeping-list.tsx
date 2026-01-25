@@ -6,6 +6,7 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { Image } from "@/components/image";
 import { useList } from "@/components/list/use-list";
 import { SectionTitle } from "@/components/session-title";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import {
@@ -48,7 +49,6 @@ import { useRouter } from "next/navigation";
 import { type FC } from "react";
 import { getTimekeepings } from "./hrm-timekeepings-service";
 import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
-import { EventType } from "@/graphql/enums.graphql";
 
 export const HrmTimekeepingList: FC = () => {
   const workspace = useWorkspace();

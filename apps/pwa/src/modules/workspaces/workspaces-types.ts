@@ -61,13 +61,11 @@ export interface WorkspaceContext {
   userMembers: WorkspaceMemberDataFragment[];
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
-  // update: (dto: WorkspaceDto) => Promise<WorkspaceEntity>;
   leave: () => void;
   invitationState: WorkspaceMemberInvitationState | undefined;
   leaveInvitation: () => void;
   settings: WorkspaceSettingEntity;
   isHrmTimekeepingAvailable: boolean;
-  roles: WorkspaceRoleEntity[];
   hasPermission: (permission: WorkspacePermission) => boolean;
   updateSettings: (settings: WorkspaceSettingEntity) => Promise<void>;
   setSettings: (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => void | Promise<void>;

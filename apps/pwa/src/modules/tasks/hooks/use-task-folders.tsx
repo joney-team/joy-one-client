@@ -12,10 +12,10 @@ import QUERY_TAGS, {
   type TagsQueryVariables,
 } from "@/modules/tags/graphql/queryTags.graphql";
 import { TagType } from "@/modules/tags/tags-types";
+import { onError } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";
 import { parseTaskPath } from "../tasks-route-helpers";
-import { onError } from "@/utils/exceptions.utils";
 
 export type TaskFolder = TagDataFragment;
 
@@ -27,7 +27,9 @@ export const useTaskFolders = () => {
     variables: { type: TagType.TASK_FOLDER },
   });
 
-  const folders = Array.from(data?.tags.data ?? []).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+  const folders = Array.from(data?.tags.results ?? []).sort(
+    (a, b) => (a.order ?? 0) - (b.order ?? 0)
+  );
 
   const activatedFolder = folders.find((v) => v.slug === params.slug);
 
@@ -60,7 +62,7 @@ export const useTaskFolders = () => {
             ...prev,
             tags: {
               ...prev.tags,
-              data: prev.tags.data
+              results: prev.tags.results
                 .map((v) => ({ ...v, ...(items.find((v2) => v2._id === v._id) ?? {}) }))
                 .sort((a, b) => a.order - b.order),
             },

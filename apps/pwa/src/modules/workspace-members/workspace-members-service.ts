@@ -21,10 +21,6 @@ export async function updateWorkspaceMember(memberId: string, dto: UpdateWorkspa
   return api.put(`/workspace-members/${memberId}`, dto);
 }
 
-export async function createWorkspaceMemberInvitation(): Promise<string> {
-  return api.post(`/workspace-members/invite`).then((res) => res.joinLink);
-}
-
 export async function joinWorkspaceMember(inviteCode: string) {
   return api.post<WorkspaceMemberDataFragment>(`/workspace-members/join`, { inviteCode });
 }

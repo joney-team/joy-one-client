@@ -1,0 +1,40 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+#import "../../customers/graphql/fragmentCustomer.graphql"
+
+query Orders($limit: Float, $offset: Float, $query: JSONObject) {
+  list: orders(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      id
+      _count
+      _id
+      code
+      type
+      items
+      paymentStatus
+      couponIds
+      voucherIds
+      comboIds
+      promotionIds
+      assigneeUserIds
+      paidAmount
+      totalAmount
+      note
+      relatedCustomerId
+      relatedUserIds
+      isFulfilled
+      createdByUser {
+        ...WorkspaceMemberData
+      }
+      assigneeUsers {
+        ...WorkspaceMemberData
+      }
+      relatedCustomer {
+        ...CustomerData
+      }
+    }
+  }
+}

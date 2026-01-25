@@ -1,4 +1,4 @@
-import { UseList, UseListArgs } from "@/components/list/use-list";
+import { UseGraphqlList, UseGraphqlListArgs } from "@/components/list/use-graphql-list";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { ResponseList } from "@/types";
 import type { Icon } from "@tabler/icons-react";
@@ -8,6 +8,7 @@ import type { StaticSelectorFilterConfig } from "./filters/static-selector-filte
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
 import { BaseData } from "@joy-one-client/utils/base-data";
+import { TypedDocumentNode } from "@apollo/client";
 
 export type ListSort = {
   label: string;
@@ -94,13 +95,13 @@ export type ListFetch<Data = any> = (
 
 export type ListProps<Data extends BaseData = any> = {
   id: string;
-  route: string;
+  query: TypedDocumentNode;
   columns: Columns<Data>;
   fixedParams?: Record<string, any>;
   name?: ReactNode;
   icon?: Icon;
   filterModes?: FilterMode<Data>[];
-  events?: UseListArgs["events"];
+  events?: UseGraphqlListArgs["events"];
   card?: FC<{ data: Data }>;
   actions?: ListAction<Data>[];
   limit?: number;
@@ -149,7 +150,7 @@ export type ListContext<Data extends BaseData = any> = Omit<
   ListProps<Data>,
   "columns" | "actions" | "bulkActions"
 > & {
-  list: UseList<Data>;
+  list: UseGraphqlList<Data>;
   viewState: ListViewState;
   setViewState: (viewState: ListViewState) => void;
   spacing: number;

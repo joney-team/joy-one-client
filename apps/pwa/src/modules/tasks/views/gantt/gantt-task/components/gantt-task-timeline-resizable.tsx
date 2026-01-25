@@ -7,11 +7,11 @@ import { FC, ReactNode, RefObject, useEffect, useRef } from "react";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { IconChevronCompactLeft } from "@tabler/icons-react";
-import { UpdateTask, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
 } from "../../../../graphql/queryTasks.graphql";
+import { UpdateTask, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";
 import styles from "../../gantt-tasks.module.css";
@@ -116,7 +116,7 @@ export const GanttTaskTimelineResizable: FC<{
         variables: subTasksGroupVariables,
       });
 
-      const subtasks = Array.from(subtasksData?.tasks.data ?? []);
+      const subtasks = Array.from(subtasksData?.tasks.results ?? []);
 
       if (resizingDirection === "LEFT") {
         // Calculate new start index (keep end index fixed)

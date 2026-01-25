@@ -5,17 +5,22 @@ import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 import { formatBytes } from "@joy-one-client/utils/files";
+import { useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
 import { WorkspaceStatsEntity } from "../workspace-stats/workspace-stats.types";
 import { workspaceTypes } from "../workspaces/workspace-constants";
 
+import QUERY_WORKSPACE_STATS from "./graphql/queryWorkspaceStats.graphql";
+
 export const AdminWorkspaces: FC = () => {
+  const { t } = useLingui();
+
   return (
     <Stack p={16}>
       <List<WorkspaceStatsEntity & { type: WorkspaceType }>
         id="wss"
-        route="/workspace-stats/admin"
+        query={QUERY_WORKSPACE_STATS}
         columns={{
           workspace: {
             name: "Information",
@@ -33,7 +38,7 @@ export const AdminWorkspaces: FC = () => {
             valuePath: "workspace.type",
             name: "Type",
             options: Object.values(WorkspaceType).map((type) => ({
-              label: workspaceTypes[type].name(),
+              label: t(workspaceTypes[type].name),
               value: type,
             })),
           }),

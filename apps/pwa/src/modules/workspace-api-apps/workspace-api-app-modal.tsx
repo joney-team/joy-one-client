@@ -18,9 +18,7 @@ import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/worksp
 import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
-  WorkspaceRoleEntity,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -48,6 +46,8 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
+import { WorkspaceRoleDataFragment } from "../workspace-roles/graphql/fragmentWorkspaceRole.graphql";
+import { useWorkspaceRoles } from "../workspace-roles/hooks/use-workspace-roles";
 import { workspaceDefaultRoles } from "../workspace-roles/workspace-roles-constants";
 
 interface ModalWorkspaceApiAppProps {
@@ -55,7 +55,6 @@ interface ModalWorkspaceApiAppProps {
 }
 
 const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
-  const workspace = useWorkspace();
   const { t } = useLingui();
 
   const secretKeyVisible = useDisclosure(false);
@@ -69,6 +68,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
         {
           _id: WorkspaceDefaultRoleId.ADMIN,
           name: t(workspaceDefaultRoles[WorkspaceDefaultRoleId.ADMIN].name),
+          color: null,
         },
       ],
       workspaceBranches: _app?.member.workspaceBranches || [],
@@ -77,7 +77,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 
   const form = useForm<{
     name: string;
-    roles: Pick<WorkspaceRoleEntity, "_id" | "name" | "color">[];
+    roles: Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">[];
     workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[];
   }>({
     initialValues: getInitialValues(props.app),
@@ -86,7 +86,8 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
     },
   });
 
-  const roles = workspace.roles.filter((v) => form.values.roles.some((v2) => v2._id === v._id));
+  const { roles: workspaceRoles } = useWorkspaceRoles();
+  const roles = workspaceRoles.filter((v) => form.values.roles.some((v2) => v2._id === v._id));
   const isMainWorkspaceAccessable = roles.some((v) =>
     v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
   );

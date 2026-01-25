@@ -6,7 +6,7 @@ import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { FC, Fragment, memo, PropsWithChildren, useEffect, useMemo } from "react";
 import { useFolderStatuses } from "../../hooks/use-task-statuses";
-import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
+import { TaskSelectionsProvider } from "../../components/task-selections/task-selections-provider";
 
 const ListTasksGroup = dynamic(
   () => import("./list-tasks-group").then((mod) => mod.ListTasksGroup),
@@ -58,7 +58,6 @@ export const ListTasks: FC<PropsWithChildren> = memo((props) => {
     <TaskSelectionsProvider>
       <Stack p="sm">
         {listTasksGroup}
-
         {props.children}
       </Stack>
     </TaskSelectionsProvider>

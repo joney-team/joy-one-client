@@ -1,6 +1,5 @@
 "use client";
 
-import { updateTasks } from "@/modules/tasks/tasks-service";
 import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -14,6 +13,7 @@ import {
 import { IconHourglassHigh } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { parseTimeInput } from "./estimate-time-input-utils";
+import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 
 interface EstimateTimeInputProps extends Omit<TextInputProps, "value" | "onChange" | "onSubmit"> {
   value?: number | null;
@@ -46,6 +46,7 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
 ) => {
   const [opened, setOpened] = useState(false);
   const { t } = useLingui();
+  const { updateTasks } = useUpdateTasks();
 
   const children = props.children ? (
     <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group>
@@ -70,12 +71,10 @@ export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInput
               e.preventDefault();
               e.stopPropagation();
               const duration = parseTimeInput((e.target as HTMLInputElement).value);
-              updateTasks([
-                {
-                  ...props.task,
-                  estimatedTime: duration,
-                },
-              ]);
+              updateTasks({
+                _id: props.task._id,
+                estimatedTime: duration,
+              });
               setOpened(false);
             }
           }}

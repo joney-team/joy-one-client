@@ -1,11 +1,11 @@
 "use client";
 
-import { UseList } from "@/components/list/use-list";
+import type { BaseData } from "@joy-one-client/utils/base-data";
 import { Trans } from "@lingui/react/macro";
 import { Badge, em } from "@mantine/core";
 import { FC } from "react";
 import { NumberFormat } from "./format/number-format";
-import type { BaseData } from "@joy-one-client/utils/base-data";
+import { UseList } from "./list/use-list";
 
 export interface ListQtyProps<T extends BaseData = any> {
   list: UseList<T>;

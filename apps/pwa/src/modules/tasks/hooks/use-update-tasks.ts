@@ -20,7 +20,7 @@ export interface UpdateTaskContext {
   toGroupVariables?: TasksQueryVariables | null;
 }
 
-export type UpdateTask = Partial<TasksQuery["tasks"]["data"][number]> & {
+export type UpdateTask = Partial<TasksQuery["tasks"]["results"][number]> & {
   _id: string;
   context?: UpdateTaskContext;
 };
@@ -151,8 +151,8 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
-                    count: prev.tasks.count - 1,
-                    data: [...prev.tasks.data.filter((t) => t._id !== currentData._id)],
+                    total: prev.tasks.total - 1,
+                    results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
               }
@@ -174,9 +174,9 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
-                    count: prev.tasks.count + 1,
-                    data: [
-                      ...prev.tasks.data.filter((t) => t._id !== updatedData._id),
+                    total: prev.tasks.total + 1,
+                    results: [
+                      ...prev.tasks.results.filter((t) => t._id !== updatedData._id),
                       updatedData,
                     ],
                   },
@@ -204,7 +204,7 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
-                    data: [...prev.tasks.data.filter((t) => t._id !== currentData._id)],
+                    results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
               }
@@ -222,8 +222,8 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
-                    data: [
-                      ...prev.tasks.data.filter((t) => t._id !== updatedTask._id),
+                    results: [
+                      ...prev.tasks.results.filter((t) => t._id !== updatedTask._id),
                       updatedData,
                     ],
                   },
@@ -246,8 +246,8 @@ export const useUpdateTasks = () => {
                   ...prev,
                   tasks: {
                     ...prev.tasks,
-                    count: prev.tasks.count - 1,
-                    data: [...prev.tasks.data.filter((t) => t._id !== updatedTask._id)],
+                    total: prev.tasks.total - 1,
+                    results: [...prev.tasks.results.filter((t) => t._id !== updatedTask._id)],
                   },
                 };
               }

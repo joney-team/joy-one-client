@@ -1,11 +1,12 @@
 "use client";
 
-import { createTask } from "@/modules/tasks/tasks-service";
 import { onActionLoad } from "@/utils/actions";
+import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
+import CREATE_TASK_MUTATION from "../graphql/mutationCreateTask.graphql";
 
 interface QuickCreateTaskInputProps {
   folderId?: string | null;
@@ -15,6 +16,8 @@ interface QuickCreateTaskInputProps {
 export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProps>> = (props) => {
   const [opened, setOpened] = useState(false);
   const { t } = useLingui();
+
+  const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
   const children = props.children ? (
     <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group>
@@ -44,9 +47,13 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
                 name: <Trans>Create task</Trans>,
                 process: () =>
                   createTask({
-                    name: value,
-                    folderId: props.folderId,
-                    parentId: props.parentId,
+                    variables: {
+                      input: {
+                        name: value,
+                        folderId: props.folderId,
+                        parentId: props.parentId,
+                      },
+                    },
                   }),
               });
               setOpened(false);

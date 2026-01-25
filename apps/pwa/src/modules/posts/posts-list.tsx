@@ -4,18 +4,19 @@ import { EntityImage } from "@/components/entity-image";
 import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { primaryColumn } from "@/components/list/columns/primary-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onArchive } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
 import { api } from "../apis";
 import { CategoryColumn } from "../categories/components/category-column";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import QUERY_POSTS from "./graphql/queryPosts.graphql";
 import { PostEntity } from "./posts-types";
-import { Trans } from "@lingui/react/macro";
-import { EventType } from "@/graphql/enums.graphql";
 
 export const PostsList: FC = () => {
   const router = useRouter();
@@ -26,7 +27,7 @@ export const PostsList: FC = () => {
         icon={IconNews}
         id="pst"
         name={<Trans>Posts</Trans>}
-        route="/posts"
+        query={QUERY_POSTS}
         columns={{
           _id: primaryColumn({
             name: <Trans>Title</Trans>,
@@ -57,7 +58,7 @@ export const PostsList: FC = () => {
         bulkActions={[
           {
             type: "archive",
-            label: t`Archive`,
+            label: <Trans>Archive</Trans>,
             icon: IconArchive,
             permission: WorkspacePermission.POSTS_MANAGER,
             handler: async (data) => {

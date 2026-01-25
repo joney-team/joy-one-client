@@ -3,7 +3,7 @@
 import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps, Radio } from "@mantine/core";
 
 import { Renderer } from "@/components/renderer";
-import { getId, Selector } from "@/components/selector";
+import { Selector } from "@/components/selector";
 import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -13,6 +13,7 @@ import { FilterProps } from "./types";
 export interface StaticSelectorFilterConfig {
   multiple?: boolean;
   dropdownProps?: ComboboxDropdownProps;
+  getOptionId?: (data: any) => string;
   options: {
     label: string;
     value: string;
@@ -33,6 +34,7 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
       flex={1}
       key={column.columnKey}
       autoCloseOnChange={false}
+      getOptionId={config.getOptionId}
       pinnedOptions={config.options?.map((v) => ({
         id: v.value,
         label: v.label,
@@ -73,15 +75,14 @@ export const StaticSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrapper
           </Wrapper>
         );
       }}
-      renderOption={(item) => {
-        const itemId = getId(item);
+      renderOption={(item, key) => {
         const option = options?.find((v) => v.value === item.value);
         if (!option) return null;
 
         const isSelected = selectedOptions.some((v) => v.value === item.value);
 
         return (
-          <Combobox.Option value={itemId} key={itemId} fz={14}>
+          <Combobox.Option value={item.value} key={key} fz={14}>
             <Group gap={8} wrap="nowrap">
               {multiple ? (
                 <Checkbox checked={isSelected} radius={5} size="xs" />

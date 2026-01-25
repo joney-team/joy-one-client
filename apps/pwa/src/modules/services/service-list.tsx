@@ -17,14 +17,17 @@ import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "../products/products-service";
 
+import { Trans } from "@lingui/react/macro";
+import QUERY_PRODUCTS from "../products/graphql/queryProducts.graphql";
+
 export const ServiceList: FC = () => {
   return (
     <Stack p={16}>
       <List<ProductEntity>
         id="sers"
-        name={t`Services`}
+        name={<Trans>Services</Trans>}
         icon={IconCategory2}
-        route="/products"
+        query={QUERY_PRODUCTS}
         fixedParams={{ type: ProductType.SERVICE }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.SERVICE }),

@@ -1,15 +1,9 @@
 "use client";
 
 import { AppPageMetadata, ResponseList } from "@/types";
-import { onActionLoad, onArchive } from "@/utils/actions";
-import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
-import { IconFolder } from "@tabler/icons-react";
 import { api } from "../apis";
-import { getTasks } from "../tasks/tasks-service";
 import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
-import { Trans } from "@lingui/react/macro";
 
 export async function createTag(dto: TagDto) {
   return api.post(`/tags`, dto);
@@ -40,29 +34,6 @@ export async function interactTag(tagId: string) {
     await api.post(`/tags/${tagId}/interact`);
   } catch (error) {}
 }
-
-export const onRemoveTaskTagFolder = (tag: TagEntity, onDone?: () => void) => {
-  onActionLoad({
-    isShowCompleted: false,
-    name: <Trans>Remove folder</Trans>,
-    icon: IconFolder,
-    process: async () => {
-      const relatedTasks = await getTasks({ folderId: tag._id, limit: 1 });
-      onArchive({
-        name: t`Folder`,
-        icon: IconFolder,
-        children:
-          relatedTasks.count > 0
-            ? `${t`Are you sure you want to continue?`} ${t`${relatedTasks.count} related work will be moved to the default folder`}`
-            : undefined,
-        process: async () => {
-          await removeTag(tag._id).catch(onError);
-          onDone?.();
-        },
-      });
-    },
-  });
-};
 
 export const tagTypeConfigs: Record<TagType, { color: MantineColor }> = {
   [TagType.CUSTOMER]: { color: "blue" },

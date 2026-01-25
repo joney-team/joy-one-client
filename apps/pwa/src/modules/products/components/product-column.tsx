@@ -45,7 +45,7 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
         multiple: true,
         listRoute: "/products",
         listParams: args?.type ? { type: args?.type } : undefined,
-        getOptions: async (ids: string[]) => {
+        getSelectedOptions: async (ids: string[]) => {
           const options = await getProductByIds(ids);
           return options.map((v) => ({
             label: v.name,

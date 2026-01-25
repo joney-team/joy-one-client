@@ -14,8 +14,8 @@ query Events(
     userId: $userId
     type: $type
   ) {
-    count
-    data {
+    total
+    results {
       _id
       time
       type

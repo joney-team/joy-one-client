@@ -9,7 +9,7 @@ import QUERY_TASKS, {
   type TasksQueryVariables,
 } from "@/modules/tasks/graphql/queryTasks.graphql";
 import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
-import { useTaskMenu } from "@/modules/tasks/modules/task-menu/task-menu";
+import { useTaskMenu } from "@/modules/tasks/components/task-menu/task-menu";
 import { useColor } from "@/modules/theme/use-color";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -87,7 +87,7 @@ export const GanttTaskTimeline: FC = () => {
           variables: subTasksGroupVariables,
         });
 
-        const subtasks = Array.from(subtasksData?.tasks.data ?? []);
+        const subtasks = Array.from(subtasksData?.tasks.results ?? []);
 
         updateTasks(
           subtasks.reduce<UpdateTask[]>((acc, subtask) => {

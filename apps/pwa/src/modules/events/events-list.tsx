@@ -2,21 +2,11 @@
 
 import { FC, ReactNode, useCallback, useMemo } from "react";
 
-import { Badge, Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
-import {
-  IconArrowRight,
-  IconCashRegister,
-  IconFlagFilled,
-  IconUserMinus,
-  IconUserPlus,
-  IconX,
-} from "@tabler/icons-react";
+import { Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
+import { IconCashRegister, IconUserMinus, IconUserPlus } from "@tabler/icons-react";
 
 import { EventType, EventVariant } from "@/graphql/enums.graphql";
 import { eventTypes, eventVariants } from "@/modules/events/event-constants";
-import { taskPriorities } from "@/modules/tasks/task-constants";
-import { getTaskPriorityColor, renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
-import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
@@ -43,7 +33,7 @@ interface EventListProps extends StackProps {
   fetching?: ReactNode;
 }
 
-type Event = EventsQuery["events"]["data"][number];
+type Event = EventsQuery["events"]["results"][number];
 
 export const EventsList: FC<EventListProps> = ({
   ref,
@@ -73,7 +63,7 @@ export const EventsList: FC<EventListProps> = ({
   );
 
   const isAbleToFetchMore = useMemo(() => {
-    return data && data.events.count > 0 && data.events.data.length < data.events.count;
+    return data && data.events.total > 0 && data.events.results.length < data.events.total;
   }, [data]);
 
   const onFetchMore = useCallback(async () => {
@@ -81,13 +71,16 @@ export const EventsList: FC<EventListProps> = ({
     await fetchMore({
       variables: {
         ...variables,
-        offset: data?.events.data.length || 0,
+        offset: data?.events.results.length || 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          events: { ...prev.events, data: [...prev.events.data, ...fetchMoreResult.events.data] },
+          events: {
+            ...prev.events,
+            data: [...prev.events.results, ...fetchMoreResult.events.results],
+          },
         };
       },
     });
@@ -96,7 +89,7 @@ export const EventsList: FC<EventListProps> = ({
   const my = typeof rest.my === "number" ? rest.my : 30;
 
   if (fetching && loading && !error && !data) return fetching;
-  if (!data || data.events.count === 0) return empty || null;
+  if (!data || data.events.total === 0) return empty || null;
 
   return (
     <Stack my={my} {...rest}>
@@ -108,14 +101,14 @@ export const EventsList: FC<EventListProps> = ({
 
       {error && <Errored error={error} />}
 
-      {data.events.data.length > 0 && (
+      {data.events.results.length > 0 && (
         <Timeline
           active={1}
           bulletSize={25}
           lineWidth={1.5}
           styles={{ itemBullet: { padding: 0, border: 0 } }}
         >
-          {data.events.data.map((event) => {
+          {data.events.results.map((event) => {
             return <EventItem key={event._id} event={event} />;
           })}
         </Timeline>
@@ -230,90 +223,6 @@ function EventItemTitle(props: { event: Event }) {
   ];
 
   const [wokspaceMembers] = useWorkspaceMembers(workspaceMembersIds);
-
-  if (event.type === EventType.TaskPriorityUpdated && event.data) {
-    const toPriority = event.data.toPriority as TaskPriority;
-    const fromPriority = event.data.fromPriority as TaskPriority;
-
-    if (!toPriority && !fromPriority) return null;
-
-    if (!toPriority)
-      return (
-        <Group gap={4}>
-          <Text fz={14}>
-            <Trans>Unset priority</Trans>
-          </Text>
-
-          <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
-            <IconX strokeWidth={1.5} size={14} />
-          </ThemeIcon>
-
-          <Group gap={0} ml={-4}>
-            <ThemeIcon color={taskPriorities[fromPriority].color} variant="transparent">
-              <IconFlagFilled size={16} />
-            </ThemeIcon>
-            <Text fz={14}>{taskPriorities[fromPriority].label()}</Text>
-          </Group>
-        </Group>
-      );
-
-    return (
-      <Group gap={4}>
-        <Text fz={14}>
-          <Trans>Set priority</Trans>
-        </Text>
-
-        <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
-          <IconArrowRight strokeWidth={1.5} size={14} />
-        </ThemeIcon>
-
-        <Group gap={0} ml={-4}>
-          <ThemeIcon color={getTaskPriorityColor(toPriority)} variant="transparent">
-            <IconFlagFilled size={16} />
-          </ThemeIcon>
-          <Text fz={14}>{taskPriorities[toPriority].label()}</Text>
-        </Group>
-      </Group>
-    );
-  }
-
-  if (
-    event.type === EventType.TaskStatusUpdated &&
-    event.data &&
-    event.data.fromStatus &&
-    event.data.toStatus
-  ) {
-    const fromStatusStyle = renderTaskStatusStyle(
-      event.data.fromStatus,
-      workspace.settings.taskStatuses
-    );
-    const toStatusStyle = renderTaskStatusStyle(
-      event.data.toStatus,
-      workspace.settings.taskStatuses
-    );
-
-    return (
-      <Group gap={8}>
-        <Text fz={14}>
-          <Trans>Status updated</Trans>
-        </Text>
-
-        <Group gap={3}>
-          <Badge variant="outline" color={fromStatusStyle.color} size="xs">
-            {fromStatusStyle.name}
-          </Badge>
-
-          <ThemeIcon size={14} radius={100} color="dark" variant="transparent">
-            <IconArrowRight strokeWidth={1.5} size={14} />
-          </ThemeIcon>
-
-          <Badge variant="outline" color={toStatusStyle.color} size="xs">
-            {toStatusStyle.name}
-          </Badge>
-        </Group>
-      </Group>
-    );
-  }
 
   if (
     event.type === EventType.TaskAssigned &&

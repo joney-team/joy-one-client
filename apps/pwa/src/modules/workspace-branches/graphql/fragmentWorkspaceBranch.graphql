@@ -1,0 +1,15 @@
+fragment WorkspaceBranchData on WorkspaceBranch {
+  _id
+  name
+  hotline
+  location {
+    provinceId
+    districtId
+    wardId
+    address
+    coordinates {
+      lat
+      lng
+    }
+  }
+}

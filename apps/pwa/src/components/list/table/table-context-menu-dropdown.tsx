@@ -106,7 +106,7 @@ export const TableContextMenuDropdown: ContextMenuDropdownComponent = ({ data, o
               onClick={() =>
                 bulkAction.handler([rowData], {
                   unSelect: context.unselectAll,
-                  refetch: context.list.fetch,
+                  refetch: context.list.refetch,
                 })
               }
               label={bulkAction.label ?? <Trans>Action</Trans>}

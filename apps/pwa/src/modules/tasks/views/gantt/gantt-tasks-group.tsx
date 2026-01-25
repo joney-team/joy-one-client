@@ -20,7 +20,7 @@ import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTaskMetrics } from "../../hooks/use-task-metrics";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { type ModalCreateTaskRef } from "../../modals/modal-create-task";
-import { useTaskSelections } from "../../modules/task-selections/task-selections-context";
+import { useTaskSelections } from "../../components/task-selections/task-selections-context";
 import { useTasks } from "../../tasks-context";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";

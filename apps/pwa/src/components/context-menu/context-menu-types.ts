@@ -34,4 +34,5 @@ export type ContextMenuProps<T extends BaseData = BaseData, Context = unknown> =
   children: ReactNode | ((context: ContextMenuType<T>) => ReactNode);
   dropdown: ContextMenuDropdownComponent<T extends BaseData ? T : never, Context>;
   options?: PlaceDropdownMenuOptions;
+  disabled?: boolean;
 };

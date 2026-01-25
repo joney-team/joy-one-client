@@ -9,19 +9,16 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getWorkspaceInviteInformation } from "@/modules/workspaces/workspaces-service";
-import { WorkspaceInviteInformation } from "@/modules/workspaces/workspaces-types";
 import { getAvatarInitials } from "@/utils/string.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useQuery } from "@apollo/client/react";
 import { primaryColors } from "@joy-one-client/config/colors";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Avatar,
   Card,
   Center,
   createTheme,
-  em,
   Group,
   Loader,
   MantineProvider,
@@ -36,75 +33,21 @@ import { FC, Fragment, useEffect } from "react";
 import { Pattern } from "../../components/pattern/pattern";
 import { workspaceTypes } from "./workspace-constants";
 
+import QUERY_WORKSPACE_INVITE_INFORMATION, {
+  type WorkspaceInviteInformationQuery,
+} from "./graphql/queryWorkspaceInviteInformation.graphql";
+
 export interface WorkspaceInvitationProps {
   inviteCode: string;
 }
 
-const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
-  const color = useColor();
-  const layout = useLayout();
-
-  const inviteInformation = useFetch({
-    fetch: async () => getWorkspaceInviteInformation(props.inviteCode),
-  });
-
-  return (
-    <MantineProvider
-      theme={createTheme({
-        colors: { primary: primaryColors },
-        primaryColor: (inviteInformation.data?.appColor || "primary") as any,
-        primaryShade: (inviteInformation.data?.appColorShape || 6) as any,
-      })}
-    >
-      <Stack
-        h={layout.height}
-        w={layout.width}
-        style={{
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {inviteInformation.isFetching && (
-          <Center h="100dvh" w="100dvw">
-            <Loader type="dots" />
-          </Center>
-        )}
-
-        {!!inviteInformation.error && (
-          <Stack mih="100dvh" w="100dvw" align="center" justify="center">
-            <Group justify="center">
-              <IconErrored width={400} />
-            </Group>
-            <Title ta="center" fz={25}>
-              <Trans>Oops! Something went wrong...</Trans>
-            </Title>
-            <Text c="gray" ta="center" fz={16}>
-              <Trans>The workspace is not available</Trans>
-            </Text>
-
-            <Button onClick={() => inviteInformation.fetch()}>
-              <Trans>Retry now</Trans>
-            </Button>
-
-            <Button variant="subtle" size="xs" component={Link} href="/" color="gray">
-              <Trans>Leave</Trans>
-            </Button>
-          </Stack>
-        )}
-
-        {inviteInformation.data && (
-          <Fragment>
-            <Pattern color={color(inviteInformation.data?.appColor)} />
-            <Content invite={inviteInformation.data} {...props} />
-          </Fragment>
-        )}
-      </Stack>
-    </MantineProvider>
-  );
-};
-
-const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformation }> = (props) => {
+const WorkspaceInvitationContent: FC<
+  WorkspaceInvitationProps & {
+    invite: WorkspaceInviteInformationQuery["workspaceInviteInformation"];
+  }
+> = (props) => {
   const { invite } = props;
+  const { t } = useLingui();
   const auth = useAuth();
   const workspace = useWorkspace();
   const layout = useLayout();
@@ -113,6 +56,7 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
   const router = useRouter();
 
   useEffect(() => {
+    // Redirect to workspace if already joined
     const member = workspace.userMembers.find(
       (m) => m.userId === auth.user?._id && m.workspaceId === invite.workspaceId
     );
@@ -127,9 +71,10 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
 
   return (
     <ScrollArea h={layout.height} w={layout.width}>
-      <Stack justify="center" align="center" mih={layout.height} w="100%" py={30}>
+      <Stack justify="center" align="center" mih={layout.height} w="100%" py="xl">
         <Card
-          p={30}
+          py="lg"
+          px="xl"
           radius={16}
           w={550}
           maw="100%"
@@ -137,30 +82,33 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
             boxShadow: `0 0 15px ${color(`${invite.appColor || "primary"}.4`)}`,
           }}
         >
-          <Stack align="center">
+          <Stack align="center" gap="md">
             <Image src="/images/welcome.png" w={150} />
-            <Title ta="center">
-              <Trans>Welcome {auth.user?.name}</Trans>
-            </Title>
-            <Text ta="center">
-              <Trans>You have been invited to join workspace</Trans>.
-            </Text>
+            <Stack gap={0}>
+              <Title ta="center" order={2} fw={500}>
+                <Trans>Welcome {auth.user?.name}</Trans>
+              </Title>
+              <Text ta="center">
+                <Trans>You have been invited to join workspace</Trans>.
+              </Text>
+            </Stack>
 
-            <Card withBorder shadow="none" p={10} my={16}>
-              <Group>
+            <Card withBorder shadow="none" p="xs">
+              <Group gap="sm">
                 <Avatar
                   src={invite.logo ? renderFileUrl(invite.logo) : "/symbol.png"}
-                  size={60}
-                  color={invite.appColor}
-                  radius={10}
-                  fz={20}
+                  color={invite.appColor ?? "primary"}
+                  radius="xs"
+                  size={46}
                 >
                   {getAvatarInitials(invite.name)}
                 </Avatar>
-                <Stack gap={3} pr={10}>
-                  <Text fw={700}>{invite.name}</Text>
-                  <Text fz={12} c="gray">
-                    {workspaceTypes[invite.type].name()}
+                <Stack gap={3} miw={200}>
+                  <Text fw={700} truncate maw="100%">
+                    {invite.name}
+                  </Text>
+                  <Text fz="sm" c="gray">
+                    {t(workspaceTypes[invite.type].name)}
                   </Text>
                 </Stack>
               </Group>
@@ -169,25 +117,23 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
             <Text ta="center">
               <Trans>
                 Let's build value together, create opportunities and develop strongly on the success
-                journey of you
+                journey of you.
               </Trans>
-              .
             </Text>
 
-            <Stack align="center" mt={16}>
+            <Stack align="center" pt="md">
               <Button
                 leftIcon={IconHeartHandshake}
                 onClick={() => workspace.join(props.inviteCode)}
                 type="submit"
-                color={invite.appColor}
+                color={invite.appColor ?? "primary"}
                 radius={100}
-                size="lg"
-                tt="uppercase"
+                size="md"
               >
-                <Trans>Join now</Trans>
+                <Trans>Join now</Trans>!
               </Button>
 
-              <Anchor component={Link} href="/" c="gray.5" fz={em(14)}>
+              <Anchor component={Link} href="/" c="gray.5" fz="sm">
                 <Trans>Leave</Trans>
               </Anchor>
             </Stack>
@@ -195,6 +141,70 @@ const Content: FC<WorkspaceInvitationProps & { invite: WorkspaceInviteInformatio
         </Card>
       </Stack>
     </ScrollArea>
+  );
+};
+
+const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
+  const color = useColor();
+  const layout = useLayout();
+
+  const { data, loading, error, refetch } = useQuery(QUERY_WORKSPACE_INVITE_INFORMATION, {
+    variables: { inviteCode: props.inviteCode },
+    fetchPolicy: "network-only",
+  });
+
+  return (
+    <MantineProvider
+      theme={createTheme({
+        colors: { primary: primaryColors },
+        primaryColor: (data?.workspaceInviteInformation?.appColor || "primary") as any,
+        primaryShade: (data?.workspaceInviteInformation?.appColorShape || 6) as any,
+      })}
+    >
+      <Stack
+        h={layout.height}
+        w={layout.width}
+        style={{
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {loading && (
+          <Center h="100dvh" w="100dvw">
+            <Loader type="dots" />
+          </Center>
+        )}
+
+        {!!error && (
+          <Stack mih="100dvh" w="100dvw" align="center" justify="center">
+            <Group justify="center">
+              <IconErrored width={400} />
+            </Group>
+            <Title ta="center" fz={25}>
+              <Trans>Oops! Something went wrong...</Trans>
+            </Title>
+            <Text c="gray" ta="center" fz={16}>
+              <Trans>The workspace is not available</Trans>
+            </Text>
+
+            <Button onClick={() => refetch()}>
+              <Trans>Retry now</Trans>
+            </Button>
+
+            <Button variant="subtle" size="xs" component={Link} href="/" color="gray">
+              <Trans>Leave</Trans>
+            </Button>
+          </Stack>
+        )}
+
+        {data?.workspaceInviteInformation && (
+          <Fragment>
+            <Pattern color={color(data?.workspaceInviteInformation.appColor ?? "primary")} />
+            <WorkspaceInvitationContent invite={data?.workspaceInviteInformation} {...props} />
+          </Fragment>
+        )}
+      </Stack>
+    </MantineProvider>
   );
 };
 

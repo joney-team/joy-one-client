@@ -4,20 +4,14 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { ModalHead } from "@/components/modal/modal-head";
 import { permissionGroups } from "@/modules/workspace-roles/workspace-roles-config";
-import {
-  createWorkspaceRole,
-  removeWorkspaceRole,
-  updateWorkspaceRole,
-} from "@/modules/workspace-roles/workspace-roles-service";
+import { removeWorkspaceRole } from "@/modules/workspace-roles/workspace-roles-service";
 import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
-  WorkspaceRoleDto,
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
-import { stringable } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -35,12 +29,9 @@ import {
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconAccessible, IconCheck, IconLock } from "@tabler/icons-react";
-import { FC, useState } from "react";
-import {
-  workspaceDefaultRoles,
-  workspacePermissions,
-  workspaceSpecialRoleIds,
-} from "../workspace-roles-constants";
+import { FC } from "react";
+import { useWorkspaceRoles } from "../hooks/use-workspace-roles";
+import { workspacePermissions } from "../workspace-roles-constants";
 
 interface ModalWorkspaceRoleFormProps {
   roleId?: string;
@@ -48,49 +39,20 @@ interface ModalWorkspaceRoleFormProps {
 
 export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) => {
   const workspace = useWorkspace();
+  const { roles, create, update } = useWorkspaceRoles();
   const { t } = useLingui();
-  const dynamicRole = workspace.roles.find((role) => role._id === props.roleId);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const role = roles.find((role) => role._id === props.roleId);
 
   const close = () => modals.close("ModalRoleForm");
 
-  const isAbleToEdit =
-    props.roleId &&
-    ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN]
-      .map(stringable)
-      .includes(props.roleId);
+  const isAbleToEdit = role && role.isEditable;
 
-  const getInitialDto = (): WorkspaceRoleDto => {
-    if (dynamicRole)
-      return {
-        name: dynamicRole.name || "",
-        permissions: dynamicRole.permissions,
-        description: dynamicRole.description || "",
-      };
-
-    if (!isAbleToEdit)
-      return {
-        name: workspaceSpecialRoleIds[props.roleId as WorkspaceDefaultRoleId]?.name(),
-        permissions: Object.values(WorkspacePermission),
-      };
-
-    if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
-      return {
-        name: t(workspaceDefaultRoles[WorkspaceDefaultRoleId.MEMBER].name),
-        permissions: workspace.settings.memberPermissions || [],
-        description: "",
-      };
-    }
-
-    return {
-      name: "",
-      permissions: [],
-      description: "",
-    };
-  };
-
-  const form = useForm<WorkspaceRoleDto>({
-    initialValues: getInitialDto(),
+  const form = useForm({
+    initialValues: {
+      name: role?.name ?? "",
+      permissions: role?.permissions ?? [],
+      description: role?.description ?? "",
+    },
     validate: {
       name: (value: string) => {
         if (!value) return t`Must be provided`;
@@ -99,12 +61,10 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
   });
 
   const onSubmit = form.onSubmit(async (values) => {
-    setIsSubmitting(true);
-
     if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
       await setWorkspaceSettings({
         ...workspace.settings,
-        memberPermissions: values.permissions,
+        memberPermissions: values.permissions as WorkspacePermission[],
       })
         .then(async () => close())
         .catch(onError);
@@ -114,16 +74,14 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
         permissions: values.permissions,
       };
 
-      const action = dynamicRole
-        ? () => updateWorkspaceRole(dynamicRole._id, payload)
-        : () => createWorkspaceRole(payload);
+      const action = role
+        ? () => update({ variables: { ...payload, id: role._id } })
+        : () => create({ variables: payload });
 
       await action()
         .then(async () => close())
         .catch(onFormErrorLegacy(form));
     }
-
-    setIsSubmitting(false);
   });
 
   const allPermissions = Object.values(permissionGroups).reduce((acc, group) => {
@@ -133,7 +91,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
   return (
     <Stack>
       <TextInput
-        label={t`Name`}
+        label={<Trans>Name</Trans>}
         withAsterisk
         disabled={!isAbleToEdit || props.roleId === WorkspaceDefaultRoleId.MEMBER}
         {...form.getInputProps("name")}
@@ -141,13 +99,13 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
       {isAbleToEdit && props.roleId !== WorkspaceDefaultRoleId.MEMBER && (
         <Textarea
-          label={t`Description`}
+          label={<Trans>Description</Trans>}
           {...form.getInputProps("description")}
           style={{ minHeight: 80 }}
         />
       )}
 
-      <InputWrapper label={t`Grant permissions`}>
+      <InputWrapper label={<Trans>Grant permissions</Trans>}>
         <Stack mt={10}>
           {Object.entries(permissionGroups)
             .filter(
@@ -239,7 +197,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       {isAbleToEdit && (
         <Button
           mt={10}
-          loading={isSubmitting}
+          loading={form.submitting}
           onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
@@ -249,8 +207,8 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       )}
 
       <ButtonArchive
-        enabled={!!dynamicRole?._id}
-        process={() => removeWorkspaceRole(dynamicRole!._id)}
+        enabled={!!role?._id}
+        process={() => removeWorkspaceRole(role!._id)}
         onArchived={() => close()}
         goBackWhenArchived={false}
       />

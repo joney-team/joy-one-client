@@ -1,0 +1,19 @@
+#import "./fragmentWorkspaceMember.graphql"
+
+mutation UpdateWorkspaceMember(
+  $memberId: String!
+  $displayName: String
+  $color: String
+  $workingTimeType: WorkspaceMemberWorkingTimeType
+  $workspaceBranchIds: [String!]
+) {
+  updateWorkspaceMember(
+    memberId: $memberId
+    displayName: $displayName
+    color: $color
+    workingTimeType: $workingTimeType
+    workspaceBranchIds: $workspaceBranchIds
+  ) {
+    ...WorkspaceMemberData
+  }
+}

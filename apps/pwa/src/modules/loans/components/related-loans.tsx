@@ -1,23 +1,22 @@
 "use client";
 
+import { CurrencyFormat } from "@/components/format/currency-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
+import { SectionTitle } from "@/components/session-title";
+import { WayPoint } from "@/components/way-point";
+import { LoanStatus, SortDirection } from "@/graphql/enums.graphql";
+import { useColor } from "@/modules/theme/use-color";
 import { useQuery } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { IconCreditCardPay } from "@tabler/icons-react";
+import Link from "next/link";
 import { useMemo, useState, type FC } from "react";
 import LOANS_QUERY, {
   type LoansQuery,
   type LoansQueryVariables,
 } from "../graphql/queryLoans.graphql";
-import { SectionTitle } from "@/components/session-title";
-import { Trans, useLingui } from "@lingui/react/macro";
-import { IconCreditCardPay } from "@tabler/icons-react";
-import { NumberFormat } from "@/components/format/number-format";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
-import Link from "next/link";
-import { LoanStatus, SortDirection } from "@/graphql/enums.graphql";
-import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
-import { WayPoint } from "@/components/way-point";
-import { useColor } from "@/modules/theme/use-color";
-import { CurrencyFormat } from "@/components/format/currency-format";
 
 export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }> = ({
   customerCidNumber,
@@ -40,7 +39,7 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
   });
 
   const isAbleFetchingMore = useMemo(() => {
-    return !isFetchingMore && data && data.loans.data.length < data.loans.count && !loading;
+    return !isFetchingMore && data && data.list.results.length < data.list.total && !loading;
   }, [data, isFetchingMore, loading]);
 
   const onFetchMore = async () => {
@@ -50,16 +49,17 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
     await fetchMore({
       variables: {
         ...variables,
-        offset: data?.loans.data.length ?? 0,
+        offset: data?.list.results.length ?? 0,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          loans: {
-            ...prev.loans,
+          list: {
+            ...prev.list,
+            results: [...prev.list.results, ...fetchMoreResult.list.results],
+            total: fetchMoreResult.list.total,
           },
-          count: fetchMoreResult.loans.count,
         };
       },
     });
@@ -70,7 +70,7 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
     <Stack gap="xs">
       <SectionTitle name={<Trans>Credit history</Trans>} icon={IconCreditCardPay} />
 
-      {data?.loans.data.map((loan) => {
+      {data?.list.results.map((loan) => {
         if (ignoreCode === loan.code) return null;
 
         const loanAsset = loanAssetTypes[loan.assetType];

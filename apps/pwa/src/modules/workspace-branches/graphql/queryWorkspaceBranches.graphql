@@ -1,0 +1,10 @@
+#import "./fragmentWorkspaceBranch.graphql"
+
+query WorkspaceBranches($limit: Float, $offset: Float, $query: JSONObject) {
+  list: workspaceBranches(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...WorkspaceBranchData
+    }
+  }
+}

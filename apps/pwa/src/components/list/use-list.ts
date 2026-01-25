@@ -281,7 +281,7 @@ export const useList = <T extends BaseData>({
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
   const onEvent = async (e: EventEntity) => {
     try {
-      if (args.isIgnoreEventActionType || e.userId === workspace.member.userId) {
+      if (args.isIgnoreEventActionType) {
         return fetch(true, { isSilient: true });
       }
 

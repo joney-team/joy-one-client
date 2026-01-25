@@ -22,6 +22,7 @@ import {
 import { modals } from "@mantine/modals";
 import { IconCheck, IconCopy, IconRefresh, IconUsersPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { useGenerateWorkspaceInviteCode } from "../workspaces/hooks/useGenerateWorkspaceInviteCode";
 
 export const WorkspaceInviteMember: FC = () => {
   const isReachMemberLimit = false;
@@ -47,6 +48,8 @@ const CreateMemberInvitationLink: FC = () => {
   const workspace = useWorkspace();
   const invitationLink = `${config.APP_URL}/join/${workspace.member.workspace.inviteCode}`;
 
+  const { generateWorkspaceInviteCode } = useGenerateWorkspaceInviteCode();
+
   return (
     <Stack align="center" p={30}>
       <MembersIllustration width={250} />
@@ -70,11 +73,7 @@ const CreateMemberInvitationLink: FC = () => {
           </CopyButton>
 
           <Tooltip label={t`Regenerate link`}>
-            <ActionIcon
-              onClick={() => regenerateWorkspaceInviteCode()}
-              variant="subtle"
-              color="gray"
-            >
+            <ActionIcon onClick={generateWorkspaceInviteCode} variant="subtle" color="gray">
               <IconRefresh size={18} />
             </ActionIcon>
           </Tooltip>

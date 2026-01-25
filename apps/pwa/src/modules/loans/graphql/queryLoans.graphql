@@ -4,25 +4,44 @@ query Loans(
   $limit: Float
   $offset: Float
   $sortCreatedAt: SortDirection
+  $query: JSONObject
 ) {
-  loans(
+  list: loans(
     customerCidNumber: $customerCidNumber
     status: $status
     limit: $limit
     offset: $offset
     sortCreatedAt: $sortCreatedAt
+    query: $query
   ) {
-    data {
+    total
+    results {
       id
       code
-      status
-      amount
+      customerId
       customerCidNumber
+      customer {
+        _id
+        name
+      }
+      workspaceBranchId
+      amount
+      packageId
+      package
+      packagePeriodDays
+      paymentPeriods
       assetType
+      assetData
+      paymentProgress
+      metadata
+      status
       rejectReason
+      payment
       createdAt
+      nextReceiptAt
       isHasLateInterestReceipt
+      isLiquidated
+      fulfilledAt
     }
-    count
   }
 }

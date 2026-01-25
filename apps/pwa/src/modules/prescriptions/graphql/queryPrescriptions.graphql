@@ -1,0 +1,11 @@
+query Prescriptions($limit: Float, $offset: Float, $query: JSONObject) {
+  list: prescriptions(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      _id
+      name
+      items
+      note
+    }
+  }
+}

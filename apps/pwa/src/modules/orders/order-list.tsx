@@ -24,6 +24,8 @@ import { OrderItemsColumn } from "./order-items-columns";
 import { orderPaymentStatuses } from "./orders-constants";
 import { payOrder } from "./orders-service";
 
+import QUERY_ORDERS from "./graphql/queryOrders.graphql";
+
 const ModalPayReceipt = dynamic(
   () => import("../receipts/modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
   {
@@ -44,7 +46,7 @@ export const OrderList: FC = () => {
         id="ors"
         name={workspaceModule.name}
         icon={workspaceModule.icon}
-        route="/orders"
+        query={QUERY_ORDERS}
         columns={{
           code: codeColumn({ href: (value) => `/orders/${value}` }),
           createdAt: dateTimeColumn({ name: t`Time`, sortable: true }),

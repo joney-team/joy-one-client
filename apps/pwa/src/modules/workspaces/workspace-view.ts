@@ -1,3 +1,4 @@
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
 import type {
@@ -5,7 +6,6 @@ import type {
   WorkspaceViewComponent,
 } from "../workspace-settings/workspace-settings-types";
 import type { WorkspaceModule } from "./workspace-modules";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const defaultWorkspaceView: WorkspaceView = {
   dashboardWidgets: [
@@ -81,7 +81,6 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
       { id: "", type: ReportWidgetType.TASKS },
       { id: "", type: ReportWidgetType.TASKS_COMPLETED_RATES },
       { id: "", type: ReportWidgetType.NEW_CUSTOMERS },
-      { id: "", type: ReportWidgetType.TASK_TIME_TRACKINGS },
     ],
   },
   [WorkspaceType.Credit]: {

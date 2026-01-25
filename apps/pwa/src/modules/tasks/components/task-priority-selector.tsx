@@ -1,8 +1,8 @@
 "use client";
 
-import { getTaskPriorityColor } from "@/modules/tasks/tasks-service";
 import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
+import { useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Combobox,
@@ -16,7 +16,7 @@ import {
 import { IconFlagFilled } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
-import { taskPriorities } from "../task-constants";
+import { taskPriorities } from "../tasks-constants";
 
 interface TaskPrioritySelectorProps {
   render?: (ctx: SelectorContext<{ id: TaskPriority }>) => ReactNode;
@@ -29,21 +29,24 @@ interface TaskPrioritySelectorProps {
 
 export const TaskPrioritySelector: FC<TaskPrioritySelectorProps> = (props) => {
   const color = useColor();
+  const { t } = useLingui();
 
   return (
     <Selector
       {...props.inputProps}
       pinnedOptions={Object.values(TaskPriority).map((priority) => ({ id: priority }))}
       renderOption={(priority) => {
-        const priorityColor = getTaskPriorityColor(priority.id);
+        const taskPriority = taskPriorities[priority.id];
+        if (!taskPriority) return null;
+
         return (
           <Combobox.Option value={priority.id} key={priority.id}>
             <Group gap={8} wrap="nowrap">
-              <ThemeIcon color={color(priorityColor)} variant="transparent">
+              <ThemeIcon color={color(taskPriority.color)} variant="transparent">
                 <IconFlagFilled size={20} />
               </ThemeIcon>
               <Stack gap={3}>
-                <Text>{taskPriorities[priority.id as TaskPriority]?.label()}</Text>
+                <Text>{t(taskPriority.label)}</Text>
               </Stack>
             </Group>
           </Combobox.Option>

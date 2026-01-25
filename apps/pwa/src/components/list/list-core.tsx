@@ -1,6 +1,6 @@
 "use client";
 
-import { useList } from "@/components/list/use-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
 import { shiftSelect } from "@joy-one-client/utils/array";
@@ -151,18 +151,13 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
     };
   }, [props.fixedParams, props.filterModes, viewStateRef.current.activatedModes]);
 
-  const list = useList<T>({
+  const list = useGraphqlList<T>({
     id: props.id,
     limit: props.limit,
     isSkip: !isInitialized,
+    query: props.query,
     params: stateParams,
     events: props.events,
-    fetch: (fetchParams, controller) => {
-      return api.get(props.route, {
-        params: fetchParams,
-        signal: controller?.signal,
-      });
-    },
   });
 
   const spacing = 10;
@@ -187,17 +182,16 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
     forceUpdate();
   };
 
-  const refreshList = () => {
+  const refreshList = async () => {
     setIsRefreshing(true);
-    list.fetch(true, { isSilient: true }).finally(() => {
-      setIsRefreshing(false);
-    });
+    await list.refetch();
+    setIsRefreshing(false);
   };
 
   const resetDefault = () => {
     viewStateRef.current = defaultViewState;
     localStorage.removeItem(listViewId);
-    list.removeAllParams({ isSilient: true });
+    list.removeAllParams();
     forceUpdate();
   };
 
@@ -349,11 +343,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
                           )}
 
                           {list.newDataCount > 0 && (
-                            <Badge
-                              size="sm"
-                              variant="light"
-                              onClick={() => list.fetch(true, { isSilient: false })}
-                            >
+                            <Badge size="sm" variant="light" onClick={list.refetch}>
                               <Trans>
                                 +<NumberFormat value={list.newDataCount || 0} /> new one
                               </Trans>
@@ -422,11 +412,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
               </Fragment>
             )}
 
-            <WayPoint
-              enabled={list.isAbleToLoadMore}
-              offset={350}
-              onReached={() => list.fetch(false)}
-            />
+            <WayPoint enabled={list.isAbleToLoadMore} offset={350} onReached={list.loadMore} />
 
             <BulkActions />
           </Fragment>

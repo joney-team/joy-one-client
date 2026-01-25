@@ -1,3 +1,4 @@
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
@@ -18,15 +19,12 @@ import {
   IconReportMoney,
   IconStack,
   IconStack2,
-  IconStopwatch,
   IconUsersPlus,
 } from "@tabler/icons-react";
 import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { ReportWidgetsContext, ReportWidgetType } from "./types";
 import { ReportCreditWidget } from "./widgets/report-credit.widget";
 import { ReportProductsWidget } from "./widgets/report-products.widget";
-import { ReportTimeTrackingsWidget } from "./widgets/report-time-trackings.widget";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const useReportWidgetModules = (): {
   reportWidgetModules: EWidgetModules<ReportWidgetType, ReportWidgetsContext>;
@@ -181,19 +179,6 @@ export const useReportWidgetModules = (): {
           },
         },
         component: ReportProductsWidget,
-      },
-      [ReportWidgetType.TASK_TIME_TRACKINGS]: {
-        config: {
-          name: () => t`Tasks time trackings`,
-          icon: IconStopwatch,
-          layout: {
-            initH: 12,
-            initW: 12,
-            minW: 6,
-            minH: 12,
-          },
-        },
-        component: ReportTimeTrackingsWidget,
       },
       [ReportWidgetType.LOANS_RECEIPTS]: {
         config: {

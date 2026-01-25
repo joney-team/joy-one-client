@@ -2,10 +2,10 @@
 
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import {
   HrmTimekeepingsCalendar,
   TimekeepingsCalendarExplain,

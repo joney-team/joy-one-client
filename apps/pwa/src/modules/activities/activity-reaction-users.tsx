@@ -20,7 +20,7 @@ export const ActivityReactionUsers: FC<{ userIds: string[] }> = ({ userIds }) =>
   return (
     <Menu.Dropdown>
       <Stack gap="xs" py={5}>
-        {data?.users.data.map((user) => (
+        {data?.users.results.map((user) => (
           <Group key={user._id} px="xs">
             <Text fz="xs" fw={500}>
               {user.name}

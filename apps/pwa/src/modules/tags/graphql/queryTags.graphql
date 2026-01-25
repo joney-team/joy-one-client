@@ -2,8 +2,8 @@
 
 query Tags($type: String, $offset: Float, $limit: Float, $ids: [String!]) {
   tags(type: $type, offset: $offset, limit: $limit, ids: $ids) {
-    count
-    data {
+    total
+    results {
       ...TagData
     }
   }

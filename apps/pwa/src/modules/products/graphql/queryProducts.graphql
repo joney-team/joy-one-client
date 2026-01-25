@@ -1,0 +1,40 @@
+query Products($limit: Float, $offset: Float, $query: JSONObject) {
+  list: products(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      _id
+      name
+      code
+      content
+      displayName
+      image
+      productCode
+      tags
+      supplies {
+        productId
+        quantity
+      }
+      unit
+      price
+      minPrice
+      maxPrice
+      defaultQtyPerUse
+      isStockCheck
+      warningOutOfDateBeforeDays
+      warningOutOfStockQty
+      workspaceId
+      categoryId
+      inStock
+      isHiddenInReceiptWhenNoPrice
+      type
+      combosExpireInDays
+      voucherAmount
+      voucherExpireInDays
+      voucherExcludeProductIds
+      voucherIncludeProductIds
+    }
+  }
+}

@@ -3,8 +3,6 @@
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
-import { getTaskPriorityColor, isTaskOutdated } from "@/modules/tasks/tasks-service";
-import { TaskPriority } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import {
@@ -54,14 +52,16 @@ import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
-import { useTaskMenu } from "../../modules/task-menu/task-menu";
-import { TaskMenuAction } from "../../modules/task-menu/task-menu-types";
-import { taskPriorities } from "../../task-constants";
+import { useTaskMenu } from "../../components/task-menu/task-menu";
+import { TaskMenuAction } from "../../components/task-menu/task-menu-types";
+import { taskPriorities } from "../../tasks-constants";
 
 import { Avatar } from "@/components/avatar";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { useRouter } from "next/navigation";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { updateTaskPath } from "../../tasks-route-helpers";
+import { DefaultTaskStatusId } from "../../tasks-types";
 import styles from "./board-tasks.module.css";
 
 const CardProperty: FC<
@@ -181,6 +181,14 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
   const [isShowSubTasks, setIsShowSubTasks] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [over, setOver] = useState<{ edge: Edge; rect: DOMRect } | null>(null);
+
+  const isOutdated = useMemo(
+    () =>
+      !!task?.dueDate &&
+      task.dueDate < DateTime.getNowInSeconds() &&
+      task.status !== DefaultTaskStatusId.CLOSED,
+    [task]
+  );
 
   const subtaskVariables: TasksQueryVariables = useMemo(() => {
     return {
@@ -421,7 +429,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                     flex={1}
                     fz={14}
                     fw={500}
-                    c={isTaskOutdated(task) ? "red" : "var(--mantine-color-text)"}
+                    c={isOutdated ? "red" : "var(--mantine-color-text)"}
                   >
                     <DateFormat value={task.dueDate} />
                   </Text>
@@ -435,7 +443,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
 
               <CardProperty
                 icon={task.priority ? IconFlagFilled : IconFlag}
-                iconColor={task.priority ? getTaskPriorityColor(task.priority) : undefined}
+                iconColor={task.priority ? taskPriorities[task.priority]?.color : undefined}
                 label={t`Priority`}
                 canRemove={!!task.priority}
                 onRemove={() => updateTasks([{ _id: task._id, priority: null }])}
@@ -451,8 +459,8 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
                 }}
               >
                 {task.priority ? (
-                  <Text flex={1} fz={14} fw={500} c={getTaskPriorityColor(task.priority)}>
-                    {taskPriorities[task.priority as TaskPriority]?.label()}
+                  <Text flex={1} fz={14} fw={500} c={taskPriorities[task.priority]?.color}>
+                    {t(taskPriorities[task.priority]?.label)}
                   </Text>
                 ) : (
                   <Group color="gray" variant="subtle" fz={12} c="gray" gap={2}>

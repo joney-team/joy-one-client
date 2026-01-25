@@ -49,6 +49,7 @@ import { FC, Fragment, useRef } from "react";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
+import QUERY_LOANS from "./graphql/queryLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
 
@@ -92,7 +93,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         name={<Trans>Loans</Trans>}
         limit={16}
         icon={IconCreditCardPay}
-        route="/loans"
+        query={QUERY_LOANS}
         fixedParams={
           props.strictStatus
             ? {

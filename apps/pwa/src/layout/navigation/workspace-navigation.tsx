@@ -34,7 +34,7 @@ import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspac
 import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
 
 const WorkspaceNavigationDrawer = dynamic(
-  () => import("./navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
+  () => import("./workspace-navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
   {
     ssr: false,
     loading: nonLoading,

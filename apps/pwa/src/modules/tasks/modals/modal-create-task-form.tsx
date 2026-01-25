@@ -36,9 +36,9 @@ import TASK_STATUS_QUERY, {
   type TaskStatusesQueryVariables,
 } from "../graphql/queryTaskStatuses.graphql";
 import { useTaskStatuses } from "../hooks/use-task-statuses";
-import { useTaskMenu } from "../modules/task-menu/task-menu";
-import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
-import { taskPriorities } from "../task-constants";
+import { useTaskMenu } from "../components/task-menu/task-menu";
+import { TaskMenuAction } from "../components/task-menu/task-menu-types";
+import { taskPriorities } from "../tasks-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
 
 export interface CreateTaskFormProps {
@@ -286,7 +286,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
               }
             >
               {form.values.priority ? (
-                taskPriorities[form.values.priority as TaskPriority].label()
+                t(taskPriorities[form.values.priority as TaskPriority].label)
               ) : (
                 <Trans>Priority</Trans>
               )}

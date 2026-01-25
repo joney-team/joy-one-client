@@ -8,9 +8,9 @@ import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { numberColumn } from "@/components/list/columns/number-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { EventType } from "@/graphql/enums.graphql";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { ModalProductStockOut } from "@/modules/product-stocks/modals/modal-product-stock-out";
 import { ProductStockRecordType } from "@/modules/product-stocks/product-stocks-types";
@@ -39,6 +39,9 @@ import {
   ProductStockEntity,
   ProductStockRecordEntity,
 } from "../product-stocks/product-stocks-entity";
+
+import QUERY_PRODUCT_STOCK_RECORDS from "../product-stocks/graphql/queryProductStockRecords.graphql";
+import QUERY_PRODUCT_STOCKS from "../product-stocks/graphql/queryProductStocks.graphql";
 
 const events = [
   EventType.ProductNew,
@@ -97,7 +100,7 @@ export const ProductDetail: FC = () => {
                           id={`product-stocks-${productId}`}
                           icon={IconBuildingWarehouse}
                           name="product_stocks"
-                          route="/product-stocks"
+                          query={QUERY_PRODUCT_STOCKS}
                           fixedParams={{ productId, sortExpireAt: 1 }}
                           columns={{
                             createdAt: dateTimeColumn({ sortable: true, name: "time" }),
@@ -151,7 +154,7 @@ export const ProductDetail: FC = () => {
                   id={`product-stock-records-${productId}`}
                   icon={IconArrowLeftRight}
                   name="history"
-                  route="/product-stock-records"
+                  query={QUERY_PRODUCT_STOCK_RECORDS}
                   fixedParams={{ productId }}
                   columns={{
                     createdAt: dateTimeColumn(),

@@ -1,0 +1,8 @@
+fragment WorkspaceRoleData on WorkspaceRole {
+  _id
+  name
+  description
+  color
+  permissions
+  isEditable
+}

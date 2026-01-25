@@ -3,16 +3,16 @@
 import { Button } from "@/components/buttons/button";
 import { searchArray } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
-import { WorkspaceRoleEntity } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { Checkbox, Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Circle } from "../../../components/circle";
 import { Selector, SelectorContext } from "../../../components/selector";
+import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
+import { useWorkspaceRoles } from "../hooks/use-workspace-roles";
 
-type WorkspaceRoleOption = Pick<WorkspaceRoleEntity, "_id" | "name" | "color">;
+type WorkspaceRoleOption = Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">;
 
 interface WorkspaceRolesSelectorProps {
   onSelect: (role: WorkspaceRoleOption) => void;
@@ -22,8 +22,7 @@ interface WorkspaceRolesSelectorProps {
 }
 
 export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) => {
-  const workspace = useWorkspace();
-  const options: WorkspaceRoleOption[] = workspace.roles.map((v) => ({ ...v, name: v.name }));
+  const { selectableRoles } = useWorkspaceRoles();
   const color = useColor();
 
   return (
@@ -31,7 +30,7 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
       disabled={props.disabled}
       autoCloseOnChange={false}
       staticSearch
-      pinnedOptions={options}
+      pinnedOptions={selectableRoles}
       renderOption={(mo) => {
         const _color = color(mo.color || "gray");
         return (
@@ -74,7 +73,7 @@ export const WorkspaceRolesSelector: FC<WorkspaceRolesSelectorProps> = (props) =
         if (!e) return;
         props.onSelect?.(e);
       }}
-      onSearch={(q) => searchArray<WorkspaceRoleOption>(options, ["name"], q)}
+      onSearch={(q) => searchArray<WorkspaceRoleOption>(selectableRoles, ["name"], q)}
     />
   );
 };

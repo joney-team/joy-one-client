@@ -8,7 +8,7 @@ export type ActivityReactionUsersQueryVariables = Types.Exact<{
 }>;
 
 
-export type ActivityReactionUsersQuery = { __typename: 'Query', users: { __typename: 'WorkspaceMembersPaginated', count: number, data: Array<{ __typename: 'WorkspaceMember', _id: string, name: string }> } };
+export type ActivityReactionUsersQuery = { __typename: 'Query', users: { __typename: 'WorkspaceMembersPaginated', total: number, results: Array<{ __typename: 'WorkspaceMember', _id: string, name: string }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

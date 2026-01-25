@@ -6,8 +6,7 @@ import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { useMutation } from "@apollo/client/react";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Group,
@@ -26,51 +25,28 @@ import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
 
-import WORKSPACE_DATE_FRAGMENT from "../graphql/fragmentWorkspace.graphql";
-import UPDATE_WORKSPACE_MUTATION, {
-  type UpdateWorkspaceMutation,
-  type UpdateWorkspaceMutationVariables,
-} from "../graphql/mutationUpdateWorkspace.graphql";
+import { useDebouncedCallback } from "@mantine/hooks";
+import { type UpdateWorkspaceMutationVariables } from "../graphql/mutationUpdateWorkspace.graphql";
+import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 import { normalizeWorkspaceInput } from "../workspaces-service";
 
-let timeout: NodeJS.Timeout;
-
 export const WorkspaceInformation: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
   const [avatarUploading, setAvatarUploading] = useState(false);
-  const [updateWorkspace] = useMutation<UpdateWorkspaceMutation, UpdateWorkspaceMutationVariables>(
-    UPDATE_WORKSPACE_MUTATION,
-    {
-      update: (cache, result) => {
-        if (!result.data) return;
-        cache.updateFragment(
-          {
-            id: `Workspace:${result.data.updateWorkspace._id}`,
-            fragment: WORKSPACE_DATE_FRAGMENT,
-            fragmentName: "WorkspaceData",
-          },
-          (data) => {
-            if (!data) return data;
+  const { updateWorkspace } = useUpdateWorkspace();
 
-            return {
-              ...data,
-              ...result.data?.updateWorkspace,
-            };
-          }
-        );
-      },
-    }
+  const handleUpdateWorkspace = useDebouncedCallback(
+    async (values: UpdateWorkspaceMutationVariables) => {
+      await updateWorkspace({ variables: values }).catch(onError);
+    },
+    300
   );
 
   const form = useForm({
     initialValues: normalizeWorkspaceInput(workspace.member.workspace),
-    onValuesChange: (values) => {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        updateWorkspace({ variables: values }).catch(onError);
-      }, 300);
-    },
+    onValuesChange: handleUpdateWorkspace,
   });
 
   const handleUploadLogo = async (file: File) => {
@@ -136,7 +112,7 @@ export const WorkspaceInformation: FC = () => {
                 <WorkspaceTypeItem
                   key={type}
                   icon={workspaceTypes[type].icon}
-                  label={workspaceTypes[type].name()}
+                  label={t(workspaceTypes[type].name)}
                   isActive={form.values.type === type}
                   onClick={() => form.setFieldValue("type", type)}
                 />

@@ -7,7 +7,7 @@ import { useLingui } from "@lingui/react/macro";
 import { useThrottledCallback } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { setTaskMenuRoot } from "../../modules/task-menu/task-menu";
+import { setTaskMenuRoot } from "../../components/task-menu/task-menu";
 import { parseTaskPath } from "../../tasks-route-helpers";
 import { ganttConfig } from "./gantt-tasks-config";
 import { Context } from "./gantt-tasks-context";

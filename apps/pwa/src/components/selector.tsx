@@ -1,6 +1,5 @@
 "use client";
 
-import { useList } from "@/components/list/use-list";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
 import { api } from "@/modules/apis";
@@ -8,6 +7,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
+import { getId } from "@joy-one-client/utils/base-data";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,
@@ -31,6 +31,7 @@ import {
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconBackground, IconPlus } from "@tabler/icons-react";
 import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
+import { useList } from "./list/use-list";
 
 type WithGroup = { _group?: string };
 type WithDisabled = { disabled?: boolean };
@@ -47,7 +48,7 @@ export interface SelectorContext<T extends SelectOption> {
 }
 
 export type SelectorTarget<T extends SelectOption> = (ctx: SelectorContext<T>) => ReactNode;
-export type SelectorRenderOption<T extends SelectOption> = (item: T) => ReactNode;
+export type SelectorRenderOption<T extends SelectOption> = (item: T, key: string) => ReactNode;
 export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | Promise<T[]>;
 
 export interface SelectorBaseProps<T extends SelectOption>
@@ -71,11 +72,10 @@ export interface SelectorBaseProps<T extends SelectOption>
   autoCloseOnChange?: boolean;
   comboboxProps?: ComboboxProps;
   searchProps?: ComboboxSearchProps;
+  getOptionId?: (item: T) => string;
 }
 
 export interface SelectorProps<T extends SelectOption = any> extends SelectorBaseProps<T> {}
-
-export const getId = (item: SelectOption): string => ("id" in item ? item.id : item._id);
 
 export const getLabel = (item: any): string =>
   "label" in item ? item.label : "name" in item ? item.name : getId(item);
@@ -103,8 +103,11 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     searchProps,
     listRoute,
     listParams,
+    getOptionId: propsGetOptionId,
     ...rest
   } = props;
+
+  const getOptionId = propsGetOptionId ?? getId;
 
   const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
   const { t } = useLingui();
@@ -152,33 +155,33 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     const listOptions = [...list.data].map((v) => ({
       ...v,
       label: getLabel(v),
-      value: getId(v),
+      value: getOptionId(v),
       data: v,
     }));
 
     const pinnedOptions = (propsPinnedOptions || [])
-      .filter((v) => !listOptions.find((v2) => getId(v) === getId(v2)))
+      .filter((v) => !listOptions.find((listOption) => getOptionId(v) === getOptionId(listOption)))
       .map((v) => ({
         ...v,
         label: getLabel(v),
-        value: getId(v),
+        value: getOptionId(v),
         data: v,
       }));
 
-    const opts = (
+    const combinedOptions = (
       searchOptions.length > 0 || search.length > 0
         ? searchOptions
         : [...pinnedOptions, ...listOptions]
     )
-      .filter((item) => (value ? getId(value) !== getId(item) : true))
+      .filter((item) => (value ? getOptionId(value) !== getOptionId(item) : true))
       .filter((item) => {
         if (excludeIds) {
-          return !excludeIds?.includes(getId(item));
+          return !excludeIds?.includes(getOptionId(item));
         }
         return true;
       });
 
-    return [...opts];
+    return [...combinedOptions];
   }, [searchOptions, search, value, excludeIds, propsPinnedOptions, list.data]);
 
   const groupOptions = options.reduce((acc, item) => {
@@ -256,8 +259,8 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             combobox.closeDropdown();
           } else {
             const option =
-              options.find((item) => getId(item) === val) ||
-              list.data.find((item) => getId(item) === val);
+              options.find((item) => getOptionId(item) === val) ||
+              list.data.find((item) => getOptionId(item) === val);
 
             await props.onSelect?.(option, combobox);
             if (autoCloseOnChange) combobox.closeDropdown();
@@ -319,18 +322,22 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
             >
               {options.length > 0 ? (
                 <Fragment>
-                  {options.filter((v) => !getGroup(v)).map((item) => props.renderOption(item))}
+                  {options
+                    .filter((v) => !getGroup(v))
+                    .map((item, itemIndex) => props.renderOption(item, `option-${itemIndex}`))}
 
-                  {Object.keys(groupOptions).map((group, i) => {
+                  {Object.keys(groupOptions).map((group, groupIndex) => {
                     if (groupOptions[group].length === 0) return null;
 
                     return (
                       <Combobox.Group
                         label={group}
-                        key={group + i}
+                        key={group + groupIndex}
                         styles={{ groupLabel: { fontSize: 12 } }}
                       >
-                        {groupOptions[group].map((item) => props.renderOption(item))}
+                        {groupOptions[group].map((item, itemIndex) =>
+                          props.renderOption(item, `group-${groupIndex}-option-${itemIndex}`)
+                        )}
                       </Combobox.Group>
                     );
                   })}

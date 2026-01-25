@@ -3,16 +3,16 @@
 import { DynamicSelectorFilterOption } from "@/components/list/filters/dynamic-selector-filter";
 import { Column } from "@/components/list/types";
 import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { getWorkspaceBranchByIds } from "./workspace-branches-service";
-import { Trans } from "@lingui/react/macro";
 
 export const workspaceBranchColumn = (): Column => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
   const rootOption = { label: t`Main office`, value: "root", data: null };
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
@@ -42,7 +42,7 @@ export const workspaceBranchColumn = (): Column => {
         ? {
             dynamicSelector: {
               pinnedOptions: [rootOption],
-              getOptions: async (ids) => {
+              getSelectedOptions: async (ids) => {
                 const options = await getWorkspaceBranchByIds(ids.filter((v) => v !== "root"));
                 return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
               },

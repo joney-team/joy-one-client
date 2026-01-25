@@ -1,20 +1,20 @@
 "use client";
 
-import { TaskStatus } from "@/graphql/types.graphql";
+import { TaskContextType } from "@/graphql/enums.graphql";
+import { useQuery } from "@apollo/client/react";
 import { useMemo } from "react";
 import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
-import { normalizeTaskStatuses } from "../task-constants";
-import { useQuery } from "@apollo/client/react";
 import QUERY_TASK_STATUSES, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../graphql/queryTaskStatuses.graphql";
-import { TaskContextType } from "@/graphql/enums.graphql";
+import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
 export function getTaskStatuses(task: Pick<TaskDataFragment, "status" | "statuses">) {
   const statuses = normalizeTaskStatuses(task.statuses);
   const status = statuses.find((s) => s.id === task.status) ?? statuses[0];
+
   return {
     statuses,
     status,

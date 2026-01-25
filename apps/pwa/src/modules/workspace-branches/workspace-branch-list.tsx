@@ -15,6 +15,7 @@ import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useLocations } from "../locations/locations-context";
 import { WorkspaceBranchEntity } from "./workspace-branches-types";
+import QUERY_WORKSPACE_BRANCHES from "./graphql/queryWorkspaceBranches.graphql";
 
 export const WorkspaceBranchList: FC = () => {
   const color = useColor();
@@ -28,7 +29,7 @@ export const WorkspaceBranchList: FC = () => {
           onCreate: () => OnWorkspaceBranchModal(),
           permission: WorkspacePermission.WORKSPACE_SETTINGS,
         }}
-        route="/workspace-branches"
+        query={QUERY_WORKSPACE_BRANCHES}
         id="workspace-branches"
         columns={{
           name: {

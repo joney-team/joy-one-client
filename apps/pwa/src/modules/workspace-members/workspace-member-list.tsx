@@ -25,6 +25,7 @@ import {
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -33,11 +34,16 @@ import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
 import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
+import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "./graphql/mutationAssignWorkspaceMemberRoles.graphql";
+import QUERY_WORKSPACE_MEMBERS from "./graphql/queryWorkspaceMembers.graphql";
+
 export const WorkspaceMemberList: FC = () => {
   const workspace = useWorkspace();
   const color = useColor();
   const { normalizeRole } = useNormalizeRoles();
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
+
+  const [assignRoles] = useMutation(MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES);
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
@@ -48,10 +54,10 @@ export const WorkspaceMemberList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List<any>
-        route="/workspace-members"
+      <List<WorkspaceMemberDataFragment>
         id="workspace-members"
-        name={t`Members`}
+        query={QUERY_WORKSPACE_MEMBERS}
+        name={<Trans>Members</Trans>}
         columns={{
           name: {
             defaultWidth: 300,
@@ -68,7 +74,7 @@ export const WorkspaceMemberList: FC = () => {
               </Group>
             ),
           },
-          createdAt: dateTimeColumn({
+          joinedAt: dateTimeColumn({
             valuePath: "joinedAt",
             name: <Trans>Joined at</Trans>,
             isShowRelativeTime: true,
@@ -113,7 +119,7 @@ export const WorkspaceMemberList: FC = () => {
             render: ({ data }) => {
               const roles = data.roles.map(normalizeRole);
               const owner = roles.find((v: any) => v._id === WorkspaceDefaultRoleId.OWNER);
-              const isHasPermission = workspace.hasPermission(
+              const isCanAssignRole = workspace.hasPermission(
                 WorkspacePermission.WORKSPACE_ROLES_MANAGER
               );
 
@@ -131,16 +137,17 @@ export const WorkspaceMemberList: FC = () => {
 
               return (
                 <WorkspaceRolesInput
-                  key={data.userId}
                   autoHide
-                  disabled={!isHasPermission}
+                  disabled={!isCanAssignRole}
                   value={data.roles}
                   onChange={(roles) => {
                     if (!data.memberId) return;
-                    return updateWorkspaceMember(data.memberId, {
-                      ...data,
-                      roleIds: roles.map((v) => v._id),
-                    } as any);
+                    return assignRoles({
+                      variables: {
+                        memberId: data.memberId,
+                        roleIds: roles.map((v) => v._id),
+                      },
+                    });
                   }}
                 />
               );
@@ -151,7 +158,7 @@ export const WorkspaceMemberList: FC = () => {
               };
             },
           },
-          workspaceBranchIds: {
+          workspaceBranches: {
             defaultWidth: 300,
             name: <Trans>Branch</Trans>,
             icon: IconBuilding,
@@ -186,7 +193,7 @@ export const WorkspaceMemberList: FC = () => {
               workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
                 ? {
                     dynamicSelector: {
-                      getOptions: async (ids) => {
+                      getSelectedOptions: async (ids) => {
                         const options = await getWorkspaceBranchByIds(
                           ids.filter((v) => v !== "root")
                         );
@@ -218,6 +225,7 @@ export const WorkspaceMemberList: FC = () => {
         card={({ data }) => <MemberCard member={data} />}
         events={[
           EventType.WorkspaceMemberUpdated,
+          EventType.WorkspaceMemberAssignRoles,
           EventType.WorkspaceMemberLeaved,
           EventType.WorkspaceMemberTransferOwner,
         ]}

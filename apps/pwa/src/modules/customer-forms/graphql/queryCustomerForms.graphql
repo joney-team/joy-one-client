@@ -1,0 +1,27 @@
+query CustomerForms($limit: Float, $offset: Float, $query: JSONObject) {
+  list: customerForms(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      _id
+      name
+      phone
+      email
+      dynamicData
+      location {
+        address
+      }
+      vnLocation {
+        address
+      }
+      status
+      cancelReason
+      workspaceBranch {
+        _id
+        name
+      }
+    }
+  }
+}

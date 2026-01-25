@@ -1,0 +1,20 @@
+query EInvoices($limit: Float, $offset: Float, $query: JSONObject) {
+  list: eInvoices(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      _id
+      refs
+      createdAt
+      updatedAt
+      providerId
+      provider
+      receiptId
+      receiptCode
+      invoiceId
+      invoiceData
+      providerData
+      url
+      isCancelled
+    }
+  }
+}

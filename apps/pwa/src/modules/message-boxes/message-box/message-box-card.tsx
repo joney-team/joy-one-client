@@ -4,8 +4,8 @@ import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
 import { useList } from "@/components/list/use-list";
 import { TextOverflow } from "@/components/text-overflow";
-import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import {
   getMessages,
   messageBoxPlatformImages,

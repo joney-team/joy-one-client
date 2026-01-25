@@ -7,7 +7,6 @@ import { ContextMenuProps } from "./context-menu-types";
 
 import { getId } from "@joy-one-client/utils/base-data";
 import { placeDropdownMenuByMouseEvent, placeDropdownMenuByTarget } from "./context-menu-helpers";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 export const ContextMenuDropdown = ({
   id,

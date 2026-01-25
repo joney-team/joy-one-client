@@ -1,6 +1,7 @@
 "use client";
 
 import OverlayLoading from "@/components/overlay-loading";
+import { useColor } from "@/modules/theme/use-color";
 import { useWorkspaceStyles } from "@/modules/theme/use-workspace-styles";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
@@ -11,7 +12,6 @@ import dynamic from "next/dynamic";
 import { Fragment, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
-import { useColor } from "@/modules/theme/use-color";
 
 const WorkspaceNavigation = dynamic(
   () => import("./navigation/workspace-navigation").then((m) => m.WorkspaceNavigation),

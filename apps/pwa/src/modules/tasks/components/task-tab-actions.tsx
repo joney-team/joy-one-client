@@ -4,21 +4,18 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { WithClearable } from "@/components/with-clearable/with-clearable";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
-import QUERY_WORKSPACE_MEMBERS, {
-  type WorkspaceMembersQuery,
-  type WorkspaceMembersQueryVariables,
-} from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
+import QUERY_WORKSPACE_MEMBERS from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
 import { IconChecks, IconEdit, IconFlag, IconFlagFilled, IconUsers } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { useEffect, useRef, type FC } from "react";
 import { useFolderStatuses } from "../hooks/use-task-statuses";
-import { useTaskMenu } from "../modules/task-menu/task-menu";
-import { TaskMenuAction } from "../modules/task-menu/task-menu-types";
-import { taskPriorities } from "../task-constants";
+import { useTaskMenu } from "./task-menu/task-menu";
+import { TaskMenuAction } from "./task-menu/task-menu-types";
+import { taskPriorities } from "../tasks-constants";
 import { useTasks } from "../tasks-context";
 
 const ModalCreateTask = dynamic(
@@ -30,25 +27,23 @@ const ModalCreateTask = dynamic(
 );
 
 export const TaskTabActions: FC = () => {
+  const { t } = useLingui();
   const { activatedFolder, setState, state } = useTasks();
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
   const { statuses } = useFolderStatuses(activatedFolder?._id);
 
-  const workspaceMembers = useQuery<WorkspaceMembersQuery, WorkspaceMembersQueryVariables>(
-    QUERY_WORKSPACE_MEMBERS,
-    {
-      skip: !state.variables?.assigneeUserIds || state.variables?.assigneeUserIds.length === 0,
-      variables: {
-        userId: state.variables?.assigneeUserIds ?? [],
-      },
-    }
-  );
+  const workspaceMembers = useQuery(QUERY_WORKSPACE_MEMBERS, {
+    skip: !state.variables?.assigneeUserIds || state.variables?.assigneeUserIds.length === 0,
+    variables: {
+      userId: state.variables?.assigneeUserIds ?? [],
+    },
+  });
 
   const menuTask = useTaskMenu({
     task: {
       _id: "filter-tasks",
       statuses: [...statuses.inprogress, ...statuses.closed],
-      assigneeUsers: workspaceMembers.data?.workspaceMembers?.data,
+      assigneeUsers: workspaceMembers.data?.list?.results,
     },
     options: {
       offset: {
@@ -107,10 +102,9 @@ export const TaskTabActions: FC = () => {
             menuTask.open({ action: TaskMenuAction.CHANGE_ASSIGNEE, target: e.currentTarget });
           }}
         >
-          {workspaceMembers.data?.workspaceMembers &&
-          workspaceMembers.data?.workspaceMembers.data.length > 0 ? (
+          {workspaceMembers.data?.list && workspaceMembers.data.list.results.length > 0 ? (
             <Group gap={3}>
-              {workspaceMembers.data?.workspaceMembers.data.map((member) => (
+              {workspaceMembers.data.list.results.map((member) => (
                 <Avatar key={member._id} user={member} size={20} />
               ))}
             </Group>
@@ -138,7 +132,7 @@ export const TaskTabActions: FC = () => {
           }}
         >
           {state.variables?.priority ? (
-            taskPriorities[state.variables.priority]?.label()
+            t(taskPriorities[state.variables.priority]?.label)
           ) : (
             <Trans>Priority</Trans>
           )}

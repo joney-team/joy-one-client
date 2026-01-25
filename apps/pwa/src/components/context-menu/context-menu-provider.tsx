@@ -40,7 +40,7 @@ export const ContextMenuProvider = <T extends BaseData, Context = unknown>(
   };
 
   const onOpen = (args: OpenContextMenuArgs) => {
-    if (!menuRef.current) return;
+    if (!menuRef.current || props.disabled) return;
 
     const oldMenuId = menuArgsRef.current?.data ? getId(menuArgsRef.current.data) : null;
     const newMenuId = args.data ? getId(args.data) : null;

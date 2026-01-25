@@ -8,13 +8,13 @@ import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { GanttProvider } from "./gantt-tasks-provider";
 
+import { useLayout } from "@/layout/layout-context";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import dynamic from "next/dynamic";
-import { TaskSelectionsProvider } from "../../modules/task-selections/task-selections-provider";
+import { TaskSelectionsProvider } from "../../components/task-selections/task-selections-provider";
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
 import styles from "./gantt-tasks.module.css";
-import { useLayout } from "@/layout/layout-context";
 
 const SidebarHead = dynamic(() => import("./gantt-tasks-layout").then((mod) => mod.SidebarHead), {
   ssr: false,

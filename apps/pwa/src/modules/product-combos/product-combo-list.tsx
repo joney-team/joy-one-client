@@ -4,19 +4,21 @@ import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { statusColumn } from "@/components/list/columns/status-column";
+import { EventType } from "@/graphql/enums.graphql";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { ModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { productComboStatusOptions } from "@/modules/product-combos/product-combos-service";
 import { ProductComboStatus } from "@/modules/product-combos/product-combos-types";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
 import { Badge, Group, Stack, Text } from "@mantine/core";
 import { IconHistory, IconPackage } from "@tabler/icons-react";
 import { type FC } from "react";
 import { productComboStatuses } from "./product-combos-constants";
 import { ProductComboEntity } from "./product-combos-entity";
-import { EventType } from "@/graphql/enums.graphql";
+
+import { Trans } from "@lingui/react/macro";
+import QUERY_PRODUCT_COMBOS from "./graphql/queryProductCombos.graphql";
 
 export const ProductComboList: FC = () => {
   const color = useColor();
@@ -29,17 +31,20 @@ export const ProductComboList: FC = () => {
             <List<ProductComboEntity>
               id="cbs"
               icon={IconPackage}
-              name={t`List combos`}
-              route="/product-combos"
+              name={<Trans>List combos</Trans>}
+              query={QUERY_PRODUCT_COMBOS}
               columns={{
-                customerId: customerColumn({ name: t`Customer`, valuePath: "customer" }),
-                createdAt: dateTimeColumn({ name: t`Time`, valuePath: "createdAt" }),
+                customerId: customerColumn({
+                  name: <Trans>Customer</Trans>,
+                  valuePath: "customer",
+                }),
+                createdAt: dateTimeColumn({ name: <Trans>Time</Trans>, valuePath: "createdAt" }),
                 product: {
-                  name: t`Name`,
+                  name: <Trans>Name</Trans>,
                   render: ({ data }) => data.product.name,
                 },
                 productRefs: {
-                  name: t`Products/Services`,
+                  name: <Trans>Products/Services</Trans>,
                   render: ({ value, data }) => {
                     const statusOptions = productComboStatusOptions[data.status];
 
@@ -81,7 +86,7 @@ export const ProductComboList: FC = () => {
               }}
               actions={[
                 {
-                  label: t`History`,
+                  label: <Trans>History</Trans>,
                   icon: IconHistory,
                   onClick: (data) => openProductCombo({ id: data.id }),
                 },

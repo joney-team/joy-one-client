@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
-import { renderTaskStatusStyle } from "@/modules/tasks/tasks-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -11,6 +10,7 @@ import { useForceUpdate, useHover } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { normalizeTaskStatuses } from "../../tasks-constants";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { TaskTimeTracking, TaskTimeTrackingUser } from "./time-tracking-types";
 
@@ -25,8 +25,9 @@ export const TimeTrackingTask: FC<{
   const color = useColor();
   const router = useRouter();
 
-  const statusStyle = renderTaskStatusStyle(task.status, workspace.settings.taskStatuses);
   const assignee = task.assigneeUsers?.[0];
+  const taskStatuses = normalizeTaskStatuses(task.statuses);
+  const taskStatus = taskStatuses.find((s) => s.id === task.status);
 
   const timeTrackings = (task.timeTrackings || []).filter(
     (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
@@ -66,7 +67,7 @@ export const TimeTrackingTask: FC<{
       radius={5}
       ref={hover.ref}
       style={{
-        borderLeft: `3px solid ${color(statusStyle.color)}`,
+        borderLeft: `3px solid ${color(taskStatus?.color ?? "gray")}`,
         position: "relative",
         overflow: "hidden",
       }}

@@ -20,8 +20,8 @@ query Activities(
     sortCreatedAt: $sortCreatedAt
     parentId: $parentId
   ) {
-    count
-    data {
+    total
+    results {
       ...ActivityData
     }
   }

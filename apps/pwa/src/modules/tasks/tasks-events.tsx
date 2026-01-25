@@ -6,12 +6,9 @@ import { type FC } from "react";
 import { useEventsListener } from "../events/event-service";
 import { useTasks } from "./tasks-context";
 
-import TASK_FRAGMENT, { type TaskDataFragment } from "./graphql/fragmentTask.graphql";
+import TASK_FRAGMENT from "./graphql/fragmentTask.graphql";
 
-import QUERY_TASK_BY_ID, {
-  type TaskByIdQuery,
-  type TaskByIdQueryVariables,
-} from "./graphql/queryTaskById.graphql";
+import QUERY_TASK_BY_ID from "./graphql/queryTaskById.graphql";
 
 export const TasksEvents: FC = () => {
   const { state } = useTasks();
@@ -22,7 +19,7 @@ export const TasksEvents: FC = () => {
     async (ev) => {
       if (!ev.ref) return;
 
-      const task = await client.query<TaskByIdQuery, TaskByIdQueryVariables>({
+      const task = await client.query({
         query: QUERY_TASK_BY_ID,
         variables: {
           id: ev.ref,
@@ -36,7 +33,7 @@ export const TasksEvents: FC = () => {
           _id: task.data?.task._id,
         });
 
-        client.cache.updateFragment<TaskDataFragment>(
+        client.cache.updateFragment(
           {
             id: identifiedId,
             fragment: TASK_FRAGMENT,

@@ -40,6 +40,7 @@ import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-co
 import { type ModalPayReceiptRef } from "./modals/modal-pay-receipt";
 import { ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
+import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
 
 const ModalReceiptDetail = dynamic(
   () => import("./modals/modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
@@ -82,7 +83,7 @@ export const ReceiptList: FC = () => {
           name={<Trans>Receipts</Trans>}
           limit={18}
           icon={IconCashRegister}
-          route="/receipts"
+          query={QUERY_RECEIPTS}
           columns={{
             code: codeColumn({
               onClick: (_, data) => modalReceiptDetailRef.current?.open(data.id),

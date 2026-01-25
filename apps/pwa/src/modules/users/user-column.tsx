@@ -7,10 +7,8 @@ import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import {
-  getMemberRoleLabel,
-  getWorkspaceMemberByIds,
-} from "../workspace-members/workspace-members-service";
+import QUERY_WORKSPACE_MEMBERS_BY_IDS from "../workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
+import { getMemberRoleLabel } from "../workspace-members/workspace-members-service";
 import { ModalUserInformation } from "./modals/modal-user-information";
 
 export interface UserColumnArgs extends Omit<Column, "render"> {
@@ -53,14 +51,23 @@ export const userColumn = (args?: UserColumnArgs): Column => {
         ...args?.filter,
         multiple: true,
         listRoute: "/workspace-members",
-        getOptions: async (ids: string[]) => {
-          return getWorkspaceMemberByIds(ids).then((res) =>
-            res.map((v) => ({
-              label: v.name,
-              value: v.userId,
-              data: v,
-            }))
-          );
+        getOptionId: (item) => item.userId,
+        getSelectedOptions: async (ids: string[], client) => {
+          return client
+            .query({
+              query: QUERY_WORKSPACE_MEMBERS_BY_IDS,
+              variables: {
+                ids,
+              },
+              fetchPolicy: "network-only",
+            })
+            .then((res) => {
+              return (res.data?.workspaceMembersByIds ?? []).map((v) => ({
+                label: v.name,
+                value: v.userId,
+                data: v,
+              }));
+            });
         },
         search: async (query) => {
           return searchEntity(AppEntity.WORKSPACE_MEMBERS, query).then((res) =>

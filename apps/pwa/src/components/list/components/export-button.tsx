@@ -21,6 +21,8 @@ import { useListContext } from "../list-context";
 import { getColumnName, getIn, getListName, getValuePath } from "../list-utils";
 import { ExportToExcelItem } from "../types";
 import { ActionButton } from "./action-button";
+import { useApolloClient } from "@apollo/client/react";
+import { UseGraphqlListData } from "../use-graphql-list";
 
 export enum ExportType {
   EXCEL = "Excel",
@@ -31,6 +33,7 @@ export const ExportButton: FC = () => {
   const context = useListContext();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
+  const client = useApolloClient();
   const { t, i18n } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -56,9 +59,12 @@ export const ExportButton: FC = () => {
     onActionLoad({
       name: <Trans>Export data</Trans>,
       process: async () => {
-        const { data } = await api.get<ResponseList<any>>(context.route, {
-          params: { ...context.list.params, getAll: true },
+        const { data: queryData } = await client.query<UseGraphqlListData>({
+          query: context.query,
+          variables: { ...context.list.params, getAll: true },
         });
+
+        const data: any[] = queryData?.list.results ?? [];
 
         if (data.length === 0) throw new Error(t`No data to export`);
 

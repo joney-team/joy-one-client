@@ -12,6 +12,8 @@ import { customFieldTypes } from "./custom-field-constants";
 import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
 
+import QUERY_CUSTOM_FIELDS from "./graphql/queryCustomFields.graphql";
+
 export const CustomFieldList: FC = () => {
   const { t } = useLingui();
 
@@ -21,7 +23,7 @@ export const CustomFieldList: FC = () => {
         id="custom-fields"
         name={<Trans>Custom fields</Trans>}
         icon={IconForms}
-        route="/custom-fields"
+        query={QUERY_CUSTOM_FIELDS}
         columns={{
           label: { name: <Trans>Name</Trans> },
           description: { name: <Trans>Description</Trans> },

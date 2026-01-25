@@ -1,12 +1,10 @@
+#import "./fragmentCustomer.graphql"
+
 query Customers($ids: [String!], $limit: Float, $offset: Float) {
-  customers(ids: $ids, limit: $limit, offset: $offset) {
-    count
-    data {
-      _id
-      code
-      name
-      avatar
-      phone
+  list: customers(ids: $ids, limit: $limit, offset: $offset) {
+    total
+    results {
+      ...CustomerData
     }
   }
 }

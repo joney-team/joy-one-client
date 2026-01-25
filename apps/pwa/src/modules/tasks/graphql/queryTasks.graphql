@@ -34,8 +34,8 @@ query Tasks(
     fromTrackingTime: $fromTrackingTime
     toTrackingTime: $toTrackingTime
   ) {
-    count
-    data {
+    total
+    results {
       ...TaskData      
     }
   }

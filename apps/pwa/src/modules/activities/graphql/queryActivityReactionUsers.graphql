@@ -10,10 +10,10 @@ query ActivityReactionUsers(
     limit: $limit
     offset: $offset
   ) {
-    data {
+    results {
       _id
       name
     }
-    count
+    total
   }
 }

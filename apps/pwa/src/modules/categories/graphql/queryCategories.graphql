@@ -1,0 +1,19 @@
+query Categories($limit: Float, $offset: Float, $query: JSONObject) {
+  list: categories(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      _id
+      name
+      slug
+      icon
+      thumbnail
+      description
+      parentId
+      order
+      type
+    }
+  }
+}

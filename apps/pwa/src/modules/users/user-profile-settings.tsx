@@ -43,7 +43,7 @@ import {
   IconUser,
 } from "@tabler/icons-react";
 import { useEffect, type FC } from "react";
-import { UserWorkspaceSettings } from "./components/user-workspace-settings-form";
+import { WorkspaceMemberSetting } from "../workspace-members/components/workspace-member-setting";
 
 export const UserProfileSettings: FC = () => {
   const auth = useAuth();
@@ -228,7 +228,7 @@ export const UserProfileSettings: FC = () => {
         <SectionTitle name={<Trans>Workspace settings</Trans>} mb={-20} />
 
         <Card shadow="xs">
-          <UserWorkspaceSettings userId={auth.user!._id} />
+          <WorkspaceMemberSetting userId={auth.user!._id} />
         </Card>
       </Stack>
     </Container>

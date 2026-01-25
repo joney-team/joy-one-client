@@ -3,6 +3,7 @@
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
+import { EventType } from "@/graphql/enums.graphql";
 import { api } from "@/modules/apis";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { ResponseList } from "@/types";
@@ -12,7 +13,6 @@ import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/c
 import { IconExternalLink } from "@tabler/icons-react";
 import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";
-import { EventType } from "@/graphql/enums.graphql";
 
 export const ZaloOaGmfGroups: FC = () => {
   const workspace = useWorkspace();

@@ -1,0 +1,7 @@
+#import "./fragmentWorkspaceMember.graphql"
+
+mutation AssignWorkspaceMemberRoles($memberId: String!, $roleIds: [String!]!) {
+  assignWorkspaceMemberRoles(memberId: $memberId, roleIds: $roleIds) {
+    ...WorkspaceMemberData
+  }
+}

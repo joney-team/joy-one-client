@@ -20,6 +20,8 @@ import { CustomerFormEntity } from "./customer-form-entity";
 import { multiArchiveCustomerForm } from "./customer-form-service";
 import { OnModalCustomerForm } from "./modal-customer-form";
 
+import QUERY_CUSTOMER_FORMS from "./graphql/queryCustomerForms.graphql";
+
 export const CustomerFormList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
   return (
@@ -28,7 +30,7 @@ export const CustomerFormList: FC = () => {
         <Stack p={16}>
           <List<CustomerFormEntity>
             id="cfms"
-            route="/customer-forms"
+            query={QUERY_CUSTOMER_FORMS}
             creatable={{
               onCreate: () => OnModalCustomerForm(),
               label: t`Link form`,

@@ -49,7 +49,7 @@ import TASK_STATUS_QUERY, {
   type TaskStatusesQuery,
   type TaskStatusesQueryVariables,
 } from "../graphql/queryTaskStatuses.graphql";
-import { normalizeTaskStatuses } from "../task-constants";
+import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
 export interface ModalConfigureStatusesArgs {

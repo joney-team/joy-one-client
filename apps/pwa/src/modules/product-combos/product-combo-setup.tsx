@@ -8,10 +8,12 @@ import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { ProductEntity, ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { t } from "@lingui/core/macro";
 import { Badge, em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
 import { type FC } from "react";
+
+import { Trans } from "@lingui/react/macro";
+import QUERY_PRODUCT_COMBOS from "./graphql/queryProductCombos.graphql";
 
 export const ProductComboSetup: FC = () => {
   return (
@@ -19,18 +21,18 @@ export const ProductComboSetup: FC = () => {
       <List<ProductEntity>
         id="cbsetup"
         icon={IconSettings}
-        name={t`List combos`}
-        route="/products"
+        name={<Trans>List combos</Trans>}
+        query={QUERY_PRODUCT_COMBOS}
         fixedParams={{ type: ProductType.COMBO }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.COMBO }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
         }}
         columns={{
-          name: {},
-          unit: {},
+          name: { name: <Trans>Name</Trans> },
+          unit: { name: <Trans>Unit</Trans> },
           combos: {
-            name: `${t`Products`}/${t`Services`}`,
+            name: <Trans>Products/Services</Trans>,
             render: ({ value }) => {
               if (!value) return null;
 
@@ -53,12 +55,12 @@ export const ProductComboSetup: FC = () => {
               );
             },
           },
-          price: numberColumn({ type: "money", name: t`Price`, sortable: true }),
+          price: numberColumn({ type: "money", name: <Trans>Price</Trans>, sortable: true }),
         }}
         card={(props) => <ProductCard product={props.data} />}
         actions={[
           {
-            label: t`Edit`,
+            label: <Trans>Edit</Trans>,
             icon: IconEditCircle,
             onClick: (data) => OnProductModal({ type: data.type, product: data }),
           },

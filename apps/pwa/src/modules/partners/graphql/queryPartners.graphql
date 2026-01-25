@@ -1,0 +1,15 @@
+query Partners($limit: Float, $offset: Float, $query: JSONObject) {
+  list: partners(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      _id
+      name
+      phone
+      logo
+      email
+    }
+  }
+}

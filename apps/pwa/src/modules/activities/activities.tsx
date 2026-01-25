@@ -33,7 +33,7 @@ export const Activities: FC<ActivitiesProps> = (props) => {
 
   return (
     <Stack gap="sm">
-      {data?.activities.data.map((activity) => (
+      {data?.activities.results.map((activity) => (
         <ActivityCard key={activity._id} activity={activity} />
       ))}
 

@@ -19,6 +19,8 @@ import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 import { getProductIcon } from "./products-service";
 
+import QUERY_PRODUCTS from "./graphql/queryProducts.graphql";
+
 export const ProductList: FC = () => {
   return (
     <Stack p={16}>
@@ -26,7 +28,7 @@ export const ProductList: FC = () => {
         id="prods"
         name={<Trans>Products</Trans>}
         icon={IconBox}
-        route="/products"
+        query={QUERY_PRODUCTS}
         fixedParams={{ type: ProductType.PRODUCT }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.PRODUCT }),

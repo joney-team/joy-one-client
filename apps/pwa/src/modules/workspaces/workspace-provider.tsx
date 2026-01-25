@@ -32,11 +32,10 @@ import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
-import { useLingui } from "@lingui/react/macro";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import * as Sentry from "@sentry/react";
 import { useRouter } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { api } from "../apis";
 import QUERY_USER_WORKSPACE_MEMBERS from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
 import { Context } from "./workspace-context";
@@ -49,7 +48,6 @@ import {
 } from "./workspaces-types";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
-  const { t } = useLingui();
   const client = useApolloClient();
   const forceUpdate = useForceUpdate();
   const auth = useAuth();
@@ -57,11 +55,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const app = useApp();
 
   const state = useRef<{
-    roles: WorkspaceRoleEntity[];
     settings?: WorkspaceSettingEntity;
-  }>({
-    roles: [],
-  });
+  }>({});
 
   const [isInitialized, _setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
@@ -78,9 +73,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   );
 
-  const member = auth.user
-    ? workspaceMembersData?.userWorkspaceMembers.find((w) => w.workspaceId === workspaceId)
-    : undefined;
+  const member = useMemo(
+    () =>
+      auth.user
+        ? workspaceMembersData?.userWorkspaceMembers.find((w) => w.workspaceId === workspaceId)
+        : undefined,
+    [workspaceMembersData, workspaceId]
+  );
 
   useEventsListener(
     [EventType.WorkspaceMemberSynced],
@@ -91,13 +90,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     },
     [member?.userId]
   );
-
-  const fetchRoles = async () => {
-    const result = await getWorkspaceRoles();
-    state.current.roles = result;
-    forceUpdate();
-    return result;
-  };
 
   const fetchSettings = async () => {
     const result = await getWorkspaceSettings();
@@ -144,8 +136,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const fetchRelatedData = async () => {
     try {
       const initial = await workspaceInitialize();
-
-      state.current.roles = initial.roles;
       state.current.settings = initial.settings;
 
       // Check if the workspace is restricted to the current session
@@ -239,7 +229,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     return getWorkspaceDisplayView({});
   };
 
-  useEventsListener([EventType.WorkspaceSettingUpdated], fetchSettings, [workspaceId]);
+  useEventsListener([EventType.WorkspaceSettingUpdated], fetchSettings, [member?.workspaceId]);
 
   useEventsListener(
     [
@@ -253,7 +243,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WorkspaceBranchNew,
     ],
     () => {
-      fetchRoles();
       getWorkspaceMembers();
     }
   );
@@ -274,17 +263,21 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (member) {
       app.joinWorkspaceRoom(member.workspaceId);
-    }
-  }, [member]);
 
-  useEffect(() => {
-    if (member && !isExtendedApp()) {
-      setMetadata({
-        ...getMetadata(),
-        appColor: member.workspace.appColor || defaultMetadata.appColor,
-        appName: member.workspace.appName || defaultMetadata.appName,
-        appIcon: member.workspace.appIcon || defaultMetadata.appIcon,
-        appColorShape: member.workspace.appColorShape || defaultMetadata.appColorShape,
+      if (!isExtendedApp()) {
+        setMetadata({
+          ...getMetadata(),
+          appColor: member.workspace.appColor || defaultMetadata.appColor,
+          appName: member.workspace.appName || defaultMetadata.appName,
+          appIcon: member.workspace.appIcon || defaultMetadata.appIcon,
+          appColorShape: member.workspace.appColorShape || defaultMetadata.appColorShape,
+        });
+      }
+
+      // Add workspace code and name to Sentry
+      Sentry.setExtra("Workspace", {
+        code: contextValue.member.workspace.code,
+        name: contextValue.member.workspace.name,
       });
     }
   }, [member]);
@@ -300,17 +293,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   }, [auth.user?._id, auth.isInitialized, workspaceId]);
 
-  const defaultWorkspaceRoles: WorkspaceRoleEntity[] = [
-    {
-      _id: WorkspaceDefaultRoleId.ADMIN,
-      name: WorkspaceDefaultRoleId.ADMIN,
-      color: "primary",
-      permissions: Object.values(WorkspacePermission),
-      workspaceId: "",
-      createdAt: Date.now(),
-    },
-  ];
-
   const isShouldEnableBranches =
     !!member &&
     member.workspace.branches > 0 &&
@@ -322,7 +304,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     updateSettings,
     hasPermission: (permission: WorkspacePermission) =>
       member?.permissions.includes(permission) ?? false,
-    roles: [...state.current.roles, ...defaultWorkspaceRoles],
     isInitialized,
     settings: state.current.settings!,
     currency: Currency.get(state.current.settings?.currencyCode) || Currency.get()!,
@@ -355,6 +336,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     isAvailable: isInitialized && !!auth.user && !!member && !!state.current.settings,
   };
 
+  // Auto switch workspace when url has query param "w"
   useEffect(() => {
     if (isInitialized && contextValue.userMembers.length > 0) {
       const query = new URLSearchParams(window.location.search);
@@ -367,15 +349,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       }
     }
   }, [isInitialized, contextValue.userMembers]);
-
-  useEffect(() => {
-    if (contextValue.member) {
-      Sentry.setExtra("Workspace", {
-        code: contextValue.member.workspace.code,
-        name: contextValue.member.workspace.name,
-      });
-    }
-  }, [contextValue.member]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };
