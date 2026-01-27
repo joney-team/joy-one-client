@@ -6,7 +6,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { Modal } from "@/components/modal/modal";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";

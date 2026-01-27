@@ -8,7 +8,7 @@ import { onReconnected } from "@/modules/events/event-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {

@@ -34,7 +34,7 @@ import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { loanAssetTypes } from "../loans/loans-constants";
-import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
 
 export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   const loans = useLoans();

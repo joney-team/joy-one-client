@@ -6,7 +6,7 @@ import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { api } from "../apis";
 import { useAuth } from "../auth/auth-context";
-import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
 
 export async function getWorkspaceSettings() {
   return api.get<WorkspaceSettingEntity>(`/workspace-settings`);

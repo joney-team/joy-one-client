@@ -9,7 +9,7 @@ import { Card, InputWrapper, NumberInput, Stack, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { type FC } from "react";
-import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
 
 export const WorkspaceSettingHrmTimekeepings: FC = () => {
   const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();

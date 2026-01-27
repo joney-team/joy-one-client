@@ -8,7 +8,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { Editor } from "../../components/editor/editor";
-import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
 
 interface WorkspaceSettingTermsPoliciesEditorProps {
   doc: `terms-of-service` | `privacy-policy`;

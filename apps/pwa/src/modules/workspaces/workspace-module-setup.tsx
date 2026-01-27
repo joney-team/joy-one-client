@@ -38,7 +38,7 @@ import {
 } from "@tabler/icons-react";
 import { type FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { useAvailableWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
 
 export const WorkspaceModuleSetup: FC = () => {

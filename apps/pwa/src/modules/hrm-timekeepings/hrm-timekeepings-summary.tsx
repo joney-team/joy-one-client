@@ -17,7 +17,7 @@ import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 
 interface HrmTimekeepingsSummaryProps {
   timekeepings: HrmTimekeepingEntity[];

@@ -16,7 +16,7 @@ import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Period } from "@/types";

@@ -68,7 +68,7 @@ import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 
 const RelatedLoans = dynamic(

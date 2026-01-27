@@ -10,7 +10,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
 
 export const WorkspacetSettingLoans: FC = () => {
   const { workspaceSetting } = useWorkspaceSetting();

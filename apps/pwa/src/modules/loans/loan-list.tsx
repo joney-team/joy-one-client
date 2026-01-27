@@ -52,7 +52,7 @@ import { useColor } from "../theme/use-color";
 import QUERY_LOANS from "./graphql/queryLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 
 const ModalUpdateWorkspaceBranch = dynamic(
   () =>

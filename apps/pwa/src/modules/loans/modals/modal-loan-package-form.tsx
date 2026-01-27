@@ -7,7 +7,7 @@ import { LoanPackage } from "@/graphql/types.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetType } from "@/modules/loans/loans-types";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {

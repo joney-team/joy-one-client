@@ -19,7 +19,7 @@ import { getDefaultWorkspaceView } from "../workspace-settings-view";
 export const useWorkspaceSetting = () => {
   const client = useApolloClient();
   const { member } = useWorkspace();
-  const { data } = useQuery(QUERY_WORKSPACE_SETTING);
+  const { data } = useQuery(QUERY_WORKSPACE_SETTING, { skip: !member });
 
   const workspaceSetting = useMemo(() => {
     if (data) return normalizeObject(data.workspaceSetting);
@@ -97,7 +97,7 @@ export const useWorkspaceSetting = () => {
 
     Object.entries(defaultWorkspaceView).forEach(([key, value]) => {
       const viewKey = key as keyof WorkspaceView;
-      if (!output[viewKey] && value) {
+      if (!output[viewKey]) {
         output[viewKey] = value as any;
       }
     });
@@ -105,15 +105,8 @@ export const useWorkspaceSetting = () => {
     return { ...output } as WorkspaceView;
   };
 
-  const workspaceViewValue: WorkspaceView = useMemo(() => {
-    return (
-      workspaceSetting?.view ?? {
-        __typename: "WorkspaceView",
-        menu: [],
-        dashboardWidgets: [],
-        reportWidgets: [],
-      }
-    );
+  const workspaceViewValue: WorkspaceView | undefined = useMemo(() => {
+    return workspaceSetting?.view ?? undefined;
   }, [workspaceSetting?.view]);
 
   const workspaceView: WorkspaceView = useMemo(() => {
@@ -122,8 +115,16 @@ export const useWorkspaceSetting = () => {
 
   const updateWorkspaceView = async (partial: Partial<WorkspaceView>) => {
     const view = { ...workspaceViewValue, ...partial };
-    await updateWorkspaceSetting({ view });
-    return getWorkspaceDisplayView(view);
+    await updateWorkspaceSetting({
+      view: {
+        __typename: "WorkspaceView",
+        menu: view.menu ?? null,
+        dashboardWidgets: view.dashboardWidgets ?? null,
+        reportWidgets: view.reportWidgets ?? null,
+      },
+    });
+
+    return view;
   };
 
   const resetWorkspaceView = async () => {

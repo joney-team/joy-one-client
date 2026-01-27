@@ -9,7 +9,7 @@ import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";

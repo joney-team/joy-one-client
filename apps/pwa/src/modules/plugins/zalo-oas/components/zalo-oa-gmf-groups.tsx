@@ -5,7 +5,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { api } from "@/modules/apis";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";

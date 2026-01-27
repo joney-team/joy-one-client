@@ -47,7 +47,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { getTimekeepings } from "./hrm-timekeepings-service";
 import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
 

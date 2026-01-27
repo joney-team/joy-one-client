@@ -21,7 +21,7 @@ import { LoanAssetType } from "@/modules/loans/loans-types";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { useBanks } from "@/modules/plugins/banks/banks.services";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";

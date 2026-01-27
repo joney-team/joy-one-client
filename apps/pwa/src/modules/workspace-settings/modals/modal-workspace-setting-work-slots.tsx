@@ -11,7 +11,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCalendarWeek } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
 
 export const ModalWorkspaceSettingsWorkSlots: FC = () => {
   const { workspaceSetting } = useWorkspaceSetting();

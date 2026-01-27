@@ -34,7 +34,7 @@ import { Avatar } from "../../components/avatar";
 import { Calendar } from "../../components/calendar/calendar";
 import { Circle } from "../../components/circle";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 
 interface HrmTimekeepingsProps {
   initialDate?: Date;

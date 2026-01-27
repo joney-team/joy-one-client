@@ -4,7 +4,7 @@ import { FC, Fragment } from "react";
 import { PrinterComponentProps, PrintSize } from "./printer-types";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { useLingui } from "@lingui/react/macro";
 import { DateFormat } from "../format/date-format";

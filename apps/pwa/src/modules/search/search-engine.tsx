@@ -44,7 +44,7 @@ import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import {
   useAvailableWorkspaceModules,
   useWorkspaceModules,

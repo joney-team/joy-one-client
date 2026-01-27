@@ -3,7 +3,7 @@
 import { EventType } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { getPreviousTimeKeeping } from "./hrm-timekeepings-service";
 import { HrmTimekeepingType } from "./hrm-timekeepings-types";
 

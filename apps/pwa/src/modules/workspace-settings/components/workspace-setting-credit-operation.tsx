@@ -6,7 +6,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { Grid, NumberInput, Switch, TextInput } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { FC } from "react";
-import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
 
 export const WorkspaceSettingCreditOperation: FC = () => {
   const workspace = useWorkspace();

@@ -24,7 +24,7 @@ import {
   workingTimeHours,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";

@@ -128,40 +128,21 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   useEventsListener(
-    [EventType.WorkspaceMemberSynced],
-    (e) => {
-      if (e.userId === member?.userId) {
-        fetchWorkspaceMembers();
-      }
-    },
-    [member?.userId]
-  );
-
-  useEventsListener(
-    [
-      EventType.WorkspaceArchived,
-      EventType.WorkspaceRolesNew,
-      EventType.WorkspaceRolesUpdated,
-      EventType.WorkspaceRolesRemoved,
-      EventType.WorkspaceSettingUpdated,
-      EventType.WorkspaceInviteCodeUpdated,
-      EventType.WorkspaceMemberTransferOwner,
-      EventType.WorkspaceBranchNew,
-      EventType.WorkspaceMemberSynced,
-    ],
-    () => {
-      fetchWorkspaceMembers();
-    }
-  );
-
-  useEventsListener(
     [
       EventType.WorkspaceUpdated,
+      EventType.WorkspaceArchived,
       EventType.WorkspaceMemberLeaved,
       EventType.WorkspaceMemberUpdated,
       EventType.WorkspaceMemberTransferOwner,
       EventType.WorkspaceBranchNew,
       EventType.WorkspaceBranchUpdated,
+      EventType.WorkspaceRolesNew,
+      EventType.WorkspaceRolesUpdated,
+      EventType.WorkspaceRolesRemoved,
+      EventType.WorkspaceInviteCodeUpdated,
+      EventType.WorkspaceMemberTransferOwner,
+      EventType.WorkspaceBranchNew,
+      EventType.WorkspaceMemberSynced,
     ],
     () => fetchWorkspaceMembers()
   );

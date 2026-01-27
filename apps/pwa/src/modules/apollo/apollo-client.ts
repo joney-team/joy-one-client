@@ -14,6 +14,7 @@ import { SetContextLink } from "@apollo/client/link/context";
 import { ErrorLink } from "@apollo/client/link/error";
 import { getAccessToken, retrieveAccessToken } from "../auth/auth-service";
 import { getClientLocale } from "../lang/lang-service";
+import environment from "@joy-one-client/config";
 
 let isRefreshing = false;
 let pendingRequests: (() => Promise<void>)[] = [];
@@ -84,7 +85,7 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
   }
 });
 
-const httpLink = new HttpLink({ uri: "/graphql" });
+const httpLink = new HttpLink({ uri: environment.API_CLIENT_SIDE_URL + "/graphql" });
 
 const authMiddleware = new SetContextLink(async ({ headers }) => {
   const workspaceId = getLocalStorage(StorageKey.WORKSPACE_ID);

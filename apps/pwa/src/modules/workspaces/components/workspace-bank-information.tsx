@@ -2,7 +2,7 @@
 
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformation } from "@/modules/plugins/banks/banks.types";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";

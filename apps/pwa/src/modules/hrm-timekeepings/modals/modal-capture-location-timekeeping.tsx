@@ -22,7 +22,7 @@ import {
   getGeolocation,
 } from "@/modules/locations/locations-service";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";

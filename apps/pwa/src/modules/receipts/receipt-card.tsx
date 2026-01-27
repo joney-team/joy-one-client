@@ -59,7 +59,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 
 const ModalPayReceipt = dynamic(
   () => import("./modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),

@@ -2,7 +2,7 @@
 
 import { MailerIllustration } from "@/components/illustrations/mailer";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Anchor, Button, Stack, Text, Title, em } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { FC, useState } from "react";

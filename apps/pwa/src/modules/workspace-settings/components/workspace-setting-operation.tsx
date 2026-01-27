@@ -36,7 +36,7 @@ import {
 import { TimeInput } from "@mantine/dates";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
+import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 
