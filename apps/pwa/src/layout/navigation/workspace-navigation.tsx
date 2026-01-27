@@ -4,13 +4,17 @@ import { Avatar } from "@/components/avatar";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import {
+  getDefaultWorkspaceView,
+  getNavigationGroups,
+} from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import {
   useAvailableWorkspaceModules,
   useWorkspaceModules,
   WorkspaceModuleId,
 } from "@/modules/workspaces/workspace-modules";
-import { getDefaultWorkspaceView, getNavigationGroups } from "@/modules/workspaces/workspace-view";
 import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { Trans } from "@lingui/react/macro";
@@ -44,6 +48,7 @@ const WorkspaceNavigationDrawer = dynamic(
 export const WorkspaceNavigation: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
+  const { workspaceView } = useWorkspaceSetting();
   const { availableModules, isModuleAvailable, getAvailableModule } =
     useAvailableWorkspaceModules();
   const { getModule } = useWorkspaceModules();
@@ -54,7 +59,7 @@ export const WorkspaceNavigation: FC = () => {
   const mobileDrawer = useDisclosure(false);
 
   const components = (
-    workspace.view.menu ??
+    workspaceView.menu ??
     getDefaultWorkspaceView(workspace.type).menu ??
     []
   ).filter((v) => {

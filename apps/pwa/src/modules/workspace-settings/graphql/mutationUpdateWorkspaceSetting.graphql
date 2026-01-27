@@ -1,0 +1,49 @@
+#import "./fragmentWorkspaceSetting.graphql"
+
+mutation UpdateWorkspaceSetting(
+  $bankAccount: PluginBankAccountInput
+  $schedule: WorkspaceScheduleInput
+  $mailer: PluginMailerAccountInput
+  $hrmTimeKeepingsRules: HrmTimekeepingsRulesInput
+  $bookingsAutoRemindCustomerBookingBeforeDays: Float
+  $allowTip: Boolean
+  $allowDuplicateBookings: Boolean
+  $memberPermissions: [String!]
+  $bookingsAutoRemindCustomerBookingTime: String
+  $loanSettings: LoanSettingsInput
+  $termsOfService: String
+  $privacyPolicy: String
+  $receiptImagesRequired: Boolean
+  $receiptPaymentMethodDefault: ReceiptPaymentMethod
+  $view: WorkspaceViewInput
+  $searchSettings: WorkspaceSearchSettingsInput
+  $currencyCode: String
+  $isAuthSessionRestricted: Boolean
+  $zaloOaGmfGroupSettings: JSONObject
+  $allowPayTicketMultipleTimes: Boolean
+) {
+  updateWorkspaceSetting(
+    bankAccount: $bankAccount
+    schedule: $schedule
+    mailer: $mailer
+    hrmTimeKeepingsRules: $hrmTimeKeepingsRules
+    bookingsAutoRemindCustomerBookingBeforeDays: $bookingsAutoRemindCustomerBookingBeforeDays
+    allowTip: $allowTip
+    allowDuplicateBookings: $allowDuplicateBookings
+    memberPermissions: $memberPermissions
+    bookingsAutoRemindCustomerBookingTime: $bookingsAutoRemindCustomerBookingTime
+    loanSettings: $loanSettings
+    termsOfService: $termsOfService
+    privacyPolicy: $privacyPolicy
+    receiptImagesRequired: $receiptImagesRequired
+    receiptPaymentMethodDefault: $receiptPaymentMethodDefault
+    view: $view
+    searchSettings: $searchSettings
+    currencyCode: $currencyCode
+    isAuthSessionRestricted: $isAuthSessionRestricted
+    zaloOaGmfGroupSettings: $zaloOaGmfGroupSettings
+    allowPayTicketMultipleTimes: $allowPayTicketMultipleTimes
+  ) {
+    ...WorkspaceSettingData
+  }
+}

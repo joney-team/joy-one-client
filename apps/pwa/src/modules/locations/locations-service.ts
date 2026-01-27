@@ -1,10 +1,10 @@
 "use client";
 
+import { CheckInLocation } from "@/graphql/types.graphql";
 import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import { t } from "@lingui/core/macro";
-import { CheckInLocation } from "../hrm-timekeepings/hrm-timekeepings-types";
 
 export const isGeolocationSupported = () =>
   !isServer() && "navigator" in window && "geolocation" in navigator;

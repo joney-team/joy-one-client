@@ -9,9 +9,9 @@ import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onError, onFormError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -39,6 +39,7 @@ interface ModalWorkspaceRoleFormProps {
 
 export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) => {
   const workspace = useWorkspace();
+  const { updateWorkspaceSetting } = useWorkspaceSetting();
   const { roles, create, update } = useWorkspaceRoles();
   const { t } = useLingui();
   const role = roles.find((role) => role._id === props.roleId);
@@ -62,9 +63,8 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
   const onSubmit = form.onSubmit(async (values) => {
     if (props.roleId === WorkspaceDefaultRoleId.MEMBER) {
-      await setWorkspaceSettings({
-        ...workspace.settings,
-        memberPermissions: values.permissions as WorkspacePermission[],
+      await updateWorkspaceSetting({
+        memberPermissions: values.permissions,
       })
         .then(async () => close())
         .catch(onError);
@@ -80,7 +80,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
       await action()
         .then(async () => close())
-        .catch(onFormErrorLegacy(form));
+        .catch((error) => onFormError(form, error));
     }
   });
 

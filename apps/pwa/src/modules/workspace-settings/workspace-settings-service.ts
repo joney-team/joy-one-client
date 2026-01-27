@@ -2,11 +2,11 @@ import {
   SetWorkspaceSettingsDto,
   WorkspaceSettingEntity,
 } from "@/modules/workspace-settings/workspace-settings-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
+import { DateTime } from "@joy-one-client/utils/date-time";
 import { api } from "../apis";
 import { useAuth } from "../auth/auth-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
 
 export async function getWorkspaceSettings() {
   return api.get<WorkspaceSettingEntity>(`/workspace-settings`);
@@ -27,10 +27,10 @@ export interface WorkDaySlot {
 
 export function useWorkDaySlots() {
   const auth = useAuth();
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   let workDaySlots: WorkDaySlot[] = new Array(7).fill(0).reduce((acc, _, curr) => {
-    const relatedSlots = (workspace.settings.wSlots || []).filter((v) => v.dayWeek === curr);
+    const relatedSlots = (workspaceSetting?.wSlots || []).filter((v) => v.dayWeek === curr);
     const startSlot = relatedSlots.reduce((acc, curr) => {
       return acc.startHour < curr.startHour ? acc : curr;
     }, relatedSlots[0]);

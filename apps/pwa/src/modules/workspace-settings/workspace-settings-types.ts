@@ -11,18 +11,19 @@ import { DashboardWidgetType } from "@/widgets/dashboard/types";
 import { ReportWidgetType } from "@/widgets/reports/types";
 import { Widget } from "@/widgets/widgets-types";
 import { ZaloOaGmfGroupSettings } from "../plugins/zalo-oas/zalo-oas-types";
-export interface WorkspaceViewComponent {
-  id: string;
-  type: "MODULE" | "DIVIDER";
-  moduleId?: WorkspaceModuleId;
-  dividerName?: string;
-}
+import { WorkspaceView } from "@/graphql/types.graphql";
+// export interface WorkspaceViewComponent {
+//   id: string;
+//   type: "MODULE" | "DIVIDER";
+//   moduleId?: WorkspaceModuleId;
+//   dividerName?: string;
+// }
 
-export interface WorkspaceView {
-  dashboardWidgets?: Widget<DashboardWidgetType>[] | null;
-  reportWidgets?: Widget<ReportWidgetType>[] | null;
-  menu?: WorkspaceViewComponent[] | null;
-}
+// export interface WorkspaceView {
+//   dashboardWidgets?: Widget<DashboardWidgetType>[] | null;
+//   reportWidgets?: Widget<ReportWidgetType>[] | null;
+//   menu?: WorkspaceViewComponent[] | null;
+// }
 
 export interface WorkspaceSearchSettings {
   hideEntities?: AppEntity[];

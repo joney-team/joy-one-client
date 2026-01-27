@@ -52,6 +52,7 @@ import { useColor } from "../theme/use-color";
 import QUERY_LOANS from "./graphql/queryLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 
 const ModalUpdateWorkspaceBranch = dynamic(
   () =>
@@ -81,6 +82,7 @@ interface LoanListProps {
 export const LoanList: FC<LoanListProps> = (props) => {
   const { t } = useLingui();
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const color = useColor();
   const location = useLocations();
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
@@ -116,7 +118,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             name: <Trans>Loan package</Trans>,
             filter: {
               staticSelector: {
-                options: (workspace.settings.loanSettings?.loanPackages || []).map((s) => ({
+                options: (workspaceSetting?.loanSettings?.loanPackages || []).map((s) => ({
                   label: s.id.toString(),
                   value: s.id,
                 })),
@@ -128,8 +130,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
               const linkContractPdf =
                 loan.status !== LoanStatus.PENDING_SIGN &&
-                !!workspace.settings.loanSettings?.contractPdfUrl
-                  ? workspace.settings.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
+                !!workspaceSetting?.loanSettings?.contractPdfUrl
+                  ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
                   : undefined;
 
               if (!loanPackage) return;
@@ -227,7 +229,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             sortable: true,
             render: ({ value, data: loan }) => {
               const warningReceiptBeforeDays =
-                workspace.settings.loanSettings?.warningReceiptBeforeDays || 0;
+                workspaceSetting?.loanSettings?.warningReceiptBeforeDays || 0;
 
               const isExpired =
                 loan.nextReceiptAt && DateTime.isBefore(loan.nextReceiptAt, new Date());

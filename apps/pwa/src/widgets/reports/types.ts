@@ -2,6 +2,8 @@ import type { AppRouter } from "@/hooks/use-router";
 import type { Period } from "@/types";
 import type { RangeReport } from "@/modules/reports/reports-types";
 import type { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
+import { WorkspaceSettingDataFragment } from "@/modules/workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
+import { CurrencyData } from "@joy-one-client/utils/currency";
 
 export enum ReportWidgetType {
   TASKS = "TASKS",
@@ -32,4 +34,6 @@ export interface ReportWidgetsContext {
   toTime: number;
   period: Period;
   workspace: WorkspaceContext;
+  workspaceSetting: WorkspaceSettingDataFragment;
+  currency?: CurrencyData;
 }

@@ -1,14 +1,14 @@
 "use client";
 
+import { EventType } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 import { getPreviousTimeKeeping } from "./hrm-timekeepings-service";
 import { HrmTimekeepingType } from "./hrm-timekeepings-types";
-import { EventType } from "@/graphql/enums.graphql";
 
 export const useHrmTimekeeping = () => {
-  const workspace = useWorkspace();
+  const { isHrmTimekeepingAvailable } = useWorkspaceSetting();
 
   const prevTimekeeping = useFetch({
     fetch: () => getPreviousTimeKeeping(),
@@ -38,6 +38,6 @@ export const useHrmTimekeeping = () => {
     prevTimekeeping: prevTimekeeping.data,
     prevType,
     nextType,
-    isAvailable: workspace.isHrmTimekeepingAvailable,
+    isAvailable: isHrmTimekeepingAvailable,
   };
 };

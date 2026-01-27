@@ -3,17 +3,19 @@
 import { FC, Fragment } from "react";
 import { PrinterComponentProps, PrintSize } from "./printer-types";
 
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useLang } from "@/modules/lang/lang-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { Currency } from "@joy-one-client/utils/currency";
+import { useLingui } from "@lingui/react/macro";
 import { DateFormat } from "../format/date-format";
 import styles from "./printer.module.css";
-import { useLang } from "@/modules/lang/lang-context";
-import { useLingui } from "@lingui/react/macro";
 
 export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const lang = useLang();
   const { t } = useLingui();
+
+  const currencyCode = workspaceSetting?.currencyCode ?? undefined;
 
   if ("order" in props) {
     const order = props.order;
@@ -63,9 +65,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                 <tr key={key}>
                   <td className={styles.TaLeft}>{item.product.displayName || item.product.name}</td>
                   <td className={styles.TaRight}>{item.quantity.toLocaleString(lang.locale)}</td>
-                  <td className={styles.TaRight}>
-                    {Currency.normalize(item.price, workspace.settings.currencyCode)}
-                  </td>
+                  <td className={styles.TaRight}>{Currency.normalize(item.price, currencyCode)}</td>
                 </tr>
               );
             })}
@@ -76,7 +76,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                   {t`Subtotal`}
                 </td>
                 <td className={styles.TaRight}>
-                  {Currency.normalize(subTotalPrice, workspace.settings.currencyCode)}
+                  {Currency.normalize(subTotalPrice, currencyCode)}
                 </td>
               </tr>
             )}
@@ -87,7 +87,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                   {t`Discount`}
                 </td>
                 <td className={styles.TaRight}>
-                  {Currency.normalize(totalDiscount, workspace.settings.currencyCode)}
+                  {Currency.normalize(totalDiscount, currencyCode)}
                 </td>
               </tr>
             )}
@@ -98,7 +98,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                   TIP
                 </td>
                 <td className={styles.TaRight}>
-                  {Currency.normalize(order.tipAmount, workspace.settings.currencyCode)}
+                  {Currency.normalize(order.tipAmount, currencyCode)}
                 </td>
               </tr>
             )}
@@ -110,7 +110,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                     {t`Payment`}
                   </td>
                   <td className={styles.TaRight}>
-                    {Currency.normalize(order.totalAmount, workspace.settings.currencyCode)}
+                    {Currency.normalize(order.totalAmount, currencyCode)}
                   </td>
                 </tr>
 
@@ -120,10 +120,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                   </td>
                   <td className={styles.TaRight}>
                     <strong>
-                      {Currency.normalize(
-                        order.totalAmount - order.paidAmount,
-                        workspace.settings.currencyCode
-                      )}
+                      {Currency.normalize(order.totalAmount - order.paidAmount, currencyCode)}
                     </strong>
                   </td>
                 </tr>
@@ -133,9 +130,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                     {t`Total`}
                   </td>
                   <td className={styles.TaRight}>
-                    <strong>
-                      {Currency.normalize(totalAmount, workspace.settings.currencyCode)}
-                    </strong>
+                    <strong>{Currency.normalize(totalAmount, currencyCode)}</strong>
                   </td>
                 </tr>
               </Fragment>
@@ -145,9 +140,7 @@ export const PrinterBody: FC<PrinterComponentProps> = ({ settings, ...props }) =
                   {t`Total`}
                 </td>
                 <td className={styles.TaRight}>
-                  <strong>
-                    {Currency.normalize(totalAmount, workspace.settings.currencyCode)}
-                  </strong>
+                  <strong>{Currency.normalize(totalAmount, currencyCode)}</strong>
                 </td>
               </tr>
             )}

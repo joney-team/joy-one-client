@@ -1,11 +1,15 @@
 "use client";
 
-import { Period } from "@/types";
+import { WorkspaceType } from "@/graphql/enums.graphql";
+import { getClientLocale } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
+import { Period } from "@/types";
 import { round } from "@/utils/number.utils";
+import { DateTime } from "@joy-one-client/utils/date-time";
+import { t } from "@lingui/core/macro";
 import {
   IconBusinessplan,
   IconCalendar,
@@ -19,10 +23,6 @@ import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { numberWidget } from "../common/number.widget";
 import { EWidgetModules } from "../widgets-types";
 import { DashboardWidgetsContext, DashboardWidgetType } from "./types";
-import { t } from "@lingui/core/macro";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { getClientLocale } from "@/modules/lang/lang-service";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, DashboardWidgetsContext> =
   {
@@ -101,14 +101,14 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
             const date = DateTime.normalizeDate(v.data.fromTime);
             return {
               date: date ? date.getDate() : "-",
-              value: reportConvertMoneyAmount(v.data.receipts.revenue, ctx.workspace.currency),
+              value: reportConvertMoneyAmount(v.data.receipts.revenue, ctx.currency),
               prevValue: reportConvertMoneyAmount(
                 ctx.rangeReports.data?.prevPeriod[i]?.data.receipts.revenue || 0,
-                ctx.workspace.currency
+                ctx.currency
               ),
             };
           }),
-        unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
+        unit: (ctx) => reportConvertMoneyAmountUnit(ctx.currency),
         renderSeries: () => [
           { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
           { name: "value", label: t`This month`, color: "primary.6" },
@@ -328,15 +328,15 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
               date: date ? date.getDate() : "-",
               value: reportConvertMoneyAmount(
                 v.data.loans.contracts.fulfilledAmount || 0,
-                ctx.workspace.currency
+                ctx.currency
               ),
               prevValue: reportConvertMoneyAmount(
                 ctx.rangeReports.data?.prevPeriod[i]?.data.loans.contracts.fulfilledAmount || 0,
-                ctx.workspace.currency
+                ctx.currency
               ),
             };
           }),
-        unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
+        unit: (ctx) => reportConvertMoneyAmountUnit(ctx.currency),
         renderSeries: () => [
           { name: "prevValue", label: t`Last month`, color: "gray.4", strokeDasharray: "2 2" },
           { name: "value", label: t`This month`, color: "primary.6" },

@@ -1,11 +1,9 @@
 "use client";
 
 import { NumberFormat } from "@/components/format/number-format";
+import { HrmTimekeepingsRules } from "@/graphql/types.graphql";
 import { useLayout } from "@/layout/layout-context";
-import {
-  HrmTimekeepingEntity,
-  HrmTimekeepingsRules,
-} from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
+import { HrmTimekeepingEntity } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import {
   calculateTimekeepings,
   workingTimeHours,
@@ -13,13 +11,13 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { UserCard } from "@/modules/users/components/user-card";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Group, SimpleGrid, Stack, Table, Text } from "@mantine/core";
 import { FC } from "react";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 
 interface HrmTimekeepingsSummaryProps {
   timekeepings: HrmTimekeepingEntity[];
@@ -27,7 +25,7 @@ interface HrmTimekeepingsSummaryProps {
 
 export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) => {
   const { timekeepings } = props;
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const viewport = useLayout();
   const color = useColor();
   const [userMemberInfos] = useWorkspaceMembers([...new Set(timekeepings.map((v) => v.userId))]);
@@ -56,8 +54,8 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
           {groupByUsers.map((groupByUser) => {
             const summary = useTimekeepingsSummary(groupByUser.timekeepings, {
               userInfo: userMemberInfos.find((v) => v.userId === groupByUser.userId)!,
-              workSlots: workspace.settings.wSlots,
-              rules: workspace.settings.hrmTimeKeepingsRules,
+              workSlots: workspaceSetting?.wSlots ?? [],
+              rules: workspaceSetting?.hrmTimeKeepingsRules ?? undefined,
             });
 
             return (
@@ -119,8 +117,8 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
           {groupByUsers.map((groupByUser) => {
             const summary = useTimekeepingsSummary(groupByUser.timekeepings, {
               userInfo: userMemberInfos.find((v) => v.userId === groupByUser.userId)!,
-              workSlots: workspace.settings.wSlots,
-              rules: workspace.settings.hrmTimeKeepingsRules,
+              workSlots: workspaceSetting?.wSlots,
+              rules: workspaceSetting?.hrmTimeKeepingsRules,
             });
 
             return (
@@ -189,8 +187,8 @@ const useTimekeepingsSummary = (
   timekeepings: HrmTimekeepingEntity[],
   args: {
     userInfo: WorkspaceMemberDataFragment;
-    workSlots?: WorkSlot[] | undefined;
-    rules?: HrmTimekeepingsRules;
+    workSlots?: WorkSlot[] | null;
+    rules?: HrmTimekeepingsRules | null;
   }
 ) => {
   let pointedTimekeepingIds: string[] = [];

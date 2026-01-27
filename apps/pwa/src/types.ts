@@ -199,3 +199,9 @@ export interface DynamicSelection<ValueType = any> {
   operator: DynamicSelectionOperator;
   value: ValueType[];
 }
+
+export type DeepWithoutTypename<T> = T extends object
+  ? {
+      [K in keyof T as Exclude<K, "__typename">]: DeepWithoutTypename<T[K]>;
+    }
+  : T;

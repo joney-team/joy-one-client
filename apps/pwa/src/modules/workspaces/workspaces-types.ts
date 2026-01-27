@@ -1,4 +1,5 @@
-import { AppCurrency, BaseMongoEntity } from "@/types";
+import { WorkspaceType } from "@/graphql/types.graphql";
+import { BaseMongoEntity } from "@/types";
 import { Icon } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
 import { AppLocale } from "../lang/lang-types";
@@ -6,13 +7,7 @@ import { LocationEntity } from "../locations/locations-types";
 import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
-import { WorkspacePermission, WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
-import {
-  SetWorkspaceSettingsDto,
-  WorkspaceSettingEntity,
-  WorkspaceView,
-} from "../workspace-settings/workspace-settings-types";
-import { WorkspaceType } from "@/graphql/types.graphql";
+import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 
 export interface PluginMailerAccount {
   user: string;
@@ -64,15 +59,8 @@ export interface WorkspaceContext {
   leave: () => void;
   invitationState: WorkspaceMemberInvitationState | undefined;
   leaveInvitation: () => void;
-  settings: WorkspaceSettingEntity;
-  isHrmTimekeepingAvailable: boolean;
   hasPermission: (permission: WorkspacePermission) => boolean;
-  updateSettings: (settings: WorkspaceSettingEntity) => Promise<void>;
-  setSettings: (dto: Partial<SetWorkspaceSettingsDto>, exec?: boolean) => void | Promise<void>;
   type: WorkspaceType;
-  view: WorkspaceView;
-  setView: (view: WorkspaceView) => Promise<WorkspaceView>;
-  resetView: () => Promise<WorkspaceView>;
   isCreateNew: boolean;
   setIsCreateNew: Dispatch<SetStateAction<boolean>>;
   archive: () => Promise<void>;
@@ -81,7 +69,6 @@ export interface WorkspaceContext {
   defaultBranch?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;
-  currency: AppCurrency;
 }
 
 export interface WorkspaceMemberInvitation {

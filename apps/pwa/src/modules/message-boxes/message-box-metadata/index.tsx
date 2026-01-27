@@ -4,6 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import {
   ModalCreateBooking,
@@ -14,8 +15,10 @@ import { getCustomer } from "@/modules/customers/customer-service";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { ModalCreateLoan, ModalCreateLoanRef } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -36,8 +39,6 @@ import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
 import { AccordionItem } from "./message-box-metadata-types";
-import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const accordionItems: AccordionItem[] = [
   {
@@ -66,6 +67,7 @@ export const MetadataMessageBox: FC = () => {
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const { getAvailableModule } = useAvailableWorkspaceModules();
   const { messageBox } = messageBoxes;
+  const { workspaceView } = useWorkspaceSetting();
 
   const customer = useFetch<CustomerEntity | null>({
     id: `${messageBox?._id}-${messageBox?.customerId}`,
@@ -144,7 +146,7 @@ export const MetadataMessageBox: FC = () => {
                       const workspaceModule = getAvailableModule(item.moduleId);
 
                       const isInView = (
-                        workspace.view.menu ??
+                        workspaceView.menu ??
                         getDefaultWorkspaceView(workspace.type).menu ??
                         []
                       ).some((v) => v.moduleId === item.moduleId);

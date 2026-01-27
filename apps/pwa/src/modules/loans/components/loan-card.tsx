@@ -6,6 +6,7 @@ import { useRouter } from "@/hooks/use-router";
 import { loanStatusColors } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -23,13 +24,14 @@ interface LoanCardProps {
 export const LoanCard: FC<LoanCardProps> = (props) => {
   const { t } = useLingui();
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const { data: loan } = props;
   const customer = loan.customer;
   const router = useRouter();
 
   const linkContractPdf =
-    loan.status !== LoanStatus.PENDING_SIGN && !!workspace.settings.loanSettings?.contractPdfUrl
-      ? workspace.settings.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
+    loan.status !== LoanStatus.PENDING_SIGN && !!workspaceSetting?.loanSettings?.contractPdfUrl
+      ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
       : undefined;
 
   return (

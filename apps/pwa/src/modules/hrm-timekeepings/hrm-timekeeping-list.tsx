@@ -47,6 +47,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC } from "react";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 import { getTimekeepings } from "./hrm-timekeepings-service";
 import { HrmTimekeepingEntity, HrmTimekeepingStatus } from "./hrm-timekeepings-types";
 
@@ -55,6 +56,7 @@ export const HrmTimekeepingList: FC = () => {
   const viewport = useLayout();
   const assigneesHover = useHover();
   const router = useRouter();
+  const { isHrmTimekeepingAvailable } = useWorkspaceSetting();
 
   const getQuery = (query: any) => {
     let _query = { ...query };
@@ -102,7 +104,7 @@ export const HrmTimekeepingList: FC = () => {
   const assigneeUserIds: string[] = query.assigneeUserIds || [];
 
   if (
-    !workspace.isHrmTimekeepingAvailable &&
+    !isHrmTimekeepingAvailable &&
     workspace.hasPermission(WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP)
   ) {
     return (

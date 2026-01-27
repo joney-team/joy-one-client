@@ -31,6 +31,7 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 
 export const Profile: FC = () => {
   const auth = useAuth();
@@ -38,7 +39,7 @@ export const Profile: FC = () => {
   const workspace = useWorkspace();
   const router = useRouter();
   const layout = useLayout();
-
+  const { isHrmTimekeepingAvailable } = useWorkspaceSetting();
   useEffect(() => {
     layout.setComponents({
       head: t`Profile`,
@@ -77,7 +78,7 @@ export const Profile: FC = () => {
         </Group>
 
         <Stack gap={10}>
-          {workspace.isHrmTimekeepingAvailable && (
+          {isHrmTimekeepingAvailable && (
             <NavItem
               icon={IconClockCheck}
               name={t`Timekeeping History`}

@@ -17,7 +17,6 @@ import {
 } from "@/modules/loans/loans-types";
 import { ModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -35,13 +34,14 @@ import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { loanAssetTypes } from "../loans/loans-constants";
+import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
 
 export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   const loans = useLoans();
   const router = useRouter();
-  const workspace = useWorkspace();
   const searchs = useSearchParams();
   const { t } = useLingui();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   const [importing, setImporting] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -149,7 +149,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   };
 
   const assetEstimationPriceSpreadRate =
-    (workspace.settings?.loanSettings?.assetEstimationPriceSpreadRate || 100) / 100;
+    (workspaceSetting?.loanSettings?.assetEstimationPriceSpreadRate || 100) / 100;
 
   return (
     <ModalLoanAssetEstimationForm>

@@ -2,29 +2,31 @@
 
 import { Container } from "@/components/container";
 import { CheckInLocationsInput } from "@/components/inputs/check-in-locations-input";
-import { HrmTimekeepingsRules } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
-import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { HrmTimekeepingsRules } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Card, InputWrapper, NumberInput, Stack, Switch } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { type FC } from "react";
+import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
 
 export const WorkspaceSettingHrmTimekeepings: FC = () => {
-  const workspace = useWorkspace();
+  const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
 
   const onChange = useDebouncedCallback((values: HrmTimekeepingsRules) => {
-    setWorkspaceSettings({
-      ...workspace.settings,
+    updateWorkspaceSetting({
       hrmTimeKeepingsRules: values,
     }).catch(onError);
   }, 300);
 
   const form = useForm<HrmTimekeepingsRules>({
-    initialValues: workspace.settings.hrmTimeKeepingsRules || {
+    initialValues: workspaceSetting?.hrmTimeKeepingsRules ?? {
+      __typename: "HrmTimekeepingsRules",
+      acceptLatenessUpToMins: null,
+      acceptOverTimeAtLeastMins: null,
       acceptLocations: [],
+      requirePhoto: false,
     },
     validate: {},
     onValuesChange: (v) => onChange(v),
@@ -50,7 +52,7 @@ export const WorkspaceSettingHrmTimekeepings: FC = () => {
             <Switch
               mt={8}
               label={t`Require photo when checking in/out`}
-              defaultChecked={workspace.settings.hrmTimeKeepingsRules?.requirePhoto}
+              defaultChecked={workspaceSetting?.hrmTimeKeepingsRules?.requirePhoto}
               {...form.getInputProps("requirePhoto")}
             />
           </InputWrapper>

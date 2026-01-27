@@ -16,8 +16,9 @@ import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
+import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { Period } from "@/types";
 import { ObjectUtils } from "@/utils/object.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -42,9 +43,11 @@ import { Renderer } from "../../components/renderer";
 import { Widgets } from "../widgets";
 import { useReportWidgetModules } from "./modules";
 import { ReportWidgetsContext } from "./types";
+import { Currency } from "@joy-one-client/utils/currency";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();
+  const { workspaceSetting, workspaceView, updateWorkspaceView, currency } = useWorkspaceSetting();
   const router = useRouter();
   const { reportWidgetModules } = useReportWidgetModules();
 
@@ -129,7 +132,11 @@ export const ReportWidgets: FC = () => {
     toTime: query.toTime,
     period,
     workspace,
+    workspaceSetting: workspaceSetting!,
+    currency,
   };
+
+  if (!workspaceSetting) return null;
 
   return (
     <Stack p={16}>
@@ -380,14 +387,17 @@ export const ReportWidgets: FC = () => {
         id="reports"
         key={JSON.stringify(report.params)}
         readonly={!workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
-        widgets={workspace.view.reportWidgets}
+        widgets={workspaceView.reportWidgets}
         defaultWidgets={getDefaultWorkspaceView(workspace.type).reportWidgets}
         modules={reportWidgetModules}
         context={ctx}
         onChange={(widgets) =>
-          workspace.setView({
-            ...workspace.view,
-            reportWidgets: widgets,
+          updateWorkspaceView({
+            reportWidgets: (widgets ?? []).map((v) => ({
+              __typename: "DisplayWidget",
+              ...v,
+              state: v.state ?? {},
+            })),
           })
         }
       />

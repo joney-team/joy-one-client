@@ -68,6 +68,7 @@ import { FC, ReactNode, useEffect, useRef, useState } from "react";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
 
 const RelatedLoans = dynamic(
@@ -153,6 +154,7 @@ export const LoanDetail: NextPage = () => {
   const color = useColor();
   const { getGoogleMapLink } = useLocations();
   const uploadFile = useUploadFile();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   const isAutoRedirectStep = useRef(true);
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
@@ -258,17 +260,13 @@ export const LoanDetail: NextPage = () => {
   const activeStep = getStepActive(loan.data, customerKyc);
 
   const linkContractPdf =
-    loan.data.status !== LoanStatus.PENDING_SIGN &&
-    !!workspace.settings.loanSettings?.contractPdfUrl
-      ? workspace.settings.loanSettings?.contractPdfUrl?.replace("{code}", loan.data.code)
+    loan.data.status !== LoanStatus.PENDING_SIGN && !!workspaceSetting?.loanSettings?.contractPdfUrl
+      ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.data.code)
       : undefined;
 
   const linkLiquidationPdf =
-    loan.data?.isLiquidated && workspace.settings.loanSettings?.contractLiquidationPdfUrl
-      ? workspace.settings.loanSettings?.contractLiquidationPdfUrl?.replace(
-          "{code}",
-          loan.data.code
-        )
+    loan.data?.isLiquidated && workspaceSetting?.loanSettings?.contractLiquidationPdfUrl
+      ? workspaceSetting?.loanSettings?.contractLiquidationPdfUrl?.replace("{code}", loan.data.code)
       : undefined;
 
   return (

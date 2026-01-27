@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, Card, Group, Stack, Title } from "@mantine/core";
@@ -9,6 +8,7 @@ import { useDebouncedValue } from "@mantine/hooks";
 import { IconChevronLeft } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { Editor } from "../../components/editor/editor";
+import { useWorkspaceSetting } from "./hooks/useWorkspaceSetting";
 
 interface WorkspaceSettingTermsPoliciesEditorProps {
   doc: `terms-of-service` | `privacy-policy`;
@@ -17,7 +17,7 @@ interface WorkspaceSettingTermsPoliciesEditorProps {
 export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPoliciesEditorProps> = (
   props
 ) => {
-  const workspace = useWorkspace();
+  const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
   const router = useRouter();
 
   const docNames = {
@@ -26,17 +26,16 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
   };
 
   const key = props.doc === "privacy-policy" ? "privacyPolicy" : "termsOfService";
-  const [value, setValue] = useState((workspace.settings as any)?.[key]);
+  const [value, setValue] = useState<string | undefined>(
+    (workspaceSetting ?? {})[key] ?? undefined
+  );
   const [debounced] = useDebouncedValue(value, 300);
 
   useEffect(() => {
-    if (debounced !== (workspace.settings as any)?.[key]) {
-      workspace
-        .updateSettings({
-          ...workspace.settings,
-          [key]: debounced,
-        })
-        .catch(onError);
+    if (debounced !== (workspaceSetting as any)?.[key]) {
+      updateWorkspaceSetting({
+        [key]: debounced,
+      }).catch(onError);
     }
   }, [debounced]);
 

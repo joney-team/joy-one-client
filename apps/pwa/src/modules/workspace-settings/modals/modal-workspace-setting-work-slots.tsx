@@ -1,28 +1,24 @@
 "use client";
 
-import { WorkSlot } from "@/types";
 import { WorkSlotsSettingsInput } from "@/components/inputs/work-slot-settings-input";
 import { ModalHead } from "@/components/modal/modal-head";
 import { getView } from "@/layout/layout-service";
-import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkSlot } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { em, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCalendarWeek } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
 
 export const ModalWorkspaceSettingsWorkSlots: FC = () => {
-  const workspace = useWorkspace();
-  const [slots, setSlots] = useState(workspace.settings.wSlots || []);
+  const { workspaceSetting } = useWorkspaceSetting();
+  const [slots, setSlots] = useState(workspaceSetting?.wSlots || []);
 
   const onUpdate = useDebouncedCallback((slots: WorkSlot[]) => {
-    setWorkspaceSettings({
-      ...workspace.settings,
-      wSlots: slots,
-    });
+    // TODO: Move from wSlots to schedule
   }, 500);
 
   return (

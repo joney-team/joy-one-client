@@ -5,7 +5,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { api } from "@/modules/apis";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -15,7 +15,7 @@ import { type FC } from "react";
 import { ZaloOaGmfGroup } from "../zalo-oas-types";
 
 export const ZaloOaGmfGroups: FC = () => {
-  const workspace = useWorkspace();
+  const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
 
   const { data, count } = useList({
     fetch: async () => api.get<ResponseList<ZaloOaGmfGroup>>("/plugins/zalo-oas/gmf-groups"),
@@ -25,7 +25,7 @@ export const ZaloOaGmfGroups: FC = () => {
   return (
     <Stack>
       {data.map((item) => {
-        const setting = workspace.settings.zaloOaGmfGroupSettings?.[item.group_id] || {};
+        const setting = workspaceSetting?.zaloOaGmfGroupSettings?.[item.group_id] || {};
         return (
           <Card key={item.group_id} withBorder shadow="none">
             <Stack gap={10}>
@@ -47,9 +47,9 @@ export const ZaloOaGmfGroups: FC = () => {
               <Switch
                 defaultChecked={setting.isAdminNotificationEnabled}
                 onChange={(e) => {
-                  workspace.setSettings({
+                  updateWorkspaceSetting({
                     zaloOaGmfGroupSettings: {
-                      ...workspace.settings.zaloOaGmfGroupSettings,
+                      ...workspaceSetting?.zaloOaGmfGroupSettings,
                       [item.group_id]: {
                         ...setting,
                         isAdminNotificationEnabled: e.target.checked,

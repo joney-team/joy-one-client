@@ -1,11 +1,11 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
+import { WorkspaceViewComponent } from "@/graphql/types.graphql";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { WorkspaceViewComponent } from "@/modules/workspace-settings/workspace-settings-types";
+import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { WorkspaceModuleSelector } from "@/modules/workspaces/components/workspace-module-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getDefaultWorkspaceView } from "@/modules/workspaces/workspace-view";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -38,12 +38,15 @@ import {
 } from "@tabler/icons-react";
 import { type FC, useEffect, useRef, useState } from "react";
 import { v4 as uuid } from "uuid";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 import { useAvailableWorkspaceModules, WorkspaceModuleId } from "./workspace-modules";
 
 export const WorkspaceModuleSetup: FC = () => {
   const workspace = useWorkspace();
+  const { workspaceView, updateWorkspaceView } = useWorkspaceSetting();
+
   const [components, handleComponents] = useListState(
-    workspace.view.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []
+    workspaceView.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []
   );
 
   const sensors = useSensors(
@@ -63,13 +66,13 @@ export const WorkspaceModuleSetup: FC = () => {
 
   useEffect(() => {
     if (isUpdateAble.current) {
-      workspace.setView({ ...workspace.view, menu: debounced });
+      updateWorkspaceView({ menu: debounced });
     }
   }, [debounced]);
 
   const onReset = async () => {
     isUpdateAble.current = false;
-    const _view = await workspace.setView({ ...workspace.view, menu: null });
+    const _view = await updateWorkspaceView({ menu: null });
     handleComponents.setState(_view.menu || []);
     setTimeout(() => (isUpdateAble.current = true), 500);
   };
@@ -109,6 +112,7 @@ export const WorkspaceModuleSetup: FC = () => {
                         icon: IconSeparator,
                         onDone: (v) => {
                           handleComponents.append({
+                            __typename: "WorkspaceViewComponent",
                             id: uuid(),
                             moduleId: v,
                             type: "DIVIDER",
@@ -128,7 +132,13 @@ export const WorkspaceModuleSetup: FC = () => {
                     .filter((v) => v.type === "MODULE" && !!v.moduleId)
                     .map((v) => v.moduleId!!)}
                   onSelect={(mo) => {
-                    handleComponents.append({ id: uuid(), moduleId: mo.id as any, type: "MODULE" });
+                    handleComponents.append({
+                      __typename: "WorkspaceViewComponent",
+                      id: uuid(),
+                      moduleId: mo.id,
+                      type: "MODULE",
+                      dividerName: null,
+                    });
                   }}
                   target={(ctx) => {
                     return (

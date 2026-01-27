@@ -147,6 +147,21 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
+export type CheckInLocation = {
+  __typename: 'CheckInLocation';
+  coordinates: Coordinates;
+  disabled: Maybe<Scalars['Boolean']['output']>;
+  name: Scalars['String']['output'];
+  radius: Scalars['Float']['output'];
+};
+
+export type CheckInLocationInput = {
+  coordinates: CoordinatesInput;
+  disabled?: InputMaybe<Scalars['Boolean']['input']>;
+  name: Scalars['String']['input'];
+  radius: Scalars['Float']['input'];
+};
+
 export type ConfigTaskStatuses = {
   __typename: 'ConfigTaskStatuses';
   isInherited: Scalars['Boolean']['output'];
@@ -378,6 +393,17 @@ export type CustomersPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export const DayOfWeek = {
+  Friday: 'FRIDAY',
+  Monday: 'MONDAY',
+  Saturday: 'SATURDAY',
+  Sunday: 'SUNDAY',
+  Thursday: 'THURSDAY',
+  Tuesday: 'TUESDAY',
+  Wednesday: 'WEDNESDAY'
+} as const;
+
+export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
 export type DeviceEntity = {
   __typename: 'DeviceEntity';
   _id: Scalars['String']['output'];
@@ -391,6 +417,19 @@ export type DeviceEntity = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
+};
+
+export type DisplayWidget = {
+  __typename: 'DisplayWidget';
+  id: Scalars['String']['output'];
+  state: Maybe<Scalars['JSONObject']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type DisplayWidgetInput = {
+  id: Scalars['String']['input'];
+  state?: InputMaybe<Scalars['JSONObject']['input']>;
+  type: Scalars['String']['input'];
 };
 
 export type EInvoice = {
@@ -719,6 +758,32 @@ export const GetTaskStatusesMode = {
 } as const;
 
 export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
+export type HrmTimekeepingsRules = {
+  __typename: 'HrmTimekeepingsRules';
+  acceptLatenessUpToMins: Maybe<Scalars['Float']['output']>;
+  acceptLocations: Maybe<Array<CheckInLocation>>;
+  acceptOverTimeAtLeastMins: Maybe<Scalars['Float']['output']>;
+  requirePhoto: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type HrmTimekeepingsRulesInput = {
+  acceptLatenessUpToMins?: InputMaybe<Scalars['Float']['input']>;
+  acceptLocations?: InputMaybe<Array<CheckInLocationInput>>;
+  acceptOverTimeAtLeastMins?: InputMaybe<Scalars['Float']['input']>;
+  requirePhoto?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type LateInterestRate = {
+  __typename: 'LateInterestRate';
+  lateDays: Scalars['Float']['output'];
+  rate: Scalars['Float']['output'];
+};
+
+export type LateInterestRateInput = {
+  lateDays: Scalars['Float']['input'];
+  rate: Scalars['Float']['input'];
+};
+
 export type Loan = {
   __typename: 'Loan';
   _count: Scalars['Float']['output'];
@@ -765,6 +830,73 @@ export const LoanAssetType = {
 } as const;
 
 export type LoanAssetType = typeof LoanAssetType[keyof typeof LoanAssetType];
+export type LoanPackage = {
+  __typename: 'LoanPackage';
+  assetTypes: Array<LoanAssetType>;
+  /** Chi phí vay */
+  contractFee: Scalars['Float']['output'];
+  /** 1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày */
+  days: Scalars['Float']['output'];
+  description: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  /** Lãi phạt */
+  lateInterestRates: Array<LateInterestRate>;
+  liquidationFeeRate: Maybe<Scalars['Float']['output']>;
+  /** Số ngày trong kỳ vay (10, 15, 30) */
+  periodDaysOptions: Array<Scalars['Float']['output']>;
+  type: LoanPackageType;
+  /** Tỷ lệ trả gốc */
+  unFixedCapitalRates: Array<Array<Scalars['Float']['output']>>;
+};
+
+export type LoanPackageInput = {
+  assetTypes: Array<LoanAssetType>;
+  /** Chi phí vay */
+  contractFee: Scalars['Float']['input'];
+  /** 1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày */
+  days: Scalars['Float']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  /** Lãi phạt */
+  lateInterestRates: Array<LateInterestRateInput>;
+  liquidationFeeRate?: InputMaybe<Scalars['Float']['input']>;
+  /** Số ngày trong kỳ vay (10, 15, 30) */
+  periodDaysOptions: Array<Scalars['Float']['input']>;
+  type: LoanPackageType;
+  /** Tỷ lệ trả gốc */
+  unFixedCapitalRates: Array<Array<Scalars['Float']['input']>>;
+};
+
+export const LoanPackageType = {
+  FixedCapital: 'FIXED_CAPITAL',
+  Installment: 'INSTALLMENT',
+  UnfixedCapital: 'UNFIXED_CAPITAL'
+} as const;
+
+export type LoanPackageType = typeof LoanPackageType[keyof typeof LoanPackageType];
+export type LoanSettings = {
+  __typename: 'LoanSettings';
+  assetEstimationPriceSpreadRate: Maybe<Scalars['Float']['output']>;
+  contractLiquidationPdfUrl: Maybe<Scalars['String']['output']>;
+  contractPdfUrl: Maybe<Scalars['String']['output']>;
+  isAutoSelectWorkspaceBranch: Maybe<Scalars['Boolean']['output']>;
+  liquidationFeeRate: Maybe<Scalars['Float']['output']>;
+  loanPackages: Array<LoanPackage>;
+  receiptPdfUrl: Maybe<Scalars['String']['output']>;
+  warningReceiptBeforeDays: Maybe<Scalars['Float']['output']>;
+};
+
+export type LoanSettingsInput = {
+  assetEstimationPriceSpreadRate?: InputMaybe<Scalars['Float']['input']>;
+  contractLiquidationPdfUrl?: InputMaybe<Scalars['String']['input']>;
+  contractPdfUrl?: InputMaybe<Scalars['String']['input']>;
+  isAutoSelectWorkspaceBranch?: InputMaybe<Scalars['Boolean']['input']>;
+  liquidationFeeRate?: InputMaybe<Scalars['Float']['input']>;
+  loanPackages: Array<LoanPackageInput>;
+  receiptPdfUrl?: InputMaybe<Scalars['String']['input']>;
+  warningReceiptBeforeDays?: InputMaybe<Scalars['Float']['input']>;
+};
+
 /** Available loan statuses */
 export const LoanStatus = {
   Approved: 'APPROVED',
@@ -836,6 +968,7 @@ export type Mutation = {
   updateWorkspace: Workspace;
   updateWorkspaceMember: WorkspaceMember;
   updateWorkspaceRole: WorkspaceRole;
+  updateWorkspaceSetting: WorkspaceSetting;
 };
 
 
@@ -1068,6 +1201,30 @@ export type MutationUpdateWorkspaceRoleArgs = {
   permissions: Array<Scalars['String']['input']>;
 };
 
+
+export type MutationUpdateWorkspaceSettingArgs = {
+  allowDuplicateBookings?: InputMaybe<Scalars['Boolean']['input']>;
+  allowPayTicketMultipleTimes?: InputMaybe<Scalars['Boolean']['input']>;
+  allowTip?: InputMaybe<Scalars['Boolean']['input']>;
+  bankAccount?: InputMaybe<PluginBankAccountInput>;
+  bookingsAutoRemindCustomerBookingBeforeDays?: InputMaybe<Scalars['Float']['input']>;
+  bookingsAutoRemindCustomerBookingTime?: InputMaybe<Scalars['String']['input']>;
+  currencyCode?: InputMaybe<Scalars['String']['input']>;
+  hrmTimeKeepingsRules?: InputMaybe<HrmTimekeepingsRulesInput>;
+  isAuthSessionRestricted?: InputMaybe<Scalars['Boolean']['input']>;
+  loanSettings?: InputMaybe<LoanSettingsInput>;
+  mailer?: InputMaybe<PluginMailerAccountInput>;
+  memberPermissions?: InputMaybe<Array<Scalars['String']['input']>>;
+  privacyPolicy?: InputMaybe<Scalars['String']['input']>;
+  receiptImagesRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  receiptPaymentMethodDefault?: InputMaybe<ReceiptPaymentMethod>;
+  schedule?: InputMaybe<WorkspaceScheduleInput>;
+  searchSettings?: InputMaybe<WorkspaceSearchSettingsInput>;
+  termsOfService?: InputMaybe<Scalars['String']['input']>;
+  view?: InputMaybe<WorkspaceViewInput>;
+  zaloOaGmfGroupSettings?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
 export type Order = {
   __typename: 'Order';
   _count: Scalars['Float']['output'];
@@ -1160,6 +1317,19 @@ export type PartnersPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type PluginBankAccount = {
+  __typename: 'PluginBankAccount';
+  accountName: Maybe<Scalars['String']['output']>;
+  accountNumber: Scalars['String']['output'];
+  bankId: Scalars['Float']['output'];
+};
+
+export type PluginBankAccountInput = {
+  accountName?: InputMaybe<Scalars['String']['input']>;
+  accountNumber: Scalars['String']['input'];
+  bankId: Scalars['Float']['input'];
+};
+
 export type PluginEInvoicesPaginated = {
   __typename: 'PluginEInvoicesPaginated';
   results: Array<EInvoice>;
@@ -1189,6 +1359,17 @@ export const PluginExternalStorageProvider = {
 } as const;
 
 export type PluginExternalStorageProvider = typeof PluginExternalStorageProvider[keyof typeof PluginExternalStorageProvider];
+export type PluginMailerAccount = {
+  __typename: 'PluginMailerAccount';
+  pass: Scalars['String']['output'];
+  user: Scalars['String']['output'];
+};
+
+export type PluginMailerAccountInput = {
+  pass: Scalars['String']['input'];
+  user: Scalars['String']['input'];
+};
+
 export type Posts = {
   __typename: 'Posts';
   _id: Scalars['String']['output'];
@@ -1547,6 +1728,7 @@ export type Query = {
   workspaceMembersByIds: Array<WorkspaceMember>;
   workspaceMembersOnlineStatus: Array<WorkspaceMemberOnlineStatus>;
   workspaceRoles: Array<WorkspaceRole>;
+  workspaceSetting: WorkspaceSetting;
   workspaceStats: WorkspaceStatsPaginated;
 };
 
@@ -2328,6 +2510,21 @@ export type TasksPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type TimeRange = {
+  __typename: 'TimeRange';
+  /** Format: HH:mm */
+  end: Scalars['String']['output'];
+  /** Format: HH:mm */
+  start: Scalars['String']['output'];
+};
+
+export type TimeRangeInput = {
+  /** Format: HH:mm */
+  end: Scalars['String']['input'];
+  /** Format: HH:mm */
+  start: Scalars['String']['input'];
+};
+
 export type UpdateTagInput = {
   _id: Scalars['String']['input'];
   color?: InputMaybe<Scalars['String']['input']>;
@@ -2362,6 +2559,17 @@ export type UserAuthProvider = {
   providerId: Scalars['String']['output'];
   uid: Scalars['String']['output'];
   username: Scalars['String']['output'];
+};
+
+export type WorkingDay = {
+  __typename: 'WorkingDay';
+  day: DayOfWeek;
+  hours: Array<TimeRange>;
+};
+
+export type WorkingDayInput = {
+  day: DayOfWeek;
+  hours: Array<TimeRangeInput>;
 };
 
 export type Workspace = {
@@ -2499,6 +2707,57 @@ export type WorkspaceRole = {
   permissions: Array<Scalars['String']['output']>;
 };
 
+export type WorkspaceSchedule = {
+  __typename: 'WorkspaceSchedule';
+  timezone: Maybe<Scalars['String']['output']>;
+  workingDays: Array<WorkingDay>;
+};
+
+export type WorkspaceScheduleInput = {
+  timezone?: InputMaybe<Scalars['String']['input']>;
+  workingDays: Array<WorkingDayInput>;
+};
+
+export type WorkspaceSearchSettings = {
+  __typename: 'WorkspaceSearchSettings';
+  hideEntities: Maybe<Array<Scalars['String']['output']>>;
+};
+
+export type WorkspaceSearchSettingsInput = {
+  hideEntities?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+export type WorkspaceSetting = {
+  __typename: 'WorkspaceSetting';
+  _id: Scalars['String']['output'];
+  allowDuplicateBookings: Maybe<Scalars['Boolean']['output']>;
+  allowPayTicketMultipleTimes: Maybe<Scalars['Boolean']['output']>;
+  allowTip: Maybe<Scalars['Boolean']['output']>;
+  bankAccount: Maybe<PluginBankAccount>;
+  bookingsAutoRemindCustomerBookingBeforeDays: Maybe<Scalars['Float']['output']>;
+  bookingsAutoRemindCustomerBookingTime: Maybe<Scalars['String']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  currencyCode: Maybe<Scalars['String']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  hrmTimeKeepingsRules: Maybe<HrmTimekeepingsRules>;
+  isAuthSessionRestricted: Maybe<Scalars['Boolean']['output']>;
+  loanSettings: Maybe<LoanSettings>;
+  mailer: Maybe<PluginMailerAccount>;
+  memberPermissions: Maybe<Array<Scalars['String']['output']>>;
+  privacyPolicy: Maybe<Scalars['String']['output']>;
+  receiptImagesRequired: Maybe<Scalars['Boolean']['output']>;
+  receiptPaymentMethodDefault: Maybe<ReceiptPaymentMethod>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  schedule: Maybe<WorkspaceSchedule>;
+  searchSettings: Maybe<WorkspaceSearchSettings>;
+  termsOfService: Maybe<Scalars['String']['output']>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  view: Maybe<WorkspaceView>;
+  /** @deprecated Use schedule instead */
+  wSlots: Maybe<Array<Scalars['AnyType']['output']>>;
+  zaloOaGmfGroupSettings: Maybe<Scalars['JSONObject']['output']>;
+};
+
 export type WorkspaceStat = {
   __typename: 'WorkspaceStat';
   _id: Scalars['String']['output'];
@@ -2541,3 +2800,30 @@ export const WorkspaceType = {
 } as const;
 
 export type WorkspaceType = typeof WorkspaceType[keyof typeof WorkspaceType];
+export type WorkspaceView = {
+  __typename: 'WorkspaceView';
+  dashboardWidgets: Maybe<Array<DisplayWidget>>;
+  menu: Maybe<Array<WorkspaceViewComponent>>;
+  reportWidgets: Maybe<Array<DisplayWidget>>;
+};
+
+export type WorkspaceViewComponent = {
+  __typename: 'WorkspaceViewComponent';
+  dividerName: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  moduleId: Maybe<Scalars['String']['output']>;
+  type: Scalars['String']['output'];
+};
+
+export type WorkspaceViewComponentInput = {
+  dividerName?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  moduleId?: InputMaybe<Scalars['String']['input']>;
+  type: Scalars['String']['input'];
+};
+
+export type WorkspaceViewInput = {
+  dashboardWidgets?: InputMaybe<Array<DisplayWidgetInput>>;
+  menu?: InputMaybe<Array<WorkspaceViewComponentInput>>;
+  reportWidgets?: InputMaybe<Array<DisplayWidgetInput>>;
+};

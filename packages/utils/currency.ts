@@ -303,8 +303,8 @@ export class Currency {
     return this.data.find((c) => c.code === currency);
   }
 
-  static format(value: number, args?: { locale?: string; currency?: string }) {
-    return Intl.NumberFormat(args?.locale, {
+  static format(value: number, args?: { locale?: string | null; currency?: string | null }) {
+    return Intl.NumberFormat(args?.locale ?? undefined, {
       style: "currency",
       currency: args?.currency ?? "USD",
       currencyDisplay: "symbol",

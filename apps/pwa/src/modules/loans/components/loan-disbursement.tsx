@@ -6,6 +6,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DocumentsIllustration } from "@/components/illustrations/documents";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
+import { PluginBankAccount } from "@/graphql/types.graphql";
 import { api } from "@/modules/apis";
 import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
 import { FilesBox } from "@/modules/files/files-box";
@@ -13,7 +14,6 @@ import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { fulfillLoan } from "@/modules/loans/loans-service";
 import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
-import { BankAccount } from "@/modules/plugins/banks/banks.types";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { getPaymentMethodIcon, getReceipts } from "@/modules/receipts/receipts-service";
@@ -204,7 +204,8 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 )
                   return null;
 
-                const bankAccount: BankAccount = {
+                const bankAccount: PluginBankAccount = {
+                  __typename: "PluginBankAccount",
                   accountName: payment.accountName,
                   accountNumber: payment.accountNumber,
                   bankId: bank.id,

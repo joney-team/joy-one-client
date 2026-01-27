@@ -11,7 +11,6 @@ import { OnModalCaptureTimekeeping } from "@/modules/hrm-timekeepings/modals/mod
 import { OnModalListTimekeepings } from "@/modules/hrm-timekeepings/modals/modal-timekeeping-list";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -35,6 +34,7 @@ import { Avatar } from "../../components/avatar";
 import { Calendar } from "../../components/calendar/calendar";
 import { Circle } from "../../components/circle";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 
 interface HrmTimekeepingsProps {
   initialDate?: Date;
@@ -47,7 +47,8 @@ interface HrmTimekeepingsProps {
 export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
   const { timekeepings, initialDate } = props;
 
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
+
   const forceUpdate = useForceUpdate();
   const layout = useLayout();
   const color = useColor();
@@ -113,8 +114,8 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
 
                 const calculated = calculateTimekeepings({
                   timekeepings: v.timekeepings,
-                  workSlots: workspace.settings.wSlots,
-                  rules: workspace.settings.hrmTimeKeepingsRules,
+                  workSlots: workspaceSetting?.wSlots,
+                  rules: workspaceSetting?.hrmTimeKeepingsRules,
                   workTimeType: userInfo.workingTimeType,
                 });
 
@@ -127,8 +128,8 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                       time: DateTime.toSeconds(new Date()),
                     },
                   ],
-                  workSlots: workspace.settings.wSlots,
-                  rules: workspace.settings.hrmTimeKeepingsRules,
+                  workSlots: workspaceSetting?.wSlots,
+                  rules: workspaceSetting?.hrmTimeKeepingsRules,
                   workTimeType: userInfo.workingTimeType,
                 });
 

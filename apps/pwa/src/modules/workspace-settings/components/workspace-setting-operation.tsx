@@ -13,10 +13,7 @@ import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { OnModalWorkspaceSettingsWorkSlots } from "@/modules/workspace-settings/modals/modal-workspace-setting-work-slots";
-import {
-  setWorkspaceSettings,
-  useWorkDaySlots,
-} from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Currency } from "@joy-one-client/utils/currency";
@@ -39,12 +36,14 @@ import {
 import { TimeInput } from "@mantine/dates";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 
 export const WorkspaceOperationSettings: FC = () => {
   const { t } = useLingui();
   const workspace = useWorkspace();
+  const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
   const color = useColor();
 
   const searchAvailableEntities = useFetch({
@@ -127,10 +126,9 @@ export const WorkspaceOperationSettings: FC = () => {
       <FormSession title={<Trans>Orders</Trans>}>
         <Switch
           label={<Trans>Allow multiple payments (Installment or Deposit)</Trans>}
-          defaultChecked={workspace.settings.allowPayTicketMultipleTimes}
+          defaultChecked={workspaceSetting?.allowPayTicketMultipleTimes ?? false}
           onChange={(e) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
+            updateWorkspaceSetting({
               allowPayTicketMultipleTimes: !!e.target.checked,
             });
           }}
@@ -144,12 +142,11 @@ export const WorkspaceOperationSettings: FC = () => {
         <Select
           label={<Trans>Currency</Trans>}
           searchable
-          defaultValue={workspace.settings.currencyCode}
+          defaultValue={workspaceSetting?.currencyCode}
           data={Currency.data.map((c) => ({ value: c.code, label: c.name }))}
           onChange={(value) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
-              currencyCode: value || undefined,
+            updateWorkspaceSetting({
+              currencyCode: value ?? null,
             });
           }}
         />
@@ -158,15 +155,14 @@ export const WorkspaceOperationSettings: FC = () => {
           label={<Trans>Default payment method</Trans>}
           searchable
           defaultValue={
-            workspace.settings.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
+            workspaceSetting?.receiptPaymentMethodDefault || Object.values(ReceiptPaymentMethod)[0]
           }
           data={Object.values(ReceiptPaymentMethod).map((value) => ({
             value,
             label: receiptPaymentMethods[value].label(),
           }))}
           onChange={(value) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
+            updateWorkspaceSetting({
               receiptPaymentMethodDefault: value as ReceiptPaymentMethod,
             });
           }}
@@ -177,10 +173,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Switch
           label={<Trans>Receipt images required</Trans>}
-          defaultChecked={workspace.settings.receiptImagesRequired}
+          defaultChecked={workspaceSetting?.receiptImagesRequired ?? false}
           onChange={(e) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
+            updateWorkspaceSetting({
               receiptImagesRequired: !!e.target.checked,
             });
           }}
@@ -189,10 +184,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Switch
           label={<Trans>Allow tip</Trans>}
-          defaultChecked={workspace.settings.allowTip}
+          defaultChecked={workspaceSetting?.allowTip ?? false}
           onChange={(e) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
+            updateWorkspaceSetting({
               allowTip: !!e.target.checked,
             });
           }}
@@ -207,10 +201,9 @@ export const WorkspaceOperationSettings: FC = () => {
           <Group>
             <NumberInput
               label={<Trans>Remind customers before the appointment n (days)</Trans>}
-              defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingBeforeDays}
+              defaultValue={workspaceSetting?.bookingsAutoRemindCustomerBookingBeforeDays ?? 0}
               onBlur={(value) => {
-                setWorkspaceSettings({
-                  ...workspace.settings,
+                updateWorkspaceSetting({
                   bookingsAutoRemindCustomerBookingBeforeDays: +value || 0,
                 });
               }}
@@ -218,10 +211,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
             <TimeInput
               label={<Trans>Reminder time</Trans>}
-              defaultValue={workspace.settings.bookingsAutoRemindCustomerBookingTime}
+              defaultValue={workspaceSetting?.bookingsAutoRemindCustomerBookingTime ?? ""}
               onBlur={(value) => {
-                setWorkspaceSettings({
-                  ...workspace.settings,
+                updateWorkspaceSetting({
                   bookingsAutoRemindCustomerBookingTime: value.target.value,
                 });
               }}
@@ -237,10 +229,9 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Switch
           label={<Trans>Allow duplicate bookings</Trans>}
-          defaultChecked={workspace.settings.allowDuplicateBookings}
+          defaultChecked={workspaceSetting?.allowDuplicateBookings ?? false}
           onChange={(e) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
+            updateWorkspaceSetting({
               allowDuplicateBookings: !!e.target.checked,
             });
           }}
@@ -255,13 +246,12 @@ export const WorkspaceOperationSettings: FC = () => {
           <Card withBorder p={12} shadow="none" mt={5}>
             <SimpleGrid cols={{ md: 3 }}>
               {searchAvailableEntities.data?.map((e) => {
-                const hideEntities = workspace.settings.searchSettings?.hideEntities || [];
+                const hideEntities = workspaceSetting?.searchSettings?.hideEntities || [];
                 const isAvailable = !!!hideEntities.includes(e);
                 const toggle = () => {
-                  setWorkspaceSettings({
-                    ...workspace.settings,
+                  updateWorkspaceSetting({
                     searchSettings: {
-                      ...workspace.settings.searchSettings,
+                      __typename: "WorkspaceSearchSettings",
                       hideEntities: isAvailable
                         ? [...hideEntities, e]
                         : hideEntities.filter((item) => item !== e),
@@ -281,21 +271,6 @@ export const WorkspaceOperationSettings: FC = () => {
             </SimpleGrid>
           </Card>
         </InputWrapper>
-      </FormSession>
-
-      <Divider opacity={0.5} my={30} />
-
-      <FormSession title={<Trans>Secure</Trans>}>
-        <Switch
-          label={<Trans>Require re-login when logging out</Trans>}
-          defaultChecked={workspace.settings.isAuthSessionRestricted}
-          onChange={(e) => {
-            setWorkspaceSettings({
-              ...workspace.settings,
-              isAuthSessionRestricted: !!e.target.checked,
-            });
-          }}
-        />
       </FormSession>
     </Stack>
   );

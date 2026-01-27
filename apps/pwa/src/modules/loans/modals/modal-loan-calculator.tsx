@@ -8,7 +8,7 @@ import { onReconnected } from "@/modules/events/event-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -36,7 +36,8 @@ import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode }> = ({
   children,
 }) => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
+
   const loans = useLoans();
   const { t } = useLingui();
 
@@ -54,7 +55,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
     close();
   };
 
-  const loanPackages = workspace.settings?.loanSettings?.loanPackages || [];
+  const loanPackages = workspaceSetting?.loanSettings?.loanPackages ?? [];
 
   const assetTypeOptions: LoanAssetType[] = loanPackages.reduce((output, p) => {
     return Array.from([...(new Set([...output, ...p.assetTypes]) as any)]);
@@ -67,7 +68,8 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 
     return output;
   }, [] as number[]);
-  const packageDays = packageDaysOptions.find((d) => d === _packageDays) || packageDaysOptions[0];
+
+  const packageDays = packageDaysOptions.find((d) => d === _packageDays) ?? packageDaysOptions[0];
 
   const packagePeriodDaysOptions = loanPackages.reduce((output, p) => {
     if (assetType && p.assetTypes.includes(assetType) && packageDays && p.days === packageDays) {
@@ -76,9 +78,9 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
     return output;
   }, [] as number[]);
   const packagePeriodDays =
-    packagePeriodDaysOptions.find((d) => d === _packagePeriodDays) || packagePeriodDaysOptions[0];
+    packagePeriodDaysOptions.find((d) => d === _packagePeriodDays) ?? packagePeriodDaysOptions[0];
 
-  const loanPackage = workspace.settings?.loanSettings?.loanPackages?.find(
+  const loanPackage = workspaceSetting?.loanSettings?.loanPackages?.find(
     (p) => assetType && p.assetTypes.includes(assetType) && p.days === packageDays
   );
   const paymentPeriods =

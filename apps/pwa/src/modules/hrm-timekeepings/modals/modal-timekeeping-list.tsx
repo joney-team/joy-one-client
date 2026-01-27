@@ -24,7 +24,7 @@ import {
   workingTimeHours,
 } from "@/modules/hrm-timekeepings/hrm-timekeepings-utils";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -50,8 +50,8 @@ interface ModalTImekeepingListProps {
 }
 
 export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
-  const workspace = useWorkspace();
   const theme = useMantineTheme();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   const timekeepings = useList<HrmTimekeepingEntity>({
     fetch: (q) =>
@@ -83,8 +83,8 @@ export const ModalTImekeepingList: FC<ModalTImekeepingListProps> = (props) => {
 
   const calculated = calculateTimekeepings({
     timekeepings: timekeepings.data,
-    rules: workspace.settings.hrmTimeKeepingsRules,
-    workSlots: workspace.settings.wSlots,
+    rules: workspaceSetting?.hrmTimeKeepingsRules,
+    workSlots: workspaceSetting?.wSlots,
     workTimeType: member?.workingTimeType as any,
   });
 

@@ -29,6 +29,7 @@ import {
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -54,7 +55,6 @@ import {
   ThemeIcon,
   useMantineTheme,
 } from "@mantine/core";
-import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck, IconClipboardCheck, IconRefresh } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import {
@@ -93,6 +93,7 @@ export interface ModalPayReceiptRef {
 
 const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const theme = useMantineTheme();
   const banks = useBanks();
 
@@ -105,16 +106,19 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
 
   const [paymentMethod, setPaymentMethod] = useState(
-    workspace.settings.receiptPaymentMethodDefault || ReceiptPaymentMethod.CASH
+    (workspaceSetting?.receiptPaymentMethodDefault ??
+      ReceiptPaymentMethod.CASH) as ReceiptPaymentMethod
   );
-  const paymentMethods = workspace.settings.receiptPaymentMethodDefault
-    ? [
-        workspace.settings.receiptPaymentMethodDefault,
-        ...Object.values(ReceiptPaymentMethod).filter(
-          (v) => v !== workspace.settings.receiptPaymentMethodDefault
-        ),
-      ]
-    : Object.values(ReceiptPaymentMethod);
+  const paymentMethods = (
+    workspaceSetting?.receiptPaymentMethodDefault
+      ? [
+          workspaceSetting?.receiptPaymentMethodDefault,
+          ...Object.values(ReceiptPaymentMethod).filter(
+            (v) => v !== workspaceSetting?.receiptPaymentMethodDefault
+          ),
+        ]
+      : Object.values(ReceiptPaymentMethod)
+  ) as ReceiptPaymentMethod[];
 
   const getDefaultTransactionDesc = async (receipt: ReceiptEntity) => {
     if (receipt.type === ReceiptType.INCOME && receipt.relatedLoanId && receipt.relatedCustomer) {
@@ -132,7 +136,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const totalAmount = receipt ? round(receipt.amount + (receipt.tipAmount || 0)) : 0;
 
   const bankInformation = useMemo(() => {
-    const bankAccount = workspaceBranch?.settings?.bankAccount || workspace.settings.bankAccount;
+    const bankAccount = workspaceBranch?.settings?.bankAccount || workspaceSetting?.bankAccount;
     const bankInformation = banks.find((v) => v.id === bankAccount?.bankId);
 
     if (
@@ -149,9 +153,10 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
       qr: getStaticQrCode(
         bankInformation,
         {
+          __typename: "PluginBankAccount",
           bankId: bankAccount.bankId,
           accountNumber: bankAccount.accountNumber,
-          accountName: bankAccount.accountName,
+          accountName: bankAccount.accountName || "",
         },
         {
           amount: totalAmount,
@@ -177,7 +182,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     if (!receipt) return;
 
     try {
-      if (workspace.settings.receiptImagesRequired && receiptFiles.length <= 0) {
+      if (workspaceSetting?.receiptImagesRequired && receiptFiles.length <= 0) {
         throw new Error(t`Receipt images required`);
       }
 
@@ -495,7 +500,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
                 <Text fw={500} fz={em(14)}>
                   <Trans>Receipts images</Trans>
                 </Text>
-                <Renderer visible={!!workspace.settings.receiptImagesRequired}>
+                <Renderer visible={!!workspaceSetting?.receiptImagesRequired}>
                   <Text fw={700} c="red">
                     *
                   </Text>

@@ -44,6 +44,7 @@ import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 import {
   useAvailableWorkspaceModules,
   useWorkspaceModules,
@@ -53,6 +54,7 @@ import {
 export const SearchEngine: FC = () => {
   const { i18n, t } = useLingui();
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const { getModule } = useWorkspaceModules();
   const { isModuleAvailable, availableModules } = useAvailableWorkspaceModules();
   const router = useRouter();
@@ -79,7 +81,7 @@ export const SearchEngine: FC = () => {
       : [];
 
   const strictSearchEntity = (entity: AppEntity) => {
-    if ((workspace.settings.searchSettings?.hideEntities || []).includes(entity)) return false;
+    if ((workspaceSetting?.searchSettings?.hideEntities || []).includes(entity)) return false;
     return true;
   };
 

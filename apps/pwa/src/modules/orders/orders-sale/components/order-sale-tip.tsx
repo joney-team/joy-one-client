@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { t } from "@lingui/core/macro";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
@@ -11,11 +11,11 @@ import { FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 export const OrderSaleTip: FC = () => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const orderSale = userOrdersManagement();
   const tipAmount = orderSale.activeOrder?.tipAmount ?? 0;
 
-  if (!workspace.settings.allowTip || !orderSale.activeOrder) return null;
+  if (!workspaceSetting?.allowTip || !orderSale.activeOrder) return null;
 
   return (
     <ModalInput>

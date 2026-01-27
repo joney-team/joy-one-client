@@ -67,6 +67,17 @@ export const CustomerFormStatus = {
 } as const;
 
 export type CustomerFormStatus = typeof CustomerFormStatus[keyof typeof CustomerFormStatus];
+export const DayOfWeek = {
+  Friday: 'FRIDAY',
+  Monday: 'MONDAY',
+  Saturday: 'SATURDAY',
+  Sunday: 'SUNDAY',
+  Thursday: 'THURSDAY',
+  Tuesday: 'TUESDAY',
+  Wednesday: 'WEDNESDAY'
+} as const;
+
+export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
 /** Available event channels */
 export const EventChannel = {
   None: 'NONE',
@@ -317,6 +328,13 @@ export const LoanAssetType = {
 } as const;
 
 export type LoanAssetType = typeof LoanAssetType[keyof typeof LoanAssetType];
+export const LoanPackageType = {
+  FixedCapital: 'FIXED_CAPITAL',
+  Installment: 'INSTALLMENT',
+  UnfixedCapital: 'UNFIXED_CAPITAL'
+} as const;
+
+export type LoanPackageType = typeof LoanPackageType[keyof typeof LoanPackageType];
 /** Available loan statuses */
 export const LoanStatus = {
   Approved: 'APPROVED',

@@ -16,6 +16,7 @@ import { type ModalReceiptDetailRef } from "@/modules/receipts/modals/modal-rece
 import { updateReceipt } from "@/modules/receipts/receipts-service";
 import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
@@ -47,6 +48,8 @@ export const LoanReceiptCard: FC<{
   refetch: () => Promise<any>;
 }> = (props) => {
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
+
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
   const { receipt, loan, receipts } = props;
   const { isLiquidation, fee, capital, period, isExpired, data, isPartialPayment } =
@@ -63,8 +66,8 @@ export const LoanReceiptCard: FC<{
   const isShowExplain = isPartialPayment || !!data.liquidation;
   const isAbleToUpdate = !!workspace.hasPermission(WorkspacePermission.RECEIPTS_UPDATE);
 
-  const linkReceiptPdf = workspace.settings.loanSettings?.receiptPdfUrl
-    ? workspace.settings.loanSettings.receiptPdfUrl.replace("{id}", receipt.id)
+  const linkReceiptPdf = workspaceSetting?.loanSettings?.receiptPdfUrl
+    ? workspaceSetting?.loanSettings.receiptPdfUrl.replace("{id}", receipt.id)
     : undefined;
 
   const onChangeAmount = async (amount: number) => {

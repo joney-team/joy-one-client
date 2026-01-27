@@ -1,21 +1,22 @@
 "use client";
 
+import { MailerIllustration } from "@/components/illustrations/mailer";
 import { useColor } from "@/modules/theme/use-color";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { Anchor, Button, Stack, Text, Title, em } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { MailerIllustration } from "@/components/illustrations/mailer";
 import { PluginMailerForm } from "./plugin-mailer-form";
 
 export const PluginMailer: FC = () => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
+
   const color = useColor();
   const [isShowForm, setIsShowForm] = useState(false);
 
   if (isShowForm) return <PluginMailerForm onDone={() => setIsShowForm(false)} />;
 
-  if (workspace.settings.mailer)
+  if (workspaceSetting?.mailer)
     return (
       <Stack align="center">
         <MailerIllustration width={200} />
@@ -26,8 +27,8 @@ export const PluginMailer: FC = () => {
           </Title>
 
           <Text ta="center">
-            Hệ thống đang dùng email <strong>{workspace.settings.mailer.user}</strong> để gửi Mail
-            cho khách hàng hoặc các thông báo hệ thống cho thành viên.
+            Hệ thống đang dùng email <strong>{workspaceSetting.mailer.user}</strong> để gửi Mail cho
+            khách hàng hoặc các thông báo hệ thống cho thành viên.
           </Text>
         </Stack>
 

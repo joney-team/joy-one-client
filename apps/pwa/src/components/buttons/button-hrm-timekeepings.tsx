@@ -4,7 +4,7 @@ import { EventType } from "@/graphql/enums.graphql";
 import { getPreviousTimeKeeping } from "@/modules/hrm-timekeepings/hrm-timekeepings-service";
 import { HrmTimekeepingType } from "@/modules/hrm-timekeepings/hrm-timekeepings-types";
 import { OnModalCaptureLocationTimekeeping } from "@/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
@@ -15,7 +15,7 @@ import { Button } from "./button";
 
 export const ButtonHrmTimeKeeping: FC = () => {
   const forceUpdate = useForceUpdate();
-  const workspace = useWorkspace();
+  const { isHrmTimekeepingAvailable } = useWorkspaceSetting();
 
   const previousTimekeeping = useFetch({
     fetch: () => getPreviousTimeKeeping(),
@@ -36,7 +36,7 @@ export const ButtonHrmTimeKeeping: FC = () => {
       ? HrmTimekeepingType.CHECK_OUT
       : HrmTimekeepingType.CHECK_IN;
 
-  if (!workspace.isHrmTimekeepingAvailable) return null;
+  if (!isHrmTimekeepingAvailable) return null;
 
   if (nextType === HrmTimekeepingType.CHECK_IN) {
     return (

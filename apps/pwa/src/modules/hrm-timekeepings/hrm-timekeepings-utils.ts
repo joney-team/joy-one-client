@@ -2,11 +2,8 @@ import { WorkspaceMemberWorkingTimeType } from "@/graphql/enums.graphql";
 import { WorkSlot } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { sortWorkSlots } from "../workspace-settings/workspace-settings-service";
-import {
-  HrmTimekeepingEntity,
-  HrmTimekeepingsRules,
-  HrmTimekeepingType,
-} from "./hrm-timekeepings-types";
+import { HrmTimekeepingEntity, HrmTimekeepingType } from "./hrm-timekeepings-types";
+import { HrmTimekeepingsRules } from "@/graphql/types.graphql";
 
 export interface HrmCalculateTimekeepingsArgs {
   timekeepings: HrmTimekeepingEntity[];

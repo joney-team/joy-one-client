@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { FC, Fragment } from "react";
 
@@ -10,7 +10,7 @@ export interface CurrencyFormatProps {
 }
 
 export const CurrencyFormat: FC<CurrencyFormatProps> = (props) => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const lang = useLang();
   const { value } = props;
 
@@ -18,7 +18,7 @@ export const CurrencyFormat: FC<CurrencyFormatProps> = (props) => {
     <Fragment>
       {Currency.format(value, {
         locale: lang.locale,
-        currency: workspace.settings.currencyCode,
+        currency: workspaceSetting?.currencyCode ?? "",
       })}
     </Fragment>
   );

@@ -5,13 +5,11 @@ import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { stringable } from "@joy-one-client/utils/string";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
 import { FC, Fragment, useMemo } from "react";
-import { getWorkspaceRoleName } from "../workspace-roles-constants";
 import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 
 interface WorkspaceRoleCardProps {
@@ -19,15 +17,11 @@ interface WorkspaceRoleCardProps {
 }
 
 export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
-  const workspace = useWorkspace();
   const isAbleToEdit = ![WorkspaceDefaultRoleId.OWNER, WorkspaceDefaultRoleId.ADMIN]
     .map(stringable)
     .includes(role._id);
 
-  const permissions =
-    (role._id === WorkspaceDefaultRoleId.MEMBER
-      ? workspace.settings.memberPermissions
-      : role?.permissions) || [];
+  const permissions = role?.permissions ?? [];
   const permissionCounts = Object.values(WorkspacePermission).filter((key) =>
     permissions.includes(key)
   ).length;
@@ -37,10 +31,13 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
       return (
         <Fragment>
           <Text fz={em(12)} c="gray">
-            • {t`Has access to all functions of the system`}
+            • <Trans>Has access to all functions of the system</Trans>
           </Text>
           <Text fz={em(12)} c="gray">
-            • {t`Cannot be deleted, cannot be assigned to other members, can only be transferred`}
+            •{" "}
+            <Trans>
+              Cannot be deleted, cannot be assigned to other members, can only be transferred
+            </Trans>
           </Text>
         </Fragment>
       );
@@ -50,10 +47,10 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
       return (
         <Fragment>
           <Text fz={em(12)} c="gray">
-            • {t`Has access to all functions of the system`}
+            • <Trans>Has access to all functions of the system</Trans>
           </Text>
           <Text fz={em(12)} c="gray">
-            • {t`Cannot be deleted, can be assigned to other members`}
+            • <Trans>Cannot be deleted, can be assigned to other members</Trans>
           </Text>
         </Fragment>
       );
@@ -63,11 +60,12 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
       return (
         <Fragment>
           <Text fz={em(12)} c="gray">
-            • {t`Default role when not specified`}
+            • <Trans>Default role when not specified</Trans>
           </Text>
 
           <Text fz={em(12)} c="gray">
-            • {t`Grant permissions`} {permissionCounts}/{Object.keys(WorkspacePermission).length}
+            • <Trans>Grant permissions</Trans> {permissionCounts}/
+            {Object.keys(WorkspacePermission).length}
           </Text>
         </Fragment>
       );
@@ -82,7 +80,8 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
         )}
 
         <Text fz={em(12)} c="gray">
-          • {t`Grant permissions`} {permissionCounts}/{Object.keys(WorkspacePermission).length}
+          • <Trans>Grant permissions</Trans> {permissionCounts}/
+          {Object.keys(WorkspacePermission).length}
         </Text>
       </Fragment>
     );

@@ -89,10 +89,10 @@ export const useReportWidgetModules = (): {
                     ? date.getDate()
                     : `${date.getDate()}/${date.getMonth() + 1}`
                   : "-",
-                value: reportConvertMoneyAmount(v.receipts.revenue, ctx.workspace.currency),
+                value: reportConvertMoneyAmount(v.receipts.revenue, ctx.currency),
               };
             }),
-          unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
+          unit: (ctx) => reportConvertMoneyAmountUnit(ctx.currency),
           renderSeries: () => [{ name: "value", label: t`Revenue`, color: "primary.6" }],
         }),
       },
@@ -243,11 +243,11 @@ export const useReportWidgetModules = (): {
                   : "-",
                 value: reportConvertMoneyAmount(
                   v.loans.contracts.fulfilledAmount || 0,
-                  ctx.workspace.currency
+                  ctx.currency
                 ),
               };
             }),
-          unit: (ctx) => reportConvertMoneyAmountUnit(ctx.workspace.currency),
+          unit: (ctx) => reportConvertMoneyAmountUnit(ctx.currency),
           renderSeries: () => [{ name: "value", label: t`Money amount`, color: "primary.6" }],
         }),
       },

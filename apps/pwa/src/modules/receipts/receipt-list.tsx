@@ -21,7 +21,6 @@ import {
 import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
@@ -37,10 +36,11 @@ import {
 import dynamic from "next/dynamic";
 import { Fragment, useRef, type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
+import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
 import { type ModalPayReceiptRef } from "./modals/modal-pay-receipt";
 import { ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
-import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
 
 const ModalReceiptDetail = dynamic(
   () => import("./modals/modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
@@ -67,10 +67,10 @@ const ModalPayReceipt = dynamic(
 );
 
 export const ReceiptList: FC = () => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const banks = useBanks();
-  const bank = banks.find((v) => workspace.settings.bankAccount?.bankId === v.id);
-  const bankAccount = workspace.settings.bankAccount;
+  const bank = banks.find((v) => workspaceSetting?.bankAccount?.bankId === v.id);
+  const bankAccount = workspaceSetting?.bankAccount;
   const modalPrinterRef = useRef<ModalPrinterRef | null>(null);
   const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);

@@ -1,0 +1,96 @@
+fragment WorkspaceSettingData on WorkspaceSetting {
+  _id
+  schedule {
+    timezone
+    workingDays {
+      day
+      hours {
+        start
+        end
+      }
+    }
+  }
+  wSlots
+  bankAccount {
+    bankId
+    accountNumber
+    accountName
+  }
+  mailer {
+    user
+    pass
+  }
+  hrmTimeKeepingsRules {
+    requirePhoto
+    acceptLatenessUpToMins
+    acceptOverTimeAtLeastMins
+    acceptLocations {
+      name
+      radius
+      coordinates {
+        lat
+        lng
+      }
+      disabled
+    }
+  }
+  bookingsAutoRemindCustomerBookingBeforeDays
+  allowTip
+  allowDuplicateBookings
+  memberPermissions
+  bookingsAutoRemindCustomerBookingTime
+  loanSettings {
+    loanPackages {
+      id
+      assetTypes
+      type
+      days
+      periodDaysOptions
+      contractFee
+      unFixedCapitalRates
+      lateInterestRates {
+        lateDays
+        rate
+      }
+      description
+      liquidationFeeRate
+    }
+    assetEstimationPriceSpreadRate
+    liquidationFeeRate
+    warningReceiptBeforeDays
+    isAutoSelectWorkspaceBranch
+    contractPdfUrl
+    contractLiquidationPdfUrl
+    receiptPdfUrl
+  }
+  termsOfService
+  privacyPolicy
+  receiptImagesRequired
+  receiptPaymentMethodDefault
+  view {
+    menu {
+      id
+      type
+      moduleId
+      dividerName
+    }
+    dashboardWidgets {
+      id
+      type
+      state
+    }
+    reportWidgets {
+      id
+      type
+      state
+    }
+  }
+  searchSettings {
+    hideEntities
+  }
+  currencyCode
+  isAuthSessionRestricted
+  zaloOaGmfGroupSettings
+  allowPayTicketMultipleTimes
+  updatedAt
+}

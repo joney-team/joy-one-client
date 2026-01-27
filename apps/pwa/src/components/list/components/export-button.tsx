@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { api } from "@/modules/apis";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { ResponseList } from "@/types";
 import { onActionLoad } from "@/utils/actions";
+import { useApolloClient } from "@apollo/client/react";
 import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { downloadJSON } from "@joy-one-client/utils/files";
@@ -20,9 +20,8 @@ import writeXlsxFile, { Row } from "write-excel-file";
 import { useListContext } from "../list-context";
 import { getColumnName, getIn, getListName, getValuePath } from "../list-utils";
 import { ExportToExcelItem } from "../types";
-import { ActionButton } from "./action-button";
-import { useApolloClient } from "@apollo/client/react";
 import { UseGraphqlListData } from "../use-graphql-list";
+import { ActionButton } from "./action-button";
 
 export enum ExportType {
   EXCEL = "Excel",
@@ -32,6 +31,7 @@ export enum ExportType {
 export const ExportButton: FC = () => {
   const context = useListContext();
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const theme = useMantineTheme();
   const client = useApolloClient();
   const { t, i18n } = useLingui();
@@ -43,7 +43,7 @@ export const ExportButton: FC = () => {
     if (item.text) return { value: item.text };
     if (item.money)
       return {
-        value: Currency.normalize(item.money, workspace.settings.currencyCode),
+        value: Currency.normalize(item.money, workspaceSetting?.currencyCode ?? undefined),
         type: Number,
         format: "#,##0",
       };

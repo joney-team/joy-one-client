@@ -59,6 +59,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/useWorkspaceSetting";
 
 const ModalPayReceipt = dynamic(
   () => import("./modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
@@ -90,10 +91,11 @@ interface ReceiptCardProps {
 export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props }) => {
   const { receipt } = props;
   const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   const banks = useBanks();
-  const bank = banks.find((v) => workspace.settings.bankAccount?.bankId === v.id);
-  const bankAccount = workspace.settings.bankAccount;
+  const bank = banks.find((v) => workspaceSetting?.bankAccount?.bankId === v.id);
+  const bankAccount = workspaceSetting?.bankAccount;
   const totalAmount = receipt.amount + (receipt.tipAmount || 0);
   const isExpired = receipt.expireAt && receipt.expireAt < DateTime.toSeconds(new Date());
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);

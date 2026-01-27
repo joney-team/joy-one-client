@@ -2,10 +2,12 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
+import { LoanPackageType } from "@/graphql/enums.graphql";
+import { LoanPackage } from "@/graphql/types.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useLoans } from "@/modules/loans/loans-context";
-import { LoanAssetType, LoanPackage, LoanPackageType } from "@/modules/loans/loans-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { LoanAssetType } from "@/modules/loans/loans-types";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -40,7 +42,8 @@ export const ModalLoanPackageForm: FC<{
 }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
   const loans = useLoans();
-  const workspace = useWorkspace();
+  const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
+
   const { t } = useLingui();
 
   const [props, setProps] = useState<ModalLoanPackageFormArgs>();
@@ -56,7 +59,7 @@ export const ModalLoanPackageForm: FC<{
       id: (value) => {
         if (!value) return "Mã gói vay không được để trống";
         if (value.length < 3) return "Mã gói vay phải có ít nhất 3 ký tự";
-        const existed = workspace.settings.loanSettings?.loanPackages?.find((p) => p.id === value);
+        const existed = workspaceSetting?.loanSettings?.loanPackages?.find((p) => p.id === value);
         if (existed && existed !== props?.loanPackage) return "Mã gói vay đã tồn tại";
       },
       assetTypes: (value) => {
@@ -75,7 +78,9 @@ export const ModalLoanPackageForm: FC<{
 
   const submitting = useFormSubmit(form, {
     onSubmit: async (values) => {
-      let loanPackages = workspace.settings.loanSettings?.loanPackages || [];
+      if (!workspaceSetting?.loanSettings) return;
+
+      let loanPackages = workspaceSetting?.loanSettings?.loanPackages ?? [];
 
       if (props?.loanPackage) {
         loanPackages = loanPackages.map((p) => (p.id === props.loanPackage?.id ? values : p));
@@ -83,16 +88,12 @@ export const ModalLoanPackageForm: FC<{
         loanPackages.push(values);
       }
 
-      await workspace.setSettings(
-        {
-          ...workspace.settings,
-          loanSettings: {
-            ...workspace.settings.loanSettings,
-            loanPackages,
-          },
+      await updateWorkspaceSetting({
+        loanSettings: {
+          ...workspaceSetting.loanSettings,
+          loanPackages,
         },
-        true
-      );
+      });
 
       close();
     },
@@ -136,7 +137,7 @@ export const ModalLoanPackageForm: FC<{
             />
 
             <Select
-              label={t`Loan period`}
+              label={<Trans>Loan period</Trans>}
               data={[
                 { label: t`1 month`, value: "30" },
                 { label: t`2 months`, value: "60" },
@@ -153,7 +154,9 @@ export const ModalLoanPackageForm: FC<{
             <NumberInput
               label={<Trans>Contract fee</Trans>}
               {...form.getInputProps("contractFee")}
-              rightSection={<Text>{Currency.get(workspace.settings.currencyCode)?.symbol}</Text>}
+              rightSection={
+                <Text>{Currency.get(workspaceSetting?.currencyCode ?? undefined)?.symbol}</Text>
+              }
             />
           </SimpleGrid>
 
@@ -185,7 +188,7 @@ export const ModalLoanPackageForm: FC<{
             }
           />
 
-          {form.values.type === LoanPackageType.UNFIXED_CAPITAL &&
+          {form.values.type === LoanPackageType.UnfixedCapital &&
             form.values.periodDaysOptions.length > 0 && (
               <Fragment>
                 {form.values.periodDaysOptions.map((days, i) => {
@@ -310,11 +313,15 @@ export const ModalLoanPackageForm: FC<{
                     leftSection={<IconPlus size={18} style={{ marginRight: -5 }} />}
                     onClick={() => {
                       let _lateInterestRates = [...form.values.lateInterestRates];
-                      _lateInterestRates.push({ rate: 1, lateDays: 1 });
+                      _lateInterestRates.push({
+                        __typename: "LateInterestRate",
+                        rate: 1,
+                        lateDays: 1,
+                      });
                       form.setFieldValue("lateInterestRates", _lateInterestRates);
                     }}
                   >
-                    {t`Add`}
+                    <Trans>Add</Trans>
                   </Button>
                 </Group>
               </SimpleGrid>

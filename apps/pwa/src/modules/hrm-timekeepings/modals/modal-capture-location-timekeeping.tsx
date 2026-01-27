@@ -22,6 +22,7 @@ import {
   getGeolocation,
 } from "@/modules/locations/locations-service";
 import { useColor } from "@/modules/theme/use-color";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -37,8 +38,9 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
   const workspace = useWorkspace();
   const color = useColor();
   const uploadFile = useUploadFile();
+  const { workspaceSetting } = useWorkspaceSetting();
 
-  const acceptLocations = workspace.settings.hrmTimeKeepingsRules?.acceptLocations || [];
+  const acceptLocations = workspaceSetting?.hrmTimeKeepingsRules?.acceptLocations || [];
   const geolocation = useFetch({ fetch: () => getGeolocation() });
 
   const [timekeeping, setTimekeeping] = useState<HrmTimekeepingEntity>();
@@ -50,7 +52,7 @@ export const ModalCaptureLocationTimekeeping: FC = () => {
           lat: geolocation.data.coords.latitude,
           lng: geolocation.data.coords.longitude,
         },
-        acceptLocations || []
+        acceptLocations ?? []
       )
     : undefined;
 

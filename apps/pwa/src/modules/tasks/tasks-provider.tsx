@@ -68,7 +68,7 @@ export const TasksProvider: FC<PropsWithChildren> = (props) => {
       activatedFolder,
       isReady: !isFolderLoading && workspace.isAvailable,
     };
-  }, [view, state, activatedFolder, workspace.settings, workspace.isAvailable, isFolderLoading]);
+  }, [view, state, activatedFolder, workspace.isAvailable, isFolderLoading]);
 
   return <Context.Provider value={contextValue}>{props.children}</Context.Provider>;
 };

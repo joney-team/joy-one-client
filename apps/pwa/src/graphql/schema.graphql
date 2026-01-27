@@ -118,6 +118,20 @@ enum CategoryType {
   PRODUCTS
 }
 
+type CheckInLocation {
+  coordinates: Coordinates!
+  disabled: Boolean
+  name: String!
+  radius: Float!
+}
+
+input CheckInLocationInput {
+  coordinates: CoordinatesInput!
+  disabled: Boolean
+  name: String!
+  radius: Float!
+}
+
 type ConfigTaskStatuses {
   isInherited: Boolean!
   statuses: [TaskStatus!]!
@@ -330,6 +344,16 @@ type CustomersPaginated {
   total: Float!
 }
 
+enum DayOfWeek {
+  FRIDAY
+  MONDAY
+  SATURDAY
+  SUNDAY
+  THURSDAY
+  TUESDAY
+  WEDNESDAY
+}
+
 type DeviceEntity {
   _id: String!
   createdAt: Float
@@ -342,6 +366,18 @@ type DeviceEntity {
   updatedAt: Float
   userAgent: String!
   userId: String
+}
+
+type DisplayWidget {
+  id: String!
+  state: JSONObject
+  type: String!
+}
+
+input DisplayWidgetInput {
+  id: String!
+  state: JSONObject
+  type: String!
 }
 
 type EInvoice {
@@ -657,10 +693,34 @@ enum GetTaskStatusesMode {
   VIEW
 }
 
+type HrmTimekeepingsRules {
+  acceptLatenessUpToMins: Float
+  acceptLocations: [CheckInLocation!]
+  acceptOverTimeAtLeastMins: Float
+  requirePhoto: Boolean
+}
+
+input HrmTimekeepingsRulesInput {
+  acceptLatenessUpToMins: Float
+  acceptLocations: [CheckInLocationInput!]
+  acceptOverTimeAtLeastMins: Float
+  requirePhoto: Boolean
+}
+
 """
 The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
 scalar JSONObject
+
+type LateInterestRate {
+  lateDays: Float!
+  rate: Float!
+}
+
+input LateInterestRateInput {
+  lateDays: Float!
+  rate: Float!
+}
 
 type Loan {
   _count: Float!
@@ -704,6 +764,80 @@ enum LoanAssetType {
   ICLOUD
   LAND_CERTIFICATE
   MOTOBIKE_REGISTRATION
+}
+
+type LoanPackage {
+  assetTypes: [LoanAssetType!]!
+
+  """Chi phí vay"""
+  contractFee: Float!
+
+  """1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày"""
+  days: Float!
+  description: String
+  id: String!
+
+  """Lãi phạt"""
+  lateInterestRates: [LateInterestRate!]!
+  liquidationFeeRate: Float
+
+  """Số ngày trong kỳ vay (10, 15, 30)"""
+  periodDaysOptions: [Float!]!
+  type: LoanPackageType!
+
+  """Tỷ lệ trả gốc"""
+  unFixedCapitalRates: [[Float!]!]!
+}
+
+input LoanPackageInput {
+  assetTypes: [LoanAssetType!]!
+
+  """Chi phí vay"""
+  contractFee: Float!
+
+  """1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày"""
+  days: Float!
+  description: String
+  id: String!
+
+  """Lãi phạt"""
+  lateInterestRates: [LateInterestRateInput!]!
+  liquidationFeeRate: Float
+
+  """Số ngày trong kỳ vay (10, 15, 30)"""
+  periodDaysOptions: [Float!]!
+  type: LoanPackageType!
+
+  """Tỷ lệ trả gốc"""
+  unFixedCapitalRates: [[Float!]!]!
+}
+
+enum LoanPackageType {
+  FIXED_CAPITAL
+  INSTALLMENT
+  UNFIXED_CAPITAL
+}
+
+type LoanSettings {
+  assetEstimationPriceSpreadRate: Float
+  contractLiquidationPdfUrl: String
+  contractPdfUrl: String
+  isAutoSelectWorkspaceBranch: Boolean
+  liquidationFeeRate: Float
+  loanPackages: [LoanPackage!]!
+  receiptPdfUrl: String
+  warningReceiptBeforeDays: Float
+}
+
+input LoanSettingsInput {
+  assetEstimationPriceSpreadRate: Float
+  contractLiquidationPdfUrl: String
+  contractPdfUrl: String
+  isAutoSelectWorkspaceBranch: Boolean
+  liquidationFeeRate: Float
+  loanPackages: [LoanPackageInput!]!
+  receiptPdfUrl: String
+  warningReceiptBeforeDays: Float
 }
 
 """Available loan statuses"""
@@ -773,6 +907,7 @@ type Mutation {
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
   updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
+  updateWorkspaceSetting(allowDuplicateBookings: Boolean, allowPayTicketMultipleTimes: Boolean, allowTip: Boolean, bankAccount: PluginBankAccountInput, bookingsAutoRemindCustomerBookingBeforeDays: Float, bookingsAutoRemindCustomerBookingTime: String, currencyCode: String, hrmTimeKeepingsRules: HrmTimekeepingsRulesInput, isAuthSessionRestricted: Boolean, loanSettings: LoanSettingsInput, mailer: PluginMailerAccountInput, memberPermissions: [String!], privacyPolicy: String, receiptImagesRequired: Boolean, receiptPaymentMethodDefault: ReceiptPaymentMethod, schedule: WorkspaceScheduleInput, searchSettings: WorkspaceSearchSettingsInput, termsOfService: String, view: WorkspaceViewInput, zaloOaGmfGroupSettings: JSONObject): WorkspaceSetting!
 }
 
 type Order {
@@ -859,6 +994,18 @@ type PartnersPaginated {
   total: Float!
 }
 
+type PluginBankAccount {
+  accountName: String
+  accountNumber: String!
+  bankId: Float!
+}
+
+input PluginBankAccountInput {
+  accountName: String
+  accountNumber: String!
+  bankId: Float!
+}
+
 type PluginEInvoicesPaginated {
   results: [EInvoice!]!
   total: Float!
@@ -882,6 +1029,16 @@ type PluginExternalStorage {
 """Available external storage providers"""
 enum PluginExternalStorageProvider {
   AWS_S3
+}
+
+type PluginMailerAccount {
+  pass: String!
+  user: String!
+}
+
+input PluginMailerAccountInput {
+  pass: String!
+  user: String!
 }
 
 type Posts {
@@ -1216,6 +1373,7 @@ type Query {
   workspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
   workspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
   workspaceRoles: [WorkspaceRole!]!
+  workspaceSetting: WorkspaceSetting!
   workspaceStats(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceStatsPaginated!
 }
 
@@ -1584,6 +1742,22 @@ type TasksPaginated {
   total: Float!
 }
 
+type TimeRange {
+  """Format: HH:mm"""
+  end: String!
+
+  """Format: HH:mm"""
+  start: String!
+}
+
+input TimeRangeInput {
+  """Format: HH:mm"""
+  end: String!
+
+  """Format: HH:mm"""
+  start: String!
+}
+
 input UpdateTagInput {
   _id: String!
   color: String
@@ -1617,6 +1791,16 @@ type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
+}
+
+type WorkingDay {
+  day: DayOfWeek!
+  hours: [TimeRange!]!
+}
+
+input WorkingDayInput {
+  day: DayOfWeek!
+  hours: [TimeRangeInput!]!
 }
 
 type Workspace {
@@ -1741,6 +1925,53 @@ type WorkspaceRole {
   permissions: [String!]!
 }
 
+type WorkspaceSchedule {
+  timezone: String
+  workingDays: [WorkingDay!]!
+}
+
+input WorkspaceScheduleInput {
+  timezone: String
+  workingDays: [WorkingDayInput!]!
+}
+
+type WorkspaceSearchSettings {
+  hideEntities: [String!]
+}
+
+input WorkspaceSearchSettingsInput {
+  hideEntities: [String!]
+}
+
+type WorkspaceSetting {
+  _id: String!
+  allowDuplicateBookings: Boolean
+  allowPayTicketMultipleTimes: Boolean
+  allowTip: Boolean
+  bankAccount: PluginBankAccount
+  bookingsAutoRemindCustomerBookingBeforeDays: Float
+  bookingsAutoRemindCustomerBookingTime: String
+  createdAt: Float
+  currencyCode: String
+  customFieldValues: [CustomFieldValue!]
+  hrmTimeKeepingsRules: HrmTimekeepingsRules
+  isAuthSessionRestricted: Boolean
+  loanSettings: LoanSettings
+  mailer: PluginMailerAccount
+  memberPermissions: [String!]
+  privacyPolicy: String
+  receiptImagesRequired: Boolean
+  receiptPaymentMethodDefault: ReceiptPaymentMethod
+  refs: [String!]
+  schedule: WorkspaceSchedule
+  searchSettings: WorkspaceSearchSettings
+  termsOfService: String
+  updatedAt: Float
+  view: WorkspaceView
+  wSlots: [AnyType!] @deprecated(reason: "Use schedule instead")
+  zaloOaGmfGroupSettings: JSONObject
+}
+
 type WorkspaceStat {
   _id: String!
   bookingCount: Float
@@ -1777,4 +2008,30 @@ enum WorkspaceType {
   HOSPITAL
   SOFTWARE
   SPA
+}
+
+type WorkspaceView {
+  dashboardWidgets: [DisplayWidget!]
+  menu: [WorkspaceViewComponent!]
+  reportWidgets: [DisplayWidget!]
+}
+
+type WorkspaceViewComponent {
+  dividerName: String
+  id: String!
+  moduleId: String
+  type: String!
+}
+
+input WorkspaceViewComponentInput {
+  dividerName: String
+  id: String!
+  moduleId: String
+  type: String!
+}
+
+input WorkspaceViewInput {
+  dashboardWidgets: [DisplayWidgetInput!]
+  menu: [WorkspaceViewComponentInput!]
+  reportWidgets: [DisplayWidgetInput!]
 }

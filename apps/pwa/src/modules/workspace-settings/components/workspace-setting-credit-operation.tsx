@@ -1,23 +1,29 @@
 "use client";
 
-import { LoanSettings } from "@/modules/loans/loans-types";
+import { LoanSettingsInput } from "@/graphql/types.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { onError } from "@/utils/exceptions.utils";
 import { Grid, NumberInput, Switch, TextInput } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { FC } from "react";
+import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
 
 export const WorkspaceSettingCreditOperation: FC = () => {
   const workspace = useWorkspace();
+  const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
 
-  const onChange = useDebouncedCallback((key: keyof LoanSettings, value: any) => {
-    workspace.setSettings({
-      ...workspace.settings,
+  const onChange = useDebouncedCallback((key: keyof LoanSettingsInput, value: any) => {
+    if (!workspaceSetting) return;
+    updateWorkspaceSetting({
       loanSettings: {
-        ...workspace.settings.loanSettings,
-        [key]: value,
+        ...workspaceSetting.loanSettings!,
+        loanPackages: workspaceSetting.loanSettings?.loanPackages ?? [],
+        [key]: value ?? null,
       },
-    });
+    }).catch(onError);
   }, 500);
+
+  if (!workspaceSetting) return null;
 
   return (
     <Grid>
@@ -26,7 +32,7 @@ export const WorkspaceSettingCreditOperation: FC = () => {
           label="Tỷ lệ chênh lệch định giá (0 - 100)"
           min={0}
           max={100}
-          value={workspace.settings.loanSettings?.assetEstimationPriceSpreadRate}
+          value={workspaceSetting.loanSettings?.assetEstimationPriceSpreadRate ?? undefined}
           onChange={(e) => {
             onChange("assetEstimationPriceSpreadRate", e);
           }}
@@ -38,7 +44,7 @@ export const WorkspaceSettingCreditOperation: FC = () => {
           label="Cảnh báo trước ngày thanh toán (ngày)"
           min={0}
           max={100}
-          value={workspace.settings.loanSettings?.warningReceiptBeforeDays}
+          value={workspaceSetting.loanSettings?.warningReceiptBeforeDays ?? undefined}
           onChange={(e) => {
             onChange("warningReceiptBeforeDays", e);
           }}
@@ -48,7 +54,7 @@ export const WorkspaceSettingCreditOperation: FC = () => {
       <Grid.Col span={12}>
         <TextInput
           label="Link file hợp đồng PDF"
-          defaultValue={workspace.settings.loanSettings?.contractPdfUrl}
+          defaultValue={workspaceSetting.loanSettings?.contractPdfUrl ?? ""}
           onBlur={(e) => {
             onChange("contractPdfUrl", e.target.value);
           }}
@@ -58,7 +64,7 @@ export const WorkspaceSettingCreditOperation: FC = () => {
       <Grid.Col span={12}>
         <TextInput
           label="Link file hợp đồng thanh lý PDF"
-          defaultValue={workspace.settings.loanSettings?.contractLiquidationPdfUrl}
+          defaultValue={workspaceSetting.loanSettings?.contractLiquidationPdfUrl ?? ""}
           onBlur={(e) => {
             onChange("contractLiquidationPdfUrl", e.target.value);
           }}
@@ -68,19 +74,9 @@ export const WorkspaceSettingCreditOperation: FC = () => {
       <Grid.Col span={12}>
         <TextInput
           label="Link file hóa đơn PDF"
-          defaultValue={workspace.settings.loanSettings?.receiptPdfUrl}
+          defaultValue={workspaceSetting.loanSettings?.receiptPdfUrl ?? ""}
           onBlur={(e) => {
             onChange("receiptPdfUrl", e.target.value);
-          }}
-        />
-      </Grid.Col>
-
-      <Grid.Col span={12}>
-        <Switch
-          label="Tự động xoá hồ sơ vay không được duyệt"
-          defaultChecked={workspace.settings.loanSettings?.isAutoArchivePendingLoans}
-          onChange={(e) => {
-            onChange("isAutoArchivePendingLoans", e.target.checked);
           }}
         />
       </Grid.Col>
@@ -89,7 +85,7 @@ export const WorkspaceSettingCreditOperation: FC = () => {
         <Grid.Col span={12}>
           <Switch
             label="Tự động chọn chi nhánh khi tạo hợp đồng"
-            defaultChecked={workspace.settings.loanSettings?.isAutoSelectWorkspaceBranch}
+            defaultChecked={workspaceSetting.loanSettings?.isAutoSelectWorkspaceBranch ?? false}
             onChange={(e) => {
               onChange("isAutoSelectWorkspaceBranch", e.target.checked);
             }}

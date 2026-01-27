@@ -6,6 +6,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { Modal } from "@/components/modal/modal";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -68,9 +69,12 @@ export const ModalInput: FC<{
   const workspace = useWorkspace();
   const args = props?.args || {};
   const color = useColor();
+  const { workspaceSetting } = useWorkspaceSetting();
 
   const focusInputRef = useRef<HTMLInputElement | HTMLTextAreaElement>(null);
-  const currency = Currency.get(workspace.settings?.currencyCode ?? "USD");
+
+  const currencyCode = workspaceSetting?.currencyCode ?? undefined;
+  const currency = Currency.get(currencyCode);
   const placeholder = props?.placeholder;
 
   const form = useForm({
@@ -112,9 +116,7 @@ export const ModalInput: FC<{
     <Fragment>
       {children((p) => {
         const initialValue =
-          p.type === InputModalType.MONEY
-            ? Currency.normalize(p.value, workspace.settings.currencyCode)
-            : p.value;
+          p.type === InputModalType.MONEY ? Currency.normalize(p.value, currencyCode) : p.value;
 
         form.setInitialValues({ value: initialValue });
         form.reset();

@@ -6,14 +6,14 @@ import { NumberFormat } from "@/components/format/number-format";
 import { loanAssetTypes, loanPackageTypes } from "@/modules/loans/loans-constants";
 import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { ModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import { useWorkspaceSetting } from "../hooks/useWorkspaceSetting";
 
 export const WorkspacetSettingLoans: FC = () => {
-  const workspace = useWorkspace();
+  const { workspaceSetting } = useWorkspaceSetting();
   const { t } = useLingui();
 
   return (
@@ -21,7 +21,7 @@ export const WorkspacetSettingLoans: FC = () => {
       {(open) => (
         <Stack>
           <SimpleGrid cols={{ md: 2 }}>
-            {workspace.settings.loanSettings?.loanPackages?.map((pkg, index) => {
+            {workspaceSetting?.loanSettings?.loanPackages?.map((pkg, index) => {
               const totalMonth = pkg.days / 30;
 
               return (

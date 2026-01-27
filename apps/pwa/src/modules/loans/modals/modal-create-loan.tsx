@@ -21,6 +21,7 @@ import { LoanAssetType } from "@/modules/loans/loans-types";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { useBanks } from "@/modules/plugins/banks/banks.services";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -76,6 +77,7 @@ export const ModalCreateLoan = forwardRef<
   { children?: (ref: ModalCreateLoanRef) => ReactNode }
 >((props, ref) => {
   const { t } = useLingui();
+  const { workspaceSetting } = useWorkspaceSetting();
   const { children } = props;
   const [args, setArgs] = useState<ModalCreateLoanProps | null>(null);
 
@@ -168,7 +170,7 @@ export const ModalCreateLoan = forwardRef<
     setIsFetchingCustomerKyc(false);
   };
 
-  const loanPackages = workspace.settings?.loanSettings?.loanPackages || [];
+  const loanPackages = workspaceSetting?.loanSettings?.loanPackages || [];
 
   const assetTypeOptions: LoanAssetType[] = loanPackages.reduce((output, p) => {
     return Array.from([...(new Set([...output, ...p.assetTypes]) as any)]);

@@ -2,8 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { api } from "@/modules/apis";
-import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -29,7 +28,8 @@ interface MailerFormProps {
 }
 
 export const PluginMailerForm: FC<MailerFormProps> = (props) => {
-  const workspace = useWorkspace();
+  const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [active, setActive] = useState(0);
 
@@ -50,6 +50,8 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
   });
 
   const onSubmit = form.onSubmit(async (payload) => {
+    if (!workspaceSetting) return;
+
     if (active === 0) {
       setActive(1);
     }
@@ -75,7 +77,13 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
     if (active === 2) {
       setIsSubmitting(true);
       try {
-        await setWorkspaceSettings({ ...workspace.settings, mailer: payload });
+        await updateWorkspaceSetting({
+          mailer: {
+            __typename: "PluginMailerAccount",
+            user: payload.user,
+            pass: payload.pass,
+          },
+        });
         props.onDone?.();
       } catch (error) {
         onError(error);

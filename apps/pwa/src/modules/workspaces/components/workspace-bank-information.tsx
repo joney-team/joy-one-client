@@ -2,7 +2,7 @@
 
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformation } from "@/modules/plugins/banks/banks.types";
-import { setWorkspaceSettings } from "@/modules/workspace-settings/workspace-settings-service";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/useWorkspaceSetting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -31,6 +31,7 @@ export const WorkspaceBankInformation: FC = () => {
   const [banks, setBanks] = useState<BankInformation[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const workspace = useWorkspace();
+  const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
 
   const fetchBanks = async () => {
     return getBanks()
@@ -39,7 +40,7 @@ export const WorkspaceBankInformation: FC = () => {
   };
 
   const form = useForm({
-    initialValues: workspace.settings.bankAccount || ({} as any),
+    initialValues: workspaceSetting?.bankAccount ?? ({} as any),
     validate: {
       bankId: (value) => {
         if (!value) return t`Select bank`;
@@ -53,8 +54,7 @@ export const WorkspaceBankInformation: FC = () => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      await setWorkspaceSettings({
-        ...workspace.settings,
+      await updateWorkspaceSetting({
         bankAccount: { ...values, bankId: +values.bankId },
       });
     } catch (error) {
@@ -68,8 +68,8 @@ export const WorkspaceBankInformation: FC = () => {
   }, []);
 
   useEffect(() => {
-    form.setInitialValues(workspace.settings.bankAccount || ({} as any));
-  }, [workspace.settings.bankAccount]);
+    form.setInitialValues(workspaceSetting?.bankAccount ?? ({} as any));
+  }, [workspaceSetting?.bankAccount]);
 
   return (
     <Card shadow="xs" className="WorkspaceBankInformation">
@@ -95,7 +95,7 @@ export const WorkspaceBankInformation: FC = () => {
 
         <Group justify="space-between">
           {(function () {
-            if (!workspace.settings.bankAccount)
+            if (!workspaceSetting?.bankAccount)
               return (
                 <Group gap={4}>
                   <ThemeIcon color="gray" variant="transparent">
@@ -107,7 +107,7 @@ export const WorkspaceBankInformation: FC = () => {
                 </Group>
               );
 
-            if (!workspace.settings.bankAccount.accountName) return <Box />;
+            if (!workspaceSetting?.bankAccount?.accountName) return <Box />;
 
             return (
               <Group gap={8}>
@@ -122,7 +122,7 @@ export const WorkspaceBankInformation: FC = () => {
                     </Badge>
                   </Group>
                   <Text>
-                    <strong>{workspace.settings.bankAccount.accountName}</strong>
+                    <strong>{workspaceSetting?.bankAccount?.accountName}</strong>
                   </Text>
                 </Stack>
               </Group>
