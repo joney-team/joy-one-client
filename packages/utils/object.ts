@@ -4,11 +4,11 @@ export function isDiff(obj1: any, obj2: any): boolean {
 
 export function objSelect<T = any>(obj: T, keys: (keyof T)[]) {
   return keys.reduce((acc: any, key) => {
-    if (typeof acc[key] === 'undefined') {
-      acc[key] = obj[key]
+    if (typeof acc[key] === "undefined") {
+      acc[key] = obj[key];
     }
-    return acc
-  }, {})
+    return acc;
+  }, {});
 }
 
 export function objUnselect<T extends object>(obj: T, keys: (keyof T)[]) {
@@ -18,4 +18,12 @@ export function objUnselect<T extends object>(obj: T, keys: (keyof T)[]) {
     }
     return acc;
   }, {} as Partial<T>);
+}
+
+export function normalizeObject<T>(obj: T): T {
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch (error) {
+    return obj;
+  }
 }

@@ -33,9 +33,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
   const app = useApp();
 
-  const [isInitialized, _setIsInitialized] = useState(false);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
-  const [invitationState, _setInvitationState] = useState<WorkspaceMemberInvitationState>();
+  const [invitationState, setInvitationState] = useState<WorkspaceMemberInvitationState>();
   const [workspaceId, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const [fetchWorkspaceMembers, { data: workspaceMembersData }] = useLazyQuery(
@@ -64,9 +64,9 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const select = async (workspaceId: string) => {
     startAppLoading("initial-workspace");
-    setWorkspaceId(workspaceId);
+    setIsInitialized(true);
     client.cache.reset();
-    await initialize();
+    await initialize(workspaceId);
   };
 
   const create = async (dto: WorkspaceDto) => {
@@ -93,36 +93,36 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const join = async (code: string) => {
     const result = await joinWorkspaceMember(code);
-    if (result.workspaceId) setWorkspaceId(result.workspaceId);
-    await initialize();
+    await initialize(result.workspaceId);
   };
 
   const leaveInvitation = () => {
     router.replace("/");
-    _setInvitationState(undefined);
+    setInvitationState(undefined);
   };
 
-  const initialize = async () => {
+  const initialize = async (selectedWorkspaceId: string | null) => {
     try {
       await runWithDelay(async () => {
-        // Auto set workspace id when app is extended
-        if (app.metadata.isExtended && app.metadata.workspaceId) {
-          setWorkspaceId(app.metadata.workspaceId);
-        }
-
         const result = await fetchWorkspaceMembers();
+
         const workspaceMember = result.data?.userWorkspaceMembers.find(
-          (member) => member.workspaceId === workspaceId
+          (member) =>
+            member.workspaceId === selectedWorkspaceId ||
+            member.workspaceId === app.metadata.workspaceId
         );
 
-        if (workspaceMember && workspaceMember.workspaceId) {
+        if (selectedWorkspaceId && workspaceMember && workspaceMember.workspaceId) {
+          setWorkspaceId(selectedWorkspaceId);
           await fetchWorkspaceSetting();
+        } else {
+          setWorkspaceId(undefined);
         }
       });
     } catch (error) {
       console.error(error);
     } finally {
-      _setIsInitialized(true);
+      setIsInitialized(true);
       endAppLoading("initial-workspace");
     }
   };
@@ -187,10 +187,11 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   useEffect(() => {
     if (auth.isInitialized) {
       if (auth.user?._id) {
-        initialize();
+        const currentWorkspaceId = getLocalStorage(StorageKey.WORKSPACE_ID);
+        initialize(currentWorkspaceId);
       } else {
         setWorkspaceId(undefined);
-        _setIsInitialized(false);
+        setIsInitialized(false);
       }
     }
   }, [auth.user?._id, auth.isInitialized, workspaceId]);

@@ -9,17 +9,22 @@ import QUERY_WORKSPACE_SETTING from "../graphql/queryWorkspaceSetting.graphql";
 
 import { WorkspaceView } from "@/graphql/types.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getDefaultWorkspaceView } from "../workspace-settings-view";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
-import { WorkspaceSettingDataFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
-import { useMemo } from "react";
 import { Currency } from "@joy-one-client/utils/currency";
+import { normalizeObject } from "@joy-one-client/utils/object";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { useMemo } from "react";
+import { WorkspaceSettingDataFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
+import { getDefaultWorkspaceView } from "../workspace-settings-view";
 
 export const useWorkspaceSetting = () => {
   const client = useApolloClient();
   const { member } = useWorkspace();
   const { data } = useQuery(QUERY_WORKSPACE_SETTING);
-  const { workspaceSetting } = data ?? {};
+
+  const workspaceSetting = useMemo(() => {
+    if (data) return normalizeObject(data.workspaceSetting);
+    return null;
+  }, [data]);
 
   const [handleUpdate] = useMutation(UPDATE_WORKSPACE_SETTING_MUTATION);
 
@@ -100,7 +105,7 @@ export const useWorkspaceSetting = () => {
     return { ...output } as WorkspaceView;
   };
 
-  const workspaceView: WorkspaceView = useMemo(() => {
+  const workspaceViewValue: WorkspaceView = useMemo(() => {
     return (
       workspaceSetting?.view ?? {
         __typename: "WorkspaceView",
@@ -111,8 +116,12 @@ export const useWorkspaceSetting = () => {
     );
   }, [workspaceSetting?.view]);
 
+  const workspaceView: WorkspaceView = useMemo(() => {
+    return getWorkspaceDisplayView(workspaceViewValue);
+  }, [workspaceViewValue]);
+
   const updateWorkspaceView = async (partial: Partial<WorkspaceView>) => {
-    const view = { ...workspaceView, ...partial };
+    const view = { ...workspaceViewValue, ...partial };
     await updateWorkspaceSetting({ view });
     return getWorkspaceDisplayView(view);
   };
@@ -133,6 +142,7 @@ export const useWorkspaceSetting = () => {
   return {
     workspaceSetting,
     updateWorkspaceSetting,
+    workspaceViewValue,
     workspaceView,
     updateWorkspaceView,
     resetWorkspaceView,

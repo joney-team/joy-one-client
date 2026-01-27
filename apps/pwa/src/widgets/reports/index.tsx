@@ -43,7 +43,6 @@ import { Renderer } from "../../components/renderer";
 import { Widgets } from "../widgets";
 import { useReportWidgetModules } from "./modules";
 import { ReportWidgetsContext } from "./types";
-import { Currency } from "@joy-one-client/utils/currency";
 
 export const ReportWidgets: FC = () => {
   const workspace = useWorkspace();
