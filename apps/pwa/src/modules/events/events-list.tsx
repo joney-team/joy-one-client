@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, ReactNode, useCallback, useMemo } from "react";
+import { FC, ReactNode, useCallback, useMemo, useRef } from "react";
 
 import { Group, Stack, StackProps, Text, ThemeIcon, Timeline, Tooltip } from "@mantine/core";
 import { IconCashRegister, IconUserMinus, IconUserPlus } from "@tabler/icons-react";
@@ -9,7 +9,10 @@ import { EventType, EventVariant } from "@/graphql/enums.graphql";
 import { eventTypes, eventVariants } from "@/modules/events/event-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
+import {
+  ModalUserInformation,
+  ModalUserInformationRef,
+} from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useQuery } from "@apollo/client/react";
@@ -44,6 +47,8 @@ export const EventsList: FC<EventListProps> = ({
   fetching,
   ...rest
 }) => {
+  const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
+
   const variables = useMemo<EventsQueryVariables>(() => {
     return {
       offset: 0,
@@ -109,7 +114,13 @@ export const EventsList: FC<EventListProps> = ({
           styles={{ itemBullet: { padding: 0, border: 0 } }}
         >
           {data.events.results.map((event) => {
-            return <EventItem key={event._id} event={event} />;
+            return (
+              <EventItem
+                key={event._id}
+                event={event}
+                openUser={(userId) => modalUserInformationRef.current?.open(userId)}
+              />
+            );
           })}
         </Timeline>
       )}
@@ -119,11 +130,13 @@ export const EventsList: FC<EventListProps> = ({
           <ButtonViewMore onClick={onFetchMore} />
         </Group>
       )}
+
+      <ModalUserInformation ref={modalUserInformationRef} />
     </Stack>
   );
 };
 
-export const EventItem: FC<{ event: Event }> = (props) => {
+export const EventItem: FC<{ event: Event; openUser: (userId: string) => void }> = (props) => {
   const { event } = props;
   const isToday = DateTime.isSame(event.time, new Date(), "day");
 
@@ -131,22 +144,21 @@ export const EventItem: FC<{ event: Event }> = (props) => {
     <Timeline.Item bullet={renderBullet(event)} title={<EventItemTitle event={event} />}>
       <Stack>
         <Group gap={5}>
-          {props.event.user && (
-            <ModalUserInformation>
-              {(modal) => (
-                <Group
-                  gap={5}
-                  style={{ cursor: "pointer" }}
-                  onClick={() => modal.open(props.event.user!._id)}
-                >
-                  <Avatar user={props.event.user} size={18} hideOnlineStatus />
+          {!!props.event.user && (
+            <Group
+              gap={5}
+              style={{ cursor: "pointer" }}
+              onClick={() => {
+                if (!props.event.user) return;
+                props.openUser(props.event.user._id);
+              }}
+            >
+              <Avatar user={props.event.user} size={18} hideOnlineStatus />
 
-                  <Text fz={10} c="gray" fw={500}>
-                    {props.event.user?.name}
-                  </Text>
-                </Group>
-              )}
-            </ModalUserInformation>
+              <Text fz={10} c="gray" fw={500}>
+                {props.event.user.name}
+              </Text>
+            </Group>
           )}
 
           <Text fz={10} c="gray">
