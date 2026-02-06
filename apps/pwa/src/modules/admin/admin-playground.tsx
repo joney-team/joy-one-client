@@ -1,20 +1,24 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { CircularProgress } from "@/components/circular-progress/circular-progress";
 import { DateFormat } from "@/components/format/date-format";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { SectionTitle } from "@/components/session-title";
+import { TimeSlots } from "@/components/time-slots/time-slots";
+import { TimeEvent } from "@/components/time-slots/time-slots.types";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { CalendarView } from "@/types";
 import { wait } from "@/utils/common.utils";
-import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
-import { useState, type FC } from "react";
-import { useWorkspace } from "../workspaces/workspace-context";
-import { useUploadFile } from "../files/hooks/use-upload-file";
 import { onError } from "@/utils/exceptions.utils";
+import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
+import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { CircularProgress } from "@/components/circular-progress/circular-progress";
+import { useMemo, useState, type FC } from "react";
+import { useUploadFile } from "../files/hooks/use-upload-file";
+import { useLang } from "../lang/lang-context";
+import { useWorkspace } from "../workspaces/workspace-context";
 
 const UseUploadFilePlayground: FC = () => {
   const uploadFile = useUploadFile();
@@ -52,6 +56,49 @@ const UseUploadFilePlayground: FC = () => {
   );
 };
 
+const TimeSlotsPlayground: FC = () => {
+  const { locale } = useLang();
+  const [events, setEvents] = useState<TimeEvent[]>([
+    {
+      id: "1",
+      start: "07:10",
+      end: "10:00",
+      columnIndex: 2,
+    },
+  ]);
+
+  const cols = useMemo(() => {
+    return [1, 2, 3, 4, 5, 6, 7].map((dayWeek) => {
+      return {
+        dayWeek,
+        head: (
+          <Stack>
+            <Text fz={12} fw={600} tt="capitalize" p="xs">
+              {renderWeekdayFromISO(dayWeek, locale)}
+            </Text>
+          </Stack>
+        ),
+      };
+    });
+  }, [locale]);
+
+  return (
+    <TimeSlots
+      cols={cols}
+      events={events}
+      availableTimeIntervals={[
+        { start: "2:00", end: "24:00", columnIndex: 2 },
+        { start: "7:38", end: "16:00", columnIndex: 1 },
+      ]}
+      onSelect={(value) => {
+        setEvents((s) => [...s, { id: Date.now().toString(), ...value, title: "Event" }]);
+      }}
+      onEventClick={(event, element) => console.log("onEventClick", event, element)}
+      onEventResize={(event) => setEvents((s) => s.map((v) => (v.id === event.id ? event : v)))}
+    />
+  );
+};
+
 export const AdminPlayground: FC = () => {
   const workspace = useWorkspace();
   const [value, setValue] = useState("= @receiptAmount");
@@ -59,6 +106,15 @@ export const AdminPlayground: FC = () => {
 
   return (
     <Stack p="md" gap="md">
+      <Paper withBorder>
+        <Stack>
+          <Group px={20} pt={20}>
+            <SectionTitle name="Time Slots" />
+          </Group>
+          <TimeSlotsPlayground />
+        </Stack>
+      </Paper>
+
       <Paper withBorder p={20}>
         <Stack>
           <SectionTitle name="Circular Progress" />

@@ -16,7 +16,7 @@ import { Period } from "@/types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Stack } from "@mantine/core";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { Widgets } from "../widgets";
 import { dashboardWidgetModules } from "./modules";
 import { DashboardWidgetsContext, RangeReports } from "./types";
@@ -104,6 +104,11 @@ export const DashboardWidgets: FC = () => {
     currency,
   };
 
+  const defaultWidgets = useMemo(
+    () => getDefaultWorkspaceView(workspace.type).dashboardWidgets,
+    [workspace.type]
+  );
+
   return (
     <Stack>
       <Widgets
@@ -111,18 +116,19 @@ export const DashboardWidgets: FC = () => {
         readonly={!workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)}
         context={context}
         widgets={workspaceView.dashboardWidgets}
-        defaultWidgets={getDefaultWorkspaceView(workspace.type).dashboardWidgets}
+        defaultWidgets={defaultWidgets}
         modules={dashboardWidgetModules}
-        onChange={(widgets) =>
+        onChange={(widgets) => {
           updateWorkspaceView({
-            dashboardWidgets: (widgets ?? []).map((v) => ({
-              __typename: "DisplayWidget",
-              id: v.id,
-              type: v.type,
-              state: v.state,
-            })),
-          })
-        }
+            dashboardWidgets:
+              widgets?.map((v) => ({
+                __typename: "DisplayWidget",
+                id: v.id,
+                type: v.type,
+                state: v.state,
+              })) ?? null,
+          });
+        }}
       />
     </Stack>
   );

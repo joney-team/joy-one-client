@@ -49,8 +49,10 @@ export const WorkspaceNavigation: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const { workspaceView } = useWorkspaceSetting();
+
   const { availableModules, isModuleAvailable, getAvailableModule } =
     useAvailableWorkspaceModules();
+
   const { getModule } = useWorkspaceModules();
   const workspaceLayout = useWorkspaceLayout();
   const router = useRouter();
@@ -250,13 +252,13 @@ export const WorkspaceNavigation: FC = () => {
                   <Divider my={5} />
                 </Renderer>
 
-                {group.moduleIds.map((moduleId) => {
+                {group.moduleIds.map((moduleId, moduleIndex) => {
                   const module = getModule(moduleId);
                   if (!module) return null;
 
                   return (
                     <WorkspaceNavigationMenu
-                      key={moduleId}
+                      key={moduleId + moduleIndex}
                       icon={module.icon}
                       route={module.href}
                       label={module.name}

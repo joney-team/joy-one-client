@@ -2,21 +2,18 @@
 
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
-import { DateFormat } from "@/components/format/date-format";
-import { SlotTime } from "@/components/inputs/work-slot-settings-input";
-import { Renderer } from "@/components/renderer";
 import { appEntities } from "@/constant";
 import { EventType } from "@/graphql/enums.graphql";
+import { useLang } from "@/modules/lang/lang-context";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
-import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { OnModalWorkspaceSettingsWorkSlots } from "@/modules/workspace-settings/modals/modal-workspace-setting-work-slots";
 import { useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Currency } from "@joy-one-client/utils/currency";
+import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Badge,
@@ -35,16 +32,22 @@ import {
 } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconPencil, IconPlus } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useMemo, useRef } from "react";
 import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
+import {
+  type ModalWorkspaceSettingWorkingDaysRef,
+  ModalWorkspaceSettingWorkingDays,
+} from "../modals/modal-workspace-setting-working-days";
+import { WorkingDayInterval } from "@/graphql/types.graphql";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 
 export const WorkspaceOperationSettings: FC = () => {
   const { t } = useLingui();
+  const { locale } = useLang();
   const workspace = useWorkspace();
+  const workspaceSettingWorkingDaysRef = useRef<ModalWorkspaceSettingWorkingDaysRef>(null);
   const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
-  const color = useColor();
 
   const searchAvailableEntities = useFetch({
     id: "search-available-entities",
@@ -54,71 +57,70 @@ export const WorkspaceOperationSettings: FC = () => {
 
   const workDaySlots = useWorkDaySlots();
 
+  const groupWorkingDays = useMemo(
+    () =>
+      (workspaceSetting?.schedule?.workingDays ?? []).reduce<Record<string, WorkingDayInterval[]>>(
+        (output, workingDay) => {
+          if (!output[workingDay.day]) {
+            output[workingDay.day] = [workingDay];
+          } else {
+            output[workingDay.day].push(workingDay);
+          }
+
+          return output;
+        },
+        {}
+      ),
+    [workspaceSetting?.schedule?.workingDays]
+  );
+
   return (
     <Stack py={16}>
       <FormSession
-        title={<Trans>Work slots</Trans>}
+        title={<Trans>Work schedule</Trans>}
         description={
-          <Trans>Working time slots applied to the booking, timekeeping, and other features.</Trans>
+          <Trans>Work schedule applied to the booking, timekeeping, and other features.</Trans>
         }
       >
-        <Renderer visible={workDaySlots.length > 0}>
-          <Group gap={8}>
-            {workDaySlots.map((stat) => {
-              return (
-                <Card withBorder shadow="none" key={stat.dayWeek} p={8}>
-                  <Stack gap={8}>
-                    <Stack gap={0}>
-                      <Text fz={14} fw={600} tt="capitalize">
-                        <DateFormat value={new Date()} type="custom" format={{ weekday: "long" }} />
-                      </Text>
-
-                      <Text fz={12} c="gray">
-                        <SlotTime
-                          dayWeek={stat.dayWeek}
-                          startHour={stat.startHour}
-                          startMin={stat.startMin}
-                          endHour={stat.endHour}
-                          endMin={stat.endMin}
-                        />
-                      </Text>
-                    </Stack>
-
-                    <Group gap={8}>
-                      {stat.slots.map((s) => {
-                        const groupId = +(s.groupId || "0");
-                        return (
-                          <Badge key={s.id} color={color(slotGroupColors[groupId])} variant="light">
-                            <SlotTime
-                              dayWeek={s.dayWeek}
-                              startHour={s.startHour}
-                              startMin={s.startMin}
-                              endHour={s.endHour}
-                              endMin={s.endMin}
-                            />
-                          </Badge>
-                        );
-                      })}
-                    </Group>
+        {Object.keys(groupWorkingDays).length > 0 &&
+          Object.entries(groupWorkingDays).map(([day, workingDays]) => {
+            return (
+              <Card withBorder shadow="none" key={day} p="xs">
+                <Stack gap={8}>
+                  <Stack gap={0}>
+                    <Text fz={14} fw={600} tt="capitalize">
+                      {renderWeekdayFromISO(+day, locale)}
+                    </Text>
                   </Stack>
-                </Card>
-              );
-            })}
-          </Group>
-        </Renderer>
+
+                  <Group gap={8}>
+                    {workingDays.map((interval) => {
+                      return (
+                        <Badge key={interval.id} variant="light">
+                          {interval.start} - {interval.end}
+                        </Badge>
+                      );
+                    })}
+                  </Group>
+                </Stack>
+              </Card>
+            );
+          })}
 
         <Group>
           <Button
             radius={100}
-            size="compact-md"
+            size="compact-sm"
             miw={100}
             leftIcon={workDaySlots.length > 0 ? IconPencil : IconPlus}
             variant="outline"
-            onClick={() => OnModalWorkspaceSettingsWorkSlots()}
+            onClick={() => workspaceSettingWorkingDaysRef.current?.open()}
           >
             {workDaySlots.length > 0 ? <Trans>Edit</Trans> : <Trans>Add</Trans>}
           </Button>
         </Group>
+
+        <ModalWorkspaceSettingWorkingDays ref={workspaceSettingWorkingDaysRef} />
       </FormSession>
 
       <Divider opacity={0.5} my={30} />
@@ -142,7 +144,7 @@ export const WorkspaceOperationSettings: FC = () => {
         <Select
           label={<Trans>Currency</Trans>}
           searchable
-          defaultValue={workspaceSetting?.currencyCode}
+          value={workspaceSetting?.currencyCode}
           data={Currency.data.map((c) => ({ value: c.code, label: c.name }))}
           onChange={(value) => {
             updateWorkspaceSetting({

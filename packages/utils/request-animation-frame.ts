@@ -1,4 +1,4 @@
-export function requestAnimationFrameTimes(callback: () => void, times = 3): void {
+export function requestAnimationFrameTimes(callback: () => void, times = 5): void {
   if (times <= 0) {
     callback();
     return;

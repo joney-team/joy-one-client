@@ -19,6 +19,7 @@ export const ModalHead: FC<Props> = (props) => {
   const modalColor = useMemo(() => {
     return color(props.color ?? "primary");
   }, [props.color, color]);
+
   return (
     <Group px={props.px} gap={8} style={{ width: "100%" }} flex={1}>
       <ThemeIcon color={modalColor} radius={8}>

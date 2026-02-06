@@ -3,11 +3,11 @@ fragment WorkspaceSettingData on WorkspaceSetting {
   schedule {
     timezone
     workingDays {
+      id
       day
-      hours {
-        start
-        end
-      }
+      start
+      end
+      shift
     }
   }
   wSlots

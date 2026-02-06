@@ -67,17 +67,6 @@ export const CustomerFormStatus = {
 } as const;
 
 export type CustomerFormStatus = typeof CustomerFormStatus[keyof typeof CustomerFormStatus];
-export const DayOfWeek = {
-  Friday: 'FRIDAY',
-  Monday: 'MONDAY',
-  Saturday: 'SATURDAY',
-  Sunday: 'SUNDAY',
-  Thursday: 'THURSDAY',
-  Tuesday: 'TUESDAY',
-  Wednesday: 'WEDNESDAY'
-} as const;
-
-export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
 /** Available event channels */
 export const EventChannel = {
   None: 'NONE',

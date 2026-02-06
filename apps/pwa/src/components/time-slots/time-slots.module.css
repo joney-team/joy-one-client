@@ -1,0 +1,136 @@
+.TimeSlots {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  & .Row {
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid var(--mantine-color-dark-light);
+    position: relative;
+
+    &.isSticky {
+      position: sticky;
+      top: 0;
+      background: var(--mantine-color-body);
+      z-index: 10;
+    }
+
+    & .Cell {
+      display: flex;
+      flex-direction: column;
+
+      &:not(:first-child) {
+        flex: 1;
+      }
+
+      &:not(.Head) {
+        border-right: 1px solid var(--mantine-color-dark-light);
+      }
+
+      &.Hour {
+        font-size: 80%;
+        user-select: none;
+        outline: none;
+        text-align: right;
+        padding: var(--time-slots-cell-spacing, 4px);
+        color: var(--mantine-color-gray-filled-hover);
+      }
+    }
+  }
+
+  & .Pointer {
+    position: absolute;
+    cursor: crosshair;
+    user-select: none;
+  }
+
+  & .SelectingTimeRange {
+    position: absolute;
+    background: var(--app-primary-colorm, #0063ff);
+    border-radius: 6px;
+    color: var(--mantine-primary-color-contrast);
+    padding: var(--time-slots-cell-spacing, 4px);
+    font-size: 80%;
+    transition: 100ms;
+    z-index: 2;
+    box-shadow: 2px 3px 12px rgba(0, 0, 0, 0.18);
+    user-select: none;
+    overflow: hidden;
+  }
+
+  & .Event {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    transition: 200ms;
+
+    &.isClickable {
+      cursor: pointer;
+    }
+
+    &.isResizing {
+      z-index: 2;
+    }
+
+    & .EventContent {
+      border-radius: 6px;
+      height: 100%;
+      min-height: 0;
+      max-height: 100%;
+      padding: var(--time-slots-cell-spacing, 4px);
+      color: var(--mantine-primary-color-contrast);
+      user-select: none;
+      position: relative;
+    
+      &.isWithBorder {
+        border: 1px solid var(--mantine-primary-color-contrast);
+      }
+
+      & .EventTime {
+        font-size: 70%;
+      }
+
+      & .ResizeHandle {
+        background: transparent;
+        cursor: ns-resize;
+        height: 8px;
+        left: 0;
+        position: absolute;
+        right: 0;
+        outline: none;
+        border: none;
+
+        &.Top {
+          top: 0;
+        }
+
+        &.Bottom {
+          bottom: 0;
+        }
+
+        &:hover {
+          background: rgb(255 255 255 / 0.2);
+        }
+
+        &:active {
+          background: rgb(255 255 255 / 0.3);
+        }
+      }
+    }
+  }
+
+  &.isHasRestrictedTimeIntervals {
+    & .InvalidArea {
+      position: absolute;
+      background: var(--mantine-color-dark-light);
+    }
+
+    & .AvailableTimeInterval {
+      position: absolute;
+      background: var(--mantine-color-body);
+      padding: 4px;
+      color: var(--mantine-color-gray-filled-hover);
+    }
+  }
+}

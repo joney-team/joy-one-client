@@ -49,8 +49,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const [fetchWorkspaceSetting, { data: workspaceSettingData }] = useLazyQuery(
     QUERY_WORKSPACE_SETTING,
     {
-      fetchPolicy: "network-only",
-      nextFetchPolicy: "network-only",
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-and-network",
     }
   );
 
@@ -120,7 +120,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         }
       });
     } catch (error) {
-      console.error(error);
+      // TODO: Handle error
+      console.error(`Error when initializing workspace`, error);
     } finally {
       setIsInitialized(true);
       endAppLoading("initial-workspace");
@@ -147,7 +148,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     () => fetchWorkspaceMembers()
   );
 
-  useEventsListener([EventType.WorkspaceSettingUpdated], () => fetchWorkspaceSetting());
+  useEventsListener([EventType.WorkspaceSettingUpdated], () => {
+    fetchWorkspaceMembers();
+    fetchWorkspaceSetting();
+  });
 
   useEffect(() => {
     if (!member) return;

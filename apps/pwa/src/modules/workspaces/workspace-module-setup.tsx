@@ -61,7 +61,7 @@ export const WorkspaceModuleSetup: FC = () => {
   const [debounced] = useDebouncedValue(components, 300);
 
   useEffect(() => {
-    setTimeout(() => (isUpdateAble.current = true), 200);
+    setTimeout(() => (isUpdateAble.current = true), 300);
   }, []);
 
   useEffect(() => {

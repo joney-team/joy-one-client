@@ -344,16 +344,6 @@ type CustomersPaginated {
   total: Float!
 }
 
-enum DayOfWeek {
-  FRIDAY
-  MONDAY
-  SATURDAY
-  SUNDAY
-  THURSDAY
-  TUESDAY
-  WEDNESDAY
-}
-
 type DeviceEntity {
   _id: String!
   createdAt: Float
@@ -411,7 +401,7 @@ type Event {
   time: Float!
   type: EventType!
   updatedAt: Float
-  user: WorkspaceMember!
+  user: WorkspaceMember
   userId: String
   variant: EventVariant
 }
@@ -1742,22 +1732,6 @@ type TasksPaginated {
   total: Float!
 }
 
-type TimeRange {
-  """Format: HH:mm"""
-  end: String!
-
-  """Format: HH:mm"""
-  start: String!
-}
-
-input TimeRangeInput {
-  """Format: HH:mm"""
-  end: String!
-
-  """Format: HH:mm"""
-  start: String!
-}
-
 input UpdateTagInput {
   _id: String!
   color: String
@@ -1793,14 +1767,34 @@ type UserAuthProvider {
   username: String!
 }
 
-type WorkingDay {
-  day: DayOfWeek!
-  hours: [TimeRange!]!
+type WorkingDayInterval {
+  """
+  1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday
+  """
+  day: Float!
+
+  """Format: HH:mm"""
+  end: String!
+  id: String!
+  shift: String
+
+  """Format: HH:mm"""
+  start: String!
 }
 
-input WorkingDayInput {
-  day: DayOfWeek!
-  hours: [TimeRangeInput!]!
+input WorkingDayIntervalInput {
+  """
+  1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday
+  """
+  day: Float!
+
+  """Format: HH:mm"""
+  end: String!
+  id: String!
+  shift: String
+
+  """Format: HH:mm"""
+  start: String!
 }
 
 type Workspace {
@@ -1927,12 +1921,12 @@ type WorkspaceRole {
 
 type WorkspaceSchedule {
   timezone: String
-  workingDays: [WorkingDay!]!
+  workingDays: [WorkingDayInterval!]!
 }
 
 input WorkspaceScheduleInput {
   timezone: String
-  workingDays: [WorkingDayInput!]!
+  workingDays: [WorkingDayIntervalInput!]!
 }
 
 type WorkspaceSearchSettings {

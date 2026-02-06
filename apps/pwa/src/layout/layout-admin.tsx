@@ -10,6 +10,7 @@ import {
   ActionIcon,
   AppShell,
   Burger,
+  Divider,
   Group,
   Image,
   NavLink,
@@ -48,7 +49,6 @@ const navItems: {
 ];
 
 export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
-  const [opened, { toggle }] = useDisclosure();
   const auth = useAuth();
   const router = useRouter();
   const pathname = usePathname();
@@ -64,34 +64,31 @@ export const LayoutAdmin: FC<PropsWithChildren> = (props) => {
 
   return (
     <AppShell
-      header={{ height: 40 }}
       navbar={{
         width: 200,
         breakpoint: "sm",
-        collapsed: { mobile: !opened },
       }}
       bg={color("bg")}
     >
-      <AppShell.Header>
-        <Group h="100%" align="center" px={12} gap={8}>
-          <Group gap={8} flex={1}>
-            <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Image src="/app-icon.png" h={20} w={20} />
-            <Title fz={15}>Joy One Admin</Title>
-          </Group>
-
-          <Group>
-            <ColorSchemes />
-
-            <ActionIcon variant="subtle" color="gray.6" onClick={auth.signOut}>
-              <IconLogout size={18} strokeWidth={1.5} />
-            </ActionIcon>
-          </Group>
-        </Group>
-      </AppShell.Header>
-
       <AppShell.Navbar>
-        <Stack gap={8} p={8}>
+        <Stack gap={8} p={6}>
+          <Group h="100%" align="center" px={12} gap={3} wrap="nowrap">
+            <Group gap={8} flex={1}>
+              <Image src="/app-icon.png" h={24} w={24} />
+              <Text fz="sm" fw={500} truncate>
+                Admin
+              </Text>
+            </Group>
+
+            <Group gap={0}>
+              <ColorSchemes />
+
+              <ActionIcon variant="subtle" color="gray.6" onClick={auth.signOut}>
+                <IconLogout size={18} strokeWidth={1.5} />
+              </ActionIcon>
+            </Group>
+          </Group>
+
           {navItems.map((item) => {
             const routeName = `/admin${item.route}`;
             return (

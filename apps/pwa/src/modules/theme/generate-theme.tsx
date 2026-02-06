@@ -44,7 +44,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
     colors: {
       primary: primaryColors,
     },
-    primaryColor: metadata.appColor || "primary",
+    primaryColor: metadata.appColor ?? "primary",
     primaryShade: {
       light: getColorShape(metadata.appColorShape) as any,
       dark: (getColorShape(metadata.appColorShape) - 2) as any,
@@ -158,6 +158,9 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
               paddingTop: 10,
               paddingBottom: 10,
               minHeight: "unset",
+            },
+            title: {
+              flex: 1,
             },
           },
         },

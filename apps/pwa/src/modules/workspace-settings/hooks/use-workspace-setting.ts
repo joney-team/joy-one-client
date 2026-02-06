@@ -91,7 +91,7 @@ export const useWorkspaceSetting = () => {
     }
   };
 
-  const getWorkspaceDisplayView = (view?: WorkspaceView) => {
+  const getWorkspaceDisplayView = (view?: Partial<WorkspaceView>) => {
     const defaultWorkspaceView = getDefaultWorkspaceView(member?.workspace?.type);
     let output = (view ?? { ...workspaceSetting?.view }) as WorkspaceView;
 
@@ -115,7 +115,8 @@ export const useWorkspaceSetting = () => {
 
   const updateWorkspaceView = async (partial: Partial<WorkspaceView>) => {
     const view = { ...workspaceViewValue, ...partial };
-    await updateWorkspaceSetting({
+
+    updateWorkspaceSetting({
       view: {
         __typename: "WorkspaceView",
         menu: view.menu ?? null,
@@ -124,11 +125,11 @@ export const useWorkspaceSetting = () => {
       },
     });
 
-    return view;
+    return getWorkspaceDisplayView(view);
   };
 
   const resetWorkspaceView = async () => {
-    await updateWorkspaceSetting({ view: null });
+    updateWorkspaceSetting({ view: null });
     return getWorkspaceDisplayView();
   };
 

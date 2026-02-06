@@ -393,17 +393,6 @@ export type CustomersPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export const DayOfWeek = {
-  Friday: 'FRIDAY',
-  Monday: 'MONDAY',
-  Saturday: 'SATURDAY',
-  Sunday: 'SUNDAY',
-  Thursday: 'THURSDAY',
-  Tuesday: 'TUESDAY',
-  Wednesday: 'WEDNESDAY'
-} as const;
-
-export type DayOfWeek = typeof DayOfWeek[keyof typeof DayOfWeek];
 export type DeviceEntity = {
   __typename: 'DeviceEntity';
   _id: Scalars['String']['output'];
@@ -465,7 +454,7 @@ export type Event = {
   time: Scalars['Float']['output'];
   type: EventType;
   updatedAt: Maybe<Scalars['Float']['output']>;
-  user: WorkspaceMember;
+  user: Maybe<WorkspaceMember>;
   userId: Maybe<Scalars['String']['output']>;
   variant: Maybe<EventVariant>;
 };
@@ -2510,21 +2499,6 @@ export type TasksPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export type TimeRange = {
-  __typename: 'TimeRange';
-  /** Format: HH:mm */
-  end: Scalars['String']['output'];
-  /** Format: HH:mm */
-  start: Scalars['String']['output'];
-};
-
-export type TimeRangeInput = {
-  /** Format: HH:mm */
-  end: Scalars['String']['input'];
-  /** Format: HH:mm */
-  start: Scalars['String']['input'];
-};
-
 export type UpdateTagInput = {
   _id: Scalars['String']['input'];
   color?: InputMaybe<Scalars['String']['input']>;
@@ -2561,15 +2535,27 @@ export type UserAuthProvider = {
   username: Scalars['String']['output'];
 };
 
-export type WorkingDay = {
-  __typename: 'WorkingDay';
-  day: DayOfWeek;
-  hours: Array<TimeRange>;
+export type WorkingDayInterval = {
+  __typename: 'WorkingDayInterval';
+  /** 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday */
+  day: Scalars['Float']['output'];
+  /** Format: HH:mm */
+  end: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  shift: Maybe<Scalars['String']['output']>;
+  /** Format: HH:mm */
+  start: Scalars['String']['output'];
 };
 
-export type WorkingDayInput = {
-  day: DayOfWeek;
-  hours: Array<TimeRangeInput>;
+export type WorkingDayIntervalInput = {
+  /** 1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday */
+  day: Scalars['Float']['input'];
+  /** Format: HH:mm */
+  end: Scalars['String']['input'];
+  id: Scalars['String']['input'];
+  shift?: InputMaybe<Scalars['String']['input']>;
+  /** Format: HH:mm */
+  start: Scalars['String']['input'];
 };
 
 export type Workspace = {
@@ -2710,12 +2696,12 @@ export type WorkspaceRole = {
 export type WorkspaceSchedule = {
   __typename: 'WorkspaceSchedule';
   timezone: Maybe<Scalars['String']['output']>;
-  workingDays: Array<WorkingDay>;
+  workingDays: Array<WorkingDayInterval>;
 };
 
 export type WorkspaceScheduleInput = {
   timezone?: InputMaybe<Scalars['String']['input']>;
-  workingDays: Array<WorkingDayInput>;
+  workingDays: Array<WorkingDayIntervalInput>;
 };
 
 export type WorkspaceSearchSettings = {

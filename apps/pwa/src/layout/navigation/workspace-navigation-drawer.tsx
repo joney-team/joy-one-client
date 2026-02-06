@@ -100,7 +100,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
     return workspace.userMembers.filter(
       (userMember) => userMember.workspace._id !== workspace.member.workspaceId
     );
-  }, [workspace.userMembers]);
+  }, [workspace.userMembers, workspace.member]);
 
   return (
     <Fragment>
@@ -292,22 +292,22 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
               <Trans>Switch workspace</Trans>
             </Label>
 
-            {otherWorkspace.map((userMember) => {
+            {otherWorkspace.map((member) => {
               return (
                 <NavigationItem
-                  key={userMember.workspaceId}
+                  key={member.workspaceId}
                   leftSection={
                     <ThemeIcon variant="subtle" color="dark">
                       <Avatar
-                        workspace={userMember.workspace}
+                        workspace={member.workspace}
                         size={25}
                         radius={5}
                         bg="var(--mantine-color-body)"
                       />
                     </ThemeIcon>
                   }
-                  onClick={() => workspace.select(userMember.workspaceId!)}
-                  label={userMember.workspace!.name}
+                  onClick={() => workspace.select(member.workspaceId!)}
+                  label={member.workspace!.name}
                 />
               );
             })}
