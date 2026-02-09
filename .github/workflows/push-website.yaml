@@ -183,15 +183,8 @@ jobs:
           BRANCH_NAME="${{ github.ref_name }}"
           DOKPLOY_CONFIG="${{ vars.DOKPLOY }}"
           
-          # Set token based on branch
-          if [[ "${BRANCH_NAME}" == "production" ]]; then
-            echo "dokploy_token=${{ secrets.DOKPLOY_PRODUCTION_TOKEN }}" >> $GITHUB_OUTPUT
-          elif [[ "${BRANCH_NAME}" == "staging" ]]; then
-            echo "dokploy_token=${{ secrets.DOKPLOY_STAGING_TOKEN }}" >> $GITHUB_OUTPUT
-          else
-            echo "Unknown branch: ${BRANCH_NAME}"
-            exit 1
-          fi
+          # Set token
+          echo "dokploy_token=${{ secrets.DOKPLOY_TOKEN }}" >> $GITHUB_OUTPUT
           
           # Write config to temporary file for parsing
           echo "$DOKPLOY_CONFIG" > /tmp/dokploy.env

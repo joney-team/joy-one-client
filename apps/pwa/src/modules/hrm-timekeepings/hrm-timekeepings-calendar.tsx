@@ -142,27 +142,6 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                   (v) => v.status === HrmTimekeepingStatus.PENDING
                 );
 
-                // const debugDay = new Date(2024, 7, 1, 0, 0, 0);
-                // const isDebug = DateTimeUtils.isMatchDay(date, debugDay);
-
-                // if (isDebug) {
-                //   console.log(`User > ${v.user.name}`);
-                //   // console.log(JSON.stringify({
-                //   //   timekeepings: v.timekeepings,
-                //   //   workSlots: ws.settings.workSlots,
-                //   //   rules: ws.settings.hrmTimeKeepingsRules
-                //   // }))
-
-                //   console.log(calculated.timeLogs);
-
-                //   console.table(Object.keys(calculated).map((key) => {
-                //     return {
-                //       key: key,
-                //       valueInHHMMSS: `${DateTimeUtils.toHHMMSS((calculated as any)[key])} (${(calculated as any)[key]})`
-                //     }
-                //   }));
-                // }
-
                 return (
                   <Card
                     shadow="none"
