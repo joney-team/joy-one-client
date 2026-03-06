@@ -6,7 +6,6 @@ import { Renderer } from "@/components/renderer";
 import { getView } from "@/layout/layout-service";
 import { PrintButton } from "@/modals/modal-printer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
 import {
   createPrescription,
@@ -57,7 +56,7 @@ import { FC, useState } from "react";
 
 interface ModalPrescriptionFormProps {
   prescription?: PrescriptionEntity;
-  customer?: CustomerShortInfo;
+  customer?: any;
   notUseTemplate?: boolean;
 }
 

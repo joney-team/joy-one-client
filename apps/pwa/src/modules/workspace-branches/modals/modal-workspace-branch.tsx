@@ -3,15 +3,9 @@
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
 import { ModalHead } from "@/components/modal/modal-head";
+import { WorkspaceBranchInput } from "@/graphql/types.graphql";
 import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
-import {
-  createWorkspaceBranch,
-  updateWorkspaceBranch,
-} from "@/modules/workspace-branches/workspace-branches-service";
-import {
-  WorkspaceBranchDto,
-  WorkspaceBranchEntity,
-} from "@/modules/workspace-branches/workspace-branches-types";
+import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Stack, Tabs, TextInput } from "@mantine/core";
@@ -19,11 +13,17 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconBuilding, IconCheck, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { WorkspaceBranchDataFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
+import CREATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationCreateWorkspaceBranch.graphql";
+import UPDATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationUpdateWorkspaceBranch.graphql";
 
-export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ branch }) => {
+export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchDataFragment }> = ({ branch }) => {
   const [loading, setLoading] = useState(false);
 
-  const form = useForm<WorkspaceBranchDto>({
+  const [updateWorkspaceBranch] = useMutation(UPDATE_WORKSPACE_BRANCH_MUTATION);
+  const [createWorkspaceBranch] = useMutation(CREATE_WORKSPACE_BRANCH_MUTATION);
+
+  const form = useForm<WorkspaceBranchInput>({
     initialValues: {
       name: branch?.name || "",
       hotline: branch?.hotline || "",
@@ -40,9 +40,9 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
   const onSubmit = form.onSubmit(async (values) => {
     setLoading(true);
     if (branch) {
-      await updateWorkspaceBranch(branch._id, values);
+      await updateWorkspaceBranch({ variables: { id: branch._id, input: values } });
     } else {
-      await createWorkspaceBranch(values);
+      await createWorkspaceBranch({ variables: { input: values } });
     }
     modals.closeAll();
     setLoading(false);
@@ -92,7 +92,7 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchEntity }> = ({ b
   );
 };
 
-export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchEntity) => {
+export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchDataFragment) => {
   return modals.open({
     title: (
       <ModalHead

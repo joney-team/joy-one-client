@@ -1,21 +1,20 @@
 import { BaseMongoEntity } from "@/types";
 import { ProductEntity } from "../products/products-types";
-import { CustomerEntity } from "../customers/customer-types";
 
 export enum CouponRuleBenefitType {
-  DISCOUNT_ON_TOTAL = 'DISCOUNT_ON_TOTAL',
-  DISCOUNT_ON_PRODUCT = 'DISCOUNT_ON_PRODUCT',
-  FREE_ON_PRODUCT = 'FREE_ON_PRODUCT',
+  DISCOUNT_ON_TOTAL = "DISCOUNT_ON_TOTAL",
+  DISCOUNT_ON_PRODUCT = "DISCOUNT_ON_PRODUCT",
+  FREE_ON_PRODUCT = "FREE_ON_PRODUCT",
 }
 
 export interface CouponRuleBenefit {
   type: CouponRuleBenefitType;
-  data?: any
+  data?: any;
 }
 
 export enum CouponRuleConditionType {
-  MINIMUM_TOTAL = 'MINIMUM_TOTAL',
-  LIMIT_PRODUCTS = 'LIMIT_PRODUCTS',
+  MINIMUM_TOTAL = "MINIMUM_TOTAL",
+  LIMIT_PRODUCTS = "LIMIT_PRODUCTS",
 }
 
 export interface CouponRuleTerm {
@@ -48,8 +47,8 @@ export interface CouponRuleEntity extends BaseMongoEntity {
 
 // ======================= Start Benefit Type Datas =======================
 export enum DiscountType {
-  PERCENT = 'PERCENT',
-  AMOUNT = 'AMOUNT',
+  PERCENT = "PERCENT",
+  AMOUNT = "AMOUNT",
 }
 
 export interface DiscountOnTotalData {
@@ -89,7 +88,7 @@ export interface CouponEntity extends BaseMongoEntity {
   quantity: number;
   code?: string;
   customerId?: string;
-  customer?: CustomerEntity;
+  customer?: any;
   receiptId?: string;
   ticketId?: string;
   expiredAt?: number;

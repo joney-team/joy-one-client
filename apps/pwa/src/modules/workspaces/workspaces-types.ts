@@ -4,7 +4,7 @@ import { Icon } from "@tabler/icons-react";
 import { Dispatch, SetStateAction } from "react";
 import { AppLocale } from "../lang/lang-types";
 import { LocationEntity } from "../locations/locations-types";
-import { WorkspaceBranchEntity } from "../workspace-branches/workspace-branches-types";
+import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
@@ -66,7 +66,7 @@ export interface WorkspaceContext {
   archive: () => Promise<void>;
   join: (code: string) => Promise<void>;
   ref: string;
-  defaultBranch?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
+  defaultBranch?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;
 }

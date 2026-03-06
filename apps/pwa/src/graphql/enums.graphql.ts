@@ -67,6 +67,14 @@ export const CustomerFormStatus = {
 } as const;
 
 export type CustomerFormStatus = typeof CustomerFormStatus[keyof typeof CustomerFormStatus];
+/** Available entity sources */
+export const EntitySource = {
+  Import: 'IMPORT',
+  Internal: 'INTERNAL',
+  ZaloOa: 'ZALO_OA'
+} as const;
+
+export type EntitySource = typeof EntitySource[keyof typeof EntitySource];
 /** Available event channels */
 export const EventChannel = {
   None: 'NONE',

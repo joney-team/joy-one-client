@@ -6,7 +6,6 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCoupon, getCouponRules } from "@/modules/coupons/coupon-service";
 import { CouponDto, CouponEntity } from "@/modules/coupons/coupon-types";
-import { getCustomers } from "@/modules/customers/customer-service";
 import { onError } from "@/utils/exceptions.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -135,11 +134,12 @@ export const ModalCouponForm: FC<{
               {...form.getInputProps("quantity")}
             />
 
-            <InputWrapper label={t`Limit settings`}>
+            {/* TODO: Limit setting by customers */}
+            {/* <InputWrapper label={t`Limit settings`}>
               <Card withBorder p={8}>
                 <Stack gap={10}>
                   <SearchSelectInput
-                    label={t`Customer`}
+                    label={<Trans>Customer</Trans>}
                     onSearch={(q) =>
                       getCustomers({ q }).then(({ data }) =>
                         data.map((r) => ({
@@ -162,7 +162,7 @@ export const ModalCouponForm: FC<{
                   />
                 </Stack>
               </Card>
-            </InputWrapper>
+            </InputWrapper> */}
           </SimpleGrid>
 
           <Group justify="center" mt={10}>

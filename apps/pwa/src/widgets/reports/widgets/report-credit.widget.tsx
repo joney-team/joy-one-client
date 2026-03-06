@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
-import { getCustomer } from "@/modules/customers/customer-service";
-import { CustomerEntity } from "@/modules/customers/customer-types";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { loanPackageTypes } from "@/modules/loans/loans-constants";
 import { getLoanByCode } from "@/modules/loans/loans-service";
@@ -24,13 +22,19 @@ import { IconFileExcel, IconReportAnalytics } from "@tabler/icons-react";
 import { FC } from "react";
 import writeXlsxFile from "write-excel-file";
 import { ReportWidgetsContext } from "../types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { ApolloClient } from "@apollo/client";
+import { ApolloClientType } from "@/modules/apollo/apollo-client";
+
+import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
+import { useApolloClient } from "@apollo/client/react";
 
 interface CreditReportItem {
   time: number;
   type: LoanPackageType;
   loan: LoanEntity;
   cashier?: WorkspaceMemberDataFragment;
-  customer?: CustomerEntity;
+  customer?: CustomerDataFragment;
   receipt: ReceiptEntity;
   fee: {
     total: number;
@@ -82,9 +86,12 @@ interface CreditReport {
 
 const chunkingSize = 300;
 
-const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> => {
+const exportReport = async (
+  receipts: ReceiptEntity[],
+  client: ApolloClientType
+): Promise<CreditReport> => {
   const reports: CreditReportItem[] = [];
-  const customers: CustomerEntity[] = [];
+  const customers: CustomerDataFragment[] = [];
   const loans: LoanEntity[] = [];
 
   const loanCodes = [...new Set([...receipts.map((v) => v.relatedLoanCode)])].filter(
@@ -109,8 +116,14 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
   ].filter(Boolean) as string[];
 
   for (const customerId of customerIds) {
-    const customer = await getCustomer(customerId);
-    customers.push(customer);
+    const customer = await client.query({
+      query: QUERY_CUSTOMER,
+      variables: {
+        id: customerId,
+      },
+    });
+
+    customers.push(customer.data?.customer!);
   }
 
   for (const receipt of receipts) {
@@ -266,6 +279,7 @@ const exportReport = async (receipts: ReceiptEntity[]): Promise<CreditReport> =>
 
 export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
   const { t } = useLingui();
+  const client = useApolloClient();
   const workspace = useWorkspace();
   const theme = useMantineTheme();
   const parsedPrimaryColor = parseThemeColor({
@@ -315,7 +329,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
           await fetchReceipts();
 
-          const report = await exportReport(receipts);
+          const report = await exportReport(receipts, client);
 
           const userMemberInfos = await getWorkspaceMemberByIds(
             [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(Boolean)

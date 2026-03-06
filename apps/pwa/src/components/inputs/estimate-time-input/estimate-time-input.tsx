@@ -1,6 +1,7 @@
 "use client";
 
-import { TaskEntity } from "@/modules/tasks/tasks-types";
+import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
+import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -13,7 +14,6 @@ import {
 import { IconHourglassHigh } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
 import { parseTimeInput } from "./estimate-time-input-utils";
-import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 
 interface EstimateTimeInputProps extends Omit<TextInputProps, "value" | "onChange" | "onSubmit"> {
   value?: number | null;
@@ -38,7 +38,7 @@ export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
 };
 
 export interface QuickEstimateTimeInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  task: TaskEntity;
+  task: TaskDataFragment;
 }
 
 export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInputProps>> = (

@@ -2,21 +2,19 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { onError } from "@/utils/exceptions.utils";
 import { Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconId } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { updateCustomer } from "../customer-service";
-import { CustomerShortInfo } from "../customer-types";
 
 import { useRouter } from "@/hooks/use-router";
 import { Trans } from "@lingui/react/macro";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface ModalCustomerPlainCodeFormProps {
-  customer: CustomerShortInfo;
-  onDone?: (customer: CustomerShortInfo) => any;
+  customer: CustomerDataFragment;
+  onDone?: (customer: CustomerDataFragment) => any;
 }
 
 export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (props) => {
@@ -32,19 +30,21 @@ export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
 
-    const action = () =>
-      updateCustomer(props.customer!._id, {
-        ...props.customer,
-        plainCode: values.plainCode,
-      });
+    // TODO: Update customer plain code
+    // const action = () => {
+    //   // return updateCustomer(props.customer!._id, {
+    //   //   ...props.customer,
+    //   //   plainCode: values.plainCode,
+    //   // });
+    // };
 
-    await action()
-      .then(async (res) => {
-        if (props.onDone) await props.onDone?.(res);
-        else router.push(`/customers/${res.code}`);
-        modals.close("ModalCustomerPlainCodeForm");
-      })
-      .catch(onError);
+    // await action()
+    //   .then(async (res) => {
+    //     if (props.onDone) await props.onDone?.(res);
+    //     else router.push(`/customers/${res.code}`);
+    //     modals.close("ModalCustomerPlainCodeForm");
+    //   })
+    //   .catch(onError);
 
     setIsSubmitting(false);
   });

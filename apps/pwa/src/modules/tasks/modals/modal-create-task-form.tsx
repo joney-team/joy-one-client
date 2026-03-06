@@ -53,10 +53,13 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
   const { member } = useWorkspace();
 
-  const [getTaskStatuses, { data: taskStatusesData, loading: taskStatusesLoading }] = useLazyQuery<
-    TaskStatusesQuery,
-    TaskStatusesQueryVariables
-  >(TASK_STATUS_QUERY);
+  const [getTaskStatuses, { data: taskStatusesData, loading: taskStatusesLoading }] = useLazyQuery(
+    TASK_STATUS_QUERY,
+    {
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-and-network",
+    }
+  );
 
   useEffect(() => {
     getTaskStatuses({
@@ -64,7 +67,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
         ? { contextType: TaskContextType.Folder, contextId: initial.folder._id }
         : undefined,
     });
-  }, [initial]);
+  }, [initial?.folder?._id]);
 
   const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
     CREATE_TASK_MUTATION

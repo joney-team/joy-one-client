@@ -1,5 +1,4 @@
 import { BaseMongoEntity } from "@/types";
-import { CustomerEntity } from "../customers/customer-types";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export enum MessageBoxPlatformType {
@@ -27,7 +26,7 @@ export interface MessageBoxEntity extends BaseMongoEntity {
   lastInteractionAt?: number;
   status?: MessageBoxStatus;
   user?: WorkspaceMemberDataFragment;
-  customer?: CustomerEntity;
+  customer?: any;
   assigneeUserId?: string;
   assigneeUser?: WorkspaceMemberDataFragment;
   aiAssistantconversationId?: string;

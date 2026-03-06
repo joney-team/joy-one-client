@@ -11,5 +11,5 @@ const ListCore = dynamic(() => import("./list-core").then((m) => m.ListCore), {
 });
 
 export function List<Data extends BaseData>(props: ListProps<Data>) {
-  return <ListCore {...(props as any)} />;
+  return <ListCore {...(props as ListProps)} />;
 }

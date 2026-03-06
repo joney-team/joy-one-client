@@ -7,8 +7,10 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
+import { EventType } from "@/graphql/enums.graphql";
 import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
-import { getCustomer } from "@/modules/customers/customer-service";
+import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
 import {
@@ -19,16 +21,16 @@ import {
 import { LoanEntity } from "@/modules/loans/loans-types";
 import { type ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-receipt";
 import { onActionLoad } from "@/utils/actions";
+import { nonLoading } from "@/utils/non-loading";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
+import { useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { FC, Fragment, useRef, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
 
 const ModalPayReceipt = dynamic(
   () => import("@/modules/receipts/modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
@@ -44,16 +46,30 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
 
   const { t } = useLingui();
 
+  const {
+    data: customerData,
+    refetch: customerRefetch,
+    loading: customerLoading,
+    error: customerError,
+  } = useQuery(QUERY_CUSTOMER, {
+    variables: {
+      id: loan.customerId ?? "",
+    },
+    skip: !loan.customerId,
+  });
+
+  useEventsListener([EventType.CustomerUpdated], () => {
+    customerRefetch();
+  });
+
   const state = useFetch({
     fetch: async () => {
-      const [customer, customerKyc, calculated] = await Promise.all([
-        getCustomer(loan.customerId),
+      const [customerKyc, calculated] = await Promise.all([
         getCustomerKyc(loan.customerId),
         loanLiquidationCalculate(loan.id),
       ]);
 
       return {
-        customer,
         customerKyc,
         calculated,
       };
@@ -83,9 +99,10 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
   };
 
   if (!state.isInitialized) return <Skeleton height={300} />;
-  if (state.error || !state.data) return <Errored error={state.error} />;
+  if (state.error || !state.data || !customerData)
+    return <Errored error={state.error ?? customerError} />;
 
-  const { customerKyc, calculated, customer } = state.data;
+  const { customerKyc, calculated } = state.data;
   const kyc = customerKyc.versions[customerKyc.versions.length - 1];
 
   return (
@@ -93,15 +110,15 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
       <Card withBorder p={10}>
         <Stack>
           <Group gap={16} align="start">
-            <Avatar customer={customer} mt={5} size={50} />
+            <Avatar customer={customerData.customer} mt={5} size={50} />
             <Stack gap={0}>
               <Text fw={700}>{kyc.cidFullName}</Text>
               <Text fz={em(12)} c="gray">
-                {t`Birthday`}:{" "}
+                <Trans>Birthday</Trans>:{" "}
                 {kyc.cidBirthday && <DateFormat value={kyc.cidBirthday} type="date" />}
               </Text>
               <Text fz={em(12)} c="gray">
-                {t`Phone`}: {customer.phone}
+                <Trans>Phone</Trans>: {customerData.customer.phone}
               </Text>
             </Stack>
           </Group>

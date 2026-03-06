@@ -4,10 +4,7 @@ import { TaskContextType } from "@/graphql/enums.graphql";
 import { useQuery } from "@apollo/client/react";
 import { useMemo } from "react";
 import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
-import QUERY_TASK_STATUSES, {
-  type TaskStatusesQuery,
-  type TaskStatusesQueryVariables,
-} from "../graphql/queryTaskStatuses.graphql";
+import QUERY_TASK_STATUSES from "../graphql/queryTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
@@ -27,17 +24,20 @@ export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuse
 };
 
 export const useFolderStatuses = (folderId?: string | null) => {
-  const taskStatusesData = useQuery<TaskStatusesQuery, TaskStatusesQueryVariables>(
-    QUERY_TASK_STATUSES,
-    {
-      variables: folderId
-        ? {
-            contextType: TaskContextType.Folder,
-            contextId: folderId,
-          }
-        : {},
-    }
-  );
+  const variables = useMemo(() => {
+    return folderId
+      ? {
+          contextType: TaskContextType.Folder,
+          contextId: folderId,
+        }
+      : {};
+  }, [folderId]);
+
+  const taskStatusesData = useQuery(QUERY_TASK_STATUSES, {
+    variables,
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
+  });
 
   const statuses = useMemo(() => {
     const selectStatuses = taskStatusesData.data?.taskStatuses.isInherited

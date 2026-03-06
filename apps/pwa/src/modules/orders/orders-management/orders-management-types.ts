@@ -1,5 +1,5 @@
 import { UseRestQuery } from "@/modules/apis/use-rest-query";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { ProductEntity } from "@/modules/products/products-types";
 import { PromotionEntity } from "@/modules/promotions/promotions-types";
@@ -37,7 +37,7 @@ export interface Order {
   isDirty?: boolean;
   code?: string;
   items: OrderItem[];
-  relatedCustomer?: CustomerShortInfo | null;
+  relatedCustomer?: CustomerDataFragment | null;
   directDiscount?: number;
   note?: string;
   assigneeUsers: WorkspaceMemberDataFragment[];

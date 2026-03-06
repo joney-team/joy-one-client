@@ -33,6 +33,7 @@ query Search($query: String!, $entities: [String!]!, $limit: Int) {
       name
       code
       phone
+      avatar
     }
     ... on SearchResultProduct {
       name

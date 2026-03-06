@@ -4,10 +4,10 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, InputWrapperProps, Text } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { type FC } from "react";
-import { CustomerEntity } from "../customer-types";
 import { CustomerSelector } from "./customer-selector";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
-export type CustomerValue = Pick<CustomerEntity, "_id" | "name" | "phone">;
+export type CustomerValue = Pick<CustomerDataFragment, "_id" | "name" | "phone">;
 
 interface CustomersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: CustomerValue[];

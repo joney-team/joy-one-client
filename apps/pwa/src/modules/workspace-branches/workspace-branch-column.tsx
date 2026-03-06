@@ -8,7 +8,7 @@ import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { getWorkspaceBranchByIds } from "./workspace-branches-service";
+import QUERY_WORKSPACE_BRANCHES_BY_IDS from "./graphql/queryWorkspaceBranchsByIds.graphql";
 
 export const workspaceBranchColumn = (): Column => {
   const workspace = useWorkspace();
@@ -42,8 +42,12 @@ export const workspaceBranchColumn = (): Column => {
         ? {
             dynamicSelector: {
               pinnedOptions: [rootOption],
-              getSelectedOptions: async (ids) => {
-                const options = await getWorkspaceBranchByIds(ids.filter((v) => v !== "root"));
+              getSelectedOptions: async (ids, client) => {
+                const results = await client.query({
+                  query: QUERY_WORKSPACE_BRANCHES_BY_IDS,
+                  variables: { ids: ids.filter((v) => v !== "root") },
+                });
+                const options = results.data?.branches ?? [];
                 return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
               },
               search: async (q) => {

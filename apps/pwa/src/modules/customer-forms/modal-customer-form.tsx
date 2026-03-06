@@ -3,7 +3,6 @@
 import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
@@ -11,13 +10,14 @@ import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } fr
 import { modals } from "@mantine/modals";
 import { IconCopy, IconCopyCheck, IconMessageUser, IconX } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 
 const ModalCustomerForm: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
   const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
-    WorkspaceBranchEntity,
-    "_id" | "name"
+    WorkspaceBranchDataFragment,
+    "_id" | "name" | "hotline"
   > | null>(null);
   const link = `${config.APP_URL}/customer-forms/new/${workspace.member.workspaceId}/${
     workspaceBranch?._id || "main"
@@ -31,6 +31,7 @@ const ModalCustomerForm: FC = () => {
             ? {
                 _id: workspaceBranch._id,
                 name: workspaceBranch.name,
+                hotline: workspaceBranch.hotline,
               }
             : undefined
         }

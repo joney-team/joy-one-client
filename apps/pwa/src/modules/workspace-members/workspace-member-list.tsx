@@ -13,7 +13,6 @@ import {
   type ModalUserInformationRef,
 } from "@/modules/users/modals/modal-user-information";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import { getWorkspaceBranchByIds } from "@/modules/workspace-branches/workspace-branches-service";
 import {
   getMemberRoleLabel,
   updateWorkspaceMember,
@@ -34,6 +33,7 @@ import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
 import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
+import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
 import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "./graphql/mutationAssignWorkspaceMemberRoles.graphql";
 import QUERY_WORKSPACE_MEMBERS from "./graphql/queryWorkspaceMembers.graphql";
 
@@ -193,10 +193,12 @@ export const WorkspaceMemberList: FC = () => {
               workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
                 ? {
                     dynamicSelector: {
-                      getSelectedOptions: async (ids) => {
-                        const options = await getWorkspaceBranchByIds(
-                          ids.filter((v) => v !== "root")
-                        );
+                      getSelectedOptions: async (ids, client) => {
+                        const results = await client.query({
+                          query: QUERY_WORKSPACE_BRANCHES_BY_IDS,
+                          variables: { ids: ids.filter((v) => v !== "root") },
+                        });
+                        const options = results.data?.branches ?? [];
                         return bindOptions(
                           options.map((v) => ({ label: v.name, value: v._id, data: v }))
                         );

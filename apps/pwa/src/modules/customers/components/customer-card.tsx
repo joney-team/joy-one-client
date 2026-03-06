@@ -6,13 +6,13 @@ import { useTags } from "@/modules/tags/tags-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
-import { customerGenders, renderGener } from "../customer-service";
+import { customerGenders } from "../customer-service";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface CustomerCardProps extends CardProps {
@@ -35,6 +35,7 @@ interface CustomerCardProps extends CardProps {
 }
 
 export const CustomerCard: FC<CustomerCardProps> = (props) => {
+  const { t } = useLingui();
   const { customer, disableClick, onClick: onClickProps, showLastCheckin, ...rest } = props;
 
   const router = useRouter();
@@ -120,7 +121,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
                   <ThemeIcon color="dark" variant="transparent">
                     <IconGender.icon strokeWidth={1.2} size={18} />
                   </ThemeIcon>
-                  <Text fz={16}>{renderGener(customer.gender)}</Text>
+                  <Text fz={16}>{t(customerGenders[customer.gender].label)}</Text>
                 </Group>
               )}
             </Group>

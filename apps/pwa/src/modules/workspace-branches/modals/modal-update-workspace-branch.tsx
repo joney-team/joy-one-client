@@ -3,8 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
-import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -12,6 +10,8 @@ import { Trans } from "@lingui/react/macro";
 import { Blockquote, Center, Modal, Stack } from "@mantine/core";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
+import { WorkspaceBranchDataFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchInput } from "../workspace-branch-input";
 
 export interface ModalUpdateWorkspaceBranchRef {
   open: (p: ModalUpdateWorkspaceBranchProps) => void;
@@ -21,7 +21,7 @@ export interface ModalUpdateWorkspaceBranchRef {
 type ModalUpdateWorkspaceBranchProps = {
   entity?: AppEntity;
   ids?: string[];
-  workspaceBranch?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline"> | null;
+  workspaceBranch?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null;
   onComplete?: () => void;
 };
 
@@ -39,7 +39,7 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
 >(({ children }, ref) => {
   const [args, setArgs] = useState<ModalUpdateWorkspaceBranchProps | null>(null);
   const [branch, setBranch] = useState<Pick<
-    WorkspaceBranchEntity,
+    WorkspaceBranchDataFragment,
     "_id" | "name" | "hotline"
   > | null>(null);
 

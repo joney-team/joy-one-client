@@ -1,6 +1,5 @@
 "use client";
 
-import { CustomerRelationshipContact } from "@/modules/customers/customer-types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -19,11 +18,12 @@ import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Button } from "../../../components/buttons/button";
 import { Renderer } from "../../../components/renderer";
+import type { CustomerRelationshipContactInput as CustomerRelationshipContactInputType } from "@/graphql/types.graphql";
 
 interface CustomerRelationshipContactInputProps
   extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value?: CustomerRelationshipContact[];
-  onChange?: (value: CustomerRelationshipContact[]) => void;
+  value?: CustomerRelationshipContactInputType[];
+  onChange?: (value: CustomerRelationshipContactInputType[]) => void;
   disabled?: boolean;
 }
 
@@ -53,7 +53,7 @@ export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInp
       <Card p={8} withBorder shadow="none">
         <Stack justify="stretch">
           {contacts.map((contact, i) => {
-            const onChange = (key: keyof CustomerRelationshipContact, value: any) => {
+            const onChange = (key: keyof CustomerRelationshipContactInputType, value: any) => {
               if (props.disabled) return;
               const newContacts = [...contacts];
               newContacts[i][key] = value;

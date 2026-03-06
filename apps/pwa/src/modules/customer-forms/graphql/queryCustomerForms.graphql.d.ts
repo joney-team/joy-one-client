@@ -7,7 +7,7 @@ export type CustomerFormsQueryVariables = Types.Exact<{
 }>;
 
 
-export type CustomerFormsQuery = { __typename: 'Query', list: { __typename: 'CustomerFormsPaginated', total: number, results: Array<{ __typename: 'CustomerForm', refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, _id: string, name: string, phone: string, email: string | null, dynamicData: any | null, status: Types.CustomerFormStatus, cancelReason: string | null, location: { __typename: 'LocationEntity', address: string | null } | null, vnLocation: { __typename: 'LocationEntity', address: string | null } | null, workspaceBranch: { __typename: 'WorkspaceBranch', _id: string, name: string } | null }> } };
+export type CustomerFormsQuery = { __typename: 'Query', list: { __typename: 'CustomerFormsPaginated', total: number, results: Array<{ __typename: 'CustomerForm', refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, _id: string, name: string, phone: string, email: string | null, dynamicData: any | null, status: Types.CustomerFormStatus, cancelReason: string | null, location: { __typename: 'Location', address: string | null } | null, vnLocation: { __typename: 'Location', address: string | null } | null, workspaceBranch: { __typename: 'WorkspaceBranch', _id: string, name: string } | null }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

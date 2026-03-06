@@ -7,7 +7,7 @@ import { EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
-import { CustomerEntity } from "@/modules/customers/customer-types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -20,7 +20,6 @@ import {
   Card,
   Divider,
   em,
-  Grid,
   Group,
   Loader,
   Stack,
@@ -33,7 +32,7 @@ import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanCustomerKycProps {
-  customer: CustomerEntity;
+  customer: CustomerDataFragment;
   kyc: CustomerKycEntity;
 }
 
@@ -99,8 +98,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
               >
                 <Anchor
                   href={
-                    customer.vnLocationFullAddress &&
-                    getGoogleMapLink(customer.vnLocationFullAddress)
+                    !!customer.vnLocationFullAddress
+                      ? getGoogleMapLink(customer.vnLocationFullAddress)
+                      : ""
                   }
                   target="_blank"
                 >
@@ -112,7 +112,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
           <LoanRowInfo
             label={<Trans>Secondary address (Hometown)</Trans>}
-            value={customer.vnSecondaryLocationFullAddress}
+            value={customer.vnSecondaryLocationFullAddress || ""}
             renderValue={(value) => (
               <Tooltip
                 label={
@@ -131,7 +131,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
           <LoanRowInfo
             label={<Trans>Salary amount</Trans>}
-            value={customer.salaryAmount}
+            value={customer.salaryAmount ?? 0}
             renderValue={(value) => (value ? <CurrencyFormat value={value} /> : "--")}
           />
 
@@ -149,7 +149,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
               <LoanRowInfo
                 label={<Trans>Relative contacts</Trans>}
-                value={customer.relationshipContacts}
+                value={customer.relationshipContacts ?? []}
                 renderValue={(value) =>
                   value && value.length > 0 ? (
                     <Stack>

@@ -100,7 +100,7 @@ export const useGraphqlList = <T extends BaseData>({
   useEffect(() => {
     if (!isReadyToFetch) return;
     fetch({ variables });
-  }, [isReadyToFetch, variables]);
+  }, [isReadyToFetch, variables, workspace.member?.workspaceId]);
 
   const listData = useMemo(() => {
     const list =

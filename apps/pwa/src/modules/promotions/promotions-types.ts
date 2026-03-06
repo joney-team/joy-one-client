@@ -1,17 +1,17 @@
 import { BasePostgresEntity, DynamicSelection } from "@/types";
-import { CustomerEntity } from "../customers/customer-types";
-import { ProductEntity } from "../products/products-types";
 import { CustomFieldValue } from "../custom-fields/custom-field-types";
+import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
+import { ProductEntity } from "../products/products-types";
 
 export enum PromotionStatus {
-  ACTIVE = 'ACTIVE',
-  CLOSED = 'CLOSED',
-  EXPIRED = 'EXPIRED'
+  ACTIVE = "ACTIVE",
+  CLOSED = "CLOSED",
+  EXPIRED = "EXPIRED",
 }
 
 export enum PromotionType {
-  DISCOUNT_RATE = 'DISCOUNT_RATE',
-  DISCOUNT_AMOUNT = 'DISCOUNT_AMOUNT',
+  DISCOUNT_RATE = "DISCOUNT_RATE",
+  DISCOUNT_AMOUNT = "DISCOUNT_AMOUNT",
 }
 
 export interface PromotionDto {
@@ -22,8 +22,8 @@ export interface PromotionDto {
   type: PromotionType;
   value: number;
   limitPerCustomer?: number;
-  productsSelection?: DynamicSelection<Pick<ProductEntity, '_id' | 'name' | 'type'>>;
-  customersSelection?: DynamicSelection<Pick<CustomerEntity, '_id' | 'name' | 'phone'>>;
+  productsSelection?: DynamicSelection<Pick<ProductEntity, "_id" | "name" | "type">>;
+  customersSelection?: DynamicSelection<Pick<CustomerDataFragment, "_id" | "name" | "phone">>;
   status?: PromotionStatus;
   customFieldValues?: CustomFieldValue[];
 }
@@ -35,8 +35,8 @@ export interface PromotionEntity extends BasePostgresEntity {
   limitPerCustomer?: number;
   type: PromotionType;
   value: number;
-  productsSelection?: DynamicSelection<Pick<ProductEntity, '_id' | 'name' | 'type'>>;
-  customersSelection?: DynamicSelection<Pick<CustomerEntity, '_id' | 'name' | 'phone'>>;
+  productsSelection?: DynamicSelection<Pick<ProductEntity, "_id" | "name" | "type">>;
+  customersSelection?: DynamicSelection<Pick<CustomerDataFragment, "_id" | "name" | "phone">>;
   expireAt?: number;
   status: PromotionStatus;
 }

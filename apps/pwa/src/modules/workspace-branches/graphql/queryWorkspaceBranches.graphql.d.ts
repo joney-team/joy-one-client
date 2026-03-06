@@ -7,7 +7,7 @@ export type WorkspaceBranchesQueryVariables = Types.Exact<{
 }>;
 
 
-export type WorkspaceBranchesQuery = { __typename: 'Query', list: { __typename: 'WorkspaceBranchesPaginated', total: number, results: Array<{ __typename: 'WorkspaceBranch', _id: string, name: string, hotline: string | null, location: { __typename: 'LocationEntity', provinceId: string | null, districtId: string | null, wardId: string | null, address: string | null, coordinates: { __typename: 'Coordinates', lat: number, lng: number } | null } }> } };
+export type WorkspaceBranchesQuery = { __typename: 'Query', list: { __typename: 'WorkspaceBranchesPaginated', total: number, results: Array<{ __typename: 'WorkspaceBranch', _id: string, name: string, hotline: string | null, location: { __typename: 'Location', provinceId: string | null, districtId: string | null, wardId: string | null, address: string | null, coordinates: { __typename: 'Coordinates', lat: number, lng: number } | null }, settings: { __typename: 'WorkspaceBranchSettings', bankAccount: { __typename: 'PluginBankAccount', bankId: number, accountNumber: string, accountName: string | null } | null } | null }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

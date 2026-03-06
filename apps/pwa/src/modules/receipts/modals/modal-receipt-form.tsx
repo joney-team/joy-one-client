@@ -5,7 +5,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanEntity } from "@/modules/loans/loans-types";
@@ -27,7 +27,7 @@ interface ReceiptFormValues {
   type: ReceiptType;
   note?: string;
   data?: any;
-  relatedCustomer?: CustomerShortInfo | undefined;
+  relatedCustomer?: CustomerDataFragment | undefined;
   relatedLoan?: LoanEntity | undefined;
   expireAt?: number | null;
 }
@@ -35,7 +35,7 @@ interface ReceiptFormValues {
 interface ModalReceiptFormProps {
   type?: ReceiptType;
   data?: any;
-  relatedCustomer?: CustomerShortInfo;
+  relatedCustomer?: CustomerDataFragment;
   relatedLoan?: LoanEntity;
   onDone?: (receipt: ReceiptEntity) => Promise<any> | any;
 }

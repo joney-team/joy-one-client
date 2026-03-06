@@ -1,8 +1,8 @@
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { ProductType } from "@/modules/products/products-types";
 import { BasePostgresEntity, Query } from "@/types";
 import { LoanReceiptReport } from "../loans/loans-types";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
 
 export enum ReceiptType {
   INCOME = "INCOME",
@@ -66,7 +66,7 @@ export interface ReceiptEntity<T = any> extends BasePostgresEntity {
   relatedLoanId?: string;
   relatedLoanCode?: string;
   relatedCustomerId?: string;
-  relatedCustomer?: CustomerShortInfo;
+  relatedCustomer?: CustomerDataFragment;
   relatedOrderId?: string;
   cashierUserId?: string;
   cashierUser?: WorkspaceMemberDataFragment;

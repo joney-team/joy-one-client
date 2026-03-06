@@ -1,14 +1,14 @@
 import { Button } from "@/components/buttons/button";
 import { useColor } from "@/modules/theme/use-color";
 import { EntitySource } from "@/types";
-import { createCustomer, isCustomerPhoneExisted } from "@/modules/customers/customer-service";
-import { CustomerDto } from "@/modules/customers/customer-types";
+import { isCustomerPhoneExisted } from "@/modules/customers/customer-service";
 import { ImportLoanDto } from "@/modules/loans/loan-dtos";
 import { String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { IconFileImport, IconFileTypeJs, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
+import { CustomerInput } from "@/graphql/types.graphql";
 
 interface Result {
   customers: {
@@ -27,7 +27,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
   const [customersFile, setCustomersFile] = useState<File | null>(null);
   const [result, setResult] = useState<Result | null>(null);
 
-  const normalizeCustomerDtos = (rawCustomers: any[]): CustomerDto[] => {
+  const normalizeCustomerDtos = (rawCustomers: any[]): CustomerInput[] => {
     if (!Array.isArray(rawCustomers)) throw new Error("Dữ liệu khách hàng không hợp lệ");
     try {
       return rawCustomers.reduce((acc, c) => {
@@ -39,7 +39,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
         )?.CreatedTime;
 
         if (id && phone && address) {
-          const data: CustomerDto = {
+          const data: CustomerInput = {
             plainCode: id.toString(),
             name: c.name,
             phone: phone.split("/")[0].trim(),
@@ -101,13 +101,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
           continue;
         }
 
-        await createCustomer(dto)
-          .then(() => {
-            result.customers.created++;
-          })
-          .catch(() => {
-            result.customers.failed++;
-          });
+        // TODO: create customer
       }
     }
 

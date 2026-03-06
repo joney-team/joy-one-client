@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { configs } from "@/configs/layout.config";
-import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import {
@@ -17,39 +16,33 @@ import {
   TextInput,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import {
-  IconCake,
-  IconCheck,
-  IconClipboardHeart,
-  IconLocation,
-  IconMail,
-  IconPhone,
-} from "@tabler/icons-react";
+import { IconCake, IconCheck, IconClipboardHeart, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
-import { createCustomer, updateCustomer } from "../customer-service";
 
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
 import { genders } from "@/constant";
 import { WorkspaceType } from "@/graphql/enums.graphql";
+import { CustomerInput } from "@/graphql/types.graphql";
 import { useRouter } from "@/hooks/use-router";
-import { api } from "@/modules/apis";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { AppLocale } from "@/modules/lang/lang-types";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { Gender } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useMutation } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import CREATE_CUSTOMER_MUTATION from "../graphql/mutationCreateCustomer.graphql";
+import UPDATE_CUSTOMER_MUTATION from "../graphql/mutationUpdateCustomer.graphql";
 import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
 
 export interface CustomerFormProps {
-  onDone?: (customer: CustomerEntity) => void | Promise<void>;
+  onDone?: (customer: CustomerDataFragment) => void | Promise<void>;
   onClose?: () => void;
-  customer?: CustomerEntity;
+  customer?: CustomerDataFragment;
   relationship?: boolean;
 }
 
@@ -79,13 +72,17 @@ export const medicalHistoryOptions: { [key in AppLocale]: string[] } = {
 };
 
 export const CustomerForm: FC<CustomerFormProps> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const router = useRouter();
   const isShowSecondaryLocation = [WorkspaceType.Credit]
     .map((t) => t.toString())
     .includes(workspace.type);
 
-  const form = useForm<any>({
+  const [createCustomer] = useMutation(CREATE_CUSTOMER_MUTATION);
+  const [updateCustomer] = useMutation(UPDATE_CUSTOMER_MUTATION);
+
+  const form = useForm<Partial<CustomerDataFragment>>({
     initialValues: {
       name: props.customer?.name || "",
       ...(props.customer
@@ -93,62 +90,74 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             assigneeUsers: [workspace.member],
           }
         : { assigneeUsers: [] }),
-      vnLocation: props.customer?.vnLocation || {},
-      vnSecondaryLocation: props.customer?.vnSecondaryLocation || {},
+      vnLocation: props.customer?.vnLocation || null,
+      vnSecondaryLocation: props.customer?.vnSecondaryLocation || null,
     },
     validate: {
-      name: (value: string) => {
+      name: (value) => {
         if (!value) return t`Must be provided`;
       },
     },
   });
 
-  const onSubmit = form.onSubmit(async (values) => {
-    let payload = {
-      ...values,
-      assigneeUserIds: values.assigneeUsers.map((user: WorkspaceMemberDataFragment) => user.userId),
-      presenterCustomerId: values.presenterCustomer?._id,
-      relatedCustomerIds: values.relatedCustomers?.map((c: CustomerEntity) => c._id),
-      workspaceBranchId: values.workspaceBranch?._id,
+  const onSubmit = form.onSubmit(async ({ _id, ...values }) => {
+    const payload: CustomerInput = {
+      name: values.name || "",
+      phone: values.phone,
+      email: values.email,
+      birthday: values.birthday,
+      gender: values.gender,
+      medicalHistory: values.medicalHistory,
+      relationshipContacts: values.relationshipContacts,
+      presenterCustomerId: values.presenterCustomerId,
+      assigneeUserIds: values.assigneeUsers?.map((user) => user.userId) ?? [],
+      relatedCustomerIds: values.relatedCustomerIds,
+      workspaceBranchId: values.workspaceBranchId,
+      salaryAmount: values.salaryAmount,
+      vnLocation: values.vnLocation,
+      vnSecondaryLocation: values.vnSecondaryLocation,
+      secondaryLocation: values.secondaryLocation,
+      location: values.location,
+      tagIds: values.tagIds,
+      avatar: values.avatar,
+      createdAt: values.createdAt,
+      plainCode: values.plainCode,
+      socialFacebookUrl: values.socialFacebookUrl,
     };
 
-    delete payload.assigneeUsers;
-    delete payload.presenterCustomer;
-
     const action = props.customer
-      ? () => updateCustomer(props.customer!._id, payload)
-      : () => createCustomer(payload);
+      ? () =>
+          updateCustomer({
+            variables: {
+              id: props.customer!._id,
+              input: payload,
+            },
+          })
+      : () =>
+          createCustomer({
+            variables: {
+              input: payload,
+            },
+          });
 
     await action()
       .then(async (res) => {
-        if (props.onDone) await props.onDone?.(res);
-        else router.push(`/customers/${res.code}`);
+        if (props.onDone && res.data) await props.onDone?.(res.data?.customer);
+        else router.push(`/customers/${res.data?.customer?.code}`);
         props.onClose?.();
       })
       .catch(onError);
   });
 
-  const convertLocations = async () => {
-    if (!props.customer) return;
-
-    const updated = await api.patch<CustomerEntity>(
-      `/customers/${props.customer?._id}/convert-vn-locations`
-    );
-
-    form.setFieldValue("vnLocation", updated.vnLocation);
-    form.setFieldValue("vnSecondaryLocation", updated.vnSecondaryLocation);
-  };
-
   useEffect(() => {
     form.reset();
     form.setValues({
-      ...(props.customer ||
-        ({
-          assigneeUsers: [workspace.member],
-        } as any)),
+      ...(props.customer || {
+        assigneeUsers: [workspace.member],
+      }),
       name: props.customer?.name || "",
-      location: props.customer?.location || {},
-      secondaryLocation: props.customer?.secondaryLocation || {},
+      vnLocation: props.customer?.vnLocation || null,
+      secondaryLocation: props.customer?.secondaryLocation || null,
     });
   }, [props.customer]);
 
@@ -156,20 +165,26 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
     <Form onSubmit={onSubmit}>
       <Stack>
         <WorkspaceBranchInput
-          label={t`Branch`}
-          value={form.values.workspaceBranch}
-          onChange={(branch) => form.setFieldValue("workspaceBranch", branch)}
+          label={<Trans>Branch</Trans>}
+          value={form.values.workspaceBranch ?? null}
+          onChange={(branch) => form.setFieldValue("workspaceBranch", branch as any)}
         />
 
-        <TextInput autoFocus withAsterisk label={t`Name`} {...form.getInputProps("name")} />
         <TextInput
-          label={t`Phone`}
+          autoFocus
+          withAsterisk
+          label={<Trans>Name</Trans>}
+          {...form.getInputProps("name")}
+        />
+
+        <TextInput
+          label={<Trans>Phone</Trans>}
           placeholder={configs.placeholders.phone}
           {...form.getInputProps("phone")}
           leftSection={<IconPhone strokeWidth={1.2} size={18} />}
         />
         <TextInput
-          label={t`Email`}
+          label={<Trans>Email</Trans>}
           placeholder={configs.placeholders.email}
           {...form.getInputProps("email")}
           leftSection={<IconMail strokeWidth={1.2} size={18} />}
@@ -177,7 +192,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Renderer visible={workspace.type === WorkspaceType.Credit}>
           <NumberInput
-            label={t`Salary amount`}
+            label={<Trans>Salary amount</Trans>}
             {...form.getInputProps("salaryAmount")}
             hideControls
           />
@@ -185,14 +200,14 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
         <Group align="start">
           <DateInput
-            label={t`Birthday`}
+            label={<Trans>Birthday</Trans>}
             {...form.getInputProps("birthday")}
             style={{ flex: 1 }}
             leftSection={<IconCake strokeWidth={1.2} size={18} />}
           />
 
           <Select
-            label={t`Gender`}
+            label={<Trans>Gender</Trans>}
             searchable
             data={Object.values(Gender).map((gender) => ({
               label: genders[gender].name(),
@@ -207,7 +222,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
           <Stack gap={16}>
             <Stack gap={5}>
               <Text fz={em(11)} fw={500}>
-                {t`Current address`}
+                <Trans>Current address</Trans>
               </Text>
               <Card withBorder shadow="none" p={10}>
                 <Stack gap={8}>
@@ -218,7 +233,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
             <Stack gap={5}>
               <Text fz={em(11)} fw={500}>
-                {t`Secondary address`} ({t`Homeland`})
+                <Trans>Secondary address</Trans> (<Trans>Homeland</Trans>)
               </Text>
               <Card withBorder shadow="none" p={10}>
                 <Stack gap={8}>
@@ -239,7 +254,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             .includes(workspace.type)}
         >
           <TagsInput
-            label={t`Medical history`}
+            label={<Trans>Medical history</Trans>}
             leftSection={<IconClipboardHeart strokeWidth={1.2} size={18} />}
             style={{ flex: 1 }}
             data={medicalHistoryOptions[getClientLocale()]}
@@ -254,18 +269,12 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         </Renderer>
 
         <WorkspaceMembersInput
-          label={t`Assignee`}
+          label={<Trans>Assignee</Trans>}
           style={{ flex: 1 }}
           {...form.getInputProps("assigneeUsers")}
         />
 
         <Group mt={10} justify="center" align="center">
-          {props.customer && (
-            <Button leftIcon={IconLocation} variant="outline" onClick={convertLocations}>
-              <Trans>Convert locations</Trans>
-            </Button>
-          )}
-
           <Button
             type="submit"
             loading={form.submitting}

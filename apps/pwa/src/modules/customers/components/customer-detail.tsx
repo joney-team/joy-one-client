@@ -1,33 +1,30 @@
 "use client";
 
 import { Errored } from "@/components/errored";
-import { EventType } from "@/graphql/enums.graphql";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
-import { CustomerEntity } from "@/modules/customers/customer-types";
-import { useFetch } from "@/utils/use-fetch.util";
-import { ActionIcon, Group, Skeleton, Stack } from "@mantine/core";
-import { IconFiles, IconPill, IconTimelineEvent, IconUserScan } from "@tabler/icons-react";
+import { Group, Skeleton, Stack } from "@mantine/core";
+import { IconFiles, IconTimelineEvent, IconUserScan } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { Fragment } from "react";
-import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
 import { SectionTitle } from "@/components/session-title";
 import { FilesBox } from "@/modules/files/files-box";
 
 import { Archived } from "@/components/archived";
 import { ButtonArchive } from "@/components/buttons/button-archive";
-import { CtasWrapper } from "@/components/cta-wrapper";
 import { Renderer } from "@/components/renderer";
-import { useLayout } from "@/layout/layout-context";
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
+import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
+
+import ARCHIVE_CUSTOMER from "../graphql/mutationArchiveCustomer.graphql";
+import { useCustomerByCode } from "../hooks/useCustomer";
 
 const Activities = dynamic(
   () => import("@/modules/activities/activities").then((mod) => mod.Activities),
@@ -48,26 +45,14 @@ const EventsList = dynamic(
 export const CustomerDetail = () => {
   const workspace = useWorkspace();
   const { getAvailableModule } = useAvailableWorkspaceModules();
-  const layout = useLayout();
 
-  const params = useParams();
-  const customerCode = params.code as string;
+  const params = useParams<{ code: string }>();
 
-  const detail = useFetch<CustomerEntity>({
-    id: `customers-${customerCode}`,
-    fetch: async () => {
-      return getCustomerByCode(customerCode);
-    },
-    refetchEvents: {
-      types: [EventType.CustomerUpdated],
-      condition: (e, data) =>
-        data?._id === e.ref || (e.relatedEntities || []).some((v) => v.id === data?._id),
-    },
-  });
+  const { customer, loading, error } = useCustomerByCode(params.code);
 
-  const { data: customer } = detail;
+  const [archiveCustomer] = useMutation(ARCHIVE_CUSTOMER);
 
-  if (detail.isFetching)
+  if (loading)
     return (
       <Stack p={16}>
         <Skeleton height={150} />
@@ -82,7 +67,7 @@ export const CustomerDetail = () => {
       </Stack>
     );
 
-  if (detail.error || !customer) return <Errored error={detail.error} />;
+  if (error || !customer) return <Errored error={error} />;
   if (customer.isArchived) return <Archived entity={<Trans>Customer</Trans>} />;
 
   return (
@@ -120,22 +105,9 @@ export const CustomerDetail = () => {
           enabled={
             !customer.isArchived && workspace.hasPermission(WorkspacePermission.CUSTOMERS_ARCHIVE)
           }
-          process={() => archiveCustomer(customer._id)}
+          process={() => archiveCustomer({ variables: { id: customer._id } })}
         />
       </Stack>
-
-      <CtasWrapper>
-        <Renderer visible={!!getAvailableModule("prescriptions")}>
-          <ActionIcon
-            radius={150}
-            size="xl"
-            color="orange"
-            onClick={() => OnModalPrescriptionForm({ customer })}
-          >
-            <IconPill strokeWidth={1.5} />
-          </ActionIcon>
-        </Renderer>
-      </CtasWrapper>
     </Fragment>
   );
 };

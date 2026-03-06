@@ -1,0 +1,7 @@
+#import "../graphql/fragmentCustomer.graphql"
+
+mutation CreateCustomer($input: CustomerInput!) {
+  customer: createCustomer(input: $input) {
+    ...CustomerData
+  }
+}

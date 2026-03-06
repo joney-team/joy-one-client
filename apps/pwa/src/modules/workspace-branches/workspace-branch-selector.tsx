@@ -2,7 +2,6 @@
 
 import { Button } from "@/components/buttons/button";
 import { searchArray, searchEntity } from "@/modules/search/search-service";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -12,8 +11,9 @@ import { Combobox, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
+import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 
-type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
+type WorkspaceBranchOption = Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">;
 
 interface WorkspaceBranchSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {
   isShowRoot?: boolean;
@@ -30,6 +30,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   const rootOption = {
     _id: "root",
     name: t`Main office`,
+    hotline: workspace.member.workspace.hotline,
   };
 
   return (

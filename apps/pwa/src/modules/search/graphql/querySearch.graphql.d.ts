@@ -9,7 +9,7 @@ export type SearchQueryVariables = Types.Exact<{
 
 export type SearchQuery = { __typename: 'Query', search: Array<
     | { __typename: 'SearchResultCategory', name: string, id: string, entity: string }
-    | { __typename: 'SearchResultCustomer', name: string, code: string, phone: string | null, id: string, entity: string }
+    | { __typename: 'SearchResultCustomer', name: string, code: string, phone: string | null, avatar: string | null, id: string, entity: string }
     | { __typename: 'SearchResultLoan', code: string, customerName: string, customerPhone: string | null, id: string, entity: string }
     | { __typename: 'SearchResultOrders', code: string, id: string, entity: string }
     | { __typename: 'SearchResultPartner', name: string, phone: string | null, id: string, entity: string }

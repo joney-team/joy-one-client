@@ -13,6 +13,7 @@ import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { useFolderStatuses } from "../../hooks/use-task-statuses";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -38,6 +39,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const { activatedFolder, isReady, state } = useTasks();
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
+  const { statuses, loading } = useFolderStatuses(activatedFolder?._id);
 
   useEffect(() => {
     const pageLayout = document.getElementById("LayoutPage");
@@ -45,42 +47,44 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
 
     if (pageLayout && scrollArea) {
       const calculateScrollArea = () => {
-        const container = scrollArea.getBoundingClientRect();
-        scrollArea.style.minHeight = `calc(100dvh - ${container.top}px)`;
-        scrollArea.style.maxHeight = `calc(100dvh - ${container.top}px)`;
-        pageLayout.style.height = "100dvh";
+        requestAnimationFrameTimes(() => {
+          const container = scrollArea.getBoundingClientRect();
+          scrollArea.style.minHeight = `calc(100dvh - ${container.top}px)`;
+          scrollArea.style.maxHeight = `calc(100dvh - ${container.top}px)`;
+          pageLayout.style.height = "100dvh";
+        });
       };
 
-      window.addEventListener("resize", calculateScrollArea);
       calculateScrollArea();
+
+      window.addEventListener("resize", calculateScrollArea);
 
       return () => {
         window.removeEventListener("resize", calculateScrollArea);
         pageLayout.style.removeProperty("height");
       };
     }
-  }, [isReady]);
+  }, [isReady, loading]);
 
   useEffect(() => {
     if (!scrollAreaRef.current) return;
+
     return autoScrollForElements({
       element: scrollAreaRef.current,
       getAllowedAxis: () => "horizontal",
     });
-  }, []);
-
-  const { statuses, loading } = useFolderStatuses(activatedFolder?._id);
+  }, [loading]);
 
   const boardTasksGroup = useMemo(() => {
     if (!isReady || loading)
       return (
-        <Stack px={16}>
+        <Stack p={16}>
           <Skeleton height={500} />
         </Stack>
       );
 
     return (
-      <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
+      <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden", minHeight: 0 }}>
         <Group
           id="BoardHorizontalScroll"
           w="100%"
@@ -155,85 +159,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
 
   return (
     <Stack id="TasksBoardView" gap={0} mih={0} flex={1} miw={0}>
-      {/* {isReady && !loading ? (
-        <Stack gap={0} flex={1} miw={0} style={{ overflow: "hidden" }}>
-          <Group
-            id="BoardHorizontalScroll"
-            w="100%"
-            align="stretch"
-            flex={1}
-            mih={0}
-            ref={scrollAreaRef}
-            style={{
-              overflowX: "auto",
-              overflowY: "hidden",
-            }}
-          >
-            <Group
-              ref={containerRef}
-              wrap="nowrap"
-              w="max-content"
-              align="stretch"
-              flex={1}
-              p="sm"
-              gap="sm"
-              mih={0}
-            >
-              {statuses.inprogress.map((status, statusIndex) => (
-                <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
-              ))}
-
-              {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && (
-                <ModalConfigureStatuses>
-                  {(modal) => (
-                    <Card
-                      withBorder
-                      shadow="none"
-                      p="xs"
-                      w={300}
-                      style={{
-                        background: "transparent",
-                        border: "1px dashed rgba(0, 0, 0, 0.1)",
-                      }}
-                    >
-                      <Group>
-                        <Button
-                          variant="light"
-                          color="gray"
-                          size="xs"
-                          leftIcon={IconPlus}
-                          fz={12}
-                          onClick={() =>
-                            modal.open({
-                              contextType: activatedFolder ? TaskContextType.Folder : null,
-                              contextId: activatedFolder?._id ?? null,
-                              autoCreation: true,
-                            })
-                          }
-                        >
-                          <Trans>Add status</Trans>
-                        </Button>
-                      </Group>
-                    </Card>
-                  )}
-                </ModalConfigureStatuses>
-              )}
-
-              {state.showClosed &&
-                statuses.closed.map((status, statusIndex) => (
-                  <BoardGroupByStatuses key={status.id + statusIndex} status={status} />
-                ))}
-            </Group>
-          </Group>
-        </Stack>
-      ) : (
-        <Stack px={16}>
-          <Skeleton height={500} />
-        </Stack>
-      )} */}
-
       {boardTasksGroup}
-
       {props.children}
     </Stack>
   );

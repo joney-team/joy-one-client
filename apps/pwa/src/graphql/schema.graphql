@@ -51,6 +51,10 @@ enum AppLocale {
   VI
 }
 
+input AssignCustomerInput {
+  userIds: [String!]!
+}
+
 type BaseCustomFieldValue {
   customFieldId: String!
   value: AnyType
@@ -65,9 +69,11 @@ type Booking {
   customer: Customer
   customerId: String
   endTime: Float!
+  isArchived: Boolean
   note: String
   reasonForCancellation: String
   refs: [String!]
+  source: EntitySource
   startTime: Float!
   status: BookingStatus!
   title: String
@@ -103,11 +109,13 @@ type Category {
   customFields: [CustomField!]!
   description: String
   icon: String
+  isArchived: Boolean
   name: String!
   order: Float!
   parentId: String
   refs: [String!]
   slug: String!
+  source: EntitySource
   thumbnail: String
   type: CategoryType!
   updatedAt: Float
@@ -157,12 +165,14 @@ type Coupon {
   customFieldValues: [CustomFieldValue!]
   customerId: String
   expiredAt: Float
+  isArchived: Boolean
   isExpired: Boolean
   quantity: Float!
   receiptId: String
   refs: [String!]
   rule: CouponRule!
   ruleId: String!
+  source: EntitySource
   ticketId: String
   updatedAt: Float
 }
@@ -175,9 +185,11 @@ type CouponRule {
   description: String
   image: String
   isActive: Boolean!
+  isArchived: Boolean
   isCumulative: Boolean!
   name: String!
   refs: [String!]
+  source: EntitySource
   terms: [CouponRuleTerm!]!
   updatedAt: Float
 }
@@ -244,11 +256,13 @@ type CustomField {
   customFieldValues: [CustomFieldValue!]
   description: String
   entities: [String!]!
+  isArchived: Boolean
   key: String
   label: String!
   order: Float!
   placeholder: String
   refs: [String!]
+  source: EntitySource
   type: CustomFieldType!
   updatedAt: Float
 }
@@ -286,6 +300,7 @@ type CustomFieldsPaginated {
 type Customer {
   _id: String!
   assigneeUserIds: [String!]
+  assigneeUsers: [WorkspaceMember!]!
   avatar: String
   birthday: Float
   birthdayDate: Float
@@ -296,21 +311,30 @@ type Customer {
   customFieldValues: [CustomFieldValue!]
   email: String
   gender: Gender
+  isArchived: Boolean
   lastCheckin: Float
-  location: LocationEntity
+  location: Location
   medicalHistory: [String!]
   name: String!
   phone: String
   plainCode: String
+  presenterCustomer: Customer
   presenterCustomerId: String
   refs: [String!]
   relatedCustomerIds: [String!]
+  relationshipContacts: [CustomerRelationshipContact!]
   salaryAmount: Float
-  secondaryLocation: LocationEntity
+  secondaryLocation: Location
+  socialFacebookUrl: String
+  source: EntitySource
   tagIds: [String!]
   updatedAt: Float
-  vnLocation: LocationEntity
-  vnSecondaryLocation: LocationEntity
+  vnLocation: Location
+  vnLocationFullAddress: String
+  vnPrevLocationFullAddress: String
+  vnPrevSecondaryLocationFullAddress: String
+  vnSecondaryLocation: Location
+  vnSecondaryLocationFullAddress: String
   workspaceBranch: WorkspaceBranch
   workspaceBranchId: String
 }
@@ -322,13 +346,15 @@ type CustomerForm {
   customFieldValues: [CustomFieldValue!]
   dynamicData: AnyType
   email: String
-  location: LocationEntity
+  isArchived: Boolean
+  location: Location
   name: String!
   phone: String!
   refs: [String!]
+  source: EntitySource
   status: CustomerFormStatus!
   updatedAt: Float
-  vnLocation: LocationEntity
+  vnLocation: Location
   workspaceBranch: WorkspaceBranch
 }
 
@@ -344,6 +370,43 @@ type CustomerFormsPaginated {
   total: Float!
 }
 
+input CustomerInput {
+  assigneeUserIds: [String!]
+  avatar: String
+  birthday: Float
+  createdAt: Float
+  email: String
+  gender: Gender
+  location: LocationInput
+  medicalHistory: [String!]
+  name: String!
+  phone: String
+  plainCode: String
+  presenterCustomerId: String
+  relatedCustomerIds: [String!]
+  relationshipContacts: [CustomerRelationshipContactInput!]
+  salaryAmount: Float
+  secondaryLocation: LocationInput
+  socialFacebookUrl: String
+  source: EntitySource
+  tagIds: [String!]
+  vnLocation: LocationInput
+  vnSecondaryLocation: LocationInput
+  workspaceBranchId: String
+}
+
+type CustomerRelationshipContact {
+  name: String!
+  phone: String!
+  type: String!
+}
+
+input CustomerRelationshipContactInput {
+  name: String!
+  phone: String!
+  type: String!
+}
+
 type CustomersPaginated {
   results: [Customer!]!
   total: Float!
@@ -354,10 +417,12 @@ type DeviceEntity {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   identifyId: String
+  isArchived: Boolean
   lastActiveAt: Float!
   locale: AppLocale
   notificationToken: String
   refs: [String!]
+  source: EntitySource
   updatedAt: Float
   userAgent: String!
   userId: String
@@ -381,6 +446,7 @@ type EInvoice {
   customFieldValues: [CustomFieldValue!]
   invoiceData: JSONObject
   invoiceId: String!
+  isArchived: Boolean
   isCancelled: Boolean
   provider: PluginEInvoicesProviderType!
   providerData: JSONObject
@@ -388,8 +454,16 @@ type EInvoice {
   receiptCode: String!
   receiptId: String!
   refs: [String!]
+  source: EntitySource
   updatedAt: Float
   url: String
+}
+
+"""Available entity sources"""
+enum EntitySource {
+  IMPORT
+  INTERNAL
+  ZALO_OA
 }
 
 type Event {
@@ -399,10 +473,12 @@ type Event {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   data: JSONObject
+  isArchived: Boolean
   persist: Boolean
   ref: String
   refs: [String!]
   sessionId: String
+  source: EntitySource
   time: Float!
   type: EventType!
   updatedAt: Float
@@ -630,6 +706,7 @@ type File {
   customFieldValues: [CustomFieldValue!]
   externalUrl: String
   fileName: String!
+  isArchived: Boolean
   path: String!
   ref: String
   refs: [String!]
@@ -641,6 +718,7 @@ type File {
   relatedReceiptId: String
   relativePath: String
   size: Float
+  source: EntitySource
   thumbnail: String
   type: FileType!
   updatedAt: Float
@@ -732,6 +810,7 @@ type Loan {
   customerId: String!
   fulfilledAt: Float
   id: String!
+  isArchived: Boolean
   isHasLateInterestReceipt: Boolean
   isLiquidated: Boolean
   metadata: AnyType
@@ -746,6 +825,7 @@ type Loan {
   rejectReason: String
   relatedEntities: [RelatedEntity!]
   signature: String
+  source: EntitySource
   status: LoanStatus!
   updatedAt: Float
   workspaceBranch: WorkspaceBranch
@@ -851,7 +931,7 @@ type LoansPaginated {
   total: Float!
 }
 
-type LocationEntity {
+type Location {
   address: String
   coordinates: Coordinates
   districtId: String
@@ -871,15 +951,19 @@ type Mutation {
   addActivity(content: String, contextId: String!, contextType: String!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   archiveActivity(id: String!): Activity!
+  archiveCustomer(id: String!): Boolean!
+  assignCustomer(id: String!, input: AssignCustomerInput!): Customer!
   assignWorkspaceMemberRoles(memberId: String!, roleIds: [String!]!): WorkspaceMember!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   cancelBooking(id: String!, reason: String!): Booking!
   createBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+  createCustomer(input: CustomerInput!): Customer!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   createTag(input: TagDto!): Tag!
   createTask(input: CreateTaskInput!): Task!
+  createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
   createWorkspaceRole(color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   deleteCategory(id: String!): Boolean!
   deleteWorkspaceRole(_id: String!): Boolean!
@@ -902,8 +986,10 @@ type Mutation {
   updateActivity(content: String, id: String!): Activity!
   updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+  updateCustomer(id: String!, input: CustomerInput!): Customer!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
+  updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   updateWorkspaceSetting(allowDuplicateBookings: Boolean, allowPayTicketMultipleTimes: Boolean, allowTip: Boolean, bankAccount: PluginBankAccountInput, bookingsAutoRemindCustomerBookingBeforeDays: Float, bookingsAutoRemindCustomerBookingTime: String, currencyCode: String, hrmTimeKeepingsRules: HrmTimekeepingsRulesInput, isAuthSessionRestricted: Boolean, loanSettings: LoanSettingsInput, mailer: PluginMailerAccountInput, memberPermissions: [String!], privacyPolicy: String, receiptImagesRequired: Boolean, receiptPaymentMethodDefault: ReceiptPaymentMethod, schedule: WorkspaceScheduleInput, searchSettings: WorkspaceSearchSettingsInput, termsOfService: String, view: WorkspaceViewInput, zaloOaGmfGroupSettings: JSONObject): WorkspaceSetting!
@@ -922,6 +1008,7 @@ type Order {
   customFieldValues: [BaseCustomFieldValue!]
   discounts: [OrderDiscount!]!
   id: String!
+  isArchived: Boolean
   isFulfilled: Boolean
   items: AnyType!
   note: String
@@ -933,6 +1020,7 @@ type Order {
   relatedCustomerId: String
   relatedEntities: [RelatedEntity!]
   relatedUserIds: [String!]
+  source: EntitySource
   totalAmount: Float!
   type: OrderType
   updatedAt: Float
@@ -981,10 +1069,12 @@ type Partner {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   email: String
+  isArchived: Boolean
   logo: String
   name: String!
   phone: String
   refs: [String!]
+  source: EntitySource
   updatedAt: Float
 }
 
@@ -1048,11 +1138,13 @@ type Posts {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   excerpt: String
+  isArchived: Boolean
   meta: JSONObject
   productId: String
   publishedAt: Float
   refs: [String!]
   slug: String!
+  source: EntitySource
   thumbnail: String
   title: String!
   updatedAt: Float
@@ -1067,10 +1159,12 @@ type Prescription {
   _id: String!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
+  isArchived: Boolean
   items: AnyType!
   name: String!
   note: String
   refs: [String!]
+  source: EntitySource
   updatedAt: Float
 }
 
@@ -1093,6 +1187,7 @@ type Product {
   displayName: String
   image: String
   inStock: Float
+  isArchived: Boolean
   isHiddenInReceiptWhenNoPrice: Boolean
   isStockCheck: Boolean
   maxPrice: Float
@@ -1101,6 +1196,7 @@ type Product {
   price: Float!
   productCode: String
   refs: [String!]
+  source: EntitySource
   supplies: [ProductSupply!]
   tags: [String!]!
   type: ProductType!
@@ -1123,10 +1219,12 @@ type ProductCombo {
   customerId: String!
   expireAt: Float
   id: String!
+  isArchived: Boolean
   productId: String!
   productRefs: [ProductComboRef!]!
   refs: [String!]
   relatedEntities: [RelatedEntity!]
+  source: EntitySource
   sourceId: String!
   status: ProductComboStatus!
   updatedAt: Float
@@ -1173,6 +1271,7 @@ type ProductStock {
   customFieldValues: [BaseCustomFieldValue!]
   expireAt: Float!
   id: String!
+  isArchived: Boolean
   note: String
   product: Product!
   productId: String!
@@ -1181,6 +1280,7 @@ type ProductStock {
   refs: [String!]
   relatedEntities: [RelatedEntity!]
   remainQuantity: Float!
+  source: EntitySource
   updatedAt: Float
 }
 
@@ -1191,6 +1291,7 @@ type ProductStockRecord {
   createdByUser: WorkspaceMember
   customFieldValues: [BaseCustomFieldValue!]
   id: String!
+  isArchived: Boolean
   note: String
   product: Product!
   productId: String!
@@ -1202,6 +1303,7 @@ type ProductStockRecord {
   relatedOrderId: String
   relatedProduct: Product
   relatedProductId: String
+  source: EntitySource
   stockCode: String!
   type: ProductStockRecordType!
   updatedAt: Float
@@ -1248,10 +1350,12 @@ type ProductVoucher {
   customFieldValues: [CustomFieldValue!]
   customerId: String!
   expireAt: Float
+  isArchived: Boolean
   productVoucherId: String!
   ref: String!
   refs: [String!]
   relatedTicketId: String!
+  source: EntitySource
   status: ProductVoucherStatus!
   updatedAt: Float
 }
@@ -1284,11 +1388,13 @@ type Promotion {
   expireAt: Float
   id: String!
   image: String
+  isArchived: Boolean
   limitPerCustomer: Float
   name: String!
   productsSelection: JSONObject
   refs: [String!]
   relatedEntities: [RelatedEntity!]
+  source: EntitySource
   status: PromotionStatus!
   type: PromotionType!
   updatedAt: Float
@@ -1325,8 +1431,10 @@ type Query {
   coupons(limit: Float = 30, offset: Float, query: JSONObject): CouponsPaginated!
   customFields(limit: Float = 30, offset: Float, query: JSONObject): CustomFieldsPaginated!
   customer(id: String!): Customer!
+  customerByCode(code: String!): Customer!
   customerForms(limit: Float = 30, offset: Float, query: JSONObject): CustomerFormsPaginated!
   customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
+  customersByIds(ids: [String!]!): [Customer!]!
   eInvoices(limit: Float = 30, offset: Float, query: JSONObject): PluginEInvoicesPaginated!
   event(id: String!): Event!
   events(limit: Float = 30, offset: Float, ref: String, type: EventType, userId: String): EventsPaginated!
@@ -1366,7 +1474,9 @@ type Query {
   userWorkspaceMembers: [WorkspaceMember!]!
   workspace: Workspace!
   workspaceApiApps(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceApiAppsPaginated!
+  workspaceBranch(id: String!): WorkspaceBranch!
   workspaceBranches(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceBranchesPaginated!
+  workspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
   workspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
   workspaceMember(userId: String!): WorkspaceMember!
   workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, userId: [String!]): WorkspaceMembersPaginated!
@@ -1427,6 +1537,7 @@ type Receipt {
   expireAt: Float
   giveAmount: AnyType
   id: String!
+  isArchived: Boolean
   note: String
   paidAt: Float
   paymentMethod: ReceiptPaymentMethod
@@ -1440,6 +1551,7 @@ type Receipt {
   relatedOrderId: String
   relatedPartnerId: String
   relatedTicketId: String
+  source: EntitySource
   status: ReceiptStatus!
   tipAmount: AnyType
   type: ReceiptType!
@@ -1495,6 +1607,7 @@ type SearchResultCategory implements SearchResult {
 }
 
 type SearchResultCustomer implements SearchResult {
+  avatar: String
   code: String!
   entity: String!
   id: String!
@@ -1594,10 +1707,12 @@ type Tag {
   color: String
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
+  isArchived: Boolean
   name: String!
   order: Float!
   refs: [String!]
   slug: String!
+  source: EntitySource
   type: TagType!
   updatedAt: Float
 }
@@ -1658,6 +1773,7 @@ type Task {
   progress: Float!
   refs: [String!]
   relatedUserIds: [String!]!
+  source: EntitySource
   startDate: Float
   status: String!
   statuses: [TaskStatus!]!
@@ -1820,7 +1936,7 @@ type Workspace {
   inviteCode: String
   isArchived: Boolean
   locale: AppLocale
-  location: LocationEntity
+  location: Location
   logo: String
   name: String!
   phone: String
@@ -1833,10 +1949,12 @@ type WorkspaceApiApp {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   enabled: Boolean!
+  isArchived: Boolean
   member: WorkspaceMember!
   memberId: String!
   refs: [String!]
   secretKey: String!
+  source: EntitySource
   updatedAt: Float
   userId: String!
 }
@@ -1851,10 +1969,28 @@ type WorkspaceBranch {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   hotline: String
-  location: LocationEntity!
+  isArchived: Boolean
+  location: Location!
   name: String!
   refs: [String!]
+  settings: WorkspaceBranchSettings
+  source: EntitySource
   updatedAt: Float
+}
+
+input WorkspaceBranchInput {
+  hotline: String
+  location: LocationInput
+  name: String!
+  settings: WorkspaceBranchSettingsInput
+}
+
+type WorkspaceBranchSettings {
+  bankAccount: PluginBankAccount
+}
+
+input WorkspaceBranchSettingsInput {
+  bankAccount: PluginBankAccountInput
 }
 
 type WorkspaceBranchesPaginated {
@@ -1912,6 +2048,7 @@ enum WorkspaceMemberWorkingTimeType {
 
 type WorkspaceMemberWorkspaceBranchInfo {
   _id: String!
+  hotline: String
   name: String!
 }
 
@@ -1959,6 +2096,7 @@ type WorkspaceSetting {
   currencyCode: String
   customFieldValues: [CustomFieldValue!]
   hrmTimeKeepingsRules: HrmTimekeepingsRules
+  isArchived: Boolean
   isAuthSessionRestricted: Boolean
   loanSettings: LoanSettings
   mailer: PluginMailerAccount
@@ -1969,10 +2107,10 @@ type WorkspaceSetting {
   refs: [String!]
   schedule: WorkspaceSchedule
   searchSettings: WorkspaceSearchSettings
+  source: EntitySource
   termsOfService: String
   updatedAt: Float
   view: WorkspaceView
-  wSlots: [AnyType!] @deprecated(reason: "Use schedule instead")
   zaloOaGmfGroupSettings: JSONObject
 }
 
@@ -1982,9 +2120,11 @@ type WorkspaceStat {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   customerCount: Float
+  isArchived: Boolean
   memberCount: Float
   orderCount: Float
   refs: [String!]
+  source: EntitySource
   storageUsage: Float
   updatedAt: Float
   workspace: WorkspaceStatWorkspaceInformation!

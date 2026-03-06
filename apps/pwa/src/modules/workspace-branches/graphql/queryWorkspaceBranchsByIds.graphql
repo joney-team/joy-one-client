@@ -1,0 +1,7 @@
+#import "./fragmentWorkspaceBranch.graphql"
+
+query WorkspaceBranchesByIds($ids: [String!]!) {
+  branches: workspaceBranchesByIds(ids: $ids) {
+    ...WorkspaceBranchData
+  }
+}

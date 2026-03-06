@@ -306,8 +306,8 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
                       />
                     </ThemeIcon>
                   }
-                  onClick={() => workspace.select(member.workspaceId!)}
-                  label={member.workspace!.name}
+                  onClick={() => workspace.select(member.workspaceId)}
+                  label={member.workspace.name}
                 />
               );
             })}

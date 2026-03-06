@@ -5,29 +5,31 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { LocationForm } from "@/components/location-form";
 import { createCustomerForm } from "@/modules/customer-forms/customer-form-service";
-import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
+import QUERY_WORKSPACE_BRANCH from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
 import { getWorkspaceById } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Card, Center, Group, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
+import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { CustomerFormEntity } from "./customer-form-entity";
 
 export const CustomerFormRegister: FC = () => {
   const app = useApp();
-  const params = useParams();
-  const workspaceId = app.metadata.workspaceId || (params.workspaceId as string);
+  const client = useApolloClient();
+  const params = useParams<{ workspaceId: string; workspaceBranchId: string }>();
+  const workspaceId = app.metadata.workspaceId || params.workspaceId;
   const workspaceBranchId =
     params.workspaceBranchId && params.workspaceBranchId !== "main"
       ? (params.workspaceBranchId as string)
       : null;
   const state = useRef<{
     workspace: WorkspaceEntity | null;
-    workspaceBranch: WorkspaceBranchEntity | null;
+    workspaceBranch: WorkspaceBranchDataFragment | null;
   }>({
     workspace: null,
     workspaceBranch: null,
@@ -78,7 +80,11 @@ export const CustomerFormRegister: FC = () => {
     try {
       state.current.workspace = await getWorkspaceById(workspaceId);
       if (workspaceBranchId) {
-        state.current.workspaceBranch = await getWorkspaceBranchById(workspaceBranchId);
+        const results = await client.query({
+          query: QUERY_WORKSPACE_BRANCH,
+          variables: { id: workspaceBranchId },
+        });
+        state.current.workspaceBranch = results.data?.workspaceBranch ?? null;
       }
       setIsInitializing(false);
     } catch (error) {

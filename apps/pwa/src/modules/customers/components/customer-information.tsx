@@ -2,12 +2,10 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { useLayout } from "@/layout/layout-context";
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { CustomerEntity } from "@/modules/customers/customer-types";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
-import { OnModalCustomerRelationshipContacts } from "@/modules/customers/modals/modal-customer-relationship-contacts";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
@@ -19,8 +17,9 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useFetch } from "@/utils/use-fetch.util";
+import { useMutation } from "@apollo/client/react";
 import config from "@joy-one-client/config";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -41,7 +40,6 @@ import { useClickOutside } from "@mantine/hooks";
 import {
   IconAddressBook,
   IconCake,
-  IconClipboardHeart,
   IconMail,
   IconPencil,
   IconPhone,
@@ -53,24 +51,29 @@ import { FC, Fragment, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 import { ModalCustomer } from "../customer-modal";
-import { assignCustomer, renderGener, renderGenerIcon, updateCustomer } from "../customer-service";
-import { CustomerLocations } from "./customer-locations";
-import { WorkspaceType } from "@/graphql/enums.graphql";
+import { customerGenders, normalizeCustomerInput } from "../customer-service";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+
+import ASSIGN_CUSTOMER from "../graphql/mutationAssignCustomer.graphql";
+import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
 
 interface CustomerInformationsProps {
-  customer: CustomerEntity;
+  customer: CustomerDataFragment;
   withBorder?: boolean;
 }
 
 export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
-  const viewport = useLayout();
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const tags = useTags();
   const isCanUpdateInfo = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
   const uploadFile = useUploadFile();
 
   const { customer } = props;
-  const IconGender = renderGenerIcon(customer.gender);
+  const customerGener = customer.gender ? customerGenders[customer.gender] : null;
+
+  const [updateCustomer] = useMutation(UPDATE_CUSTOMER);
+  const [assignCustomer] = useMutation(ASSIGN_CUSTOMER);
 
   const [tagListOpened, setTagListOpened] = useState(false);
   const ref = useClickOutside(() => setTagListOpened(false));
@@ -86,7 +89,12 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
         refs: [`${AppEntity.CUSTOMERS}:${customer._id}`],
         compressSize: 1,
       });
-      await updateCustomer(customer._id, { ...customer, avatar: avatarFile.path });
+      await updateCustomer({
+        variables: {
+          id: customer._id,
+          input: normalizeCustomerInput({ ...customer, avatar: avatarFile.path }),
+        },
+      });
     } catch (error) {
       onError(error);
     }
@@ -94,15 +102,25 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
 
   const toggleTag = async (tag: any) => {
     if (customer.tagIds?.includes(tag._id)) {
-      updateCustomer(customer._id, {
-        ...customer,
-        tagIds: (customer.tagIds || []).filter((tagId) => tagId !== tag._id),
-      }).catch(onError);
+      await updateCustomer({
+        variables: {
+          id: customer._id,
+          input: normalizeCustomerInput({
+            ...customer,
+            tagIds: (customer.tagIds || []).filter((tagId) => tagId !== tag._id),
+          }),
+        },
+      });
     } else {
-      updateCustomer(customer._id, {
-        ...customer,
-        tagIds: [...(customer.tagIds || []), tag._id],
-      }).catch(onError);
+      await updateCustomer({
+        variables: {
+          id: customer._id,
+          input: normalizeCustomerInput({
+            ...customer,
+            tagIds: [...(customer.tagIds || []), tag._id],
+          }),
+        },
+      });
     }
   };
 
@@ -172,12 +190,12 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       </Group>
                     )}
 
-                    {customer.gender && (
+                    {customer.gender && customerGener && (
                       <Group gap={1} wrap="nowrap">
                         <ThemeIcon color="dark" variant="transparent">
-                          <IconGender strokeWidth={1.5} size={18} />
+                          <customerGener.icon strokeWidth={1.5} size={18} />
                         </ThemeIcon>
-                        <Text fz={em(15)}>{renderGener(customer.gender)}</Text>
+                        <Text fz={em(15)}>{t(customerGener.label)}</Text>
                       </Group>
                     )}
 
@@ -225,7 +243,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         c="dark"
                         onClick={(e) => {
                           e.stopPropagation();
-                          OnModalCustomerRelationshipContacts({ customer });
+                          // OnModalCustomerRelationshipContacts({ customer });
                         }}
                       >
                         <Group gap={1} wrap="nowrap">
@@ -256,40 +274,8 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       </Anchor>
                     )}
                   </Group>
-
-                  {viewport.view !== "mobile" && (
-                    <Fragment>
-                      {customer.medicalHistory.length > 0 && (
-                        <Group gap={1} wrap="nowrap">
-                          <ThemeIcon color="dark" variant="transparent">
-                            <IconClipboardHeart strokeWidth={1.5} size={20} />
-                          </ThemeIcon>
-                          <Text fz={16}>
-                            {customer.medicalHistory.toString().replace(/,/g, ", ")}
-                          </Text>
-                        </Group>
-                      )}
-
-                      <CustomerLocations customer={customer} />
-                    </Fragment>
-                  )}
                 </Stack>
               </Group>
-
-              {viewport.view === "mobile" && (
-                <Fragment>
-                  {customer.medicalHistory.length > 0 && (
-                    <Group gap={1} wrap="nowrap">
-                      <ThemeIcon color="dark" variant="transparent">
-                        <IconClipboardHeart strokeWidth={1.5} size={20} />
-                      </ThemeIcon>
-                      <Text fz={16}>{customer.medicalHistory.toString().replace(/,/g, ", ")}</Text>
-                    </Group>
-                  )}
-
-                  <CustomerLocations customer={customer} />
-                </Fragment>
-              )}
 
               <Group gap={1} wrap="nowrap">
                 <ThemeIcon color="dark" variant="transparent">
@@ -415,7 +401,14 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                 showMainResponsible
                 value={customer.assigneeUsers}
                 onChange={(users) =>
-                  assignCustomer(customer._id, { userIds: users.map((v) => v.userId) })
+                  assignCustomer({
+                    variables: {
+                      id: customer._id,
+                      input: {
+                        userIds: users.map((v) => v.userId),
+                      },
+                    },
+                  })
                 }
                 disabled={!workspace.hasPermission(WorkspacePermission.CUSTOMERS_ASSIGN)}
               />

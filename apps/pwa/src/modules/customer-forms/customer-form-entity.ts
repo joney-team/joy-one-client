@@ -1,13 +1,14 @@
-import type { BaseMongoEntity } from '@/types';
-import { LocationEntity } from '../locations/locations-types';
-import { CustomerFormStatus } from './customer-form-types';
+import { Location } from "@/graphql/types.graphql";
+import type { BaseMongoEntity } from "@/types";
+import { CustomerFormStatus } from "./customer-form-types";
 
-export interface CustomerFormEntity extends Omit<BaseMongoEntity, 'workspaceId' | 'workspaceBranchId'> {
+export interface CustomerFormEntity
+  extends Omit<BaseMongoEntity, "workspaceId" | "workspaceBranchId"> {
   name: string;
   phone: string;
   email?: string;
-  location?: LocationEntity;
-  vnLocation?: LocationEntity;
+  location?: Location;
+  vnLocation?: Location;
   dynamicData?: any;
   status: CustomerFormStatus;
   workspaceId: string;

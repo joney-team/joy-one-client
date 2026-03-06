@@ -2,15 +2,15 @@
 
 import { Button } from "@/components/buttons/button";
 import { searchEntity } from "@/modules/search/search-service";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
+import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 
-type WorkspaceBranchOption = Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline">;
+type WorkspaceBranchOption = Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">;
 
 interface WorkspaceBranchesSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {}
 

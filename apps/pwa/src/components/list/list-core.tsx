@@ -210,6 +210,8 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
         const defaultWidth = column.defaultWidth ?? column.minWidth ?? 120;
         const minWidth = column.minWidth ?? 100;
 
+        if (column.disabled) return acc;
+
         return [
           ...acc,
           {

@@ -1,0 +1,3 @@
+mutation ArchiveCustomer($id: String!) {
+  archiveCustomer(id: $id)
+}

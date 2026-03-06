@@ -2,10 +2,10 @@ import { ResponseList } from "@/types";
 import { PropsWithChildren, type FC } from "react";
 import { useRestQuery } from "../apis/use-rest-query";
 import { GetGoogleMapLink, LocationsContext, RenderVnLocation } from "./locations-context";
-import { Location } from "./locations-types";
+import { RawLocation } from "./locations-types";
 
 export const LocationsProvider: FC<PropsWithChildren> = (props) => {
-  const vnLocationsQuery = useRestQuery<ResponseList<Location>>({
+  const vnLocationsQuery = useRestQuery<ResponseList<RawLocation>>({
     route: "/locations/vn",
   });
 

@@ -1,7 +1,11 @@
-import { BasePostgresEntity } from '@/types';
-import { CustomerEntity } from '../customers/customer-types';
-import { ProductEntity } from '../products/products-types';
-import { ProductComboHistoryRecord, ProductComboRef, ProductComboSourceType, ProductComboStatus } from './product-combos-types';
+import { BasePostgresEntity } from "@/types";
+import { ProductEntity } from "../products/products-types";
+import {
+  ProductComboHistoryRecord,
+  ProductComboRef,
+  ProductComboSourceType,
+  ProductComboStatus,
+} from "./product-combos-types";
 
 export interface ProductComboHistoryEntity extends BasePostgresEntity {
   productComboId: string;
@@ -15,7 +19,7 @@ export interface ProductComboEntity extends BasePostgresEntity {
   productId: string;
   product: ProductEntity;
   customerId: string;
-  customer: CustomerEntity;
+  customer: any;
   workspaceId: string;
   productRefs: ProductComboRef[];
   sourceType: ProductComboSourceType;

@@ -11,15 +11,13 @@ import {
   ModalCreateBookingRef,
 } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { getCustomer } from "@/modules/customers/customer-service";
-import { CustomerEntity } from "@/modules/customers/customer-types";
+import { useCustomer } from "@/modules/customers/hooks/useCustomer";
 import { ModalCreateLoan, ModalCreateLoanRef } from "@/modules/loans/modals/modal-create-loan";
 import { setCustomerToMessageBox } from "@/modules/message-boxes/message-boxes-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
-import { useFetch } from "@/utils/use-fetch.util";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -69,21 +67,18 @@ export const MetadataMessageBox: FC = () => {
   const { messageBox } = messageBoxes;
   const { workspaceView } = useWorkspaceSetting();
 
-  const customer = useFetch<CustomerEntity | null>({
-    id: `${messageBox?._id}-${messageBox?.customerId}`,
-    fetch: async () => (messageBox?.customerId ? getCustomer(messageBox.customerId) : null),
-  });
+  const { customer, loading: customerLoading } = useCustomer(messageBox?.customerId);
 
   if (!messageBox) return null;
 
-  if (customer.isFetching)
+  if (customerLoading)
     return (
       <Stack flex={1} p={16} align="center" justify="center">
         <Skeleton flex={1} />
       </Stack>
     );
 
-  if (customer.data)
+  if (customer)
     return (
       <Stack flex={1} gap={0}>
         <Group
@@ -95,24 +90,24 @@ export const MetadataMessageBox: FC = () => {
           }}
         >
           <Group gap={8}>
-            <Avatar radius={8} customer={customer.data} />
+            <Avatar radius={8} customer={customer} />
             <Stack gap={0}>
               <Text fz={12} c="gray">
-                #{customer.data.code}
+                #{customer.code}
               </Text>
-              <Text fw={500}>{customer.data.name}</Text>
+              <Text fw={500}>{customer.name}</Text>
             </Stack>
           </Group>
 
           <Group gap={8}>
-            {customer.data.email && (
-              <ActionIcon variant="light" component={Link} href={`mailto:${customer.data.email}`}>
+            {customer.email && (
+              <ActionIcon variant="light" component={Link} href={`mailto:${customer.email}`}>
                 <IconMail size={16} />
               </ActionIcon>
             )}
 
-            {customer.data.phone && (
-              <ActionIcon variant="light" component={Link} href={`tel:${customer.data.phone}`}>
+            {customer.phone && (
+              <ActionIcon variant="light" component={Link} href={`tel:${customer.phone}`}>
                 <IconPhoneCall size={16} />
               </ActionIcon>
             )}
@@ -170,7 +165,7 @@ export const MetadataMessageBox: FC = () => {
                                   onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
-                                    const customerData = customer.data;
+                                    const customerData = customer;
                                     if (!customerData) return;
 
                                     item.onCreate?.(customerData, {
@@ -196,7 +191,7 @@ export const MetadataMessageBox: FC = () => {
                           </Accordion.Control>
 
                           <Accordion.Panel>
-                            <item.component customer={customer.data!} />
+                            <item.component customer={customer} />
                           </Accordion.Panel>
                         </Accordion.Item>
                       );

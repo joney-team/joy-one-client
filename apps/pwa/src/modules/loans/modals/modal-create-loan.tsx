@@ -12,7 +12,7 @@ import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-regi
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { CreateLoanDto } from "@/modules/loans/loan-dtos";
@@ -64,7 +64,7 @@ import {
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
-  customer?: CustomerShortInfo;
+  customer?: CustomerDataFragment;
 }
 
 export interface ModalCreateLoanRef {
@@ -113,7 +113,7 @@ export const ModalCreateLoan = forwardRef<
   const [isInitialized, setIsInitialized] = useState(false);
   const [isFetchingCustomerKyc, setIsFetchingCustomerKyc] = useState(false);
 
-  const [customer, setCustomer] = useState<CustomerShortInfo>();
+  const [customer, setCustomer] = useState<CustomerDataFragment>();
   const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
 
   const form = useForm({

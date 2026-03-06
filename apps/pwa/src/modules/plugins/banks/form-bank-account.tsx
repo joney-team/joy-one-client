@@ -7,10 +7,11 @@ import { em, Group, Select, SelectProps, SimpleGrid, Stack, Text, TextInput } fr
 import { IconCheck } from "@tabler/icons-react";
 import { FC } from "react";
 import { Image } from "../../../components/image";
+import { PluginBankAccountInput } from "@/graphql/types.graphql";
 
 interface FormBankAccountProps {
-  bankAccount?: Partial<BankAccount>;
-  onChange: (bankAccount?: Partial<BankAccount>) => any;
+  bankAccount?: Partial<PluginBankAccountInput> | null | undefined;
+  onChange: (bankAccount?: PluginBankAccountInput) => any;
 }
 
 export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChange }) => {

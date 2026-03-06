@@ -6,7 +6,6 @@ import { EntityImage } from "@/components/entity-image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { genders } from "@/constant";
 import { useFormSubmit } from "@/hooks/use-form";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
@@ -38,6 +37,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
 import { InputModalType, ModalInput } from "../../modals/modal-input";
+import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useLocations } from "../locations/locations-context";
@@ -45,7 +45,7 @@ import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
 import { CustomerKycDto } from "./customer-kycs-types";
 
 interface ModalRegisterCustomerKycArgs {
-  customer: CustomerShortInfo;
+  customer: CustomerDataFragment;
   onDone?: () => void | Promise<void>;
 }
 

@@ -1,0 +1,10 @@
+fragment LocationData on Location {
+  provinceId
+  districtId
+  wardId
+  address
+  coordinates {
+    lat
+    lng
+  }
+}

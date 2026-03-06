@@ -14,7 +14,7 @@ import { Stack, Text, Title } from "@mantine/core";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useLocations } from "../locations/locations-context";
-import { WorkspaceBranchEntity } from "./workspace-branches-types";
+import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import QUERY_WORKSPACE_BRANCHES from "./graphql/queryWorkspaceBranches.graphql";
 
 export const WorkspaceBranchList: FC = () => {
@@ -24,7 +24,7 @@ export const WorkspaceBranchList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List<WorkspaceBranchEntity>
+      <List<WorkspaceBranchDataFragment>
         creatable={{
           onCreate: () => OnWorkspaceBranchModal(),
           permission: WorkspacePermission.WORKSPACE_SETTINGS,

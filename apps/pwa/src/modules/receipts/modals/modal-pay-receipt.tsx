@@ -27,8 +27,8 @@ import {
   ReceiptType,
 } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
+import WORKSPACE_BRANCH_QUERY from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
-import { getWorkspaceBranchById } from "@/modules/workspace-branches/workspace-branches-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -36,6 +36,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { loadImage } from "@joy-one-client/utils/assets";
 import { t } from "@lingui/core/macro";
@@ -71,6 +72,7 @@ import {
 import { PrintButton } from "../../../modals/modal-printer";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { type ModalReceiptDetailRef } from "./modal-receipt-detail";
+import { WorkspaceBranchDataFragment } from "@/modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 
 const ModalReceiptDetail = dynamic(
   () => import("./modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
@@ -93,6 +95,7 @@ export interface ModalPayReceiptRef {
 
 const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const workspace = useWorkspace();
+  const client = useApolloClient();
   const { workspaceSetting } = useWorkspaceSetting();
   const theme = useMantineTheme();
   const banks = useBanks();
@@ -132,11 +135,20 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
 
   const [transactionDesc, setTransactionDesc] = useState<string>("");
   const [giveAmount, setGiveAmount] = useState<number>();
-  const [workspaceBranch, setWorkspaceBranch] = useState(workspace.defaultBranch);
+  const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
+    WorkspaceBranchDataFragment,
+    "_id" | "name" | "hotline"
+  > | null>(workspace.defaultBranch ?? null);
   const totalAmount = receipt ? round(receipt.amount + (receipt.tipAmount || 0)) : 0;
 
+  const { data: workspaceBranchData } = useQuery(WORKSPACE_BRANCH_QUERY, {
+    variables: { id: workspaceBranch?._id ?? "" },
+    skip: !receipt?.workspaceBranchId,
+  });
+
   const bankInformation = useMemo(() => {
-    const bankAccount = workspaceBranch?.settings?.bankAccount || workspaceSetting?.bankAccount;
+    const bankAccount =
+      workspaceBranchData?.workspaceBranch?.settings?.bankAccount || workspaceSetting?.bankAccount;
     const bankInformation = banks.find((v) => v.id === bankAccount?.bankId);
 
     if (
@@ -164,7 +176,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
         }
       ),
     };
-  }, [workspaceBranch, banks, transactionDesc]);
+  }, [workspaceBranchData, banks, transactionDesc]);
 
   const onClose = async () => {
     if (!receipt) return;
@@ -218,8 +230,11 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     setReceipt(data);
 
     if (data.workspaceBranchId) {
-      const branch = await getWorkspaceBranchById(data.workspaceBranchId);
-      setWorkspaceBranch(branch);
+      const { data: branchData } = await client.query({
+        query: WORKSPACE_BRANCH_QUERY,
+        variables: { id: data.workspaceBranchId },
+      });
+      setWorkspaceBranch(branchData?.workspaceBranch ?? null);
     } else {
       setWorkspaceBranch(null);
     }

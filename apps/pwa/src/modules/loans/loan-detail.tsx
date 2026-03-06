@@ -17,7 +17,6 @@ import {
   type CustomerKycEntity,
   CustomerKycStatus,
 } from "@/modules/customer-kycs/customer-kycs-types";
-import { getCustomer } from "@/modules/customers/customer-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { useLoans } from "@/modules/loans/loans-context";
 import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
@@ -70,6 +69,10 @@ import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
+import { useQuery } from "@apollo/client/react";
+
+import QUERY_CUSTOMER from "../customers/graphql/queryCustomer.graphql";
+import { useCustomer } from "../customers/hooks/useCustomer";
 
 const RelatedLoans = dynamic(
   () => import("./components/related-loans").then((mod) => mod.RelatedLoans),
@@ -201,12 +204,11 @@ export const LoanDetail: NextPage = () => {
     },
   });
 
-  const customer = useFetch({
-    skip: !loan.data,
-    id: `customer-${loan.data?.customerId}`,
-    fetch: () => getCustomer(loan.data!.customerId),
-    refetchEvents: [EventType.CustomerUpdated],
-  });
+  const {
+    customer,
+    loading: customerLoading,
+    error: customerError,
+  } = useCustomer(loan.data?.customerId);
 
   const handleUpdateAssetData = useDebouncedCallback((assetData) => {
     onActionLoad({
@@ -243,17 +245,17 @@ export const LoanDetail: NextPage = () => {
       </Stack>
     );
 
-  if (loan.isFetching || !customerKyc || !loans.isInitialized || customer.isFetching)
+  if (loan.isFetching || !customerKyc || !loans.isInitialized || customerLoading)
     return (
       <Stack p={16}>
         <Skeleton height={250} />
       </Stack>
     );
 
-  if (!loan.data || !customer.data)
+  if (!loan.data || !customer || customerError)
     return (
       <Stack p={16}>
-        <Errored error={loan.error} centered />
+        <Errored error={loan.error ?? customerError} centered />
       </Stack>
     );
 
@@ -274,32 +276,27 @@ export const LoanDetail: NextPage = () => {
       <Stack p="sm">
         <Card shadow="xs">
           <Group align="start">
-            <EntityImage src={customer.data.avatar} readonly size={80} radius={10} />
+            <EntityImage src={customer.avatar} readonly size={80} radius={10} />
             <Stack gap={10} flex={1}>
               <Group justify="space-between" w="100%" align="start">
                 <Title fz={18} fw={600}>
-                  {customer.data.name}
+                  {customer.name}
                 </Title>
 
                 <Group gap={10}>
-                  {customer.data.phone &&
+                  {customer.phone &&
                     workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
-                      <Anchor
-                        href={`tel:${customer.data.phone}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <Anchor href={`tel:${customer.phone}`} onClick={(e) => e.stopPropagation()}>
                         <ActionIcon size="lg" radius={100}>
                           <IconPhone size={18} />
                         </ActionIcon>
                       </Anchor>
                     )}
 
-                  {(customer.data.location || customer.data.secondaryLocation) && (
+                  {(customer.location || customer.secondaryLocation) && (
                     <Anchor
                       onClick={(e) => e.stopPropagation()}
-                      href={getGoogleMapLink(
-                        customer.data.location! || customer.data.secondaryLocation!
-                      )}
+                      href={getGoogleMapLink(customer.location ?? customer.secondaryLocation)}
                       target="_blank"
                     >
                       <ActionIcon size="lg" radius={100} variant="outline">
@@ -315,8 +312,7 @@ export const LoanDetail: NextPage = () => {
                           onClick={(e) => {
                             e.stopPropagation();
                             modalCustomer.open({
-                              customer: customer.data,
-                              onDone: async () => {},
+                              customer: customer,
                             });
                           }}
                         >
@@ -332,12 +328,12 @@ export const LoanDetail: NextPage = () => {
 
               <SimpleGrid cols={{ md: 4 }}>
                 <InfoCard
-                  label={t`Birhtday`}
-                  visible={!!customer.data?.birthday}
+                  label={<Trans>Birhtday</Trans>}
+                  visible={!!customer?.birthday}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {customer.data.birthday ? (
-                        <DateFormat value={customer.data.birthday} type="date" />
+                      {customer.birthday ? (
+                        <DateFormat value={customer.birthday} type="date" />
                       ) : (
                         "--"
                       )}
@@ -346,39 +342,39 @@ export const LoanDetail: NextPage = () => {
                 />
 
                 <InfoCard
-                  label={t`Gender`}
-                  visible={!!customer.data?.gender}
+                  label={<Trans>Gender</Trans>}
+                  visible={!!customer?.gender}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {customer.data.gender ? genders[customer.data.gender].name() : "--"}
+                      {customer.gender ? genders[customer.gender].name() : "--"}
                     </Text>
                   }
                 />
 
                 <InfoCard
-                  label={t`Phone`}
+                  label={<Trans>Phone</Trans>}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {customer.data.phone ? formatPhoneNumber(customer.data.phone) : "--"}
+                      {customer.phone ? formatPhoneNumber(customer.phone) : "--"}
                     </Text>
                   }
-                  href={`tel:${customer.data.phone}`}
+                  href={`tel:${customer.phone}`}
                   visible={workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT)}
                 />
 
                 <InfoCard
-                  label={t`Email`}
-                  href={`mailto:${customer.data.email}`}
-                  visible={!!customer.data?.email}
+                  label={<Trans>Email</Trans>}
+                  href={`mailto:${customer.email}`}
+                  visible={!!customer?.email}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {customer.data.email}
+                      {customer.email}
                     </Text>
                   }
                 />
 
                 <InfoCard
-                  label={t`Loan package`}
+                  label={<Trans>Loan package</Trans>}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
                       {loan.data.package.id} / {t(loanAssetTypes[loan.data.assetType].label)}
@@ -387,7 +383,7 @@ export const LoanDetail: NextPage = () => {
                 />
 
                 <InfoCard
-                  label={t`Money amount`}
+                  label={<Trans>Money amount</Trans>}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
                       <CurrencyFormat value={loan.data.amount} />
@@ -397,17 +393,17 @@ export const LoanDetail: NextPage = () => {
 
                 {workspace.isShouldEnableBranches && (
                   <InfoCard
-                    label={t`Workspace branch`}
+                    label={<Trans>Workspace branch</Trans>}
                     content={
                       <Text truncate="end" fz={16} fw={500} maw={250}>
-                        {loan.data.workspaceBranch?.name || t`Main office`}
+                        {loan.data.workspaceBranch?.name || <Trans>Main office</Trans>}
                       </Text>
                     }
                   />
                 )}
 
                 <InfoCard
-                  label={t`Loan contract`}
+                  label={<Trans>Loan contract</Trans>}
                   content={
                     linkContractPdf ? (
                       <Group gap={4} align="center">
@@ -425,7 +421,7 @@ export const LoanDetail: NextPage = () => {
 
                 {linkLiquidationPdf && (
                   <InfoCard
-                    label={t`Liquidation statement`}
+                    label={<Trans>Liquidation statement</Trans>}
                     content={
                       linkLiquidationPdf ? (
                         <Group gap={4} align="center">
@@ -565,7 +561,7 @@ export const LoanDetail: NextPage = () => {
             {
               [
                 <Container size={900}>
-                  <LoanCustomerKyc customer={customer.data} kyc={customerKyc} />
+                  <LoanCustomerKyc customer={customer} kyc={customerKyc} />
                   <RelatedLoans
                     customerCidNumber={
                       customerKyc.versions[customerKyc.versions.length - 1].cidNumber

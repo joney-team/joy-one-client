@@ -4,14 +4,14 @@ import { Avatar } from "@/components/avatar";
 import { Column } from "@/components/list/types";
 import { useRouter } from "@/hooks/use-router";
 import { AppEntity } from "@/types";
+import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import { searchEntity } from "../../search/search-service";
 import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../../workspaces/workspace-context";
-import { getCustomerByIds } from "../customer-service";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import QUERY_CUSTOMERS_BY_IDS from "../graphql/queryCustomersByIds.graphql";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}
 
@@ -57,18 +57,28 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
         ...args?.filter,
         listRoute: "/customers",
         multiple: true,
-        getSelectedOptions: async (ids: string[]) => {
-          const options = await getCustomerByIds(ids);
-          return options.map((v) => ({
+        getSelectedOptions: async (ids: string[], client) => {
+          const results = await client.query({
+            query: QUERY_CUSTOMERS_BY_IDS,
+            variables: {
+              ids,
+            },
+          });
+          return (results.data?.customersByIds ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,
           }));
         },
-        search: async (query) => {
+        search: async (query, client) => {
           const result = await searchEntity(AppEntity.CUSTOMERS, query);
-          const options = await getCustomerByIds(result.map((v) => v._id));
-          return options.map((v) => ({
+          const results = await client.query({
+            query: QUERY_CUSTOMERS_BY_IDS,
+            variables: {
+              ids: result.map((v) => v._id),
+            },
+          });
+          return (results.data?.customersByIds ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,

@@ -73,6 +73,10 @@ export const AppLocale = {
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
+export type AssignCustomerInput = {
+  userIds: Array<Scalars['String']['input']>;
+};
+
 export type BaseCustomFieldValue = {
   __typename: 'BaseCustomFieldValue';
   customFieldId: Scalars['String']['output'];
@@ -89,9 +93,11 @@ export type Booking = {
   customer: Maybe<Customer>;
   customerId: Maybe<Scalars['String']['output']>;
   endTime: Scalars['Float']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   note: Maybe<Scalars['String']['output']>;
   reasonForCancellation: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   startTime: Scalars['Float']['output'];
   status: BookingStatus;
   title: Maybe<Scalars['String']['output']>;
@@ -131,11 +137,13 @@ export type Category = {
   customFields: Array<CustomField>;
   description: Maybe<Scalars['String']['output']>;
   icon: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   parentId: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   slug: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   thumbnail: Maybe<Scalars['String']['output']>;
   type: CategoryType;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -190,12 +198,14 @@ export type Coupon = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   customerId: Maybe<Scalars['String']['output']>;
   expiredAt: Maybe<Scalars['Float']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isExpired: Maybe<Scalars['Boolean']['output']>;
   quantity: Scalars['Float']['output'];
   receiptId: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   rule: CouponRule;
   ruleId: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   ticketId: Maybe<Scalars['String']['output']>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -209,9 +219,11 @@ export type CouponRule = {
   description: Maybe<Scalars['String']['output']>;
   image: Maybe<Scalars['String']['output']>;
   isActive: Scalars['Boolean']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isCumulative: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   terms: Array<CouponRuleTerm>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -285,11 +297,13 @@ export type CustomField = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   description: Maybe<Scalars['String']['output']>;
   entities: Array<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   key: Maybe<Scalars['String']['output']>;
   label: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   placeholder: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   type: CustomFieldType;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -331,6 +345,7 @@ export type Customer = {
   __typename: 'Customer';
   _id: Scalars['String']['output'];
   assigneeUserIds: Maybe<Array<Scalars['String']['output']>>;
+  assigneeUsers: Array<WorkspaceMember>;
   avatar: Maybe<Scalars['String']['output']>;
   birthday: Maybe<Scalars['Float']['output']>;
   birthdayDate: Maybe<Scalars['Float']['output']>;
@@ -341,21 +356,30 @@ export type Customer = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   email: Maybe<Scalars['String']['output']>;
   gender: Maybe<Gender>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   lastCheckin: Maybe<Scalars['Float']['output']>;
-  location: Maybe<LocationEntity>;
+  location: Maybe<Location>;
   medicalHistory: Maybe<Array<Scalars['String']['output']>>;
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
   plainCode: Maybe<Scalars['String']['output']>;
+  presenterCustomer: Maybe<Customer>;
   presenterCustomerId: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedCustomerIds: Maybe<Array<Scalars['String']['output']>>;
+  relationshipContacts: Maybe<Array<CustomerRelationshipContact>>;
   salaryAmount: Maybe<Scalars['Float']['output']>;
-  secondaryLocation: Maybe<LocationEntity>;
+  secondaryLocation: Maybe<Location>;
+  socialFacebookUrl: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   tagIds: Maybe<Array<Scalars['String']['output']>>;
   updatedAt: Maybe<Scalars['Float']['output']>;
-  vnLocation: Maybe<LocationEntity>;
-  vnSecondaryLocation: Maybe<LocationEntity>;
+  vnLocation: Maybe<Location>;
+  vnLocationFullAddress: Maybe<Scalars['String']['output']>;
+  vnPrevLocationFullAddress: Maybe<Scalars['String']['output']>;
+  vnPrevSecondaryLocationFullAddress: Maybe<Scalars['String']['output']>;
+  vnSecondaryLocation: Maybe<Location>;
+  vnSecondaryLocationFullAddress: Maybe<Scalars['String']['output']>;
   workspaceBranch: Maybe<WorkspaceBranch>;
   workspaceBranchId: Maybe<Scalars['String']['output']>;
 };
@@ -368,13 +392,15 @@ export type CustomerForm = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   dynamicData: Maybe<Scalars['AnyType']['output']>;
   email: Maybe<Scalars['String']['output']>;
-  location: Maybe<LocationEntity>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  location: Maybe<Location>;
   name: Scalars['String']['output'];
   phone: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   status: CustomerFormStatus;
   updatedAt: Maybe<Scalars['Float']['output']>;
-  vnLocation: Maybe<LocationEntity>;
+  vnLocation: Maybe<Location>;
   workspaceBranch: Maybe<WorkspaceBranch>;
 };
 
@@ -392,6 +418,44 @@ export type CustomerFormsPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type CustomerInput = {
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  birthday?: InputMaybe<Scalars['Float']['input']>;
+  createdAt?: InputMaybe<Scalars['Float']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  gender?: InputMaybe<Gender>;
+  location?: InputMaybe<LocationInput>;
+  medicalHistory?: InputMaybe<Array<Scalars['String']['input']>>;
+  name: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+  plainCode?: InputMaybe<Scalars['String']['input']>;
+  presenterCustomerId?: InputMaybe<Scalars['String']['input']>;
+  relatedCustomerIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  relationshipContacts?: InputMaybe<Array<CustomerRelationshipContactInput>>;
+  salaryAmount?: InputMaybe<Scalars['Float']['input']>;
+  secondaryLocation?: InputMaybe<LocationInput>;
+  socialFacebookUrl?: InputMaybe<Scalars['String']['input']>;
+  source?: InputMaybe<EntitySource>;
+  tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  vnLocation?: InputMaybe<LocationInput>;
+  vnSecondaryLocation?: InputMaybe<LocationInput>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CustomerRelationshipContact = {
+  __typename: 'CustomerRelationshipContact';
+  name: Scalars['String']['output'];
+  phone: Scalars['String']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type CustomerRelationshipContactInput = {
+  name: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+  type: Scalars['String']['input'];
+};
+
 export type CustomersPaginated = {
   __typename: 'CustomersPaginated';
   results: Array<Customer>;
@@ -404,10 +468,12 @@ export type DeviceEntity = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   identifyId: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   lastActiveAt: Scalars['Float']['output'];
   locale: Maybe<AppLocale>;
   notificationToken: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
@@ -433,6 +499,7 @@ export type EInvoice = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   invoiceData: Maybe<Scalars['JSONObject']['output']>;
   invoiceId: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isCancelled: Maybe<Scalars['Boolean']['output']>;
   provider: PluginEInvoicesProviderType;
   providerData: Maybe<Scalars['JSONObject']['output']>;
@@ -440,10 +507,19 @@ export type EInvoice = {
   receiptCode: Scalars['String']['output'];
   receiptId: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   url: Maybe<Scalars['String']['output']>;
 };
 
+/** Available entity sources */
+export const EntitySource = {
+  Import: 'IMPORT',
+  Internal: 'INTERNAL',
+  ZaloOa: 'ZALO_OA'
+} as const;
+
+export type EntitySource = typeof EntitySource[keyof typeof EntitySource];
 export type Event = {
   __typename: 'Event';
   _id: Scalars['String']['output'];
@@ -452,10 +528,12 @@ export type Event = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   data: Maybe<Scalars['JSONObject']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   persist: Maybe<Scalars['Boolean']['output']>;
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   sessionId: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   time: Scalars['Float']['output'];
   type: EventType;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -689,6 +767,7 @@ export type File = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   externalUrl: Maybe<Scalars['String']['output']>;
   fileName: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   path: Scalars['String']['output'];
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
@@ -700,6 +779,7 @@ export type File = {
   relatedReceiptId: Maybe<Scalars['String']['output']>;
   relativePath: Maybe<Scalars['String']['output']>;
   size: Maybe<Scalars['Float']['output']>;
+  source: Maybe<EntitySource>;
   thumbnail: Maybe<Scalars['String']['output']>;
   type: FileType;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -794,6 +874,7 @@ export type Loan = {
   customerId: Scalars['String']['output'];
   fulfilledAt: Maybe<Scalars['Float']['output']>;
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isHasLateInterestReceipt: Maybe<Scalars['Boolean']['output']>;
   isLiquidated: Maybe<Scalars['Boolean']['output']>;
   metadata: Maybe<Scalars['AnyType']['output']>;
@@ -808,6 +889,7 @@ export type Loan = {
   rejectReason: Maybe<Scalars['String']['output']>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
   signature: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   status: LoanStatus;
   updatedAt: Maybe<Scalars['Float']['output']>;
   workspaceBranch: Maybe<WorkspaceBranch>;
@@ -909,8 +991,8 @@ export type LoansPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export type LocationEntity = {
-  __typename: 'LocationEntity';
+export type Location = {
+  __typename: 'Location';
   address: Maybe<Scalars['String']['output']>;
   coordinates: Maybe<Coordinates>;
   districtId: Maybe<Scalars['String']['output']>;
@@ -931,15 +1013,19 @@ export type Mutation = {
   addActivity: Activity;
   addReaction: Scalars['Boolean']['output'];
   archiveActivity: Activity;
+  archiveCustomer: Scalars['Boolean']['output'];
+  assignCustomer: Customer;
   assignWorkspaceMemberRoles: WorkspaceMember;
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
   cancelBooking: Booking;
   createBooking: Booking;
   createCategory: Category;
+  createCustomer: Customer;
   createProduct: Product;
   createTag: Tag;
   createTask: Task;
+  createWorkspaceBranch: WorkspaceBranch;
   createWorkspaceRole: WorkspaceRole;
   deleteCategory: Scalars['Boolean']['output'];
   deleteWorkspaceRole: Scalars['Boolean']['output'];
@@ -962,8 +1048,10 @@ export type Mutation = {
   updateActivity: Activity;
   updateBooking: Booking;
   updateCategory: Category;
+  updateCustomer: Customer;
   updateTaskStatuses: Array<TaskStatus>;
   updateWorkspace: Workspace;
+  updateWorkspaceBranch: WorkspaceBranch;
   updateWorkspaceMember: WorkspaceMember;
   updateWorkspaceRole: WorkspaceRole;
   updateWorkspaceSetting: WorkspaceSetting;
@@ -988,6 +1076,17 @@ export type MutationAddReactionArgs = {
 
 export type MutationArchiveActivityArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationArchiveCustomerArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationAssignCustomerArgs = {
+  id: Scalars['String']['input'];
+  input: AssignCustomerInput;
 };
 
 
@@ -1040,6 +1139,11 @@ export type MutationCreateCategoryArgs = {
 };
 
 
+export type MutationCreateCustomerArgs = {
+  input: CustomerInput;
+};
+
+
 export type MutationCreateProductArgs = {
   categoryId?: InputMaybe<Scalars['String']['input']>;
   code?: InputMaybe<Scalars['String']['input']>;
@@ -1077,6 +1181,11 @@ export type MutationCreateTagArgs = {
 
 export type MutationCreateTaskArgs = {
   input: CreateTaskInput;
+};
+
+
+export type MutationCreateWorkspaceBranchArgs = {
+  input: WorkspaceBranchInput;
 };
 
 
@@ -1202,6 +1311,12 @@ export type MutationUpdateCategoryArgs = {
 };
 
 
+export type MutationUpdateCustomerArgs = {
+  id: Scalars['String']['input'];
+  input: CustomerInput;
+};
+
+
 export type MutationUpdateTaskStatusesArgs = {
   contextId?: InputMaybe<Scalars['String']['input']>;
   contextType?: InputMaybe<TaskContextType>;
@@ -1223,6 +1338,12 @@ export type MutationUpdateWorkspaceArgs = {
   name: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
   type: WorkspaceType;
+};
+
+
+export type MutationUpdateWorkspaceBranchArgs = {
+  id: Scalars['String']['input'];
+  input: WorkspaceBranchInput;
 };
 
 
@@ -1281,6 +1402,7 @@ export type Order = {
   customFieldValues: Maybe<Array<BaseCustomFieldValue>>;
   discounts: Array<OrderDiscount>;
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isFulfilled: Maybe<Scalars['Boolean']['output']>;
   items: Scalars['AnyType']['output'];
   note: Maybe<Scalars['String']['output']>;
@@ -1292,6 +1414,7 @@ export type Order = {
   relatedCustomerId: Maybe<Scalars['String']['output']>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
   relatedUserIds: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   totalAmount: Scalars['Float']['output'];
   type: Maybe<OrderType>;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -1346,10 +1469,12 @@ export type Partner = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   email: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   logo: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
@@ -1421,11 +1546,13 @@ export type Posts = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   excerpt: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   meta: Maybe<Scalars['JSONObject']['output']>;
   productId: Maybe<Scalars['String']['output']>;
   publishedAt: Maybe<Scalars['Float']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   slug: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   thumbnail: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -1442,10 +1569,12 @@ export type Prescription = {
   _id: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   items: Scalars['AnyType']['output'];
   name: Scalars['String']['output'];
   note: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
@@ -1470,6 +1599,7 @@ export type Product = {
   displayName: Maybe<Scalars['String']['output']>;
   image: Maybe<Scalars['String']['output']>;
   inStock: Maybe<Scalars['Float']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isHiddenInReceiptWhenNoPrice: Maybe<Scalars['Boolean']['output']>;
   isStockCheck: Maybe<Scalars['Boolean']['output']>;
   maxPrice: Maybe<Scalars['Float']['output']>;
@@ -1478,6 +1608,7 @@ export type Product = {
   price: Scalars['Float']['output'];
   productCode: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   supplies: Maybe<Array<ProductSupply>>;
   tags: Array<Scalars['String']['output']>;
   type: ProductType;
@@ -1501,10 +1632,12 @@ export type ProductCombo = {
   customerId: Scalars['String']['output'];
   expireAt: Maybe<Scalars['Float']['output']>;
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   productId: Scalars['String']['output'];
   productRefs: Array<ProductComboRef>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
+  source: Maybe<EntitySource>;
   sourceId: Scalars['String']['output'];
   status: ProductComboStatus;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -1556,6 +1689,7 @@ export type ProductStock = {
   customFieldValues: Maybe<Array<BaseCustomFieldValue>>;
   expireAt: Scalars['Float']['output'];
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   note: Maybe<Scalars['String']['output']>;
   product: Product;
   productId: Scalars['String']['output'];
@@ -1564,6 +1698,7 @@ export type ProductStock = {
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
   remainQuantity: Scalars['Float']['output'];
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
@@ -1575,6 +1710,7 @@ export type ProductStockRecord = {
   createdByUser: Maybe<WorkspaceMember>;
   customFieldValues: Maybe<Array<BaseCustomFieldValue>>;
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   note: Maybe<Scalars['String']['output']>;
   product: Product;
   productId: Scalars['String']['output'];
@@ -1586,6 +1722,7 @@ export type ProductStockRecord = {
   relatedOrderId: Maybe<Scalars['String']['output']>;
   relatedProduct: Maybe<Product>;
   relatedProductId: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   stockCode: Scalars['String']['output'];
   type: ProductStockRecordType;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -1638,10 +1775,12 @@ export type ProductVoucher = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   customerId: Scalars['String']['output'];
   expireAt: Maybe<Scalars['Float']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   productVoucherId: Scalars['String']['output'];
   ref: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedTicketId: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   status: ProductVoucherStatus;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -1678,11 +1817,13 @@ export type Promotion = {
   expireAt: Maybe<Scalars['Float']['output']>;
   id: Scalars['String']['output'];
   image: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   limitPerCustomer: Maybe<Scalars['Float']['output']>;
   name: Scalars['String']['output'];
   productsSelection: Maybe<Scalars['JSONObject']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
+  source: Maybe<EntitySource>;
   status: PromotionStatus;
   type: PromotionType;
   updatedAt: Maybe<Scalars['Float']['output']>;
@@ -1723,8 +1864,10 @@ export type Query = {
   coupons: CouponsPaginated;
   customFields: CustomFieldsPaginated;
   customer: Customer;
+  customerByCode: Customer;
   customerForms: CustomerFormsPaginated;
   customers: CustomersPaginated;
+  customersByIds: Array<Customer>;
   eInvoices: PluginEInvoicesPaginated;
   event: Event;
   events: EventsPaginated;
@@ -1764,7 +1907,9 @@ export type Query = {
   userWorkspaceMembers: Array<WorkspaceMember>;
   workspace: Workspace;
   workspaceApiApps: WorkspaceApiAppsPaginated;
+  workspaceBranch: WorkspaceBranch;
   workspaceBranches: WorkspaceBranchesPaginated;
+  workspaceBranchesByIds: Array<WorkspaceBranch>;
   workspaceInviteInformation: WorkspaceInviteInformation;
   workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
@@ -1843,6 +1988,11 @@ export type QueryCustomerArgs = {
 };
 
 
+export type QueryCustomerByCodeArgs = {
+  code: Scalars['String']['input'];
+};
+
+
 export type QueryCustomerFormsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
@@ -1855,6 +2005,11 @@ export type QueryCustomersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   sortCreatedAt?: InputMaybe<SortDirection>;
+};
+
+
+export type QueryCustomersByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -2116,10 +2271,20 @@ export type QueryWorkspaceApiAppsArgs = {
 };
 
 
+export type QueryWorkspaceBranchArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryWorkspaceBranchesArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryWorkspaceBranchesByIdsArgs = {
+  ids: Array<Scalars['String']['input']>;
 };
 
 
@@ -2211,6 +2376,7 @@ export type Receipt = {
   expireAt: Maybe<Scalars['Float']['output']>;
   giveAmount: Maybe<Scalars['AnyType']['output']>;
   id: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   note: Maybe<Scalars['String']['output']>;
   paidAt: Maybe<Scalars['Float']['output']>;
   paymentMethod: Maybe<ReceiptPaymentMethod>;
@@ -2224,6 +2390,7 @@ export type Receipt = {
   relatedOrderId: Maybe<Scalars['String']['output']>;
   relatedPartnerId: Maybe<Scalars['String']['output']>;
   relatedTicketId: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   status: ReceiptStatus;
   tipAmount: Maybe<Scalars['AnyType']['output']>;
   type: ReceiptType;
@@ -2286,6 +2453,7 @@ export type SearchResultCategory = SearchResult & {
 
 export type SearchResultCustomer = SearchResult & {
   __typename: 'SearchResultCustomer';
+  avatar: Maybe<Scalars['String']['output']>;
   code: Scalars['String']['output'];
   entity: Scalars['String']['output'];
   id: Scalars['String']['output'];
@@ -2399,10 +2567,12 @@ export type Tag = {
   color: Maybe<Scalars['String']['output']>;
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   name: Scalars['String']['output'];
   order: Scalars['Float']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   slug: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   type: TagType;
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
@@ -2466,6 +2636,7 @@ export type Task = {
   progress: Scalars['Float']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   relatedUserIds: Array<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
   startDate: Maybe<Scalars['Float']['output']>;
   status: Scalars['String']['output'];
   statuses: Array<TaskStatus>;
@@ -2631,7 +2802,7 @@ export type Workspace = {
   inviteCode: Maybe<Scalars['String']['output']>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
   locale: Maybe<AppLocale>;
-  location: Maybe<LocationEntity>;
+  location: Maybe<Location>;
   logo: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
@@ -2645,10 +2816,12 @@ export type WorkspaceApiApp = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   enabled: Scalars['Boolean']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   member: WorkspaceMember;
   memberId: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
   secretKey: Scalars['String']['output'];
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   userId: Scalars['String']['output'];
 };
@@ -2665,10 +2838,29 @@ export type WorkspaceBranch = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   hotline: Maybe<Scalars['String']['output']>;
-  location: LocationEntity;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  location: Location;
   name: Scalars['String']['output'];
   refs: Maybe<Array<Scalars['String']['output']>>;
+  settings: Maybe<WorkspaceBranchSettings>;
+  source: Maybe<EntitySource>;
   updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type WorkspaceBranchInput = {
+  hotline?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<LocationInput>;
+  name: Scalars['String']['input'];
+  settings?: InputMaybe<WorkspaceBranchSettingsInput>;
+};
+
+export type WorkspaceBranchSettings = {
+  __typename: 'WorkspaceBranchSettings';
+  bankAccount: Maybe<PluginBankAccount>;
+};
+
+export type WorkspaceBranchSettingsInput = {
+  bankAccount?: InputMaybe<PluginBankAccountInput>;
 };
 
 export type WorkspaceBranchesPaginated = {
@@ -2733,6 +2925,7 @@ export type WorkspaceMemberWorkingTimeType = typeof WorkspaceMemberWorkingTimeTy
 export type WorkspaceMemberWorkspaceBranchInfo = {
   __typename: 'WorkspaceMemberWorkspaceBranchInfo';
   _id: Scalars['String']['output'];
+  hotline: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
 };
 
@@ -2785,6 +2978,7 @@ export type WorkspaceSetting = {
   currencyCode: Maybe<Scalars['String']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   hrmTimeKeepingsRules: Maybe<HrmTimekeepingsRules>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   isAuthSessionRestricted: Maybe<Scalars['Boolean']['output']>;
   loanSettings: Maybe<LoanSettings>;
   mailer: Maybe<PluginMailerAccount>;
@@ -2795,11 +2989,10 @@ export type WorkspaceSetting = {
   refs: Maybe<Array<Scalars['String']['output']>>;
   schedule: Maybe<WorkspaceSchedule>;
   searchSettings: Maybe<WorkspaceSearchSettings>;
+  source: Maybe<EntitySource>;
   termsOfService: Maybe<Scalars['String']['output']>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   view: Maybe<WorkspaceView>;
-  /** @deprecated Use schedule instead */
-  wSlots: Maybe<Array<Scalars['AnyType']['output']>>;
   zaloOaGmfGroupSettings: Maybe<Scalars['JSONObject']['output']>;
 };
 
@@ -2810,9 +3003,11 @@ export type WorkspaceStat = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   customerCount: Maybe<Scalars['Float']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
   memberCount: Maybe<Scalars['Float']['output']>;
   orderCount: Maybe<Scalars['Float']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
   storageUsage: Maybe<Scalars['Float']['output']>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   workspace: WorkspaceStatWorkspaceInformation;

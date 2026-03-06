@@ -13,7 +13,6 @@ import {
   updateWorkspaceApiApp,
 } from "@/modules/workspace-api-apps/workspace-api-apps-service";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspaceDefaultRoleId,
@@ -46,6 +45,7 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
+import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceRoleDataFragment } from "../workspace-roles/graphql/fragmentWorkspaceRole.graphql";
 import { useWorkspaceRoles } from "../workspace-roles/hooks/use-workspace-roles";
 import { workspaceDefaultRoles } from "../workspace-roles/workspace-roles-constants";
@@ -78,7 +78,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   const form = useForm<{
     name: string;
     roles: Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">[];
-    workspaceBranches: Pick<WorkspaceBranchEntity, "_id" | "name">[];
+    workspaceBranches: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">[];
   }>({
     initialValues: getInitialValues(props.app),
     validate: {

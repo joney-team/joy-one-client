@@ -19,7 +19,6 @@ import {
   SearchLoan,
   SearchResult,
 } from "@/modules/search/search-types";
-import { TaskEntity } from "@/modules/tasks/tasks-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -43,6 +42,7 @@ import {
 import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
+import { TaskDataFragment } from "../tasks/graphql/fragmentTask.graphql";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import {
@@ -206,7 +206,7 @@ export const SearchEngine: FC = () => {
         }
 
         if (entity === AppEntity.TASKS) {
-          const tasks = data as TaskEntity[];
+          const tasks = data as TaskDataFragment[];
 
           actionGroups.push({
             group: t`Tasks`,

@@ -134,3 +134,5 @@ export const apolloClient = new ApolloClient({
     },
   }),
 });
+
+export type ApolloClientType = typeof apolloClient;

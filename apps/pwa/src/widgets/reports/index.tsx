@@ -11,7 +11,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { ReportEntity } from "@/modules/reports/reports-entity";
 import { exportPeriodReport } from "@/modules/reports/reports-services";
 import { RangeReport, ReportType } from "@/modules/reports/reports-types";
-import { useWorkspaceBranches } from "@/modules/workspace-branches/hooks/use-workspace-branches";
+import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import { WorkspaceMemberSelector } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
@@ -21,6 +21,7 @@ import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Period } from "@/types";
 import { ObjectUtils } from "@/utils/object.utils";
+import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
@@ -118,8 +119,15 @@ export const ReportWidgets: FC = () => {
   const [userMemberInfos, isUserMemberInfosReady, setUerMemberInfo] = useWorkspaceMembers(
     [query.userId].filter(Boolean)
   );
-  const [workspaceBranches, isWorkspaceBranchesReady] = useWorkspaceBranches(
-    query.workspaceBranchIds
+
+  const { data: workspaceBranchesData, loading: isWorkspaceBranchesLoading } = useQuery(
+    QUERY_WORKSPACE_BRANCHES_BY_IDS,
+    {
+      variables: {
+        ids: query.workspaceBranchIds,
+      },
+      skip: !query.workspaceBranchIds || query.workspaceBranchIds.length === 0,
+    }
   );
 
   const ctx: ReportWidgetsContext = {
@@ -308,7 +316,7 @@ export const ReportWidgets: FC = () => {
                 <Hovered>
                   {(hover) => {
                     const workspaceBranch = [
-                      ...workspaceBranches,
+                      ...(workspaceBranchesData?.branches ?? []),
                       { _id: "root", name: <Trans>Main office</Trans> },
                     ].find((v) => query.workspaceBranchIds.includes(v._id));
 
@@ -335,7 +343,7 @@ export const ReportWidgets: FC = () => {
                               <Trans>Branch</Trans>
                             </Text>
 
-                            {!isWorkspaceBranchesReady ? (
+                            {isWorkspaceBranchesLoading ? (
                               <Loader size={13} type="dots" color="var(--mantine-color-dimmed)" />
                             ) : (
                               workspaceBranch && (

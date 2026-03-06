@@ -12,4 +12,11 @@ fragment WorkspaceBranchData on WorkspaceBranch {
       lng
     }
   }
+  settings {
+    bankAccount {
+      bankId
+      accountNumber
+      accountName
+    }
+  }
 }

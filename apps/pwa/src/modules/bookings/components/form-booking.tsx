@@ -6,7 +6,6 @@ import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format"
 import { TimeInput } from "@/components/inputs/time-input";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
@@ -45,6 +44,7 @@ import {
 import { FC, Fragment, useEffect, useMemo } from "react";
 
 import { BookingStatus } from "@/graphql/enums.graphql";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
 import CREATE_BOOKING_MUTATION, {
@@ -56,7 +56,7 @@ import UPDATE_BOOKING_MUTATION from "../graphql/mutationUpdateBooking.graphql";
 export interface BookingFormProps {
   startTime?: Date;
   endTime?: Date;
-  customer?: CustomerShortInfo;
+  customer?: CustomerDataFragment;
   assigneeUsers?: WorkspaceMemberDataFragment[];
 
   reschedule?: BookingDataFragment;

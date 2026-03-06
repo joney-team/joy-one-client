@@ -1,3 +1,7 @@
+#import "../../locations/graphql/fragmentLocation.graphql"
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+#import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
+
 fragment CustomerData on Customer {
   _id
   refs
@@ -22,4 +26,38 @@ fragment CustomerData on Customer {
   relatedCustomerIds
   lastCheckin
   workspaceBranchId
+  workspaceBranch {
+    ...WorkspaceBranchData
+  }
+  location {
+    ...LocationData
+  }
+  secondaryLocation {
+    ...LocationData
+  }
+  vnLocation {
+    ...LocationData
+  }
+  vnSecondaryLocation {
+    ...LocationData
+  }
+  relationshipContacts {
+    name
+    phone
+    type
+  }
+  assigneeUsers {
+    ...WorkspaceMemberData
+  }
+  socialFacebookUrl
+  presenterCustomerId
+  isArchived
+  medicalHistory
+  source
+
+  vnLocationFullAddress
+  vnSecondaryLocationFullAddress
+
+  vnPrevLocationFullAddress
+  vnPrevSecondaryLocationFullAddress
 }

@@ -4,8 +4,8 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
-import { getCustomer, renderGener } from "@/modules/customers/customer-service";
-import { CustomerEntity, CustomerShortInfo } from "@/modules/customers/customer-types";
+import { customerGenders } from "@/modules/customers/customer-service";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
@@ -28,7 +28,6 @@ import {
   Card,
   Center,
   Divider,
-  em,
   Group,
   Skeleton,
   Stack,
@@ -55,7 +54,7 @@ interface PrinterArgs {
   receipt?: ReceiptEntity;
   bankQrCode?: BankQrCode;
   prescription?: PrescriptionEntity;
-  customer?: Pick<CustomerShortInfo, "_id">;
+  customer?: Pick<CustomerDataFragment, "_id">;
   order?: OrderEntity;
 }
 
@@ -132,7 +131,7 @@ export const ModalPrinter = forwardRef<
   const [args, setArgs] = useState<ModalPrinterArgs | null>(null);
   const [loading, setIsLoading] = useState(true);
   const [relatedOrder, setRelatedOrder] = useState<OrderEntity>();
-  const [customer, setCustomer] = useState<CustomerEntity>();
+  const [customer, setCustomer] = useState<CustomerDataFragment>();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -176,8 +175,9 @@ export const ModalPrinter = forwardRef<
       const customerId =
         _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
       if (customerId) {
-        const customer = await getCustomer(customerId);
-        setCustomer(customer);
+        // TODO: get customer by ID
+        // const customer = await getCustomer(customerId);
+        // setCustomer(customer);
       }
 
       currentProps = _p;
@@ -518,7 +518,7 @@ export const ModalPrinter = forwardRef<
                                 )}
                                 {customer.gender && (
                                   <p>
-                                    {t`Gender`}: {renderGener(customer.gender)}
+                                    {t`Gender`}: {t(customerGenders[customer.gender].label)}
                                   </p>
                                 )}
                                 {prescription.name && (

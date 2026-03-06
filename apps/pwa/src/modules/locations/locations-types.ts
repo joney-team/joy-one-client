@@ -2,7 +2,7 @@ import { Coordinates } from "@/types";
 
 export type LocationType = "province" | "district" | "ward";
 
-export interface Location {
+export interface RawLocation {
   id: string;
   type: LocationType;
   name: string;

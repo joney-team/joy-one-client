@@ -1,16 +1,22 @@
 import { createContext, useContext } from "react";
-import { Location, LocationEntity } from "./locations-types";
+import { LocationDataFragment } from "./graphql/fragmentLocation.graphql";
+import { RawLocation } from "./locations-types";
 
-export type RenderVnLocation = (location: LocationEntity | null | undefined, args?: {
-  shortProvine?: boolean;
-  shortDistrict?: boolean;
-  shortWard?: boolean;
-}) => string
+export type RenderVnLocation = (
+  location: Partial<LocationDataFragment> | null | undefined,
+  args?: {
+    shortProvine?: boolean;
+    shortDistrict?: boolean;
+    shortWard?: boolean;
+  }
+) => string;
 
-export type GetGoogleMapLink = (location: LocationEntity | string | null | undefined) => string
+export type GetGoogleMapLink = (
+  location: Partial<LocationDataFragment> | string | null | undefined
+) => string;
 
 interface LocationsContextValue {
-  vnLocations: Location[];
+  vnLocations: RawLocation[];
   renderVnLocation: RenderVnLocation;
   getGoogleMapLink: GetGoogleMapLink;
 }
@@ -21,4 +27,4 @@ export const LocationsContext = createContext<LocationsContextValue>({
   getGoogleMapLink: () => "",
 });
 
-export const useLocations = () => useContext(LocationsContext)
+export const useLocations = () => useContext(LocationsContext);

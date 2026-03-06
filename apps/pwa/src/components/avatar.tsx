@@ -1,6 +1,6 @@
 "use client";
 
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -34,7 +34,7 @@ export interface AvatarProps extends MantineAvatarProps {
   color?: string;
   user?: AvatarUser;
   workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appIcon">;
-  customer?: Pick<CustomerShortInfo, "name" | "avatar"> | null | undefined;
+  customer?: Pick<CustomerDataFragment, "name" | "avatar"> | null | undefined;
   partner?: PartnerEntity;
   pluginMetaPage?: PluginMetaPageEntity;
   hideOnlineStatus?: boolean;

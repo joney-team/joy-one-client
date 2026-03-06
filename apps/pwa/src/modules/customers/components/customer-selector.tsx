@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
@@ -10,8 +9,9 @@ import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
-export type CustomerSelectorValue = Pick<CustomerShortInfo, "_id" | "name" | "phone" | "avatar">;
+export type CustomerSelectorValue = Pick<CustomerDataFragment, "_id" | "name" | "phone" | "avatar">;
 
 interface CustomerSelectorProps
   extends Omit<SelectorProps<CustomerSelectorValue>, "onSearch" | "renderOption"> {}

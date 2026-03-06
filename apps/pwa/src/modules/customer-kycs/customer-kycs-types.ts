@@ -1,11 +1,11 @@
 import { BaseMongoEntity, Gender } from "@/types";
-import { CustomerEntity } from "../customers/customer-types";
 import { LocationEntity } from "../locations/locations-types";
+import { Location } from "@/graphql/types.graphql";
 
 export enum CustomerKycStatus {
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  REJECTED = "REJECTED",
 }
 
 export interface CustomerKycDto {
@@ -24,15 +24,15 @@ export interface CustomerKycDto {
 
 export interface CustomerKycVersion {
   id: string;
-  
+
   frontOfCidImage: string;
   backOfCidImage: string;
   portraitImage: string;
 
   cidNumber: string;
   cidFullName: string;
-  cidLocation?: LocationEntity;
-  cidVnLocation?: LocationEntity;
+  cidLocation?: Location;
+  cidVnLocation?: Location;
   cidRaw: string;
   cidGender: Gender;
   cidBirthday: number;
@@ -49,8 +49,8 @@ export interface RejectCustomerKycDto {
 
 export interface CustomerKycEntity extends BaseMongoEntity {
   customerId: string;
-  customer: CustomerEntity;
+  customer: any;
   workspaceId: string;
-  versions: CustomerKycVersion[]
+  versions: CustomerKycVersion[];
   status: CustomerKycStatus;
 }

@@ -1,9 +1,9 @@
 import { AppEntity } from "@/types";
-import { CustomerShortInfo } from "../customers/customer-types";
+import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
 import { LoanAssetType, LoanPackage, LoanStatus } from "../loans/loans-types";
 import { ProductEntity } from "../products/products-types";
 import { ReceiptType } from "../receipts/receipts-types";
-import { TaskEntity } from "../tasks/tasks-types";
+import { TaskDataFragment } from "../tasks/graphql/fragmentTask.graphql";
 
 export type SearchEntityResult<E extends AppEntity = AppEntity, T = any> = T & {
   _id: string;
@@ -13,11 +13,11 @@ export type SearchEntityResult<E extends AppEntity = AppEntity, T = any> = T & {
   _entity: E;
 };
 
-export type SearchCustomer = SearchEntityResult<AppEntity.CUSTOMERS, CustomerShortInfo>;
+export type SearchCustomer = SearchEntityResult<AppEntity.CUSTOMERS, CustomerDataFragment>;
 
 export type SearchTask = SearchEntityResult<
   AppEntity.TASKS,
-  Pick<TaskEntity, "name" | "description" | "code">
+  Pick<TaskDataFragment, "name" | "description" | "code">
 >;
 
 export type SearchProduct = SearchEntityResult<

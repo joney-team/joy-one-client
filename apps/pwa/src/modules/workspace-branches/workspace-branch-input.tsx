@@ -1,23 +1,22 @@
 "use client";
 
-import { WorkspaceBranchEntity } from "@/modules/workspace-branches/workspace-branches-types";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 import { useWorkspace } from "../workspaces/workspace-context";
+import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchSelector } from "./workspace-branch-selector";
 
 interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value?: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null;
-  onChange: (
-    value: Pick<WorkspaceBranchEntity, "_id" | "name" | "hotline" | "settings"> | null
-  ) => void;
+  value?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null;
+  onChange: (value: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null) => void;
   disabled?: boolean;
   autoHide?: boolean;
 }
 
 export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
+  const { t } = useLingui();
   const { value, onChange, disabled, autoHide, ...rest } = props;
   const workspace = useWorkspace();
 
@@ -30,7 +29,7 @@ export const WorkspaceBranchInput: FC<WorkspaceBranchInputProps> = (props) => {
         excludeIds={value ? [value._id] : []}
         onSelect={(branch) => {
           if (!branch) return;
-          props.onChange(branch);
+          props.onChange(branch as any);
         }}
         target={(ctx) => {
           return (

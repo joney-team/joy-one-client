@@ -16,6 +16,7 @@ fragment WorkspaceMemberData on WorkspaceMember {
   workspaceBranches {
     _id
     name
+    hotline
   }
   roles {
     _id

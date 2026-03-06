@@ -1,40 +1,39 @@
+import { Location } from "@/graphql/types.graphql";
 import { BasePostgresEntity, Coordinates } from "@/types";
-import { CustomerShortInfo } from "../customers/customer-types";
-import { LocationEntity } from "../locations/locations-types";
 
 export interface LoanMetadata {
   cidNumber?: number;
-  cidVnLocation?: LocationEntity;
-  cidLocation?: LocationEntity;
+  cidVnLocation?: Location;
+  cidLocation?: Location;
 }
 
 export interface LoanPayment {
-  accountName: string,
-  accountNumber: string,
-  accountBankId: string,
+  accountName: string;
+  accountNumber: string;
+  accountBankId: string;
 }
 
 export enum LoanStatus {
-  PENDING_SIGN = 'PENDING_SIGN',
-  PENDING = 'PENDING',
-  APPROVED = 'APPROVED',
-  FULFILLED = 'FULFILLED',
-  REJECTED = 'REJECTED',
-  OVERDUE = 'OVERDUE',
-  COMPLETED = 'COMPLETED',
+  PENDING_SIGN = "PENDING_SIGN",
+  PENDING = "PENDING",
+  APPROVED = "APPROVED",
+  FULFILLED = "FULFILLED",
+  REJECTED = "REJECTED",
+  OVERDUE = "OVERDUE",
+  COMPLETED = "COMPLETED",
 }
 
 export enum LoanAssetType {
-  ICLOUD = 'ICLOUD',
-  MOTOBIKE_REGISTRATION = 'MOTOBIKE_REGISTRATION',
-  CAR_REGISTRATION = 'CAR_REGISTRATION',
-  BUSINESS_PERMIT = 'BUSINESS_PERMIT',
-  LAND_CERTIFICATE = 'LAND_CERTIFICATE',
+  ICLOUD = "ICLOUD",
+  MOTOBIKE_REGISTRATION = "MOTOBIKE_REGISTRATION",
+  CAR_REGISTRATION = "CAR_REGISTRATION",
+  BUSINESS_PERMIT = "BUSINESS_PERMIT",
+  LAND_CERTIFICATE = "LAND_CERTIFICATE",
 }
 
 export enum LoanSource {
-  COMMON = 'COMMON',
-  IMPORT = 'IMPORT',
+  COMMON = "COMMON",
+  IMPORT = "IMPORT",
 }
 
 export interface LoanPaymentPeriod {
@@ -51,7 +50,7 @@ export interface LoanPaymentPeriod {
 export type LoanPaymentPeriods = {
   periodDays: number;
   periods: LoanPaymentPeriod[];
-}[]
+}[];
 
 export interface LoanPaymentPlanResult {
   loanPackage: LoanPackage;
@@ -78,7 +77,7 @@ interface LoanAssetVehicle extends LoanAssetData {
   };
 }
 
-export interface LoanAssetsMotobike extends LoanAssetVehicle { }
+export interface LoanAssetsMotobike extends LoanAssetVehicle {}
 
 export interface LoanAssetsCar extends LoanAssetVehicle {
   receipts: string[];
@@ -121,7 +120,7 @@ export interface LoanPaymentProgress {
 export interface LoanEntity<T extends LoanAssetType = any> extends BasePostgresEntity {
   customerId: string;
   customerPhone?: string;
-  customer: CustomerShortInfo;
+  customer: any;
   workspaceId: string;
   code: string;
   amount: number;
@@ -187,9 +186,9 @@ export interface LoanAssetEstimations {
 
 // ======================= Start Loan Settings =======================
 export enum LoanPackageType {
-  FIXED_CAPITAL = 'FIXED_CAPITAL', // CD1
-  UNFIXED_CAPITAL = 'UNFIXED_CAPITAL', // CD2
-  INSTALLMENT = 'INSTALLMENT', // Trả góp
+  FIXED_CAPITAL = "FIXED_CAPITAL", // CD1
+  UNFIXED_CAPITAL = "UNFIXED_CAPITAL", // CD2
+  INSTALLMENT = "INSTALLMENT", // Trả góp
 }
 
 export interface LateInterestRate {
@@ -205,8 +204,8 @@ export interface LoanPackage {
   days: number; // 1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày
   periodDaysOptions: number[]; // Số ngày trong kỳ vay (10, 15, 30)
   contractFee: number; //  Chi phí vay
-  unFixedCapitalRates: (number[])[]; // Tỷ lệ trả gốc
-  lateInterestRates: LateInterestRate[] // Lãi phạt
+  unFixedCapitalRates: number[][]; // Tỷ lệ trả gốc
+  lateInterestRates: LateInterestRate[]; // Lãi phạt
   liquidationFeeRate?: number;
 }
 
@@ -228,52 +227,52 @@ export interface LoansRealtimeReport {
     activated: number;
     overdue: number;
     pending: number;
-  },
+  };
   debt: {
     total: number;
     notDueYet: number;
     overdue: number;
-  },
+  };
 }
 
 export interface LoansRangReport {
-  newLoans: Pick<LoanEntity, 'id' | 'amount' | 'customerId'>[];
-  fulfilledLoans: Pick<LoanEntity, 'id' | 'amount' | 'customerId'>[];
+  newLoans: Pick<LoanEntity, "id" | "amount" | "customerId">[];
+  fulfilledLoans: Pick<LoanEntity, "id" | "amount" | "customerId">[];
   contracts: {
     new: number;
     fulfilled: number;
     fulfilledAmount?: number;
-  }
+  };
 }
 
 export interface LoanLiquidationCalculated {
-  capitalAmount: number
-  paidAmount: number
-  avancedPaymentAmount: number
-  remainCapitalAmount: number
-  remainCapitalAmountFeePercent: number
-  remainCapitalAmountFee: number
-  period: number
-  periodFeeAmount: number
-  periodFeeDays: number
-  periodStartAt: number
-  periodFeePerDay: number
-  feeAmount: number
-  lateInterestAmount: number
+  capitalAmount: number;
+  paidAmount: number;
+  avancedPaymentAmount: number;
+  remainCapitalAmount: number;
+  remainCapitalAmountFeePercent: number;
+  remainCapitalAmountFee: number;
+  period: number;
+  periodFeeAmount: number;
+  periodFeeDays: number;
+  periodStartAt: number;
+  periodFeePerDay: number;
+  feeAmount: number;
+  lateInterestAmount: number;
 }
 
 export interface LoanReceiptData {
-  period?: LoanPaymentPeriod,
-  partial?: boolean,
-  remainPartial?: boolean,
-  liquidation?: boolean,
-  liquidationCalculated?: LoanLiquidationCalculated,
-  liquidationReceiptIds?: string[],
+  period?: LoanPaymentPeriod;
+  partial?: boolean;
+  remainPartial?: boolean;
+  liquidation?: boolean;
+  liquidationCalculated?: LoanLiquidationCalculated;
+  liquidationReceiptIds?: string[];
   lateInterest?: {
-    period: number,
-    rate: number,
-    days: number,
-  },
+    period: number;
+    rate: number;
+    days: number;
+  };
 }
 
 export interface LoanReceiptReport {

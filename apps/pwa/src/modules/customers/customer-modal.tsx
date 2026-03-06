@@ -3,7 +3,7 @@
 import { IconUser, IconUserPlus } from "@tabler/icons-react";
 
 import { Modal } from "@/components/modal/modal";
-import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/form-customer";
+import { CustomerForm, CustomerFormProps } from "@/modules/customers/components/customer-form";
 import { Trans } from "@lingui/react/macro";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
 
@@ -36,24 +36,22 @@ export const ModalCustomer = forwardRef<
 
   return (
     <Fragment>
-      {typeof children === "function"
-        ? children({
-            open: (p) => {
-              setArgs(p ?? {});
-            },
-            close: () => {
-              setArgs(null);
-            },
-          })
-        : null}
+      {children?.({
+        open: (p) => {
+          setArgs(p ?? {});
+        },
+        close: () => {
+          setArgs(null);
+        },
+      })}
 
       <Modal
         id={modalId}
         key={modalId}
         opened={!!args}
         onClose={() => setArgs(null)}
-        name={args ? <Trans>Update customer</Trans> : <Trans>Create customer</Trans>}
-        icon={args ? IconUser : IconUserPlus}
+        name={args?.customer ? <Trans>Update customer</Trans> : <Trans>Create customer</Trans>}
+        icon={args?.customer ? IconUser : IconUserPlus}
         size="lg"
         isFullscreenOnMobile
       >

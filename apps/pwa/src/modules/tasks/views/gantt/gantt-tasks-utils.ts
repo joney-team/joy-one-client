@@ -1,4 +1,4 @@
-import { TaskEntity } from "@/modules/tasks/tasks-types";
+import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 
 export function getDatesFromRange(from: any, to: any): Date[] {
   if (!from || !to) return [];
@@ -51,33 +51,6 @@ export function getWeeksFromRange(from: any, to: any, startOnMonday = false) {
   }
 
   return weeks;
-}
-
-export function getRangeOfTasks(tasks: TaskEntity[]) {
-  const startTask = tasks.reduce((out, task) => {
-    if (!task.startDate) return out;
-    if (!out || !out.startDate) return task;
-    return task.startDate < out.startDate ? task : out;
-  }, undefined as TaskEntity | undefined);
-
-  const endTask = tasks.reduce((out, task) => {
-    if (!task.dueDate) return out;
-    if (!out || !out.dueDate) return task;
-    return task.dueDate > out.dueDate ? task : out;
-  }, undefined as TaskEntity | undefined);
-
-  return {
-    startTask,
-    endTask,
-    startDate:
-      startTask && (startTask.startDate || startTask.dueDate)
-        ? new Date((startTask.startDate! || startTask.dueDate!) * 1000)
-        : undefined,
-    dueDate:
-      endTask && (endTask.startDate || endTask.dueDate)
-        ? new Date((endTask.dueDate! || endTask.startDate!) * 1000)
-        : undefined,
-  };
 }
 
 /**
