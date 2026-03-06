@@ -70,17 +70,23 @@ export const ModalCreateTask = forwardRef<
         : null}
 
       <Modal
+        opened={!!args}
         id="modal-create-task"
         name={<Trans>Create task</Trans>}
         icon={IconStackPush}
         isFullscreenOnMobile
-        opened={!!args}
-        onClose={() => {
-          setArgs(null);
-        }}
+        onClose={() => setArgs(null)}
         size={600}
         zIndex={zIndexes.commonModals + 1}
         styles={{
+          header: {
+            paddingTop: 10,
+            paddingBottom: 10,
+            minHeight: "unset",
+          },
+          title: {
+            flex: 1,
+          },
           body: {
             padding: 0,
           },

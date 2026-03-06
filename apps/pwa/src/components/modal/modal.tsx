@@ -12,10 +12,18 @@ export interface ModalProps extends MantineModalProps {
   id?: string;
   icon?: Icon;
   name?: ReactNode;
+  color?: string;
   isFullscreenOnMobile?: boolean;
 }
 
-export const Modal: FC<ModalProps> = ({ id, icon, name, isFullscreenOnMobile, ...props }) => {
+export const Modal: FC<ModalProps> = ({
+  id,
+  icon,
+  name,
+  isFullscreenOnMobile,
+  color,
+  ...props
+}) => {
   const layout = useLayout();
 
   const modalId = useMemo(() => {
@@ -59,9 +67,16 @@ export const Modal: FC<ModalProps> = ({ id, icon, name, isFullscreenOnMobile, ..
     <MantineModal
       {...props}
       closeOnEscape={false}
+      withCloseButton={false}
       removeScrollProps={{ enabled: false }}
       fullScreen={isFullScreen}
-      title={name ? <ModalHead name={name} icon={icon} /> : props.title}
+      title={
+        name ? (
+          <ModalHead color={color} name={name} icon={icon} onClose={props.onClose} />
+        ) : (
+          props.title
+        )
+      }
     />
   );
 };

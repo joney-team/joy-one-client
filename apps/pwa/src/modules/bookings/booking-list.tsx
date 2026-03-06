@@ -4,35 +4,22 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CalendarViewSelector } from "@/components/calendar-view-selector";
 import { DateFormat } from "@/components/format/date-format";
-import { useList } from "@/components/list/use-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
-import { useCalendarProps } from "@/configs/calendar.config";
-import { EventType } from "@/graphql/enums.graphql";
-import { useLayout } from "@/layout/layout-context";
-import {
-  bookingActiveStatus,
-  getBookings,
-  getBookingStatusColor,
-} from "@/modules/bookings/booking-service";
-import { getBookingTitle } from "@/modules/bookings/booking-utils";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { useLang } from "@/modules/lang/lang-context";
+import { TimeSlots } from "@/components/time-slots/time-slots";
+import { TimeEvent, TimeInterval, TimeSlotsColumn } from "@/components/time-slots/time-slots.types";
+import { getMinutesFromStringTime } from "@/components/time-slots/time-slots.utils";
+import { BookingStatus, EventType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
-import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import {
   WorkspaceMemberSelector,
   WorkspaceMemberSelectorValue,
 } from "@/modules/workspace-members/components/workspace-member-selector";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import {
-  isInWorkSlot,
-  useWorkDaySlots,
-} from "@/modules/workspace-settings/workspace-settings-service";
 import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { ObjectUtils } from "@/utils/object.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -41,7 +28,6 @@ import {
   Center,
   Combobox,
   Group,
-  HoverCard,
   Loader,
   Stack,
   Text,
@@ -58,15 +44,25 @@ import {
   IconUsers,
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { type FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
-import { type CalendarProps } from "react-big-calendar";
-import { useAuth } from "../auth/auth-context";
-import { bookingStatuses } from "./booking-constants";
-import { BookingEntity, BookingStatus } from "./booking-types";
-import { ModalCreateBooking } from "./modals/modal-create-booking";
+import { type FC, Fragment, useMemo, useRef } from "react";
+import { bookingActiveStatus, bookingStatuses } from "./booking-constants";
+import type { ModalCreateBookingRef } from "./modals/modal-create-booking";
 
-const Calendar = dynamic<CalendarProps<any, any>>(
-  () => import("react-big-calendar").then((mod) => mod.Calendar),
+import { getBookingTitle } from "./booking-utils";
+import QUERY_BOOKINGS, { type BookingsQuery } from "./graphql/queryBookings.graphql";
+import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import type { ModalBookingDetailRef } from "./modals/modal-booking-detail";
+
+const ModalCreateBooking = dynamic(
+  () => import("./modals/modal-create-booking").then((mod) => mod.ModalCreateBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalBookingDetail = dynamic(
+  () => import("./modals/modal-booking-detail").then((mod) => mod.ModalBookingDetail),
   {
     ssr: false,
     loading: nonLoading,
@@ -93,32 +89,26 @@ const normalizeQuery = (query: any) => {
 };
 
 export const BookingList: FC = () => {
-  const { t } = useLingui();
-  const ref = useRef<HTMLDivElement>(null);
-  const workDaySlots = useWorkDaySlots();
-  const layout = useLayout();
-  const lang = useLang();
-  const colorScheme = useColorScheme();
   const color = useColor();
-  const auth = useAuth();
-  const calendarProps = useCalendarProps();
+  const { t } = useLingui();
+  const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);
+  const modalBookingDetailRef = useRef<ModalBookingDetailRef>(null);
+  const { workspaceSetting } = useWorkspaceSetting();
 
-  const [columnSize, setColumnSize] = useState(0);
-
-  const bookings = useList({
+  const bookings = useGraphqlList<BookingsQuery["list"]["results"][number]>({
+    query: QUERY_BOOKINGS,
     id: "bk",
-    fetch: async (q) => {
-      const query = normalizeQuery(q);
+    normalizeParams: (params) => {
+      const query = normalizeQuery(params);
       const range = `${DateTime.toSeconds(query.startTime)}-${DateTime.toSeconds(query.endTime)}`;
 
-      return getBookings(
-        ObjectUtils.cleanObj({
-          rangeStartTime: range,
-          assigneeUserIds: query.assigneeUserIds.length > 0 ? query.assigneeUserIds : undefined,
-          status: query.status || bookingActiveStatus,
-          getAll: true,
-        })
-      );
+      return ObjectUtils.cleanObj({
+        ...params,
+        rangeStartTime: range,
+        assigneeUserIds: query.assigneeUserIds.length > 0 ? query.assigneeUserIds : undefined,
+        status: query.status ?? bookingActiveStatus,
+        getAll: true,
+      });
     },
     isIgnoreEventActionType: true,
     events: [
@@ -136,22 +126,6 @@ export const BookingList: FC = () => {
   );
 
   const normalizedQuery = normalizeQuery(bookings.params);
-
-  const startWeek = DateTime.getRange(normalizedQuery.date, "week").start;
-  const daysOfWeek = new Array(7).fill(0).map((_, index) => {
-    const date = DateTime.add(startWeek, "day", index);
-
-    return {
-      date,
-    };
-  });
-
-  const syncColumnSize = () => {
-    if (ref.current) {
-      const collumn = ref.current.getElementsByClassName("rbc-day-slot")[0];
-      if (collumn) setColumnSize(collumn.clientWidth);
-    }
-  };
 
   const setDate = (date: Date) => {
     const isToday = DateTime.isSame(date, new Date(), "day");
@@ -242,371 +216,343 @@ export const BookingList: FC = () => {
   const isCanResetFilter = Object.keys(bookings.params).length > 0;
   const resetFilter = () => bookings.removeAllParams();
 
-  useEffect(() => {
-    syncColumnSize();
-  }, [layout.width, auth.user?.settings.isTwelveHour, normalizedQuery.view]);
+  const dates = useMemo(() => {
+    if (normalizedQuery.view === CalendarView.DAY) {
+      return [DateTime.normalizeDate(normalizedQuery.date)];
+    }
+
+    if (normalizedQuery.view === CalendarView.WEEK) {
+      const startWeek = DateTime.getRange(normalizedQuery.date, "week").start;
+      return new Array(7).fill(0).map((_, index) => DateTime.add(startWeek, "day", index));
+    }
+
+    return [];
+  }, [normalizedQuery.view, normalizedQuery.date]);
+
+  const columns = useMemo<TimeSlotsColumn[]>(() => {
+    if (normalizedQuery.view === CalendarView.DAY) {
+      return [
+        {
+          head: (
+            <Text fz="xs" px="xs" py={4}>
+              <DateFormat
+                value={normalizedQuery.date}
+                type="custom"
+                format={{ month: "long", day: "numeric", year: "numeric" }}
+              />
+            </Text>
+          ),
+        },
+      ];
+    }
+
+    if (normalizedQuery.view === CalendarView.WEEK) {
+      return dates.map((date) => ({
+        head: (
+          <Text fz="xs" px="xs" py={4}>
+            <DateFormat value={date} type="custom" format={{ weekday: "narrow" }} />
+            {" - "}
+            <DateFormat value={date} type="date" />
+          </Text>
+        ),
+      }));
+    }
+
+    return [];
+  }, [dates]);
+
+  const availableTimeIntervals = useMemo<TimeInterval[] | undefined>(() => {
+    const workingDays = workspaceSetting?.schedule?.workingDays ?? [];
+    if (workingDays.length === 0) return undefined;
+
+    const intervals: TimeInterval[] = [];
+
+    dates.forEach((date, dateIndex) => {
+      const dayOfWeek = DateTime.getDayOfWeek(date);
+      const workingDayIntervals = workingDays.filter((w) => w.day === dayOfWeek);
+      if (!workingDayIntervals) return;
+
+      workingDayIntervals.forEach((interval) => {
+        intervals.push({
+          start: interval.start,
+          end: interval.end,
+          columnIndex: dateIndex,
+        });
+      });
+    });
+
+    return intervals;
+  }, [workspaceSetting?.schedule?.workingDays, dates]);
+
+  const defaultSelectedDate = useMemo(() => {
+    const selectedDate =
+      dates[0] && DateTime.isBefore(new Date(), dates[0]) ? dates[0] : new Date();
+
+    return new Date(selectedDate);
+  }, [dates]);
+
+  const events = useMemo<TimeEvent[]>(() => {
+    return bookings.data.reduce((acc, booking) => {
+      const dateIndex = dates.findIndex((date) => DateTime.isSame(date, booking.startTime, "day"));
+
+      if (dateIndex < 0) return acc;
+
+      acc.push({
+        id: booking._id,
+        title: getBookingTitle(booking),
+        columnIndex: dateIndex,
+        start: DateTime.toTimeInputValue(booking.startTime),
+        end: DateTime.toTimeInputValue(booking.endTime),
+      });
+
+      return acc;
+    }, []);
+  }, [bookings.data, dates]);
 
   return (
-    <ModalCreateBooking>
-      {(modalCreateBooking) => (
-        <Stack p={16}>
-          <Card shadow="xs">
-            <Stack ref={ref}>
-              <Group justify="space-between">
-                <Group flex={1}>
-                  <Group gap={5}>
-                    <ActionIcon
-                      variant="outline"
-                      color={color("gray")}
-                      size="sm"
-                      onClick={previousRange}
-                    >
-                      <IconChevronLeft strokeWidth={1.5} size={18} />
-                    </ActionIcon>
+    <Stack p={16}>
+      <Card shadow="xs" p={0}>
+        <Stack>
+          <Group p="sm" pb={0} justify="space-between">
+            <Group flex={1}>
+              <Group gap={5}>
+                <ActionIcon
+                  variant="outline"
+                  color={color("gray")}
+                  size="sm"
+                  onClick={previousRange}
+                >
+                  <IconChevronLeft strokeWidth={1.5} size={18} />
+                </ActionIcon>
 
-                    <ActionIcon
-                      variant="outline"
-                      size="sm"
-                      color={color("gray")}
-                      onClick={nextRange}
-                    >
-                      <IconChevronRight strokeWidth={1.5} size={18} />
-                    </ActionIcon>
-                  </Group>
-
-                  <Text fz={14} fw={500} tt="capitalize">
-                    {displayDate}
-                  </Text>
-
-                  <Group gap={8}>
-                    <WorkspaceMemberSelector
-                      onSelect={toggleAssigneeUser}
-                      optionRightSection={(user) => {
-                        const isSelected = normalizedQuery.assigneeUserIds.includes(user.userId);
-                        return (
-                          <ActionIcon
-                            variant="subtle"
-                            color={color("gray")}
-                            size="sm"
-                            onClick={() => toggleAssigneeUser(user)}
-                          >
-                            {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
-                          </ActionIcon>
-                        );
-                      }}
-                      target={(ctx) => {
-                        return (
-                          <Card
-                            py={0}
-                            pl={8}
-                            pr={5}
-                            shadow="none"
-                            h={32}
-                            style={{ cursor: "pointer" }}
-                            withBorder
-                            onClick={ctx.toggle}
-                            radius={150}
-                            className="unselectable"
-                          >
-                            <Group wrap="nowrap" align="center" h={32} gap={5}>
-                              <IconUsers size={16} color={color("gray")} />
-
-                              {!isAssigneesReady ? (
-                                <Loader size={13} type="dots" color="gray" />
-                              ) : selectedAssignees.length === 0 ? (
-                                <Text fz={11} c="gray" fw={500}>
-                                  <Trans>Attendees</Trans>
-                                </Text>
-                              ) : (
-                                <Group gap={5}>
-                                  {selectedAssignees.map((u, i) => {
-                                    return (
-                                      <Center key={u.userId} ml={i > 0 ? -10 : 0}>
-                                        <Tooltip label={u.name}>
-                                          <Avatar user={u} size={23} withBorder />
-                                        </Tooltip>
-                                      </Center>
-                                    );
-                                  })}
-                                </Group>
-                              )}
-                            </Group>
-                          </Card>
-                        );
-                      }}
-                    />
-
-                    <Selector
-                      pinnedOptions={[
-                        {
-                          id: "default",
-                          label: t`Active`,
-                        },
-                        {
-                          id: BookingStatus.COMPLETED,
-                          label: bookingStatuses[BookingStatus.COMPLETED].label(),
-                        },
-                        {
-                          id: BookingStatus.RESCHEDULED,
-                          label: bookingStatuses[BookingStatus.RESCHEDULED].label(),
-                        },
-                        {
-                          id: BookingStatus.CANCELLED,
-                          label: bookingStatuses[BookingStatus.CANCELLED].label(),
-                        },
-                      ]}
-                      renderOption={(option) => {
-                        return (
-                          <Combobox.Option value={option.id} key={option.id}>
-                            <Group gap={5}>
-                              <IconCircleFilled
-                                size={13}
-                                color={color(
-                                  getBookingStatusColor(option.id as BookingStatus) || "primary"
-                                )}
-                              />
-                              <Text fz={11} c="gray" fw={500}>
-                                {option.label}
-                              </Text>
-                            </Group>
-                          </Combobox.Option>
-                        );
-                      }}
-                      onSelect={(e) => selectStatus(e?.id)}
-                      target={(ctx) => {
-                        const statusColor = !normalizedQuery.status
-                          ? "primary"
-                          : getBookingStatusColor(normalizedQuery.status as BookingStatus);
-                        const statusLabel = !normalizedQuery.status
-                          ? t`Active`
-                          : bookingStatuses[normalizedQuery.status as BookingStatus].label();
-
-                        return (
-                          <Card
-                            onClick={ctx.toggle}
-                            py={0}
-                            px={8}
-                            shadow="none"
-                            h={32}
-                            style={{ cursor: "pointer" }}
-                            withBorder
-                            radius={150}
-                            className="unselectable"
-                          >
-                            <Group wrap="nowrap" align="center" h={32} gap={5}>
-                              <IconCircleFilled size={13} color={color(statusColor)} />
-
-                              <Text fz={11} c="gray" fw={500}>
-                                {statusLabel}
-                              </Text>
-                            </Group>
-                          </Card>
-                        );
-                      }}
-                    />
-
-                    <Renderer visible={isCanResetFilter}>
-                      <Tooltip label={t`Reset filter`}>
-                        <ActionIcon
-                          variant="subtle"
-                          color={color("gray")}
-                          size="sm"
-                          onClick={resetFilter}
-                          radius={150}
-                          h={32}
-                          w={32}
-                        >
-                          <IconRefresh strokeWidth={1.5} size={18} />
-                        </ActionIcon>
-                      </Tooltip>
-                    </Renderer>
-                  </Group>
-                </Group>
-
-                <Group gap={10} justify="end">
-                  {!DateTime.isSame(normalizedQuery.date, new Date(), "day") && (
-                    <Button
-                      size="compact-sm"
-                      variant="light"
-                      leftIcon={IconCalendarDown}
-                      onClick={() => setDate(new Date())}
-                    >
-                      {normalizedQuery.view === CalendarView.DAY ? t`Today` : t`This week`}
-                    </Button>
-                  )}
-
-                  <CalendarViewSelector
-                    view={normalizedQuery.view}
-                    onChange={(view) => bookings.setParams({ view })}
-                  />
-
-                  <Tooltip label={t`You can drag and drop to select a time slot in the calendar.`}>
-                    <Button
-                      size="compact-sm"
-                      h={30}
-                      leftIcon={IconPlus}
-                      onClick={() => modalCreateBooking.open()}
-                    >
-                      <Trans>Create booking</Trans>
-                    </Button>
-                  </Tooltip>
-                </Group>
+                <ActionIcon variant="outline" size="sm" color={color("gray")} onClick={nextRange}>
+                  <IconChevronRight strokeWidth={1.5} size={18} />
+                </ActionIcon>
               </Group>
 
-              <Stack gap={0}>
-                <Renderer visible={normalizedQuery.view === CalendarView.WEEK}>
-                  <Group justify="end" gap={0} wrap="nowrap" w="100%">
-                    {daysOfWeek.map((day, index) => {
-                      return (
-                        <Card
-                          key={index}
-                          shadow="none"
-                          radius={0}
-                          px={5}
-                          py={0}
-                          pb={5}
-                          style={{
-                            width: `${columnSize}px`,
-                            boxSizing: "border-box",
-                            display: "flex",
-                          }}
-                        >
-                          <Group justify="center" align="center" wrap="nowrap" w="100%">
-                            <Text fz={13} fw={700} tt="capitalize" c="gray">
-                              {DateTime.format(day.date, { locale: lang.locale, weekday: "short" })}
-                            </Text>
+              <Text fz={14} fw={500} tt="capitalize">
+                {displayDate}
+              </Text>
 
-                            <Text fz={13} fw={500} tt="capitalize" c="gray">
-                              {DateTime.format(day.date, {
-                                locale: lang.locale,
-                                month: "2-digit",
-                                day: "2-digit",
+              <Group gap={8}>
+                <WorkspaceMemberSelector
+                  onSelect={toggleAssigneeUser}
+                  optionRightSection={(user) => {
+                    const isSelected = normalizedQuery.assigneeUserIds.includes(user.userId);
+                    return (
+                      <ActionIcon
+                        variant="subtle"
+                        color={color("gray")}
+                        size="sm"
+                        onClick={() => toggleAssigneeUser(user)}
+                      >
+                        {isSelected ? <IconMinus size={16} /> : <IconPlus size={16} />}
+                      </ActionIcon>
+                    );
+                  }}
+                  target={(ctx) => {
+                    return (
+                      <Card
+                        py={0}
+                        pl={8}
+                        pr={5}
+                        shadow="none"
+                        h={32}
+                        style={{ cursor: "pointer" }}
+                        withBorder
+                        onClick={ctx.toggle}
+                        radius={150}
+                        className="unselectable"
+                      >
+                        <Group wrap="nowrap" align="center" h={32} gap={5}>
+                          <IconUsers size={16} color={color("gray")} />
+
+                          {!isAssigneesReady ? (
+                            <Loader size={13} type="dots" color="gray" />
+                          ) : selectedAssignees.length === 0 ? (
+                            <Text fz={11} c="gray" fw={500}>
+                              <Trans>Attendees</Trans>
+                            </Text>
+                          ) : (
+                            <Group gap={5}>
+                              {selectedAssignees.map((u, i) => {
+                                return (
+                                  <Center key={u.userId} ml={i > 0 ? -10 : 0}>
+                                    <Tooltip label={u.name}>
+                                      <Avatar user={u} size={23} withBorder />
+                                    </Tooltip>
+                                  </Center>
+                                );
                               })}
-                            </Text>
-                          </Group>
-                        </Card>
-                      );
-                    })}
-                  </Group>
-                </Renderer>
-
-                <Renderer visible={normalizedQuery.view === CalendarView.DAY}>
-                  <Group justify="end" gap={0} wrap="nowrap" w="100%">
-                    {daysOfWeek.map((day, index) => {
-                      const isActive = DateTime.isSame(normalizedQuery.date, day.date, "day");
-
-                      return (
-                        <Group flex={1} key={index} justify="center" pb={10}>
-                          <Button
-                            key={index}
-                            variant={isActive ? "filled" : "light"}
-                            color={isActive ? "primary" : "gray"}
-                            onClick={() => setDate(new Date(day.date))}
-                            size="compact-sm"
-                          >
-                            <Group justify="center" align="center" wrap="nowrap" w="100%">
-                              <Text fz={13} fw={700} tt="capitalize">
-                                {DateTime.format(day.date, {
-                                  locale: lang.locale,
-                                  weekday: "short",
-                                })}
-                              </Text>
-
-                              <Text fz={13} fw={500} tt="capitalize">
-                                {DateTime.format(day.date, {
-                                  locale: lang.locale,
-                                  month: "2-digit",
-                                  day: "2-digit",
-                                })}
-                              </Text>
                             </Group>
-                          </Button>
+                          )}
                         </Group>
-                      );
-                    })}
-                  </Group>
-                </Renderer>
-
-                <Calendar
-                  {...calendarProps}
-                  className="hide-header"
-                  dayLayoutAlgorithm="no-overlap"
-                  date={normalizedQuery.date}
-                  view={normalizedQuery.view}
-                  toolbar={false}
-                  events={bookings.data.map((b) => ({
-                    id: b._id,
-                    title: getBookingTitle(b),
-                    start: new Date(b.startTime * 1000),
-                    end: new Date(b.endTime * 1000),
-                    _data: b,
-                  }))}
-                  popup
-                  slotPropGetter={(slot) => {
-                    const workDaySlot = workDaySlots.find((v) => v.dayWeek === slot.getDay());
-                    const isInWorkspaceWorkSlots = isInWorkSlot(slot, workDaySlot?.slots);
-
-                    const bg = {
-                      light: isInWorkspaceWorkSlots
-                        ? "var(--mantine-color-body)"
-                        : `var(--mantine-color-gray-light)`,
-                      dark: isInWorkspaceWorkSlots
-                        ? "var(--mantine-color-default-hover)"
-                        : `var(--mantine-color-body)`,
-                    };
-
-                    return {
-                      style: {
-                        backgroundColor: bg[colorScheme],
-                      },
-                    };
+                      </Card>
+                    );
                   }}
-                  eventPropGetter={(e) => {
-                    const event = bookings.data.find((v) => v._id === e.id);
-                    const statusColor =
-                      getBookingStatusColor(event?.status as BookingStatus) || "primary";
-
-                    return {
-                      style: {
-                        backgroundColor: color(statusColor),
-                        borderColor: color(statusColor + ".8"),
-                      },
-                    };
-                  }}
-                  components={{
-                    event: (props) => {
-                      const booking = (props.event as any)._data as BookingEntity;
-
-                      return (
-                        <HoverCard shadow="xs" zIndex={zIndexes.pannel + 1}>
-                          <HoverCard.Target>
-                            <Text fz={14} fw={500}>
-                              {getBookingTitle(booking)}
-                            </Text>
-                          </HoverCard.Target>
-
-                          <HoverCard.Dropdown>
-                            <Group w="max-content">
-                              <BookingCard w={380} booking={booking} p={0} withBorder={false} />
-                            </Group>
-                          </HoverCard.Dropdown>
-                        </HoverCard>
-                      );
-                    },
-                  }}
-                  selectable
-                  onSelectSlot={(slot) =>
-                    modalCreateBooking.open({
-                      startTime: slot.start,
-                      endTime: slot.end,
-                    })
-                  }
                 />
-              </Stack>
-            </Stack>
-          </Card>
+
+                <Selector
+                  dropdownProps={{ miw: 200 }}
+                  pinnedOptions={[
+                    {
+                      id: "default",
+                      label: <Trans>Active</Trans>,
+                    },
+                    {
+                      id: BookingStatus.Completed,
+                      label: t(bookingStatuses[BookingStatus.Completed].label),
+                    },
+                    {
+                      id: BookingStatus.Rescheduled,
+                      label: t(bookingStatuses[BookingStatus.Rescheduled].label),
+                    },
+                    {
+                      id: BookingStatus.Cancelled,
+                      label: t(bookingStatuses[BookingStatus.Cancelled].label),
+                    },
+                  ]}
+                  renderOption={(option) => {
+                    return (
+                      <Combobox.Option value={option.id} key={option.id}>
+                        <Group gap={5}>
+                          <IconCircleFilled
+                            size={13}
+                            color={color(
+                              bookingStatuses[option.id as BookingStatus]?.color ?? "primary"
+                            )}
+                          />
+                          <Text fz="sm" c="gray" fw={500}>
+                            {option.label}
+                          </Text>
+                        </Group>
+                      </Combobox.Option>
+                    );
+                  }}
+                  onSelect={(e) => selectStatus(e?.id)}
+                  target={(ctx) => {
+                    const statusColor = !normalizedQuery.status
+                      ? "primary"
+                      : bookingStatuses[normalizedQuery.status as BookingStatus].color ?? "primary";
+
+                    const statusLabel = !normalizedQuery.status ? (
+                      <Trans>Active</Trans>
+                    ) : (
+                      t(bookingStatuses[normalizedQuery.status as BookingStatus].label)
+                    );
+
+                    return (
+                      <Card
+                        onClick={ctx.toggle}
+                        py={0}
+                        px={8}
+                        shadow="none"
+                        h={32}
+                        style={{ cursor: "pointer" }}
+                        withBorder
+                        radius={150}
+                        className="unselectable"
+                      >
+                        <Group wrap="nowrap" align="center" h={32} gap={5}>
+                          <IconCircleFilled size={13} color={color(statusColor)} />
+
+                          <Text fz={11} c="gray" fw={500}>
+                            {statusLabel}
+                          </Text>
+                        </Group>
+                      </Card>
+                    );
+                  }}
+                />
+
+                <Renderer visible={isCanResetFilter}>
+                  <Tooltip label={<Trans>Reset filter</Trans>}>
+                    <ActionIcon
+                      variant="subtle"
+                      color={color("gray")}
+                      size="sm"
+                      onClick={resetFilter}
+                      radius={150}
+                      h={32}
+                      w={32}
+                    >
+                      <IconRefresh strokeWidth={1.5} size={18} />
+                    </ActionIcon>
+                  </Tooltip>
+                </Renderer>
+              </Group>
+            </Group>
+
+            <Group gap={10} justify="end">
+              {!DateTime.isSame(normalizedQuery.date, new Date(), "day") && (
+                <Button
+                  size="compact-sm"
+                  variant="light"
+                  leftIcon={IconCalendarDown}
+                  onClick={() => setDate(new Date())}
+                >
+                  {normalizedQuery.view === CalendarView.DAY ? (
+                    <Trans>Today</Trans>
+                  ) : (
+                    <Trans>This week</Trans>
+                  )}
+                </Button>
+              )}
+
+              <CalendarViewSelector
+                view={normalizedQuery.view}
+                onChange={(view) => bookings.setParams({ view })}
+              />
+
+              <Tooltip
+                label={<Trans>You can drag and drop to select a time slot in the calendar.</Trans>}
+              >
+                <Button
+                  size="compact-sm"
+                  h={30}
+                  leftIcon={IconPlus}
+                  onClick={() => modalCreateBookingRef.current?.open()}
+                >
+                  <Trans>Create booking</Trans>
+                </Button>
+              </Tooltip>
+            </Group>
+          </Group>
+
+          <Stack gap={0}>
+            <TimeSlots
+              cols={columns}
+              events={events}
+              isAllowUnavailableTimeIntervals
+              availableTimeIntervals={availableTimeIntervals}
+              onSelect={(value) => {
+                const date = dates[value.columnIndex];
+                const startMins = getMinutesFromStringTime(value.start);
+                const endMins = getMinutesFromStringTime(value.end);
+
+                if (!date || !startMins || !endMins) return;
+
+                const startOfDate = DateTime.getRange(date, "date").start;
+                const startTime = new Date(startOfDate.getTime() + startMins * 60 * 1000);
+                const endTime = new Date(startOfDate.getTime() + endMins * 60 * 1000);
+
+                modalCreateBookingRef.current?.open({
+                  startTime,
+                  endTime,
+                });
+              }}
+              onEventClick={({ id }) => {
+                const event = bookings.data.find((b) => b._id === id);
+                if (!event) return;
+                modalBookingDetailRef.current?.open(event);
+              }}
+            />
+          </Stack>
         </Stack>
-      )}
-    </ModalCreateBooking>
+      </Card>
+
+      <ModalCreateBooking ref={modalCreateBookingRef} />
+      <ModalBookingDetail ref={modalBookingDetailRef} />
+    </Stack>
   );
 };

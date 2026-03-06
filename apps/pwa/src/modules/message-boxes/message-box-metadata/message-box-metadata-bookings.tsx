@@ -1,31 +1,29 @@
 "use client";
 
 import { Empty } from "@/components/empty";
-import { useList } from "@/components/list/use-list";
-import { EventType } from "@/graphql/enums.graphql";
-import { getBookings } from "@/modules/bookings/booking-service";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
+import QUERY_BOOKINGS from "@/modules/bookings/graphql/queryBookings.graphql";
+
 export const MessageBoxMetadataBookings: AccordionItemComponent = ({ customer }) => {
-  const bookings = useList({
-    fetch: async () => getBookings({ customerId: customer._id }),
-    events: [
-      EventType.BookingNew,
-      EventType.BookingCancelled,
-      EventType.BookingCheckin,
-      EventType.BookingCompleted,
-      EventType.BookingInProgress,
-      EventType.BookingUpdated,
-    ],
+  const { data } = useQuery(QUERY_BOOKINGS, {
+    variables: {
+      query: {
+        customerId: customer._id,
+      },
+    },
   });
+
+  const isEmpty = data && data.list && data.list.results && data.list.results.length === 0;
 
   return (
     <Stack>
-      {bookings.isEmpty && <Empty hideBorder />}
+      {isEmpty && <Empty hideBorder />}
 
-      {bookings.data?.map((booking) => {
+      {data?.list.results.map((booking) => {
         return <BookingCard key={booking._id} booking={booking} withBorder shadow="none" />;
       })}
     </Stack>

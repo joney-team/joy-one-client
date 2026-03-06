@@ -1,20 +1,7 @@
-import {
-  SetWorkspaceSettingsDto,
-  WorkspaceSettingEntity,
-} from "@/modules/workspace-settings/workspace-settings-types";
+import { getMinutesFromStringTime } from "@/components/time-slots/time-slots.utils";
+import { WorkingDayInterval } from "@/graphql/types.graphql";
 import { WorkSlot } from "@/types";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { api } from "../apis";
-import { useAuth } from "../auth/auth-context";
-import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
-
-export async function getWorkspaceSettings() {
-  return api.get<WorkspaceSettingEntity>(`/workspace-settings`);
-}
-
-export async function setWorkspaceSettings(dto: SetWorkspaceSettingsDto) {
-  return api.put<WorkspaceSettingEntity>(`/workspace-settings`, dto);
-}
+import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 
 export interface WorkDaySlot {
   dayWeek: number;
@@ -25,43 +12,44 @@ export interface WorkDaySlot {
   slots: WorkSlot[];
 }
 
-export function useWorkDaySlots() {
-  const auth = useAuth();
-  const { workspaceSetting } = useWorkspaceSetting();
+// TODO: Workspace schedule migration
+export function useWorkDaySlots(): WorkDaySlot[] {
+  // const { workspaceSetting } = useWorkspaceSetting();
 
-  let workDaySlots: WorkDaySlot[] = new Array(7).fill(0).reduce((acc, _, curr) => {
-    const relatedSlots = (workspaceSetting?.wSlots || []).filter((v) => v.dayWeek === curr);
-    const startSlot = relatedSlots.reduce((acc, curr) => {
-      return acc.startHour < curr.startHour ? acc : curr;
-    }, relatedSlots[0]);
+  // let workDaySlots: WorkDaySlot[] = new Array(7).fill(0).reduce((acc, _, curr) => {
+  //   // TODO: Workspace schedule migration
+  //   const relatedSlots = ([] as any).filter((v) => v.dayWeek === curr);
+  //   const startSlot = relatedSlots.reduce((acc, curr) => {
+  //     return acc.startHour < curr.startHour ? acc : curr;
+  //   }, relatedSlots[0]);
 
-    const endSlot = relatedSlots.reduce((acc, curr) => {
-      return acc.endHour > curr.endHour ? acc : curr;
-    }, relatedSlots[0]);
+  //   const endSlot = relatedSlots.reduce((acc, curr) => {
+  //     return acc.endHour > curr.endHour ? acc : curr;
+  //   }, relatedSlots[0]);
 
-    if (startSlot && endSlot) {
-      acc.push({
-        dayWeek: startSlot.dayWeek,
-        startHour: startSlot.startHour,
-        startMin: startSlot.startMin,
-        endHour: endSlot.endHour,
-        endMin: endSlot.endMin,
-        slots: relatedSlots,
-      });
-    }
-    return acc;
-  }, [] as WorkDaySlot[]);
+  //   if (startSlot && endSlot) {
+  //     acc.push({
+  //       dayWeek: startSlot.dayWeek,
+  //       startHour: startSlot.startHour,
+  //       startMin: startSlot.startMin,
+  //       endHour: endSlot.endHour,
+  //       endMin: endSlot.endMin,
+  //       slots: relatedSlots,
+  //     });
+  //   }
+  //   return acc;
+  // }, [] as WorkDaySlot[]);
 
-  workDaySlots = workDaySlots.sort((a, b) => a.dayWeek - b.dayWeek);
+  // workDaySlots = workDaySlots.sort((a, b) => a.dayWeek - b.dayWeek);
 
-  if (auth.user?.settings.isStartOfWeekSunday) {
-    workDaySlots = [
-      ...workDaySlots.filter((v) => v.dayWeek !== 0),
-      ...workDaySlots.filter((v) => v.dayWeek === 0),
-    ];
-  }
+  // if (auth.user?.settings.isStartOfWeekSunday) {
+  //   workDaySlots = [
+  //     ...workDaySlots.filter((v) => v.dayWeek !== 0),
+  //     ...workDaySlots.filter((v) => v.dayWeek === 0),
+  //   ];
+  // }
 
-  return workDaySlots;
+  return [];
 }
 
 export const isInWorkSlot = (slot: Date, workSlots?: WorkSlot[]) => {
@@ -71,6 +59,24 @@ export const isInWorkSlot = (slot: Date, workSlots?: WorkSlot[]) => {
     const from = DateTime.normalizeDate(new Date(slot).setHours(s.startHour, s.startMin, 0, 0));
     const to = DateTime.normalizeDate(new Date(slot).setHours(s.endHour, s.endMin, 0, 0));
     return DateTime.isBefore(from, slot) && DateTime.isAfter(to, slot);
+  });
+};
+
+export const isInWorkingDayInterval = (
+  date: RawDate,
+  workingDayIntervals: WorkingDayInterval[]
+) => {
+  const dayOfWeek = DateTime.getDayOfWeek(date);
+  const startOfDate = DateTime.getRange(date, "day").start;
+
+  return workingDayIntervals.some((interval) => {
+    const startMins = getMinutesFromStringTime(interval.start);
+    const endMins = getMinutesFromStringTime(interval.end);
+    if (!startMins || !endMins || dayOfWeek !== interval.day) return false;
+
+    const from = DateTime.add(startOfDate, "minute", startMins);
+    const to = DateTime.add(startOfDate, "minute", endMins);
+    return DateTime.isBefore(from, date) && DateTime.isAfter(to, date);
   });
 };
 

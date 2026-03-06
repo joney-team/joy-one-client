@@ -1,15 +1,16 @@
 "use client";
 
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { Trans } from "@lingui/react/macro";
-import { Modal } from "@mantine/core";
 import { IconCalendar } from "@tabler/icons-react";
 import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
 import { Fragment } from "react/jsx-runtime";
 import { BookingForm, BookingFormProps } from "../components/form-booking";
 
 export interface ModalCreateBookingRef {
-  open: (args?: Omit<BookingFormProps, "onFinished">) => void;
+  open: (
+    args?: Pick<BookingFormProps, "customer" | "endTime" | "startTime" | "assigneeUsers">
+  ) => void;
   close: () => void;
 }
 
@@ -30,30 +31,23 @@ export const ModalCreateBooking = forwardRef<
       setArgs(null);
     },
   }));
+
   return (
     <Fragment>
-      {typeof children === "function"
-        ? children({
-            open: (p) => {
-              setArgs(p ?? {});
-            },
-            close: () => {
-              setArgs(null);
-            },
-          })
-        : null}
+      {children?.({
+        open: (p) => {
+          setArgs(p ?? {});
+        },
+        close: () => {
+          setArgs(null);
+        },
+      })}
 
       <Modal
         opened={!!args}
         onClose={() => setArgs(null)}
-        title={
-          <ModalHead
-            name={
-              args?.reschedule ? <Trans>Reschedule booking</Trans> : <Trans>Create booking</Trans>
-            }
-            icon={IconCalendar}
-          />
-        }
+        icon={IconCalendar}
+        name={args?.reschedule ? <Trans>Reschedule booking</Trans> : <Trans>Create booking</Trans>}
         size={500}
       >
         {args && (

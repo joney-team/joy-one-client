@@ -1,24 +1,53 @@
 "use client";
 
-import { ModalHead } from "@/components/modal/modal-head";
-import { BookingEntity } from "@/modules/bookings/booking-types";
+import { Modal } from "@/components/modal/modal";
 import { Trans } from "@lingui/react/macro";
-import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
+import { forwardRef, useImperativeHandle, useState } from "react";
 import { BookingForm } from "../components/form-booking";
+import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
 
-export const OnModalRescheduleBooking = (booking: BookingEntity) => {
-  return modals.open({
-    title: <ModalHead name={<Trans>Reschedule booking</Trans>} icon={IconCalendar} />,
-    modalId: "RescheduleBooking",
-    size: 500,
-    children: (
-      <BookingForm
-        key={`${booking._id}-reschedule`}
-        reschedule={booking}
-        onFinished={() => modals.closeAll()}
-        onCancel={() => modals.closeAll()}
-      />
-    ),
-  });
+type RescheduleBookingArgs = {
+  booking: BookingDataFragment;
+  onRescheduled?: (booking: BookingDataFragment) => void;
 };
+
+export interface ModalRescheduleBookingRef {
+  open: (args: RescheduleBookingArgs) => void;
+  close: () => void;
+}
+
+export const ModalRescheduleBooking = forwardRef<ModalRescheduleBookingRef>((_, ref) => {
+  const [args, setArgs] = useState<RescheduleBookingArgs | null>(null);
+
+  const onClose = () => {
+    setArgs(null);
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: (p) => {
+      setArgs(p);
+    },
+    close: () => {
+      setArgs(null);
+    },
+  }));
+
+  return (
+    <Modal
+      opened={!!args}
+      onClose={onClose}
+      name={<Trans>Reschedule booking</Trans>}
+      icon={IconCalendar}
+    >
+      {args && (
+        <BookingForm
+          key={args.booking._id}
+          reschedule={args.booking}
+          onFinished={() => setArgs(null)}
+          onCancel={() => setArgs(null)}
+        />
+      )}
+    </Modal>
+  );
+});

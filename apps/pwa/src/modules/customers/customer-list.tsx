@@ -27,8 +27,8 @@ import { Fragment, useRef, type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { type ModalCustomerRef } from "./customer-modal";
-import { CustomerEntity } from "./customer-types";
 
+import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
 import QUERY_CUSTOMERS from "./graphql/queryCustomers.graphql";
 
 const ModalCustomer = dynamic(
@@ -46,7 +46,7 @@ export const CustomerList: FC = () => {
   return (
     <Fragment>
       <Stack p={16}>
-        <List<CustomerEntity>
+        <List<CustomerDataFragment>
           id="cus"
           name={<Trans>Customers</Trans>}
           icon={IconUserSquare}

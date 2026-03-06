@@ -1,35 +1,24 @@
 "use client";
 
-import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
 import { EventType } from "@/graphql/enums.graphql";
-import { CustomerBookings } from "@/modules/customers/components/customer-booking";
 import { CustomerInformations } from "@/modules/customers/components/customer-information";
 import { CustomerEntity } from "@/modules/customers/customer-types";
 import { useFetch } from "@/utils/use-fetch.util";
 import { ActionIcon, Group, Skeleton, Stack } from "@mantine/core";
-import {
-  IconCalendarPlus,
-  IconFiles,
-  IconPill,
-  IconStackPush,
-  IconTimelineEvent,
-  IconUserScan,
-} from "@tabler/icons-react";
+import { IconFiles, IconPill, IconTimelineEvent, IconUserScan } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { Fragment, useEffect } from "react";
+import { Fragment } from "react";
 import { archiveCustomer, getCustomerByCode } from "../customer-service";
 
 import { SectionTitle } from "@/components/session-title";
 import { FilesBox } from "@/modules/files/files-box";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
 
 import { Archived } from "@/components/archived";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { CtasWrapper } from "@/components/cta-wrapper";
 import { Renderer } from "@/components/renderer";
 import { useLayout } from "@/layout/layout-context";
-import { ModalCreateBooking } from "@/modules/bookings/modals/modal-create-booking";
 import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -78,45 +67,6 @@ export const CustomerDetail = () => {
 
   const { data: customer } = detail;
 
-  useEffect(() => {
-    if (customer) {
-      layout.setComponents({
-        head: customer.name,
-        navigation: (
-          <Fragment>
-            {workspace.hasPermission(WorkspacePermission.BOOKING_MANAGER) && (
-              <ModalCreateBooking>
-                {(modalCreateBooking) => (
-                  <Button
-                    leftIcon={IconCalendarPlus}
-                    variant="outline"
-                    onClick={() => modalCreateBooking.open({ customer })}
-                    size="xs"
-                  >
-                    <Trans>Booking</Trans>
-                  </Button>
-                )}
-              </ModalCreateBooking>
-            )}
-
-            <ModalCreateTask>
-              {(modalCreateTask) => (
-                <Button
-                  leftIcon={IconStackPush}
-                  variant="outline"
-                  onClick={() => modalCreateTask.open({ initial: { customer: customer as any } })}
-                  size="xs"
-                >
-                  <Trans>Task</Trans>
-                </Button>
-              )}
-            </ModalCreateTask>
-          </Fragment>
-        ),
-      });
-    }
-  }, [customer, workspace.member.permissions]);
-
   if (detail.isFetching)
     return (
       <Stack p={16}>
@@ -145,10 +95,6 @@ export const CustomerDetail = () => {
             <SectionTitle name="KYC" icon={IconUserScan} />
             <CustomerKyc customer={customer} />
           </Stack>
-        </Renderer>
-
-        <Renderer visible={!!getAvailableModule("bookings")}>
-          <CustomerBookings customer={customer} />
         </Renderer>
 
         <Stack gap={10}>

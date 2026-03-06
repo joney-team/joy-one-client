@@ -20,7 +20,6 @@ import {
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconCalendar,
-  IconCornerDownRight,
   IconFlag,
   IconFlagFilled,
   IconGripVertical,
@@ -39,20 +38,21 @@ import Link from "next/link";
 import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
 import { Avatar } from "@/components/avatar";
+import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
-import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
-import { useTaskStatuses } from "../../hooks/use-task-statuses";
-import { useTasksQuery } from "../../hooks/use-tasks-query";
-import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { useTaskMenu } from "../../components/task-menu/task-menu";
 import { TaskMenuAction } from "../../components/task-menu/task-menu-types";
 import { TaskRowDraggable } from "../../components/task-row-draggable/task-row-draggable";
 import { TaskSelectionBox } from "../../components/task-selections/task-selection-box";
+import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { useTaskStatuses } from "../../hooks/use-task-statuses";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
+import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import { ListTaskRowHeadProps } from "./list-task-row-head";
@@ -97,6 +97,7 @@ export const ListTaskRow: FC<
   const color = useColor();
   const pathname = usePathname();
   const taskMenu = useTaskMenu({ task, groupVariables });
+  const modalCreateTaskRef = useRef<ModalCreateTaskRef | null>(null);
   const droppableRef = useRef<HTMLDivElement | null>(null);
 
   const { status } = useTaskStatuses(task);
@@ -326,29 +327,25 @@ export const ListTaskRow: FC<
                               )}
 
                               {!task.parentId && (
-                                <ModalCreateTask>
-                                  {(modalCreateTask) => (
-                                    <Tooltip label={<Trans>Create subtask</Trans>}>
-                                      <ActionIcon
-                                        variant="subtle"
-                                        color="gray.6"
-                                        size="sm"
-                                        onClick={(e) => {
-                                          e.preventDefault();
-                                          e.stopPropagation();
-                                          modalCreateTask.open({
-                                            initial: { parent: task },
-                                            onCreated: () => {
-                                              setIsShowSubtasks(true);
-                                            },
-                                          });
-                                        }}
-                                      >
-                                        <IconPlus size={14} />
-                                      </ActionIcon>
-                                    </Tooltip>
-                                  )}
-                                </ModalCreateTask>
+                                <Tooltip label={<Trans>Create subtask</Trans>}>
+                                  <ActionIcon
+                                    variant="subtle"
+                                    color="gray.6"
+                                    size="sm"
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      modalCreateTaskRef.current?.open({
+                                        initial: { parent: task },
+                                        onCreated: () => {
+                                          setIsShowSubtasks(true);
+                                        },
+                                      });
+                                    }}
+                                  >
+                                    <IconPlus size={14} />
+                                  </ActionIcon>
+                                </Tooltip>
                               )}
 
                               <ActionIcon
@@ -506,6 +503,8 @@ export const ListTaskRow: FC<
             groupVariables={subTasksGroupVariables}
           />
         ))}
+
+      <ModalCreateTask ref={modalCreateTaskRef} />
     </Fragment>
   );
 };

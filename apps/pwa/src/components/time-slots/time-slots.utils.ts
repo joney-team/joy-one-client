@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { TIME_SLOTS_CONFIG, useTimeSlots } from "./time-slots.constants";
 import { TimeEvent, TimeInterval } from "./time-slots.types";
+import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 
 export function getMousePosInElement(e: MouseEvent, el: HTMLElement) {
   const rect = el.getBoundingClientRect();

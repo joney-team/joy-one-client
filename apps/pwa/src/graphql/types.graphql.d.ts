@@ -83,8 +83,10 @@ export type Booking = {
   __typename: 'Booking';
   _id: Scalars['String']['output'];
   assigneeUserIds: Array<Scalars['String']['output']>;
+  assigneeUsers: Array<WorkspaceMember>;
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
+  customer: Maybe<Customer>;
   customerId: Maybe<Scalars['String']['output']>;
   endTime: Scalars['Float']['output'];
   note: Maybe<Scalars['String']['output']>;
@@ -339,6 +341,7 @@ export type Customer = {
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   email: Maybe<Scalars['String']['output']>;
   gender: Maybe<Gender>;
+  lastCheckin: Maybe<Scalars['Float']['output']>;
   location: Maybe<LocationEntity>;
   medicalHistory: Maybe<Array<Scalars['String']['output']>>;
   name: Scalars['String']['output'];
@@ -353,6 +356,8 @@ export type Customer = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   vnLocation: Maybe<LocationEntity>;
   vnSecondaryLocation: Maybe<LocationEntity>;
+  workspaceBranch: Maybe<WorkspaceBranch>;
+  workspaceBranchId: Maybe<Scalars['String']['output']>;
 };
 
 export type CustomerForm = {
@@ -929,6 +934,8 @@ export type Mutation = {
   assignWorkspaceMemberRoles: WorkspaceMember;
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
+  cancelBooking: Booking;
+  createBooking: Booking;
   createCategory: Category;
   createProduct: Product;
   createTag: Tag;
@@ -948,10 +955,12 @@ export type Mutation = {
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
+  rescheduleBooking: Booking;
   setPluginExternalStorage: PluginExternalStorage;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateActivity: Activity;
+  updateBooking: Booking;
   updateCategory: Category;
   updateTaskStatuses: Array<TaskStatus>;
   updateWorkspace: Workspace;
@@ -995,6 +1004,26 @@ export type MutationBulkUpdateTagsArgs = {
 
 export type MutationBulkUpdateTasksArgs = {
   items: Array<UpdateTaskInput>;
+};
+
+
+export type MutationCancelBookingArgs = {
+  id: Scalars['String']['input'];
+  reason: Scalars['String']['input'];
+};
+
+
+export type MutationCreateBookingArgs = {
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  createdAt?: InputMaybe<Scalars['Float']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  endTime: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  reasonForCancellation?: InputMaybe<Scalars['String']['input']>;
+  startTime: Scalars['Float']['input'];
+  status: BookingStatus;
+  title?: InputMaybe<Scalars['String']['input']>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1114,6 +1143,21 @@ export type MutationRemoveTagArgs = {
 };
 
 
+export type MutationRescheduleBookingArgs = {
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  createdAt?: InputMaybe<Scalars['Float']['input']>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  endTime: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  prevBookingId: Scalars['String']['input'];
+  reasonForCancellation?: InputMaybe<Scalars['String']['input']>;
+  startTime: Scalars['Float']['input'];
+  status: BookingStatus;
+  title?: InputMaybe<Scalars['String']['input']>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationSetPluginExternalStorageArgs = {
   accessKeyId?: InputMaybe<Scalars['String']['input']>;
   bucketName?: InputMaybe<Scalars['String']['input']>;
@@ -1132,6 +1176,15 @@ export type MutationSyncTaskArgs = {
 export type MutationUpdateActivityArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateBookingArgs = {
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  customerId?: InputMaybe<Scalars['String']['input']>;
+  id: Scalars['String']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  title?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -1662,6 +1715,7 @@ export type Query = {
   activities: ActivitiesPaginated;
   activity: Activity;
   appConfig: AppConfig;
+  booking: Booking;
   bookings: BookingsPaginated;
   categories: CategoriesPaginated;
   category: Category;
@@ -1735,6 +1789,11 @@ export type QueryActivitiesArgs = {
 
 
 export type QueryActivityArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryBookingArgs = {
   id: Scalars['String']['input'];
 };
 

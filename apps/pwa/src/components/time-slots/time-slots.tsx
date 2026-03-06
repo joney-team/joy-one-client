@@ -19,6 +19,7 @@ export const TimeSlots: FC<TimeSlotsProps> = ({
   onEventClick,
   onEventResize,
   availableTimeIntervals,
+  isAllowUnavailableTimeIntervals = false,
 }) => {
   const rootRef = useRef<HTMLDivElement>(null);
   const headRef = useRef<HTMLDivElement>(null);
@@ -76,6 +77,7 @@ export const TimeSlots: FC<TimeSlotsProps> = ({
         onEventClick,
         onEventResize,
         availableTimeIntervals,
+        isAllowUnavailableTimeIntervals,
       }}
     >
       <div

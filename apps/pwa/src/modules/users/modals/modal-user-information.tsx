@@ -1,16 +1,10 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
-import { ButtonViewMore } from "@/components/buttons/button-view-more";
 import { Empty } from "@/components/empty";
-import { Errored } from "@/components/errored";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
-import { useList, type UseList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
-import { getBookings } from "@/modules/bookings/booking-service";
-import { BookingEntity } from "@/modules/bookings/booking-types";
-import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { useColor } from "@/modules/theme/use-color";
 import { getUserPublicInformation } from "@/modules/users/users-service";
 import { UserPublicInformation } from "@/modules/users/users-types";
@@ -45,7 +39,6 @@ import {
   IconAccessible,
   IconBrandGithub,
   IconCake,
-  IconCalendar,
   IconMail,
   IconPhone,
   IconUser,
@@ -74,11 +67,6 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
   const [userMemberInfos] = useWorkspaceMembers([user._id]);
   const member = userMemberInfos.find((v) => v.userId === user._id);
-
-  const bookings = useList({
-    id: `user-bookings-${user._id}`,
-    fetch: () => getBookings({ assigneeUserIds: [user._id] }),
-  });
 
   const githubProvider = user.providers?.find((p) => p.providerId === "github.com");
 
@@ -194,14 +182,6 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
             </Tabs.Tab>
           )}
 
-          <Tabs.Tab value="bookings" fz={14} fw={500} h={30} px={16 * 2}>
-            <Trans>Bookings</Trans>
-
-            <Text component="span" ml={3} fz={14} c="gray">
-              ({bookings.count})
-            </Text>
-          </Tabs.Tab>
-
           {!!member && (
             <Tabs.Tab value="workspace-settings" fz={14} fw={500} h={30} px={16 * 2}>
               <Trans>Workspace settings</Trans>
@@ -215,10 +195,6 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
 
         <Tabs.Panel value="mutual_workspaces" pt={16}>
           <UserMutualWorkspaces user={user} />
-        </Tabs.Panel>
-
-        <Tabs.Panel value="bookings" pt={16}>
-          <UserBookings user={user} bookings={bookings} />
         </Tabs.Panel>
 
         {!!member && (
@@ -269,37 +245,6 @@ const UserActivity: FC<{ user: UserPublicInformation }> = (props) => {
         empty={<Empty hideBorder message={<Trans>No activity</Trans>} />}
         fetching={<Skeleton height={50} />}
       />
-    </Stack>
-  );
-};
-
-const UserBookings: FC<{
-  user: UserPublicInformation;
-  bookings: UseList<BookingEntity>;
-}> = (props) => {
-  const { bookings } = props;
-
-  return (
-    <Stack>
-      <Empty
-        visible={bookings.isEmpty}
-        icon={IconCalendar}
-        hideBorder
-        message={<Trans>No bookings</Trans>}
-      />
-      <Errored error={bookings.error} visible={bookings.isHasError} />
-
-      {bookings.isHasData && (
-        <Stack>
-          {bookings.data.map((b) => {
-            return <BookingCard key={b._id} booking={b} withBorder />;
-          })}
-        </Stack>
-      )}
-
-      {bookings.isFetching && <Skeleton height={50} />}
-
-      <ButtonViewMore onClick={() => bookings.fetch()} visible={bookings.isAbleToLoadMore} />
     </Stack>
   );
 };

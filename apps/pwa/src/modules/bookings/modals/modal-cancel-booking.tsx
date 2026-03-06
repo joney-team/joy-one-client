@@ -1,29 +1,33 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
-import { cancelBooking } from "@/modules/bookings/booking-service";
-import { BookingEntity } from "@/modules/bookings/booking-types";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Stack, Textarea } from "@mantine/core";
+import { Center, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { modals } from "@mantine/modals";
 import { IconCalendarMinus } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
+import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+
+import { Modal } from "@/components/modal/modal";
+import { useMutation } from "@apollo/client/react";
+import MUTATION_CANCEL_BOOKING from "../graphql/mutationCancelBooking.graphql";
 
 interface ModalCancelBookingProps {
-  booking: BookingEntity;
+  booking: Pick<BookingDataFragment, "_id">;
+  onCancelled?: () => void;
+  onClose: () => void;
 }
 
-export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+const CancelBookingForm: FC<ModalCancelBookingProps> = (props) => {
   const { t } = useLingui();
+
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [cancelBooking] = useMutation(MUTATION_CANCEL_BOOKING);
 
   const form = useForm({
     validate: {
-      reasonForCancellation: (value) => {
+      reason: (value) => {
         if (!value) return t`Please enter the reason for cancellation`;
       },
     },
@@ -32,8 +36,14 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      await cancelBooking(props.booking._id, values.reasonForCancellation);
-      modals.close("cancel-booking");
+      await cancelBooking({
+        variables: {
+          id: props.booking._id,
+          reason: values.reason,
+        },
+      });
+      props.onCancelled?.();
+      props.onClose();
     } catch (error) {
       onError(error);
     }
@@ -42,24 +52,61 @@ export const ModalCancelBooking: FC<ModalCancelBookingProps> = (props) => {
 
   return (
     <Stack>
-      <Textarea
-        withAsterisk
-        label={t`Reason for cancellation`}
-        {...form.getInputProps("reasonForCancellation")}
-      />
+      <Textarea withAsterisk label={t`Reason for cancellation`} {...form.getInputProps("reason")} />
 
-      <Button loading={isSubmitting} onClick={() => onSubmit()} color="red" type="submit">
-        <Trans>Confirm cancellation</Trans>
-      </Button>
+      <Center>
+        <Button loading={isSubmitting} onClick={() => onSubmit()} color="red" type="submit">
+          <Trans>Confirm cancellation</Trans>
+        </Button>
+      </Center>
     </Stack>
   );
 };
 
-export const OnModalCancelBooking = (props: ModalCancelBookingProps) => {
-  return modals.open({
-    modalId: "cancel-booking",
-    title: <ModalHead color="red" name={<Trans>Cancel booking</Trans>} icon={IconCalendarMinus} />,
-    children: <ModalCancelBooking {...props} />,
-    zIndex: zIndexes.commonModals,
-  });
-};
+type ModalCancelBookingState = Pick<ModalCancelBookingProps, "booking" | "onCancelled">;
+
+export interface ModalCancelBookingRef {
+  open: (state: ModalCancelBookingState) => void;
+  close: () => void;
+}
+
+export const ModalCancelBooking = forwardRef<
+  ModalCancelBookingRef,
+  { children?: (ref: ModalCancelBookingRef) => ReactNode }
+>((props, ref) => {
+  const [state, setState] = useState<ModalCancelBookingState | null>(null);
+
+  const onClose = () => {
+    setState(null);
+  };
+
+  useImperativeHandle(ref, () => ({
+    open: (b) => setState(b),
+    close: onClose,
+  }));
+
+  return (
+    <Fragment>
+      {props.children?.({
+        open: (b) => setState(b),
+        close: onClose,
+      })}
+
+      <Modal
+        opened={!!state}
+        onClose={onClose}
+        name={<Trans>Cancel booking</Trans>}
+        icon={IconCalendarMinus}
+        color="red"
+      >
+        {!!state && (
+          <CancelBookingForm
+            booking={state.booking}
+            onCancelled={state.onCancelled}
+            onClose={onClose}
+          />
+        )}
+      </Modal>
+    </Fragment>
+  );
+});

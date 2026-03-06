@@ -5,7 +5,6 @@ import { useLayout } from "@/layout/layout-context";
 import { type ModalCreateBookingRef } from "@/modules/bookings/modals/modal-create-booking";
 import { type ModalCustomerRef } from "@/modules/customers/customer-modal";
 import { type ModalCreateLoanRef } from "@/modules/loans/modals/modal-create-loan";
-import { ModalLoanCalculator } from "@/modules/loans/modals/modal-loan-calculator";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -34,6 +33,15 @@ import { Button } from "../../components/buttons/button";
 import dynamic from "next/dynamic";
 import { nonLoading } from "@/utils/non-loading";
 import { WorkspaceType } from "@/graphql/enums.graphql";
+
+const ModalLoanCalculator = dynamic(
+  () =>
+    import("@/modules/loans/modals/modal-loan-calculator").then((mod) => mod.ModalLoanCalculator),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const ModalCustomer = dynamic(
   () => import("@/modules/customers/customer-modal").then((mod) => mod.ModalCustomer),

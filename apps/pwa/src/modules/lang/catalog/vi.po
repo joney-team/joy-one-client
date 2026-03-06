@@ -5759,7 +5759,7 @@ msgstr "Yêu cầu"
 #: src/modules/bookings/modals/modal-create-booking.tsx:52
 #: src/modules/bookings/modals/modal-reschedule-booking.tsx:12
 msgid "Reschedule booking"
-msgstr "Đổi lịch lịch hẹn"
+msgstr "Đổi lịch hẹn"
 
 #: src/modules/bookings/booking-constants.tsx:8
 msgid "Rescheduled"

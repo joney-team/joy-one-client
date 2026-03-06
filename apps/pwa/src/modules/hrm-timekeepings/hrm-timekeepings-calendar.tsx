@@ -114,7 +114,8 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
 
                 const calculated = calculateTimekeepings({
                   timekeepings: v.timekeepings,
-                  workSlots: workspaceSetting?.wSlots,
+                  // TODO: Workspace schedule migration
+                  workSlots: [],
                   rules: workspaceSetting?.hrmTimeKeepingsRules,
                   workTimeType: userInfo.workingTimeType,
                 });
@@ -128,7 +129,8 @@ export const HrmTimekeepingsCalendar: FC<HrmTimekeepingsProps> = (props) => {
                       time: DateTime.toSeconds(new Date()),
                     },
                   ],
-                  workSlots: workspaceSetting?.wSlots,
+                  // TODO: Workspace schedule migration
+                  workSlots: [],
                   rules: workspaceSetting?.hrmTimeKeepingsRules,
                   workTimeType: userInfo.workingTimeType,
                 });

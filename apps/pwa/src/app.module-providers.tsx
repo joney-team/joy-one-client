@@ -75,14 +75,6 @@ const ModalInstallWebAppTutorial = dynamic(
   }
 );
 
-const ModalNextBooking = dynamic(
-  () => import("@/modules/bookings/modals/modal-next-booking").then((mod) => mod.ModalNextBooking),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
-
 const InAppNotification = dynamic(
   () => import("@/modules/notifications/in-app-notification").then((mod) => mod.InAppNotification),
   {
@@ -114,7 +106,6 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
 
                   <ModalUpgradeVersion />
                   <ModalInstallWebAppTutorial />
-                  <ModalNextBooking />
                   <PreloadResource />
                   <SearchEngine />
                   <InAppNotification />

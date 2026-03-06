@@ -40,14 +40,18 @@ interface ListTasksGroupProps {
   lazyLoadId?: string;
 }
 
-export const ListTasksGroup: FC<ListTasksGroupProps> = ({ lazyLoadId, defaultVisible, status }) => {
-  const { activatedFolder, state } = useTasks();
-  const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
-  const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
+const limit = 30;
 
-  const [isVisible, setIsVisible] = useState(
-    typeof defaultVisible === "boolean" ? defaultVisible : true
-  );
+export const ListTasksGroup: FC<ListTasksGroupProps> = ({
+  lazyLoadId,
+  defaultVisible = true,
+  status,
+}) => {
+  const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
+  const { activatedFolder, state } = useTasks();
+
+  const [isReadyToFetch, setIsReadyToFetch] = useState(!lazyLoadId);
+  const [isVisible, setIsVisible] = useState(defaultVisible);
 
   const isClosedTasks = status.id === DefaultTaskStatusId.CLOSED;
 
@@ -56,17 +60,18 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({ lazyLoadId, defaultVis
       ...state.variables,
       status: status.id,
       folderId: activatedFolder?._id,
-      limit: 30,
+      limit,
       parentId: "root",
     };
-  }, [status, activatedFolder?._id, state]);
+  }, [status.id, activatedFolder?._id, state.variables]);
 
   const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
     { variables: groupVariables }
   );
 
   useEffect(() => {
-    if (isReadyToFetch) getTasks();
+    if (!isReadyToFetch) return;
+    getTasks();
   }, [getTasks, isReadyToFetch]);
 
   useWaitElementLazyLoad({
@@ -130,7 +135,7 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({ lazyLoadId, defaultVis
         )}
       </Group>
 
-      {isVisible && !!count && count > 0 && (
+      {isVisible && tasks.length > 0 && (
         <Stack gap={0} w="100%">
           <ListTaskRowHead />
 

@@ -5,12 +5,13 @@ import { NumberFormat } from "@/components/format/number-format";
 import { WayPoint } from "@/components/way-point";
 import { Task, TaskStatus } from "@/graphql/types.graphql";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
-import { ModalCreateTask } from "@/modules/tasks/modals/modal-create-task";
+import { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { nonLoading } from "@/utils/non-loading";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -28,6 +29,14 @@ const BoardTaskCard = dynamic(() => import("./board-task-card").then((res) => re
   loading: () => <Skeleton mih={220} height={220} miw="100%" />,
 });
 
+const ModalCreateTask = dynamic(
+  () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
 interface BoardTasksGroupProps {
   status: TaskStatus;
 }
@@ -43,6 +52,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
   const scrollAreaRef = useRef<HTMLDivElement | null>(null);
   const [isOver, setIsOver] = useState(false);
   const { updateTasks } = useUpdateTasks();
+  const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
 
   const { activatedFolder, state } = useTasks();
 
@@ -56,7 +66,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
       limit,
       parentId: "root",
     };
-  }, [props.status.id, activatedFolder?._id, state]);
+  }, [props.status.id, activatedFolder?._id, state.variables]);
 
   const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
     { variables: groupVariables }
@@ -99,126 +109,121 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
     );
   }, [props.status.id, groupVariables]);
 
+  const handleCreateTask = () => {
+    modalCreateTaskRef.current?.open({
+      initial: {
+        status: props.status.id,
+        folder: activatedFolder,
+        order: (tasks[0]?.order ?? 1) / 2,
+      },
+    });
+  };
+
   return (
-    <ModalCreateTask>
-      {(modalCreateTask) => {
-        const handleCreateTask = () => {
-          modalCreateTask.open({
-            initial: {
-              status: props.status.id,
-              folder: activatedFolder,
-              order: (tasks[0]?.order ?? 1) / 2,
-            },
-          });
-        };
-
-        return (
-          <Stack
-            ref={droppableRef}
-            w={300}
-            gap={0}
-            bg={alpha(color(props.status.color ?? "gray"), isOver ? 0.1 : 0.05)}
-            pb={5}
-            style={{ borderRadius: wrapperRadius }}
-            mih={0}
+    <Stack
+      ref={droppableRef}
+      w={300}
+      gap={0}
+      bg={alpha(color(props.status.color ?? "gray"), isOver ? 0.1 : 0.05)}
+      pb={5}
+      style={{ borderRadius: wrapperRadius }}
+      mih={0}
+    >
+      <Group
+        p={wrapperPadding}
+        pb={wrapperPadding / 2}
+        gap={8}
+        align="start"
+        justify="space-between"
+        pos="sticky"
+        top={0}
+      >
+        <Group gap={8}>
+          <Button
+            key={props.status.id}
+            size="compact-xs"
+            variant="light"
+            color={props.status.color ?? "gray"}
+            leftSection={
+              <Center mr={-4}>
+                <TaskStatusIcon {...props.status} size={14} />
+              </Center>
+            }
+            tt="uppercase"
           >
-            <Group
-              p={wrapperPadding}
-              pb={wrapperPadding / 2}
-              gap={8}
-              align="start"
-              justify="space-between"
-              pos="sticky"
-              top={0}
+            {props.status.name}
+          </Button>
+
+          {count && count > 0 && (
+            <Text c="gray" fz={10} fw={500}>
+              <NumberFormat value={count} />
+            </Text>
+          )}
+        </Group>
+
+        {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) && !isClosedTasks && (
+          <Group justify="end" gap={0}>
+            <ActionIcon
+              component="div"
+              variant="subtle"
+              size="sm"
+              color="gray"
+              onClick={handleCreateTask}
             >
-              <Group gap={8}>
-                <Button
-                  key={props.status.id}
-                  size="compact-xs"
-                  variant="light"
-                  color={props.status.color ?? "gray"}
-                  leftSection={
-                    <Center mr={-4}>
-                      <TaskStatusIcon {...props.status} size={14} />
-                    </Center>
-                  }
-                  tt="uppercase"
-                >
-                  {props.status.name}
-                </Button>
+              <IconPlus size={16} strokeWidth={1.6} />
+            </ActionIcon>
+          </Group>
+        )}
+      </Group>
 
-                {count && count > 0 && (
-                  <Text c="gray" fz={10} fw={500}>
-                    <NumberFormat value={count} />
-                  </Text>
-                )}
-              </Group>
+      <Stack
+        flex={1}
+        gap={8}
+        mih={0}
+        ref={scrollAreaRef}
+        style={{
+          overflow: "auto",
+          padding: wrapperPadding,
+        }}
+      >
+        {tasks.length > 0 &&
+          tasks.map((task, index) => (
+            <BoardTaskCard
+              key={task._id}
+              task={task}
+              prevTask={tasks[index - 1]}
+              nextTask={tasks[index + 1]}
+              scrollContainerRef={scrollAreaRef.current}
+              groupVariables={groupVariables}
+            />
+          ))}
 
-              {workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS) &&
-                !isClosedTasks && (
-                  <Group justify="end" gap={0}>
-                    <ActionIcon
-                      component="div"
-                      variant="subtle"
-                      size="sm"
-                      color="gray"
-                      onClick={handleCreateTask}
-                    >
-                      <IconPlus size={16} strokeWidth={1.6} />
-                    </ActionIcon>
-                  </Group>
-                )}
-            </Group>
+        {(loading || isLoadingMore) && <Skeleton mih={220} miw="100%" />}
 
-            <Stack
-              flex={1}
-              gap={8}
-              mih={0}
-              ref={scrollAreaRef}
-              style={{
-                overflow: "auto",
-                padding: wrapperPadding,
-              }}
+        {isCanLoadMore && (
+          <WayPoint
+            scrollContainerRef={scrollAreaRef.current}
+            enabled={isCanLoadMore}
+            onReached={loadMore}
+          />
+        )}
+
+        {!isClosedTasks && (
+          <Group>
+            <Button
+              color="gray"
+              size="compact-sm"
+              variant="subtle"
+              leftIcon={IconPlus}
+              onClick={handleCreateTask}
             >
-              {tasks.length > 0 &&
-                tasks.map((task, index) => (
-                  <BoardTaskCard
-                    key={task._id}
-                    task={task}
-                    prevTask={tasks[index - 1]}
-                    nextTask={tasks[index + 1]}
-                    scrollContainerRef={scrollAreaRef.current}
-                    groupVariables={groupVariables}
-                  />
-                ))}
+              <Trans>Create task</Trans>
+            </Button>
+          </Group>
+        )}
+      </Stack>
 
-              {(loading || isLoadingMore) && <Skeleton mih={220} miw="100%" />}
-
-              {isCanLoadMore && (
-                <WayPoint
-                  scrollContainerRef={scrollAreaRef.current}
-                  enabled={isCanLoadMore}
-                  onReached={loadMore}
-                />
-              )}
-
-              {!isClosedTasks && (
-                <Group>
-                  <Button
-                    color="gray"
-                    size="compact-sm"
-                    variant="subtle"
-                    leftIcon={IconPlus}
-                    onClick={handleCreateTask}
-                  >
-                    <Trans>Create task</Trans>
-                  </Button>
-                </Group>
-              )}
-            </Stack>
-          </Stack>
-        );
-      }}
-    </ModalCreateTask>
+      <ModalCreateTask ref={modalCreateTaskRef} />
+    </Stack>
   );
 };

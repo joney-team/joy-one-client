@@ -120,8 +120,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         }
       });
     } catch (error) {
-      // TODO: Handle error
-      console.error(`Error when initializing workspace`, error);
+      console.warn(`Error when initializing workspace`, error);
     } finally {
       setIsInitialized(true);
       endAppLoading("initial-workspace");

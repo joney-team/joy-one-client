@@ -30,8 +30,12 @@ export const TimeSlotsSelecting = () => {
     onSelect,
     rootRect,
     cols,
-    availableTimeIntervals,
+    ...rest
   } = useTimeSlotsAttributes();
+
+  const availableTimeIntervals = rest.isAllowUnavailableTimeIntervals
+    ? undefined
+    : rest.availableTimeIntervals;
 
   const scrollContainerRef = useRef<HTMLElement | null | undefined>(null);
 
@@ -88,7 +92,7 @@ export const TimeSlotsSelecting = () => {
   useEscape({
     id: "time-slots-selecting",
     onEscape: onReset,
-    active: !!cursorColumnIndex && !!cursorTime && !!onSelect,
+    active: typeof cursorColumnIndex === "number" && !!cursorTime && !!onSelect,
   });
 
   useEffect(() => {
@@ -259,7 +263,7 @@ export const TimeSlotsSelecting = () => {
     if (!cursorTime) onReset();
   }, [cursorTime]);
 
-  if (!cursorColumnIndex || !cursorTime || !onSelect) return null;
+  if (typeof cursorColumnIndex !== "number" || !cursorTime || !onSelect) return null;
 
   return (
     <Fragment>

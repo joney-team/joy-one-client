@@ -2,8 +2,6 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { useRouter } from "@/hooks/use-router";
-import { CustomerShortInfo } from "@/modules/customers/customer-types";
-import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { useTags } from "@/modules/tags/tags-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -14,10 +12,23 @@ import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
-import { renderGener, renderGenerIcon } from "../customer-service";
+import { customerGenders, renderGener } from "../customer-service";
+import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface CustomerCardProps extends CardProps {
-  customer: CustomerShortInfo;
+  customer: Pick<
+    CustomerDataFragment,
+    | "_id"
+    | "code"
+    | "plainCode"
+    | "name"
+    | "phone"
+    | "gender"
+    | "avatar"
+    | "tagIds"
+    | "updatedAt"
+    | "lastCheckin"
+  >;
   disableClick?: boolean;
   onClick?: () => void;
   showLastCheckin?: boolean;
@@ -28,7 +39,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
 
   const router = useRouter();
   const workspace = useWorkspace();
-  const IconGender = renderGenerIcon(customer.gender);
+  const IconGender = customer.gender ? customerGenders[customer.gender] : null;
   const tags = useTags();
   const routePath = `/customers/${customer.code}`;
 
@@ -68,12 +79,13 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
                       e.preventDefault();
                       e.stopPropagation();
 
-                      if (workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO)) {
-                        OnModalCustomerPlainCodeForm({
-                          customer: customer,
-                          onDone: () => {},
-                        });
-                      }
+                      // TODO: Add modal to update plain code
+                      // if (workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO)) {
+                      //   OnModalCustomerPlainCodeForm({
+                      //     customer,
+                      //     onDone: () => {},
+                      //   });
+                      // }
                     }, 500);
                   }}
                 >
@@ -103,10 +115,10 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
                   </Anchor>
                 )}
 
-              {!!customer.gender && (
+              {!!customer.gender && IconGender?.icon && (
                 <Group gap={1}>
                   <ThemeIcon color="dark" variant="transparent">
-                    <IconGender strokeWidth={1.2} size={18} />
+                    <IconGender.icon strokeWidth={1.2} size={18} />
                   </ThemeIcon>
                   <Text fz={16}>{renderGener(customer.gender)}</Text>
                 </Group>

@@ -54,7 +54,8 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
           {groupByUsers.map((groupByUser) => {
             const summary = useTimekeepingsSummary(groupByUser.timekeepings, {
               userInfo: userMemberInfos.find((v) => v.userId === groupByUser.userId)!,
-              workSlots: workspaceSetting?.wSlots ?? [],
+              // TODO: Workspace schedule migration
+              workSlots: [],
               rules: workspaceSetting?.hrmTimeKeepingsRules ?? undefined,
             });
 
@@ -117,7 +118,8 @@ export const HrmTimekeepingsSummary: FC<HrmTimekeepingsSummaryProps> = (props) =
           {groupByUsers.map((groupByUser) => {
             const summary = useTimekeepingsSummary(groupByUser.timekeepings, {
               userInfo: userMemberInfos.find((v) => v.userId === groupByUser.userId)!,
-              workSlots: workspaceSetting?.wSlots,
+              // TODO: Workspace schedule migration
+              workSlots: [],
               rules: workspaceSetting?.hrmTimeKeepingsRules,
             });
 

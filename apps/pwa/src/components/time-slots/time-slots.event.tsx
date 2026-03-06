@@ -47,7 +47,7 @@ export const TimeSlotsEvent: FC<TimeSlotsEventProps> = ({ event, index }) => {
       minWidth: columnWidth * 0.3,
       height,
     };
-  }, []);
+  }, [columnWidth]);
 
   const isResizable = useMemo(() => {
     return (

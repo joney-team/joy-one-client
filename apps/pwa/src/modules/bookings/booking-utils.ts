@@ -1,9 +1,15 @@
-import { BookingEntity } from "./booking-types";
-
-export function getBookingTitle(
-  booking: Pick<BookingEntity, "customer" | "assigneeUsers" | "title">
-) {
-  if (booking.title) return booking.title;
+export function getBookingTitle(booking: {
+  title?: string | null;
+  customer?: {
+    name?: string;
+  } | null;
+  assigneeUsers?:
+    | {
+        name?: string;
+      }[]
+    | null;
+}) {
+  if (booking.title) return booking.title ?? "";
 
   const names = [];
 

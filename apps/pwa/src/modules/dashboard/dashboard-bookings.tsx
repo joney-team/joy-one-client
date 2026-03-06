@@ -3,36 +3,61 @@
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { SectionTitle } from "@/components/session-title";
-import { BookingEntity, BookingStatus } from "@/modules/bookings/booking-types";
+import { EventType } from "@/graphql/enums.graphql";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { Period, ResponseList, StorageKey } from "@/types";
+import { Period, StorageKey } from "@/types";
+import { nonLoading } from "@/utils/non-loading";
+import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
-import { FC } from "react";
-import { useRestQuery } from "../apis/use-rest-query";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import { useWorkspace } from "../workspaces/workspace-context";
-import { EventType } from "@/graphql/enums.graphql";
+import dynamic from "next/dynamic";
+import { FC, useRef } from "react";
+import { bookingActiveStatus } from "../bookings/booking-constants";
+import QUERY_BOOKINGS from "../bookings/graphql/queryBookings.graphql";
+import type { ModalCancelBookingRef } from "../bookings/modals/modal-cancel-booking";
+import type { ModalRescheduleBookingRef } from "../bookings/modals/modal-reschedule-booking";
+import { useEventsListener } from "../events/event-service";
+
+const ModalCancelBooking = dynamic(
+  () => import("../bookings/modals/modal-cancel-booking").then((mod) => mod.ModalCancelBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalRescheduleBooking = dynamic(
+  () =>
+    import("../bookings/modals/modal-reschedule-booking").then((mod) => mod.ModalRescheduleBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 export const DashboardBookings: FC = () => {
-  const workspace = useWorkspace();
+  const modalCancelBookingRef = useRef<ModalCancelBookingRef>(null);
+  const modalRescheduleBookingRef = useRef<ModalRescheduleBookingRef>(null);
 
   const [query, setQuery] = useLocalStorage({
     key: StorageKey.DASHBOARD_BOOKINGS_QUERY,
     defaultValue: { status: "in_progress", assigneeUserIds: [] as string[] },
   });
 
-  const todayBookings = useRestQuery<ResponseList<BookingEntity>>({
-    route: "/bookings",
-    isSkip: !workspace.hasPermission(WorkspacePermission.BOOKING_VIEW),
-    params: {
-      timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
-      getAll: true,
+  const { data: todayBookings, refetch } = useQuery(QUERY_BOOKINGS, {
+    variables: {
+      query: {
+        timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
+        getAll: true,
+      },
     },
-    refetchEvents: [
+  });
+
+  useEventsListener(
+    [
       EventType.BookingNew,
       EventType.BookingUpdated,
       EventType.BookingCheckin,
@@ -40,25 +65,23 @@ export const DashboardBookings: FC = () => {
       EventType.BookingCompleted,
       EventType.BookingCancelled,
     ],
-  });
+    () => {
+      refetch();
+    }
+  );
 
-  const bookingData = (todayBookings.data?.data || [])
+  const bookingData = (todayBookings?.list.results || [])
     .filter((b) => {
       if (query.assigneeUserIds.length > 0)
         return query.assigneeUserIds.includes(b.assigneeUserIds?.[0] || "");
       return true;
     })
     .filter((b) => {
-      if (query.status === "in_progress")
-        return [
-          BookingStatus.IN_PROGRESS,
-          BookingStatus.CHECK_IN,
-          BookingStatus.JUST_CREATED,
-        ].includes(b.status);
+      if (query.status === "in_progress") return bookingActiveStatus.includes(b.status);
       return true;
     });
 
-  if ((todayBookings.data?.count || 0) === 0) return null;
+  if ((todayBookings?.list.total || 0) === 0) return null;
 
   return (
     <Stack>
@@ -84,9 +107,31 @@ export const DashboardBookings: FC = () => {
 
       <SimpleGrid cols={{ md: 3, sm: 1 }}>
         {bookingData.map((booking) => (
-          <BookingCard key={booking._id} booking={booking} />
+          <BookingCard
+            key={booking._id}
+            booking={booking}
+            onCancel={() =>
+              modalCancelBookingRef.current?.open({
+                booking,
+                onCancelled: () => {
+                  refetch();
+                },
+              })
+            }
+            onReschedule={() =>
+              modalRescheduleBookingRef.current?.open({
+                booking,
+                onRescheduled: () => {
+                  refetch();
+                },
+              })
+            }
+          />
         ))}
       </SimpleGrid>
+
+      <ModalCancelBooking ref={modalCancelBookingRef} />
+      <ModalRescheduleBooking ref={modalRescheduleBookingRef} />
     </Stack>
   );
 };

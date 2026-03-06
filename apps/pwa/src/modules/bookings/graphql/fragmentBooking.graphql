@@ -1,0 +1,21 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+#import "../../customers/graphql/fragmentCustomer.graphql"
+
+fragment BookingData on Booking {
+  _id
+  title
+  note
+  customerId
+  assigneeUserIds
+  startTime
+  endTime
+  reasonForCancellation
+  transferToBookingId
+  status
+  assigneeUsers {
+    ...WorkspaceMemberData
+  }
+  customer {
+    ...CustomerData
+  }
+}

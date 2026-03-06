@@ -429,4 +429,11 @@ export class DateTime {
     const _endDate = this.normalizeDate(endDate);
     return _date.getTime() >= _startDate.getTime() && _date.getTime() <= _endDate.getTime();
   }
+
+  static getDayOfWeek(date: RawDate) {
+    const _date = this.normalizeDate(date);
+    const dayOfWeek = _date.getDay();
+    if (dayOfWeek === 0) return 7; // Sunday
+    return dayOfWeek; // Monday to Saturday
+  }
 }

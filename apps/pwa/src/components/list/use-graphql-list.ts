@@ -30,6 +30,7 @@ export interface UseGraphqlListArgs<T = any> {
         condition?: (data: EventEntity, currentData: T[]) => boolean;
       };
   isIgnoreEventActionType?: boolean;
+  normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
 }
 
 export type UseGraphqlListData<T = BaseData> = {
@@ -43,6 +44,7 @@ export const useGraphqlList = <T extends BaseData>({
   limit = 30,
   isSkip = false,
   autoFetch = true,
+  normalizeParams,
   ...args
 }: UseGraphqlListArgs<T>) => {
   const { t } = useLingui();
@@ -85,7 +87,7 @@ export const useGraphqlList = <T extends BaseData>({
   const variables = useMemo(() => {
     return {
       limit,
-      query: params,
+      query: normalizeParams ? normalizeParams(params) : params,
     };
   }, [limit, params]);
 

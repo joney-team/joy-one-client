@@ -4,11 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { FormSessionIcon } from "@/components/form-session";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { TimeInput } from "@/components/inputs/time-input";
-import {
-  createBooking,
-  rescheduleBooking,
-  updateBooking,
-} from "@/modules/bookings/booking-service";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerShortInfo } from "@/modules/customers/customer-types";
@@ -16,12 +11,10 @@ import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import {
-  isInWorkSlot,
-  useWorkDaySlots,
-} from "@/modules/workspace-settings/workspace-settings-service";
+import { isInWorkingDayInterval } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -50,18 +43,28 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
-import { BookingEntity, BookingStatus, CreateBookingDto } from "../booking-types";
+
+import { BookingStatus } from "@/graphql/enums.graphql";
+import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
+import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import CREATE_BOOKING_MUTATION, {
+  CreateBookingMutationVariables,
+} from "../graphql/mutationCreateBooking.graphql";
+import RESCHEDULE_BOOKING_MUTATION from "../graphql/mutationRescheduleMeeting.graphql";
+import UPDATE_BOOKING_MUTATION from "../graphql/mutationUpdateBooking.graphql";
 
 export interface BookingFormProps {
   startTime?: Date;
   endTime?: Date;
   customer?: CustomerShortInfo;
   assigneeUsers?: WorkspaceMemberDataFragment[];
-  reschedule?: BookingEntity;
-  booking?: BookingEntity;
+
+  reschedule?: BookingDataFragment;
+  update?: BookingDataFragment;
 
   onFinished?: () => void;
   onCancel?: () => void;
+  onRescheduled?: (booking: BookingDataFragment) => void;
 }
 
 export const BookingForm: FC<BookingFormProps> = (props) => {
@@ -70,26 +73,29 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   const color = useColor();
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
-  const workDaySlots = useWorkDaySlots();
   const workspace = useWorkspace();
-  const type = props.booking ? "UPDATE" : props.reschedule ? "RESCHEDULE" : "CREATE";
+  const { workspaceSetting } = useWorkspaceSetting();
+
+  const type = props.update ? "UPDATE" : props.reschedule ? "RESCHEDULE" : "CREATE";
+
+  const [createBooking] = useMutation(CREATE_BOOKING_MUTATION);
+  const [rescheduleBooking] = useMutation(RESCHEDULE_BOOKING_MUTATION);
+  const [updateBooking] = useMutation(UPDATE_BOOKING_MUTATION);
 
   const initialValues = useMemo(() => {
     return {
-      title: props.booking?.title ?? "",
-      note: props.booking?.note ?? "",
-      customer: props.booking?.customer ?? props.reschedule?.customer ?? props.customer,
-      assigneeUsers: props.booking?.assigneeUsers ??
+      title: props.update?.title ?? "",
+      note: props.update?.note ?? "",
+      customer: props.update?.customer ?? props.reschedule?.customer ?? props.customer,
+      assigneeUsers: props.update?.assigneeUsers ??
         props.reschedule?.assigneeUsers ??
         props.assigneeUsers ?? [workspace.member],
-      startTime: props.booking?.startTime
-        ? DateTime.normalizeDate(props.booking.startTime)
+      startTime: props.update?.startTime
+        ? DateTime.normalizeDate(props.update.startTime)
         : props.startTime,
-      endTime: props.booking?.endTime
-        ? DateTime.normalizeDate(props.booking.endTime)
-        : props.endTime,
+      endTime: props.update?.endTime ? DateTime.normalizeDate(props.update.endTime) : props.endTime,
     };
-  }, [props.customer, props.assigneeUsers, props.startTime, props.endTime, props.booking, type]);
+  }, [props.customer, props.assigneeUsers, props.startTime, props.endTime, props.update, type]);
 
   const form = useForm({ initialValues });
 
@@ -99,29 +105,42 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         throw Error(t`Start time and end time are required`);
       }
 
-      const payload: CreateBookingDto = {
+      const variables: CreateBookingMutationVariables = {
         title: values.title,
         note: values.note,
         customerId: values.customer?._id,
         assigneeUserIds: values.assigneeUsers?.map((v) => v.userId) ?? [],
         startTime: DateTime.toSeconds(values.startTime),
         endTime: DateTime.toSeconds(values.endTime),
-        status: BookingStatus.JUST_CREATED,
+        status: BookingStatus.JustCreated,
       };
 
       if (type === "RESCHEDULE") {
-        await rescheduleBooking({
-          ...payload,
-          prevBookingId: props.reschedule!._id,
+        const { data } = await rescheduleBooking({
+          variables: {
+            ...variables,
+            prevBookingId: props.reschedule!._id,
+          },
         });
+
+        if (data?.rescheduleBooking) {
+          props.onRescheduled?.(data?.rescheduleBooking);
+        }
       }
 
       if (type === "CREATE") {
-        await createBooking(payload);
+        await createBooking({
+          variables,
+        });
       }
 
       if (type === "UPDATE") {
-        await updateBooking(props.booking!._id, payload);
+        await updateBooking({
+          variables: {
+            ...variables,
+            id: props.update!._id,
+          },
+        });
       }
 
       props.onFinished?.();
@@ -130,16 +149,18 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
     }
   });
 
-  const isInWorkspaceWorkSlots = form.values.startTime
-    ? isInWorkSlot(
-        form.values.startTime,
-        workDaySlots.find((v) => v.dayWeek === form.values.startTime!.getDay())?.slots
-      )
-    : false;
+  const workingDayIntervals = workspaceSetting?.schedule?.workingDays ?? [];
 
-  const isPassed =
-    form.values.startTime &&
-    DateTime.isBefore(form.values.startTime, DateTime.subtract(new Date(), "day", 1));
+  const isInWorkspaceWorkSlots = useMemo(() => {
+    return form.values.startTime && form.values.endTime && workingDayIntervals.length > 0
+      ? isInWorkingDayInterval(form.values.startTime, workingDayIntervals) &&
+          isInWorkingDayInterval(form.values.endTime, workingDayIntervals)
+      : false;
+  }, [form.values.startTime, workingDayIntervals]);
+
+  const isPassed = useMemo(() => {
+    return form.values.startTime && DateTime.isBefore(form.values.startTime, new Date());
+  }, [form.values.startTime]);
 
   useEffect(() => {
     form.setInitialValues(initialValues);
@@ -380,29 +401,33 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
         />
       </FormSessionIcon>
 
-      {(type === "CREATE" || type === "RESCHEDULE") && (
-        <Stack gap={8}>
-          {form.values.startTime && !isInWorkspaceWorkSlots && (
-            <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              <Trans>Out of work slots</Trans>
-            </Blockquote>
-          )}
-
-          {form.values.startTime && isPassed && (
-            <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
-              <Trans>You are booking in the past</Trans>
-            </Blockquote>
-          )}
-
-          {form.values.startTime &&
-            form.values.endTime &&
-            DateTime.isBefore(form.values.endTime, form.values.startTime) && (
-              <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
-                <Trans>End time must be after start time</Trans>
+      {(type === "CREATE" || type === "RESCHEDULE") &&
+        form.values.startTime &&
+        (!isInWorkspaceWorkSlots ||
+          isPassed ||
+          (form.values.endTime &&
+            DateTime.isBefore(form.values.endTime, form.values.startTime))) && (
+          <Stack gap={8}>
+            {!isInWorkspaceWorkSlots && (
+              <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
+                <Trans>Out of work slots</Trans>
               </Blockquote>
             )}
-        </Stack>
-      )}
+
+            {isPassed && (
+              <Blockquote color="orange" p={8} fz={14} fw={500} mt={5}>
+                <Trans>You are booking in the past</Trans>
+              </Blockquote>
+            )}
+
+            {form.values.endTime &&
+              DateTime.isBefore(form.values.endTime, form.values.startTime) && (
+                <Blockquote color="red" p={8} fz={14} fw={500} mt={5}>
+                  <Trans>End time must be after start time</Trans>
+                </Blockquote>
+              )}
+          </Stack>
+        )}
 
       <Group justify="center">
         {props.onCancel && !form.submitting && (

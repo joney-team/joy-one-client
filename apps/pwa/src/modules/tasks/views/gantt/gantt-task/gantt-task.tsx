@@ -21,7 +21,6 @@ import {
 import { useRouter } from "next/navigation";
 import TASKS_QUERY, { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { useUpdateTasks } from "../../../hooks/use-update-tasks";
-import { ModalCreateTask } from "../../../modals/modal-create-task";
 import { updateTaskPath } from "../../../tasks-route-helpers";
 import { useGantt } from "../gantt-tasks-context";
 import { useGanttRefs } from "../gantt-tasks-refs";
@@ -46,6 +45,14 @@ import { TaskSelectionBox } from "../../../components/task-selections/task-selec
 import styles from "../gantt-tasks.module.css";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
+
+const ModalCreateTask = dynamic(
+  () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
 
 const GanttTaskTimeline = dynamic(
   () => import("./components/gantt-task-timeline").then((mod) => mod.GanttTaskTimeline),

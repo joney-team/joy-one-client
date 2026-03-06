@@ -1,8 +1,8 @@
 fragment CustomerData on Customer {
+  _id
   refs
   createdAt
   updatedAt
-  _id
   code
   codePrefix
   plainCode
@@ -20,4 +20,6 @@ fragment CustomerData on Customer {
   tagIds
   salaryAmount
   relatedCustomerIds
+  lastCheckin
+  workspaceBranchId
 }

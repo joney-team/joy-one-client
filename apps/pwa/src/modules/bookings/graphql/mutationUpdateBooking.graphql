@@ -1,0 +1,19 @@
+#import "./fragmentBooking.graphql"
+
+mutation UpdateBooking(
+  $id: String!
+  $title: String
+  $note: String
+  $assigneeUserIds: [String!]
+  $customerId: String
+) {
+  updateBooking(
+    id: $id
+    title: $title
+    note: $note
+    assigneeUserIds: $assigneeUserIds
+    customerId: $customerId
+  ) {
+    ...BookingData
+  }
+}

@@ -27,6 +27,7 @@ export interface TimeSlotsProps {
   events?: TimeEvent[];
   onEventClick?: (timeEvent: TimeEvent, element: HTMLDivElement) => void;
   onEventResize?: (timeEvent: TimeEvent) => void;
+  isAllowUnavailableTimeIntervals?: boolean;
 }
 
 export type TimeSlotDOMRect = Omit<DOMRect, "toJSON">;
@@ -40,5 +41,10 @@ export type TimeSlotsContextValue = {
   stepInMinutes: number;
 } & Pick<
   TimeSlotsProps,
-  "cols" | "onSelect" | "onEventClick" | "onEventResize" | "availableTimeIntervals"
+  | "cols"
+  | "onSelect"
+  | "onEventClick"
+  | "onEventResize"
+  | "availableTimeIntervals"
+  | "isAllowUnavailableTimeIntervals"
 >;

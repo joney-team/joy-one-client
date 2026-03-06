@@ -1,11 +1,45 @@
-import { t } from "@lingui/core/macro";
-import { BookingStatus } from "./booking-types";
+import { BookingStatus } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import {
+  Icon,
+  IconAnalyze,
+  IconArrowsLeftRight,
+  IconCheck,
+  IconClock,
+  IconUserCheck,
+  IconX,
+} from "@tabler/icons-react";
 
-export const bookingStatuses: Record<BookingStatus, { label: () => string }> = {
-  [BookingStatus.JUST_CREATED]: { label: () => t`Just created` },
-  [BookingStatus.CHECK_IN]: { label: () => t`Check in` },
-  [BookingStatus.IN_PROGRESS]: { label: () => t`In progress` },
-  [BookingStatus.RESCHEDULED]: { label: () => t`Rescheduled` },
-  [BookingStatus.COMPLETED]: { label: () => t`Completed` },
-  [BookingStatus.CANCELLED]: { label: () => t`Cancelled` },
+export const bookingStatuses: Record<
+  BookingStatus,
+  { label: MacroMessageDescriptor; color: string; icon: Icon }
+> = {
+  [BookingStatus.JustCreated]: {
+    label: defineMessage`Just created`,
+    color: "primary",
+    icon: IconClock,
+  },
+  [BookingStatus.CheckIn]: {
+    label: defineMessage`Check in`,
+    color: "primary",
+    icon: IconUserCheck,
+  },
+  [BookingStatus.InProgress]: {
+    label: defineMessage`In progress`,
+    color: "orange",
+    icon: IconAnalyze,
+  },
+  [BookingStatus.Rescheduled]: {
+    label: defineMessage`Rescheduled`,
+    color: "violet",
+    icon: IconArrowsLeftRight,
+  },
+  [BookingStatus.Completed]: { label: defineMessage`Completed`, color: "green", icon: IconCheck },
+  [BookingStatus.Cancelled]: { label: defineMessage`Cancelled`, color: "red", icon: IconX },
 };
+
+export const bookingActiveStatus: BookingStatus[] = [
+  BookingStatus.JustCreated,
+  BookingStatus.CheckIn,
+  BookingStatus.InProgress,
+];

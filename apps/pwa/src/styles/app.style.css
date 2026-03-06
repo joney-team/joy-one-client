@@ -20,6 +20,10 @@
 }
 /* End Color Scheme */
 
+:root {
+  --scrollbar-width: 5px;
+}
+
 .bg-content {
   background-color: var(--color-bg-content);
 }
@@ -99,7 +103,7 @@
 
 /* Start Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: var(--scrollbar-width);
 }
 
 ::-webkit-scrollbar:horizontal {
@@ -559,6 +563,7 @@ body {
 
   &[scroll-lock="true"] {
     overflow: hidden;
+    padding-right: var(--scrollbar-width);
   }
 }
 

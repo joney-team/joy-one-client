@@ -59,8 +59,10 @@ type BaseCustomFieldValue {
 type Booking {
   _id: String!
   assigneeUserIds: [String!]!
+  assigneeUsers: [WorkspaceMember!]!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
+  customer: Customer
   customerId: String
   endTime: Float!
   note: String
@@ -294,6 +296,7 @@ type Customer {
   customFieldValues: [CustomFieldValue!]
   email: String
   gender: Gender
+  lastCheckin: Float
   location: LocationEntity
   medicalHistory: [String!]
   name: String!
@@ -308,6 +311,8 @@ type Customer {
   updatedAt: Float
   vnLocation: LocationEntity
   vnSecondaryLocation: LocationEntity
+  workspaceBranch: WorkspaceBranch
+  workspaceBranchId: String
 }
 
 type CustomerForm {
@@ -869,6 +874,8 @@ type Mutation {
   assignWorkspaceMemberRoles(memberId: String!, roleIds: [String!]!): WorkspaceMember!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
+  cancelBooking(id: String!, reason: String!): Booking!
+  createBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
   createTag(input: TagDto!): Tag!
@@ -888,10 +895,12 @@ type Mutation {
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
+  rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateActivity(content: String, id: String!): Activity!
+  updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
@@ -1308,6 +1317,7 @@ type Query {
   activities(contextId: String!, contextType: String!, ids: [String!], limit: Float = 30, offset: Float, parentId: String, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
   activity(id: String!): Activity!
   appConfig: AppConfig!
+  booking(id: String!): Booking!
   bookings(limit: Float = 30, offset: Float, query: JSONObject): BookingsPaginated!
   categories(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!

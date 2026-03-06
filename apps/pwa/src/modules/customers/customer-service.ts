@@ -1,4 +1,5 @@
-import { AppPageMetadata, Gender, ResponseList } from "@/types";
+import { Gender } from "@/graphql/enums.graphql";
+import { AppPageMetadata, ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
 import { api } from "../apis";
@@ -60,15 +61,15 @@ export async function archiveCustomer(_id: string) {
 }
 
 export function renderGener(gender?: Gender) {
-  if (gender === Gender.FEMALE) return "Nữ";
-  if (gender === Gender.MALE) return "Nam";
-  if (gender === Gender.OTHER) return "Khác";
+  if (gender === Gender.Female) return "Nữ";
+  if (gender === Gender.Male) return "Nam";
+  if (gender === Gender.Other) return "Khác";
   return "N/A";
 }
 
 export function renderGenerIcon(gender?: Gender) {
-  if (gender === Gender.FEMALE) return IconGenderFemale;
-  if (gender === Gender.MALE) return IconGenderMale;
+  if (gender === Gender.Female) return IconGenderFemale;
+  if (gender === Gender.Male) return IconGenderMale;
   return IconGenderBigender;
 }
 
@@ -80,13 +81,13 @@ export async function getCustomerByCode(code: string): Promise<CustomerEntity> {
   return api.get(`/customers/codes/${code}`);
 }
 
-export const customerGenderOptions: {
+export const customerGenders: {
   [key in Gender]: {
     color: string;
     icon: Icon;
   };
 } = {
-  [Gender.FEMALE]: { color: "pink", icon: IconGenderFemale },
-  [Gender.MALE]: { color: "blue", icon: IconGenderMale },
-  [Gender.OTHER]: { color: "orange", icon: IconGenderBigender },
+  [Gender.Female]: { color: "pink", icon: IconGenderFemale },
+  [Gender.Male]: { color: "blue", icon: IconGenderMale },
+  [Gender.Other]: { color: "orange", icon: IconGenderBigender },
 };

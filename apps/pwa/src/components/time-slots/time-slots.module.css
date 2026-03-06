@@ -123,7 +123,7 @@
   &.isHasRestrictedTimeIntervals {
     & .InvalidArea {
       position: absolute;
-      background: var(--mantine-color-dark-light);
+      background: var(--mantine-color-default-hover);
     }
 
     & .AvailableTimeInterval {

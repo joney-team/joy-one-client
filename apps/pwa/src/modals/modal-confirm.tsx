@@ -59,14 +59,12 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
 
   return (
     <Fragment>
-      {typeof children === "function"
-        ? children({
-            open: handleOpen,
-            close: () => {
-              setArgs(null);
-            },
-          })
-        : null}
+      {children?.({
+        open: handleOpen,
+        close: () => {
+          setArgs(null);
+        },
+      })}
 
       <Modal
         opened={!!args}

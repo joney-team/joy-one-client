@@ -1,104 +1,153 @@
 "use client";
 
-import { Anchor, Modal, Stack, ThemeIcon, Title, em } from "@mantine/core";
-import { IconCalendar, IconEye, IconUser, IconUserScreen } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useState } from "react";
+import { Group, Stack, ThemeIcon, Title } from "@mantine/core";
+import { IconCalendar, IconCalendarMinus, IconEye } from "@tabler/icons-react";
+import { forwardRef, Fragment, ReactNode, useImperativeHandle, useRef, useState } from "react";
 
 import { Button } from "@/components/buttons/button";
-import { SectionTitle } from "@/components/session-title";
+import { Modal } from "@/components/modal/modal";
 import { useRouter } from "@/hooks/use-router";
-import { BookingEntity } from "@/modules/bookings/booking-types";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { useColor } from "@/modules/theme/use-color";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
-import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
+import dynamic from "next/dynamic";
+import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
 
-interface ModalBookingDetailProps {
-  booking: BookingEntity;
+import type { ModalCancelBookingRef } from "./modal-cancel-booking";
+import type { ModalRescheduleBookingRef } from "./modal-reschedule-booking";
+
+const ModalRescheduleBooking = dynamic(
+  () => import("./modal-reschedule-booking").then((mod) => mod.ModalRescheduleBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const ModalCancelBooking = dynamic(
+  () => import("./modal-cancel-booking").then((mod) => mod.ModalCancelBooking),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+export interface ModalBookingDetailRef {
+  open: (booking: BookingDataFragment) => void;
+  close: () => void;
 }
 
-export const ModalBookingDetail: FC<{
-  children: (open: (props: ModalBookingDetailProps) => void) => ReactNode;
-}> = ({ children }) => {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [props, setProps] = useState<ModalBookingDetailProps>();
+export const ModalBookingDetail = forwardRef<
+  ModalBookingDetailRef,
+  {
+    children?: (open: (booking: BookingDataFragment) => void) => ReactNode;
+  }
+>((props, ref) => {
+  const [booking, setBooking] = useState<BookingDataFragment | null>(null);
+  const modalCancelBookingRef = useRef<ModalCancelBookingRef>(null);
+  const modalRescheduleBookingRef = useRef<ModalRescheduleBookingRef>(null);
+
   const router = useRouter();
   const color = useColor();
 
   const onClose = () => {
-    close();
+    setBooking(null);
   };
 
-  const onViewDetail = async () => {
-    if (!props) return;
-    if (props.booking.customer) {
-      router.push(`/customers/${props.booking.customer.code}`);
+  const onViewCustomerDetail = async () => {
+    if (!booking) return;
+    if (booking.customer) {
+      router.push(`/customers/${booking.customer.code}`);
     }
     onClose();
     modals.closeAll();
   };
 
+  useImperativeHandle(ref, () => ({
+    open: (p) => {
+      setBooking(p);
+    },
+    close: () => {
+      setBooking(null);
+    },
+  }));
+
   return (
     <Fragment>
-      {children((p) => {
-        setProps(p);
-        open();
+      {props.children?.((p) => {
+        setBooking(p);
       })}
 
-      <Modal opened={opened} onClose={onClose} size="md" withCloseButton={false} yOffset={20}>
-        {props?.booking && (
-          <Stack>
-            <Stack gap={16} mb={10}>
-              <Stack gap={0} align="center">
-                <ThemeIcon variant="subtle" radius={100} size={50} color={color("primary")}>
-                  <IconUserScreen size={45} strokeWidth={1.8} />
-                </ThemeIcon>
+      <Modal opened={!!booking} onClose={onClose} withCloseButton={false}>
+        <Stack gap="md">
+          <Group justify="center" gap={4}>
+            <ThemeIcon variant="transparent">
+              <IconCalendar size={22} />
+            </ThemeIcon>
+            <Title fz="lg" fw={500} c={color("primary")} ta="center">
+              <Trans>Booking information</Trans>
+            </Title>
+          </Group>
 
-                <Title fz={em(20)} fw={700} c={color("primary")} ta="center">
-                  <Trans>Booking information</Trans>
-                </Title>
-              </Stack>
-
-              {props?.booking.customer && (
-                <Fragment>
-                  <SectionTitle mb={-10} name={<Trans>Customer</Trans>} icon={IconUser} />
-                  <CustomerCard
-                    customer={props?.booking.customer}
-                    withBorder
-                    shadow="none"
-                    onClick={() => {}}
-                  />
-                </Fragment>
+          {booking && (
+            <Fragment>
+              {booking?.customer && (
+                <CustomerCard
+                  customer={booking.customer}
+                  withBorder
+                  shadow="none"
+                  onClick={onViewCustomerDetail}
+                />
               )}
 
-              <SectionTitle mb={-10} name={<Trans>Booking</Trans>} icon={IconCalendar} />
+              <BookingCard booking={booking} hideCustomerInfo withBorder shadow="none" hideCtas />
 
-              <BookingCard
-                booking={props?.booking}
-                hideCustomerInfo
-                withBorder
-                shadow="none"
-                hideCtas
-                onClick={() => {}}
-              />
-
-              <Stack justify="center" align="center" mt={10}>
-                {props.booking.customer && (
-                  <Button leftIcon={IconEye} radius={100} onClick={onViewDetail}>
-                    <Trans>Customer detail</Trans>
+              <Group justify="center" align="center" gap="xs" pt="xs">
+                {booking.customer && (
+                  <Button leftIcon={IconEye} variant="outline" onClick={onViewCustomerDetail}>
+                    <Trans>View customer</Trans>
                   </Button>
                 )}
 
-                <Anchor c="gray" fz={em(14)} onClick={onClose}>
+                <Button
+                  color="orange"
+                  variant="outline"
+                  leftIcon={IconCalendarMinus}
+                  onClick={() =>
+                    modalRescheduleBookingRef.current?.open({
+                      booking,
+                      onRescheduled: (booking) => setBooking(booking),
+                    })
+                  }
+                >
+                  <Trans>Reschedule booking</Trans>
+                </Button>
+
+                <Button
+                  color="red"
+                  variant="outline"
+                  leftIcon={IconCalendarMinus}
+                  onClick={() =>
+                    modalCancelBookingRef.current?.open({ booking, onCancelled: onClose })
+                  }
+                >
+                  <Trans>Cancel booking</Trans>
+                </Button>
+
+                <Button color="gray" variant="outline" onClick={onClose}>
                   <Trans>Close</Trans>
-                </Anchor>
-              </Stack>
-            </Stack>
-          </Stack>
-        )}
+                </Button>
+              </Group>
+            </Fragment>
+          )}
+        </Stack>
       </Modal>
+
+      <ModalCancelBooking ref={modalCancelBookingRef} />
+      <ModalRescheduleBooking ref={modalRescheduleBookingRef} />
     </Fragment>
   );
-};
+});

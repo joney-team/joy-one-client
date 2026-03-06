@@ -50,7 +50,7 @@ export const useFolderStatuses = (folderId?: string | null) => {
       inprogress: allStatus.filter((status) => status.id !== DefaultTaskStatusId.CLOSED),
       closed: allStatus.filter((status) => status.id === DefaultTaskStatusId.CLOSED),
     };
-  }, [taskStatusesData.data]);
+  }, [taskStatusesData.data, folderId]);
 
   return { statuses, loading: taskStatusesData.loading };
 };

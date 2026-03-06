@@ -155,7 +155,7 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
           zIndex: zIndexes.commonModals,
           styles: {
             header: {
-              paddingTop: 10,
+              paddingTop: 16,
               paddingBottom: 10,
               minHeight: "unset",
             },
