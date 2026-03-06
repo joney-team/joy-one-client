@@ -12,7 +12,10 @@ const releaseDokploy = async () => {
     },
     body: JSON.stringify({
       dockerImage: DOKPLOY_IMAGE,
-      applicationId: DOKPLOY_APPLICATION_ID
+      applicationId: DOKPLOY_APPLICATION_ID,
+      username: "",
+      password: "",
+      registryUrl: ""
     })
   });
 
