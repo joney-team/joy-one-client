@@ -1,6 +1,6 @@
 {
   "name": "pwa",
-  "version": "3.3.0",
+  "version": "3.5.0",
   "private": true,
   "scripts": {
     "dev": "pnpm run codegen:compile && rm -rf .next && next dev",
