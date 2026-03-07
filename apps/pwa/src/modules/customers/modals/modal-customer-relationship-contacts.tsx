@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
-import { CustomerRelationshipContactInput } from "@/modules/customers/components/customer-relationship-contact-input";
+import { CustomerRelationshipContactInput } from "@/modules/customers/customer-detail/customer-relationship-contact-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useMutation } from "@apollo/client/react";

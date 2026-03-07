@@ -1,6 +1,6 @@
 import { computePosition, shift, flip } from "@floating-ui/react-dom";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { Editor, posToDOMRect } from "@tiptap/react";
+import { Editor, JSONContent, posToDOMRect } from "@tiptap/react";
 
 export const parseEditorJSON = (rawValue?: string | null): object | null => {
   try {
@@ -28,4 +28,9 @@ export const updatePosition = (editor: Editor, element: HTMLElement) => {
     element.style.top = `${y}px`;
     element.style.zIndex = `${zIndexes.commonModals + 100}`;
   });
+};
+
+export const isEmptyContent = (editor: Editor) => {
+  const jsonContent = editor.getJSON().content;
+  return jsonContent.every((c) => !c.content || c.content.length === 0);
 };

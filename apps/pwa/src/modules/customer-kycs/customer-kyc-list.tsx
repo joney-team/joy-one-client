@@ -6,7 +6,7 @@ import { Errored } from "@/components/errored";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
-import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
+import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { useEventsListener } from "@/modules/events/event-service";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";

@@ -11,7 +11,7 @@ import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
 import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
+import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";

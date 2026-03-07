@@ -1004,7 +1004,7 @@ type Order {
   comboIds: [String!]
   couponIds: [String!]
   createdAt: Float
-  createdByUser: WorkspaceMember!
+  createdByUser: WorkspaceMember
   customFieldValues: [BaseCustomFieldValue!]
   discounts: [OrderDiscount!]!
   id: String!

@@ -1398,7 +1398,7 @@ export type Order = {
   comboIds: Maybe<Array<Scalars['String']['output']>>;
   couponIds: Maybe<Array<Scalars['String']['output']>>;
   createdAt: Maybe<Scalars['Float']['output']>;
-  createdByUser: WorkspaceMember;
+  createdByUser: Maybe<WorkspaceMember>;
   customFieldValues: Maybe<Array<BaseCustomFieldValue>>;
   discounts: Array<OrderDiscount>;
   id: Scalars['String']['output'];

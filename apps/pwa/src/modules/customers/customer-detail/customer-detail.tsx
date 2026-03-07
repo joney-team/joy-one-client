@@ -1,11 +1,10 @@
 "use client";
 
 import { Errored } from "@/components/errored";
-import { CustomerInformations } from "@/modules/customers/components/customer-information";
+import { CustomerInformations } from "@/modules/customers/customer-detail/customer-information";
 import { Group, Skeleton, Stack } from "@mantine/core";
-import { IconFiles, IconTimelineEvent, IconUserScan } from "@tabler/icons-react";
+import { IconCalendar, IconFiles, IconTimelineEvent, IconUserScan } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
-import { Fragment } from "react";
 
 import { SectionTitle } from "@/components/session-title";
 import { FilesBox } from "@/modules/files/files-box";
@@ -13,7 +12,7 @@ import { FilesBox } from "@/modules/files/files-box";
 import { Archived } from "@/components/archived";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Renderer } from "@/components/renderer";
-import { CustomerKyc } from "@/modules/customers/components/customer-kyc-list";
+import { CustomerKyc } from "@/modules/customers/customer-detail/customer-kyc-list";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
@@ -23,6 +22,7 @@ import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
 
+import { Container } from "@/components/container";
 import ARCHIVE_CUSTOMER from "../graphql/mutationArchiveCustomer.graphql";
 import { useCustomerByCode } from "../hooks/useCustomer";
 
@@ -36,6 +36,14 @@ const Activities = dynamic(
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
+  {
+    ssr: false,
+    loading: nonLoading,
+  }
+);
+
+const BookingsList = dynamic(
+  () => import("./customer-bookings").then((mod) => mod.CustomerBookings),
   {
     ssr: false,
     loading: nonLoading,
@@ -71,7 +79,7 @@ export const CustomerDetail = () => {
   if (customer.isArchived) return <Archived entity={<Trans>Customer</Trans>} />;
 
   return (
-    <Fragment>
+    <Container size={900}>
       <Stack gap={30} p={16}>
         <CustomerInformations customer={customer} />
 
@@ -81,6 +89,11 @@ export const CustomerDetail = () => {
             <CustomerKyc customer={customer} />
           </Stack>
         </Renderer>
+
+        <Stack gap={10}>
+          <SectionTitle name={<Trans>Bookings</Trans>} icon={IconCalendar} />
+          <BookingsList customerId={customer._id} />
+        </Stack>
 
         <Stack gap={10}>
           <SectionTitle name={<Trans>Images & Documents</Trans>} icon={IconFiles} />
@@ -108,6 +121,6 @@ export const CustomerDetail = () => {
           process={() => archiveCustomer({ variables: { id: customer._id } })}
         />
       </Stack>
-    </Fragment>
+    </Container>
   );
 };

@@ -105,7 +105,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
                 <DateFormat
                   value={startTime}
                   type="custom"
-                  format={{ month: "2-digit", year: "numeric" }}
+                  format={{ month: "numeric", year: "numeric" }}
                 />
               </Text>
             </Stack>

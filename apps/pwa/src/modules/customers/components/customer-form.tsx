@@ -37,7 +37,7 @@ import { Renderer } from "../../../components/renderer";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 import CREATE_CUSTOMER_MUTATION from "../graphql/mutationCreateCustomer.graphql";
 import UPDATE_CUSTOMER_MUTATION from "../graphql/mutationUpdateCustomer.graphql";
-import { CustomerRelationshipContactInput } from "./customer-relationship-contact-input";
+import { CustomerRelationshipContactInput } from "../customer-detail/customer-relationship-contact-input";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerDataFragment) => void | Promise<void>;

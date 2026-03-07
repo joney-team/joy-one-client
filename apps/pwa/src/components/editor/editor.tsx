@@ -56,6 +56,7 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
   defaultValue?: string | JSONContent | undefined | null;
   onChangeHTML?: (content?: string) => void;
   onChangeJSON?: (content?: JSONContent) => void;
+  onChangeText?: (content?: string) => void;
   delay?: number;
   placeholder?: string;
   uploadFileOptions?: UploadFileOptions;
@@ -103,6 +104,7 @@ function InsertImageControl() {
 export interface EditorRef {
   getHTML: () => string;
   getJSON: () => JSONContent;
+  getText: () => string;
   editor: EditorType | null;
   clear: () => void;
   focus: () => void;
@@ -113,6 +115,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     {
       onChangeHTML,
       onChangeJSON,
+      onChangeText,
       delay,
       placeholder,
       uploadFileOptions,
@@ -129,10 +132,11 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
   ) => {
     const uploadFile = useUploadFile();
 
-    const onChange = useDebouncedCallback((html: string, json: JSONContent) => {
+    const onChange = useDebouncedCallback((html: string, json: JSONContent, text: string) => {
       if (readonly) return;
       onChangeHTML?.(html);
       onChangeJSON?.(json);
+      onChangeText?.(text);
     }, delay ?? 0);
 
     const editorExtensions: Extensions = useMemo(() => {
@@ -163,7 +167,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         onUpdate: readonly
           ? undefined
           : (e) => {
-              onChange(e.editor.getHTML(), e.editor.getJSON());
+              onChange(e.editor.getHTML(), e.editor.getJSON(), e.editor.getText());
             },
         immediatelyRender: false,
         autofocus: autoFocus,
@@ -199,6 +203,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       editor,
       getHTML: () => editor?.getHTML() ?? "",
       getJSON: () => editor?.getJSON() ?? {},
+      getText: () => editor?.getText() ?? "",
       clear: () => editor?.commands.setContent({ type: "doc", content: [] }),
       focus: () => {
         if (editor) {

@@ -16,14 +16,15 @@ import ADD_ACTIVITY_MUTATION, {
 } from "./graphql/mutationAddActivity.graphql";
 
 import { Avatar } from "@/components/avatar";
+import { isEmptyContent } from "@/components/editor/editor-utils";
+import { VoiceInput } from "@/components/inputs/voice-input/voice-input";
 import { createObjectId } from "@joy-one-client/utils/object-id";
 import { useFileDialog } from "@mantine/hooks";
 import { setRefFile } from "../files/file-service";
+import { renderFileUrl } from "../files/files-utils";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useWorkspace } from "../workspaces/workspace-context";
 import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
-import { useUploadFile } from "../files/hooks/use-upload-file";
-import { renderFileUrl } from "../files/files-utils";
-import { VoiceInput } from "@/components/inputs/voice-input/voice-input";
 
 export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
   contextType,
@@ -54,9 +55,12 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
 
   const onSubmit = async () => {
     try {
+      if (!editorRef.current?.editor) return;
+
       setIsSubmitting(true);
       const contentJSON = editorRef.current?.getJSON();
-      if (!contentJSON || !contentJSON.content || contentJSON.content.length === 0) return;
+      const isEmpty = isEmptyContent(editorRef.current?.editor);
+      if (isEmpty) throw new Error(t`You need to add some content to your comment`);
 
       await addActivity({
         variables: {
@@ -68,6 +72,7 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
         },
         refetchQueries: [QUERY_ACTIVITIES],
       });
+
       editorRef.current?.clear();
     } catch (error) {
       onError(error);

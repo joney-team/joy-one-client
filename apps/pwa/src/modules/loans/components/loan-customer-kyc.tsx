@@ -6,7 +6,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
-import { CustomerKycCard } from "@/modules/customers/components/customer-kyc-card";
+import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { useLocations } from "@/modules/locations/locations-context";
