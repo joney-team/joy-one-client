@@ -4,12 +4,10 @@ import { Button } from "@/components/buttons/button";
 import { CircularProgress } from "@/components/circular-progress/circular-progress";
 import { DateFormat } from "@/components/format/date-format";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
-import { WorkSlotsInput } from "@/components/inputs/work-slots-input";
 import { SectionTitle } from "@/components/session-title";
 import { TimeSlots } from "@/components/time-slots/time-slots";
 import { TimeEvent } from "@/components/time-slots/time-slots.types";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { CalendarView } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
@@ -226,23 +224,6 @@ export const AdminPlayground: FC = () => {
           </Group>
         </Stack>
       </Paper>
-
-      {workspace.isAvailable && (
-        <Paper withBorder p={20}>
-          <Stack>
-            <SectionTitle name="Work Slots Input" />
-            <WorkSlotsInput
-              events={[]}
-              onSelectEvent={() => {}}
-              onCreate={() => {}}
-              onDateChange={() => {}}
-              initialDate={new Date()}
-              disabled={false}
-              view={CalendarView.DAY}
-            />
-          </Stack>
-        </Paper>
-      )}
 
       <Paper withBorder p={20}>
         <Stack>

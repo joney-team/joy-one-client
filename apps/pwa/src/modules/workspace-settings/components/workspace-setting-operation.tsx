@@ -4,12 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { appEntities } from "@/constant";
 import { EventType } from "@/graphql/enums.graphql";
+import { WorkingDayInterval } from "@/graphql/types.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkDaySlots } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { Currency } from "@joy-one-client/utils/currency";
@@ -38,7 +38,6 @@ import {
   type ModalWorkspaceSettingWorkingDaysRef,
   ModalWorkspaceSettingWorkingDays,
 } from "../modals/modal-workspace-setting-working-days";
-import { WorkingDayInterval } from "@/graphql/types.graphql";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 
@@ -55,23 +54,22 @@ export const WorkspaceOperationSettings: FC = () => {
     refetchEvents: [EventType.WorkspaceSettingUpdated],
   });
 
-  const workDaySlots = useWorkDaySlots();
+  const workingDaysIntervals = useMemo(() => {
+    return workspaceSetting?.schedule?.workingDays ?? [];
+  }, [workspaceSetting?.schedule?.workingDays]);
 
   const groupWorkingDays = useMemo(
     () =>
-      (workspaceSetting?.schedule?.workingDays ?? []).reduce<Record<string, WorkingDayInterval[]>>(
-        (output, workingDay) => {
-          if (!output[workingDay.day]) {
-            output[workingDay.day] = [workingDay];
-          } else {
-            output[workingDay.day].push(workingDay);
-          }
+      workingDaysIntervals.reduce<Record<string, WorkingDayInterval[]>>((output, workingDay) => {
+        if (!output[workingDay.day]) {
+          output[workingDay.day] = [workingDay];
+        } else {
+          output[workingDay.day].push(workingDay);
+        }
 
-          return output;
-        },
-        {}
-      ),
-    [workspaceSetting?.schedule?.workingDays]
+        return output;
+      }, {}),
+    [workingDaysIntervals]
   );
 
   return (
@@ -112,11 +110,11 @@ export const WorkspaceOperationSettings: FC = () => {
             radius={100}
             size="compact-sm"
             miw={100}
-            leftIcon={workDaySlots.length > 0 ? IconPencil : IconPlus}
+            leftIcon={workingDaysIntervals.length > 0 ? IconPencil : IconPlus}
             variant="outline"
             onClick={() => workspaceSettingWorkingDaysRef.current?.open()}
           >
-            {workDaySlots.length > 0 ? <Trans>Edit</Trans> : <Trans>Add</Trans>}
+            {workingDaysIntervals.length > 0 ? <Trans>Edit</Trans> : <Trans>Add</Trans>}
           </Button>
         </Group>
 

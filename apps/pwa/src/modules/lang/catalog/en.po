@@ -140,7 +140,7 @@ msgid "Active at"
 msgstr "Active at"
 
 #: src/constant.ts:31
-#: src/modules/customers/components/customer-detail.tsx:96
+#: src/modules/customers/customer-detail/customer-detail.tsx:109
 #: src/modules/loans/loan-detail.tsx:593
 #: src/modules/tasks/components/task-detail/task-detail.tsx:183
 msgid "Activities"
@@ -151,8 +151,7 @@ msgid "Activity"
 msgstr "Activity"
 
 #: src/components/inputs/time-trackings-input.tsx:546
-#: src/components/inputs/work-slot-settings-input.tsx:275
-#: src/modules/customers/components/customer-information.tsx:371
+#: src/modules/customers/customer-detail/customer-information.tsx:371
 #: src/modules/loans/modals/modal-loan-package-form.tsx:324
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
@@ -160,7 +159,7 @@ msgstr "Activity"
 #: src/modules/products/components/form-product.tsx:493
 #: src/modules/products/components/product-selector.tsx:73
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:300
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:119
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:117
 msgid "Add"
 msgstr "Add"
 
@@ -186,7 +185,7 @@ msgstr "Add child field"
 msgid "Add combo history"
 msgstr "Add combo history"
 
-#: src/modules/customers/components/customer-relationship-contact-input.tsx:112
+#: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:112
 #: src/modules/customers/modals/modal-customer-contacts.tsx:162
 msgid "Add contact"
 msgstr "Add contact"
@@ -296,7 +295,7 @@ msgstr "Add widget"
 #: src/modals/modal-printer.tsx:627
 #: src/modules/customer-forms/customer-form-list.tsx:58
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:345
-#: src/modules/customers/components/customer-kyc-card.tsx:155
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:155
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:66
 #: src/modules/workspaces/components/workspace-information.tsx:106
 #: src/modules/workspaces/components/workspace-information.tsx:145
@@ -401,15 +400,15 @@ msgstr "All time trackings"
 msgid "Allow cumulative coupon rules"
 msgstr "Allow cumulative coupon rules"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:233
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:231
 msgid "Allow duplicate bookings"
 msgstr "Allow duplicate bookings"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:130
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:128
 msgid "Allow multiple payments (Installment or Deposit)"
 msgstr "Allow multiple payments (Installment or Deposit)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:188
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:186
 msgid "Allow tip"
 msgstr "Allow tip"
 
@@ -461,10 +460,6 @@ msgstr "App settings"
 msgid "Application password"
 msgstr "Application password"
 
-#: src/components/inputs/work-slot-settings-input.tsx:230
-msgid "Applied to staff working in shifts"
-msgstr "Applied to staff working in shifts"
-
 #: src/modules/custom-fields/components/form-custom-field.tsx:122
 #: src/modules/custom-fields/custom-field-list.tsx:39
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:68
@@ -488,8 +483,8 @@ msgstr "Apply changes"
 msgid "Approval Timekeeping"
 msgstr "Approval Timekeeping"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:60
-#: src/modules/customers/components/customer-kyc-card.tsx:219
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:60
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:219
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:138
 #: src/modules/loans/components/loan-documents.tsx:99
 #: src/modules/loans/components/loan-documents.tsx:208
@@ -515,7 +510,7 @@ msgid "Approve Receipt"
 msgstr "Approve Receipt"
 
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:10
-#: src/modules/customers/components/customer-kyc-card.tsx:196
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:196
 #: src/modules/loans/loans-constants.tsx:31
 #: src/modules/receipts/receipt-card.tsx:457
 msgid "Approved"
@@ -779,7 +774,7 @@ msgstr "Automatically reply to customer messages"
 msgid "Automatically returning in {tick}s..."
 msgstr "Automatically returning in {tick}s..."
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:247
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:245
 msgid "Available entities to search"
 msgstr "Available entities to search"
 
@@ -792,8 +787,8 @@ msgid "Back"
 msgstr "Back"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:188
-#: src/modules/customers/components/customer-kyc-card.tsx:94
-#: src/modules/customers/components/customer-kyc-card.tsx:178
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:94
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:178
 msgid "Back of CID"
 msgstr "Back of CID"
 
@@ -895,9 +890,10 @@ msgstr "Booking Completed"
 msgid "Booking information"
 msgstr "Booking information"
 
+#: src/modules/customers/customer-detail/customer-detail.tsx:94
 #: src/modules/dashboard/dashboard-bookings.tsx:88
 #: src/modules/workspace-roles/workspace-roles-config.ts:106
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:201
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:199
 #: src/modules/workspaces/workspace-modules.tsx:154
 msgid "Bookings"
 msgstr "Bookings"
@@ -1210,7 +1206,7 @@ msgstr "CID created at"
 msgid "CID Infos"
 msgstr "CID Infos"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:133
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:133
 #: src/modules/loans/components/loan-customer-kyc.tsx:62
 msgid "CID number"
 msgstr "CID number"
@@ -1517,8 +1513,8 @@ msgstr "Connection successful"
 msgid "Consumables"
 msgstr "Consumables"
 
-#: src/modules/customers/components/customer-information.tsx:254
-#: src/modules/customers/components/customer-relationship-contact-input.tsx:52
+#: src/modules/customers/customer-detail/customer-information.tsx:254
+#: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:52
 #: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:77
 msgid "Contact relatives"
 msgstr "Contact relatives"
@@ -1527,7 +1523,7 @@ msgstr "Contact relatives"
 msgid "Contact support"
 msgstr "Contact support"
 
-#: src/modules/customers/components/customer-information.tsx:235
+#: src/modules/customers/customer-detail/customer-information.tsx:235
 #: src/modules/customers/modals/modal-customer-contacts.tsx:177
 #: src/modules/loans/components/loan-customer-kyc.tsx:140
 #: src/modules/loans/components/loan-customer-kyc.tsx:177
@@ -1829,7 +1825,7 @@ msgstr "Credit settings"
 msgid "Cross-origin resource sharing (CORS)"
 msgstr "Cross-origin resource sharing (CORS)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:145
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:143
 msgid "Currency"
 msgstr "Currency"
 
@@ -1893,9 +1889,9 @@ msgstr "Custom statuses"
 #: src/modules/bookings/modals/modal-booking-detail.tsx:111
 #: src/modules/coupons/coupon-card.tsx:44
 #: src/modules/customers/components/customer-column.tsx:21
-#: src/modules/customers/components/customer-detail.tsx:71
-#: src/modules/customers/components/customer-detail.tsx:104
-#: src/modules/customers/components/customer-kyc-card.tsx:113
+#: src/modules/customers/customer-detail/customer-detail.tsx:79
+#: src/modules/customers/customer-detail/customer-detail.tsx:117
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:113
 #: src/modules/loans/components/loan-card.tsx:54
 #: src/modules/loans/modals/modal-create-loan.tsx:261
 #: src/modules/orders/order-card.tsx:125
@@ -1958,7 +1954,7 @@ msgid "Customer information & KYC"
 msgstr "Customer information & KYC"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:167
-#: src/modules/customers/components/customer-kyc-card.tsx:71
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:71
 msgid "Customer KYC"
 msgstr "Customer KYC"
 
@@ -2056,7 +2052,7 @@ msgstr "Default"
 msgid "Default is {0}"
 msgstr "Default is {0}"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:157
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:155
 msgid "Default payment method"
 msgstr "Default payment method"
 
@@ -2313,7 +2309,7 @@ msgstr "Easy & quick setup"
 #: src/modules/promotions/promotions-list.tsx:209
 #: src/modules/services/service-list.tsx:98
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:119
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:117
 msgid "Edit"
 msgstr "Edit"
 
@@ -2474,7 +2470,7 @@ msgstr "Enter pill name"
 msgid "Enter product supplies"
 msgstr "Enter product supplies"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:72
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:72
 #: src/modules/loans/components/loan-documents.tsx:89
 #: src/modules/loans/loan-list.tsx:395
 msgid "Enter reject reason"
@@ -2791,8 +2787,8 @@ msgid "From <0/> to <1/>"
 msgstr "From <0/> to <1/>"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:177
-#: src/modules/customers/components/customer-kyc-card.tsx:88
-#: src/modules/customers/components/customer-kyc-card.tsx:171
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:88
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:171
 msgid "Front of CID"
 msgstr "Front of CID"
 
@@ -2816,7 +2812,7 @@ msgstr "Fulfilled at"
 
 #: src/modals/modal-printer.tsx:510
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:267
-#: src/modules/customers/components/customer-kyc-card.tsx:144
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:144
 msgid "Full name"
 msgstr "Full name"
 
@@ -2963,7 +2959,7 @@ msgstr "Identify brand through Email. Help you take better care of customers thr
 msgid "Image"
 msgstr "Image"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:76
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
 msgid "Image is blurry"
 msgstr "Image is blurry"
 
@@ -2975,7 +2971,7 @@ msgstr "Image loading"
 msgid "Images / Documents"
 msgstr "Images / Documents"
 
-#: src/modules/customers/components/customer-detail.tsx:86
+#: src/modules/customers/customer-detail/customer-detail.tsx:99
 msgid "Images & Documents"
 msgstr "Images & Documents"
 
@@ -3046,7 +3042,7 @@ msgstr "Incorrect login information"
 msgid "Info"
 msgstr "Info"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:76
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
 #: src/modules/loans/components/loan-documents.tsx:93
 #: src/modules/loans/loan-list.tsx:405
 msgid "Info does not match image"
@@ -3358,8 +3354,8 @@ msgstr "Latitue"
 msgid "Leave"
 msgstr "Leave"
 
-#: src/modules/activities/activity-input.tsx:180
-#: src/modules/activities/activity-input.tsx:205
+#: src/modules/activities/activity-input.tsx:185
+#: src/modules/activities/activity-input.tsx:210
 msgid "Leave a comment..."
 msgstr "Leave a comment..."
 
@@ -3375,7 +3371,7 @@ msgstr "Leave blank if you don't want to calculate overtime"
 msgid "Leave blank if you want to deduct directly into working time"
 msgstr "Leave blank if you want to deduct directly into working time"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:225
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:223
 msgid "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 msgstr "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 
@@ -4238,7 +4234,7 @@ msgstr "Mutual workspaces"
 #: src/modules/customer-forms/customer-form-list.tsx:41
 #: src/modules/customers/components/customer-column.tsx:109
 #: src/modules/customers/components/customer-form.tsx:176
-#: src/modules/customers/components/customer-relationship-contact-input.tsx:76
+#: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/customer-list.tsx:80
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
 #: src/modules/customers/modals/modal-customer-form.tsx:82
@@ -4642,7 +4638,7 @@ msgstr "Order synced"
 #: src/modules/search/search-engine.tsx:296
 #: src/modules/search/search-engine.tsx:301
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:128
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:126
 #: src/modules/workspaces/workspace-modules.tsx:212
 msgid "Orders"
 msgstr "Orders"
@@ -4794,7 +4790,7 @@ msgstr "Pay successful"
 #: src/modules/loans/loan-detail.tsx:546
 #: src/modules/receipts/receipt-list.tsx:138
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:143
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:141
 msgid "Payment"
 msgstr "Payment"
 
@@ -4894,8 +4890,8 @@ msgstr "Personal informations"
 #: src/modules/customer-forms/customer-form-list.tsx:49
 #: src/modules/customers/components/customer-column.tsx:113
 #: src/modules/customers/components/customer-form.tsx:181
-#: src/modules/customers/components/customer-kyc-card.tsx:122
-#: src/modules/customers/components/customer-relationship-contact-input.tsx:83
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:122
+#: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/customer-list.tsx:89
 #: src/modules/customers/modals/modal-customer-form.tsx:84
 #: src/modules/loans/components/loan-card.tsx:65
@@ -4995,8 +4991,8 @@ msgid "Plus or remove widgets"
 msgstr "Plus or remove widgets"
 
 #: src/modules/customer-kycs/modal-register-customer-kyc.tsx:199
-#: src/modules/customers/components/customer-kyc-card.tsx:100
-#: src/modules/customers/components/customer-kyc-card.tsx:185
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:100
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:185
 msgid "Portrait image"
 msgstr "Portrait image"
 
@@ -5399,7 +5395,7 @@ msgstr "Read docs"
 msgid "Rearranging the interface."
 msgstr "Rearranging the interface."
 
-#: src/modules/customers/components/customer-kyc-card.tsx:209
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:209
 #: src/modules/customers/modals/modal-customer-form.tsx:148
 #: src/modules/loans/components/loan-card.tsx:98
 msgid "Reason"
@@ -5427,7 +5423,7 @@ msgid "Receipt code"
 msgstr "Receipt code"
 
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:198
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:177
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:175
 msgid "Receipt images required"
 msgstr "Receipt images required"
 
@@ -5494,8 +5490,8 @@ msgstr "Register new account"
 msgid "Registration number"
 msgstr "Registration number"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:71
-#: src/modules/customers/components/customer-kyc-card.tsx:223
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:71
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:223
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:149
 #: src/modules/loans/components/loan-documents.tsx:212
 #: src/modules/loans/loan-list.tsx:388
@@ -5515,7 +5511,7 @@ msgid "Reject loan"
 msgstr "Reject loan"
 
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:11
-#: src/modules/customers/components/customer-kyc-card.tsx:205
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:205
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:202
 #: src/modules/loans/components/loan-documents.tsx:179
 #: src/modules/loans/loans-constants.tsx:33
@@ -5526,7 +5522,7 @@ msgstr "Rejected"
 msgid "Rejected timekeeping"
 msgstr "Rejected timekeeping"
 
-#: src/modules/customers/components/customer-relationship-contact-input.tsx:90
+#: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:90
 msgid "Relationship type"
 msgstr "Relationship type"
 
@@ -5561,15 +5557,14 @@ msgstr "Remaining amount"
 msgid "Remaining principal"
 msgstr "Remaining principal"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:205
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:203
 msgid "Remind customers before the appointment n (days)"
 msgstr "Remind customers before the appointment n (days)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:215
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:213
 msgid "Reminder time"
 msgstr "Reminder time"
 
-#: src/components/inputs/work-slot-settings-input.tsx:294
 #: src/components/list/components/bulk-actions.tsx:107
 #: src/layout/navigation/workspace-navigation-task-folders.tsx:213
 #: src/modals/modal-date-picker.tsx:89
@@ -5841,7 +5836,6 @@ msgstr "Salary amount"
 msgid "Sale price"
 msgstr "Sale price"
 
-#: src/components/inputs/work-slot-settings-input.tsx:275
 #: src/modules/activities/activity-card.tsx:282
 #: src/modules/bookings/components/form-booking.tsx:445
 #: src/modules/categories/components/form-category.tsx:136
@@ -5889,7 +5883,7 @@ msgstr "Scroll to today"
 #: src/modules/tasks/components/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/components/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/components/task-menu/task-menu-tags.tsx:99
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:246
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:244
 #: src/widgets/components/manage-widgets.tsx:35
 msgid "Search"
 msgstr "Search"
@@ -6165,7 +6159,6 @@ msgstr "Share"
 msgid "Share this task"
 msgstr "Share this task"
 
-#: src/components/inputs/work-slot-settings-input.tsx:245
 #: src/modules/workspace-settings/modals/modal-workspace-setting-working-days.tsx:61
 #: src/modules/workspace-settings/modals/modal-workspace-setting-working-days.tsx:128
 msgid "Shift"
@@ -6428,8 +6421,8 @@ msgstr "Table slot created"
 msgid "Table slot updated"
 msgstr "Table slot updated"
 
-#: src/modules/customers/components/customer-information.tsx:318
-#: src/modules/customers/components/customer-information.tsx:393
+#: src/modules/customers/customer-detail/customer-information.tsx:318
+#: src/modules/customers/customer-detail/customer-information.tsx:393
 msgid "Tag"
 msgstr "Tag"
 
@@ -6685,7 +6678,6 @@ msgstr "Time"
 msgid "Time format"
 msgstr "Time format"
 
-#: src/components/inputs/work-slot-settings-input.tsx:180
 #: src/modules/workspace-settings/modals/modal-workspace-setting-working-days.tsx:51
 msgid "Time frame"
 msgstr "Time frame"
@@ -6952,7 +6944,7 @@ msgstr "Unknown error"
 msgid "Unknown file size"
 msgstr "Unknown file size"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:209
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:209
 msgid "Unknown reason"
 msgstr "Unknown reason"
 
@@ -7415,12 +7407,11 @@ msgstr "Welcome to {0}"
 msgid "Withdraw"
 msgstr "Withdraw"
 
-#: src/components/inputs/work-slot-settings-input.tsx:172
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:80
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:78
 msgid "Work schedule"
 msgstr "Work schedule"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:82
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:80
 msgid "Work schedule applied to the booking, timekeeping, and other features."
 msgstr "Work schedule applied to the booking, timekeeping, and other features."
 
@@ -7438,19 +7429,11 @@ msgstr "Working days"
 msgid "Working hours"
 msgstr "Working hours"
 
-#: src/components/inputs/work-slot-settings-input.tsx:229
-msgid "Working shift"
-msgstr "Working shift"
-
 #: src/modules/hrm-timekeepings/hrm-timekeeping-button.tsx:112
 #: src/modules/hrm-timekeepings/modals/modal-timekeeping-list.tsx:164
 #: src/modules/hrm-timekeepings/modals/modal-timekeeping-list.tsx:177
 msgid "Working time"
 msgstr "Working time"
-
-#: src/components/inputs/work-slot-settings-input.tsx:182
-msgid "Working time frame, activities are performed in these time frames"
-msgstr "Working time frame, activities are performed in these time frames"
 
 #: src/modules/workspace-members/components/workspace-member-setting.tsx:106
 msgid "Working time type"
@@ -7524,7 +7507,7 @@ msgstr "Workspace updated"
 msgid "Workspaces"
 msgstr "Workspaces"
 
-#: src/modules/customers/components/customer-kyc-card.tsx:76
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
 #: src/modules/loans/components/loan-documents.tsx:93
 #: src/modules/loans/loan-list.tsx:405
 msgid "Wrong information"
@@ -7594,6 +7577,10 @@ msgstr "You have not granted permission or refused to access the device location
 #: src/modules/plugins/plugins-provider.tsx:93
 msgid "You need advice! Start chatting with us now."
 msgstr "You need advice! Start chatting with us now."
+
+#: src/modules/activities/activity-input.tsx:63
+msgid "You need to add some content to your comment"
+msgstr "You need to add some content to your comment"
 
 #. placeholder {0}: getMainDomain(form.values.appDomain)
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:222
