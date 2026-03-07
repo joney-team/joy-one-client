@@ -168,7 +168,7 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
   }, [props]);
 
   return (
-    <Stack pt={16} gap={30}>
+    <Stack pt={16} gap="md">
       <FormSessionIcon icon={IconReservedLine} description={<Trans>Title</Trans>}>
         {type === "RESCHEDULE" ? (
           <Title order={5} fw={500}>

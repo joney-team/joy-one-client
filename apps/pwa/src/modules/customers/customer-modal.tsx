@@ -21,13 +21,11 @@ export const ModalCustomer = forwardRef<
   const { children } = props;
   const [args, setArgs] = useState<CustomerFormProps | null>(null);
 
+  const onClose = () => setArgs(null);
+
   useImperativeHandle(ref, () => ({
-    open: (p) => {
-      setArgs(p ?? {});
-    },
-    close: () => {
-      setArgs(null);
-    },
+    open: (p) => setArgs(p ?? {}),
+    close: onClose,
   }));
 
   const modalId = useMemo(() => {
@@ -40,14 +38,10 @@ export const ModalCustomer = forwardRef<
         open: (p) => {
           setArgs(p ?? {});
         },
-        close: () => {
-          setArgs(null);
-        },
+        close: onClose,
       })}
 
       <Modal
-        id={modalId}
-        key={modalId}
         opened={!!args}
         onClose={() => setArgs(null)}
         name={args?.customer ? <Trans>Update customer</Trans> : <Trans>Create customer</Trans>}
@@ -55,7 +49,7 @@ export const ModalCustomer = forwardRef<
         size="lg"
         isFullscreenOnMobile
       >
-        {args && <CustomerForm {...args} onClose={() => setArgs(null)} />}
+        {args && <CustomerForm key={modalId} {...args} onClose={() => setArgs(null)} />}
       </Modal>
     </Fragment>
   );
