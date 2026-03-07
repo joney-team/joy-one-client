@@ -108,7 +108,7 @@ export const ModalBookingDetail = forwardRef<
               <Group justify="center" align="center" gap="xs" pt="xs">
                 {booking.customer && (
                   <Button leftIcon={IconEye} variant="outline" onClick={onViewCustomerDetail}>
-                    <Trans>View customer</Trans>
+                    <Trans>Customer</Trans>
                   </Button>
                 )}
 
