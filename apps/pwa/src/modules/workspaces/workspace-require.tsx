@@ -23,7 +23,7 @@ import {
 import { IconLocation, IconPlus, IconUser } from "@tabler/icons-react";
 import { FC, useEffect } from "react";
 import { useApp } from "../../app.context";
-import { getMemberRoleLabel } from "../workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import { CreateWorkspace } from "./components/create-workspace";
 
 export const WorkspaceRequire: FC = () => {
@@ -175,7 +175,9 @@ export const WorkspaceRequire: FC = () => {
                         <ThemeIcon size="xs" variant="transparent" color="dark">
                           <IconUser strokeWidth={1.2} />
                         </ThemeIcon>
-                        <Text fz="xs">{getMemberRoleLabel(userMember)}</Text>
+                        <Text fz="xs">
+                          <WorkspaceMemberRoleName member={userMember} />
+                        </Text>
                       </Group>
 
                       {!!userMember.workspace.location?.address && (

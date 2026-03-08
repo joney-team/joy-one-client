@@ -10,11 +10,11 @@ import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-b
 import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
-  getMemberRoleLabel,
   removeWorkspaceMember,
   updateWorkspaceMember,
 } from "@/modules/workspace-members/workspace-members-service";
 import { UpdateWorkspaceMemberDto } from "@/modules/workspace-members/workspace-members-types";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import { workspaceDefaultRoles } from "@/modules/workspace-roles/workspace-roles-constants";
 import {
@@ -138,7 +138,7 @@ const WorkspaceMemberSettingContent: FC<
             }}
           />
         ) : (
-          getMemberRoleLabel(userMember)
+          <WorkspaceMemberRoleName member={userMember} />
         )}
       </FormSession>
 

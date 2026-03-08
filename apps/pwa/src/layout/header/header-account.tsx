@@ -7,7 +7,7 @@ import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { ModalLang } from "@/modules/lang/modal-language";
-import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, em, Group, Menu, Stack, Text } from "@mantine/core";
@@ -44,7 +44,7 @@ export const WorkspaceHeaderAccount: FC = () => {
                       {workspace.member.name}
                     </Text>
                     <Text maw={120} truncate fz={10} lh="100%" fw={600} c="gray">
-                      {getMemberRoleLabel(workspace.member)}
+                      <WorkspaceMemberRoleName member={workspace.member} />
                     </Text>
                   </Stack>
                 </Renderer>

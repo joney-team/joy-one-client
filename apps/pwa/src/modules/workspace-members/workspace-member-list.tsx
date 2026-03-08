@@ -34,6 +34,7 @@ import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles"
 import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
 import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
+import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "./graphql/mutationAssignWorkspaceMemberRoles.graphql";
 import QUERY_WORKSPACE_MEMBERS from "./graphql/queryWorkspaceMembers.graphql";
 
@@ -151,11 +152,6 @@ export const WorkspaceMemberList: FC = () => {
                   }}
                 />
               );
-            },
-            exportToExcel: (_, data) => {
-              return {
-                text: getMemberRoleLabel(data),
-              };
             },
           },
           workspaceBranches: {
@@ -285,7 +281,7 @@ const MemberCard: FC<{ member: WorkspaceMemberDataFragment }> = (props) => {
               </ThemeIcon>
 
               <Text fz={12} fw={500}>
-                {getMemberRoleLabel(member)}
+                <WorkspaceMemberRoleName member={member} />
               </Text>
             </Group>
           </Stack>

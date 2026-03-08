@@ -1,9 +1,5 @@
-import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
-import {
-  WorkspacePermission,
-  WorkspaceRoleEntity,
-  WorkspaceDefaultRoleId,
-} from "./workspace-roles-types";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import { WorkspaceDefaultRoleId, WorkspacePermission } from "./workspace-roles-types";
 
 export const workspaceDefaultRoles: Record<
   WorkspaceDefaultRoleId,
@@ -14,208 +10,203 @@ export const workspaceDefaultRoles: Record<
   [WorkspaceDefaultRoleId.MEMBER]: { name: defineMessage`Member` },
 };
 
-export const workspaceSpecialRoleIds: Record<WorkspaceDefaultRoleId, { name: () => string }> = {
-  [WorkspaceDefaultRoleId.OWNER]: { name: () => t`Owner` },
-  [WorkspaceDefaultRoleId.ADMIN]: { name: () => t`Admin` },
-  [WorkspaceDefaultRoleId.MEMBER]: { name: () => t`Member` },
+export const workspaceSpecialRoleIds: Record<
+  WorkspaceDefaultRoleId,
+  { name: MacroMessageDescriptor }
+> = {
+  [WorkspaceDefaultRoleId.OWNER]: { name: defineMessage`Owner` },
+  [WorkspaceDefaultRoleId.ADMIN]: { name: defineMessage`Admin` },
+  [WorkspaceDefaultRoleId.MEMBER]: { name: defineMessage`Member` },
 };
 
-export const getWorkspaceRoleName = (role: Pick<WorkspaceRoleEntity, "name" | "_id">): string => {
-  if (Object.values(WorkspaceDefaultRoleId).includes(role._id as WorkspaceDefaultRoleId)) {
-    return workspaceSpecialRoleIds[role._id as WorkspaceDefaultRoleId].name();
-  }
-
-  return role.name;
-};
-
-export const workspacePermissions: Record<WorkspacePermission, { name: () => string }> = {
+export const workspacePermissions: Record<WorkspacePermission, { name: MacroMessageDescriptor }> = {
   [WorkspacePermission.LOANS_UPDATE_WORKSPACE_BRANCH]: {
-    name: () => t`Change loan workspace branch`,
+    name: defineMessage`Change loan workspace branch`,
   },
   [WorkspacePermission.CUSTOMERS_VIEW]: {
-    name: () => t`View customers`,
+    name: defineMessage`View customers`,
   },
   [WorkspacePermission.CUSTOMERS_VIEW_CONTACT]: {
-    name: () => t`View customer phone number and contact`,
+    name: defineMessage`View customer phone number and contact`,
   },
   [WorkspacePermission.CUSTOMERS_CREATE]: {
-    name: () => t`Create customer`,
+    name: defineMessage`Create customer`,
   },
   [WorkspacePermission.CUSTOMERS_UPDATE_INFO]: {
-    name: () => t`Update customer info`,
+    name: defineMessage`Update customer info`,
   },
   [WorkspacePermission.CUSTOMERS_ASSIGN]: {
-    name: () => t`Assign customer to member`,
+    name: defineMessage`Assign customer to member`,
   },
   [WorkspacePermission.CUSTOMER_KYCS_MANAGER]: {
-    name: () => t`Manage customer KYC`,
+    name: defineMessage`Manage customer KYC`,
   },
   [WorkspacePermission.LOANS_VIEW]: {
-    name: () => t`View all loans`,
+    name: defineMessage`View all loans`,
   },
   [WorkspacePermission.LOANS_APPROVE]: {
-    name: () => t`Approve loan`,
+    name: defineMessage`Approve loan`,
   },
   [WorkspacePermission.LOANS_FULFILL]: {
-    name: () => t`Fulfill loan`,
+    name: defineMessage`Fulfill loan`,
   },
   [WorkspacePermission.LOANS_CREATOR]: {
-    name: () => t`Create/update loan`,
+    name: defineMessage`Create/update loan`,
   },
   [WorkspacePermission.LOANS_PAY]: {
-    name: () => t`Pay loan`,
+    name: defineMessage`Pay loan`,
   },
   [WorkspacePermission.LOANS_ARCHIVE]: {
-    name: () => t`Archive loan`,
+    name: defineMessage`Archive loan`,
   },
   [WorkspacePermission.BOOKING_VIEW]: {
-    name: () => t`View bookings`,
+    name: defineMessage`View bookings`,
   },
   [WorkspacePermission.BOOKING_MANAGER]: {
-    name: () => t`Manage bookings`,
+    name: defineMessage`Manage bookings`,
   },
   [WorkspacePermission.RECEIPTS_VIEW]: {
-    name: () => t`View receipts`,
+    name: defineMessage`View receipts`,
   },
   [WorkspacePermission.RECEIPTS_CREATE]: {
-    name: () => t`Create receipt`,
+    name: defineMessage`Create receipt`,
   },
   [WorkspacePermission.RECEIPTS_CENSORSHIP]: {
-    name: () => t`Censor receipts`,
+    name: defineMessage`Censor receipts`,
   },
   [WorkspacePermission.PRODUCTS_SERVICES_WRITE]: {
-    name: () => t`Create product/service`,
+    name: defineMessage`Create product/service`,
   },
   [WorkspacePermission.PARTNERS_WRITE]: {
-    name: () => t`Manage partners`,
+    name: defineMessage`Manage partners`,
   },
   [WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP]: {
-    name: () => t`Censor timekeeping`,
+    name: defineMessage`Censor timekeeping`,
   },
   [WorkspacePermission.HRM_SALARIES_MANAGER]: {
-    name: () => t`Manage salaries`,
+    name: defineMessage`Manage salaries`,
   },
   [WorkspacePermission.WORKSPACE_MEMBERS_VIEW]: {
-    name: () => t`View members`,
+    name: defineMessage`View members`,
   },
   [WorkspacePermission.WORKSPACE_MEMBERS_MANAGER]: {
-    name: () => t`Manage members`,
+    name: defineMessage`Manage members`,
   },
   [WorkspacePermission.WORKSPACE_ROLES_MANAGER]: {
-    name: () => t`Manage roles`,
+    name: defineMessage`Manage roles`,
   },
   [WorkspacePermission.WORKSPACE_SETTINGS]: {
-    name: () => t`Change settings`,
+    name: defineMessage`Change settings`,
   },
   [WorkspacePermission.WORKSPACE_BILLINGS_MANAGER]: {
-    name: () => t`Manage billings`,
+    name: defineMessage`Manage billings`,
   },
   [WorkspacePermission.REPORTS_VIEW]: {
-    name: () => t`View reports`,
+    name: defineMessage`View reports`,
   },
   [WorkspacePermission.PRESCRIPTIONS_WRITE]: {
-    name: () => t`Manage prescriptions`,
+    name: defineMessage`Manage prescriptions`,
   },
   [WorkspacePermission.MESSAGE_BOXES_MANAGER]: {
-    name: () => t`Manage message boxes`,
+    name: defineMessage`Manage message boxes`,
   },
   [WorkspacePermission.TABLE_SLOTS_WRITE]: {
-    name: () => t`Manage tables`,
+    name: defineMessage`Manage tables`,
   },
   [WorkspacePermission.COUPONS_MANAGER]: {
-    name: () => t`Manage coupons`,
+    name: defineMessage`Manage coupons`,
   },
   [WorkspacePermission.VOUCHERS_MANAGER]: {
-    name: () => t`Manage vouchers`,
+    name: defineMessage`Manage vouchers`,
   },
   [WorkspacePermission.CUSTOMERS_ARCHIVE]: {
-    name: () => t`Archive customer`,
+    name: defineMessage`Archive customer`,
   },
   [WorkspacePermission.RECEIPTS_ARCHIVE]: {
-    name: () => t`Archive receipt`,
+    name: defineMessage`Archive receipt`,
   },
   [WorkspacePermission.RECEIPTS_UPDATE]: {
-    name: () => t`Update receipt`,
+    name: defineMessage`Update receipt`,
   },
   [WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS]: {
-    name: () => t`Access all branches`,
+    name: defineMessage`Access all branches`,
   },
   [WorkspacePermission.ORDERS_VIEW]: {
-    name: () => t`View orders / service ticket`,
+    name: defineMessage`View orders / service ticket`,
   },
   [WorkspacePermission.ORDERS_CREATE]: {
-    name: () => t`Create order / service ticket`,
+    name: defineMessage`Create order / service ticket`,
   },
   [WorkspacePermission.ORDERS_UPDATE]: {
-    name: () => t`Update order / service ticket`,
+    name: defineMessage`Update order / service ticket`,
   },
   [WorkspacePermission.ORDERS_ARCHIVE]: {
-    name: () => t`Archive order / service ticket`,
+    name: defineMessage`Archive order / service ticket`,
   },
   [WorkspacePermission.PRODUCT_STOCK_IN]: {
-    name: () => t`Stock in`,
+    name: defineMessage`Stock in`,
   },
   [WorkspacePermission.PRODUCT_STOCK_OUT]: {
-    name: () => t`Stock out`,
+    name: defineMessage`Stock out`,
   },
   [WorkspacePermission.PRODUCT_STOCK_IN_REVERT]: {
-    name: () => t`Revert stock in`,
+    name: defineMessage`Revert stock in`,
   },
   [WorkspacePermission.PRODUCT_STOCK_OUT_REVERT]: {
-    name: () => t`Revert stock out`,
+    name: defineMessage`Revert stock out`,
   },
   [WorkspacePermission.EXPORT_DATA]: {
-    name: () => t`Export data`,
+    name: defineMessage`Export data`,
   },
   [WorkspacePermission.PRODUCT_STOCK_VIEW]: {
-    name: () => t`View stock`,
+    name: defineMessage`View stock`,
   },
   [WorkspacePermission.PRODUCT_COMBOS_VIEW]: {
-    name: () => t`View Combos`,
+    name: defineMessage`View Combos`,
   },
   [WorkspacePermission.PRODUCT_COMBOS_MANAGER]: {
-    name: () => t`Manage Combos`,
+    name: defineMessage`Manage Combos`,
   },
   [WorkspacePermission.CUSTOMER_FORMS_MANAGER]: {
-    name: () => t`Manage customer forms`,
+    name: defineMessage`Manage customer forms`,
   },
   [WorkspacePermission.LOANS_CUSTOM_FULFILLED_AT]: {
-    name: () => t`Change fulfilled at`,
+    name: defineMessage`Change fulfilled at`,
   },
   [WorkspacePermission.POSTS_VIEW]: {
-    name: () => t`View posts`,
+    name: defineMessage`View posts`,
   },
   [WorkspacePermission.POSTS_MANAGER]: {
-    name: () => t`Manage posts`,
+    name: defineMessage`Manage posts`,
   },
   [WorkspacePermission.CUSTOM_FIELDS_MANAGER]: {
-    name: () => t`Manage custom fields`,
+    name: defineMessage`Manage custom fields`,
   },
   [WorkspacePermission.PROMOTIONS_VIEW]: {
-    name: () => t`View promotions`,
+    name: defineMessage`View promotions`,
   },
   [WorkspacePermission.PROMOTIONS_MANAGER]: {
-    name: () => t`Manage promotions`,
+    name: defineMessage`Manage promotions`,
   },
   [WorkspacePermission.CATEGORIES_VIEW]: {
-    name: () => t`View categories`,
+    name: defineMessage`View categories`,
   },
   [WorkspacePermission.CATEGORIES_MANAGER]: {
-    name: () => t`Manage categories`,
+    name: defineMessage`Manage categories`,
   },
   [WorkspacePermission.LOANS_APPROVED_REVERTED]: {
-    name: () => t`Revert loan approve`,
+    name: defineMessage`Revert loan approve`,
   },
   [WorkspacePermission.RECEIPTS_REVERT_PAYMENT]: {
-    name: () => t`Revert payment`,
+    name: defineMessage`Revert payment`,
   },
   [WorkspacePermission.LOANS_FULFILLED_REVERTED]: {
-    name: () => t`Revert loan fulfill`,
+    name: defineMessage`Revert loan fulfill`,
   },
   [WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE]: {
-    name: () => t`Export e-invoice`,
+    name: defineMessage`Export e-invoice`,
   },
   [WorkspacePermission.ATTENDANCE_RECORDS_MANAGER]: {
-    name: () => t`Manage attendance records`,
+    name: defineMessage`Manage attendance records`,
   },
 };

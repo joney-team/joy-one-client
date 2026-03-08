@@ -11,7 +11,7 @@ import { UserPublicInformation } from "@/modules/users/users-types";
 import { WorkspaceMemberSetting } from "@/modules/workspace-members/components/workspace-member-setting";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
@@ -125,7 +125,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
             {!!mutualWorkspace && member && (
               <ShortInfoSession
                 label={t`Member role`}
-                value={getMemberRoleLabel(member)}
+                value={<WorkspaceMemberRoleName member={member} />}
                 icon={IconAccessible}
               />
             )}
@@ -223,7 +223,7 @@ const UserMutualWorkspaces: FC<{ user: UserPublicInformation }> = (props) => {
               <Stack gap={0}>
                 <Text fz={16}>{data.name}</Text>
                 <Text fz={12} c="gray">
-                  {getMemberRoleLabel(data)}
+                  <WorkspaceMemberRoleName member={data} />
                 </Text>
               </Stack>
             </Group>

@@ -167,7 +167,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                         >
                           <Switch
                             key={permission.value}
-                            label={workspacePermissions[permission.value].name()}
+                            label={t(workspacePermissions[permission.value].name)}
                             color={isHasDependentPermissions ? "orange" : undefined}
                             checked={isChecked}
                             onClick={onToggle}

@@ -22,6 +22,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 
 const MenuItem = ({
   member,
@@ -68,7 +69,7 @@ const MenuItem = ({
           </Text>
 
           <Text fz={10} c="gray">
-            {getMemberRoleLabel(member)}
+            <WorkspaceMemberRoleName member={member} />
           </Text>
         </Stack>
       </Group>

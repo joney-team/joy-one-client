@@ -8,7 +8,7 @@ import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import QUERY_WORKSPACE_MEMBERS_BY_IDS from "../workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
-import { getMemberRoleLabel } from "../workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import { ModalUserInformation } from "./modals/modal-user-information";
 
 export interface UserColumnArgs extends Omit<Column, "render"> {
@@ -38,7 +38,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
                   {user.name}
                 </Text>
                 <Text fz={10} c="gray" truncate>
-                  {getMemberRoleLabel(user)}
+                  <WorkspaceMemberRoleName member={user} />
                 </Text>
               </Stack>
             </Group>
@@ -78,16 +78,16 @@ export const userColumn = (args?: UserColumnArgs): Column => {
             }))
           );
         },
-        render: ({ data: user }) => {
+        render: ({ data: member }) => {
           return (
             <Group gap={8} className="clickable">
-              <Avatar user={user} size="sm" />
+              <Avatar user={member} size="sm" />
               <Stack gap={0}>
                 <Text fz={14} fw={500}>
-                  {user.name}
+                  {member.name}
                 </Text>
                 <Text fz={10} c="gray">
-                  {getMemberRoleLabel(user)}
+                  <WorkspaceMemberRoleName member={member} />
                 </Text>
               </Stack>
             </Group>

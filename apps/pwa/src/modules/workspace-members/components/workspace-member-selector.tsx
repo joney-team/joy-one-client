@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { searchEntity } from "@/modules/search/search-service";
-import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { AppEntity } from "@/types";
 import { ActionIcon, Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
@@ -41,7 +41,7 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
                   <Text>{user.name}</Text>
 
                   <Text fz={em(10)} mt={-2}>
-                    {getMemberRoleLabel(user)}
+                    <WorkspaceMemberRoleName member={user} />
                   </Text>
                 </Stack>
               </Group>

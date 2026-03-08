@@ -103,7 +103,7 @@ msgstr "A combo is a shopping method that combines multiple products into a sing
 msgid "Accept lateness up to {0} minutes"
 msgstr "Accept lateness up to {0} minutes"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:141
+#: src/modules/workspace-roles/workspace-roles-constants.ts:132
 msgid "Access all branches"
 msgstr "Access all branches"
 
@@ -302,8 +302,8 @@ msgstr "Add widget"
 msgid "Address"
 msgstr "Address"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:13
-#: src/modules/workspace-roles/workspace-roles-constants.ts:19
+#: src/modules/workspace-roles/workspace-roles-constants.ts:9
+#: src/modules/workspace-roles/workspace-roles-constants.ts:18
 msgid "Admin"
 msgstr "Admin"
 
@@ -376,7 +376,7 @@ msgstr "All"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:220
 #: src/modules/workspace-members/components/workspace-member-setting.tsx:149
-#: src/modules/workspace-members/workspace-member-list.tsx:169
+#: src/modules/workspace-members/workspace-member-list.tsx:165
 msgid "All branches"
 msgstr "All branches"
 
@@ -501,7 +501,7 @@ msgid "Approve Expense"
 msgstr "Approve Expense"
 
 #: src/modules/events/event-constants.ts:125
-#: src/modules/workspace-roles/workspace-roles-constants.ts:57
+#: src/modules/workspace-roles/workspace-roles-constants.ts:48
 msgid "Approve loan"
 msgstr "Approve loan"
 
@@ -528,15 +528,15 @@ msgstr "Approved"
 msgid "Archive"
 msgstr "Archive"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:132
+#: src/modules/workspace-roles/workspace-roles-constants.ts:123
 msgid "Archive customer"
 msgstr "Archive customer"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:69
+#: src/modules/workspace-roles/workspace-roles-constants.ts:60
 msgid "Archive loan"
 msgstr "Archive loan"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:153
+#: src/modules/workspace-roles/workspace-roles-constants.ts:144
 msgid "Archive order / service ticket"
 msgstr "Archive order / service ticket"
 
@@ -549,7 +549,7 @@ msgid "Archive product"
 msgstr "Archive product"
 
 #: src/modules/events/event-constants.ts:77
-#: src/modules/workspace-roles/workspace-roles-constants.ts:135
+#: src/modules/workspace-roles/workspace-roles-constants.ts:126
 msgid "Archive receipt"
 msgstr "Archive receipt"
 
@@ -682,7 +682,7 @@ msgstr "Asset types"
 msgid "Assign assignee"
 msgstr "Assign assignee"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:48
+#: src/modules/workspace-roles/workspace-roles-constants.ts:39
 msgid "Assign customer to member"
 msgstr "Assign customer to member"
 
@@ -911,7 +911,7 @@ msgstr "Bookings chart"
 #: src/modules/loans/modals/modal-create-loan.tsx:458
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:322
 #: src/modules/workspace-branches/workspace-branch-column.tsx:25
-#: src/modules/workspace-members/workspace-member-list.tsx:163
+#: src/modules/workspace-members/workspace-member-list.tsx:159
 #: src/widgets/reports/index.tsx:343
 #: src/widgets/reports/widgets/report-credit.widget.tsx:455
 msgid "Branch"
@@ -1062,11 +1062,11 @@ msgstr "Category created"
 msgid "Category updated"
 msgstr "Category updated"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:84
+#: src/modules/workspace-roles/workspace-roles-constants.ts:75
 msgid "Censor receipts"
 msgstr "Censor receipts"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:93
+#: src/modules/workspace-roles/workspace-roles-constants.ts:84
 msgid "Censor timekeeping"
 msgstr "Censor timekeeping"
 
@@ -1095,12 +1095,12 @@ msgstr "Change customer"
 msgid "Change folder"
 msgstr "Change folder"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:183
+#: src/modules/workspace-roles/workspace-roles-constants.ts:174
 msgid "Change fulfilled at"
 msgstr "Change fulfilled at"
 
 #: src/modules/events/event-constants.ts:174
-#: src/modules/workspace-roles/workspace-roles-constants.ts:33
+#: src/modules/workspace-roles/workspace-roles-constants.ts:24
 msgid "Change loan workspace branch"
 msgstr "Change loan workspace branch"
 
@@ -1121,7 +1121,7 @@ msgstr "Change provider"
 msgid "Change receipt workspace branch"
 msgstr "Change receipt workspace branch"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:108
+#: src/modules/workspace-roles/workspace-roles-constants.ts:99
 msgid "Change settings"
 msgstr "Change settings"
 
@@ -1669,7 +1669,7 @@ msgid "Create coupon rule"
 msgstr "Create coupon rule"
 
 #: src/modules/customers/customer-modal.tsx:47
-#: src/modules/workspace-roles/workspace-roles-constants.ts:42
+#: src/modules/workspace-roles/workspace-roles-constants.ts:33
 msgid "Create customer"
 msgstr "Create customer"
 
@@ -1719,7 +1719,7 @@ msgid "Create new product"
 msgstr "Create new product"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:331
-#: src/modules/workspaces/workspace-require.tsx:204
+#: src/modules/workspaces/workspace-require.tsx:206
 msgid "Create new workspace"
 msgstr "Create new workspace"
 
@@ -1733,7 +1733,7 @@ msgstr "Create new workspace branch"
 msgid "Create order"
 msgstr "Create order"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:147
+#: src/modules/workspace-roles/workspace-roles-constants.ts:138
 msgid "Create order / service ticket"
 msgstr "Create order / service ticket"
 
@@ -1746,7 +1746,7 @@ msgstr "Create partner"
 msgid "Create product"
 msgstr "Create product"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:87
+#: src/modules/workspace-roles/workspace-roles-constants.ts:78
 msgid "Create product/service"
 msgstr "Create product/service"
 
@@ -1756,7 +1756,7 @@ msgstr "Create promotion"
 
 #: src/modules/events/event-constants.ts:73
 #: src/modules/receipts/modals/modal-receipt-form.tsx:185
-#: src/modules/workspace-roles/workspace-roles-constants.ts:81
+#: src/modules/workspace-roles/workspace-roles-constants.ts:72
 msgid "Create receipt"
 msgstr "Create receipt"
 
@@ -1787,7 +1787,7 @@ msgstr "Create subtask"
 msgid "Create task"
 msgstr "Create task"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:63
+#: src/modules/workspace-roles/workspace-roles-constants.ts:54
 msgid "Create/update loan"
 msgstr "Create/update loan"
 
@@ -2358,7 +2358,7 @@ msgstr "Edited"
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:134
 #: src/modules/users/user-profile-settings.tsx:134
-#: src/modules/workspace-members/workspace-member-list.tsx:88
+#: src/modules/workspace-members/workspace-member-list.tsx:89
 msgid "Email"
 msgstr "Email"
 
@@ -2644,12 +2644,12 @@ msgstr "Export"
 #: src/components/list/components/export-button.tsx:60
 #: src/components/list/components/export-button.tsx:204
 #: src/components/list/components/export-button.tsx:209
-#: src/modules/workspace-roles/workspace-roles-constants.ts:168
+#: src/modules/workspace-roles/workspace-roles-constants.ts:159
 #: src/widgets/reports/widgets/report-credit.widget.tsx:302
 msgid "Export data"
 msgstr "Export data"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:216
+#: src/modules/workspace-roles/workspace-roles-constants.ts:207
 msgid "Export e-invoice"
 msgstr "Export e-invoice"
 
@@ -2805,7 +2805,7 @@ msgid "Fulfill at"
 msgstr "Fulfill at"
 
 #: src/modules/events/event-constants.ts:128
-#: src/modules/workspace-roles/workspace-roles-constants.ts:60
+#: src/modules/workspace-roles/workspace-roles-constants.ts:51
 msgid "Fulfill loan"
 msgstr "Fulfill loan"
 
@@ -2880,7 +2880,7 @@ msgstr "Grid"
 #: src/modules/customers/components/customer-column.tsx:26
 #: src/modules/message-boxes/message-box/message-box-card.tsx:104
 #: src/modules/message-boxes/message-box/message-box-head.tsx:81
-#: src/modules/workspace-members/workspace-members-service.ts:52
+#: src/modules/workspace-roles/components/workspace-role-name.tsx:36
 msgid "Guest"
 msgstr "Guest"
 
@@ -3228,7 +3228,7 @@ msgstr "Join now"
 msgid "Join workspace"
 msgstr "Join workspace"
 
-#: src/modules/workspace-members/workspace-member-list.tsx:79
+#: src/modules/workspace-members/workspace-member-list.tsx:80
 msgid "Joined at"
 msgstr "Joined at"
 
@@ -3724,7 +3724,7 @@ msgstr "Logo"
 
 #: src/layout/header/header-account.tsx:111
 #: src/modules/workspaces/workspace-require.tsx:126
-#: src/modules/workspaces/workspace-require.tsx:209
+#: src/modules/workspaces/workspace-require.tsx:211
 msgid "Logout"
 msgstr "Logout"
 
@@ -3755,7 +3755,7 @@ msgstr "Main location"
 #: src/modules/workspace-branches/workspace-branch-column.tsx:27
 #: src/modules/workspace-branches/workspace-branch-column.tsx:32
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:32
-#: src/modules/workspace-members/workspace-member-list.tsx:51
+#: src/modules/workspace-members/workspace-member-list.tsx:52
 #: src/widgets/reports/index.tsx:320
 #: src/widgets/reports/widgets/report-credit.widget.tsx:388
 msgid "Main office"
@@ -3770,31 +3770,31 @@ msgstr "Main office, Branch 1, ..."
 msgid "Male"
 msgstr "Male"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:219
+#: src/modules/workspace-roles/workspace-roles-constants.ts:210
 msgid "Manage attendance records"
 msgstr "Manage attendance records"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:111
+#: src/modules/workspace-roles/workspace-roles-constants.ts:102
 msgid "Manage billings"
 msgstr "Manage billings"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:75
+#: src/modules/workspace-roles/workspace-roles-constants.ts:66
 msgid "Manage bookings"
 msgstr "Manage bookings"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:204
+#: src/modules/workspace-roles/workspace-roles-constants.ts:195
 msgid "Manage categories"
 msgstr "Manage categories"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:177
+#: src/modules/workspace-roles/workspace-roles-constants.ts:168
 msgid "Manage Combos"
 msgstr "Manage Combos"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:126
+#: src/modules/workspace-roles/workspace-roles-constants.ts:117
 msgid "Manage coupons"
 msgstr "Manage coupons"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:192
+#: src/modules/workspace-roles/workspace-roles-constants.ts:183
 msgid "Manage custom fields"
 msgstr "Manage custom fields"
 
@@ -3802,7 +3802,7 @@ msgstr "Manage custom fields"
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Manage custom fields for objects: product, service, post, ..."
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:180
+#: src/modules/workspace-roles/workspace-roles-constants.ts:171
 msgid "Manage customer forms"
 msgstr "Manage customer forms"
 
@@ -3810,7 +3810,7 @@ msgstr "Manage customer forms"
 msgid "Manage customer interaction via Zalo OA"
 msgstr "Manage customer interaction via Zalo OA"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:51
+#: src/modules/workspace-roles/workspace-roles-constants.ts:42
 msgid "Manage customer KYC"
 msgstr "Manage customer KYC"
 
@@ -3818,23 +3818,23 @@ msgstr "Manage customer KYC"
 msgid "Manage member roles and access permissions"
 msgstr "Manage member roles and access permissions"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:102
+#: src/modules/workspace-roles/workspace-roles-constants.ts:93
 msgid "Manage members"
 msgstr "Manage members"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:120
+#: src/modules/workspace-roles/workspace-roles-constants.ts:111
 msgid "Manage message boxes"
 msgstr "Manage message boxes"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:90
+#: src/modules/workspace-roles/workspace-roles-constants.ts:81
 msgid "Manage partners"
 msgstr "Manage partners"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:189
+#: src/modules/workspace-roles/workspace-roles-constants.ts:180
 msgid "Manage posts"
 msgstr "Manage posts"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:117
+#: src/modules/workspace-roles/workspace-roles-constants.ts:108
 msgid "Manage prescriptions"
 msgstr "Manage prescriptions"
 
@@ -3842,19 +3842,19 @@ msgstr "Manage prescriptions"
 msgid "Manage product, service, post, ..."
 msgstr "Manage product, service, post, ..."
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:198
+#: src/modules/workspace-roles/workspace-roles-constants.ts:189
 msgid "Manage promotions"
 msgstr "Manage promotions"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:105
+#: src/modules/workspace-roles/workspace-roles-constants.ts:96
 msgid "Manage roles"
 msgstr "Manage roles"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:96
+#: src/modules/workspace-roles/workspace-roles-constants.ts:87
 msgid "Manage salaries"
 msgstr "Manage salaries"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:123
+#: src/modules/workspace-roles/workspace-roles-constants.ts:114
 msgid "Manage tables"
 msgstr "Manage tables"
 
@@ -3867,7 +3867,7 @@ msgstr "Manage the branches of the Workspace"
 msgid "Manage the settings of the Workspace"
 msgstr "Manage the settings of the Workspace"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:129
+#: src/modules/workspace-roles/workspace-roles-constants.ts:120
 msgid "Manage vouchers"
 msgstr "Manage vouchers"
 
@@ -3919,8 +3919,8 @@ msgid "Medium"
 msgstr "Medium"
 
 #: src/modules/products/product-detail.tsx:172
-#: src/modules/workspace-roles/workspace-roles-constants.ts:14
-#: src/modules/workspace-roles/workspace-roles-constants.ts:20
+#: src/modules/workspace-roles/workspace-roles-constants.ts:10
+#: src/modules/workspace-roles/workspace-roles-constants.ts:19
 #: src/widgets/reports/widgets/report-credit.widget.tsx:465
 msgid "Member"
 msgstr "Member"
@@ -3965,7 +3965,7 @@ msgstr "Member updated"
 #: src/modules/hrm-timekeepings/hrm-timekeepings-summary.tsx:103
 #: src/modules/plugins/zalo-oas/components/zalo-oa-gmf-groups.tsx:43
 #: src/modules/search/search-engine.tsx:275
-#: src/modules/workspace-members/workspace-member-list.tsx:60
+#: src/modules/workspace-members/workspace-member-list.tsx:61
 #: src/modules/workspace-roles/workspace-roles-config.ts:226
 #: src/modules/workspaces/workspace-modules.tsx:121
 #: src/widgets/reports/index.tsx:258
@@ -4265,7 +4265,7 @@ msgstr "Mutual workspaces"
 #: src/modules/users/user-profile-settings.tsx:123
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:206
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:62
-#: src/modules/workspace-members/workspace-member-list.tsx:64
+#: src/modules/workspace-members/workspace-member-list.tsx:65
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:94
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:74
 #: src/modules/workspace-sdks/workspace-sdk-list.tsx:30
@@ -4403,7 +4403,7 @@ msgstr "No activity"
 msgid "No asset estimation"
 msgstr "No asset estimation"
 
-#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:244
+#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:245
 msgid "No assignees found"
 msgstr "No assignees found"
 
@@ -4697,8 +4697,8 @@ msgstr "Overdue"
 msgid "Overtime"
 msgstr "Overtime"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:12
-#: src/modules/workspace-roles/workspace-roles-constants.ts:18
+#: src/modules/workspace-roles/workspace-roles-constants.ts:8
+#: src/modules/workspace-roles/workspace-roles-constants.ts:17
 msgid "Owner"
 msgstr "Owner"
 
@@ -4783,7 +4783,7 @@ msgstr "Pay"
 msgid "Pay expire"
 msgstr "Pay expire"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:66
+#: src/modules/workspace-roles/workspace-roles-constants.ts:57
 msgid "Pay loan"
 msgstr "Pay loan"
 
@@ -4915,7 +4915,7 @@ msgstr "Personal informations"
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:448
 #: src/modules/users/modals/modal-user-information.tsx:142
 #: src/modules/users/user-profile-settings.tsx:128
-#: src/modules/workspace-members/workspace-member-list.tsx:104
+#: src/modules/workspace-members/workspace-member-list.tsx:105
 #: src/modules/workspaces/components/workspace-information.tsx:99
 msgid "Phone"
 msgstr "Phone"
@@ -5782,15 +5782,15 @@ msgstr "Revert history"
 msgid "Revert liquidation"
 msgstr "Revert liquidation"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:207
+#: src/modules/workspace-roles/workspace-roles-constants.ts:198
 msgid "Revert loan approve"
 msgstr "Revert loan approve"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:213
+#: src/modules/workspace-roles/workspace-roles-constants.ts:204
 msgid "Revert loan fulfill"
 msgstr "Revert loan fulfill"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:210
+#: src/modules/workspace-roles/workspace-roles-constants.ts:201
 msgid "Revert payment"
 msgstr "Revert payment"
 
@@ -5800,11 +5800,11 @@ msgstr "Revert payment"
 msgid "Revert Payment"
 msgstr "Revert Payment"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:162
+#: src/modules/workspace-roles/workspace-roles-constants.ts:153
 msgid "Revert stock in"
 msgstr "Revert stock in"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:165
+#: src/modules/workspace-roles/workspace-roles-constants.ts:156
 msgid "Revert stock out"
 msgstr "Revert stock out"
 
@@ -5812,8 +5812,8 @@ msgstr "Revert stock out"
 msgid "Right"
 msgstr "Right"
 
-#: src/modules/workspace-api-apps/workspace-api-app-card.tsx:69
-#: src/modules/workspace-members/workspace-member-list.tsx:117
+#: src/modules/workspace-api-apps/workspace-api-app-card.tsx:68
+#: src/modules/workspace-members/workspace-member-list.tsx:118
 msgid "Role"
 msgstr "Role"
 
@@ -5891,7 +5891,7 @@ msgstr "Scroll to today"
 #: src/layout/header/workspace-header.tsx:91
 #: src/layout/header/workspace-header.tsx:177
 #: src/modules/search/search-engine.tsx:382
-#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:152
+#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:153
 #: src/modules/tasks/components/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/components/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/components/task-menu/task-menu-tags.tsx:99
@@ -6332,7 +6332,7 @@ msgstr "Stock code"
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:121
 #: src/modules/product-stocks/product-stock-list.tsx:79
 #: src/modules/product-stocks/product-stocks-constants.tsx:11
-#: src/modules/workspace-roles/workspace-roles-constants.ts:156
+#: src/modules/workspace-roles/workspace-roles-constants.ts:147
 msgid "Stock in"
 msgstr "Stock in"
 
@@ -6347,7 +6347,7 @@ msgstr "Stock in reverted"
 #: src/modules/events/event-constants.ts:169
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:80
 #: src/modules/product-stocks/product-stocks-constants.tsx:16
-#: src/modules/workspace-roles/workspace-roles-constants.ts:159
+#: src/modules/workspace-roles/workspace-roles-constants.ts:150
 msgid "Stock out"
 msgstr "Stock out"
 
@@ -6971,7 +6971,7 @@ msgstr "Unlimited customers"
 msgid "Unlink"
 msgstr "Unlink"
 
-#: src/modules/workspace-members/workspace-member-list.tsx:73
+#: src/modules/workspace-members/workspace-member-list.tsx:74
 #: src/utils/file.utils.ts:63
 msgid "Unnamed"
 msgstr "Unnamed"
@@ -7034,7 +7034,7 @@ msgstr "Update coupon rule"
 msgid "Update customer"
 msgstr "Update customer"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:45
+#: src/modules/workspace-roles/workspace-roles-constants.ts:36
 msgid "Update customer info"
 msgstr "Update customer info"
 
@@ -7066,7 +7066,7 @@ msgstr "Update now"
 msgid "Update order"
 msgstr "Update order"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:150
+#: src/modules/workspace-roles/workspace-roles-constants.ts:141
 msgid "Update order / service ticket"
 msgstr "Update order / service ticket"
 
@@ -7090,7 +7090,7 @@ msgstr "Update promotion status"
 
 #: src/modules/events/event-constants.ts:75
 #: src/modules/receipts/receipt-detail.tsx:81
-#: src/modules/workspace-roles/workspace-roles-constants.ts:138
+#: src/modules/workspace-roles/workspace-roles-constants.ts:129
 msgid "Update receipt"
 msgstr "Update receipt"
 
@@ -7126,7 +7126,7 @@ msgstr "Update user profile"
 msgid "Update working day"
 msgstr "Update working day"
 
-#: src/modules/workspace-api-apps/workspace-api-app-card.tsx:41
+#: src/modules/workspace-api-apps/workspace-api-app-card.tsx:40
 msgid "Update workspace API app"
 msgstr "Update workspace API app"
 
@@ -7232,19 +7232,19 @@ msgstr "Vietnamese"
 msgid "View"
 msgstr "View"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:54
+#: src/modules/workspace-roles/workspace-roles-constants.ts:45
 msgid "View all loans"
 msgstr "View all loans"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:72
+#: src/modules/workspace-roles/workspace-roles-constants.ts:63
 msgid "View bookings"
 msgstr "View bookings"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:201
+#: src/modules/workspace-roles/workspace-roles-constants.ts:192
 msgid "View categories"
 msgstr "View categories"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:174
+#: src/modules/workspace-roles/workspace-roles-constants.ts:165
 msgid "View Combos"
 msgstr "View Combos"
 
@@ -7253,11 +7253,11 @@ msgstr "View Combos"
 msgid "View contract"
 msgstr "View contract"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:39
+#: src/modules/workspace-roles/workspace-roles-constants.ts:30
 msgid "View customer phone number and contact"
 msgstr "View customer phone number and contact"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:36
+#: src/modules/workspace-roles/workspace-roles-constants.ts:27
 msgid "View customers"
 msgstr "View customers"
 
@@ -7273,7 +7273,7 @@ msgstr "View E-Invoice"
 msgid "View Invoice"
 msgstr "View Invoice"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:99
+#: src/modules/workspace-roles/workspace-roles-constants.ts:90
 msgid "View members"
 msgstr "View members"
 
@@ -7289,23 +7289,23 @@ msgstr "View notification list"
 msgid "View on Google Map"
 msgstr "View on Google Map"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:144
+#: src/modules/workspace-roles/workspace-roles-constants.ts:135
 msgid "View orders / service ticket"
 msgstr "View orders / service ticket"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:186
+#: src/modules/workspace-roles/workspace-roles-constants.ts:177
 msgid "View posts"
 msgstr "View posts"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:195
+#: src/modules/workspace-roles/workspace-roles-constants.ts:186
 msgid "View promotions"
 msgstr "View promotions"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:78
+#: src/modules/workspace-roles/workspace-roles-constants.ts:69
 msgid "View receipts"
 msgstr "View receipts"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:114
+#: src/modules/workspace-roles/workspace-roles-constants.ts:105
 msgid "View reports"
 msgstr "View reports"
 
@@ -7313,7 +7313,7 @@ msgstr "View reports"
 msgid "View reports and analytics"
 msgstr "View reports and analytics"
 
-#: src/modules/workspace-roles/workspace-roles-constants.ts:171
+#: src/modules/workspace-roles/workspace-roles-constants.ts:162
 msgid "View stock"
 msgstr "View stock"
 
@@ -7538,7 +7538,7 @@ msgid "Yesterday"
 msgstr "Yesterday"
 
 #: src/modules/activities/activity-card.tsx:340
-#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:65
+#: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:66
 msgid "You"
 msgstr "You"
 

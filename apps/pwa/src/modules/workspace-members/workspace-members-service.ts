@@ -1,11 +1,5 @@
 import { ResponseList } from "@/types";
-import { t } from "@lingui/core/macro";
 import { api } from "../apis";
-import {
-  getWorkspaceRoleName,
-  workspaceSpecialRoleIds,
-} from "../workspace-roles/workspace-roles-constants";
-import { WorkspaceDefaultRoleId } from "../workspace-roles/workspace-roles-types";
 import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 import {
   UpdateWorkspaceMemberDto,
@@ -44,24 +38,4 @@ export async function getWorkspaceMemberList(query?: any) {
 
 export async function getWorkspaceMemberOnlineStatus() {
   return api.get<WorkspaceMemberOnlineStatus>(`/workspace-members/online-status`);
-}
-
-export function getMemberRoleLabel(
-  member: Pick<WorkspaceMemberDataFragment, "memberId" | "roles">
-) {
-  if (!member.memberId) return t`Guest`;
-
-  if (member.roles.length === 0) {
-    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.MEMBER].name();
-  }
-
-  if (member.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER)) {
-    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.OWNER].name();
-  }
-
-  if (member.roles.some((v) => v._id === WorkspaceDefaultRoleId.ADMIN)) {
-    return workspaceSpecialRoleIds[WorkspaceDefaultRoleId.ADMIN].name();
-  }
-
-  return member.roles.map((v) => getWorkspaceRoleName(v)).join(", ");
 }
