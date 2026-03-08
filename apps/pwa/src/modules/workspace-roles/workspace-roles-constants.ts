@@ -215,4 +215,7 @@ export const workspacePermissions: Record<WorkspacePermission, { name: () => str
   [WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE]: {
     name: () => t`Export e-invoice`,
   },
+  [WorkspacePermission.ATTENDANCE_RECORDS_MANAGER]: {
+    name: () => t`Manage attendance records`,
+  },
 };

@@ -51,11 +51,11 @@ msgstr "<0/> liên quan đến {relatedEntity} / {0}"
 msgid "<0><1/></0> subtask(s) will be archived as well."
 msgstr "<0><1/></0> công việc con cũng sẽ bị xoá."
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:142
+#: src/modules/loans/modals/modal-loan-package-form.tsx:141
 msgid "1 month"
 msgstr "1 tháng"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:177
+#: src/modules/loans/modals/modal-loan-package-form.tsx:176
 msgid "10 days"
 msgstr "10 ngày"
 
@@ -63,15 +63,15 @@ msgstr "10 ngày"
 msgid "12 hour"
 msgstr "12 giờ"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:147
+#: src/modules/loans/modals/modal-loan-package-form.tsx:146
 msgid "12 months"
 msgstr "12 tháng"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:178
+#: src/modules/loans/modals/modal-loan-package-form.tsx:177
 msgid "15 days"
 msgstr "15 ngày"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:143
+#: src/modules/loans/modals/modal-loan-package-form.tsx:142
 msgid "2 months"
 msgstr "2 tháng"
 
@@ -79,19 +79,19 @@ msgstr "2 tháng"
 msgid "24 hour"
 msgstr "24 giờ"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:144
+#: src/modules/loans/modals/modal-loan-package-form.tsx:143
 msgid "3 months"
 msgstr "3 tháng"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:179
+#: src/modules/loans/modals/modal-loan-package-form.tsx:178
 msgid "30 days (1 month)"
 msgstr "30 ngày (1 tháng)"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:145
+#: src/modules/loans/modals/modal-loan-package-form.tsx:144
 msgid "6 months"
 msgstr "6 tháng"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:146
+#: src/modules/loans/modals/modal-loan-package-form.tsx:145
 msgid "9 months"
 msgstr "9 tháng"
 
@@ -142,7 +142,7 @@ msgstr "Kích hoạt lúc"
 
 #: src/constant.ts:31
 #: src/modules/customers/customer-detail/customer-detail.tsx:109
-#: src/modules/loans/loan-detail.tsx:593
+#: src/modules/loans/loan-detail.tsx:611
 #: src/modules/tasks/components/task-detail/task-detail.tsx:183
 msgid "Activities"
 msgstr "Hoạt động"
@@ -152,15 +152,15 @@ msgid "Activity"
 msgstr "Hoạt động"
 
 #: src/components/inputs/time-trackings-input.tsx:546
-#: src/modules/customers/customer-detail/customer-information.tsx:371
-#: src/modules/loans/modals/modal-loan-package-form.tsx:324
+#: src/modules/customers/customer-detail/customer-information.tsx:393
+#: src/modules/loans/modals/modal-loan-package-form.tsx:323
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:149
 #: src/modules/product-combos/modals/modal-product-combo-using.tsx:110
 #: src/modules/products/components/form-product.tsx:493
 #: src/modules/products/components/product-selector.tsx:73
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:300
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:117
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:301
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:116
 msgid "Add"
 msgstr "Thêm"
 
@@ -170,7 +170,7 @@ msgstr "Thêm"
 msgid "ADD"
 msgstr "ĐC"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:160
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:157
 msgid "Add asset estimation"
 msgstr "Thêm định giá"
 
@@ -191,7 +191,7 @@ msgstr "Thêm lịch sử combo"
 msgid "Add contact"
 msgstr "Thêm liên hệ"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:296
+#: src/modules/loans/modals/modal-create-loan.tsx:314
 msgid "Add customer information"
 msgstr "Thêm thông tin khách hàng"
 
@@ -215,7 +215,7 @@ msgstr "Thêm thông tin"
 msgid "Add input"
 msgstr "Thêm trường nhập liệu"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:332
+#: src/modules/loans/modals/modal-create-loan.tsx:354
 msgid "Add KYC"
 msgstr "Thêm KYC"
 
@@ -257,8 +257,8 @@ msgstr "Thêm vật tư tiêu hao"
 msgid "Add product/service to order"
 msgstr "Thêm sản phẩm/dịch vụ vào đơn hàng"
 
-#: src/modules/loans/components/loan-payments.tsx:244
-#: src/modules/loans/components/loan-payments.tsx:388
+#: src/modules/loans/components/loan-payments.tsx:256
+#: src/modules/loans/components/loan-payments.tsx:393
 msgid "Add receipt"
 msgstr "Thêm hoá đơn"
 
@@ -282,7 +282,7 @@ msgstr "Thêm thẻ"
 msgid "Add task"
 msgstr "Tạo công việc"
 
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:344
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:345
 #: src/modules/tasks/views/time-trackings/time-tracking-tasks.tsx:105
 msgid "Add time trackings"
 msgstr "Thêm thời gian làm việc"
@@ -294,9 +294,9 @@ msgstr "Thêm widget"
 #: src/components/location-form.tsx:56
 #: src/components/printer/printer-settings-bar.tsx:39
 #: src/modals/modal-printer.tsx:627
-#: src/modules/customer-forms/customer-form-list.tsx:58
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:345
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:155
+#: src/modules/customer-forms/customer-form-list.tsx:65
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:354
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:165
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:66
 #: src/modules/workspaces/components/workspace-information.tsx:106
 #: src/modules/workspaces/components/workspace-information.tsx:145
@@ -308,7 +308,7 @@ msgstr "Địa chỉ"
 msgid "Admin"
 msgstr "Quản trị viên"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:471
+#: src/widgets/reports/widgets/report-credit.widget.tsx:491
 msgid "Advance payment"
 msgstr "Ứng trước"
 
@@ -381,7 +381,7 @@ msgstr "Tất cả"
 msgid "All branches"
 msgstr "Tất cả chi nhánh"
 
-#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:117
+#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:126
 msgid "All receipts of the payment plans will also be moved to the new branch"
 msgstr "Các hoá đơn của các kỳ thanh toán cũng sẽ được chuyển sang chi nhánh mới"
 
@@ -401,21 +401,21 @@ msgstr "Tất cả thời gian"
 msgid "Allow cumulative coupon rules"
 msgstr "Cho phép cộng dồn các khuyến mãi khác"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:231
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:230
 msgid "Allow duplicate bookings"
 msgstr "Cho phép đặt lịch hẹn trùng/đè lên nhau"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:128
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:127
 msgid "Allow multiple payments (Installment or Deposit)"
 msgstr "Cho phép thanh toán nhiều lần (Trả góp hoặc Cọc tiền trước)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:186
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:185
 msgid "Allow tip"
 msgstr "Cho phép nhận Tip"
 
 #: src/modules/coupons/coupon-constants.ts:12
 #: src/modules/products/components/form-product.tsx:384
-#: src/modules/receipts/modals/modal-partial-payment.tsx:78
+#: src/modules/receipts/modals/modal-partial-payment.tsx:88
 msgid "Amount"
 msgstr "Số lượng"
 
@@ -484,12 +484,12 @@ msgstr "Áp dụng thay đổi"
 msgid "Approval Timekeeping"
 msgstr "Phê duyệt chấm công"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:60
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:219
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:59
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:229
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:138
-#: src/modules/loans/components/loan-documents.tsx:99
-#: src/modules/loans/components/loan-documents.tsx:208
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:110
+#: src/modules/loans/components/loan-documents.tsx:115
+#: src/modules/loans/components/loan-documents.tsx:230
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:115
 msgid "Approve"
 msgstr "Duyệt"
 
@@ -497,7 +497,7 @@ msgstr "Duyệt"
 msgid "Approve all"
 msgstr "Phê duyệt tất cả"
 
-#: src/modules/receipts/receipt-card.tsx:469
+#: src/modules/receipts/receipt-card.tsx:466
 msgid "Approve Expense"
 msgstr "Duyệt thanh toán"
 
@@ -506,24 +506,24 @@ msgstr "Duyệt thanh toán"
 msgid "Approve loan"
 msgstr "Duyệt hồ sơ vay"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:121
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:126
 msgid "Approve Receipt"
 msgstr "Duyệt hoá đơn"
 
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:10
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:196
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:206
 #: src/modules/loans/loans-constants.tsx:31
-#: src/modules/receipts/receipt-card.tsx:457
+#: src/modules/receipts/receipt-card.tsx:454
 msgid "Approved"
 msgstr "Đã duyệt"
 
 #: src/components/buttons/button-archive.tsx:49
-#: src/modules/customer-forms/customer-form-list.tsx:92
-#: src/modules/loans/loan-list.tsx:424
+#: src/modules/customer-forms/customer-form-list.tsx:99
+#: src/modules/loans/loan-list.tsx:425
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:43
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:200
 #: src/modules/posts/posts-list.tsx:61
-#: src/modules/receipts/receipt-detail.tsx:161
+#: src/modules/receipts/receipt-detail.tsx:186
 #: src/modules/services/service-detail.tsx:84
 #: src/utils/actions.tsx:94
 msgid "Archive"
@@ -558,7 +558,7 @@ msgstr "Xoá hoá đơn"
 msgid "Archive task"
 msgstr "Xoá công việc"
 
-#: src/modules/receipts/receipt-detail.tsx:111
+#: src/modules/receipts/receipt-detail.tsx:132
 msgid "Archived"
 msgstr "Đã xoá"
 
@@ -600,11 +600,11 @@ msgstr "Bạn có chắc muốn ngắt kết nối với {0}"
 msgid "Are you sure you want to disconnect?"
 msgstr "Bạn có chắc chắn muốn ngắt kết nối không?"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:169
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:166
 msgid "Are you sure you want to import the asset estimations?"
 msgstr "Bạn có chắc muốn nhập dữ liệu định giá?"
 
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:246
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:261
 msgid "Are you sure you want to liquidate this loan? This action cannot be undone."
 msgstr "Bạn có chắc chắn muốn thanh lý khoản vay này không? Hành động này không thể hoàn tác."
 
@@ -612,7 +612,7 @@ msgstr "Bạn có chắc chắn muốn thanh lý khoản vay này không? Hành 
 msgid "Are you sure you want to mark as done?"
 msgstr "Bạn có chắc chắn muốn đánh dấu là đã xử lí xong?"
 
-#: src/modules/receipts/receipt-card.tsx:132
+#: src/modules/receipts/receipt-card.tsx:127
 msgid "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 msgstr "Bạn có chắc chắn muốn từ chối chi phí không? Thao tác này không thể hoàn tác. Hoá đơn sẽ bị xoá."
 
@@ -624,12 +624,12 @@ msgstr "Bạn có chắc muốn xoá toàn bộ các công việc đã chọn?"
 msgid "Are you sure you want to reset the templates?"
 msgstr "Bạn có chắc chắn muốn đặt lại các mẫu không?"
 
-#: src/modules/loans/components/loan-payments.tsx:81
+#: src/modules/loans/components/loan-payments.tsx:94
 msgid "Are you sure you want to revert the liquidation?"
 msgstr "Bạn có chắc chắn muốn hoàn tác tất toán không?"
 
-#: src/modules/loans/components/loan-payments.tsx:73
-#: src/modules/receipts/receipt-detail.tsx:84
+#: src/modules/loans/components/loan-payments.tsx:86
+#: src/modules/receipts/receipt-detail.tsx:101
 msgid "Are you sure you want to revert the payment?"
 msgstr "Bạn có chắc chắn muốn hoàn tác thanh toán không?"
 
@@ -642,39 +642,39 @@ msgstr "Bạn đã đến vị trí {0}"
 msgid "Asset"
 msgstr "Tài sản"
 
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:140
 #: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:142
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:144
 msgid "Asset car receipts"
 msgstr "Hóa đơn / giấy tờ xe khác"
 
-#: src/modules/loans/components/loan-documents.tsx:187
+#: src/modules/loans/components/loan-documents.tsx:209
 msgid "Asset data"
 msgstr "Thông tin tài sản"
 
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:131
 #: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:133
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:135
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:119
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:121
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:133
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:135
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:118
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:120
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:132
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:134
 msgid "Asset images"
 msgstr "Hình ảnh tài sản"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:32
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:32
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:218
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:30
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:31
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:215
 msgid "Asset model"
 msgstr "Dòng/Mẫu"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:40
-#: src/modules/loans/modals/modal-create-loan.tsx:350
-#: src/modules/loans/modals/modal-loan-calculator.tsx:162
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:184
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:39
+#: src/modules/loans/modals/modal-create-loan.tsx:372
+#: src/modules/loans/modals/modal-loan-calculator.tsx:147
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:181
 msgid "Asset type"
 msgstr "Loại tài sản"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:290
-#: src/modules/loans/modals/modal-loan-package-form.tsx:164
+#: src/modules/loans/modals/modal-loan-calculator.tsx:275
+#: src/modules/loans/modals/modal-loan-package-form.tsx:163
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:40
 msgid "Asset types"
 msgstr "Loại tài sản"
@@ -732,13 +732,17 @@ msgstr "Phụ trách"
 msgid "Assigning a working branch"
 msgstr "Chỉ định một nhánh làm việc"
 
-#: src/modules/loans/components/loan-documents.tsx:168
+#: src/modules/loans/components/loan-documents.tsx:189
 msgid "At the time of loan signing"
 msgstr "Tại thời điểm ký hồ sơ vay"
 
 #: src/modules/tasks/components/task-detail/task-detail.tsx:169
 msgid "Attachments"
 msgstr "Tệp đính kèm"
+
+#: src/modules/workspaces/workspace-modules.tsx:127
+msgid "Attendance"
+msgstr "Chấm công"
 
 #: src/modules/bookings/booking-list.tsx:374
 #: src/modules/bookings/components/booking-card.tsx:325
@@ -775,7 +779,7 @@ msgstr "Tự động trả lời tin nhắn khách hàng"
 msgid "Automatically returning in {tick}s..."
 msgstr "Hệ thống sẽ tự động quay về sai {tick} giây..."
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:245
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:244
 msgid "Available entities to search"
 msgstr "Các dữ liệu có thể tìm kiếm"
 
@@ -787,9 +791,9 @@ msgstr "Avatar"
 msgid "Back"
 msgstr "Trở lại"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:188
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:94
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:178
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:197
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:104
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:188
 msgid "Back of CID"
 msgstr "Mặt sau CCCD"
 
@@ -806,27 +810,27 @@ msgstr "Quay lại đăng nhập"
 msgid "Bank"
 msgstr "Ngân hàng"
 
-#: src/modules/loans/components/loan-disbursement.tsx:227
-#: src/modules/loans/modals/modal-create-loan.tsx:412
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:424
+#: src/modules/loans/components/loan-disbursement.tsx:235
+#: src/modules/loans/modals/modal-create-loan.tsx:434
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:420
 msgid "Bank account name"
 msgstr "Tên tài khoản ngân hàng"
 
-#: src/modules/loans/components/loan-disbursement.tsx:232
-#: src/modules/loans/modals/modal-create-loan.tsx:407
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:439
+#: src/modules/loans/components/loan-disbursement.tsx:240
+#: src/modules/loans/modals/modal-create-loan.tsx:429
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:435
 msgid "Bank account number"
 msgstr "Số tài khoản ngân hàng"
 
-#: src/modules/receipts/receipt-constants.tsx:56
+#: src/modules/receipts/receipt-constants.tsx:58
 msgid "Bank Card"
 msgstr "Thẻ ngân hàng"
 
-#: src/modules/loans/components/loan-disbursement.tsx:236
+#: src/modules/loans/components/loan-disbursement.tsx:244
 msgid "Bank name"
 msgstr "Tên ngân hàng"
 
-#: src/modules/loans/components/loan-disbursement.tsx:238
+#: src/modules/loans/components/loan-disbursement.tsx:246
 msgid "Bank transaction content"
 msgstr "Nội dung giao dịch"
 
@@ -834,7 +838,7 @@ msgstr "Nội dung giao dịch"
 msgid "Bank Transactions"
 msgstr "Giao dịch ngân hàng"
 
-#: src/modules/receipts/receipt-constants.tsx:51
+#: src/modules/receipts/receipt-constants.tsx:53
 msgid "Bank Transfer"
 msgstr "CK ngân hàng"
 
@@ -858,14 +862,14 @@ msgstr "Nạp tiền"
 msgid "Billings withdrawn"
 msgstr "Rút tiền"
 
-#: src/modules/loans/loan-detail.tsx:331
+#: src/modules/loans/loan-detail.tsx:349
 msgid "Birhtday"
 msgstr "Ngày sinh"
 
 #: src/modals/modal-printer.tsx:515
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:281
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:290
 #: src/modules/customers/components/customer-form.tsx:203
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:117
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:132
 #: src/modules/users/modals/modal-user-information.tsx:160
 #: src/modules/users/user-profile-settings.tsx:139
 msgid "Birthday"
@@ -894,7 +898,7 @@ msgstr "Thông tin lịch hẹn"
 #: src/modules/customers/customer-detail/customer-detail.tsx:94
 #: src/modules/dashboard/dashboard-bookings.tsx:88
 #: src/modules/workspace-roles/workspace-roles-config.ts:106
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:199
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:198
 #: src/modules/workspaces/workspace-modules.tsx:154
 msgid "Bookings"
 msgstr "Lịch hẹn"
@@ -903,14 +907,14 @@ msgstr "Lịch hẹn"
 msgid "Bookings chart"
 msgstr "Biểu đồ lịch hẹn"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:43
+#: src/modules/customer-forms/modals/modal-customer-form-link.tsx:44
 #: src/modules/customers/components/customer-form.tsx:168
-#: src/modules/loans/modals/modal-create-loan.tsx:436
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:325
+#: src/modules/loans/modals/modal-create-loan.tsx:458
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:322
 #: src/modules/workspace-branches/workspace-branch-column.tsx:25
 #: src/modules/workspace-members/workspace-member-list.tsx:163
 #: src/widgets/reports/index.tsx:343
-#: src/widgets/reports/widgets/report-credit.widget.tsx:435
+#: src/widgets/reports/widgets/report-credit.widget.tsx:455
 msgid "Branch"
 msgstr "Chi nhánh"
 
@@ -923,16 +927,16 @@ msgid "Branches"
 msgstr "Chi nhánh"
 
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:148
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:249
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:246
 msgid "Brand"
 msgstr "Nhãn hiệu"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:21
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:21
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:19
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:20
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:167
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:196
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:232
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:201
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:198
 msgid "Brand name"
 msgstr "Nhãn hiệu"
 
@@ -961,7 +965,7 @@ msgstr "Có thể để trống 1 trong 2 thời gian check-in hoặc check-out 
 #: src/modals/modal-confirm.tsx:94
 #: src/modules/activities/activity-card.tsx:278
 #: src/modules/bookings/components/form-booking.tsx:435
-#: src/modules/customers/modals/modal-customer-form.tsx:122
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:147
 #: src/modules/receipts/receipt-e-invoices.tsx:120
 #: src/modules/workspace-settings/modals/modal-workspace-setting-working-days.tsx:71
 msgid "Cancel"
@@ -978,7 +982,7 @@ msgid "Cancel E-Invoice"
 msgstr "Hủy hóa đơn điện tử"
 
 #: src/modules/bookings/components/booking-card.tsx:335
-#: src/modules/customers/modals/modal-customer-form.tsx:105
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:125
 msgid "Cancel reason"
 msgstr "Lý do huỷ"
 
@@ -1004,7 +1008,7 @@ msgstr "Không thể hiển thị tập tin"
 msgid "Capacity"
 msgstr "Dung lượng"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:211
+#: src/modules/loans/modals/modal-loan-package-form.tsx:210
 msgid "Capital rate for each period {days} days"
 msgstr "Lãi suất vốn mỗi kỳ {days} ngày"
 
@@ -1012,7 +1016,7 @@ msgstr "Lãi suất vốn mỗi kỳ {days} ngày"
 msgid "Car registration"
 msgstr "Đăng ký xe ô tô"
 
-#: src/modules/receipts/receipt-constants.tsx:46
+#: src/modules/receipts/receipt-constants.tsx:48
 msgid "Cash"
 msgstr "Tiền mặt"
 
@@ -1027,8 +1031,8 @@ msgstr "Hoàn tiền"
 #: src/components/printer/printer-settings-bar.tsx:48
 #: src/modals/modal-printer.tsx:473
 #: src/modals/modal-printer.tsx:636
-#: src/modules/receipts/receipt-card.tsx:332
-#: src/modules/receipts/receipt-list.tsx:124
+#: src/modules/receipts/receipt-card.tsx:329
+#: src/modules/receipts/receipt-list.tsx:125
 msgid "Cashier"
 msgstr "Người thu"
 
@@ -1079,11 +1083,11 @@ msgstr "Thay đổi biểu tượng ứng dụng"
 msgid "Change auth"
 msgstr "Thay đổi xác thực"
 
-#: src/modules/loans/loan-list.tsx:377
+#: src/modules/loans/loan-list.tsx:376
 msgid "Change branch"
 msgstr "Thay đổi chi nhánh"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:288
+#: src/modules/loans/modals/modal-create-loan.tsx:306
 msgid "Change customer"
 msgstr "Thay đổi khách hàng"
 
@@ -1143,7 +1147,7 @@ msgstr "Đang thay đổi ngôn ngữ"
 msgid "Chat icon"
 msgstr "Biểu tượng Chat"
 
-#: src/modules/loans/components/loan-payments.tsx:125
+#: src/modules/loans/components/loan-payments.tsx:138
 msgid "Check"
 msgstr "Kiểm tra"
 
@@ -1161,8 +1165,8 @@ msgstr "Check-in"
 msgid "Check in successfully"
 msgstr "Check-in thành công"
 
-#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:46
-#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:58
+#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:55
+#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:67
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-item.tsx:189
 msgid "Check invoice"
 msgstr "Kiểm tra hoá đơn"
@@ -1201,13 +1205,13 @@ msgstr "Check-in lúc"
 msgid "CID created at"
 msgstr "Ngày cấp"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:211
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:220
 #: src/modules/loans/components/loan-customer-kyc.tsx:59
-#: src/modules/loans/loan-list.tsx:206
+#: src/modules/loans/loan-list.tsx:203
 msgid "CID Infos"
 msgstr "CCCD"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:133
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:143
 #: src/modules/loans/components/loan-customer-kyc.tsx:62
 msgid "CID number"
 msgstr "Số CCCD"
@@ -1376,9 +1380,9 @@ msgstr "Chi nhánh"
 #: src/modals/modal-prompt.tsx:86
 #: src/modules/coupons/modals/modal-coupon-form.tsx:175
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:199
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:356
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:153
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:365
 #: src/modules/customers/components/customer-form.tsx:284
-#: src/modules/customers/modals/modal-customer-form.tsx:128
 #: src/modules/customers/modals/modal-customer-plain-code-form.tsx:64
 #: src/modules/files/modals/modal-files.tsx:186
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:234
@@ -1387,8 +1391,8 @@ msgstr "Chi nhánh"
 #: src/modules/plugins/mailer/plugin-mailer-form.tsx:153
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:299
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:128
-#: src/modules/receipts/modals/modal-partial-payment.tsx:126
-#: src/modules/receipts/modals/modal-receipt-form.tsx:164
+#: src/modules/receipts/modals/modal-partial-payment.tsx:136
+#: src/modules/receipts/modals/modal-receipt-form.tsx:175
 #: src/modules/workspace-sdks/modals/modal-workspace-sdk-form.tsx:83
 #: src/modules/workspaces/components/create-workspace.tsx:183
 msgid "Complete"
@@ -1420,7 +1424,7 @@ msgstr "Thiết lập trạng thái công việc"
 #: src/modules/bookings/components/form-booking.tsx:441
 #: src/modules/dashboard/dashboard-suggestions.tsx:182
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:160
-#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:129
+#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:138
 #: src/modules/workspaces/modals/modal-transfer-workspace-owner.tsx:46
 msgid "Confirm"
 msgstr "Xác nhận"
@@ -1433,7 +1437,7 @@ msgstr "Xác nhập và áp dụng"
 msgid "Confirm cancellation"
 msgstr "Xác nhận hủy"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:546
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:542
 msgid "Confirm paid"
 msgstr "Xác nhận đã thanh toán"
 
@@ -1514,9 +1518,9 @@ msgstr "Kết nối thành công"
 msgid "Consumables"
 msgstr "Vật tư tiêu hao"
 
-#: src/modules/customers/customer-detail/customer-information.tsx:254
+#: src/modules/customers/customer-detail/customer-information.tsx:276
 #: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:52
-#: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:77
+#: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:119
 msgid "Contact relatives"
 msgstr "Liên hệ người thân"
 
@@ -1524,16 +1528,16 @@ msgstr "Liên hệ người thân"
 msgid "Contact support"
 msgstr "Liên hệ hỗ trợ"
 
-#: src/modules/customers/customer-detail/customer-information.tsx:235
+#: src/modules/customers/customer-detail/customer-information.tsx:257
 #: src/modules/customers/modals/modal-customer-contacts.tsx:177
 #: src/modules/loans/components/loan-customer-kyc.tsx:140
 #: src/modules/loans/components/loan-customer-kyc.tsx:177
 msgid "Contacts"
 msgstr "Liên hệ"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:54
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:388
-#: src/modules/receipts/receipt-card.tsx:276
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:59
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:384
+#: src/modules/receipts/receipt-card.tsx:273
 msgid "Content"
 msgstr "Nội dung"
 
@@ -1545,8 +1549,8 @@ msgstr "Tiếp tục"
 msgid "Continue with"
 msgstr "Tiếp tục với"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:312
-#: src/modules/loans/modals/modal-loan-package-form.tsx:155
+#: src/modules/loans/modals/modal-loan-calculator.tsx:297
+#: src/modules/loans/modals/modal-loan-package-form.tsx:154
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:62
 msgid "Contract fee"
 msgstr "Phí hợp đồng"
@@ -1621,7 +1625,7 @@ msgstr "Coupon"
 
 #: src/components/list/components/create-button.tsx:48
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:394
-#: src/modules/loans/modals/modal-loan-package-form.tsx:345
+#: src/modules/loans/modals/modal-loan-package-form.tsx:344
 #: src/modules/promotions/components/form-promotion.tsx:175
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:205
@@ -1665,7 +1669,7 @@ msgstr "Tạo coupon"
 msgid "Create coupon rule"
 msgstr "Tạo quy tắc coupon"
 
-#: src/modules/customers/customer-modal.tsx:53
+#: src/modules/customers/customer-modal.tsx:47
 #: src/modules/workspace-roles/workspace-roles-constants.ts:42
 msgid "Create customer"
 msgstr "Tạo khách hàng"
@@ -1683,7 +1687,7 @@ msgstr "Tạo tệp tin"
 msgid "Create folder"
 msgstr "Tạo thư mục"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:249
+#: src/modules/loans/modals/modal-create-loan.tsx:267
 msgid "Create loan"
 msgstr "Tạo hồ sơ vay"
 
@@ -1752,7 +1756,7 @@ msgid "Create promotion"
 msgstr "Tạo khuyến mãi"
 
 #: src/modules/events/event-constants.ts:73
-#: src/modules/receipts/modals/modal-receipt-form.tsx:174
+#: src/modules/receipts/modals/modal-receipt-form.tsx:185
 #: src/modules/workspace-roles/workspace-roles-constants.ts:81
 msgid "Create receipt"
 msgstr "Tạo hoá đơn"
@@ -1791,8 +1795,8 @@ msgstr "Tạo/cập nhật hồ sơ vay"
 #: src/modules/customers/customer-list.tsx:57
 #: src/modules/e-invoices/e-invoice-list.tsx:52
 #: src/modules/files/files-manager.tsx:50
-#: src/modules/loans/loan-list.tsx:358
-#: src/modules/receipts/receipt-list.tsx:93
+#: src/modules/loans/loan-list.tsx:357
+#: src/modules/receipts/receipt-list.tsx:94
 msgid "Created at"
 msgstr "Thời gian tạo"
 
@@ -1810,7 +1814,7 @@ msgstr "Tạo đơn hàng"
 msgid "Credit"
 msgstr "Tín dụng"
 
-#: src/modules/loans/components/related-loans.tsx:71
+#: src/modules/loans/components/related-loans.tsx:76
 msgid "Credit history"
 msgstr "Lịch sử tín dụng"
 
@@ -1826,7 +1830,7 @@ msgstr "Cài đặt tín dụng"
 msgid "Cross-origin resource sharing (CORS)"
 msgstr "Chia sẻ tài nguyên giữa các nguồn khác nhau (CORS)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:143
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:142
 msgid "Currency"
 msgstr "Tiền tệ"
 
@@ -1873,7 +1877,7 @@ msgstr "Cập nhật trường tùy chỉnh"
 msgid "Custom fields"
 msgstr "Trường tùy chỉnh"
 
-#: src/modules/loans/components/loan-disbursement.tsx:270
+#: src/modules/loans/components/loan-disbursement.tsx:278
 msgid "Custom fulfilled at"
 msgstr "Tùy chỉnh thời gian giải ngân"
 
@@ -1892,20 +1896,20 @@ msgstr "Tuỳ chỉnh trạng thái"
 #: src/modules/customers/components/customer-column.tsx:21
 #: src/modules/customers/customer-detail/customer-detail.tsx:79
 #: src/modules/customers/customer-detail/customer-detail.tsx:117
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:113
-#: src/modules/loans/components/loan-card.tsx:54
-#: src/modules/loans/modals/modal-create-loan.tsx:261
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:123
+#: src/modules/loans/components/loan-card.tsx:56
+#: src/modules/loans/modals/modal-create-loan.tsx:279
 #: src/modules/orders/order-card.tsx:125
 #: src/modules/orders/order-list.tsx:54
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:133
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:139
 #: src/modules/product-combos/product-combo-list.tsx:38
 #: src/modules/product-vouchers/product-voucher-card.tsx:73
-#: src/modules/receipts/modals/modal-receipt-form.tsx:139
+#: src/modules/receipts/modals/modal-receipt-form.tsx:150
 #: src/modules/tags/tags-constants.ts:12
 #: src/modules/tasks/components/task-detail/task-detail-properties.tsx:329
 #: src/modules/tasks/views/list/list-task-row-head.tsx:27
-#: src/widgets/reports/widgets/report-credit.widget.tsx:440
+#: src/widgets/reports/widgets/report-credit.widget.tsx:460
 msgid "Customer"
 msgstr "Khách hàng"
 
@@ -1933,7 +1937,7 @@ msgstr "Khách hàng đã được tạo"
 msgid "Customer form archived"
 msgstr "Xóa form khách hàng"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:104
+#: src/modules/customer-forms/modals/modal-customer-form-link.tsx:109
 msgid "Customer form link"
 msgstr "Liên kết form khách hàng"
 
@@ -1941,7 +1945,7 @@ msgstr "Liên kết form khách hàng"
 msgid "Customer form updated"
 msgstr "Cập nhật form khách hàng"
 
-#: src/modules/customers/modals/modal-customer-form.tsx:163
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:192
 msgid "Customer forms"
 msgstr "Form khách hàng"
 
@@ -1950,16 +1954,20 @@ msgstr "Form khách hàng"
 msgid "Customer Forms"
 msgstr "Form khách hàng"
 
-#: src/modules/loans/loan-detail.tsx:501
+#: src/modules/loans/loan-detail.tsx:519
 msgid "Customer information & KYC"
 msgstr "Thông tin khách hàng & KYC"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:167
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:71
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:176
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:75
 msgid "Customer KYC"
 msgstr "KYC khách hàng"
 
-#: src/modules/loans/components/loan-documents.tsx:167
+#: src/modules/loans/loan-detail.tsx:288
+msgid "Customer KYC not found"
+msgstr "Không tìm thấy thông tin KYC của khách hàng"
+
+#: src/modules/loans/components/loan-documents.tsx:188
 msgid "Customer location"
 msgstr "Vị trí khách hàng"
 
@@ -1973,7 +1981,7 @@ msgstr "Cập nhật khách hàng"
 
 #: src/constant.ts:7
 #: src/modules/customers/customer-list.tsx:51
-#: src/modules/search/search-engine.tsx:136
+#: src/modules/search/search-engine.tsx:135
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
 #: src/modules/workspaces/workspace-modules.tsx:135
 msgid "Customers"
@@ -2033,7 +2041,7 @@ msgstr "Ngày giờ"
 msgid "Day"
 msgstr "Ngày"
 
-#: src/modules/loans/loans-service.ts:204
+#: src/modules/loans/loans-service.ts:77
 #: src/modules/products/components/product-card.tsx:133
 msgid "days"
 msgstr "ngày"
@@ -2053,7 +2061,7 @@ msgstr "Mặc định"
 msgid "Default is {0}"
 msgstr "Mặc định là {0}"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:155
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:154
 msgid "Default payment method"
 msgstr "Phương thức thanh toán mặc định"
 
@@ -2070,7 +2078,7 @@ msgstr "Giá mặc định phải nằm trong khoảng giá"
 msgid "Default role when not specified"
 msgstr "Vai trò mặc định khi không được chỉ định"
 
-#: src/modules/loans/loan-detail.tsx:625
+#: src/modules/loans/loan-detail.tsx:644
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:353
 msgid "Delete"
 msgstr "Xóa"
@@ -2098,7 +2106,7 @@ msgstr "Nội dung giao dịch"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:133
 #: src/modules/custom-fields/components/form-custom-field.tsx:108
 #: src/modules/custom-fields/custom-field-list.tsx:29
-#: src/modules/loans/modals/modal-loan-package-form.tsx:337
+#: src/modules/loans/modals/modal-loan-package-form.tsx:336
 #: src/modules/promotions/components/form-promotion.tsx:118
 #: src/modules/workspace-roles/modals/modal-workspace-role-form.tsx:102
 msgid "Description"
@@ -2108,8 +2116,8 @@ msgstr "Mô tả"
 #: src/modals/modal-printer.tsx:332
 #: src/modules/bookings/components/form-booking.tsx:392
 #: src/modules/customers/customer-list.tsx:130
-#: src/modules/loans/loan-list.tsx:370
-#: src/modules/receipts/receipt-list.tsx:176
+#: src/modules/loans/loan-list.tsx:369
+#: src/modules/receipts/receipt-list.tsx:177
 msgid "Detail"
 msgstr "Chi tiết"
 
@@ -2117,15 +2125,15 @@ msgstr "Chi tiết"
 msgid "Device does not support notifications."
 msgstr "Thiết bị không hỗ trợ thông báo."
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:79
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:78
 msgid "Device key"
 msgstr "Key thiết bị"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:31
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:30
 msgid "Device name"
 msgstr "Tên thiết bị"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:67
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:66
 msgid "Device storage"
 msgstr "Dung lượng thiết bị"
 
@@ -2147,7 +2155,7 @@ msgid "Disable"
 msgstr "Tắt"
 
 #: src/modules/events/event-constants.ts:76
-#: src/modules/loans/loan-detail.tsx:532
+#: src/modules/loans/loan-detail.tsx:550
 msgid "Disbursement"
 msgstr "Giải ngân"
 
@@ -2204,7 +2212,7 @@ msgstr "Tên hiển thị"
 msgid "Display name in Workspace"
 msgstr "Tên hiển thị trong Workspace"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:308
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:305
 msgid "Display price for users"
 msgstr "Hiển thị giá cho người dùng"
 
@@ -2228,17 +2236,17 @@ msgstr "Tên miền"
 msgid "Draft"
 msgstr "Bản nháp"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:115
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:120
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:115
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:120
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:113
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:118
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:114
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:119
 msgid "Driver license images back"
 msgstr "Giấy phép lái xe (mặt sau)"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:98
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:103
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:98
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:103
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:96
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:101
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:97
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:102
 msgid "Driver license images front"
 msgstr "Giấy phép lái xe (mặt trước)"
 
@@ -2260,7 +2268,7 @@ msgid "Drop or click to choose file"
 msgstr "Thả hoặc nhấp để chọn tập tin"
 
 #: src/components/inputs/due-date-input.tsx:151
-#: src/modules/receipts/receipt-card.tsx:266
+#: src/modules/receipts/receipt-card.tsx:263
 #: src/modules/tasks/components/task-detail/task-detail-properties.tsx:288
 #: src/modules/tasks/modals/modal-create-task-form.tsx:269
 #: src/modules/tasks/views/board/board-task-card.tsx:425
@@ -2310,7 +2318,7 @@ msgstr "Thiết lập dễ dàng và nhanh chóng"
 #: src/modules/promotions/promotions-list.tsx:209
 #: src/modules/services/service-list.tsx:98
 #: src/modules/workspace-branches/modals/modal-workspace-branch.tsx:87
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:117
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:116
 msgid "Edit"
 msgstr "Chỉnh sửa"
 
@@ -2346,7 +2354,7 @@ msgstr "Đã chỉnh sửa"
 #: src/modules/auth/components/form-register.tsx:67
 #: src/modules/customers/components/customer-form.tsx:187
 #: src/modules/customers/customer-list.tsx:111
-#: src/modules/loans/loan-detail.tsx:366
+#: src/modules/loans/loan-detail.tsx:384
 #: src/modules/partners/partner-list.tsx:32
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:449
 #: src/modules/users/modals/modal-user-information.tsx:134
@@ -2379,8 +2387,8 @@ msgstr "Thời gian kết thúc phải sau thời gian bắt đầu"
 msgid "Endpoint URL"
 msgstr "Endpoint URL"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:61
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:61
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:59
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:60
 msgid "Engine number"
 msgstr "Số máy"
 
@@ -2397,8 +2405,8 @@ msgstr "Nhập tên {0}"
 msgid "Enter account number"
 msgstr "Nhập số tiền"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:241
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:254
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:250
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:263
 msgid "Enter code"
 msgstr "Nhập mã"
 
@@ -2420,7 +2428,7 @@ msgstr "Nhập dữ liệu"
 msgid "Enter detail (Optional)"
 msgstr "Nhập chi tiết (Tuỳ chọn)"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:91
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:90
 msgid "Enter device key"
 msgstr "Nhập mã thiết bị"
 
@@ -2436,7 +2444,7 @@ msgstr "Nhập công thức (ví dụ: =@revenue - @cost)"
 msgid "Enter information"
 msgstr "Nhập thông tin"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:143
+#: src/modules/loans/modals/modal-loan-calculator.tsx:128
 msgid "Enter loan amount"
 msgstr "Nhập số tiền vay"
 
@@ -2471,8 +2479,8 @@ msgstr "Nhập tên thuốc"
 msgid "Enter product supplies"
 msgstr "Nhập nguồn cung cấp sản phẩm"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:72
-#: src/modules/loans/components/loan-documents.tsx:89
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
+#: src/modules/loans/components/loan-documents.tsx:98
 #: src/modules/loans/loan-list.tsx:395
 msgid "Enter reject reason"
 msgstr "Nhập lý do từ chối"
@@ -2488,7 +2496,7 @@ msgstr "Nhập tên trạng thái"
 #: src/modules/tasks/components/quick-create-task-input.tsx:39
 #: src/modules/tasks/components/task-detail/task-detail.tsx:138
 #: src/modules/tasks/modals/modal-create-task-form.tsx:169
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:201
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:202
 msgid "Enter task name"
 msgstr "Nhập tên công việc"
 
@@ -2538,7 +2546,7 @@ msgstr "Định giá"
 msgid "Estimate time"
 msgstr "Ước tính thời gian"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:253
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:250
 msgid "Estimation price"
 msgstr "Định giá"
 
@@ -2590,8 +2598,8 @@ msgstr "Loại trừ khách hàng"
 #: src/components/printer/printer.tsx:143
 #: src/layout/header/header-tasks-breadcrumbs.tsx:111
 #: src/modals/modal-printer.tsx:709
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:300
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:550
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:297
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:546
 #: src/modules/workspaces/components/create-workspace.tsx:187
 #: src/modules/workspaces/components/workspace-archived.tsx:46
 msgid "Exit"
@@ -2621,7 +2629,7 @@ msgstr "Hết hạn vào"
 msgid "Expire in days"
 msgstr "Hết hạn sau ngày"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:340
+#: src/modules/loans/components/loan-receipt-card.tsx:354
 #: src/modules/message-boxes/message-boxes-contants.tsx:12
 #: src/modules/product-combos/product-combos-constants.tsx:11
 #: src/modules/product-vouchers/product-vouchers-constants.tsx:11
@@ -2630,7 +2638,7 @@ msgid "Expired"
 msgstr "Hết hạn"
 
 #: src/components/list/components/export-button.tsx:223
-#: src/widgets/reports/widgets/report-credit.widget.tsx:654
+#: src/widgets/reports/widgets/report-credit.widget.tsx:674
 msgid "Export"
 msgstr "Xuất"
 
@@ -2638,7 +2646,7 @@ msgstr "Xuất"
 #: src/components/list/components/export-button.tsx:204
 #: src/components/list/components/export-button.tsx:209
 #: src/modules/workspace-roles/workspace-roles-constants.ts:168
-#: src/widgets/reports/widgets/report-credit.widget.tsx:295
+#: src/widgets/reports/widgets/report-credit.widget.tsx:302
 msgid "Export data"
 msgstr "Xuất dữ liệu"
 
@@ -2663,11 +2671,11 @@ msgid "Failed to connect with Meta."
 msgstr "Không thể kết nối với Meta."
 
 #: src/modules/tasks/modals/modal-create-task-form.tsx:114
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:150
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:151
 msgid "Failed to create task"
 msgstr "Tạo công việc không thành công"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:233
+#: src/modules/loans/modals/modal-loan-calculator.tsx:218
 msgid "Fee"
 msgstr "Phí"
 
@@ -2710,7 +2718,7 @@ msgid "File type"
 msgstr "Loại file"
 
 #: src/modules/files/modals/modal-files.tsx:103
-#: src/modules/receipts/modals/modal-receipt-form.tsx:145
+#: src/modules/receipts/modals/modal-receipt-form.tsx:156
 msgid "Files"
 msgstr "Tập tin"
 
@@ -2756,8 +2764,8 @@ msgstr "Tin nhắn quên mật khẩu"
 msgid "Forgot password?"
 msgstr "Quên mật khẩu?"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:52
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:52
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:50
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:51
 msgid "Frame number"
 msgstr "Số khung"
 
@@ -2777,9 +2785,9 @@ msgstr "Miễn phí {0} tối đa x{1} {2}"
 msgid "Free on product"
 msgstr "Miễn phí trên sản phẩm"
 
-#: src/modules/loans/components/loan-payments.tsx:175
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:140
-#: src/widgets/reports/widgets/report-credit.widget.tsx:618
+#: src/modules/loans/components/loan-payments.tsx:188
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:155
+#: src/widgets/reports/widgets/report-credit.widget.tsx:638
 msgid "From"
 msgstr "Từ"
 
@@ -2787,13 +2795,13 @@ msgstr "Từ"
 msgid "From <0/> to <1/>"
 msgstr "Từ <0/> đến <1/>"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:177
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:88
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:171
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:186
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:98
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:181
 msgid "Front of CID"
 msgstr "Mặt trước CCCD"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:151
+#: src/modules/loans/modals/modal-loan-calculator.tsx:136
 msgid "Fulfill at"
 msgstr "Thời điểm giải ngân"
 
@@ -2806,14 +2814,14 @@ msgstr "Giải ngân hồ sơ vay"
 msgid "Fulfilled"
 msgstr "Đã giải ngân"
 
-#: src/modules/loans/components/loan-disbursement.tsx:278
-#: src/modules/loans/loan-list.tsx:363
+#: src/modules/loans/components/loan-disbursement.tsx:286
+#: src/modules/loans/loan-list.tsx:362
 msgid "Fulfilled at"
 msgstr "Ngày giải ngân"
 
 #: src/modals/modal-printer.tsx:510
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:267
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:144
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:276
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:154
 msgid "Full name"
 msgstr "Tên đầy đủ"
 
@@ -2822,10 +2830,10 @@ msgid "Gantt"
 msgstr "Gantt"
 
 #: src/modals/modal-printer.tsx:521
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:272
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:281
 #: src/modules/customers/components/customer-form.tsx:210
 #: src/modules/customers/customer-list.tsx:70
-#: src/modules/loans/loan-detail.tsx:345
+#: src/modules/loans/loan-detail.tsx:363
 msgid "Gender"
 msgstr "Giới tính"
 
@@ -2843,7 +2851,7 @@ msgstr "Cài đặt chung"
 msgid "General tasks"
 msgstr "Công việc chung"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:110
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:109
 msgid "Generate device key"
 msgstr "Tạo khóa thiết bị"
 
@@ -2882,9 +2890,9 @@ msgstr "Khách"
 msgid "Has access to all functions of the system"
 msgstr "Có quyền truy cập vào tất cả các chức năng của hệ thống"
 
-#: src/modules/loans/components/related-loans.tsx:126
-#: src/modules/loans/loan-list.tsx:307
-#: src/modules/loans/loan-list.tsx:457
+#: src/modules/loans/components/related-loans.tsx:133
+#: src/modules/loans/loan-list.tsx:304
+#: src/modules/loans/loan-list.tsx:467
 msgid "Has late interest"
 msgstr "Có lãi chậm trả"
 
@@ -2942,11 +2950,11 @@ msgstr "giờ"
 msgid "iCloud"
 msgstr "iCloud"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:174
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:183
 msgid "ID images"
 msgstr "Hình ảnh CCCD"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:261
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:270
 msgid "ID number"
 msgstr "Số CCCD"
 
@@ -2960,7 +2968,7 @@ msgstr "Nhận diện thương hiệu thông qua Email. Giúp bạn chăm sóc k
 msgid "Image"
 msgstr "Hình ảnh"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:86
 msgid "Image is blurry"
 msgstr "Hình ảnh bị mờ"
 
@@ -2968,7 +2976,7 @@ msgstr "Hình ảnh bị mờ"
 msgid "Image loading"
 msgstr "Đang tải hình ảnh"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:68
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:73
 msgid "Images / Documents"
 msgstr "Hình ảnh/Tài liệu"
 
@@ -2976,16 +2984,16 @@ msgstr "Hình ảnh/Tài liệu"
 msgid "Images & Documents"
 msgstr "Hình ảnh và tài liệu"
 
-#: src/modules/loans/components/loan-documents.tsx:93
+#: src/modules/loans/components/loan-documents.tsx:109
 #: src/modules/loans/loan-list.tsx:405
 msgid "Img is blurry"
 msgstr "Hình ảnh bị mờ"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:167
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:164
 msgid "Import asset estimations"
 msgstr "Nhập định giá"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:176
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:173
 msgid "Import asset estimations from file"
 msgstr "Nhập định giá từ file"
 
@@ -3031,7 +3039,7 @@ msgstr "Bao gồm khách hàng"
 msgid "Income"
 msgstr "Thu"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:618
+#: src/widgets/reports/widgets/report-credit.widget.tsx:638
 msgid "Income expense"
 msgstr "Thu chi"
 
@@ -3043,8 +3051,8 @@ msgstr "Thông tin đăng nhập không chính xác"
 msgid "Info"
 msgstr "Thông tin"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
-#: src/modules/loans/components/loan-documents.tsx:93
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:86
+#: src/modules/loans/components/loan-documents.tsx:109
 #: src/modules/loans/loan-list.tsx:405
 msgid "Info does not match image"
 msgstr "Thông tin không khớp với hình ảnh"
@@ -3130,29 +3138,29 @@ msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
 msgid "Interact with customers via Messenger"
 msgstr "Tương tác với khách hàng qua Messenger"
 
-#: src/modules/loans/components/loan-payments.tsx:150
-#: src/modules/loans/components/loan-payments.tsx:339
-#: src/modules/loans/components/loan-receipt-card.tsx:140
-#: src/modules/loans/modals/modal-loan-calculator.tsx:221
+#: src/modules/loans/components/loan-payments.tsx:163
+#: src/modules/loans/components/loan-payments.tsx:350
+#: src/modules/loans/components/loan-receipt-card.tsx:154
+#: src/modules/loans/modals/modal-loan-calculator.tsx:206
 msgid "Interest"
 msgstr "Lãi"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:194
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:200
+#: src/modules/loans/components/loan-receipt-card.tsx:208
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:215
 msgid "Interest days"
 msgstr "Ngày lãi"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:450
+#: src/widgets/reports/widgets/report-credit.widget.tsx:470
 msgid "Interest income"
 msgstr "Thu lãi"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:202
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:206
+#: src/modules/loans/components/loan-receipt-card.tsx:216
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:221
 msgid "Interest per day"
 msgstr "Lãi mỗi ngày"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:179
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:190
+#: src/modules/loans/components/loan-receipt-card.tsx:193
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:205
 msgid "Interest period"
 msgstr "Kỳ lãi"
 
@@ -3161,7 +3169,7 @@ msgstr "Kỳ lãi"
 msgid "Internal server error"
 msgstr "Lỗi máy chủ nội bộ"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:90
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:94
 msgid "Invalid CID number"
 msgstr "Số CID không hợp lệ"
 
@@ -3169,7 +3177,7 @@ msgstr "Số CID không hợp lệ"
 msgid "Invalid domain"
 msgstr "Tên miền không hợp lệ"
 
-#: src/modules/receipts/modals/modal-receipt-form.tsx:64
+#: src/modules/receipts/modals/modal-receipt-form.tsx:69
 msgid "Invalid money amount"
 msgstr "Số tiền không hợp lệ"
 
@@ -3181,7 +3189,7 @@ msgstr "Số điện thoại không hợp lệ"
 msgid "Invalid quantity"
 msgstr "Số lượng không hợp lệ"
 
-#: src/modules/receipts/modals/modal-partial-payment.tsx:52
+#: src/modules/receipts/modals/modal-partial-payment.tsx:55
 msgid "Invalid time"
 msgstr "Thời gian không hợp lệ"
 
@@ -3207,9 +3215,9 @@ msgstr "Hoá đơn"
 msgid "IPv4 address"
 msgstr "Địa chỉ IPv4"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:295
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:79
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:79
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:304
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:77
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:78
 msgid "Issued date"
 msgstr "Ngày phát hành"
 
@@ -3257,8 +3265,8 @@ msgstr "KYCs"
 msgid "Land certificate"
 msgstr "Giấy chứng nhận đất đai"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-land-certificate.tsx:14
-#: src/modules/loans/components/loan-asset-data-inputs/input-land-certificate.tsx:16
+#: src/modules/loans/components/loan-asset-data-inputs/input-land-certificate.tsx:11
+#: src/modules/loans/components/loan-asset-data-inputs/input-land-certificate.tsx:13
 msgid "Land certificate images"
 msgstr "Hình ảnh giấy chứng nhận đất đai"
 
@@ -3317,28 +3325,28 @@ msgstr "Cập nhật lần cuối lúc {0}"
 msgid "Late"
 msgstr "Muộn"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:265
+#: src/modules/loans/modals/modal-loan-package-form.tsx:264
 msgid "Late days"
 msgstr "Số ngày trễ"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:92
-#: src/modules/loans/modals/modal-loan-package-form.tsx:256
+#: src/modules/loans/components/loan-receipt-card.tsx:106
+#: src/modules/loans/modals/modal-loan-package-form.tsx:255
 msgid "Late interest"
 msgstr "Lãi chậm trả"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:239
+#: src/modules/loans/components/loan-receipt-card.tsx:253
 msgid "Late interest fee"
 msgstr "Phí lãi trả chậm"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:252
+#: src/modules/loans/components/loan-receipt-card.tsx:266
 msgid "Late interest fee days"
 msgstr "Ngày trả lãi chậm"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:262
+#: src/modules/loans/components/loan-receipt-card.tsx:276
 msgid "Late interest fee rate"
 msgstr "Lãi suất trả chậm"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:278
+#: src/modules/loans/modals/modal-loan-package-form.tsx:277
 msgid "Late interest rate"
 msgstr "Lãi suất trả chậm"
 
@@ -3360,7 +3368,7 @@ msgstr "Rời khỏi"
 msgid "Leave a comment..."
 msgstr "Để lại bình luận..."
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:212
+#: src/modules/loans/modals/modal-loan-package-form.tsx:211
 msgid "Leave blank if the capital rate for each period is the same"
 msgstr "Để trống nếu lãi suất vốn từng thời kỳ bằng nhau"
 
@@ -3372,11 +3380,11 @@ msgstr "Để trống nếu bạn không muốn tính làm thêm giờ"
 msgid "Leave blank if you want to deduct directly into working time"
 msgstr "Để trống nếu muốn trừ trực tiếp vào thời gian làm việc"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:223
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:222
 msgid "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 msgstr "Để trống hoặc điền số 0 nếu không muốn nhắc khách hàng. <0/> Lời nhắc sẽ được gửi qua Zalo OA, SMS và Email nếu các dịch vụ này được bật."
 
-#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:122
+#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:131
 msgid "Leave blank to use main office"
 msgstr "Để trống để chuyển đến trụ sở chính"
 
@@ -3417,20 +3425,20 @@ msgstr "Liên kết"
 msgid "Link customer"
 msgstr "Liên kết khách hàng"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:78
+#: src/modules/customer-forms/modals/modal-customer-form-link.tsx:79
 msgid "Link customer form"
 msgstr "Liên kết form khách hàng"
 
-#: src/modules/customer-forms/customer-form-list.tsx:36
+#: src/modules/customer-forms/customer-form-list.tsx:39
 msgid "Link form"
 msgstr "Liên kết form"
 
-#: src/modules/loans/components/loan-payments.tsx:98
-#: src/modules/loans/components/loan-payments.tsx:257
-#: src/modules/loans/components/loan-payments.tsx:408
-#: src/modules/loans/loan-list.tsx:301
-#: src/modules/loans/loan-list.tsx:450
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:251
+#: src/modules/loans/components/loan-payments.tsx:111
+#: src/modules/loans/components/loan-payments.tsx:269
+#: src/modules/loans/components/loan-payments.tsx:413
+#: src/modules/loans/loan-list.tsx:298
+#: src/modules/loans/loan-list.tsx:460
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:266
 msgid "Liquidation"
 msgstr "Tất toán"
 
@@ -3438,11 +3446,11 @@ msgstr "Tất toán"
 msgid "Liquidation fee rate"
 msgstr "Phí tất toán"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:332
+#: src/modules/loans/modals/modal-loan-package-form.tsx:331
 msgid "Liquidation fee rate, calculated on the remaining debt (0 - 100)"
 msgstr "Tỷ lệ phí tất toán, tính trên số nợ còn lại (0 - 100)"
 
-#: src/modules/loans/loan-detail.tsx:424
+#: src/modules/loans/loan-detail.tsx:442
 msgid "Liquidation statement"
 msgstr "Hồ sơ tất toán"
 
@@ -3469,26 +3477,26 @@ msgid "Loading data..."
 msgstr "Đang tải dữ liệu..."
 
 #: src/components/editor/mention/editor-mention-node-view.tsx:96
-#: src/modules/loans/components/loan-documents.tsx:109
-#: src/modules/receipts/receipt-card.tsx:220
+#: src/modules/loans/components/loan-documents.tsx:127
+#: src/modules/receipts/receipt-card.tsx:217
 msgid "Loan"
 msgstr "Hồ sơ vay"
 
-#: src/modules/loans/components/loan-card.tsx:86
-#: src/modules/loans/components/loan-disbursement.tsx:179
-#: src/modules/loans/components/loan-documents.tsx:126
-#: src/modules/loans/loan-list.tsx:221
-#: src/modules/loans/modals/modal-create-loan.tsx:382
-#: src/modules/loans/modals/modal-loan-calculator.tsx:142
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:162
+#: src/modules/loans/components/loan-card.tsx:88
+#: src/modules/loans/components/loan-disbursement.tsx:187
+#: src/modules/loans/components/loan-documents.tsx:144
+#: src/modules/loans/loan-list.tsx:218
+#: src/modules/loans/modals/modal-create-loan.tsx:404
+#: src/modules/loans/modals/modal-loan-calculator.tsx:127
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:177
 msgid "Loan amount"
 msgstr "Số tiền vay"
 
-#: src/modules/loans/loan-detail.tsx:516
+#: src/modules/loans/loan-detail.tsx:534
 msgid "Loan application"
 msgstr "Thông tin hồ sơ vay"
 
-#: src/modules/loans/components/loan-disbursement.tsx:194
+#: src/modules/loans/components/loan-disbursement.tsx:202
 msgid "Loan application does not have bank account information"
 msgstr "Thông tin hồ sơ vay không có thông tin tài khoản ngân hàng"
 
@@ -3496,7 +3504,7 @@ msgstr "Thông tin hồ sơ vay không có thông tin tài khoản ngân hàng"
 msgid "Loan approved reverted"
 msgstr "Hồ sơ vay đã được phê duyệt được hoàn tác"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:424
+#: src/modules/loans/modals/modal-create-loan.tsx:446
 msgid "Loan asset data"
 msgstr "Dữ liệu tài sản cho vay"
 
@@ -3508,10 +3516,10 @@ msgstr "Ước tính tài sản cho vay"
 msgid "Loan Asset Estimations"
 msgstr "Định giá tài sản"
 
-#: src/modules/loans/components/loan-card.tsx:77
-#: src/modules/loans/components/loan-documents.tsx:116
-#: src/modules/loans/loan-list.tsx:217
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:127
+#: src/modules/loans/components/loan-card.tsx:79
+#: src/modules/loans/components/loan-documents.tsx:134
+#: src/modules/loans/loan-list.tsx:214
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:142
 msgid "Loan asset type"
 msgstr "Loại tài sản cho vay"
 
@@ -3519,13 +3527,13 @@ msgstr "Loại tài sản cho vay"
 msgid "Loan calculator"
 msgstr "Tính khoản vay"
 
-#: src/modules/loans/loan-detail.tsx:406
-#: src/modules/loans/loan-detail.tsx:616
-#: src/modules/loans/loan-list.tsx:191
+#: src/modules/loans/loan-detail.tsx:424
+#: src/modules/loans/loan-detail.tsx:635
+#: src/modules/loans/loan-list.tsx:188
 msgid "Loan contract"
 msgstr "Hợp đồng vay"
 
-#: src/modules/loans/components/loan-disbursement.tsx:298
+#: src/modules/loans/components/loan-disbursement.tsx:306
 msgid "Loan disbursement"
 msgstr "Giải ngân hồ sơ vay"
 
@@ -3537,7 +3545,7 @@ msgstr "Hồ sơ vay đã hoàn thành"
 msgid "Loan fulfilled reverted"
 msgstr "Hồ sơ vay đã hoàn thành được hoàn tác"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:341
+#: src/modules/loans/modals/modal-create-loan.tsx:363
 msgid "Loan information"
 msgstr "Thông tin hồ sơ vay"
 
@@ -3545,57 +3553,57 @@ msgstr "Thông tin hồ sơ vay"
 msgid "Loan is signed by customer, waiting for approval"
 msgstr "Hồ sơ vay đã được khách hàng ký, chờ phê duyệt"
 
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:84
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:265
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:85
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:280
 msgid "Loan liquidation"
 msgstr "Tất toán hồ sơ vay"
 
-#: src/modules/loans/components/loan-documents.tsx:113
-#: src/modules/loans/components/related-loans.tsx:118
-#: src/modules/loans/loan-detail.tsx:377
-#: src/modules/loans/loan-list.tsx:118
-#: src/modules/loans/loan-list.tsx:215
-#: src/modules/loans/modals/modal-loan-calculator.tsx:284
-#: src/modules/loans/modals/modal-loan-package-form.tsx:114
+#: src/modules/loans/components/loan-documents.tsx:131
+#: src/modules/loans/components/related-loans.tsx:125
+#: src/modules/loans/loan-detail.tsx:395
+#: src/modules/loans/loan-list.tsx:115
+#: src/modules/loans/loan-list.tsx:212
+#: src/modules/loans/modals/modal-loan-calculator.tsx:269
+#: src/modules/loans/modals/modal-loan-package-form.tsx:113
 #: src/modules/workspace-settings/workspace-setting-credit.tsx:30
 #: src/modules/workspaces/workspace.tsx:54
 msgid "Loan package"
 msgstr "Gói vay"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:133
+#: src/modules/loans/modals/modal-loan-calculator.tsx:118
 msgid "Loan package calculator"
 msgstr "Máy tính gói vay"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:122
+#: src/modules/loans/modals/modal-loan-package-form.tsx:121
 msgid "Loan package code"
 msgstr "Mã gói vay"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:123
+#: src/modules/loans/modals/modal-loan-package-form.tsx:122
 msgid "Loan package code must be at least 3 characters, no spaces"
 msgstr "Mã gói vay phải dài ít nhất 3 ký tự, không có dấu cách"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:295
-#: src/modules/loans/modals/modal-loan-package-form.tsx:130
+#: src/modules/loans/modals/modal-loan-calculator.tsx:280
+#: src/modules/loans/modals/modal-loan-package-form.tsx:129
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:45
 msgid "Loan package type"
 msgstr "Loại gói vay"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:387
+#: src/modules/loans/modals/modal-create-loan.tsx:409
 msgid "Loan payment account"
 msgstr "Tài khoản thanh toán"
 
-#: src/modules/loans/components/loan-documents.tsx:142
-#: src/modules/loans/modals/modal-create-loan.tsx:370
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:168
+#: src/modules/loans/components/loan-documents.tsx:160
+#: src/modules/loans/modals/modal-create-loan.tsx:392
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:183
 msgid "Loan payment periods"
 msgstr "Kỳ hạn thanh toán"
 
-#: src/modules/loans/components/loan-documents.tsx:121
-#: src/modules/loans/modals/modal-create-loan.tsx:359
-#: src/modules/loans/modals/modal-loan-calculator.tsx:176
-#: src/modules/loans/modals/modal-loan-calculator.tsx:304
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:132
-#: src/modules/loans/modals/modal-loan-package-form.tsx:140
+#: src/modules/loans/components/loan-documents.tsx:139
+#: src/modules/loans/modals/modal-create-loan.tsx:381
+#: src/modules/loans/modals/modal-loan-calculator.tsx:161
+#: src/modules/loans/modals/modal-loan-calculator.tsx:289
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:147
+#: src/modules/loans/modals/modal-loan-package-form.tsx:139
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:54
 msgid "Loan period"
 msgstr "Hạn vay"
@@ -3604,7 +3612,7 @@ msgstr "Hạn vay"
 msgid "Loan profit more than 0"
 msgstr "Khi lãi vay lớn hơn 0"
 
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:232
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:247
 msgid "Loan receipt late interest"
 msgstr "Lãi vay trả chậm"
 
@@ -3629,8 +3637,8 @@ msgid "Loan revert rejected"
 msgstr "Hoàn tác từ chối"
 
 #: src/constant.ts:17
-#: src/modules/loans/loan-list.tsx:95
-#: src/modules/search/search-engine.tsx:229
+#: src/modules/loans/loan-list.tsx:92
+#: src/modules/search/search-engine.tsx:228
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:232
 #: src/widgets/reports/modules.ts:223
@@ -3695,9 +3703,9 @@ msgstr "Hồ sơ vay đang đợi xử lí"
 msgid "Loans synced"
 msgstr "Các hồ sơ vay được đồng bộ hóa"
 
-#: src/modules/customers/modals/modal-customer-form.tsx:91
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:111
 #: src/modules/hrm-timekeepings/modals/modal-capture-location-timekeeping.tsx:198
-#: src/modules/loans/loan-list.tsx:208
+#: src/modules/loans/loan-list.tsx:205
 msgid "Location"
 msgstr "Vị trí"
 
@@ -3737,20 +3745,20 @@ msgstr "Mailer"
 msgid "Main assignee"
 msgstr "Chịu trách nhiệm"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:309
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:318
 msgid "Main location"
 msgstr "Vị trí chính"
 
-#: src/modules/customer-forms/modal-customer-form.tsx:48
-#: src/modules/customer-forms/modal-customer-form.tsx:53
-#: src/modules/loans/loan-detail.tsx:399
+#: src/modules/customer-forms/modals/modal-customer-form-link.tsx:49
+#: src/modules/customer-forms/modals/modal-customer-form-link.tsx:54
+#: src/modules/loans/loan-detail.tsx:417
 #: src/modules/workspace-branches/workspace-branch-column.tsx:16
 #: src/modules/workspace-branches/workspace-branch-column.tsx:27
 #: src/modules/workspace-branches/workspace-branch-column.tsx:32
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:32
 #: src/modules/workspace-members/workspace-member-list.tsx:51
 #: src/widgets/reports/index.tsx:320
-#: src/widgets/reports/widgets/report-credit.widget.tsx:368
+#: src/widgets/reports/widgets/report-credit.widget.tsx:388
 msgid "Main office"
 msgstr "Trụ sở chính"
 
@@ -3762,6 +3770,10 @@ msgstr "Trụ sở chính, Chi nhánh 1, ..."
 #: src/modules/customers/customer-service.ts:60
 msgid "Male"
 msgstr "Nam"
+
+#: src/modules/workspace-roles/workspace-roles-constants.ts:219
+msgid "Manage attendance records"
+msgstr "Quản lí chấm công"
 
 #: src/modules/workspace-roles/workspace-roles-constants.ts:111
 msgid "Manage billings"
@@ -3876,7 +3888,7 @@ msgstr "Chấm công phê duyệt thủ công"
 msgid "Manual input"
 msgstr "Nhập thủ công"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:252
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:249
 msgid "Manufacturing year"
 msgstr "Năm sản xuất"
 
@@ -3910,7 +3922,7 @@ msgstr "Trung bình"
 #: src/modules/products/product-detail.tsx:172
 #: src/modules/workspace-roles/workspace-roles-constants.ts:14
 #: src/modules/workspace-roles/workspace-roles-constants.ts:20
-#: src/widgets/reports/widgets/report-credit.widget.tsx:445
+#: src/widgets/reports/widgets/report-credit.widget.tsx:465
 msgid "Member"
 msgstr "Thành viên"
 
@@ -3953,7 +3965,7 @@ msgstr "Đã cập nhật thành viên"
 #: src/modules/hrm-timekeepings/hrm-timekeeping-list.tsx:188
 #: src/modules/hrm-timekeepings/hrm-timekeepings-summary.tsx:103
 #: src/modules/plugins/zalo-oas/components/zalo-oa-gmf-groups.tsx:43
-#: src/modules/search/search-engine.tsx:276
+#: src/modules/search/search-engine.tsx:275
 #: src/modules/workspace-members/workspace-member-list.tsx:60
 #: src/modules/workspace-roles/workspace-roles-config.ts:226
 #: src/modules/workspaces/workspace-modules.tsx:121
@@ -3987,7 +3999,7 @@ msgid "Message box waiting"
 msgstr "Hộp tin nhắn đang chờ"
 
 #: src/modules/message-boxes/message-box/message-box-head.tsx:60
-#: src/modules/search/search-engine.tsx:99
+#: src/modules/search/search-engine.tsx:98
 msgid "Message boxes"
 msgstr "Hộp tin nhắn"
 
@@ -4066,7 +4078,7 @@ msgstr "Giá trị tối thiểu <0><1/></0>"
 #. placeholder {0}: 5000
 #: src/modules/products/components/form-product.tsx:145
 #: src/modules/products/components/form-product.tsx:171
-#: src/modules/receipts/modals/modal-partial-payment.tsx:48
+#: src/modules/receipts/modals/modal-partial-payment.tsx:51
 msgid "Minimum amount is {0}"
 msgstr "Số tiền tối thiểu là {0}"
 
@@ -4079,7 +4091,7 @@ msgid "mins"
 msgstr "phút"
 
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:220
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:250
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:247
 msgid "Model"
 msgstr "Người mẫu"
 
@@ -4089,7 +4101,7 @@ msgid "Model name"
 msgstr "Tên mẫu"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:194
-#: src/modules/search/search-engine.tsx:333
+#: src/modules/search/search-engine.tsx:332
 #: src/modules/users/user-profile.tsx:130
 #: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Modules"
@@ -4100,26 +4112,26 @@ msgid "Monday"
 msgstr "Thứ hai"
 
 #: src/components/list/columns/number-column.tsx:14
-#: src/modules/loans/loan-detail.tsx:386
-#: src/modules/loans/loan-list.tsx:160
+#: src/modules/loans/loan-detail.tsx:404
+#: src/modules/loans/loan-list.tsx:157
 #: src/modules/orders/order-list.tsx:63
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:377
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:457
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:502
-#: src/modules/receipts/modals/modal-receipt-form.tsx:122
-#: src/modules/receipts/receipt-card.tsx:429
-#: src/modules/receipts/receipt-card.tsx:438
-#: src/modules/receipts/receipt-list.tsx:150
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:373
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:453
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:498
+#: src/modules/receipts/modals/modal-receipt-form.tsx:133
+#: src/modules/receipts/receipt-card.tsx:426
+#: src/modules/receipts/receipt-card.tsx:435
+#: src/modules/receipts/receipt-list.tsx:151
 #: src/widgets/reports/modules.ts:251
 msgid "Money amount"
 msgstr "Số tiền"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:485
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:481
 msgid "Money change"
 msgstr "Đổi tiền"
 
 #: src/modals/modal-printer.tsx:453
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:468
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:464
 msgid "Money given"
 msgstr "Tiền đã cho"
 
@@ -4130,8 +4142,8 @@ msgstr "Tiền đã cho"
 msgid "Month"
 msgstr "Tháng"
 
-#: src/modules/loans/loans-service.ts:201
-#: src/modules/loans/modals/modal-loan-calculator.tsx:307
+#: src/modules/loans/loans-service.ts:74
+#: src/modules/loans/modals/modal-loan-calculator.tsx:292
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:57
 msgid "months"
 msgstr "tháng"
@@ -4149,11 +4161,11 @@ msgstr "Đăng ký xe máy"
 msgid "Move"
 msgstr "Di chuyển"
 
-#: src/modules/customer-forms/customer-form-list.tsx:79
+#: src/modules/customer-forms/customer-form-list.tsx:86
 msgid "Move branch"
 msgstr "Di chuyển nhánh"
 
-#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:111
+#: src/modules/workspace-branches/modals/modal-update-workspace-branch.tsx:120
 msgid "Move workspace branch"
 msgstr "Di chuyển nhánh workspace"
 
@@ -4178,17 +4190,17 @@ msgstr "Nhiều lựa chọn"
 #: src/modules/custom-fields/components/form-custom-field.tsx:63
 #: src/modules/custom-fields/components/form-custom-field.tsx:66
 #: src/modules/custom-fields/components/form-custom-field.tsx:67
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:89
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:93
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:96
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:97
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:98
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:101
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:104
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:107
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:110
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:113
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:116
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:93
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:97
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:100
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:101
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:102
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:105
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:108
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:111
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:114
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:117
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:120
 #: src/modules/customers/components/customer-form.tsx:98
 #: src/modules/hrm-timekeepings/modals/modal-request-timekeeping.tsx:41
 #: src/modules/partners/modals/modal-partner-form.tsx:42
@@ -4232,13 +4244,13 @@ msgstr "Workspace chung"
 #: src/modules/coupons/modals/modal-coupon-rule-form.tsx:127
 #: src/modules/custom-fields/components/form-custom-field.tsx:101
 #: src/modules/custom-fields/custom-field-list.tsx:28
-#: src/modules/customer-forms/customer-form-list.tsx:41
+#: src/modules/customer-forms/customer-form-list.tsx:44
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:102
 #: src/modules/customers/components/customer-column.tsx:109
 #: src/modules/customers/components/customer-form.tsx:176
 #: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:76
 #: src/modules/customers/customer-list.tsx:80
 #: src/modules/customers/modals/modal-customer-contacts.tsx:69
-#: src/modules/customers/modals/modal-customer-form.tsx:82
 #: src/modules/partners/modals/modal-partner-form.tsx:121
 #: src/modules/partners/partner-list.tsx:30
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:447
@@ -4260,7 +4272,7 @@ msgstr "Workspace chung"
 #: src/modules/workspace-sdks/workspace-sdk-list.tsx:30
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:145
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:241
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:251
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:248
 #: src/modules/workspaces/components/create-workspace.tsx:106
 #: src/modules/workspaces/components/workspace-information.tsx:92
 #: src/modules/workspaces/workspace-module-setup.tsx:111
@@ -4272,11 +4284,11 @@ msgstr "Tên"
 msgid "Navigator"
 msgstr "Thanh điều hướng"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:306
+#: src/modules/loans/modals/modal-create-loan.tsx:324
 msgid "Need customer information"
 msgstr "Cần thông tin khách hàng"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:344
+#: src/modules/loans/modals/modal-create-loan.tsx:366
 msgid "Need customer information and KYC"
 msgstr "Cần thông tin khách hàng và KYC"
 
@@ -4340,7 +4352,7 @@ msgid "New Post"
 msgstr "Bài viết mới"
 
 #: src/modules/tasks/modals/modal-create-task.tsx:54
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:177
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:178
 msgid "New Task"
 msgstr "Công việc mới"
 
@@ -4364,7 +4376,7 @@ msgstr "Tiếp tục"
 msgid "Next customer"
 msgstr "Khách hàng tiếp theo"
 
-#: src/modules/receipts/modals/modal-partial-payment.tsx:100
+#: src/modules/receipts/modals/modal-partial-payment.tsx:110
 msgid "Next payment deadline"
 msgstr "Thời hạn thanh toán tiếp theo"
 
@@ -4388,7 +4400,7 @@ msgstr "KHÔNG"
 msgid "No activity"
 msgstr "Không có hoạt động"
 
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:241
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:238
 msgid "No asset estimation"
 msgstr "Không ước tính tài sản"
 
@@ -4396,7 +4408,7 @@ msgstr "Không ước tính tài sản"
 msgid "No assignees found"
 msgstr "Không tìm thấy thành viên"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:63
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:68
 msgid "No content"
 msgstr "Không có nội dung"
 
@@ -4420,7 +4432,7 @@ msgstr "Không có sự kiện"
 msgid "No fields"
 msgstr "Không có trường dữ liệu"
 
-#: src/modules/receipts/receipt-card.tsx:311
+#: src/modules/receipts/receipt-card.tsx:308
 msgid "No files"
 msgstr "Không có tập tin"
 
@@ -4429,7 +4441,7 @@ msgid "No folders found"
 msgstr "Không tìm thấy thư mục"
 
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:170
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:77
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:82
 msgid "No images"
 msgstr "Không có hình ảnh"
 
@@ -4449,7 +4461,7 @@ msgstr "Không có kết quả"
 msgid "No results found"
 msgstr "Không tìm thấy kết quả"
 
-#: src/modules/search/search-engine.tsx:395
+#: src/modules/search/search-engine.tsx:394
 msgid "No search results"
 msgstr "Không có kết quả tìm kiếm"
 
@@ -4475,7 +4487,7 @@ msgstr "Không"
 msgid "Noon"
 msgstr "Buổi trưa"
 
-#: src/modules/receipts/receipt-card.tsx:485
+#: src/modules/receipts/receipt-card.tsx:482
 msgid "Not Approved"
 msgstr "Không được phê duyệt"
 
@@ -4492,7 +4504,7 @@ msgid "Not receiving notification token. Please try again."
 msgstr "Không nhận được mã thông báo. Vui lòng thử lại."
 
 #: src/components/inputs/time-trackings-input.tsx:528
-#: src/modules/loans/components/loan-receipt-card.tsx:274
+#: src/modules/loans/components/loan-receipt-card.tsx:288
 #: src/modules/orders/orders-sale/components/order-sale-items.tsx:56
 #: src/modules/orders/orders-sale/components/order-sale-items.tsx:71
 #: src/modules/orders/orders-sale/components/order-sale-items.tsx:155
@@ -4502,7 +4514,7 @@ msgstr "Không nhận được mã thông báo. Vui lòng thử lại."
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:144
 #: src/modules/product-stocks/modals/modal-product-stock-out.tsx:118
 #: src/modules/product-stocks/product-stock-list.tsx:74
-#: src/modules/receipts/modals/modal-receipt-form.tsx:128
+#: src/modules/receipts/modals/modal-receipt-form.tsx:139
 msgid "Note"
 msgstr "Ghi chú"
 
@@ -4537,8 +4549,8 @@ msgstr "Giờ đây, bạn có thể sử dụng tính năng <0>Tin nhắn</0> �
 msgid "Number"
 msgstr "Con số"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:43
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:43
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:41
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:42
 msgid "Number plate"
 msgstr "Biển số"
 
@@ -4584,7 +4596,7 @@ msgstr "Mở ứng dụng"
 msgid "Open chat box"
 msgstr "Mở hộp trò chuyện"
 
-#: src/modules/loans/loan-list.tsx:196
+#: src/modules/loans/loan-list.tsx:193
 msgid "Open file"
 msgstr "Mở tập tin"
 
@@ -4622,7 +4634,7 @@ msgstr "Hoặc"
 #: src/modules/orders/orders-sale/orders-sale.tsx:34
 #: src/modules/product-combos/modals/modal-product-combo.tsx:126
 #: src/modules/products/product-detail.tsx:176
-#: src/modules/receipts/receipt-card.tsx:241
+#: src/modules/receipts/receipt-card.tsx:238
 msgid "Order"
 msgstr "Đơn hàng"
 
@@ -4636,10 +4648,10 @@ msgstr "Đơn hàng đã được đồng bộ"
 
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:21
-#: src/modules/search/search-engine.tsx:296
-#: src/modules/search/search-engine.tsx:301
+#: src/modules/search/search-engine.tsx:295
+#: src/modules/search/search-engine.tsx:300
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:126
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
 #: src/modules/workspaces/workspace-modules.tsx:212
 msgid "Orders"
 msgstr "Đơn hàng"
@@ -4695,15 +4707,15 @@ msgstr "Chủ sở hữu"
 msgid "Package"
 msgstr "Gói"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:381
+#: src/modules/loans/components/loan-receipt-card.tsx:395
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:46
-#: src/modules/receipts/receipt-constants.tsx:36
+#: src/modules/receipts/receipt-constants.tsx:38
 #: src/modules/workspace-billings/workspace-billings-contants.ts:20
 msgid "Paid"
 msgstr "Đã thanh toán"
 
-#: src/modules/receipts/receipt-card.tsx:345
-#: src/modules/receipts/receipt-list.tsx:98
+#: src/modules/receipts/receipt-card.tsx:342
+#: src/modules/receipts/receipt-list.tsx:99
 msgid "Paid at"
 msgstr "Ngày thanh toán"
 
@@ -4715,15 +4727,15 @@ msgstr "Params"
 msgid "Parent task estimated time: {selfEstimatedTime}"
 msgstr "Ước tính của nhiệm vụ chính: {selfEstimatedTime}"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:98
-#: src/modules/loans/components/loan-receipt-card.tsx:369
-#: src/modules/receipts/modals/modal-partial-payment.tsx:139
+#: src/modules/loans/components/loan-receipt-card.tsx:112
+#: src/modules/loans/components/loan-receipt-card.tsx:383
+#: src/modules/receipts/modals/modal-partial-payment.tsx:149
 msgid "Partial payment"
 msgstr "Thanh toán một phần"
 
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:35
-#: src/modules/search/search-engine.tsx:259
+#: src/modules/search/search-engine.tsx:258
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
 #: src/modules/workspaces/workspace-modules.tsx:193
 msgid "Partners"
@@ -4758,17 +4770,17 @@ msgstr "Mật khẩu không khớp"
 msgid "Password updated"
 msgstr "Đã cập nhật mật khẩu"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:352
+#: src/modules/loans/components/loan-receipt-card.tsx:366
 #: src/modules/orders/order-card.tsx:242
 #: src/modules/orders/order-list.tsx:89
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:103
-#: src/modules/receipts/receipt-card.tsx:524
-#: src/modules/receipts/receipt-list.tsx:207
+#: src/modules/receipts/receipt-card.tsx:521
+#: src/modules/receipts/receipt-list.tsx:208
 msgid "Pay"
 msgstr "Thanh toán"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:107
-#: src/modules/receipts/receipt-list.tsx:104
+#: src/modules/loans/components/loan-receipt-card.tsx:121
+#: src/modules/receipts/receipt-list.tsx:105
 msgid "Pay expire"
 msgstr "Hạn thanh toán"
 
@@ -4777,25 +4789,25 @@ msgid "Pay loan"
 msgstr "Thanh toán vay"
 
 #: src/modules/events/event-constants.ts:74
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:313
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:310
 msgid "Pay receipt"
 msgstr "Thanh toán hoá đơn"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:294
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:291
 #: src/modules/workspace-billings/modals/modal-workspace-billing-deposit.tsx:84
 msgid "Pay successful"
 msgstr "Thanh toán thành công"
 
 #: src/components/printer/printer-body.tsx:110
 #: src/modals/modal-printer.tsx:402
-#: src/modules/loans/loan-detail.tsx:546
-#: src/modules/receipts/receipt-list.tsx:138
+#: src/modules/loans/loan-detail.tsx:564
+#: src/modules/receipts/receipt-list.tsx:139
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:141
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:140
 msgid "Payment"
 msgstr "Thanh toán"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:224
+#: src/modules/loans/modals/modal-loan-calculator.tsx:209
 msgid "Payment amount"
 msgstr "Số tiền thanh toán"
 
@@ -4808,26 +4820,26 @@ msgstr "Mã thanh toán"
 msgid "Payment created"
 msgstr "Thanh toán đã được tạo"
 
-#: src/modules/loans/loan-list.tsx:226
+#: src/modules/loans/loan-list.tsx:223
 msgid "Payment date"
 msgstr "Ngày thanh toán"
 
-#: src/modules/receipts/modals/modal-receipt-form.tsx:131
+#: src/modules/receipts/modals/modal-receipt-form.tsx:142
 msgid "Payment deadline"
 msgstr "Hạn thanh toán"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:360
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:356
 msgid "Payment info"
 msgstr "Thông tin thanh toán"
 
-#: src/modules/loans/components/loan-disbursement.tsx:153
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:336
-#: src/modules/receipts/receipt-card.tsx:371
-#: src/modules/receipts/receipt-card.tsx:379
+#: src/modules/loans/components/loan-disbursement.tsx:161
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:333
+#: src/modules/receipts/receipt-card.tsx:368
+#: src/modules/receipts/receipt-card.tsx:376
 msgid "Payment method"
 msgstr "Phương thức thanh toán"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:84
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:89
 msgid "Payment Method"
 msgstr "Phương thức thanh toán"
 
@@ -4835,20 +4847,20 @@ msgstr "Phương thức thanh toán"
 msgid "Payment paid"
 msgstr "Thanh toán đã thanh toán"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:189
+#: src/modules/loans/modals/modal-loan-calculator.tsx:174
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:71
 msgid "Payment period"
 msgstr "Kỳ thanh toán"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:175
+#: src/modules/loans/modals/modal-loan-package-form.tsx:174
 msgid "Payment period options"
 msgstr "Tùy chọn kỳ thanh toán"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:204
+#: src/modules/loans/modals/modal-loan-calculator.tsx:189
 msgid "Payment periods"
 msgstr "Kỳ thanh toán"
 
-#: src/modules/loans/loan-list.tsx:326
+#: src/modules/loans/loan-list.tsx:325
 msgid "Payment progress"
 msgstr "Tiến độ thanh toán"
 
@@ -4859,7 +4871,7 @@ msgstr "Trạng thái thanh toán"
 #: src/modules/customer-forms/customer-form-constants.tsx:13
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:9
 #: src/modules/loans/loans-constants.tsx:30
-#: src/modules/receipts/receipt-constants.tsx:32
+#: src/modules/receipts/receipt-constants.tsx:34
 #: src/modules/workspace-billings/workspace-billings-contants.ts:19
 msgid "Pending"
 msgstr "Đang xử lí"
@@ -4872,15 +4884,15 @@ msgstr "Chờ ký"
 msgid "Percent"
 msgstr "Phần trăm"
 
-#: src/modules/loans/components/loan-payments.tsx:147
-#: src/modules/loans/components/loan-payments.tsx:323
-#: src/modules/loans/modals/modal-loan-calculator.tsx:209
-#: src/modules/loans/modals/modal-loan-package-form.tsx:232
+#: src/modules/loans/components/loan-payments.tsx:160
+#: src/modules/loans/components/loan-payments.tsx:334
+#: src/modules/loans/modals/modal-loan-calculator.tsx:194
+#: src/modules/loans/modals/modal-loan-package-form.tsx:231
 msgid "Period"
 msgstr "Kỳ"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:215
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:218
+#: src/modules/loans/components/loan-receipt-card.tsx:229
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:233
 msgid "Period fee amount"
 msgstr "Phí theo kỳ"
 
@@ -4888,17 +4900,17 @@ msgstr "Phí theo kỳ"
 msgid "Personal informations"
 msgstr "Thông tin cá nhân"
 
-#: src/modules/customer-forms/customer-form-list.tsx:49
+#: src/modules/customer-forms/customer-form-list.tsx:54
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:104
 #: src/modules/customers/components/customer-column.tsx:113
 #: src/modules/customers/components/customer-form.tsx:181
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:122
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:132
 #: src/modules/customers/customer-detail/customer-relationship-contact-input.tsx:83
 #: src/modules/customers/customer-list.tsx:89
-#: src/modules/customers/modals/modal-customer-form.tsx:84
-#: src/modules/loans/components/loan-card.tsx:65
+#: src/modules/loans/components/loan-card.tsx:67
 #: src/modules/loans/components/loan-customer-kyc.tsx:143
-#: src/modules/loans/loan-detail.tsx:355
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:121
+#: src/modules/loans/loan-detail.tsx:373
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:136
 #: src/modules/partners/modals/modal-partner-form.tsx:122
 #: src/modules/partners/partner-list.tsx:31
 #: src/modules/plugins/message-hubs/message-hub-card.tsx:448
@@ -4958,7 +4970,7 @@ msgstr "Vui lòng nhập email để nhận"
 msgid "Please enter the reason for cancellation"
 msgstr "Vui lòng nhập lý do hủy"
 
-#: src/modules/loans/components/loan-disbursement.tsx:88
+#: src/modules/loans/components/loan-disbursement.tsx:91
 msgid "Please select at least one file"
 msgstr "Vui lòng chọn ít nhất 1 tệp"
 
@@ -4991,9 +5003,9 @@ msgstr "Tích hợp"
 msgid "Plus or remove widgets"
 msgstr "Thêm/xoá widget"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:199
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:100
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:185
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:208
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:110
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:195
 msgid "Portrait image"
 msgstr "Ảnh chân dung"
 
@@ -5025,7 +5037,7 @@ msgstr "Bài viết đã cập nhật"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/posts/posts-list.tsx:29
-#: src/modules/search/search-engine.tsx:116
+#: src/modules/search/search-engine.tsx:115
 #: src/modules/workspace-roles/workspace-roles-config.ts:243
 #: src/modules/workspaces/workspace-modules.tsx:97
 msgid "Posts"
@@ -5058,7 +5070,7 @@ msgid "Prescription updated"
 msgstr "Đã cập nhật đơn thuốc"
 
 #: src/constant.ts:16
-#: src/modules/search/search-engine.tsx:315
+#: src/modules/search/search-engine.tsx:314
 #: src/modules/workspace-roles/workspace-roles-config.ts:217
 #: src/modules/workspaces/workspace-modules.tsx:199
 msgid "Prescriptions"
@@ -5072,7 +5084,7 @@ msgstr "Xem trước"
 
 #: src/modules/loans/components/loan-customer-kyc.tsx:94
 #: src/modules/loans/components/loan-customer-kyc.tsx:120
-#: src/modules/loans/loan-list.tsx:212
+#: src/modules/loans/loan-list.tsx:209
 msgid "Previous address"
 msgstr "Địa chỉ cũ"
 
@@ -5082,21 +5094,21 @@ msgstr "Địa chỉ cũ"
 msgid "Price"
 msgstr "Giá"
 
-#: src/modules/loans/components/loan-payments.tsx:151
-#: src/modules/loans/components/loan-payments.tsx:344
-#: src/modules/loans/components/loan-receipt-card.tsx:150
+#: src/modules/loans/components/loan-payments.tsx:164
+#: src/modules/loans/components/loan-payments.tsx:355
+#: src/modules/loans/components/loan-receipt-card.tsx:164
 msgid "Principal"
 msgstr "Tiền gốc"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:215
+#: src/modules/loans/modals/modal-loan-calculator.tsx:200
 msgid "Principal amount"
 msgstr "Số tiền gốc"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:464
+#: src/widgets/reports/widgets/report-credit.widget.tsx:484
 msgid "Principal expense"
 msgstr "Chi gốc"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:457
+#: src/widgets/reports/widgets/report-credit.widget.tsx:477
 msgid "Principal income"
 msgstr "Thu gốc"
 
@@ -5104,7 +5116,7 @@ msgstr "Thu gốc"
 #: src/modals/modal-printer.tsx:156
 #: src/modules/orders/order-card.tsx:253
 #: src/modules/orders/orders-sale/components/order-sale-actions.tsx:47
-#: src/modules/receipts/receipt-list.tsx:181
+#: src/modules/receipts/receipt-list.tsx:182
 msgid "Print"
 msgstr "In"
 
@@ -5121,11 +5133,11 @@ msgid "Print prescription"
 msgstr "In đơn thuốc"
 
 #: src/modals/modal-printer.tsx:153
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:539
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:535
 msgid "Print receipt"
 msgstr "In hoá đơn"
 
-#: src/modules/receipts/receipt-card.tsx:513
+#: src/modules/receipts/receipt-card.tsx:510
 msgid "Print Receipt"
 msgstr "In hoá đơn"
 
@@ -5183,8 +5195,8 @@ msgstr "Đã cập nhật combo sản phẩm"
 msgid "Product images"
 msgstr "Hình ảnh sản phẩm"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:88
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:88
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:86
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:87
 msgid "Product manufacturing date"
 msgstr "Ngày sản xuất sản phẩm"
 
@@ -5296,7 +5308,7 @@ msgstr "Khuyến mãi"
 msgid "Properties"
 msgstr "Thuộc tính"
 
-#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:45
+#: src/modules/receipts/modals/modal-disburesement-receipt.tsx:50
 msgid "Proposed by"
 msgstr "Đề xuất bởi"
 
@@ -5313,7 +5325,7 @@ msgid "Provider"
 msgstr "Nhà cung cấp"
 
 #: src/components/location-form.tsx:24
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:314
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:323
 msgid "Province"
 msgstr "Tỉnh/Thành phố"
 
@@ -5334,7 +5346,7 @@ msgstr "Ngày phát hành"
 #: src/modals/modal-printer.tsx:333
 #: src/modules/coupons/coupon-list.tsx:47
 #: src/modules/coupons/coupon-rules.tsx:41
-#: src/modules/customer-kycs/customer-kyc-list.tsx:50
+#: src/modules/customer-kycs/customer-kyc-list.tsx:51
 #: src/modules/prescriptions/prescription-list.tsx:52
 #: src/widgets/reports/widgets/report-products.widget.tsx:187
 #: src/widgets/reports/widgets/report-products.widget.tsx:308
@@ -5396,9 +5408,9 @@ msgstr "Đọc tài liệu"
 msgid "Rearranging the interface."
 msgstr "Đang sắp xếp lại giao diện."
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:209
-#: src/modules/customers/modals/modal-customer-form.tsx:148
-#: src/modules/loans/components/loan-card.tsx:98
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:173
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:219
+#: src/modules/loans/components/loan-card.tsx:102
 msgid "Reason"
 msgstr "Lý do"
 
@@ -5408,23 +5420,23 @@ msgstr "Lý do hủy bỏ"
 
 #: src/components/printer/printer.tsx:45
 #: src/modals/modal-printer.tsx:313
-#: src/modules/loans/components/loan-receipt-card.tsx:118
-#: src/modules/receipts/modals/modal-receipt-detail.tsx:64
-#: src/modules/receipts/receipt-card.tsx:304
-#: src/modules/receipts/receipt-detail.tsx:151
-#: src/modules/search/search-engine.tsx:198
-#: src/widgets/reports/widgets/report-credit.widget.tsx:477
+#: src/modules/loans/components/loan-receipt-card.tsx:132
+#: src/modules/receipts/modals/modal-receipt-detail.tsx:41
+#: src/modules/receipts/receipt-card.tsx:301
+#: src/modules/receipts/receipt-detail.tsx:172
+#: src/modules/search/search-engine.tsx:197
+#: src/widgets/reports/widgets/report-credit.widget.tsx:497
 #: src/widgets/reports/widgets/report-products.widget.tsx:297
 msgid "Receipt"
 msgstr "Hoá đơn"
 
 #: src/modules/e-invoices/e-invoice-list.tsx:48
-#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:40
+#: src/modules/plugins/e-invoices/modal-check-e-invoice.tsx:49
 msgid "Receipt code"
 msgstr "Mã hoá đơn"
 
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:198
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:175
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:223
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:174
 msgid "Receipt images required"
 msgstr "Yêu cầu cung cấp hình ảnh giao dịch"
 
@@ -5441,17 +5453,17 @@ msgid "Receipt unarchived"
 msgstr "Hoá đơn đã khôi phục"
 
 #: src/constant.ts:13
-#: src/modules/loans/components/loan-payments.tsx:153
-#: src/modules/receipts/receipt-list.tsx:83
-#: src/modules/search/search-engine.tsx:193
+#: src/modules/loans/components/loan-payments.tsx:166
+#: src/modules/receipts/receipt-list.tsx:84
+#: src/modules/search/search-engine.tsx:192
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
 #: src/modules/workspaces/workspace-modules.tsx:218
 #: src/widgets/reports/widgets/report-products.widget.tsx:255
 msgid "Receipts"
 msgstr "Hoá đơn"
 
-#: src/modules/loans/components/loan-disbursement.tsx:254
-#: src/modules/receipts/modals/modal-pay-receipt.tsx:516
+#: src/modules/loans/components/loan-disbursement.tsx:262
+#: src/modules/receipts/modals/modal-pay-receipt.tsx:512
 msgid "Receipts images"
 msgstr "Hình ảnh hoá đơn"
 
@@ -5486,35 +5498,35 @@ msgstr "Đăng ký"
 msgid "Register new account"
 msgstr "Đăng ký tài khoản mới"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:70
-#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:70
+#: src/modules/loans/components/loan-asset-data-inputs/input-car-registration.tsx:68
+#: src/modules/loans/components/loan-asset-data-inputs/input-motobike-registration.tsx:69
 msgid "Registration number"
 msgstr "Số đăng ký"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:71
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:223
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:75
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:233
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:149
-#: src/modules/loans/components/loan-documents.tsx:212
-#: src/modules/loans/loan-list.tsx:388
+#: src/modules/loans/components/loan-documents.tsx:234
+#: src/modules/loans/loan-list.tsx:387
 #: src/modules/loans/loan-list.tsx:394
-#: src/modules/receipts/receipt-card.tsx:480
+#: src/modules/receipts/receipt-card.tsx:477
 msgid "Reject"
 msgstr "Từ chối"
 
-#: src/modules/receipts/receipt-card.tsx:130
-#: src/modules/receipts/receipt-card.tsx:139
+#: src/modules/receipts/receipt-card.tsx:125
+#: src/modules/receipts/receipt-card.tsx:134
 msgid "Reject Expense"
 msgstr "Từ chối chi phí"
 
 #: src/modules/events/event-constants.ts:126
-#: src/modules/loans/components/loan-documents.tsx:88
+#: src/modules/loans/components/loan-documents.tsx:97
 msgid "Reject loan"
 msgstr "Từ chối hồ sơ vay"
 
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:11
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:205
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:215
 #: src/modules/hrm-timekeepings/hrm-timekeeping-card.tsx:202
-#: src/modules/loans/components/loan-documents.tsx:179
+#: src/modules/loans/components/loan-documents.tsx:201
 #: src/modules/loans/loans-constants.tsx:33
 msgid "Rejected"
 msgstr "Bị từ chối"
@@ -5535,13 +5547,13 @@ msgstr "Liên hệ người thân"
 msgid "Released vouchers"
 msgstr "Voucher đã phát hành"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:164
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:178
+#: src/modules/loans/components/loan-receipt-card.tsx:178
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:193
 msgid "Remain capital amount"
 msgstr "Số vốn còn lại"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:226
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:225
+#: src/modules/loans/components/loan-receipt-card.tsx:240
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:240
 msgid "Remain capital amount fee"
 msgstr "Phí số vốn còn lại"
 
@@ -5550,19 +5562,19 @@ msgstr "Phí số vốn còn lại"
 msgid "Remaining"
 msgstr "Còn lại"
 
-#: src/modules/receipts/modals/modal-partial-payment.tsx:114
+#: src/modules/receipts/modals/modal-partial-payment.tsx:124
 msgid "Remaining amount"
 msgstr "Số tiền còn lại"
 
-#: src/modules/loans/modals/modal-loan-calculator.tsx:218
+#: src/modules/loans/modals/modal-loan-calculator.tsx:203
 msgid "Remaining principal"
 msgstr "Tiền gốc còn lại"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:203
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:202
 msgid "Remind customers before the appointment n (days)"
 msgstr "Nhắc nhở khách hàng trước cuộc hẹn n (ngày)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:213
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:212
 msgid "Reminder time"
 msgstr "Thời gian nhắc nhở"
 
@@ -5620,7 +5632,7 @@ msgstr "Đổi tên"
 msgid "Reply"
 msgstr "Trả lời"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:649
+#: src/widgets/reports/widgets/report-credit.widget.tsx:669
 msgid "Report income and expenditure"
 msgstr "Báo cáo thu chi"
 
@@ -5646,7 +5658,7 @@ msgstr "Đã đồng bộ hóa báo cáo"
 
 #: src/modules/workspace-roles/workspace-roles-config.ts:263
 #: src/modules/workspaces/workspace-modules.tsx:478
-#: src/widgets/reports/widgets/report-credit.widget.tsx:618
+#: src/widgets/reports/widgets/report-credit.widget.tsx:638
 msgid "Reports"
 msgstr "Báo cáo"
 
@@ -5671,7 +5683,7 @@ msgstr "Yêu cầu chụp ảnh khi nhận phòng/trả phòng"
 #: src/modals/modal-input.tsx:91
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:79
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:82
-#: src/modules/receipts/modals/modal-receipt-form.tsx:63
+#: src/modules/receipts/modals/modal-receipt-form.tsx:68
 msgid "Required"
 msgstr "Yêu cầu"
 
@@ -5754,11 +5766,11 @@ msgstr "Doanh thu trung bình"
 msgid "Revenue chart"
 msgstr "Biểu đồ doanh thu"
 
-#: src/modules/loans/components/loan-disbursement.tsx:293
+#: src/modules/loans/components/loan-disbursement.tsx:301
 msgid "Revert approval"
 msgstr "Hủy bỏ phê duyệt"
 
-#: src/modules/loans/components/loan-payments.tsx:109
+#: src/modules/loans/components/loan-payments.tsx:122
 msgid "Revert fulfilled"
 msgstr "Hoàn tác giải ngân"
 
@@ -5767,7 +5779,7 @@ msgid "Revert history"
 msgstr "Hoàn tác lịch sử"
 
 #: src/modules/events/event-constants.ts:149
-#: src/modules/loans/components/loan-payments.tsx:115
+#: src/modules/loans/components/loan-payments.tsx:128
 msgid "Revert liquidation"
 msgstr "Hoàn tác việc tất toán"
 
@@ -5783,9 +5795,9 @@ msgstr "Hoàn trả hồ sơ vay"
 msgid "Revert payment"
 msgstr "Hoàn tác thanh toán"
 
-#: src/modules/receipts/receipt-detail.tsx:83
-#: src/modules/receipts/receipt-detail.tsx:87
-#: src/modules/receipts/receipt-detail.tsx:140
+#: src/modules/receipts/receipt-detail.tsx:100
+#: src/modules/receipts/receipt-detail.tsx:104
+#: src/modules/receipts/receipt-detail.tsx:161
 msgid "Revert Payment"
 msgstr "Hoàn tác thanh toán"
 
@@ -5842,7 +5854,7 @@ msgstr "Giá bán"
 #: src/modules/categories/components/form-category.tsx:136
 #: src/modules/custom-fields/components/form-custom-field.tsx:143
 #: src/modules/customers/modals/modal-customer-contacts.tsx:167
-#: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:64
+#: src/modules/customers/modals/modal-customer-relationship-contacts.tsx:74
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:93
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:212
 #: src/modules/plugins/storage/plugin-storage-modal.tsx:107
@@ -5860,7 +5872,7 @@ msgstr "Lưu thay đổi"
 msgid "Save prescription template"
 msgstr "Lưu mẫu đơn thuốc"
 
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:230
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:239
 msgid "Scan QR code"
 msgstr "Quét mã QR"
 
@@ -5879,12 +5891,12 @@ msgstr "Di chuyển đến ngày hôm nay"
 #: src/components/selector.tsx:304
 #: src/layout/header/workspace-header.tsx:91
 #: src/layout/header/workspace-header.tsx:177
-#: src/modules/search/search-engine.tsx:383
+#: src/modules/search/search-engine.tsx:382
 #: src/modules/tasks/components/task-menu/task-menu-assignee.tsx:152
 #: src/modules/tasks/components/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/components/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/components/task-menu/task-menu-tags.tsx:99
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:244
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:243
 #: src/widgets/components/manage-widgets.tsx:35
 msgid "Search"
 msgstr "Tìm kiếm"
@@ -5949,11 +5961,11 @@ msgstr "Chọn cuộc trò chuyện để bắt đầu"
 msgid "Select asset"
 msgstr "Chọn nội dung"
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:165
+#: src/modules/loans/modals/modal-loan-package-form.tsx:164
 msgid "Select asset types"
 msgstr "Chọn loại tài sản"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:390
+#: src/modules/loans/modals/modal-create-loan.tsx:412
 #: src/modules/workspaces/components/workspace-bank-information.tsx:46
 msgid "Select bank"
 msgstr "Chọn ngân hàng"
@@ -6091,7 +6103,7 @@ msgstr "Đã gửi hình ảnh"
 msgid "Sent sticker"
 msgstr "Đã gửi nhãn dán"
 
-#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:58
+#: src/modules/loans/components/loan-asset-data-inputs/input-i-cloud.tsx:57
 msgid "Serial"
 msgstr "Serial"
 
@@ -6190,8 +6202,8 @@ msgstr "Hiển thị thời gian ước tính"
 msgid "Show/hide task color by status"
 msgstr "Ẩn/hiện màu công việc theo trạng thái"
 
-#: src/modules/loans/loan-detail.tsx:475
-#: src/modules/loans/modals/modal-sign-loan.tsx:66
+#: src/modules/loans/loan-detail.tsx:493
+#: src/modules/loans/modals/modal-sign-loan.tsx:74
 msgid "Sign contract"
 msgstr "Ký hợp đồng"
 
@@ -6200,7 +6212,7 @@ msgid "Sign in username"
 msgstr "Đăng nhập tên người dùng"
 
 #. placeholder {0}: renderEntityCode(props?.loan.code)
-#: src/modules/loans/modals/modal-sign-loan.tsx:53
+#: src/modules/loans/modals/modal-sign-loan.tsx:61
 msgid "Sign loan #{0}"
 msgstr "Ký hồ sơ vay #{0}"
 
@@ -6212,8 +6224,8 @@ msgstr "Đăng xuất"
 msgid "Sign out another device"
 msgstr "Đăng xuất trên thiết bị khác"
 
-#: src/modules/loans/components/loan-documents.tsx:161
-#: src/modules/loans/components/loan-documents.tsx:254
+#: src/modules/loans/components/loan-documents.tsx:180
+#: src/modules/loans/components/loan-documents.tsx:276
 msgid "Signature"
 msgstr "Chữ ký"
 
@@ -6296,13 +6308,13 @@ msgid "Start time must be before end time"
 msgstr "Thời gian bắt đầu phải trước thời gian kết thúc"
 
 #: src/components/list/columns/status-column.tsx:33
-#: src/modules/customer-forms/customer-form-list.tsx:63
-#: src/modules/customers/modals/modal-customer-form.tsx:138
-#: src/modules/loans/loan-detail.tsx:442
-#: src/modules/loans/loan-list.tsx:267
+#: src/modules/customer-forms/customer-form-list.tsx:70
+#: src/modules/customer-forms/modals/modal-customer-form-approval.tsx:163
+#: src/modules/loans/loan-detail.tsx:460
+#: src/modules/loans/loan-list.tsx:264
 #: src/modules/message-boxes/message-boxes.tsx:66
 #: src/modules/promotions/promotions-list.tsx:119
-#: src/modules/receipts/receipt-list.tsx:129
+#: src/modules/receipts/receipt-list.tsx:130
 #: src/modules/tasks/components/task-detail/task-detail-properties.tsx:160
 #: src/modules/tasks/components/task-selections/task-selection-menu.tsx:170
 #: src/modules/tasks/views/board/board-task-card.tsx:360
@@ -6349,7 +6361,7 @@ msgstr "Hoàn tác xuất hàng"
 msgid "Stocks"
 msgstr "Kho"
 
-#: src/modules/loans/modals/modal-create-loan.tsx:452
+#: src/modules/loans/modals/modal-create-loan.tsx:474
 msgid "Submit loan"
 msgstr "Gửi hồ sơ vay"
 
@@ -6422,8 +6434,8 @@ msgstr "Đã tạo khe bảng"
 msgid "Table slot updated"
 msgstr "Đã cập nhật khe bảng"
 
-#: src/modules/customers/customer-detail/customer-information.tsx:318
-#: src/modules/customers/customer-detail/customer-information.tsx:393
+#: src/modules/customers/customer-detail/customer-information.tsx:340
+#: src/modules/customers/customer-detail/customer-information.tsx:415
 msgid "Tag"
 msgstr "Thẻ"
 
@@ -6485,7 +6497,7 @@ msgid "Task synced"
 msgstr "Đã đồng bộ hóa công việc"
 
 #: src/constant.ts:10
-#: src/modules/search/search-engine.tsx:212
+#: src/modules/search/search-engine.tsx:211
 #: src/modules/workspaces/workspace-modules.tsx:206
 #: src/widgets/reports/modules.ts:136
 msgid "Tasks"
@@ -6581,7 +6593,7 @@ msgstr "Hệ thống sẽ tự động kết nối với các trang Facebook c�
 msgid "The time allowed to acquire the geolocation was reached before the information was obtained."
 msgstr "Thời gian cho phép để có được vị trí địa lý đã đạt được trước khi có được thông tin."
 
-#: src/modules/loans/modals/modal-loan-package-form.tsx:205
+#: src/modules/loans/modals/modal-loan-package-form.tsx:204
 msgid "The total capital rate must be 100% or 0%"
 msgstr "Tổng tỷ lệ vốn phải là 100% hoặc 0%"
 
@@ -6663,15 +6675,15 @@ msgstr "Phiếu dịch vụ"
 #: src/components/inputs/time-trackings-input.tsx:445
 #: src/components/list/columns/date-time-column.tsx:22
 #: src/configs/calendar.config.tsx:71
-#: src/modules/loans/components/loan-payments.tsx:149
-#: src/modules/loans/loan-list.tsx:175
-#: src/modules/loans/modals/modal-loan-calculator.tsx:212
+#: src/modules/loans/components/loan-payments.tsx:162
+#: src/modules/loans/loan-list.tsx:172
+#: src/modules/loans/modals/modal-loan-calculator.tsx:197
 #: src/modules/orders/order-list.tsx:52
 #: src/modules/product-combos/modals/modal-product-combo.tsx:123
 #: src/modules/product-combos/product-combo-list.tsx:41
 #: src/modules/product-stocks/product-stock-list.tsx:34
-#: src/modules/tasks/modals/modal-task-time-tracking.tsx:209
-#: src/widgets/reports/widgets/report-credit.widget.tsx:430
+#: src/modules/tasks/modals/modal-task-time-tracking.tsx:210
+#: src/widgets/reports/widgets/report-credit.widget.tsx:450
 msgid "Time"
 msgstr "Thời gian"
 
@@ -6715,7 +6727,6 @@ msgstr "Thiết lập chấm công"
 
 #: src/constant.ts:30
 #: src/modules/hrm-timekeepings/hrm-timekeeping-button.tsx:59
-#: src/modules/workspaces/workspace-modules.tsx:127
 msgid "Timekeepings"
 msgstr "Chấm công"
 
@@ -6748,9 +6759,9 @@ msgstr "Mẹo"
 msgid "Title"
 msgstr "Tiêu đề"
 
-#: src/modules/loans/components/loan-payments.tsx:181
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:147
-#: src/widgets/reports/widgets/report-credit.widget.tsx:621
+#: src/modules/loans/components/loan-payments.tsx:194
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:162
+#: src/widgets/reports/widgets/report-credit.widget.tsx:641
 msgid "To"
 msgstr "Đến"
 
@@ -6777,7 +6788,7 @@ msgstr "Lịch hẹn hôm nay"
 msgid "Today new customers"
 msgstr "Khách mới hôm nay"
 
-#: src/modules/receipts/receipt-list.tsx:159
+#: src/modules/receipts/receipt-list.tsx:160
 msgid "Today receipts"
 msgstr "Hoá đơn hôm nay"
 
@@ -6799,15 +6810,15 @@ msgstr "Ngày mai"
 
 #: src/components/printer/printer-body.tsx:130
 #: src/components/printer/printer-body.tsx:140
-#: src/modules/loans/components/loan-payments.tsx:152
-#: src/modules/loans/components/loan-payments.tsx:349
-#: src/modules/loans/components/loan-receipt-card.tsx:302
-#: src/modules/loans/modals/modal-loan-calculator.tsx:270
-#: src/modules/loans/modals/modal-loan-liquidation.tsx:238
+#: src/modules/loans/components/loan-payments.tsx:165
+#: src/modules/loans/components/loan-payments.tsx:360
+#: src/modules/loans/components/loan-receipt-card.tsx:316
+#: src/modules/loans/modals/modal-loan-calculator.tsx:255
+#: src/modules/loans/modals/modal-loan-liquidation.tsx:253
 #: src/modules/orders/order-card.tsx:228
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:57
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:262
-#: src/widgets/reports/widgets/report-credit.widget.tsx:516
+#: src/widgets/reports/widgets/report-credit.widget.tsx:536
 msgid "Total"
 msgstr "Tổng cộng"
 
@@ -6881,10 +6892,10 @@ msgstr "Bật thông báo"
 #: src/modules/custom-fields/custom-field-list.tsx:32
 #: src/modules/promotions/components/form-promotion.tsx:123
 #: src/modules/promotions/promotions-list.tsx:40
-#: src/modules/receipts/modals/modal-receipt-form.tsx:102
-#: src/modules/receipts/receipt-list.tsx:110
+#: src/modules/receipts/modals/modal-receipt-form.tsx:113
+#: src/modules/receipts/receipt-list.tsx:111
 #: src/modules/workspace-settings/components/workspace-setting-app.tsx:229
-#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:248
+#: src/modules/workspace-settings/workspace-setting-loan-asset-estimations.tsx:245
 msgid "Type"
 msgstr "Loại"
 
@@ -6893,7 +6904,7 @@ msgid "Type and press [enter]"
 msgstr "Nhập và nhấn [enter]"
 
 #: src/components/selector.tsx:353
-#: src/modules/search/search-engine.tsx:397
+#: src/modules/search/search-engine.tsx:396
 msgid "Type something to search"
 msgstr "Nhập nội dung nào đó để tìm kiếm"
 
@@ -6919,12 +6930,12 @@ msgid "Unit"
 msgstr "Đơn vị"
 
 #: src/modules/files/files-constants.ts:22
-#: src/modules/loans/components/loan-card.tsx:98
+#: src/modules/loans/components/loan-card.tsx:102
 #: src/modules/plugins/storage/plugin-storage.tsx:187
 #: src/modules/promotions/promotions-list.tsx:50
 #: src/modules/promotions/promotions-list.tsx:159
 #: src/modules/promotions/promotions-list.tsx:182
-#: src/modules/receipts/receipt-card.tsx:396
+#: src/modules/receipts/receipt-card.tsx:393
 msgid "Unknown"
 msgstr "Không xác định"
 
@@ -6945,7 +6956,7 @@ msgstr "Lỗi không xác định"
 msgid "Unknown file size"
 msgstr "Kích thước tệp không xác định"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:209
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:219
 msgid "Unknown reason"
 msgstr "Lý do không xác định"
 
@@ -6974,7 +6985,7 @@ msgstr "Bỏ chọn tất cả"
 
 #: src/modules/bookings/components/booking-card.tsx:249
 #: src/modules/loans/modals/modal-loan-asset-estimation-form.tsx:394
-#: src/modules/loans/modals/modal-loan-package-form.tsx:345
+#: src/modules/loans/modals/modal-loan-package-form.tsx:344
 #: src/modules/plugins/e-invoices/modal-e-invoice-provider.tsx:134
 #: src/modules/posts/components/form-post.tsx:161
 #: src/modules/products/components/form-product.tsx:618
@@ -6991,11 +7002,11 @@ msgstr "Cập nhật"
 msgid "Update {entity}"
 msgstr "Cập nhật {entity}"
 
-#: src/modules/loans/components/loan-receipt-card.tsx:309
+#: src/modules/loans/components/loan-receipt-card.tsx:323
 msgid "Update amount"
 msgstr "Cập nhật số tiền"
 
-#: src/modules/loans/loan-detail.tsx:215
+#: src/modules/loans/loan-detail.tsx:227
 msgid "Update asset information"
 msgstr "Cập nhật thông tin tài sản"
 
@@ -7020,7 +7031,7 @@ msgstr "Cập nhật coupons"
 msgid "Update coupon rule"
 msgstr "Cập nhật quy tắc coupons"
 
-#: src/modules/customers/customer-modal.tsx:53
+#: src/modules/customers/customer-modal.tsx:47
 msgid "Update customer"
 msgstr "Cập nhật khách hàng"
 
@@ -7036,11 +7047,11 @@ msgstr "Cập nhật thông tin"
 msgid "Update loan"
 msgstr "Cập nhật hồ sơ vay"
 
-#: src/modules/loans/components/loan-documents.tsx:71
+#: src/modules/loans/components/loan-documents.tsx:74
 msgid "Update loan amount"
 msgstr "Cập nhật số tiền vay"
 
-#: src/modules/loans/components/loan-documents.tsx:78
+#: src/modules/loans/components/loan-documents.tsx:84
 msgid "Update loan payment period"
 msgstr "Cập nhật thời hạn thanh toán hồ sơ vay"
 
@@ -7079,7 +7090,7 @@ msgid "Update promotion status"
 msgstr "Cập nhật trạng thái khuyến mãi"
 
 #: src/modules/events/event-constants.ts:75
-#: src/modules/receipts/receipt-detail.tsx:70
+#: src/modules/receipts/receipt-detail.tsx:81
 #: src/modules/workspace-roles/workspace-roles-constants.ts:138
 msgid "Update receipt"
 msgstr "Cập nhật hoá đơn"
@@ -7172,7 +7183,7 @@ msgstr "Sử dụng kết hợp trực tiếp"
 msgid "Use existed combo"
 msgstr "Sử dụng combo hiện có"
 
-#: src/modules/receipts/receipt-card.tsx:417
+#: src/modules/receipts/receipt-card.tsx:414
 msgid "User disbursement"
 msgstr "Người giải ngân"
 
@@ -7217,8 +7228,8 @@ msgid "Vietnamese"
 msgstr "Tiếng Việt"
 
 #: src/components/list/components/filter-modes.tsx:48
-#: src/modules/loans/components/loan-receipt-card.tsx:126
-#: src/modules/loans/loan-detail.tsx:429
+#: src/modules/loans/components/loan-receipt-card.tsx:140
+#: src/modules/loans/loan-detail.tsx:447
 msgid "View"
 msgstr "Xem"
 
@@ -7238,8 +7249,8 @@ msgstr "Xem danh mục"
 msgid "View Combos"
 msgstr "Xem Combo"
 
-#: src/modules/loans/components/loan-card.tsx:108
-#: src/modules/loans/loan-detail.tsx:411
+#: src/modules/loans/components/loan-card.tsx:112
+#: src/modules/loans/loan-detail.tsx:429
 msgid "View contract"
 msgstr "Xem hợp đồng"
 
@@ -7275,7 +7286,7 @@ msgstr "Xem thêm"
 msgid "View notification list"
 msgstr "Xem danh sách thông báo"
 
-#: src/modules/loans/components/loan-documents.tsx:172
+#: src/modules/loans/components/loan-documents.tsx:193
 msgid "View on Google Map"
 msgstr "Xem trên Google Map"
 
@@ -7336,16 +7347,16 @@ msgstr "Chờ"
 msgid "Waiting approval"
 msgstr "Đang chờ phê duyệt"
 
-#: src/modules/loans/loan-detail.tsx:468
+#: src/modules/loans/loan-detail.tsx:486
 msgid "Waiting for customer to sign the contract"
 msgstr "Chờ khách hàng ký hợp đồng"
 
-#: src/modules/loans/components/loan-disbursement.tsx:141
+#: src/modules/loans/components/loan-disbursement.tsx:149
 msgid "Waiting for disbursement"
 msgstr "Chờ giải ngân"
 
 #: src/components/location-form.tsx:38
-#: src/modules/customer-kycs/modal-register-customer-kyc.tsx:328
+#: src/modules/customer-kycs/modals/modal-register-customer-kyc.tsx:337
 msgid "Ward"
 msgstr "Phường"
 
@@ -7408,11 +7419,11 @@ msgstr "Chào mừng đến với {0}"
 msgid "Withdraw"
 msgstr "Rút"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:78
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:77
 msgid "Work schedule"
 msgstr "Lịch làm việc"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:80
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:79
 msgid "Work schedule applied to the booking, timekeeping, and other features."
 msgstr "Lịch làm việc áp dụng cho việc đặt chỗ, chấm công và các tính năng khác."
 
@@ -7453,7 +7464,7 @@ msgstr "Không gian làm việc"
 msgid "Workspace archived"
 msgstr "Đã xoá workspace"
 
-#: src/modules/loans/loan-detail.tsx:396
+#: src/modules/loans/loan-detail.tsx:414
 msgid "Workspace branch"
 msgstr "Nhánh workspace"
 
@@ -7508,8 +7519,8 @@ msgstr "Đã cập nhật workspace"
 msgid "Workspaces"
 msgstr "Workspaces"
 
-#: src/modules/customers/customer-detail/customer-kyc-card.tsx:76
-#: src/modules/loans/components/loan-documents.tsx:93
+#: src/modules/customers/customer-detail/customer-kyc-card.tsx:86
+#: src/modules/loans/components/loan-documents.tsx:109
 #: src/modules/loans/loan-list.tsx:405
 msgid "Wrong information"
 msgstr "Thông tin sai"

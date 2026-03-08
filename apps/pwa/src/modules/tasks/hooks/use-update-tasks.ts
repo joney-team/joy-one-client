@@ -94,6 +94,7 @@ const normalizeTaskForSubmit = (
         note: timeTracking.note,
         startAt: timeTracking.startAt,
         userId: timeTracking.userId,
+        workspaceId: timeTracking.workspaceId,
       })) ?? [];
   }
 

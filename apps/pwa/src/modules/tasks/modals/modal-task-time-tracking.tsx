@@ -141,6 +141,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
                 userId: user.userId,
                 startAt: DateTime.toSeconds(startAt),
                 endAt: DateTime.toSeconds(endAt),
+                workspaceId: workspace.member.workspaceId,
               },
             ],
           },
