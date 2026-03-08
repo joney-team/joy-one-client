@@ -15,7 +15,7 @@ interface ModalPromptProps {
   icon: Icon;
   color?: MantineColor;
   message: ReactNode;
-  onSubmit: (content: string) => Promise<void>;
+  onSubmit: (content: string) => Promise<unknown>;
   suggestions?: string[];
 }
 

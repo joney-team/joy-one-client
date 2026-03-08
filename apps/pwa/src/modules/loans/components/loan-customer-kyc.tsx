@@ -3,9 +3,9 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { EventType } from "@/graphql/enums.graphql";
+import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { CustomerKycEntity, CustomerKycStatus } from "@/modules/customer-kycs/customer-kycs-types";
+import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
@@ -33,7 +33,7 @@ import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanCustomerKycProps {
   customer: CustomerDataFragment;
-  kyc: CustomerKycEntity;
+  kyc: CustomerKycDataFragment;
 }
 
 export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
@@ -64,7 +64,7 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                 renderValue={() => (
                   <Group gap={10}>
                     <Text>{kyc?.cidNumber || "--"}</Text>
-                    {props.kyc.status === CustomerKycStatus.APPROVED && (
+                    {props.kyc.status === CustomerKycStatus.Approved && (
                       <ThemeIcon color="green" size="xs" variant="transparent">
                         <IconShieldCheck strokeWidth={3} />
                       </ThemeIcon>

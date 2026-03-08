@@ -2,26 +2,28 @@
 
 import { Button } from "@/components/buttons/button";
 import { Errored } from "@/components/errored";
+import { EventType, ReceiptStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { EventType } from "@/graphql/enums.graphql";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
-import { archiveReceipt, getReceipt, updateReceipt } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptStatus, UpdateReceiptDto } from "@/modules/receipts/receipts-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { AppEntity } from "@/types";
 import { onActionLoad, onArchive } from "@/utils/actions";
-import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Center, Group, Skeleton, Stack } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconArchive, IconEdit, IconRefresh, IconReload } from "@tabler/icons-react";
-import { FC } from "react";
-import { api } from "../apis";
-import { ReceiptEInvoices } from "./receipt-e-invoices";
 import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
+import { FC } from "react";
+import { ReceiptEInvoices } from "./receipt-e-invoices";
+
+import { UpdateReceiptInput } from "@/graphql/types.graphql";
+import MUTATION_ARCHIVE_RECEIPT from "@/modules/receipts/graphql/mutationArchiveReceipt.graphql";
+import MUTATION_REVERT_PAYMENT_RECEIPT from "@/modules/receipts/graphql/mutationRevertPaymentReceipt.graphql";
+import MUTATION_UPDATE_RECEIPT from "@/modules/receipts/graphql/mutationUpdateReceipt.graphql";
+import { useMutation, useQuery } from "@apollo/client/react";
+import { useEventsListener } from "../events/event-service";
+import QUERY_RECEIPT from "./graphql/queryReceipt.graphql";
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
@@ -33,45 +35,60 @@ const EventsList = dynamic(
 
 export const ReceiptDetail: FC<{
   receiptId: string;
-  onLoaded?: (receipt: ReceiptEntity) => void;
   p?: number;
-}> = ({ receiptId, onLoaded, p }) => {
+}> = ({ receiptId, p }) => {
   const workspace = useWorkspace();
 
-  const detail = useFetch<ReceiptEntity>({
-    id: `receipts-${receiptId}`,
-    fetch: async () => {
-      const receipt = await getReceipt(receiptId);
-      onLoaded?.(receipt);
-      return receipt;
-    },
-    refetchEvents: {
-      types: [
-        EventType.ReceiptPaid,
-        EventType.ReceiptDisbursement,
-        EventType.ReceiptArchived,
-        EventType.ReceiptUpdated,
-        EventType.ReceiptChangeWorkspaceBranch,
-        EventType.ReceiptRevertPayment,
-      ],
-      condition: (e, _receipt) =>
-        e.ref === _receipt.id ||
-        (!!e.relatedEntities &&
-          e.relatedEntities.some((v) => v.entity === AppEntity.RECEIPTS && v.id === _receipt.id)),
+  const {
+    data: receiptData,
+    refetch: refetchReceipt,
+    loading: isLoadingReceipt,
+    error: errorReceipt,
+  } = useQuery(QUERY_RECEIPT, {
+    variables: {
+      id: receiptId,
     },
   });
 
-  const { data: receipt } = detail;
+  useEventsListener(
+    [
+      EventType.ReceiptPaid,
+      EventType.ReceiptDisbursement,
+      EventType.ReceiptArchived,
+      EventType.ReceiptUpdated,
+      EventType.ReceiptChangeWorkspaceBranch,
+      EventType.ReceiptRevertPayment,
+    ],
+    (event) => {
+      if (
+        event.ref === receiptId ||
+        (event.relatedEntities && event.relatedEntities.some((v) => v.id === receiptId))
+      ) {
+        refetchReceipt();
+      }
+    }
+  );
 
-  const onUpdate = async (dto: UpdateReceiptDto) => {
-    if (!detail.data) return;
-    detail.setData({ ...detail.data, ...dto });
+  const receipt = receiptData?.receipt;
+
+  const [updateReceipt] = useMutation(MUTATION_UPDATE_RECEIPT);
+  const [archiveReceipt] = useMutation(MUTATION_ARCHIVE_RECEIPT);
+  const [revertPaymentReceipt] = useMutation(MUTATION_REVERT_PAYMENT_RECEIPT);
+
+  const onUpdate = async (input: UpdateReceiptInput) => {
+    if (!receipt) return;
     onActionLoad({
       name: <Trans>Update receipt</Trans>,
       icon: IconEdit,
       process: async () => {
-        if (!detail.data) return;
-        await updateReceipt(detail.data.id, dto);
+        if (!receipt) return;
+        await updateReceipt({
+          variables: {
+            updateReceiptId: receipt.id,
+            input: input,
+          },
+        });
+        refetchReceipt();
       },
     });
   };
@@ -86,21 +103,25 @@ export const ReceiptDetail: FC<{
       icon: IconRefresh,
       confirmLabel: <Trans>Revert Payment</Trans>,
       onConfirm: async () => {
-        await api.post(`/receipts/${receipt.id}/revert-payment`);
-        await detail.fetch();
+        await revertPaymentReceipt({
+          variables: {
+            revertPaymentReceiptId: receipt.id,
+          },
+        });
+        await refetchReceipt();
       },
       inverse: true,
     });
   };
 
-  if (detail.isFetching)
+  if (isLoadingReceipt)
     return (
       <Stack p={p}>
         <Skeleton height={200} />
       </Stack>
     );
 
-  if (detail.error || !receipt) return <Errored error={detail.error} />;
+  if (errorReceipt || !receipt) return <Errored error={errorReceipt} />;
 
   return (
     <Stack gap={30} p={p}>
@@ -108,7 +129,7 @@ export const ReceiptDetail: FC<{
         {receipt.isArchived && (
           <Center>
             <Badge size="lg" color="red">
-              {t`Archived`}
+              <Trans>Archived</Trans>
             </Badge>
           </Center>
         )}
@@ -127,7 +148,7 @@ export const ReceiptDetail: FC<{
       <EventsList ref={receipt.id} />
 
       <Group justify="center" gap={8}>
-        {receipt.status === ReceiptStatus.PAID &&
+        {receipt.status === ReceiptStatus.Paid &&
           workspace.hasPermission(WorkspacePermission.RECEIPTS_REVERT_PAYMENT) && (
             <Button
               fw={400}
@@ -150,7 +171,11 @@ export const ReceiptDetail: FC<{
               onArchive({
                 name: <Trans>Receipt</Trans>,
                 process: async () => {
-                  await archiveReceipt(receipt.id);
+                  await archiveReceipt({
+                    variables: {
+                      archiveReceiptId: receipt.id,
+                    },
+                  });
                   modals.closeAll();
                 },
               })

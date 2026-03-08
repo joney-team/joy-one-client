@@ -1,0 +1,7 @@
+#import "../graphql/fragmentReceipt.graphql"
+
+mutation CreateReceipt($input: CreateReceiptInput!) {
+  createReceipt(input: $input) {
+    ...ReceiptData
+  }
+}

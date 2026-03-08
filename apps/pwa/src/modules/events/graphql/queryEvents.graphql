@@ -1,4 +1,4 @@
-#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+#import "./fragmentEvent.graphql"
 
 query Events(
   $limit: Float
@@ -16,18 +16,7 @@ query Events(
   ) {
     total
     results {
-      _id
-      time
-      type
-      channel
-      userId
-      actionType
-      data
-      persist
-      variant
-      user {
-        ...WorkspaceMemberData
-      }
+      ...EventData
     }
   }
 }

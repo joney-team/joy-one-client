@@ -8,7 +8,7 @@ import { onMessage } from "firebase/messaging";
 import { useEffect, type FC } from "react";
 import { useAuth } from "../auth/auth-context";
 import { addEventsListener, removeEventsListner } from "../events/event-service";
-import { EventEntity } from "../events/event-types";
+import { EventDataFragment } from "../events/graphql/fragmentEvent.graphql";
 import { useLang } from "../lang/lang-context";
 import { showInAppNotification } from "./notification-service";
 import { NotificationEntity } from "./notification-types";
@@ -38,7 +38,7 @@ export const InAppNotification: FC = () => {
       if (!!device?.notificationToken && "Notification" in window) {
         listenNotification();
       } else {
-        const onNewNotification = (ev: EventEntity) => {
+        const onNewNotification = (ev: EventDataFragment) => {
           showInAppNotification(ev.data, router, theme);
         };
 

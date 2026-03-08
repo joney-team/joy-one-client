@@ -1,24 +1,24 @@
+import { CustomerFormStatus } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
-import { CustomerFormStatus } from "./customer-form-types";
-import { t } from "@lingui/core/macro";
 
 export const customerFormStatuses: Record<
   CustomerFormStatus,
   {
-    label: () => string;
+    label: MacroMessageDescriptor;
     color: MantineColor;
   }
 > = {
-  [CustomerFormStatus.PENDING]: {
-    label: () => t`Pending`,
+  [CustomerFormStatus.Pending]: {
+    label: defineMessage`Pending`,
     color: "gray",
   },
-  [CustomerFormStatus.COMPLETED]: {
-    label: () => t`Completed`,
+  [CustomerFormStatus.Completed]: {
+    label: defineMessage`Completed`,
     color: "green",
   },
-  [CustomerFormStatus.CANCELLED]: {
-    label: () => t`Cancelled`,
+  [CustomerFormStatus.Cancelled]: {
+    label: defineMessage`Cancelled`,
     color: "red",
   },
 };

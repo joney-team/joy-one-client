@@ -1,7 +1,7 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type CreateTagMutationVariables = Types.Exact<{
-  input: Types.TagDto;
+  input: Types.TagInput;
 }>;
 
 

@@ -4,40 +4,7 @@ import { Modal } from "@/components/modal/modal";
 import { ReceiptDetail } from "@/modules/receipts/receipt-detail";
 import { Trans } from "@lingui/react/macro";
 import { IconCashRegister } from "@tabler/icons-react";
-import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
-
-// export const ReceiptDetailModal: FC<ModalPromptProps> = (props) => {
-//   return <ReceiptDetail receiptId={props.id} />;
-// };
-
-// export const OnReceiptDetailModal = (props: ModalPromptProps) => {
-//   return modals.open({
-//     modalId: "ReceiptDetailModal",
-//     zIndex: zIndexes.commonModals,
-//     title: (
-//       <ModalHead
-//         name={t`Receipt`}
-//         icon={IconCashRegister}
-//         rightSection={
-//           <Group>
-//             <ActionIcon
-//               variant="subtle"
-//               color="gray"
-//               size="sm"
-//               component="a"
-//               href={`/receipts/${props.id}`}
-//               target="_blank"
-//             >
-//               <IconExternalLink size={15} />
-//             </ActionIcon>
-//           </Group>
-//         }
-//       />
-//     ),
-//     children: <ReceiptDetailModal {...props} />,
-//     size: "lg",
-//   });
-// };
+import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
 
 export interface ModalReceiptDetailRef {
   open: (receiptId: string) => void;
@@ -60,15 +27,26 @@ export const ModalReceiptDetail = forwardRef<
   }));
 
   return (
-    <Modal
-      name={<Trans>Receipt</Trans>}
-      icon={IconCashRegister}
-      opened={!!receiptId}
-      onClose={() => setReceiptId(null)}
-      size="lg"
-      isFullscreenOnMobile
-    >
-      {receiptId && <ReceiptDetail receiptId={receiptId} />}
-    </Modal>
+    <Fragment>
+      {props.children?.({
+        open: (id) => {
+          setReceiptId(id);
+        },
+        close: () => {
+          setReceiptId(null);
+        },
+      })}
+
+      <Modal
+        name={<Trans>Receipt</Trans>}
+        icon={IconCashRegister}
+        opened={!!receiptId}
+        onClose={() => setReceiptId(null)}
+        size="lg"
+        isFullscreenOnMobile
+      >
+        {receiptId && <ReceiptDetail receiptId={receiptId} />}
+      </Modal>
+    </Fragment>
   );
 });

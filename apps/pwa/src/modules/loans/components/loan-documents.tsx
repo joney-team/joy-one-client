@@ -1,29 +1,23 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { Container } from "@/components/container";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
-import { FileType } from "@/graphql/enums.graphql";
+import { FileType, LoanStatus } from "@/graphql/enums.graphql";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
-import {
-  approveLoan,
-  rejectLoan,
-  renderLoanPeriod,
-  updateLoanAmount,
-  updateLoanPackage,
-} from "@/modules/loans/loans-service";
-import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import MUTATION_UPDATE_LOAN_AMOUNT from "@/modules/loans/graphql/mutationUpdateLoanAmount.graphql";
+import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { getGoogleMapLinkCoord } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -48,11 +42,15 @@ import {
   IconNotes,
 } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import MUTATION_APPROVE_LOAN from "../graphql/mutationApproveLoan.graphql";
+import MUTATION_UPDATE_LOAN_PACKAGE from "../graphql/mutationUpdateLoanPackage.graphql";
+import MUTATION_REJECT_LOAN from "../graphql/mutationRejectLoan.graphql";
 import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDocumentsProps {
-  loan: LoanEntity;
+  loan: LoanDataFragment;
   updateAssetData: (assetData: any) => void;
   children?: ReactNode;
 }
@@ -63,13 +61,21 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
   const workspace = useWorkspace();
 
   const ableToUpdate =
-    loan.status === LoanStatus.PENDING &&
+    loan.status === LoanStatus.Pending &&
     workspace.hasPermission(WorkspacePermission.LOANS_CREATOR);
+
+  const [updateLoanAmount] = useMutation(MUTATION_UPDATE_LOAN_AMOUNT);
+  const [updateLoanPackage] = useMutation(MUTATION_UPDATE_LOAN_PACKAGE);
+  const [approveLoan] = useMutation(MUTATION_APPROVE_LOAN);
+  const [rejectLoan] = useMutation(MUTATION_REJECT_LOAN);
 
   const onUpdateAmount = useDebouncedCallback(async (value: any) => {
     onActionLoad({
       name: <Trans>Update loan amount</Trans>,
-      process: () => updateLoanAmount(loan.id, { amount: +value }).catch(onError),
+      process: () =>
+        updateLoanAmount({
+          variables: { updateLoanAmountId: loan.id, input: { amount: +value } },
+        }).catch(onError),
     });
   }, 300);
 
@@ -77,9 +83,12 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
     onActionLoad({
       name: <Trans>Update loan payment period</Trans>,
       process: () =>
-        updateLoanPackage(loan.id, { packagePeriodDays: +v, packageId: loan.package.id }).catch(
-          onError
-        ),
+        updateLoanPackage({
+          variables: {
+            loanId: loan.id,
+            input: { packagePeriodDays: +v, packageId: loan.package.id },
+          },
+        }).catch(onError),
     });
   }, 300);
 
@@ -87,7 +96,14 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
     OnModalPrompt({
       title: <Trans>Reject loan</Trans>,
       message: <Trans>Enter reject reason</Trans>,
-      onSubmit: (reason) => rejectLoan(loan.id, { reason }),
+      onSubmit: async (reason) => {
+        await rejectLoan({
+          variables: {
+            rejectLoanId: loan.id,
+            input: { reason },
+          },
+        });
+      },
       icon: IconClipboard,
       color: "red",
       suggestions: [t`Wrong information`, t`Info does not match image`, t`Img is blurry`],
@@ -99,7 +115,9 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
       name: <Trans>Approve</Trans>,
       icon: IconClipboardCheck,
       process: async () => {
-        await approveLoan(loan.id);
+        await approveLoan({
+          variables: { approveLoanId: loan.id },
+        });
       },
     });
   };
@@ -157,24 +175,28 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
             }
           />
 
-          <LoanRowInfo
-            label={<Trans>Signature</Trans>}
-            value={loan.signature}
-            renderValue={(value) => <SignareCard url={value} />}
-          />
+          {loan.signature && (
+            <LoanRowInfo
+              label={<Trans>Signature</Trans>}
+              value={loan.signature}
+              renderValue={(value) => <SignareCard url={value} />}
+            />
+          )}
 
-          <LoanRowInfo
-            label={<Trans>Customer location</Trans>}
-            description={t`At the time of loan signing`}
-            value={loan.coord}
-            renderValue={(value) => (
-              <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
-                {<Trans>View on Google Map</Trans>}
-              </Anchor>
-            )}
-          />
+          {loan.coord && (
+            <LoanRowInfo
+              label={<Trans>Customer location</Trans>}
+              description={t`At the time of loan signing`}
+              value={loan.coord}
+              renderValue={(value) => (
+                <Anchor href={value ? getGoogleMapLinkCoord(value) : undefined} target="_blank">
+                  {<Trans>View on Google Map</Trans>}
+                </Anchor>
+              )}
+            />
+          )}
 
-          {loan.status === LoanStatus.REJECTED && (
+          {loan.status === LoanStatus.Rejected && (
             <Stack align="center" gap={5} mt={16}>
               <Badge color="red">{<Trans>Rejected</Trans>}</Badge>
 
@@ -199,7 +221,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 
       <Renderer
         visible={
-          loan.status === LoanStatus.PENDING &&
+          loan.status === LoanStatus.Pending &&
           workspace.hasPermission(WorkspacePermission.LOANS_APPROVE)
         }
       >

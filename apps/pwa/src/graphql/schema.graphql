@@ -55,6 +55,64 @@ input AssignCustomerInput {
   userIds: [String!]!
 }
 
+type AttendanceRecord {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  deviceId: String!
+  isArchived: Boolean
+  locationCoordinates: Coordinates
+  member: WorkspaceMember!
+  method: AttendanceRecordMethod!
+  note: String
+  photoUrl: String
+  refs: [String!]
+  rejectedAt: Float
+  rejectedByUserId: String
+  rejectedReason: String
+  source: EntitySource
+  status: AttendanceRecordStatus!
+  time: Float!
+  type: AttendanceRecordType!
+  updatedAt: Float
+  userId: String!
+  workspaceId: String!
+}
+
+"""Attendance record method"""
+enum AttendanceRecordMethod {
+  DEFAULT
+  MANUAL
+}
+
+"""Attendance record status"""
+enum AttendanceRecordStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+"""Attendance record type"""
+enum AttendanceRecordType {
+  CHECK_IN
+  CHECK_OUT
+}
+
+type AttendanceRecordsPaginated {
+  results: [AttendanceRecord!]!
+  total: Float!
+}
+
+input AuthSignInWithEmailPasswordInput {
+  email: String!
+  password: String!
+}
+
+type AuthTokenResult {
+  accessToken: String!
+  refreshToken: String!
+}
+
 type BaseCustomFieldValue {
   customFieldId: String!
   value: AnyType
@@ -95,6 +153,30 @@ enum BookingStatus {
 type BookingsPaginated {
   results: [Booking!]!
   total: Float!
+}
+
+input BulkArchiveInput {
+  ids: [String!]!
+}
+
+input BulkArchiveLoansInput {
+  loanIds: [String!]!
+}
+
+input BulkRejectLoanInput {
+  loanIds: [String!]!
+  reason: String!
+}
+
+input BulkUpdateWorkspaceBranchInput {
+  ids: [String!]!
+  workspaceBranchId: String
+}
+
+input CalculateLoanPaymentPlanInput {
+  amount: Float!
+  packageId: String!
+  startTime: Float
 }
 
 type CategoriesPaginated {
@@ -227,6 +309,37 @@ type CouponsPaginated {
   total: Float!
 }
 
+input CreateLoanInput {
+  amount: Float!
+  assetData: JSONObject
+  assetType: LoanAssetType!
+  coord: CoordinatesInput
+  customerId: String!
+  packageId: String!
+  packagePeriodDays: Float
+  payment: LoanPaymentInput
+  source: EntitySource
+  workspaceBranchId: String
+}
+
+input CreateReceiptInput {
+  amount: Float!
+  assigneeUserIds: [String!]
+  data: AnyType
+  expireAt: Float
+  note: String
+  ref: String
+  relatedCustomerId: String
+  relatedEntities: [RelatedEntityInput!]
+  relatedLoanId: String
+  relatedOrderId: String
+  relatedPartnerId: String
+  relatedTicketId: String
+  tipAmount: Float
+  type: ReceiptType!
+  workspaceBranchId: String
+}
+
 input CreateTaskInput {
   _id: String
   assigneeUserIds: [String!]
@@ -356,6 +469,20 @@ type CustomerForm {
   updatedAt: Float
   vnLocation: Location
   workspaceBranch: WorkspaceBranch
+  workspaceId: String!
+}
+
+input CustomerFormInput {
+  cancelReason: String
+  dynamicData: AnyType
+  email: String
+  location: LocationInput
+  name: String!
+  phone: String!
+  status: CustomerFormStatus
+  vnLocation: LocationInput
+  workspaceBranchId: String
+  workspaceId: String!
 }
 
 """Available customer form statuses"""
@@ -395,6 +522,66 @@ input CustomerInput {
   workspaceBranchId: String
 }
 
+type CustomerKyc {
+  _id: String!
+  cidNumber: String
+  cidVnLocation: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  customer: Customer!
+  customerId: String!
+  isArchived: Boolean
+  refs: [String!]
+  source: EntitySource
+  status: CustomerKycStatus!
+  updatedAt: Float
+  versions: [CustomerKycVersion!]!
+}
+
+input CustomerKycInput {
+  backOfCidImage: String!
+  cidBirthday: Float!
+  cidCreatedAt: Float
+  cidFullName: String!
+  cidGender: Gender!
+  cidLocation: LocationInput
+  cidNumber: String!
+  cidRaw: String
+  cidVnLocation: LocationInput
+  frontOfCidImage: String!
+  portraitImage: String!
+}
+
+"""Customer KYC status"""
+enum CustomerKycStatus {
+  APPROVED
+  PENDING
+  REJECTED
+}
+
+type CustomerKycVersion {
+  backOfCidImage: String!
+  cidBirthday: Float!
+  cidCreatedAt: Float
+  cidFullName: String!
+  cidGender: Gender!
+  cidLocation: Location
+  cidNumber: String!
+  cidRaw: String
+  cidVnLocation: Location
+  createdAt: Float!
+  frontOfCidImage: String!
+  id: String!
+  portraitImage: String!
+  rejectReason: String
+  status: CustomerKycStatus!
+}
+
+type CustomerKycsPaginated {
+  results: [CustomerKyc!]!
+  total: Float!
+}
+
 type CustomerRelationshipContact {
   name: String!
   phone: String!
@@ -412,10 +599,11 @@ type CustomersPaginated {
   total: Float!
 }
 
-type DeviceEntity {
+type Device {
   _id: String!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
+  deviceName: String
   identifyId: String
   isArchived: Boolean
   lastActiveAt: Float!
@@ -426,6 +614,12 @@ type DeviceEntity {
   updatedAt: Float
   userAgent: String!
   userId: String
+}
+
+input DisburseReceiptInput {
+  paymentMethod: ReceiptPaymentMethod
+  relatedCustomerId: String
+  relatedLoanId: String
 }
 
 type DisplayWidget {
@@ -477,6 +671,7 @@ type Event {
   persist: Boolean
   ref: String
   refs: [String!]
+  relatedEntities: [RelatedEntity!]
   sessionId: String
   source: EntitySource
   time: Float!
@@ -507,6 +702,9 @@ enum EventType {
   ACTIVITY_NEW
   ACTIVITY_SYNCED
   ACTIVITY_UPDATED
+  ATTENDANCE_RECORD_APPROVED
+  ATTENDANCE_RECORD_NEW
+  ATTENDANCE_RECORD_REJECTED
   BANK_TRANSACTION_CANCELLED
   BANK_TRANSACTION_FAILED
   BANK_TRANSACTION_FULFILLED
@@ -753,6 +951,12 @@ type FirebaseClientConfig {
   storageBucket: String!
 }
 
+input FulfillLoanInput {
+  fulfilledAt: Float
+  paymentMethod: ReceiptPaymentMethod!
+  receiptFileIds: [String!]!
+}
+
 """Available genders"""
 enum Gender {
   FEMALE
@@ -813,14 +1017,14 @@ type Loan {
   isArchived: Boolean
   isHasLateInterestReceipt: Boolean
   isLiquidated: Boolean
-  metadata: AnyType
+  metadata: LoanMetadata
   nextReceiptAt: Float
-  package: JSONObject!
+  package: LoanPackage!
   packageId: String!
   packagePeriodDays: Float!
-  payment: AnyType
-  paymentPeriods: AnyType
-  paymentProgress: AnyType
+  payment: LoanPayment
+  paymentPeriods: [LoanPaymentPeriod!]
+  paymentProgress: [LoanPaymentProgress!]
   refs: [String!]
   rejectReason: String
   relatedEntities: [RelatedEntity!]
@@ -839,6 +1043,28 @@ enum LoanAssetType {
   ICLOUD
   LAND_CERTIFICATE
   MOTOBIKE_REGISTRATION
+}
+
+type LoanLiquidationCalculated {
+  avancedPaymentAmount: Float!
+  capitalAmount: Float!
+  feeAmount: Float!
+  lateInterestAmount: Float!
+  paidAmount: Float!
+  period: Float!
+  periodFeeAmount: Float!
+  periodFeeDays: Float!
+  periodFeePerDay: Float!
+  periodStartAt: Float!
+  remainCapitalAmount: Float!
+  remainCapitalAmountFee: Float!
+  remainCapitalAmountFeePercent: Float!
+}
+
+type LoanMetadata {
+  cidLocation: Location
+  cidNumber: String
+  cidVnLocation: Location
 }
 
 type LoanPackage {
@@ -891,6 +1117,46 @@ enum LoanPackageType {
   FIXED_CAPITAL
   INSTALLMENT
   UNFIXED_CAPITAL
+}
+
+type LoanPayment {
+  accountBankId: String!
+  accountName: String!
+  accountNumber: String!
+}
+
+input LoanPaymentInput {
+  accountBankId: String!
+  accountName: String!
+  accountNumber: String!
+}
+
+type LoanPaymentPeriod {
+  capitalAmount: Float!
+  endTime: Float!
+  fee: Float!
+  note: String
+  period: Float!
+  remainCapitalAmount: Float!
+  startTime: Float!
+  totalAmount: Float!
+}
+
+type LoanPaymentPlanResult {
+  loanPackage: LoanPackage!
+  paymentPeriods: [LoanPaymentPlanResultPaymentPeriod!]!
+}
+
+type LoanPaymentPlanResultPaymentPeriod {
+  periodDays: Float!
+  periods: [LoanPaymentPeriod!]!
+}
+
+type LoanPaymentProgress {
+  amount: Float!
+  isCompleted: Boolean!
+  receiptId: String!
+  time: Float
 }
 
 type LoanSettings {
@@ -950,43 +1216,77 @@ input LocationInput {
 type Mutation {
   addActivity(content: String, contextId: String!, contextType: String!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
+  approveAttendanceRecord(id: String!): AttendanceRecord!
+  approveCustomerKyc(customerId: String!): CustomerKyc!
+  approveLoan(id: String!): Loan!
   archiveActivity(id: String!): Activity!
   archiveCustomer(id: String!): Boolean!
+  archiveCustomerForm(id: String!): CustomerForm!
+  archiveLoan(id: String!): Loan!
+  archiveReceipt(id: String!): Receipt!
   assignCustomer(id: String!, input: AssignCustomerInput!): Customer!
   assignWorkspaceMemberRoles(memberId: String!, roleIds: [String!]!): WorkspaceMember!
+  bulkArchiveCustomerForms(input: BulkArchiveInput!): [CustomerForm!]!
+  bulkArchiveLoans(input: BulkArchiveLoansInput!): [String!]!
+  bulkRejectLoans(input: BulkRejectLoanInput!): [Loan!]!
+  bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): CustomerForm!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   cancelBooking(id: String!, reason: String!): Booking!
   createBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createCustomer(input: CustomerInput!): Customer!
+  createCustomerForm(input: CustomerFormInput!): CustomerForm!
+  createLoan(input: CreateLoanInput!): Loan!
   createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
-  createTag(input: TagDto!): Tag!
+  createReceipt(input: CreateReceiptInput!): Receipt!
+  createTag(input: TagInput!): Tag!
   createTask(input: CreateTaskInput!): Task!
   createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
   createWorkspaceRole(color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   deleteCategory(id: String!): Boolean!
   deleteWorkspaceRole(_id: String!): Boolean!
+  disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
   externalStorageVerifyDna(dna: String!): File!
   fetchExternalStorageSize: Float!
+  fulfillLoan(id: String!, input: FulfillLoanInput!): Loan!
   generateCategorySlug(name: String!): String!
   generateWorkspaceInviteCode: String!
+  healthCheckLoan(id: String!): Loan!
   healthcheckPluginExternalStorage: Boolean!
   interactCategory(id: String!): Boolean!
+  liquidateLoan(id: String!): String!
+  partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
+  payReceipt(id: String!, input: PayReceiptInput!): Receipt!
   pluginExternalStorageSignUploadUrl(fileName: String!, id: String, refs: [String!]): SignUploadUrlResponse!
-  registerDevice(input: RegisterDeviceDto!): DeviceEntity!
+  registerCustomerKyc(customerId: String!, input: CustomerKycInput!): CustomerKyc!
+  registerDevice(input: RegisterDeviceInput!): Device!
+  rejectAttendanceRecord(id: String!, input: RejectAttendanceRecordInput!): AttendanceRecord!
+  rejectCustomerKyc(customerId: String!, input: RejectCustomerKycInput!): CustomerKyc!
+  rejectLoan(id: String!, input: RejectLoanInput!): [Loan!]!
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
+  revertApproveLoan(id: String!): Loan!
+  revertFulfilledLoan(id: String!): Loan!
+  revertLiquidationLoan(id: String!): Loan!
+  revertPaymentReceipt(id: String!): Receipt!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  signInWithEmailPassword(input: AuthSignInWithEmailPasswordInput!): AuthTokenResult!
+  signLoan(id: String!, input: SignLoanInput!): Loan!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateActivity(content: String, id: String!): Activity!
   updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   updateCustomer(id: String!, input: CustomerInput!): Customer!
+  updateCustomerForm(id: String!, input: CustomerFormInput!): CustomerForm!
+  updateLoanAmount(id: String!, input: UpdateLoanAmountInput!): Loan!
+  updateLoanAssetData(id: String!, input: UpdateLoanAssetDataInput!): Loan!
+  updateLoanPackage(id: String!, input: UpdateLoanPackageInput!): Loan!
+  updateReceipt(id: String!, input: UpdateReceiptInput!): Receipt!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
@@ -1064,6 +1364,11 @@ type OrdersPaginated {
   total: Float!
 }
 
+input PartialPaymentInput {
+  amount: Float!
+  nextExpireAt: Float
+}
+
 type Partner {
   _id: String!
   createdAt: Float
@@ -1081,6 +1386,11 @@ type Partner {
 type PartnersPaginated {
   results: [Partner!]!
   total: Float!
+}
+
+input PayReceiptInput {
+  giveAmount: Float
+  paymentMethod: ReceiptPaymentMethod
 }
 
 type PluginBankAccount {
@@ -1423,8 +1733,11 @@ type Query {
   activities(contextId: String!, contextType: String!, ids: [String!], limit: Float = 30, offset: Float, parentId: String, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
   activity(id: String!): Activity!
   appConfig: AppConfig!
+  attendanceRecord(id: String!): AttendanceRecord!
+  attendanceRecords(limit: Float = 30, offset: Float, query: JSONObject): AttendanceRecordsPaginated!
   booking(id: String!): Booking!
   bookings(limit: Float = 30, offset: Float, query: JSONObject): BookingsPaginated!
+  calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
   categories(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
   category(id: String!): Category!
   couponRules(limit: Float = 30, offset: Float, query: JSONObject): CouponRulesPaginated!
@@ -1432,7 +1745,10 @@ type Query {
   customFields(limit: Float = 30, offset: Float, query: JSONObject): CustomFieldsPaginated!
   customer(id: String!): Customer!
   customerByCode(code: String!): Customer!
+  customerForm(id: String!): CustomerForm!
   customerForms(limit: Float = 30, offset: Float, query: JSONObject): CustomerFormsPaginated!
+  customerKyc(customerId: String!): CustomerKyc
+  customerKycs(limit: Float = 30, offset: Float, query: JSONObject): CustomerKycsPaginated!
   customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
   customersByIds(ids: [String!]!): [Customer!]!
   eInvoices(limit: Float = 30, offset: Float, query: JSONObject): PluginEInvoicesPaginated!
@@ -1441,9 +1757,12 @@ type Query {
   files(limit: Float = 30, offset: Float, query: JSONObject): FilesPaginated!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
+  getDeviceByIdentifyId(identifyId: String!): Device
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
+  liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
   loan(id: String!): Loan!
+  loanByCode(code: String!): Loan!
   loans(customerCidNumber: String, customerId: String, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, status: [LoanStatus!]): LoansPaginated!
   orders(limit: Float = 30, offset: Float, query: JSONObject): OrdersPaginated!
   partners(limit: Float = 30, offset: Float, query: JSONObject): PartnersPaginated!
@@ -1459,6 +1778,8 @@ type Query {
   promotions(limit: Float = 30, offset: Float, query: JSONObject): PromotionsPaginated!
   reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
   reactionsCount(entity: String!, entityId: String!): ReactionsCount!
+  receipt(id: String!): Receipt!
+  receiptByCode(code: String!): Receipt!
   receipts(limit: Float = 30, offset: Float, query: JSONObject): ReceiptsPaginated!
   search(entities: [String!]!, limit: Int, query: String!): [SearchResult!]!
   siblingTasks(_id: String!): SiblingTasks!
@@ -1532,6 +1853,7 @@ type Receipt {
   createdAt: Float
   customFieldValues: [BaseCustomFieldValue!]
   data: AnyType
+  dataChanged: JSONObject
   disbursementUser: WorkspaceMember
   disbursementUserId: String
   expireAt: Float
@@ -1583,12 +1905,32 @@ type ReceiptsPaginated {
   total: Float!
 }
 
-input RegisterDeviceDto {
+input RegisterDeviceInput {
+  deviceName: String
   identifyId: String!
   locale: AppLocale
 }
 
+input RejectAttendanceRecordInput {
+  reason: String
+}
+
+input RejectCustomerKycInput {
+  reason: String!
+}
+
+input RejectLoanInput {
+  reason: String!
+}
+
 type RelatedEntity {
+  data: JSONObject
+  entity: String!
+  id: String
+  index: Boolean
+}
+
+input RelatedEntityInput {
   data: JSONObject
   entity: String!
   id: String
@@ -1686,6 +2028,10 @@ type SiblingTasks {
   previous: Task
 }
 
+input SignLoanInput {
+  signature: String!
+}
+
 type SignUploadUrlResponse {
   dna: String!
   signedUrl: String!
@@ -1717,7 +2063,7 @@ type Tag {
   updatedAt: Float
 }
 
-input TagDto {
+input TagInput {
   color: String
   name: String!
   order: Float
@@ -1851,11 +2197,38 @@ input TaskTimeTrackingInput {
   note: String
   startAt: Float!
   userId: String!
+  workspaceId: String!
 }
 
 type TasksPaginated {
   results: [Task!]!
   total: Float!
+}
+
+input UpdateLoanAmountInput {
+  amount: Float!
+}
+
+input UpdateLoanAssetDataInput {
+  assetData: JSONObject!
+}
+
+input UpdateLoanPackageInput {
+  packageId: String!
+  packagePeriodDays: Float
+}
+
+input UpdateReceiptInput {
+  amount: Float!
+  assigneeUserIds: [String!]
+  cashierUserId: String
+  data: JSONObject
+  expireAt: Float
+  note: String
+  paidAt: Float
+  paymentMethod: ReceiptPaymentMethod
+  relatedCustomerId: String
+  tipAmount: Float
 }
 
 input UpdateTagInput {
@@ -1891,6 +2264,14 @@ type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
+}
+
+type UserSettings {
+  isStartOfWeekSunday: Boolean
+  isTwelveHour: Boolean
+  locale: AppLocale
+  timezoneId: String
+  timezoneUtc: String
 }
 
 type WorkingDayInterval {

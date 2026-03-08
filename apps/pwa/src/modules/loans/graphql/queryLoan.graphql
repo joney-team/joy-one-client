@@ -1,12 +1,7 @@
-query Loan($loanId: String!) {
-  loan(id: $loanId) {
-    id
-    code
-    status
-    assetType
-    amount
-     customer {
-      name
-    }
+#import "./fragmentLoan.graphql"
+
+query Loan($id: String!) {
+  loan(id: $id) {
+    ...LoanData
   }
 }

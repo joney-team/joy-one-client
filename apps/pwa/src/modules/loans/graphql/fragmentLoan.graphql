@@ -1,0 +1,81 @@
+#import "../../locations/graphql/fragmentLocation.graphql"
+#import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
+
+fragment LoanData on Loan {
+  id
+  code
+  customerId
+  customerCidNumber
+  customer {
+    _id
+    name
+    code
+    phone
+    avatar
+  }
+  workspaceBranchId
+  workspaceBranch {
+    ...WorkspaceBranchData
+  }
+  signature
+  amount
+  packageId
+  package {
+    id
+    assetTypes
+    type
+    days
+    contractFee
+    unFixedCapitalRates
+    lateInterestRates {
+      lateDays
+      rate
+    }
+    liquidationFeeRate
+    periodDaysOptions
+  }
+  packagePeriodDays
+  paymentPeriods {
+    period
+    startTime
+    endTime
+    totalAmount
+    fee
+    capitalAmount
+    remainCapitalAmount
+    note
+  }
+  assetType
+  assetData
+  paymentProgress {
+    receiptId
+    amount
+    time
+    isCompleted
+  }
+  metadata {
+    cidNumber
+    cidVnLocation {
+      ...LocationData
+    }
+    cidLocation {
+      ...LocationData
+    }
+  }
+  status
+  rejectReason
+  payment {
+    accountName
+    accountNumber
+    accountBankId
+  }
+  createdAt
+  nextReceiptAt
+  isHasLateInterestReceipt
+  isLiquidated
+  fulfilledAt
+  coord {
+    lat
+    lng
+  }
+}

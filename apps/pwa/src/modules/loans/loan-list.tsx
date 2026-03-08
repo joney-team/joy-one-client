@@ -8,24 +8,19 @@ import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { Renderer } from "@/components/renderer";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, LoanStatus } from "@/graphql/enums.graphql";
+import { LoanPackageType } from "@/graphql/types.graphql";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { LoanCard } from "@/modules/loans/components/loan-card";
-import {
-  archiveLoans,
-  loanPackageTypeColors,
-  loanStatusColors,
-  renderLoanPeriod,
-} from "@/modules/loans/loans-service";
-import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { ReportsContext, useReports } from "@/modules/reports/reports-context";
 import { type ModalUpdateWorkspaceBranchRef } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
@@ -49,10 +44,12 @@ import { FC, Fragment, useRef } from "react";
 import { api } from "../apis";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
-import QUERY_LOANS from "./graphql/queryLoans.graphql";
-import { loanAssetTypes, loanStatuses } from "./loans-constants";
-import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import { LoanDataFragment } from "./graphql/fragmentLoan.graphql";
+import MUTATION_BULK_ARCHIVE_LOANS from "./graphql/mutationBulkArchiveLoans.graphql";
+import QUERY_LOANS from "./graphql/queryLoans.graphql";
+import { loanAssetTypes, loanPackageTypes, loanStatuses } from "./loans-constants";
+import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
 
 const ModalUpdateWorkspaceBranch = dynamic(
   () =>
@@ -81,16 +78,16 @@ interface LoanListProps {
 
 export const LoanList: FC<LoanListProps> = (props) => {
   const { t } = useLingui();
-  const workspace = useWorkspace();
   const { workspaceSetting } = useWorkspaceSetting();
   const color = useColor();
   const location = useLocations();
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const modalUpdateWorkspaceBranchRef = useRef<ModalUpdateWorkspaceBranchRef>(null);
+  const [archiveLoans] = useMutation(MUTATION_BULK_ARCHIVE_LOANS);
 
   return (
     <Fragment>
-      <List<LoanEntity>
+      <List<LoanDataFragment>
         id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
         name={<Trans>Loans</Trans>}
         limit={16}
@@ -129,7 +126,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               const loanPackage = loan.package;
 
               const linkContractPdf =
-                loan.status !== LoanStatus.PENDING_SIGN &&
+                loan.status !== LoanStatus.PendingSign &&
                 !!workspaceSetting?.loanSettings?.contractPdfUrl
                   ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
                   : undefined;
@@ -144,7 +141,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                       <Badge
                         size="sm"
                         variant="light"
-                        color={loanPackageTypeColors[loanPackage.type]}
+                        color={loanPackageTypes[loanPackage.type as LoanPackageType].color}
                       >
                         {loanPackage.id}
                       </Badge>
@@ -245,7 +242,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
               const { end } = DateTime.getRange(new Date(), "day");
               const diff = DateTime.toSeconds(end) - DateTime.getNowInSeconds();
 
-              if (!value || loan.status === LoanStatus.COMPLETED || !loan.nextReceiptAt)
+              if (!value || loan.status === LoanStatus.Completed || !loan.nextReceiptAt)
                 return "--";
 
               return (
@@ -271,13 +268,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 options: Object.values(LoanStatus).map((s) => ({
                   label: t(loanStatuses[s].label),
                   value: s,
-                  activeColor: loanStatusColors[s],
+                  activeColor: loanStatuses[s].color,
                   render: () => {
                     const color = useColor();
 
                     return (
                       <Group gap={8}>
-                        <Circle color={color(loanStatusColors[s])} size={8} />
+                        <Circle color={color(loanStatuses[s].color)} size={8} />
 
                         <Text fz={14} fw={500}>
                           {t(loanStatuses[s].label)}
@@ -296,13 +293,13 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
               return (
                 <Stack gap={10} flex={1}>
-                  <Renderer visible={loan.isLiquidated}>
+                  <Renderer visible={!!loan.isLiquidated}>
                     <Badge variant="light" color="violet" style={{ borderRadius: 100 }}>
                       <Trans>Liquidation</Trans>
                     </Badge>
                   </Renderer>
 
-                  <Renderer visible={loan.isHasLateInterestReceipt}>
+                  <Renderer visible={!!loan.isHasLateInterestReceipt}>
                     <Badge variant="light" color="orange" style={{ borderRadius: 100 }}>
                       <Trans>Has late interest</Trans>
                     </Badge>
@@ -311,17 +308,19 @@ export const LoanList: FC<LoanListProps> = (props) => {
                   <Badge
                     variant="light"
                     style={{ borderRadius: 100 }}
-                    color={loanStatusColors[loan.status]}
+                    color={loanStatuses[loan.status].color}
                   >
                     {t(loanStatuses[loan.status].label)}
                   </Badge>
 
                   <Renderer
-                    visible={[
-                      LoanStatus.FULFILLED,
-                      LoanStatus.COMPLETED,
-                      LoanStatus.OVERDUE,
-                    ].includes(loan.status)}
+                    visible={(
+                      [
+                        LoanStatus.Fulfilled,
+                        LoanStatus.Completed,
+                        LoanStatus.Overdue,
+                      ] as LoanStatus[]
+                    ).includes(loan.status)}
                   >
                     <Tooltip label={`${t`Payment progress`} ${Number(percent.toFixed(1))}%`}>
                       <Group gap={4} wrap="nowrap">
@@ -388,7 +387,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
             label: <Trans>Reject</Trans>,
             icon: IconBan,
             permission: WorkspacePermission.LOANS_APPROVE,
-            available: (data) => data.every((v) => [LoanStatus.PENDING].includes(v.status)),
+            available: (data) =>
+              data.every((v) => ([LoanStatus.Pending] as LoanStatus[]).includes(v.status)),
             handler: (data, ctx) =>
               OnModalPrompt({
                 title: <Trans>Reject</Trans>,
@@ -409,7 +409,8 @@ export const LoanList: FC<LoanListProps> = (props) => {
             label: <Trans>Loan revert rejected</Trans>,
             icon: IconRefresh,
             permission: WorkspacePermission.LOANS_APPROVE,
-            available: (data) => data.every((v) => [LoanStatus.REJECTED].includes(v.status)),
+            available: (data) =>
+              data.every((v) => ([LoanStatus.Rejected] as LoanStatus[]).includes(v.status)),
             handler: async (data, ctx) => {
               await api.post(`/loans/bulk-revert-rejected`, {
                 loanIds: data.map((v) => v.id),
@@ -423,8 +424,17 @@ export const LoanList: FC<LoanListProps> = (props) => {
             icon: IconTrash,
             label: <Trans>Archive</Trans>,
             available: (data) =>
-              data.every((v) => [LoanStatus.PENDING, LoanStatus.PENDING_SIGN].includes(v.status)),
-            handler: (data) => archiveLoans(data.map((v) => v.id)),
+              data.every((v) =>
+                ([LoanStatus.Pending, LoanStatus.PendingSign] as LoanStatus[]).includes(v.status)
+              ),
+            handler: (data) =>
+              archiveLoans({
+                variables: {
+                  input: {
+                    loanIds: data.map((v) => v.id),
+                  },
+                },
+              }),
           },
         ]}
         events={[

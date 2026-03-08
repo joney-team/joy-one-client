@@ -1,5 +1,5 @@
-import { Order, OrderCalculated } from "@/modules/orders/orders-management/orders-management-types";
-import { ReceiptEntity } from "@/modules/receipts/receipts-types";
+import { OrderCalculated } from "@/modules/orders/orders-management/orders-management-types";
+import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 
 export enum PrintSize {
   SMALL = "SMALL",
@@ -24,7 +24,7 @@ export type PrinterEntity =
       order: OrderCalculated;
     }
   | {
-      receipt: ReceiptEntity;
+      receipt: ReceiptDataFragment;
     };
 
 export type PrinterProps = {

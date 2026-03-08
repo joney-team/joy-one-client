@@ -3,15 +3,14 @@
 import { EntityImage } from "@/components/entity-image";
 import { EntityImages } from "@/components/entity-images";
 import { useLoans } from "@/modules/loans/loans-context";
-import { LoanAssetType } from "@/modules/loans/loans-types";
 import { t } from "@lingui/core/macro";
 import { InputWrapper, Select, SimpleGrid, TextInput } from "@mantine/core";
 import { FC } from "react";
 import { LoanAssetDataInputProps } from ".";
 
-export const InputMotobileRegistration: FC<
-  LoanAssetDataInputProps<LoanAssetType.MOTOBIKE_REGISTRATION>
-> = (props) => {
+export const InputMotobileRegistration: FC<LoanAssetDataInputProps<"MOTOBIKE_REGISTRATION">> = (
+  props
+) => {
   const loans = useLoans();
 
   return (

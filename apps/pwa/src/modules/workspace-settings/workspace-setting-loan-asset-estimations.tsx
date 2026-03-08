@@ -6,15 +6,12 @@ import { ContentEditHover } from "@/components/content-edit-hover";
 import { Empty } from "@/components/empty";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useLoans } from "@/modules/loans/loans-context";
-import {
-  LoanAssetEstimation,
-  LoanAssetEstimations,
-  LoanAssetType,
-} from "@/modules/loans/loans-types";
+import { LoanAssetEstimation, LoanAssetEstimations } from "@/modules/loans/loans-types";
 import { ModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { wait } from "@/utils/common.utils";
@@ -76,8 +73,8 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       const rawProductName = row["Tên sản phẩm"];
       const assetType = (
         {
-          "XE MÁY": LoanAssetType.MOTOBIKE_REGISTRATION,
-          "Ô TÔ": LoanAssetType.CAR_REGISTRATION,
+          "XE MÁY": LoanAssetType.MotobikeRegistration,
+          "Ô TÔ": LoanAssetType.CarRegistration,
         } as any
       )[rawAssetType];
       if (!assetType) continue;
@@ -184,7 +181,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
               label={t`Asset type`}
               iconStrokeWidth={1.8}
               value={searchs.get("assetType")}
-              options={[LoanAssetType.CAR_REGISTRATION, LoanAssetType.MOTOBIKE_REGISTRATION].map(
+              options={[LoanAssetType.CarRegistration, LoanAssetType.MotobikeRegistration].map(
                 (v) => ({
                   label: t(loanAssetTypes[v].label),
                   value: v,

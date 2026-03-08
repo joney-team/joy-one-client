@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { loanAssetTypes, loanPackageTypes } from "@/modules/loans/loans-constants";
-import { loanPackageTypeColors, renderLoanPeriod } from "@/modules/loans/loans-service";
+import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { ModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
@@ -44,8 +44,8 @@ export const WorkspacetSettingLoans: FC = () => {
                       <RowInfo
                         label={t`Loan package type`}
                         value={
-                          <Badge color={loanPackageTypeColors[pkg.type]}>
-                            {loanPackageTypes[pkg.type].label()}
+                          <Badge color={loanPackageTypes[pkg.type].color}>
+                            {t(loanPackageTypes[pkg.type].label)}
                           </Badge>
                         }
                       />

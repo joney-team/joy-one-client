@@ -4,24 +4,23 @@ import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Errored } from "@/components/errored";
 import { ModalHead } from "@/components/modal/modal-head";
+import { CustomerFormStatus, EventType } from "@/graphql/enums.graphql";
 import { customerFormStatuses } from "@/modules/customer-forms/customer-form-constants";
-import {
-  getCustomerForm,
-  updateCustomerForm,
-} from "@/modules/customer-forms/customer-form-service";
-import { CustomerFormStatus } from "@/modules/customer-forms/customer-form-types";
-import { EventType } from "@/graphql/enums.graphql";
+import CUSTOMER_FORM_QUERY from "@/modules/customer-forms/graphql/queryCustomerForm.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import { useLocations } from "@/modules/locations/locations-context";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useMutation, useQuery } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Grid, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
 import { InputModalType, ModalInput } from "../../../modals/modal-input";
+
+import UPDATE_CUSTOMER_FORM_MUTATION from "@/modules/customer-forms/graphql/mutationUpdateCustomerForm.graphql";
+import { normalizeCustomerFormInput } from "../../customers/utils/normalize-customer-form-input";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -50,27 +49,48 @@ export const RowInfo: FC<{
   );
 };
 
-const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
+const CustomerFormApproval: FC<CustomerFormModalProps> = (props) => {
+  const { t } = useLingui();
   const color = useColor();
-  const { renderVnLocation: renderLocation } = useLocations();
-  const customerForm = useFetch({
-    id: props._id,
-    fetch: () => getCustomerForm(props._id),
-    refetchEvents: [
-      EventType.CustomerFormNew,
-      EventType.CustomerFormUpdated,
-      EventType.CustomerFormArchived,
-    ],
+  const { renderVnLocation } = useLocations();
+
+  const [updateCustomerForm] = useMutation(UPDATE_CUSTOMER_FORM_MUTATION);
+
+  const {
+    data: customerFormData,
+    loading: customerFormLoading,
+    error: customerFormError,
+    refetch: customerFormRefetch,
+  } = useQuery(CUSTOMER_FORM_QUERY, {
+    variables: {
+      id: props._id,
+    },
   });
 
-  if (customerForm.isFetching) return <Skeleton height={150} />;
-  if (customerForm.error || !customerForm.data) return <Errored error={customerForm.error} />;
+  useEventsListener(
+    [EventType.CustomerFormNew, EventType.CustomerFormUpdated, EventType.CustomerFormArchived],
+    (event) => {
+      if (event.ref === props._id) {
+        customerFormRefetch();
+      }
+    }
+  );
+
+  if (customerFormLoading) return <Skeleton height={150} />;
+  if (customerFormError || !customerFormData) return <Errored error={customerFormError} />;
+
+  const customerForm = customerFormData.customerForm;
 
   const onComplete = async () => {
     try {
-      await updateCustomerForm(props._id, {
-        ...customerForm.data!,
-        status: CustomerFormStatus.COMPLETED,
+      await updateCustomerForm({
+        variables: {
+          formId: props._id,
+          input: {
+            ...normalizeCustomerFormInput(customerForm),
+            status: CustomerFormStatus.Completed,
+          },
+        },
       });
     } catch (error) {
       onError(error);
@@ -79,19 +99,19 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
 
   return (
     <Stack>
-      <RowInfo label={t`Name`} value={customerForm.data.name} />
+      <RowInfo label={t`Name`} value={customerForm.name} />
       <RowInfo
         label={t`Phone`}
         value={
-          <Anchor className="anchor" href={`tel:${customerForm.data.phone}`}>
-            {customerForm.data.phone}
+          <Anchor className="anchor" href={`tel:${customerForm.phone}`}>
+            {customerForm.phone}
           </Anchor>
         }
       />
-      <RowInfo label={t`Location`} value={renderLocation(customerForm.data.vnLocation)} />
+      <RowInfo label={t`Location`} value={renderVnLocation(customerForm.vnLocation)} />
 
       {(function () {
-        if (customerForm.data.status === CustomerFormStatus.PENDING) {
+        if (customerForm.status === CustomerFormStatus.Pending) {
           return (
             <Group justify="center" mt={12}>
               <ModalInput>
@@ -107,10 +127,15 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
                         required: true,
                         onDone: async (value) => {
                           try {
-                            await updateCustomerForm(props._id, {
-                              ...customerForm.data!,
-                              status: CustomerFormStatus.CANCELLED,
-                              cancelReason: value,
+                            await updateCustomerForm({
+                              variables: {
+                                formId: props._id,
+                                input: {
+                                  ...normalizeCustomerFormInput(customerForm),
+                                  status: CustomerFormStatus.Cancelled,
+                                  cancelReason: value,
+                                },
+                              },
                             });
                           } catch (error) {
                             onError(error);
@@ -131,7 +156,7 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
           );
         }
 
-        const status = customerFormStatuses[customerForm.data.status];
+        const status = customerFormStatuses[customerForm.status];
 
         return (
           <RowInfo
@@ -140,12 +165,12 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
               <Stack gap={5}>
                 <Group gap={8}>
                   <Circle size={12} color={color(status.color)} />
-                  {status.label()}
+                  {t(status.label)}
                 </Group>
 
-                {customerForm.data.cancelReason && (
+                {customerForm.cancelReason && (
                   <Text c="red">
-                    {t`Reason`}: {customerForm.data.cancelReason}
+                    <Trans>Reason</Trans>: {customerForm.cancelReason}
                   </Text>
                 )}
               </Stack>
@@ -157,10 +182,17 @@ const CustomerFormModal: FC<CustomerFormModalProps> = (props) => {
   );
 };
 
-export const OnCustomerFormModal: (props: CustomerFormModalProps) => void = (props) => {
+export const OnCustomerFormApprovalModal: (props: CustomerFormModalProps) => void = (props) => {
   return modals.open({
-    modalId: "CustomerFormModal",
-    title: <ModalHead name={t`Customer forms`} icon={IconMessageUser} />,
-    children: <CustomerFormModal {...props} />,
+    modalId: "CustomerFormApprovalModal",
+    withCloseButton: false,
+    title: (
+      <ModalHead
+        onClose={() => modals.close("CustomerFormApprovalModal")}
+        name={<Trans>Customer forms</Trans>}
+        icon={IconMessageUser}
+      />
+    ),
+    children: <CustomerFormApproval {...props} />,
   });
 };

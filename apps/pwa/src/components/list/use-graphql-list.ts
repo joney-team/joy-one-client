@@ -3,7 +3,7 @@
 import { EventDataActionType, EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
-import { EventEntity } from "@/modules/events/event-types";
+import { EventDataFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { TypedDocumentNode } from "@apollo/client";
@@ -27,7 +27,7 @@ export interface UseGraphqlListArgs<T = any> {
     | EventType[]
     | {
         types: EventType[];
-        condition?: (data: EventEntity, currentData: T[]) => boolean;
+        condition?: (data: EventDataFragment, currentData: T[]) => boolean;
       };
   isIgnoreEventActionType?: boolean;
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
@@ -195,7 +195,7 @@ export const useGraphqlList = <T extends BaseData>({
 
   // Event listener
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
-  const onEvent = async (e: EventEntity) => {
+  const onEvent = async (e: EventDataFragment) => {
     try {
       if (args.isIgnoreEventActionType || e.userId === workspace.member.userId) {
         return refetch();

@@ -6,28 +6,25 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DocumentsIllustration } from "@/components/illustrations/documents";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
+import { LoanStatus, ReceiptPaymentMethod, ReceiptType } from "@/graphql/enums.graphql";
 import { PluginBankAccount } from "@/graphql/types.graphql";
 import { api } from "@/modules/apis";
-import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
+import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { fulfillLoan } from "@/modules/loans/loans-service";
-import { LoanEntity, LoanReceiptData, LoanStatus } from "@/modules/loans/loans-types";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
+import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
-import { getPaymentMethodIcon, getReceipts } from "@/modules/receipts/receipts-service";
-import { ReceiptPaymentMethod, ReceiptType } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Blockquote,
   Card,
@@ -42,23 +39,28 @@ import {
 } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import MUTATION_FULFILL_LOAN from "../graphql/mutationFulfillLoan.graphql";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDisburesementProps {
-  loan: LoanEntity;
-  kyc: CustomerKycEntity;
+  loan: LoanDataFragment;
+  kyc: CustomerKycDataFragment;
   onDisbursed?: () => Promise<void>;
 }
 
 export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
+  const { t } = useLingui();
   const color = useColor();
   const workspace = useWorkspace();
   const banks = useBanks();
   const uploadFile = useUploadFile();
 
+  const [fulfillLoan] = useMutation(MUTATION_FULFILL_LOAN);
+
   const { loan } = props;
   const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
-    ReceiptPaymentMethod.BANK_TRANSFER
+    ReceiptPaymentMethod.BankTransfer
   );
   const [files, setFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -66,15 +68,16 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const [isCustomFulfilledAt, setIsCustomFulfilledAt] = useState(false);
   const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTime.toSeconds(new Date()));
 
-  const disbursementReceiptResponse = useFetch({
-    fetch: () =>
-      getReceipts<LoanReceiptData>({
+  const { data: disbursementReceiptData } = useQuery(QUERY_RECEIPTS, {
+    variables: {
+      query: {
         relatedLoanId: loan.id,
-        type: [ReceiptType.EXPENSE],
-      }).then((res) => res.data[0]),
+        type: [ReceiptType.Expense],
+      },
+    },
   });
 
-  const disbursementReceipt = disbursementReceiptResponse.data;
+  const disbursementReceipt = disbursementReceiptData?.list.results[0];
 
   const onRevertApproval = async () => {
     await api.post(`/loans/${loan.id}/revert-approve`);
@@ -94,11 +97,16 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
         receiptFileIds.push(_file._id);
       }
 
-      await fulfillLoan(loan.id, {
-        receiptFileIds,
-        paymentMethod,
-        fulfilledAt: isCustomFulfilledAt ? fulfilledAt : null,
-      });
+      await fulfillLoan({
+        variables: {
+          fulfillLoanId: loan.id,
+          input: {
+            receiptFileIds,
+            paymentMethod,
+            fulfilledAt: isCustomFulfilledAt ? fulfilledAt : null,
+          },
+        },
+      }).catch(onError);
       await props.onDisbursed?.();
     } catch (error) {
       onError(error);
@@ -107,7 +115,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
     setIsSubmitting(false);
   };
 
-  if (loan.status !== LoanStatus.APPROVED) {
+  if (loan.status !== LoanStatus.Approved) {
     if (disbursementReceipt) {
       return (
         <Card shadow="xs">
@@ -154,8 +162,8 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
           </Text>
 
           <Group gap={10} justify="center">
-            {[ReceiptPaymentMethod.BANK_TRANSFER, ReceiptPaymentMethod.CASH].map((method) => {
-              const Icon = getPaymentMethodIcon(method);
+            {[ReceiptPaymentMethod.BankTransfer, ReceiptPaymentMethod.Cash].map((method) => {
+              const Icon = receiptPaymentMethods[method].icon;
 
               return (
                 <Button
@@ -166,7 +174,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   color="blue"
                   onClick={() => setPaymentMethod(method)}
                 >
-                  {receiptPaymentMethods[method].label()}
+                  {t(receiptPaymentMethods[method].label)}
                 </Button>
               );
             })}
@@ -186,7 +194,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                 const bank = banks.find((bank) => bank.id === +(payment?.accountBankId || "-1"));
 
                 if (
-                  paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER &&
+                  paymentMethod === ReceiptPaymentMethod.BankTransfer &&
                   !payment?.accountNumber
                 ) {
                   return (
@@ -200,7 +208,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   !bank ||
                   !payment ||
                   !payment.accountNumber ||
-                  paymentMethod !== ReceiptPaymentMethod.BANK_TRANSFER
+                  paymentMethod !== ReceiptPaymentMethod.BankTransfer
                 )
                   return null;
 
@@ -225,12 +233,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                   <Fragment>
                     <LoanRowInfo
                       label={<Trans>Bank account name</Trans>}
-                      value={loan.payment.accountName}
+                      value={loan.payment?.accountName}
                       copy
                     />
                     <LoanRowInfo
                       label={<Trans>Bank account number</Trans>}
-                      value={loan.payment.accountNumber}
+                      value={loan.payment?.accountNumber}
                       copy
                     />
                     <LoanRowInfo label={<Trans>Bank name</Trans>} value={bank.shortName} copy />
@@ -240,7 +248,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
                       copy
                     />
 
-                    {loan.status === LoanStatus.APPROVED && !!qrCode && (
+                    {loan.status === LoanStatus.Approved && !!qrCode && (
                       <Fragment>
                         <Divider />
                         <Image showLoading src={qrCode.url} w={250} maw="100%" my={16} />

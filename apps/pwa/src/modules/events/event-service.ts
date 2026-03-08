@@ -1,12 +1,13 @@
 "use client";
 
+import { EventType } from "@/graphql/types.graphql";
 import { ResponseList } from "@/types";
 import EventEmitter from "events";
 import { DependencyList, useEffect } from "react";
 import { api, socket } from "../apis";
-import { EventEntity, QueryEvents, UserEventDto } from "./event-types";
 import { useAuth } from "../auth/auth-context";
-import { EventType } from "@/graphql/types.graphql";
+import { QueryEvents, UserEventDto } from "./event-types";
+import { EventDataFragment } from "./graphql/fragmentEvent.graphql";
 
 export const eventsEmitter = new EventEmitter();
 eventsEmitter.setMaxListeners(500);
@@ -21,7 +22,7 @@ export const removeEventsListner = (type: EventType, listener: (...args: any[]) 
 
 export const useEventsListener = (
   type: EventType | EventType[],
-  listener: (event: EventEntity) => void,
+  listener: (event: EventDataFragment) => void,
   deps?: DependencyList
 ) => {
   useEffect(() => {
@@ -44,7 +45,7 @@ export const useEventsListener = (
 };
 
 export const usePureEventsListner = (
-  listener: (event: EventEntity) => void,
+  listener: (event: EventDataFragment) => void,
   deps?: DependencyList
 ) => {
   useEffect(() => {
@@ -71,7 +72,7 @@ export const useUserEventsListner = (
   }, [auth.user?._id, ...(deps || [])]);
 };
 
-export function getEvents(query?: QueryEvents): Promise<ResponseList<EventEntity>> {
+export function getEvents(query?: QueryEvents): Promise<ResponseList<EventDataFragment>> {
   return api.get(`/events`, { params: query });
 }
 

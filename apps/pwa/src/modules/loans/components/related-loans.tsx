@@ -17,6 +17,7 @@ import LOANS_QUERY, {
   type LoansQueryVariables,
 } from "../graphql/queryLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
+import { Empty } from "@/components/empty";
 
 export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }> = ({
   customerCidNumber,
@@ -66,9 +67,15 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
     setIsFetchingMore(false);
   };
 
+  const isEmpty = useMemo(() => {
+    return !!data && data?.list.results.filter((loan) => ignoreCode !== loan.code).length === 0;
+  }, [data]);
+
   return (
     <Stack gap="xs">
       <SectionTitle name={<Trans>Credit history</Trans>} icon={IconCreditCardPay} />
+
+      {isEmpty && <Empty />}
 
       {data?.list.results.map((loan) => {
         if (ignoreCode === loan.code) return null;

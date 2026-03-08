@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation RevertLiquidationLoan($revertLiquidationLoanId: String!) {
+  revertLiquidationLoan(id: $revertLiquidationLoanId) {
+    ...LoanData
+  }
+}

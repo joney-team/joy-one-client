@@ -9,18 +9,11 @@ import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { genders } from "@/constant";
-import { EventType } from "@/graphql/enums.graphql";
+import { CustomerKycStatus, EventType, LoanStatus } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
-import {
-  type CustomerKycEntity,
-  CustomerKycStatus,
-} from "@/modules/customer-kycs/customer-kycs-types";
 import { useEventsListener } from "@/modules/events/event-service";
-import { useLoans } from "@/modules/loans/loans-context";
-import { archiveLoan, getLoanByCode, updateLoanAssetData } from "@/modules/loans/loans-service";
-import { type LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { prepareLoanAssetData } from "@/modules/loans/loans-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -29,7 +22,6 @@ import { onActionLoad, onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { formatPhoneNumber } from "@/utils/phone.utils";
-import { useFetch } from "@/utils/use-fetch.util";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -69,10 +61,17 @@ import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { loanAssetTypes, loanStatuses } from "./loans-constants";
-import { useQuery } from "@apollo/client/react";
 
-import QUERY_CUSTOMER from "../customers/graphql/queryCustomer.graphql";
 import { useCustomer } from "../customers/hooks/useCustomer";
+
+import { useMutation, useQuery } from "@apollo/client/react";
+import { CustomerKycDataFragment } from "../customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import { useCustomerKyc } from "../customer-kycs/hooks/use-customer-kyc";
+import { LoanDataFragment } from "./graphql/fragmentLoan.graphql";
+import QUERY_LOAN_BY_CODE from "./graphql/queryLoanByCode.graphql";
+
+import MUTATION_ARCHIVE_LOAN from "./graphql/mutationArchiveLoan.graphql";
+import MUTATION_UPDATE_LOAN_ASSET_DATA from "./graphql/mutationUpdateLoanAssetData.graphql";
 
 const RelatedLoans = dynamic(
   () => import("./components/related-loans").then((mod) => mod.RelatedLoans),
@@ -148,11 +147,10 @@ const Activities = dynamic(
 
 export const LoanDetail: NextPage = () => {
   const { t } = useLingui();
-  const params = useParams();
-  const code = params.code as string;
+  const params = useParams<{ code: string }>();
+  const { code } = params;
   const router = useRouter();
   const workspace = useWorkspace();
-  const loans = useLoans();
   const layout = useLayout();
   const color = useColor();
   const { getGoogleMapLink } = useLocations();
@@ -160,116 +158,136 @@ export const LoanDetail: NextPage = () => {
   const { workspaceSetting } = useWorkspaceSetting();
 
   const isAutoRedirectStep = useRef(true);
-  const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
   const [_pointedStep, setPointedStep] = useState(0);
   const pointedStep = _pointedStep > 3 ? 3 : _pointedStep;
 
-  const fetchCustomerKyc = async (customerId: string) => {
-    const kyc = await getCustomerKyc(customerId).catch(() => undefined);
-    setCustomerKyc(kyc);
-    return kyc;
-  };
-
-  const loan = useFetch({
-    fetch: async () => {
-      const loan = await getLoanByCode(code);
-      const kyc = await fetchCustomerKyc(loan.customerId);
-      if (isAutoRedirectStep.current) {
-        const step = getStepActive(loan, kyc);
-        setPointedStep(step);
-      }
-
-      return loan;
-    },
-    refetchEvents: {
-      types: [
-        EventType.LoansJustCreated,
-        EventType.LoansPending,
-        EventType.LoansApproved,
-        EventType.LoansRejected,
-        EventType.LoansUpdated,
-        EventType.LoansFulfilled,
-        EventType.LoansCompleted,
-        EventType.LoansArchived,
-        EventType.LoansLiquidation,
-        EventType.LoansRevertLiquidation,
-        EventType.LoansSynced,
-        EventType.LoansChangeWorkspaceBranch,
-        EventType.LoansApprovedReverted,
-        EventType.LoansFulfilledReverted,
-      ],
-      condition: (e, _loan) => {
-        return e.ref === _loan.id || (e.relatedEntities || []).some((v) => v.id === _loan.id);
-      },
-    },
+  const {
+    data: loanData,
+    loading: loanLoading,
+    error: loanError,
+    refetch: refetchLoan,
+  } = useQuery(QUERY_LOAN_BY_CODE, {
+    variables: { code },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
   });
+
+  const loan = loanData?.loanByCode;
+
+  useEventsListener(
+    [
+      EventType.LoansJustCreated,
+      EventType.LoansPending,
+      EventType.LoansApproved,
+      EventType.LoansRejected,
+      EventType.LoansUpdated,
+      EventType.LoansFulfilled,
+      EventType.LoansCompleted,
+      EventType.LoansArchived,
+      EventType.LoansLiquidation,
+      EventType.LoansRevertLiquidation,
+      EventType.LoansSynced,
+      EventType.LoansChangeWorkspaceBranch,
+      EventType.LoansApprovedReverted,
+      EventType.LoansFulfilledReverted,
+    ],
+    (e) => {
+      if (e.ref === loanData?.loanByCode?.id) {
+        refetchLoan();
+      }
+    },
+    [loanData?.loanByCode?.id]
+  );
+
+  const {
+    customerKyc,
+    loading: customerKycLoading,
+    error: customerKycError,
+  } = useCustomerKyc(loanData?.loanByCode?.customerId);
+
+  useEffect(() => {
+    if (loanData?.loanByCode && customerKyc && isAutoRedirectStep.current) {
+      const step = getStepActive(loanData.loanByCode, customerKyc);
+      setPointedStep(step);
+    }
+  }, [loanData?.loanByCode, customerKyc]);
 
   const {
     customer,
     loading: customerLoading,
     error: customerError,
-  } = useCustomer(loan.data?.customerId);
+  } = useCustomer(loanData?.loanByCode?.customerId);
+
+  const [updateLoanAssetData] = useMutation(MUTATION_UPDATE_LOAN_ASSET_DATA);
+  const [archiveLoan] = useMutation(MUTATION_ARCHIVE_LOAN);
 
   const handleUpdateAssetData = useDebouncedCallback((assetData) => {
+    if (!loanData?.loanByCode?.id) return;
     onActionLoad({
       name: <Trans>Update asset information</Trans>,
-      process: () => updateLoanAssetData(loan.data!.id, { assetData }, uploadFile).catch(onError),
+      process: async () => {
+        const assetDataUploaded = await prepareLoanAssetData(assetData, uploadFile);
+        await updateLoanAssetData({
+          variables: {
+            updateLoanAssetDataId: loanData?.loanByCode?.id,
+            input: { assetData: assetDataUploaded },
+          },
+        }).catch(onError);
+      },
     });
   }, 500);
 
   const onUpdateAssetData = (data: any) => {
-    if (!loan.data) return;
-    loan.setData({ ...loan.data!, assetData: data });
+    if (!loan) return;
     handleUpdateAssetData(data);
   };
 
   useEffect(() => {
-    if (loan.data)
+    if (loan)
       layout.setComponents({
-        head: renderEntityCode(loan.data.code),
+        head: renderEntityCode(loan.code),
       });
-  }, [loan.data]);
+  }, [loan]);
 
-  useEventsListener(
-    [EventType.CustomerKycApproved, EventType.CustomerKycRejected, EventType.CustomerKycPending],
-    () => {
-      if (loan.data) fetchCustomerKyc(loan.data.customerId);
-    },
-    [loan.data]
-  );
-
-  if (loan.error)
+  if (loanError)
     return (
       <Stack p={16}>
-        <Errored error={loan.error} centered />
+        <Errored error={loanError} centered />
       </Stack>
     );
 
-  if (loan.isFetching || !customerKyc || !loans.isInitialized || customerLoading)
+  if (loanLoading || customerKycLoading || customerLoading)
     return (
       <Stack p={16}>
         <Skeleton height={250} />
       </Stack>
     );
 
-  if (!loan.data || !customer || customerError)
+  if (!loan || !customer || customerError || customerKycError)
     return (
       <Stack p={16}>
-        <Errored error={loan.error ?? customerError} centered />
+        <Errored error={loanError ?? customerError ?? customerKycError} centered />
       </Stack>
     );
 
-  const activeStep = getStepActive(loan.data, customerKyc);
+  const activeStep = getStepActive(loan, customerKyc);
 
   const linkContractPdf =
-    loan.data.status !== LoanStatus.PENDING_SIGN && !!workspaceSetting?.loanSettings?.contractPdfUrl
-      ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.data.code)
+    loan.status !== LoanStatus.PendingSign && !!workspaceSetting?.loanSettings?.contractPdfUrl
+      ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
       : undefined;
 
   const linkLiquidationPdf =
-    loan.data?.isLiquidated && workspaceSetting?.loanSettings?.contractLiquidationPdfUrl
-      ? workspaceSetting?.loanSettings?.contractLiquidationPdfUrl?.replace("{code}", loan.data.code)
+    loan.isLiquidated && workspaceSetting?.loanSettings?.contractLiquidationPdfUrl
+      ? workspaceSetting?.loanSettings?.contractLiquidationPdfUrl?.replace("{code}", loan.code)
       : undefined;
+
+  if (!customerKyc)
+    return (
+      <Stack p="sm">
+        <Errored error={new Error(t`Customer KYC not found`)} centered />
+      </Stack>
+    );
 
   return (
     <Stack p={0} pb="sm">
@@ -377,7 +395,7 @@ export const LoanDetail: NextPage = () => {
                   label={<Trans>Loan package</Trans>}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {loan.data.package.id} / {t(loanAssetTypes[loan.data.assetType].label)}
+                      {loan.package.id} / {t(loanAssetTypes[loan.assetType].label)}
                     </Text>
                   }
                 />
@@ -386,7 +404,7 @@ export const LoanDetail: NextPage = () => {
                   label={<Trans>Money amount</Trans>}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      <CurrencyFormat value={loan.data.amount} />
+                      <CurrencyFormat value={loan.amount} />
                     </Text>
                   }
                 />
@@ -396,7 +414,7 @@ export const LoanDetail: NextPage = () => {
                     label={<Trans>Workspace branch</Trans>}
                     content={
                       <Text truncate="end" fz={16} fw={500} maw={250}>
-                        {loan.data.workspaceBranch?.name || <Trans>Main office</Trans>}
+                        {loan.workspaceBranch?.name || <Trans>Main office</Trans>}
                       </Text>
                     }
                   />
@@ -446,9 +464,9 @@ export const LoanDetail: NextPage = () => {
                       fz={16}
                       fw={500}
                       maw={250}
-                      c={loanStatuses[loan.data.status].color}
+                      c={loanStatuses[loan.status].color}
                     >
-                      {t(loanStatuses[loan.data.status].label)}
+                      {t(loanStatuses[loan.status].label)}
                     </Text>
                   }
                 />
@@ -459,7 +477,7 @@ export const LoanDetail: NextPage = () => {
       </Stack>
 
       {(function () {
-        if (loan.data.status === LoanStatus.PENDING_SIGN) {
+        if (loan.status === LoanStatus.PendingSign) {
           return (
             <Stack>
               <Card shadow="xs" p={30}>
@@ -471,7 +489,7 @@ export const LoanDetail: NextPage = () => {
                     <Center>
                       <ModalSignLoan>
                         {(open) => (
-                          <Button color="orange" onClick={() => open({ loan: loan.data! })}>
+                          <Button color="orange" onClick={() => open({ loan })}>
                             <Trans>Sign contract</Trans>
                           </Button>
                         )}
@@ -502,14 +520,14 @@ export const LoanDetail: NextPage = () => {
                   icon={<IconUserScan size={18} />}
                   completedIcon={<IconShieldCheckered size={18} />}
                   allowStepSelect={activeStep >= 0}
-                  loading={activeStep === 0 && customerKyc?.status === CustomerKycStatus.PENDING}
+                  loading={activeStep === 0 && customerKyc?.status === CustomerKycStatus.Pending}
                   styles={{
                     stepIcon: {
                       borderColor: activeStep >= 1 ? color("primary") : undefined,
-                      color: customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined,
+                      color: customerKyc?.status === CustomerKycStatus.Rejected ? "red" : undefined,
                     },
                   }}
-                  color={customerKyc?.status === CustomerKycStatus.REJECTED ? "red" : undefined}
+                  color={customerKyc?.status === CustomerKycStatus.Rejected ? "red" : undefined}
                 />
 
                 <Stepper.Step
@@ -518,14 +536,14 @@ export const LoanDetail: NextPage = () => {
                   completedIcon={<IconClipboardCheck size={18} />}
                   disabled={activeStep < 1}
                   allowStepSelect={activeStep >= 1}
-                  loading={activeStep === 1 && loan.data.status === LoanStatus.PENDING}
+                  loading={activeStep === 1 && loan.status === LoanStatus.Pending}
                   styles={{
                     stepIcon: {
                       borderColor: activeStep >= 2 ? color("primary") : undefined,
-                      color: loan.data.status === LoanStatus.REJECTED ? "red" : undefined,
+                      color: loan.status === LoanStatus.Rejected ? "red" : undefined,
                     },
                   }}
-                  color={loan.data.status === LoanStatus.REJECTED ? "red" : undefined}
+                  color={loan.status === LoanStatus.Rejected ? "red" : undefined}
                 />
 
                 <Stepper.Step
@@ -566,24 +584,24 @@ export const LoanDetail: NextPage = () => {
                     customerCidNumber={
                       customerKyc.versions[customerKyc.versions.length - 1].cidNumber
                     }
-                    ignoreCode={loan.data.code}
+                    ignoreCode={loan.code}
                   />
                 </Container>,
                 <Container size={900}>
-                  <LoanDocuments loan={loan.data} updateAssetData={onUpdateAssetData}>
+                  <LoanDocuments loan={loan} updateAssetData={onUpdateAssetData}>
                     <RelatedLoans
                       customerCidNumber={
                         customerKyc.versions[customerKyc.versions.length - 1].cidNumber
                       }
-                      ignoreCode={loan.data.code}
+                      ignoreCode={loan.code}
                     />
                   </LoanDocuments>
                 </Container>,
                 <Container size={900}>
-                  <LoanDisburesement loan={loan.data} kyc={customerKyc} />
+                  <LoanDisburesement loan={loan} kyc={customerKyc} />
                 </Container>,
                 <Container fluid>
-                  <LoanPayments loan={loan} />
+                  <LoanPayments loan={loan} refetch={refetchLoan} />
                 </Container>,
               ][pointedStep]
             }
@@ -591,16 +609,17 @@ export const LoanDetail: NextPage = () => {
             <Container mt="xl" size={900}>
               <Stack gap="xs">
                 <SectionTitle name={<Trans>Activities</Trans>} icon={IconTimelineEvent} />
-                <Activities contextId={loan.data.id} contextType={AppEntity.LOANS} />
+                <Activities contextId={loan.id} contextType={AppEntity.LOANS} />
               </Stack>
 
-              <EventList ref={loan.data.id} />
+              <EventList ref={loan.id} />
             </Container>
 
             <Renderer
               visible={
-                [LoanStatus.PENDING_SIGN, LoanStatus.PENDING].includes(loan.data?.status) &&
-                workspace.hasPermission(WorkspacePermission.LOANS_ARCHIVE)
+                ([LoanStatus.PendingSign, LoanStatus.Pending] as LoanStatus[]).includes(
+                  loan?.status
+                ) && workspace.hasPermission(WorkspacePermission.LOANS_ARCHIVE)
               }
             >
               <Center>
@@ -613,9 +632,9 @@ export const LoanDetail: NextPage = () => {
                   }
                   onClick={() =>
                     onArchive({
-                      name: `${t`Loan contract`} ${renderEntityCode(loan.data!.code)}`,
+                      name: `${t`Loan contract`} ${renderEntityCode(loan.code)}`,
                       process: async () => {
-                        await archiveLoan(loan.data!.id);
+                        await archiveLoan({ variables: { archiveLoanId: loan.id } });
                         router.back();
                       },
                     })
@@ -634,12 +653,12 @@ export const LoanDetail: NextPage = () => {
   );
 };
 
-const getStepActive = (loan: LoanEntity, kyc?: CustomerKycEntity): number => {
-  if (!kyc || kyc.status !== CustomerKycStatus.APPROVED) return 0;
-  if (loan.status === LoanStatus.PENDING) return 1;
-  if (loan.status === LoanStatus.REJECTED) return 1;
-  if (loan.status === LoanStatus.APPROVED) return 2;
-  if (loan.status === LoanStatus.FULFILLED) return 3;
+const getStepActive = (loan: LoanDataFragment, kyc?: CustomerKycDataFragment | null): number => {
+  if (!kyc || kyc.status !== CustomerKycStatus.Approved) return 0;
+  if (loan.status === LoanStatus.Pending) return 1;
+  if (loan.status === LoanStatus.Rejected) return 1;
+  if (loan.status === LoanStatus.Approved) return 2;
+  if (loan.status === LoanStatus.Fulfilled) return 3;
   return 4;
 };
 

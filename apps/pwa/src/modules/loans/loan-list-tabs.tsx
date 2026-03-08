@@ -1,9 +1,9 @@
 "use client";
 
 import { NavigationTabs } from "@/components/navigation-tabs";
+import { LoanStatus } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { renderLoanList } from "@/modules/loans/loan-list";
-import { LoanStatus } from "@/modules/loans/loans-types";
 import { t } from "@lingui/core/macro";
 import { Stack } from "@mantine/core";
 import {
@@ -27,7 +27,7 @@ export const LoanListTabs: FC = () => {
         label: t`Active`,
         isShowCount: true,
         components: renderLoanList({
-          strictStatus: [LoanStatus.FULFILLED],
+          strictStatus: [LoanStatus.Fulfilled],
           count: (reports) => reports.realtimeReport.data?.data.loans.contracts.activated || 0,
         }),
       },
@@ -37,7 +37,7 @@ export const LoanListTabs: FC = () => {
         label: t`Processing`,
         isShowCount: true,
         components: renderLoanList({
-          strictStatus: [LoanStatus.PENDING_SIGN, LoanStatus.PENDING, LoanStatus.APPROVED],
+          strictStatus: [LoanStatus.PendingSign, LoanStatus.Pending, LoanStatus.Approved],
           counterColor: "orange.7",
           count: (reports) => reports.realtimeReport.data?.data.loans.contracts.pending || 0,
         }),
@@ -48,7 +48,7 @@ export const LoanListTabs: FC = () => {
         isShowCount: true,
         icon: IconClockExclamation,
         components: renderLoanList({
-          strictStatus: [LoanStatus.OVERDUE],
+          strictStatus: [LoanStatus.Overdue],
           counterColor: "red.8",
           count: (reports) => reports.realtimeReport.data?.data.loans.contracts.overdue || 0,
         }),
@@ -71,7 +71,7 @@ export const LoanListTabs: FC = () => {
       <NavigationTabs
         activeTab={activeTabId}
         onChange={(e) => {
-          if (!e || e === tabs[0].value) router.replace('/loans')
+          if (!e || e === tabs[0].value) router.replace("/loans");
           else router.replace(`/loans?ltab=${e}`);
         }}
         tabs={tabs.map((t) => ({

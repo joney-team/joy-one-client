@@ -1,0 +1,3 @@
+mutation BulkArchiveLoans($input: BulkArchiveLoansInput!) {
+  bulkArchiveLoans(input: $input)
+}

@@ -1,0 +1,34 @@
+#import "../../locations/graphql/fragmentLocation.graphql"
+
+fragment CustomerKycData on CustomerKyc {
+  _id
+  customerId
+  customer {
+    _id
+    name
+    code
+    phone
+  }
+  versions {
+    id
+    frontOfCidImage
+    backOfCidImage
+    portraitImage
+    cidNumber
+    cidFullName
+    cidLocation {
+      ...LocationData
+    }
+    cidRaw
+    cidGender
+    cidBirthday
+    cidCreatedAt
+    cidVnLocation {
+      ...LocationData
+    }
+    rejectReason
+    createdAt
+    status
+  }
+  status
+}

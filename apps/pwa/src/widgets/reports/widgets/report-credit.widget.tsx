@@ -2,12 +2,12 @@
 
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
+import { ApolloClientType } from "@/modules/apollo/apollo-client";
+import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { loanPackageTypes } from "@/modules/loans/loans-constants";
-import { getLoanByCode } from "@/modules/loans/loans-service";
-import { LoanEntity, LoanPackageType, LoanReceiptData } from "@/modules/loans/loans-types";
-import { getReceipts, isPartialPayment } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptStatus } from "@/modules/receipts/receipts-types";
+import { LoanReceiptData } from "@/modules/loans/loans-types";
+import { isPartialPayment } from "@/modules/receipts/utils/is-partial-payment";
 import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -22,20 +22,22 @@ import { IconFileExcel, IconReportAnalytics } from "@tabler/icons-react";
 import { FC } from "react";
 import writeXlsxFile from "write-excel-file";
 import { ReportWidgetsContext } from "../types";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
-import { ApolloClient } from "@apollo/client";
-import { ApolloClientType } from "@/modules/apollo/apollo-client";
 
+import { LoanPackageType, ReceiptStatus } from "@/graphql/enums.graphql";
 import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
+import { LoanDataFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
+import QUERY_LOAN_BY_CODE from "@/modules/loans/graphql/queryLoanByCode.graphql";
+import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
+import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
 import { useApolloClient } from "@apollo/client/react";
 
 interface CreditReportItem {
   time: number;
   type: LoanPackageType;
-  loan: LoanEntity;
+  loan: LoanDataFragment;
   cashier?: WorkspaceMemberDataFragment;
   customer?: CustomerDataFragment;
-  receipt: ReceiptEntity;
+  receipt: ReceiptDataFragment;
   fee: {
     total: number;
     packageTypes: {
@@ -87,12 +89,12 @@ interface CreditReport {
 const chunkingSize = 300;
 
 const exportReport = async (
-  receipts: ReceiptEntity[],
+  receipts: ReceiptDataFragment[],
   client: ApolloClientType
 ): Promise<CreditReport> => {
   const reports: CreditReportItem[] = [];
   const customers: CustomerDataFragment[] = [];
-  const loans: LoanEntity[] = [];
+  const loans: LoanDataFragment[] = [];
 
   const loanCodes = [...new Set([...receipts.map((v) => v.relatedLoanCode)])].filter(
     (v) => !!v
@@ -100,8 +102,13 @@ const exportReport = async (
 
   for (const loanCode of loanCodes) {
     try {
-      const loan = await getLoanByCode(loanCode);
-      loans.push(loan);
+      const loan = await client.query({
+        query: QUERY_LOAN_BY_CODE,
+        variables: {
+          code: loanCode,
+        },
+      });
+      loans.push(loan.data?.loanByCode!);
     } catch (error) {
       const relatedreceipts = receipts.filter((v) => v.relatedLoanCode === loanCode);
       console.error(`Failed to load loan with code ${loanCode}`, relatedreceipts);
@@ -194,12 +201,12 @@ const exportReport = async (
       );
 
       const report: CreditReportItem = {
-        time: receipt.paidAt,
+        time: receipt.paidAt!,
         loan,
         type: loan.package.type,
         receipt,
         customer,
-        cashier: receipt.cashierUser || receipt.disbursementUser,
+        cashier: receipt.cashierUser || receipt.disbursementUser!,
         fee: {
           total: Object.values(fee).reduce((acc, value) => acc + value, 0),
           packageTypes: fee,
@@ -295,33 +302,46 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       name: <Trans>Export data</Trans>,
       process: async () => {
         try {
-          let receipts: ReceiptEntity[] = [];
+          let receipts: ReceiptDataFragment[] = [];
           let count = 0;
 
           const query = {
-            status: [ReceiptStatus.PAID],
+            status: [ReceiptStatus.Paid],
             rangePaidAt: `${props.ctx.fromTime}-${props.ctx.toTime}`,
             sortPaidAt: 1,
           };
 
           // Fetch count
-          await getReceipts({ ...query, offset: 0, limit: chunkingSize }).then((result) => {
-            count = result.count;
-            receipts = result.data;
+          const receiptsResult = await client.query({
+            query: QUERY_RECEIPTS,
+            variables: {
+              query,
+              offset: 0,
+              limit: chunkingSize,
+            },
           });
+
+          count = receiptsResult.data?.list.total || 0;
+          receipts = receiptsResult.data?.list.results || [];
 
           // Fetch chunking receipts
           const fetchReceipts = async () => {
             if (receipts.length === count) return;
 
-            const result = await getReceipts({
-              ...query,
-              offset: receipts.length,
-              limit: chunkingSize,
+            const result = await client.query({
+              query: QUERY_RECEIPTS,
+              variables: {
+                query,
+                offset: receipts.length,
+                limit: chunkingSize,
+              },
             });
+
             receipts = [
               ...receipts,
-              ...result.data.filter((r) => receipts.every((e) => e.id !== r.id)),
+              ...(result.data?.list.results ?? []).filter((r) =>
+                receipts.every((e) => e.id !== r.id)
+              ),
             ];
 
             return fetchReceipts();
@@ -358,7 +378,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
             return [
               {
-                value: DateTime.format(receipt.paidAt, {
+                value: DateTime.format(receipt.paidAt!, {
                   locale: getClientLocale(),
                   dateStyle: "short",
                 }),
@@ -487,21 +507,21 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
               null,
               ...packageTypes.map((type) => {
                 return {
-                  value: loanPackageTypes[type].label(),
+                  value: t(loanPackageTypes[type].label),
                   align: "center",
                   ...headStyle,
                 };
               }),
               ...packageTypes.map((type) => {
                 return {
-                  value: loanPackageTypes[type].label(),
+                  value: t(loanPackageTypes[type].label),
                   align: "center",
                   ...headStyle,
                 };
               }),
               ...packageTypes.map((type) => {
                 return {
-                  value: loanPackageTypes[type].label(),
+                  value: t(loanPackageTypes[type].label),
                   align: "center",
                   ...headStyle,
                 };
@@ -611,8 +631,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             fontSize: 13,
           });
 
-          const startAt = receipts[0]?.paidAt;
-          const endAt = receipts[receipts.length - 1]?.paidAt;
+          const startAt = receipts[0]?.paidAt!;
+          const endAt = receipts[receipts.length - 1]?.paidAt!;
 
           const name = String.capitalizeFirstLetter(
             `${t`Reports`} ${t`Income expense`} ${t`From`} ${DateTime.format(startAt, {

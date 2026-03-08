@@ -8,28 +8,25 @@ import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
 import { EventType } from "@/graphql/enums.graphql";
-import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
+import { useCustomerKyc } from "@/modules/customer-kycs/hooks/use-customer-kyc";
 import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
-import {
-  loanLiquidation,
-  loanLiquidationCalculate,
-  renderLoanPeriod,
-} from "@/modules/loans/loans-service";
-import { LoanEntity } from "@/modules/loans/loans-types";
+import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { type ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-receipt";
 import { onActionLoad } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
-import { useFetch } from "@/utils/use-fetch.util";
-import { useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef, useState } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import MUTATION_LIQUIDATE_LOAN from "../graphql/mutationLiquidateLoan.graphql";
+import QUERY_LIQUIDATE_LOAN_CALCULATE from "../graphql/queryLiquidateLoanCalculate.graphql";
 import { loanAssetTypes } from "../loans-constants";
 
 const ModalPayReceipt = dynamic(
@@ -40,11 +37,13 @@ const ModalPayReceipt = dynamic(
   }
 );
 
-export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
+export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
 
   const { t } = useLingui();
+
+  const [liquidateLoan] = useMutation(MUTATION_LIQUIDATE_LOAN);
 
   const {
     data: customerData,
@@ -62,17 +61,19 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
     customerRefetch();
   });
 
-  const state = useFetch({
-    fetch: async () => {
-      const [customerKyc, calculated] = await Promise.all([
-        getCustomerKyc(loan.customerId),
-        loanLiquidationCalculate(loan.id),
-      ]);
+  const {
+    customerKyc,
+    loading: customerKycLoading,
+    error: customerKycError,
+  } = useCustomerKyc(loan.customerId);
 
-      return {
-        customerKyc,
-        calculated,
-      };
+  const {
+    data: calculatedData,
+    loading: calculatedLoading,
+    error: calculatedError,
+  } = useQuery(QUERY_LIQUIDATE_LOAN_CALCULATE, {
+    variables: {
+      loanId: loan.id,
     },
   });
 
@@ -85,9 +86,17 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
       icon: IconBrandSpeedtest,
       process: async () => {
         try {
-          await loanLiquidation(loan.id).then((receipt) => {
-            onClose();
-            modalPayReceiptRef.current?.open({ receipt });
+          const result = await liquidateLoan({
+            variables: {
+              liquidateLoanId: loan.id,
+            },
+          });
+
+          if (!result.data) return;
+
+          onClose();
+          modalPayReceiptRef.current?.open({
+            receipt: { id: result.data?.liquidateLoan },
           });
         } catch (error) {
           throw error;
@@ -98,12 +107,18 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
     });
   };
 
-  if (!state.isInitialized) return <Skeleton height={300} />;
-  if (state.error || !state.data || !customerData)
-    return <Errored error={state.error ?? customerError} />;
+  if (customerKycLoading || calculatedLoading) {
+    return <Skeleton height={300} />;
+  }
 
-  const { customerKyc, calculated } = state.data;
-  const kyc = customerKyc.versions[customerKyc.versions.length - 1];
+  if (customerKycError || calculatedError || !customerData || customerError) {
+    return <Errored error={customerKycError ?? calculatedError ?? customerError} />;
+  }
+
+  const kyc = customerKyc?.versions[customerKyc.versions.length - 1];
+  if (!kyc || !calculatedData?.liquidateLoanCalculate) return null;
+
+  const calculated = calculatedData.liquidateLoanCalculate;
 
   return (
     <Stack>
@@ -257,7 +272,7 @@ export const ModalLoanLiquidation: FC<LoanEntity> = (loan) => {
   );
 };
 
-export const OnModalLoanLiquidation = (loan: LoanEntity) => {
+export const OnModalLoanLiquidation = (loan: LoanDataFragment) => {
   return modals.open({
     size: "xl",
     modalId: "ModalLoanLiquidation",

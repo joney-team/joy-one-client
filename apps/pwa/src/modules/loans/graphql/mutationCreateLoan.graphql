@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation CreateLoan($input: CreateLoanInput!) {
+  createLoan(input: $input) {
+    ...LoanData
+  }
+}

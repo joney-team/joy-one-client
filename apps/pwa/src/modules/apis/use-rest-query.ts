@@ -1,19 +1,19 @@
 import { NetworkMode, UseQueryResult, useQuery as useQueryTanstack } from "@tanstack/react-query";
 
+import { EventType } from "@/graphql/types.graphql";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { StorageKey } from "@/types";
 import { AxiosError } from "axios";
 import { useMemo } from "react";
 import { api } from ".";
 import { onReconnected, useEventsListener } from "../events/event-service";
-import { EventEntity } from "../events/event-types";
-import { EventType } from "@/graphql/types.graphql";
+import { EventDataFragment } from "../events/graphql/fragmentEvent.graphql";
 
 export interface UseRestQueryArgs<T, P = Record<string, any>> {
   params?: P;
   isSkip?: boolean;
   refetchEvents?: EventType[];
-  refetchCondition?: (data: EventEntity, currentData: T) => boolean;
+  refetchCondition?: (data: EventDataFragment, currentData: T) => boolean;
   refetchWhenReconnected?: boolean;
   method?: "get" | "post";
   networkMode?: NetworkMode;
@@ -82,7 +82,7 @@ export interface UseDynmicRestQueryArgs<T> {
   queryFn: (args: { signal: AbortSignal }) => Promise<T>;
   isSkip?: boolean;
   refetchEvents?: EventType[];
-  refetchCondition?: (data: EventEntity, currentData: T) => boolean;
+  refetchCondition?: (data: EventDataFragment, currentData: T) => boolean;
 }
 
 export type UseDynmicRestQuery<T> = UseQueryResult<T, AxiosError>;

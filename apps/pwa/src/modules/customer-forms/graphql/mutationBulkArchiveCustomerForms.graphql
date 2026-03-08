@@ -1,0 +1,7 @@
+#import "./fragmentCustomerForm.graphql"
+
+mutation BulkArchiveCustomerForms($input: BulkArchiveInput!) {
+  bulkArchiveCustomerForms(input: $input) {
+    ...CustomerFormData
+  }
+}

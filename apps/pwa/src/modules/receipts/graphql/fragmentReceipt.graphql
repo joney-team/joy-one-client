@@ -1,0 +1,49 @@
+#import "../../customers/graphql/fragmentCustomer.graphql"
+#import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment ReceiptData on Receipt {
+  refs
+  createdAt
+  updatedAt
+  id
+  _count
+  _id
+  code
+  ref
+  type
+  amount
+  tipAmount
+  giveAmount
+  paidAt
+  relatedCustomerId
+  relatedTicketId
+  relatedOrderId
+  relatedLoanId
+  relatedLoanCode
+  relatedPartnerId
+  cashierUserId
+  disbursementUserId
+  note
+  data
+  dataChanged
+  assigneeUserIds
+  paymentMethod
+  expireAt
+  status
+
+  relatedCustomer {
+    ...CustomerData
+  }
+  workspaceBranch {
+    ...WorkspaceBranchData
+  }
+  cashierUser {
+    ...WorkspaceMemberData
+  }
+  disbursementUser {
+    ...WorkspaceMemberData
+  }
+
+  isArchived
+}

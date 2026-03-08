@@ -91,6 +91,8 @@ export enum WorkspacePermission {
 
   PROMOTIONS_VIEW = "PRV",
   PROMOTIONS_MANAGER = "PRM",
+
+  ATTENDANCE_RECORDS_MANAGER = "ARM",
 }
 
 export interface WorkspaceRoleDto {

@@ -3,41 +3,44 @@
 import { Button } from "@/components/buttons/button";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalHead } from "@/components/modal/modal-head";
+import { ReceiptType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { LoanEntity } from "@/modules/loans/loans-types";
-import { createReceipt, receiptTypeColors } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptType } from "@/modules/receipts/receipts-types";
+import { LoanDataFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
 import { receiptTypes } from "../receipt-constants";
+
+import MUTATION_CREATE_RECEIPT from "../graphql/createReceipt.graphql";
 
 interface ReceiptFormValues {
   amount: number;
   type: ReceiptType;
   note?: string;
   data?: any;
-  relatedCustomer?: CustomerDataFragment | undefined;
-  relatedLoan?: LoanEntity | undefined;
+  relatedCustomer?: Pick<CustomerDataFragment, "_id" | "name" | "avatar" | "phone"> | undefined;
+  relatedLoan?: LoanDataFragment | undefined;
   expireAt?: number | null;
 }
 
 interface ModalReceiptFormProps {
   type?: ReceiptType;
   data?: any;
-  relatedCustomer?: CustomerDataFragment;
-  relatedLoan?: LoanEntity;
-  onDone?: (receipt: ReceiptEntity) => Promise<any> | any;
+  relatedCustomer?: Pick<CustomerDataFragment, "_id" | "name" | "avatar" | "phone">;
+  relatedLoan?: LoanDataFragment;
+  onDone?: (receipt: ReceiptDataFragment) => Promise<any> | any;
 }
 
 export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
@@ -49,11 +52,13 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
 
+  const [createReceipt] = useMutation(MUTATION_CREATE_RECEIPT);
+
   const form = useForm<ReceiptFormValues>({
     initialValues: {
       amount: 0,
       note: "",
-      type: props.type || ReceiptType.INCOME,
+      type: props.type || ReceiptType.Income,
       data: props.data || {},
       relatedCustomer: props.relatedCustomer,
       relatedLoan: props.relatedLoan,
@@ -70,25 +75,31 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
     setIsSubmitting(true);
 
     await createReceipt({
-      amount: values.amount,
-      type: values.type,
-      note: values.note,
-      data: values.data,
-      expireAt: values.expireAt ?? null,
-      relatedCustomerId: values.relatedCustomer?._id,
-      relatedLoanId: values.relatedLoan?.id,
-      assigneeUserIds: [auth.user._id],
+      variables: {
+        input: {
+          amount: values.amount,
+          type: values.type,
+          note: values.note,
+          data: values.data,
+          expireAt: values.expireAt ?? null,
+          relatedCustomerId: values.relatedCustomer?._id,
+          relatedLoanId: values.relatedLoan?.id,
+          assigneeUserIds: [auth.user._id],
+        },
+      },
     })
       .then(async (receipt) => {
+        if (!receipt.data?.createReceipt) return;
+
         await Promise.all(
           receiptFiles.map((file) =>
             uploadFile(file, {
-              refs: [`${AppEntity.RECEIPTS}:${receipt.id}`],
+              refs: [`${AppEntity.RECEIPTS}:${receipt.data?.createReceipt.id}`],
             })
           )
         );
 
-        await props.onDone?.(receipt);
+        await props.onDone?.(receipt.data?.createReceipt);
         modals.close("ModalReceiptForm");
       })
       .catch(onFormErrorLegacy(form));
@@ -110,7 +121,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
                   color={color(config.color)}
                   leftIcon={config.icon}
                 >
-                  {config.label()}
+                  {t(config.label)}
                 </Button>
               );
             })}
@@ -159,7 +170,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
           onClick={() => onSubmit()}
           leftIcon={IconCheck}
           disabled={!form.isDirty()}
-          color={color(receiptTypeColors[form.values.type])}
+          color={color(receiptTypes[form.values.type].color)}
         >
           <Trans>Complete</Trans>
         </Button>

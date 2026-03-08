@@ -1,3 +1,5 @@
+"use client";
+
 import { useQuery } from "@apollo/client/react";
 import QUERY_CUSTOMER from "../graphql/queryCustomer.graphql";
 import QUERY_CUSTOMER_BY_CODE from "../graphql/queryCustomerByCode.graphql";

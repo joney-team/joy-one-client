@@ -12,7 +12,7 @@ import { OrderEntity } from "@/modules/orders/order-entity";
 import { getOrderById } from "@/modules/orders/orders-service";
 import { BankQrCode } from "@/modules/plugins/banks/banks.types";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
-import { ReceiptEntity } from "@/modules/receipts/receipts-types";
+import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
@@ -51,7 +51,7 @@ import { useReactToPrint } from "react-to-print";
 
 interface PrinterArgs {
   label?: string | ReactNode;
-  receipt?: ReceiptEntity;
+  receipt?: ReceiptDataFragment;
   bankQrCode?: BankQrCode;
   prescription?: PrescriptionEntity;
   customer?: Pick<CustomerDataFragment, "_id">;

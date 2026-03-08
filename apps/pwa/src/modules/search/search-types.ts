@@ -1,8 +1,7 @@
+import { LoanAssetType, LoanPackage, LoanStatus, ReceiptType } from "@/graphql/types.graphql";
 import { AppEntity } from "@/types";
 import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
-import { LoanAssetType, LoanPackage, LoanStatus } from "../loans/loans-types";
 import { ProductEntity } from "../products/products-types";
-import { ReceiptType } from "../receipts/receipts-types";
 import { TaskDataFragment } from "../tasks/graphql/fragmentTask.graphql";
 
 export type SearchEntityResult<E extends AppEntity = AppEntity, T = any> = T & {

@@ -2,9 +2,8 @@
 
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
+import { LoanStatus } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
-import { loanStatusColors } from "@/modules/loans/loans-service";
-import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -13,10 +12,11 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
 
 interface LoanCardProps {
-  data: LoanEntity;
+  data: LoanDataFragment;
   hideCustomer?: boolean;
   cardProps?: CardProps;
 }
@@ -30,7 +30,7 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
   const router = useRouter();
 
   const linkContractPdf =
-    loan.status !== LoanStatus.PENDING_SIGN && !!workspaceSetting?.loanSettings?.contractPdfUrl
+    loan.status !== LoanStatus.PendingSign && !!workspaceSetting?.loanSettings?.contractPdfUrl
       ? workspaceSetting?.loanSettings?.contractPdfUrl?.replace("{code}", loan.code)
       : undefined;
 
@@ -42,9 +42,11 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
             {renderEntityCode(loan.code)}
           </Anchor>
 
-          <Text fz={em(12)} c="gray">
-            <DateFormat value={loan.createdAt} type="date-time" />
-          </Text>
+          {loan.createdAt && (
+            <Text fz={em(12)} c="gray">
+              <DateFormat value={loan.createdAt} type="date-time" />
+            </Text>
+          )}
         </Group>
 
         {!props.hideCustomer && (
@@ -91,9 +93,11 @@ export const LoanCard: FC<LoanCardProps> = (props) => {
         </Group>
 
         <Stack align="end">
-          <Badge color={loanStatusColors[loan.status]}>{t(loanStatuses[loan.status].label)}</Badge>
+          <Badge color={loanStatuses[loan.status].color}>
+            {t(loanStatuses[loan.status].label)}
+          </Badge>
 
-          {loan.status === LoanStatus.REJECTED && (
+          {loan.status === LoanStatus.Rejected && (
             <Text fz={em(13)} fw={500} c="red">
               {t`Reason`}: {loan.rejectReason || t`Unknown`}
             </Text>

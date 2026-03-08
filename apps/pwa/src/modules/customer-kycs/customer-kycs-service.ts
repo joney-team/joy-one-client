@@ -1,27 +1,5 @@
-import { Gender, ResponseList } from "@/types";
-import { api } from "../apis";
-import { CustomerKycDto, CustomerKycEntity, RejectCustomerKycDto } from "./customer-kycs-types";
+import { Gender } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
-
-export async function getCustomerKycs(query?: any) {
-  return api.get<ResponseList<CustomerKycEntity>>("/customer-kycs", { params: query });
-}
-
-export async function getCustomerKyc(customerId: string) {
-  return api.get<CustomerKycEntity>(`/customer-kycs/${customerId}`);
-}
-
-export async function registerCustomerKyc(customerId: string, dto: CustomerKycDto) {
-  return api.post<CustomerKycEntity>(`/customer-kycs/${customerId}`, dto);
-}
-
-export async function approveCustomerKyc(customerId: string) {
-  return api.post<CustomerKycEntity>(`/customer-kycs/${customerId}/approve`);
-}
-
-export async function rejectCustomerKyc(customerId: string, dto: RejectCustomerKycDto) {
-  return api.post(`/customer-kycs/${customerId}/reject`, dto);
-}
 
 export const parseCidDate = (d: string) => {
   if (!d) return null;

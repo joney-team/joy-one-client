@@ -42,8 +42,10 @@ export const ModalHead: FC<Props> = (props) => {
           color="gray"
           onClick={props.onClose}
           style={{ alignSelf: "end" }}
+          className="removeOutline"
+          component="div"
         >
-          <IconX size={16} />
+          <IconX size={18} />
         </ActionIcon>
       )}
     </Group>

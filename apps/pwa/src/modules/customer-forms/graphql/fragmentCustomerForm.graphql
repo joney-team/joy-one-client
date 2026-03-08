@@ -1,0 +1,23 @@
+fragment CustomerFormData on CustomerForm {
+  _id
+  refs
+  createdAt
+  updatedAt
+  name
+  phone
+  email
+  dynamicData
+  location {
+    address
+  }
+  vnLocation {
+    address
+  }
+  status
+  cancelReason
+  workspaceBranch {
+    _id
+    name
+  }
+  workspaceId
+}

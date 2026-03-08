@@ -1,15 +1,12 @@
 "use client";
 
 import { EntityImages } from "@/components/entity-images";
-import { LoanAssetType } from "@/modules/loans/loans-types";
 import { t } from "@lingui/core/macro";
 import { InputWrapper } from "@mantine/core";
 import { FC } from "react";
 import { LoanAssetDataInputProps } from ".";
 
-export const InputLandCertificate: FC<LoanAssetDataInputProps<LoanAssetType.LAND_CERTIFICATE>> = (
-  props
-) => {
+export const InputLandCertificate: FC<LoanAssetDataInputProps<"LAND_CERTIFICATE">> = (props) => {
   return (
     <InputWrapper label={t`Land certificate images`}>
       <EntityImages

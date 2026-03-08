@@ -4,19 +4,19 @@ import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { LocationForm } from "@/components/location-form";
-import { createCustomerForm } from "@/modules/customer-forms/customer-form-service";
 import QUERY_WORKSPACE_BRANCH from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
 import { getWorkspaceById } from "@/modules/workspaces/workspaces-service";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import { Card, Center, Group, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { CustomerFormEntity } from "./customer-form-entity";
+import { CustomerFormDataFragment } from "./graphql/fragmentCustomerForm.graphql";
+import CREATE_CUSTOMER_FORM_MUTATION from "./graphql/mutationCreateCustomerForm.graphql";
 
 export const CustomerFormRegister: FC = () => {
   const app = useApp();
@@ -35,7 +35,9 @@ export const CustomerFormRegister: FC = () => {
     workspaceBranch: null,
   });
 
-  const [customerForm, setCustomerForm] = useState<CustomerFormEntity | null>(null);
+  const [createCustomerForm] = useMutation(CREATE_CUSTOMER_FORM_MUTATION);
+
+  const [customerForm, setCustomerForm] = useState<CustomerFormDataFragment | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
   const form = useForm<{
@@ -96,13 +98,19 @@ export const CustomerFormRegister: FC = () => {
     try {
       if (!state.current.workspace || isInitializing) return;
 
-      const _customerForm = await createCustomerForm({
-        ...values,
-        workspaceId: state.current.workspace._id,
-        workspaceBranchId: state.current.workspaceBranch?._id || null,
+      const result = await createCustomerForm({
+        variables: {
+          input: {
+            ...values,
+            workspaceId: state.current.workspace._id,
+            workspaceBranchId: state.current.workspaceBranch?._id || null,
+          },
+        },
       });
 
-      setCustomerForm(_customerForm);
+      if (result.data?.createCustomerForm) {
+        setCustomerForm(result.data?.createCustomerForm);
+      }
     } catch (error) {
       onFormError(form, error);
     }

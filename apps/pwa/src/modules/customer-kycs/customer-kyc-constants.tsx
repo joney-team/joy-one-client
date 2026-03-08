@@ -1,12 +1,12 @@
+import { CustomerKycStatus } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
-import { CustomerKycStatus } from "./customer-kycs-types";
-import { t } from "@lingui/core/macro";
 
 export const customerKycStatuses: Record<
   CustomerKycStatus,
-  { label: () => string; color: MantineColor }
+  { label: MacroMessageDescriptor; color: MantineColor }
 > = {
-  [CustomerKycStatus.PENDING]: { label: () => t`Pending`, color: "gray" },
-  [CustomerKycStatus.APPROVED]: { label: () => t`Approved`, color: "green" },
-  [CustomerKycStatus.REJECTED]: { label: () => t`Rejected`, color: "red" },
+  [CustomerKycStatus.Pending]: { label: defineMessage`Pending`, color: "gray" },
+  [CustomerKycStatus.Approved]: { label: defineMessage`Approved`, color: "green" },
+  [CustomerKycStatus.Rejected]: { label: defineMessage`Rejected`, color: "red" },
 };

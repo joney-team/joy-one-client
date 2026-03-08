@@ -1,22 +1,18 @@
 "use client";
 
-import { FileType } from "@/graphql/enums.graphql";
+import { CustomerKycStatus, FileType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import {
-  approveCustomerKyc,
-  rejectCustomerKyc,
-} from "@/modules/customer-kycs/customer-kycs-service";
-import {
-  type CustomerKycEntity,
-  CustomerKycStatus,
-} from "@/modules/customer-kycs/customer-kycs-types";
+import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import MUTATION_APPROVE_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationApproveCustomerKyc.graphql";
+import MUTATION_REJECT_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationRejectCustomerKyc.graphql";
 import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
+import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
@@ -37,9 +33,9 @@ import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 
 interface CustomerKycCardProps {
-  kyc: CustomerKycEntity;
+  kyc: CustomerKycDataFragment;
   hideCustomer?: boolean;
-  onApproved?: (kyc: CustomerKycEntity) => void;
+  onApproved?: (kyc: CustomerKycDataFragment) => void;
   cardProps?: CardProps;
 }
 
@@ -49,9 +45,12 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const workspace = useWorkspace();
   const customer = kyc.customer;
   const router = useRouter();
-  const lastVersion = kyc.versions[kyc.versions.length - 1]!;
+  const lastVersion = kyc.versions[kyc.versions.length - 1];
   const { renderVnLocation: renderLocation } = useLocations();
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+
+  const [approveCustomerKyc] = useMutation(MUTATION_APPROVE_CUSTOMER_KYC);
+  const [rejectCustomerKyc] = useMutation(MUTATION_REJECT_CUSTOMER_KYC);
 
   if (!lastVersion) return null;
 
@@ -60,8 +59,13 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
       name: <Trans>Approve</Trans>,
       icon: IconCheck,
       process: async () => {
-        const _kyc = await approveCustomerKyc(customer._id);
-        props.onApproved?.(_kyc);
+        const approvedKyc = await approveCustomerKyc({
+          variables: {
+            customerId: customer._id,
+          },
+        });
+        if (!approvedKyc.data?.approveCustomerKyc) return;
+        props.onApproved?.(approvedKyc.data?.approveCustomerKyc);
       },
     });
   };
@@ -70,7 +74,13 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
     OnModalPrompt({
       title: String.capitalizeFirstLetter(`${t`Reject`} ${t`Customer KYC`}`),
       message: <Trans>Enter reject reason</Trans>,
-      onSubmit: (reason) => rejectCustomerKyc(customer._id, { reason }),
+      onSubmit: (reason) =>
+        rejectCustomerKyc({
+          variables: {
+            customerId: customer._id,
+            input: { reason },
+          },
+        }),
       icon: IconUserScan,
       color: "red",
       suggestions: [t`Wrong information`, t`Info does not match image`, t`Image is blurry`],
@@ -189,7 +199,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
         </SimpleGrid>
 
         {(function () {
-          if (kyc.status === CustomerKycStatus.APPROVED)
+          if (kyc.status === CustomerKycStatus.Approved)
             return (
               <Stack align="end">
                 <Badge color="green">
@@ -198,7 +208,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
               </Stack>
             );
 
-          if (kyc.status === CustomerKycStatus.REJECTED)
+          if (kyc.status === CustomerKycStatus.Rejected)
             return (
               <Stack align="end" gap={5}>
                 <Badge color="red">

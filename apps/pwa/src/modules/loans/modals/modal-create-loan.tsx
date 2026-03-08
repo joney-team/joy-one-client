@@ -4,20 +4,20 @@ import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useRouter } from "@/hooks/use-router";
-import { getCustomerKyc } from "@/modules/customer-kycs/customer-kycs-service";
-import { CustomerKycEntity } from "@/modules/customer-kycs/customer-kycs-types";
-import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modal-register-customer-kyc";
+import { useCustomerKyc } from "@/modules/customer-kycs/hooks/use-customer-kyc";
+import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modals/modal-register-customer-kyc";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
-import { CreateLoanDto } from "@/modules/loans/loan-dtos";
-import { createLoan, getLoans, renderLoanPeriod } from "@/modules/loans/loans-service";
-import { LoanAssetType } from "@/modules/loans/loans-types";
+import MUTATION_CREATE_LOAN from "@/modules/loans/graphql/mutationCreateLoan.graphql";
+import QUERY_LOANS from "@/modules/loans/graphql/queryLoans.graphql";
+import { prepareLoanAssetData, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { useBanks } from "@/modules/plugins/banks/banks.services";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
@@ -25,6 +25,7 @@ import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-work
 import { renderBankSelectOption } from "@/modules/workspaces/components/workspace-bank-information";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
@@ -76,10 +77,13 @@ export const ModalCreateLoan = forwardRef<
   ModalCreateLoanRef,
   { children?: (ref: ModalCreateLoanRef) => ReactNode }
 >((props, ref) => {
+  const client = useApolloClient();
   const { t } = useLingui();
   const { workspaceSetting } = useWorkspaceSetting();
   const { children } = props;
   const [args, setArgs] = useState<ModalCreateLoanProps | null>(null);
+
+  const [createLoan] = useMutation(MUTATION_CREATE_LOAN);
 
   const onClose = () => setArgs(null);
 
@@ -114,7 +118,8 @@ export const ModalCreateLoan = forwardRef<
   const [isFetchingCustomerKyc, setIsFetchingCustomerKyc] = useState(false);
 
   const [customer, setCustomer] = useState<CustomerDataFragment>();
-  const [customerKyc, setCustomerKyc] = useState<CustomerKycEntity>();
+
+  const { customerKyc } = useCustomerKyc(customer?._id);
 
   const form = useForm({
     initialValues: {
@@ -158,14 +163,23 @@ export const ModalCreateLoan = forwardRef<
 
     setIsFetchingCustomerKyc(true);
 
-    const [kyc, previousLoan] = await Promise.all([
-      getCustomerKyc(p.customer._id).catch(() => undefined),
-      getLoans({ customerId: p.customer._id, limit: 1 }).then((res) => res.data[0]),
+    const [previousLoan] = await Promise.all([
+      client.query({
+        query: QUERY_LOANS,
+        variables: {
+          query: {
+            customerId: p.customer._id,
+          },
+          limit: 1,
+        },
+      }),
     ]);
 
-    setCustomerKyc(kyc);
     setCustomer(p.customer);
-    form.setFieldValue("workspaceBranch", previousLoan?.workspaceBranch || workspace.defaultBranch);
+    form.setFieldValue(
+      "workspaceBranch",
+      previousLoan?.data?.list?.results?.[0]?.workspaceBranch || workspace.defaultBranch
+    );
 
     setIsFetchingCustomerKyc(false);
   };
@@ -205,28 +219,32 @@ export const ModalCreateLoan = forwardRef<
       );
       if (!loanPackage) return;
 
-      let dto: CreateLoanDto = {
-        workspaceBranchId: values.workspaceBranch?._id,
-        customerId: customer._id,
-        amount: values.amount,
-        assetType: values.assetType,
-        packageId: loanPackage.id,
-        packagePeriodDays: values.packagePeriodDays,
-        assetData: values.assetData,
-        payment: {
-          accountName: values.payment_accountName,
-          accountNumber: values.payment_accountNumber,
-          accountBankId: values.payment_accountBankId,
-        },
-        coord: {
-          lat: location.coords.latitude,
-          lng: location.coords.longitude,
-        },
-      };
+      const assetData = await prepareLoanAssetData(values.assetData, uploadFile);
 
-      // Submit
-      const loan = await createLoan(dto, uploadFile);
-      await router.push(`/loans/${loan.code}`);
+      const loan = await createLoan({
+        variables: {
+          input: {
+            workspaceBranchId: values.workspaceBranch?._id,
+            customerId: customer._id,
+            amount: values.amount,
+            assetType: values.assetType,
+            packageId: loanPackage.id,
+            packagePeriodDays: values.packagePeriodDays,
+            assetData,
+            payment: {
+              accountName: values.payment_accountName,
+              accountNumber: values.payment_accountNumber,
+              accountBankId: values.payment_accountBankId,
+            },
+            coord: {
+              lat: location.coords.latitude,
+              lng: location.coords.longitude,
+            },
+          },
+        },
+      });
+
+      await router.push(`/loans/${loan.data?.createLoan.code}`);
       onClose();
     },
     onError,
@@ -302,16 +320,20 @@ export const ModalCreateLoan = forwardRef<
 
                 <Session name="KYC" icon={IconUserScan}>
                   {(function () {
-                    if (!customer)
+                    if (!customer) {
                       return <Empty hideBorder message={t`Need customer information`} />;
-                    if (isFetchingCustomerKyc) return <Skeleton height={50} />;
+                    }
+
+                    if (isFetchingCustomerKyc) {
+                      return <Skeleton height={50} />;
+                    }
+
                     if (customerKyc)
                       return (
                         <CustomerKycCard
                           kyc={customerKyc}
                           hideCustomer
                           cardProps={{ p: 16, withBorder: false, shadow: "xs" }}
-                          onApproved={(kyc) => setCustomerKyc(kyc)}
                         />
                       );
 

@@ -8,63 +8,70 @@ import { ModalUpdateWorkspaceBranch } from "@/modules/workspace-branches/modals/
 import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconBuildingSkyscraper, IconLink, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OnCustomerFormModal } from "../customers/modals/modal-customer-form";
+import { OnCustomerFormApprovalModal } from "./modals/modal-customer-form-approval";
 import { useLocations } from "../locations/locations-context";
 import { customerFormStatuses } from "./customer-form-constants";
-import { CustomerFormEntity } from "./customer-form-entity";
-import { multiArchiveCustomerForm } from "./customer-form-service";
-import { OnModalCustomerForm } from "./modal-customer-form";
+import { OnModalCustomerFormLink } from "./modals/modal-customer-form-link";
 
+import { useMutation } from "@apollo/client/react";
+import { CustomerFormDataFragment } from "./graphql/fragmentCustomerForm.graphql";
+import BULK_ARCHIVE_CUSTOMER_FORMS_MUTATION from "./graphql/mutationBulkArchiveCustomerForms.graphql";
 import QUERY_CUSTOMER_FORMS from "./graphql/queryCustomerForms.graphql";
 
 export const CustomerFormList: FC = () => {
+  const { t } = useLingui();
   const { renderVnLocation: renderLocation } = useLocations();
+  const [bulkArchiveCustomerForms] = useMutation(BULK_ARCHIVE_CUSTOMER_FORMS_MUTATION);
+
   return (
     <ModalUpdateWorkspaceBranch>
       {(modalUpdateWorkspaceBranch) => (
         <Stack p={16}>
-          <List<CustomerFormEntity>
+          <List<CustomerFormDataFragment>
             id="cfms"
             query={QUERY_CUSTOMER_FORMS}
             creatable={{
-              onCreate: () => OnModalCustomerForm(),
+              onCreate: () => OnModalCustomerFormLink(),
               label: t`Link form`,
               icon: IconLink,
             }}
             columns={{
               name: {
-                name: t`Name`,
+                name: <Trans>Name</Trans>,
                 filter: { text: true },
                 render: ({ value, data }) => {
                   if (!value) return null;
-                  return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+                  return (
+                    <Clickable onClick={() => OnCustomerFormApprovalModal(data)}>{value}</Clickable>
+                  );
                 },
               },
               phone: {
-                name: t`Phone`,
+                name: <Trans>Phone</Trans>,
                 filter: { text: true },
                 render: ({ value, data }) => {
                   if (!value) return null;
-                  return <Clickable onClick={() => OnCustomerFormModal(data)}>{value}</Clickable>;
+                  return (
+                    <Clickable onClick={() => OnCustomerFormApprovalModal(data)}>{value}</Clickable>
+                  );
                 },
               },
               vnLocation: {
                 defaultWidth: 400,
-                name: t`Address`,
+                name: <Trans>Address</Trans>,
                 render: ({ value }) => renderLocation(value),
               },
-              workspaceBranchId: workspaceBranchColumn(),
+              workspaceBranch: workspaceBranchColumn(),
               status: statusColumn({
-                name: t`Status`,
+                name: <Trans>Status</Trans>,
                 defaultWidth: 200,
                 options: Object.entries(customerFormStatuses).map(([key, value]) => ({
                   value: key,
-                  label: value.label(),
+                  label: t(value.label),
                   color: value.color,
                 })),
               }),
@@ -92,7 +99,13 @@ export const CustomerFormList: FC = () => {
                 label: <Trans>Archive</Trans>,
                 type: "archive",
                 handler: async (data, ctx) => {
-                  await multiArchiveCustomerForm(data.map((v) => v._id));
+                  await bulkArchiveCustomerForms({
+                    variables: {
+                      input: {
+                        ids: data.map((v) => v._id),
+                      },
+                    },
+                  });
                   ctx.refetch();
                 },
               },

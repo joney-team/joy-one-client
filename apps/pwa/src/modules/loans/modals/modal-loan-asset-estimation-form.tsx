@@ -11,7 +11,6 @@ import {
   LoanAssetEstimationBrand,
   LoanAssetEstimationColor,
   LoanAssetEstimationModel,
-  LoanAssetType,
 } from "@/modules/loans/loans-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -32,6 +31,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -39,7 +39,7 @@ interface ModalLoanAssetEstimationFormProps {
 
 const initialValues: LoanAssetEstimation = {
   id: "",
-  assetType: LoanAssetType.MOTOBIKE_REGISTRATION,
+  assetType: LoanAssetType.MotobikeRegistration,
   brandId: "",
   colorId: "",
   modelId: "",
@@ -131,7 +131,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                 <Select
                   label={<Trans>Asset</Trans>}
                   placeholder={t`Select asset`}
-                  data={[LoanAssetType.MOTOBIKE_REGISTRATION, LoanAssetType.CAR_REGISTRATION].map(
+                  data={[LoanAssetType.MotobikeRegistration, LoanAssetType.CarRegistration].map(
                     (type) => ({
                       value: type,
                       label: t(loanAssetTypes[type].label),

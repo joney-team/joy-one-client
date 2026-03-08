@@ -1,0 +1,10 @@
+#import "../graphql/fragmentReceipt.graphql"
+
+mutation DisburseReceipt(
+  $disburseReceiptId: String!
+  $input: DisburseReceiptInput!
+) {
+  disburseReceipt(id: $disburseReceiptId, input: $input) {
+    ...ReceiptData
+  }
+}

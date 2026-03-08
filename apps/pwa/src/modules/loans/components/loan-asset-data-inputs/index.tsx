@@ -1,12 +1,13 @@
 "use client";
 
-import { LoanAssetDataMap, LoanAssetType } from "@/modules/loans/loans-types";
+import { LoanAssetDataMap } from "@/modules/loans/loans-types";
 import { InputWrapper, InputWrapperProps, Stack } from "@mantine/core";
 import { FC } from "react";
 import { InputICloud } from "./input-i-cloud";
 import { InputLandCertificate } from "./input-land-certificate";
 import { InputCarRegistration } from "./input-car-registration";
 import { InputMotobileRegistration } from "./input-motobike-registration";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 
 export interface LoanAssetDataInputProps<T extends LoanAssetType = any>
   extends Omit<InputWrapperProps, "value" | "onChange"> {
@@ -18,11 +19,11 @@ export interface LoanAssetDataInputProps<T extends LoanAssetType = any>
 }
 
 const Inputs: Record<LoanAssetType, FC<LoanAssetDataInputProps>> = {
-  [LoanAssetType.ICLOUD]: InputICloud,
-  [LoanAssetType.MOTOBIKE_REGISTRATION]: InputMotobileRegistration,
-  [LoanAssetType.CAR_REGISTRATION]: InputCarRegistration,
-  [LoanAssetType.BUSINESS_PERMIT]: null as any,
-  [LoanAssetType.LAND_CERTIFICATE]: InputLandCertificate,
+  [LoanAssetType.Icloud]: InputICloud,
+  [LoanAssetType.MotobikeRegistration]: InputMotobileRegistration,
+  [LoanAssetType.CarRegistration]: InputCarRegistration,
+  [LoanAssetType.BusinessPermit]: null as any,
+  [LoanAssetType.LandCertificate]: InputLandCertificate,
 };
 
 export const LoanAssetDataInput: FC<LoanAssetDataInputProps> = (props) => {

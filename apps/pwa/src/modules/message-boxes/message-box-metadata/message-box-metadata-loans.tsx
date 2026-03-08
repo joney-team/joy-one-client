@@ -1,17 +1,25 @@
 "use client";
 
 import { Empty } from "@/components/empty";
-import { useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
 import { LoanCard } from "@/modules/loans/components/loan-card";
-import { getLoans } from "@/modules/loans/loans-service";
+import QUERY_LOANS from "@/modules/loans/graphql/queryLoans.graphql";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
 export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) => {
-  const loans = useList({
-    fetch: async () => getLoans({ customerId: customer._id }),
-    events: [
+  const { data: loansData, refetch: refetchLoans } = useQuery(QUERY_LOANS, {
+    variables: {
+      query: {
+        customerId: customer._id,
+      },
+    },
+  });
+
+  useEventsListener(
+    [
       EventType.LoansJustCreated,
       EventType.LoansPending,
       EventType.LoansApproved,
@@ -23,13 +31,18 @@ export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) =>
       EventType.LoansArchived,
       EventType.LoansLiquidation,
     ],
-  });
+    () => {
+      refetchLoans();
+    }
+  );
+
+  const isEmpty = loansData && loansData?.list.results.length === 0;
 
   return (
     <Stack>
-      {loans.isEmpty && <Empty hideBorder />}
+      {isEmpty && <Empty hideBorder />}
 
-      {loans.data?.map((loan) => {
+      {loansData?.list.results?.map((loan) => {
         return (
           <LoanCard
             key={loan.id}

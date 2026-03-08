@@ -77,6 +77,70 @@ export type AssignCustomerInput = {
   userIds: Array<Scalars['String']['input']>;
 };
 
+export type AttendanceRecord = {
+  __typename: 'AttendanceRecord';
+  _id: Scalars['String']['output'];
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  deviceId: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  locationCoordinates: Maybe<Coordinates>;
+  member: WorkspaceMember;
+  method: AttendanceRecordMethod;
+  note: Maybe<Scalars['String']['output']>;
+  photoUrl: Maybe<Scalars['String']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  rejectedAt: Maybe<Scalars['Float']['output']>;
+  rejectedByUserId: Maybe<Scalars['String']['output']>;
+  rejectedReason: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
+  status: AttendanceRecordStatus;
+  time: Scalars['Float']['output'];
+  type: AttendanceRecordType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  userId: Scalars['String']['output'];
+  workspaceId: Scalars['String']['output'];
+};
+
+/** Attendance record method */
+export const AttendanceRecordMethod = {
+  Default: 'DEFAULT',
+  Manual: 'MANUAL'
+} as const;
+
+export type AttendanceRecordMethod = typeof AttendanceRecordMethod[keyof typeof AttendanceRecordMethod];
+/** Attendance record status */
+export const AttendanceRecordStatus = {
+  Approved: 'APPROVED',
+  Pending: 'PENDING',
+  Rejected: 'REJECTED'
+} as const;
+
+export type AttendanceRecordStatus = typeof AttendanceRecordStatus[keyof typeof AttendanceRecordStatus];
+/** Attendance record type */
+export const AttendanceRecordType = {
+  CheckIn: 'CHECK_IN',
+  CheckOut: 'CHECK_OUT'
+} as const;
+
+export type AttendanceRecordType = typeof AttendanceRecordType[keyof typeof AttendanceRecordType];
+export type AttendanceRecordsPaginated = {
+  __typename: 'AttendanceRecordsPaginated';
+  results: Array<AttendanceRecord>;
+  total: Scalars['Float']['output'];
+};
+
+export type AuthSignInWithEmailPasswordInput = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type AuthTokenResult = {
+  __typename: 'AuthTokenResult';
+  accessToken: Scalars['String']['output'];
+  refreshToken: Scalars['String']['output'];
+};
+
 export type BaseCustomFieldValue = {
   __typename: 'BaseCustomFieldValue';
   customFieldId: Scalars['String']['output'];
@@ -121,6 +185,30 @@ export type BookingsPaginated = {
   __typename: 'BookingsPaginated';
   results: Array<Booking>;
   total: Scalars['Float']['output'];
+};
+
+export type BulkArchiveInput = {
+  ids: Array<Scalars['String']['input']>;
+};
+
+export type BulkArchiveLoansInput = {
+  loanIds: Array<Scalars['String']['input']>;
+};
+
+export type BulkRejectLoanInput = {
+  loanIds: Array<Scalars['String']['input']>;
+  reason: Scalars['String']['input'];
+};
+
+export type BulkUpdateWorkspaceBranchInput = {
+  ids: Array<Scalars['String']['input']>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CalculateLoanPaymentPlanInput = {
+  amount: Scalars['Float']['input'];
+  packageId: Scalars['String']['input'];
+  startTime?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type CategoriesPaginated = {
@@ -267,6 +355,37 @@ export type CouponsPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type CreateLoanInput = {
+  amount: Scalars['Float']['input'];
+  assetData?: InputMaybe<Scalars['JSONObject']['input']>;
+  assetType: LoanAssetType;
+  coord?: InputMaybe<CoordinatesInput>;
+  customerId: Scalars['String']['input'];
+  packageId: Scalars['String']['input'];
+  packagePeriodDays?: InputMaybe<Scalars['Float']['input']>;
+  payment?: InputMaybe<LoanPaymentInput>;
+  source?: InputMaybe<EntitySource>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateReceiptInput = {
+  amount: Scalars['Float']['input'];
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  data?: InputMaybe<Scalars['AnyType']['input']>;
+  expireAt?: InputMaybe<Scalars['Float']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  ref?: InputMaybe<Scalars['String']['input']>;
+  relatedCustomerId?: InputMaybe<Scalars['String']['input']>;
+  relatedEntities?: InputMaybe<Array<RelatedEntityInput>>;
+  relatedLoanId?: InputMaybe<Scalars['String']['input']>;
+  relatedOrderId?: InputMaybe<Scalars['String']['input']>;
+  relatedPartnerId?: InputMaybe<Scalars['String']['input']>;
+  relatedTicketId?: InputMaybe<Scalars['String']['input']>;
+  tipAmount?: InputMaybe<Scalars['Float']['input']>;
+  type: ReceiptType;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type CreateTaskInput = {
   _id?: InputMaybe<Scalars['String']['input']>;
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
@@ -402,6 +521,20 @@ export type CustomerForm = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   vnLocation: Maybe<Location>;
   workspaceBranch: Maybe<WorkspaceBranch>;
+  workspaceId: Scalars['String']['output'];
+};
+
+export type CustomerFormInput = {
+  cancelReason?: InputMaybe<Scalars['String']['input']>;
+  dynamicData?: InputMaybe<Scalars['AnyType']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  location?: InputMaybe<LocationInput>;
+  name: Scalars['String']['input'];
+  phone: Scalars['String']['input'];
+  status?: InputMaybe<CustomerFormStatus>;
+  vnLocation?: InputMaybe<LocationInput>;
+  workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
+  workspaceId: Scalars['String']['input'];
 };
 
 /** Available customer form statuses */
@@ -443,6 +576,70 @@ export type CustomerInput = {
   workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type CustomerKyc = {
+  __typename: 'CustomerKyc';
+  _id: Scalars['String']['output'];
+  cidNumber: Maybe<Scalars['String']['output']>;
+  cidVnLocation: Maybe<Scalars['String']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  customer: Customer;
+  customerId: Scalars['String']['output'];
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
+  status: CustomerKycStatus;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+  versions: Array<CustomerKycVersion>;
+};
+
+export type CustomerKycInput = {
+  backOfCidImage: Scalars['String']['input'];
+  cidBirthday: Scalars['Float']['input'];
+  cidCreatedAt?: InputMaybe<Scalars['Float']['input']>;
+  cidFullName: Scalars['String']['input'];
+  cidGender: Gender;
+  cidLocation?: InputMaybe<LocationInput>;
+  cidNumber: Scalars['String']['input'];
+  cidRaw?: InputMaybe<Scalars['String']['input']>;
+  cidVnLocation?: InputMaybe<LocationInput>;
+  frontOfCidImage: Scalars['String']['input'];
+  portraitImage: Scalars['String']['input'];
+};
+
+/** Customer KYC status */
+export const CustomerKycStatus = {
+  Approved: 'APPROVED',
+  Pending: 'PENDING',
+  Rejected: 'REJECTED'
+} as const;
+
+export type CustomerKycStatus = typeof CustomerKycStatus[keyof typeof CustomerKycStatus];
+export type CustomerKycVersion = {
+  __typename: 'CustomerKycVersion';
+  backOfCidImage: Scalars['String']['output'];
+  cidBirthday: Scalars['Float']['output'];
+  cidCreatedAt: Maybe<Scalars['Float']['output']>;
+  cidFullName: Scalars['String']['output'];
+  cidGender: Gender;
+  cidLocation: Maybe<Location>;
+  cidNumber: Scalars['String']['output'];
+  cidRaw: Maybe<Scalars['String']['output']>;
+  cidVnLocation: Maybe<Location>;
+  createdAt: Scalars['Float']['output'];
+  frontOfCidImage: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  portraitImage: Scalars['String']['output'];
+  rejectReason: Maybe<Scalars['String']['output']>;
+  status: CustomerKycStatus;
+};
+
+export type CustomerKycsPaginated = {
+  __typename: 'CustomerKycsPaginated';
+  results: Array<CustomerKyc>;
+  total: Scalars['Float']['output'];
+};
+
 export type CustomerRelationshipContact = {
   __typename: 'CustomerRelationshipContact';
   name: Scalars['String']['output'];
@@ -462,11 +659,12 @@ export type CustomersPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export type DeviceEntity = {
-  __typename: 'DeviceEntity';
+export type Device = {
+  __typename: 'Device';
   _id: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
+  deviceName: Maybe<Scalars['String']['output']>;
   identifyId: Maybe<Scalars['String']['output']>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
   lastActiveAt: Scalars['Float']['output'];
@@ -477,6 +675,12 @@ export type DeviceEntity = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
+};
+
+export type DisburseReceiptInput = {
+  paymentMethod?: InputMaybe<ReceiptPaymentMethod>;
+  relatedCustomerId?: InputMaybe<Scalars['String']['input']>;
+  relatedLoanId?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type DisplayWidget = {
@@ -532,6 +736,7 @@ export type Event = {
   persist: Maybe<Scalars['Boolean']['output']>;
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
+  relatedEntities: Maybe<Array<RelatedEntity>>;
   sessionId: Maybe<Scalars['String']['output']>;
   source: Maybe<EntitySource>;
   time: Scalars['Float']['output'];
@@ -564,6 +769,9 @@ export const EventType = {
   ActivityNew: 'ACTIVITY_NEW',
   ActivitySynced: 'ACTIVITY_SYNCED',
   ActivityUpdated: 'ACTIVITY_UPDATED',
+  AttendanceRecordApproved: 'ATTENDANCE_RECORD_APPROVED',
+  AttendanceRecordNew: 'ATTENDANCE_RECORD_NEW',
+  AttendanceRecordRejected: 'ATTENDANCE_RECORD_REJECTED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
@@ -817,6 +1025,12 @@ export type FirebaseClientConfig = {
   storageBucket: Scalars['String']['output'];
 };
 
+export type FulfillLoanInput = {
+  fulfilledAt?: InputMaybe<Scalars['Float']['input']>;
+  paymentMethod: ReceiptPaymentMethod;
+  receiptFileIds: Array<Scalars['String']['input']>;
+};
+
 /** Available genders */
 export const Gender = {
   Female: 'FEMALE',
@@ -877,14 +1091,14 @@ export type Loan = {
   isArchived: Maybe<Scalars['Boolean']['output']>;
   isHasLateInterestReceipt: Maybe<Scalars['Boolean']['output']>;
   isLiquidated: Maybe<Scalars['Boolean']['output']>;
-  metadata: Maybe<Scalars['AnyType']['output']>;
+  metadata: Maybe<LoanMetadata>;
   nextReceiptAt: Maybe<Scalars['Float']['output']>;
-  package: Scalars['JSONObject']['output'];
+  package: LoanPackage;
   packageId: Scalars['String']['output'];
   packagePeriodDays: Scalars['Float']['output'];
-  payment: Maybe<Scalars['AnyType']['output']>;
-  paymentPeriods: Maybe<Scalars['AnyType']['output']>;
-  paymentProgress: Maybe<Scalars['AnyType']['output']>;
+  payment: Maybe<LoanPayment>;
+  paymentPeriods: Maybe<Array<LoanPaymentPeriod>>;
+  paymentProgress: Maybe<Array<LoanPaymentProgress>>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   rejectReason: Maybe<Scalars['String']['output']>;
   relatedEntities: Maybe<Array<RelatedEntity>>;
@@ -906,6 +1120,30 @@ export const LoanAssetType = {
 } as const;
 
 export type LoanAssetType = typeof LoanAssetType[keyof typeof LoanAssetType];
+export type LoanLiquidationCalculated = {
+  __typename: 'LoanLiquidationCalculated';
+  avancedPaymentAmount: Scalars['Float']['output'];
+  capitalAmount: Scalars['Float']['output'];
+  feeAmount: Scalars['Float']['output'];
+  lateInterestAmount: Scalars['Float']['output'];
+  paidAmount: Scalars['Float']['output'];
+  period: Scalars['Float']['output'];
+  periodFeeAmount: Scalars['Float']['output'];
+  periodFeeDays: Scalars['Float']['output'];
+  periodFeePerDay: Scalars['Float']['output'];
+  periodStartAt: Scalars['Float']['output'];
+  remainCapitalAmount: Scalars['Float']['output'];
+  remainCapitalAmountFee: Scalars['Float']['output'];
+  remainCapitalAmountFeePercent: Scalars['Float']['output'];
+};
+
+export type LoanMetadata = {
+  __typename: 'LoanMetadata';
+  cidLocation: Maybe<Location>;
+  cidNumber: Maybe<Scalars['String']['output']>;
+  cidVnLocation: Maybe<Location>;
+};
+
 export type LoanPackage = {
   __typename: 'LoanPackage';
   assetTypes: Array<LoanAssetType>;
@@ -950,6 +1188,51 @@ export const LoanPackageType = {
 } as const;
 
 export type LoanPackageType = typeof LoanPackageType[keyof typeof LoanPackageType];
+export type LoanPayment = {
+  __typename: 'LoanPayment';
+  accountBankId: Scalars['String']['output'];
+  accountName: Scalars['String']['output'];
+  accountNumber: Scalars['String']['output'];
+};
+
+export type LoanPaymentInput = {
+  accountBankId: Scalars['String']['input'];
+  accountName: Scalars['String']['input'];
+  accountNumber: Scalars['String']['input'];
+};
+
+export type LoanPaymentPeriod = {
+  __typename: 'LoanPaymentPeriod';
+  capitalAmount: Scalars['Float']['output'];
+  endTime: Scalars['Float']['output'];
+  fee: Scalars['Float']['output'];
+  note: Maybe<Scalars['String']['output']>;
+  period: Scalars['Float']['output'];
+  remainCapitalAmount: Scalars['Float']['output'];
+  startTime: Scalars['Float']['output'];
+  totalAmount: Scalars['Float']['output'];
+};
+
+export type LoanPaymentPlanResult = {
+  __typename: 'LoanPaymentPlanResult';
+  loanPackage: LoanPackage;
+  paymentPeriods: Array<LoanPaymentPlanResultPaymentPeriod>;
+};
+
+export type LoanPaymentPlanResultPaymentPeriod = {
+  __typename: 'LoanPaymentPlanResultPaymentPeriod';
+  periodDays: Scalars['Float']['output'];
+  periods: Array<LoanPaymentPeriod>;
+};
+
+export type LoanPaymentProgress = {
+  __typename: 'LoanPaymentProgress';
+  amount: Scalars['Float']['output'];
+  isCompleted: Scalars['Boolean']['output'];
+  receiptId: Scalars['String']['output'];
+  time: Maybe<Scalars['Float']['output']>;
+};
+
 export type LoanSettings = {
   __typename: 'LoanSettings';
   assetEstimationPriceSpreadRate: Maybe<Scalars['Float']['output']>;
@@ -1012,43 +1295,77 @@ export type Mutation = {
   __typename: 'Mutation';
   addActivity: Activity;
   addReaction: Scalars['Boolean']['output'];
+  approveAttendanceRecord: AttendanceRecord;
+  approveCustomerKyc: CustomerKyc;
+  approveLoan: Loan;
   archiveActivity: Activity;
   archiveCustomer: Scalars['Boolean']['output'];
+  archiveCustomerForm: CustomerForm;
+  archiveLoan: Loan;
+  archiveReceipt: Receipt;
   assignCustomer: Customer;
   assignWorkspaceMemberRoles: WorkspaceMember;
+  bulkArchiveCustomerForms: Array<CustomerForm>;
+  bulkArchiveLoans: Array<Scalars['String']['output']>;
+  bulkRejectLoans: Array<Loan>;
+  bulkUpdateCustomerFormWorkspaceBranch: CustomerForm;
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
   cancelBooking: Booking;
   createBooking: Booking;
   createCategory: Category;
   createCustomer: Customer;
+  createCustomerForm: CustomerForm;
+  createLoan: Loan;
   createProduct: Product;
+  createReceipt: Receipt;
   createTag: Tag;
   createTask: Task;
   createWorkspaceBranch: WorkspaceBranch;
   createWorkspaceRole: WorkspaceRole;
   deleteCategory: Scalars['Boolean']['output'];
   deleteWorkspaceRole: Scalars['Boolean']['output'];
+  disburseReceipt: Receipt;
   duplicateTask: Task;
   externalStorageVerifyDna: File;
   fetchExternalStorageSize: Scalars['Float']['output'];
+  fulfillLoan: Loan;
   generateCategorySlug: Scalars['String']['output'];
   generateWorkspaceInviteCode: Scalars['String']['output'];
+  healthCheckLoan: Loan;
   healthcheckPluginExternalStorage: Scalars['Boolean']['output'];
   interactCategory: Scalars['Boolean']['output'];
+  liquidateLoan: Scalars['String']['output'];
+  partialPaymentReceipt: Array<Receipt>;
+  payReceipt: Receipt;
   pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
-  registerDevice: DeviceEntity;
+  registerCustomerKyc: CustomerKyc;
+  registerDevice: Device;
+  rejectAttendanceRecord: AttendanceRecord;
+  rejectCustomerKyc: CustomerKyc;
+  rejectLoan: Array<Loan>;
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
   rescheduleBooking: Booking;
+  revertApproveLoan: Loan;
+  revertFulfilledLoan: Loan;
+  revertLiquidationLoan: Loan;
+  revertPaymentReceipt: Receipt;
   setPluginExternalStorage: PluginExternalStorage;
+  signInWithEmailPassword: AuthTokenResult;
+  signLoan: Loan;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateActivity: Activity;
   updateBooking: Booking;
   updateCategory: Category;
   updateCustomer: Customer;
+  updateCustomerForm: CustomerForm;
+  updateLoanAmount: Loan;
+  updateLoanAssetData: Loan;
+  updateLoanPackage: Loan;
+  updateReceipt: Receipt;
   updateTaskStatuses: Array<TaskStatus>;
   updateWorkspace: Workspace;
   updateWorkspaceBranch: WorkspaceBranch;
@@ -1074,12 +1391,42 @@ export type MutationAddReactionArgs = {
 };
 
 
+export type MutationApproveAttendanceRecordArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationApproveCustomerKycArgs = {
+  customerId: Scalars['String']['input'];
+};
+
+
+export type MutationApproveLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationArchiveActivityArgs = {
   id: Scalars['String']['input'];
 };
 
 
 export type MutationArchiveCustomerArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationArchiveCustomerFormArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationArchiveLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationArchiveReceiptArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -1093,6 +1440,26 @@ export type MutationAssignCustomerArgs = {
 export type MutationAssignWorkspaceMemberRolesArgs = {
   memberId: Scalars['String']['input'];
   roleIds: Array<Scalars['String']['input']>;
+};
+
+
+export type MutationBulkArchiveCustomerFormsArgs = {
+  input: BulkArchiveInput;
+};
+
+
+export type MutationBulkArchiveLoansArgs = {
+  input: BulkArchiveLoansInput;
+};
+
+
+export type MutationBulkRejectLoansArgs = {
+  input: BulkRejectLoanInput;
+};
+
+
+export type MutationBulkUpdateCustomerFormWorkspaceBranchArgs = {
+  input: BulkUpdateWorkspaceBranchInput;
 };
 
 
@@ -1144,6 +1511,16 @@ export type MutationCreateCustomerArgs = {
 };
 
 
+export type MutationCreateCustomerFormArgs = {
+  input: CustomerFormInput;
+};
+
+
+export type MutationCreateLoanArgs = {
+  input: CreateLoanInput;
+};
+
+
 export type MutationCreateProductArgs = {
   categoryId?: InputMaybe<Scalars['String']['input']>;
   code?: InputMaybe<Scalars['String']['input']>;
@@ -1174,8 +1551,13 @@ export type MutationCreateProductArgs = {
 };
 
 
+export type MutationCreateReceiptArgs = {
+  input: CreateReceiptInput;
+};
+
+
 export type MutationCreateTagArgs = {
-  input: TagDto;
+  input: TagInput;
 };
 
 
@@ -1207,6 +1589,12 @@ export type MutationDeleteWorkspaceRoleArgs = {
 };
 
 
+export type MutationDisburseReceiptArgs = {
+  id: Scalars['String']['input'];
+  input: DisburseReceiptInput;
+};
+
+
 export type MutationDuplicateTaskArgs = {
   _id: Scalars['String']['input'];
   overwrite?: InputMaybe<CreateTaskInput>;
@@ -1218,13 +1606,41 @@ export type MutationExternalStorageVerifyDnaArgs = {
 };
 
 
+export type MutationFulfillLoanArgs = {
+  id: Scalars['String']['input'];
+  input: FulfillLoanInput;
+};
+
+
 export type MutationGenerateCategorySlugArgs = {
   name: Scalars['String']['input'];
 };
 
 
+export type MutationHealthCheckLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationInteractCategoryArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationLiquidateLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationPartialPaymentReceiptArgs = {
+  id: Scalars['String']['input'];
+  input: PartialPaymentInput;
+};
+
+
+export type MutationPayReceiptArgs = {
+  id: Scalars['String']['input'];
+  input: PayReceiptInput;
 };
 
 
@@ -1235,8 +1651,32 @@ export type MutationPluginExternalStorageSignUploadUrlArgs = {
 };
 
 
+export type MutationRegisterCustomerKycArgs = {
+  customerId: Scalars['String']['input'];
+  input: CustomerKycInput;
+};
+
+
 export type MutationRegisterDeviceArgs = {
-  input: RegisterDeviceDto;
+  input: RegisterDeviceInput;
+};
+
+
+export type MutationRejectAttendanceRecordArgs = {
+  id: Scalars['String']['input'];
+  input: RejectAttendanceRecordInput;
+};
+
+
+export type MutationRejectCustomerKycArgs = {
+  customerId: Scalars['String']['input'];
+  input: RejectCustomerKycInput;
+};
+
+
+export type MutationRejectLoanArgs = {
+  id: Scalars['String']['input'];
+  input: RejectLoanInput;
 };
 
 
@@ -1267,6 +1707,26 @@ export type MutationRescheduleBookingArgs = {
 };
 
 
+export type MutationRevertApproveLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationRevertFulfilledLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationRevertLiquidationLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationRevertPaymentReceiptArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationSetPluginExternalStorageArgs = {
   accessKeyId?: InputMaybe<Scalars['String']['input']>;
   bucketName?: InputMaybe<Scalars['String']['input']>;
@@ -1274,6 +1734,17 @@ export type MutationSetPluginExternalStorageArgs = {
   provider: PluginExternalStorageProvider;
   region?: InputMaybe<Scalars['String']['input']>;
   secretAccessKey?: InputMaybe<Scalars['String']['input']>;
+};
+
+
+export type MutationSignInWithEmailPasswordArgs = {
+  input: AuthSignInWithEmailPasswordInput;
+};
+
+
+export type MutationSignLoanArgs = {
+  id: Scalars['String']['input'];
+  input: SignLoanInput;
 };
 
 
@@ -1314,6 +1785,36 @@ export type MutationUpdateCategoryArgs = {
 export type MutationUpdateCustomerArgs = {
   id: Scalars['String']['input'];
   input: CustomerInput;
+};
+
+
+export type MutationUpdateCustomerFormArgs = {
+  id: Scalars['String']['input'];
+  input: CustomerFormInput;
+};
+
+
+export type MutationUpdateLoanAmountArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateLoanAmountInput;
+};
+
+
+export type MutationUpdateLoanAssetDataArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateLoanAssetDataInput;
+};
+
+
+export type MutationUpdateLoanPackageArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateLoanPackageInput;
+};
+
+
+export type MutationUpdateReceiptArgs = {
+  id: Scalars['String']['input'];
+  input: UpdateReceiptInput;
 };
 
 
@@ -1463,6 +1964,11 @@ export type OrdersPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type PartialPaymentInput = {
+  amount: Scalars['Float']['input'];
+  nextExpireAt?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type Partner = {
   __typename: 'Partner';
   _id: Scalars['String']['output'];
@@ -1482,6 +1988,11 @@ export type PartnersPaginated = {
   __typename: 'PartnersPaginated';
   results: Array<Partner>;
   total: Scalars['Float']['output'];
+};
+
+export type PayReceiptInput = {
+  giveAmount?: InputMaybe<Scalars['Float']['input']>;
+  paymentMethod?: InputMaybe<ReceiptPaymentMethod>;
 };
 
 export type PluginBankAccount = {
@@ -1856,8 +2367,11 @@ export type Query = {
   activities: ActivitiesPaginated;
   activity: Activity;
   appConfig: AppConfig;
+  attendanceRecord: AttendanceRecord;
+  attendanceRecords: AttendanceRecordsPaginated;
   booking: Booking;
   bookings: BookingsPaginated;
+  calculateLoanPaymentPlan: LoanPaymentPlanResult;
   categories: CategoriesPaginated;
   category: Category;
   couponRules: CouponRulesPaginated;
@@ -1865,7 +2379,10 @@ export type Query = {
   customFields: CustomFieldsPaginated;
   customer: Customer;
   customerByCode: Customer;
+  customerForm: CustomerForm;
   customerForms: CustomerFormsPaginated;
+  customerKyc: Maybe<CustomerKyc>;
+  customerKycs: CustomerKycsPaginated;
   customers: CustomersPaginated;
   customersByIds: Array<Customer>;
   eInvoices: PluginEInvoicesPaginated;
@@ -1874,9 +2391,12 @@ export type Query = {
   files: FilesPaginated;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
+  getDeviceByIdentifyId: Maybe<Device>;
   getFileInfo: File;
   getProductByIds: Array<Product>;
+  liquidateLoanCalculate: LoanLiquidationCalculated;
   loan: Loan;
+  loanByCode: Loan;
   loans: LoansPaginated;
   orders: OrdersPaginated;
   partners: PartnersPaginated;
@@ -1892,6 +2412,8 @@ export type Query = {
   promotions: PromotionsPaginated;
   reactions: ReactionsPaginated;
   reactionsCount: ReactionsCount;
+  receipt: Receipt;
+  receiptByCode: Receipt;
   receipts: ReceiptsPaginated;
   search: Array<SearchResult>;
   siblingTasks: SiblingTasks;
@@ -1938,6 +2460,18 @@ export type QueryActivityArgs = {
 };
 
 
+export type QueryAttendanceRecordArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryAttendanceRecordsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
 export type QueryBookingArgs = {
   id: Scalars['String']['input'];
 };
@@ -1947,6 +2481,11 @@ export type QueryBookingsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryCalculateLoanPaymentPlanArgs = {
+  input: CalculateLoanPaymentPlanInput;
 };
 
 
@@ -1993,7 +2532,24 @@ export type QueryCustomerByCodeArgs = {
 };
 
 
+export type QueryCustomerFormArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryCustomerFormsArgs = {
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryCustomerKycArgs = {
+  customerId: Scalars['String']['input'];
+};
+
+
+export type QueryCustomerKycsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2051,6 +2607,11 @@ export type QueryGetCategoryBySlugArgs = {
 };
 
 
+export type QueryGetDeviceByIdentifyIdArgs = {
+  identifyId: Scalars['String']['input'];
+};
+
+
 export type QueryGetFileInfoArgs = {
   fileId: Scalars['String']['input'];
 };
@@ -2061,8 +2622,18 @@ export type QueryGetProductByIdsArgs = {
 };
 
 
+export type QueryLiquidateLoanCalculateArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type QueryLoanArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type QueryLoanByCodeArgs = {
+  code: Scalars['String']['input'];
 };
 
 
@@ -2165,6 +2736,16 @@ export type QueryReactionsArgs = {
 export type QueryReactionsCountArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
+};
+
+
+export type QueryReceiptArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type QueryReceiptByCodeArgs = {
+  code: Scalars['String']['input'];
 };
 
 
@@ -2371,6 +2952,7 @@ export type Receipt = {
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<BaseCustomFieldValue>>;
   data: Maybe<Scalars['AnyType']['output']>;
+  dataChanged: Maybe<Scalars['JSONObject']['output']>;
   disbursementUser: Maybe<WorkspaceMember>;
   disbursementUserId: Maybe<Scalars['String']['output']>;
   expireAt: Maybe<Scalars['Float']['output']>;
@@ -2426,9 +3008,22 @@ export type ReceiptsPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export type RegisterDeviceDto = {
+export type RegisterDeviceInput = {
+  deviceName?: InputMaybe<Scalars['String']['input']>;
   identifyId: Scalars['String']['input'];
   locale?: InputMaybe<AppLocale>;
+};
+
+export type RejectAttendanceRecordInput = {
+  reason?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type RejectCustomerKycInput = {
+  reason: Scalars['String']['input'];
+};
+
+export type RejectLoanInput = {
+  reason: Scalars['String']['input'];
 };
 
 export type RelatedEntity = {
@@ -2437,6 +3032,13 @@ export type RelatedEntity = {
   entity: Scalars['String']['output'];
   id: Maybe<Scalars['String']['output']>;
   index: Maybe<Scalars['Boolean']['output']>;
+};
+
+export type RelatedEntityInput = {
+  data?: InputMaybe<Scalars['JSONObject']['input']>;
+  entity: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  index?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 export type SearchResult = {
@@ -2542,6 +3144,10 @@ export type SiblingTasks = {
   previous: Maybe<Task>;
 };
 
+export type SignLoanInput = {
+  signature: Scalars['String']['input'];
+};
+
 export type SignUploadUrlResponse = {
   __typename: 'SignUploadUrlResponse';
   dna: Scalars['String']['output'];
@@ -2577,7 +3183,7 @@ export type Tag = {
   updatedAt: Maybe<Scalars['Float']['output']>;
 };
 
-export type TagDto = {
+export type TagInput = {
   color?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   order?: InputMaybe<Scalars['Float']['input']>;
@@ -2721,12 +3327,39 @@ export type TaskTimeTrackingInput = {
   note?: InputMaybe<Scalars['String']['input']>;
   startAt: Scalars['Float']['input'];
   userId: Scalars['String']['input'];
+  workspaceId: Scalars['String']['input'];
 };
 
 export type TasksPaginated = {
   __typename: 'TasksPaginated';
   results: Array<Task>;
   total: Scalars['Float']['output'];
+};
+
+export type UpdateLoanAmountInput = {
+  amount: Scalars['Float']['input'];
+};
+
+export type UpdateLoanAssetDataInput = {
+  assetData: Scalars['JSONObject']['input'];
+};
+
+export type UpdateLoanPackageInput = {
+  packageId: Scalars['String']['input'];
+  packagePeriodDays?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type UpdateReceiptInput = {
+  amount: Scalars['Float']['input'];
+  assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
+  cashierUserId?: InputMaybe<Scalars['String']['input']>;
+  data?: InputMaybe<Scalars['JSONObject']['input']>;
+  expireAt?: InputMaybe<Scalars['Float']['input']>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  paidAt?: InputMaybe<Scalars['Float']['input']>;
+  paymentMethod?: InputMaybe<ReceiptPaymentMethod>;
+  relatedCustomerId?: InputMaybe<Scalars['String']['input']>;
+  tipAmount?: InputMaybe<Scalars['Float']['input']>;
 };
 
 export type UpdateTagInput = {
@@ -2763,6 +3396,15 @@ export type UserAuthProvider = {
   providerId: Scalars['String']['output'];
   uid: Scalars['String']['output'];
   username: Scalars['String']['output'];
+};
+
+export type UserSettings = {
+  __typename: 'UserSettings';
+  isStartOfWeekSunday: Maybe<Scalars['Boolean']['output']>;
+  isTwelveHour: Maybe<Scalars['Boolean']['output']>;
+  locale: Maybe<AppLocale>;
+  timezoneId: Maybe<Scalars['String']['output']>;
+  timezoneUtc: Maybe<Scalars['String']['output']>;
 };
 
 export type WorkingDayInterval = {

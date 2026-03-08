@@ -4,18 +4,17 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
+import { EventType, LoanStatus, ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { api } from "@/modules/apis";
-import { healthCheckLoan, revertLiquidationLoan } from "@/modules/loans/loans-service";
-import { LoanEntity, LoanStatus } from "@/modules/loans/loans-types";
+import { useEventsListener } from "@/modules/events/event-service";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
+import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
-import { getReceipts } from "@/modules/receipts/receipts-service";
-import { ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useFetch, UseFetch } from "@/utils/use-fetch.util";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
@@ -26,28 +25,40 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import MUTATION_HEALTH_CHECK_LOAN from "../graphql/mutationHealthCheckLoan.graphql";
+import MUTATION_REVERT_LIQUIDATION_LOAN from "../graphql/mutationRevertLiquidationLoan.graphql";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
-import { EventType } from "@/graphql/enums.graphql";
 
 interface LoanPaymentsProps {
-  loan: UseFetch<LoanEntity>;
+  loan: LoanDataFragment;
+  refetch: () => void;
 }
 
 export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const color = useColor();
-  const loan = props.loan.data;
+  const { loan, refetch } = props;
   const { hasPermission } = useWorkspace();
+  const [healthCheckLoan] = useMutation(MUTATION_HEALTH_CHECK_LOAN);
+  const [revertLiquidationLoan] = useMutation(MUTATION_REVERT_LIQUIDATION_LOAN);
 
-  const receipts = useFetch({
-    id: `loan_${loan?.id}_receipts`,
-    fetch: () =>
-      getReceipts({
+  const {
+    data: receiptsData,
+    loading,
+    refetch: refetchReceipts,
+  } = useQuery(QUERY_RECEIPTS, {
+    variables: {
+      query: {
         relatedLoanId: loan?.id,
-        type: ReceiptType.INCOME,
+        type: ReceiptType.Income,
         getAll: true,
-      }).then((res) => res.data),
-    refetchEvents: [
+      },
+    },
+  });
+
+  useEventsListener(
+    [
       EventType.ReceiptNew,
       EventType.ReceiptPaid,
       EventType.ReceiptUpdated,
@@ -56,16 +67,18 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
       EventType.ReceiptUnarchived,
       EventType.ReceiptChangeWorkspaceBranch,
     ],
-  });
+    () => refetchReceipts()
+  );
 
-  const liquidationReceipt = (receipts.data || []).find(
-    (v) => v.type === ReceiptType.INCOME && v.data?.liquidation
+  const receipts = receiptsData?.list.results || [];
+
+  const liquidationReceipt = receipts.find(
+    (v) => v.type === ReceiptType.Income && v.data?.liquidation
   );
   const isAbleToLiquidation =
-    loan?.status !== LoanStatus.COMPLETED &&
-    (receipts.data || []).filter(
-      (v) => v.type === ReceiptType.INCOME && v.status === ReceiptStatus.PENDING
-    ).length >= 2;
+    loan?.status !== LoanStatus.Completed &&
+    receipts.filter((v) => v.type === ReceiptType.Income && v.status === ReceiptStatus.Pending)
+      .length >= 2;
 
   const onRevertFulfill = async () => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
@@ -79,11 +92,11 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     if (!loan) return;
     onConfirmModal({
       content: <Trans>Are you sure you want to revert the liquidation?</Trans>,
-      onConfirm: () => revertLiquidationLoan(loan.id),
+      onConfirm: () => revertLiquidationLoan({ variables: { revertLiquidationLoanId: loan.id } }),
     });
   };
 
-  if (!loan || !loan.paymentPeriods || !receipts.isInitialized) return <Skeleton h={200} />;
+  if (!loan || !loan.paymentPeriods || loading) return <Skeleton h={200} />;
 
   const CTAs: FC = () => {
     return (
@@ -102,7 +115,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
         <Renderer
           visible={
             hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED) &&
-            loan.status !== LoanStatus.COMPLETED
+            loan.status !== LoanStatus.Completed
           }
         >
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
@@ -110,7 +123,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           </Button>
         </Renderer>
 
-        <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.COMPLETED}>
+        <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.Completed}>
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
             {t`Revert liquidation`}
           </Button>
@@ -120,7 +133,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           color="gray"
           variant="subtle"
           leftIcon={IconCircleDashedCheck}
-          onClick={() => healthCheckLoan(loan.id)}
+          onClick={() => healthCheckLoan({ variables: { healthCheckLoanId: loan.id } })}
         >
           {t`Check`}
         </Button>
@@ -156,9 +169,9 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
 
               <Table.Tbody>
                 {loan.paymentPeriods.map((paymentPeriod, i) => {
-                  const relatedReceipts = (receipts.data || []).filter(
+                  const relatedReceipts = receipts.filter(
                     (v) =>
-                      v.type === ReceiptType.INCOME &&
+                      v.type === ReceiptType.Income &&
                       (v.data?.period?.period === paymentPeriod.period ||
                         v.data?.lateInterest?.period === paymentPeriod.period)
                   );
@@ -214,8 +227,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                                 <LoanReceiptCard
                                   receipt={receipt}
                                   loan={loan}
-                                  refetch={props.loan.fetch}
-                                  receipts={receipts.data || []}
+                                  receipts={receipts}
                                 />
                               </Stack>
                             );
@@ -229,7 +241,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                               color="gray"
                               onClick={() =>
                                 OnModalReceiptForm({
-                                  type: ReceiptType.INCOME,
+                                  type: ReceiptType.Income,
                                   data: {
                                     period: {
                                       period: paymentPeriod.period,
@@ -237,7 +249,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                                   },
                                   relatedCustomer: loan.customer,
                                   relatedLoan: loan,
-                                  onDone: () => props.loan.fetch({ isSilient: true }),
+                                  onDone: () => refetch(),
                                 })
                               }
                             >
@@ -287,9 +299,8 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       >
                         <LoanReceiptCard
                           receipt={liquidationReceipt}
-                          receipts={receipts.data || []}
+                          receipts={receipts}
                           loan={loan}
-                          refetch={() => props.loan.fetch({ isSilient: true })}
                         />
                       </Stack>
                     </Table.Td>
@@ -308,9 +319,9 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
       <Renderer views={["mobile"]}>
         <Stack>
           {loan.paymentPeriods.map((paymentPeriod, i) => {
-            const relatedReceipts = (receipts.data || []).filter(
+            const relatedReceipts = receipts.filter(
               (v) =>
-                v.type === ReceiptType.INCOME &&
+                v.type === ReceiptType.Income &&
                 (v.data?.period?.period === paymentPeriod.period ||
                   v.data?.lateInterest?.period === paymentPeriod.period)
             );
@@ -355,12 +366,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                       {relatedReceipts.map((receipt) => {
                         return (
                           <Stack key={receipt.id}>
-                            <LoanReceiptCard
-                              receipt={receipt}
-                              loan={loan}
-                              refetch={props.loan.fetch}
-                              receipts={receipts.data || []}
-                            />
+                            <LoanReceiptCard receipt={receipt} loan={loan} receipts={receipts} />
                           </Stack>
                         );
                       })}
@@ -373,7 +379,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                           color="gray"
                           onClick={() =>
                             OnModalReceiptForm({
-                              type: ReceiptType.INCOME,
+                              type: ReceiptType.Income,
                               data: {
                                 period: {
                                   period: paymentPeriod.period,
@@ -381,7 +387,6 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                               },
                               relatedCustomer: loan.customer,
                               relatedLoan: loan,
-                              onDone: () => props.loan.fetch({ isSilient: true }),
                             })
                           }
                         >

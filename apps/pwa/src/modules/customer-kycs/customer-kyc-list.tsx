@@ -4,32 +4,33 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { NumberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-list";
-import { EventType } from "@/graphql/enums.graphql";
+import { UseGraphqlList, useGraphqlList } from "@/components/list/use-graphql-list";
+import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { useEventsListener } from "@/modules/events/event-service";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyzeFilled } from "@tabler/icons-react";
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { customerKycStatuses } from "./customer-kyc-constants";
-import { getCustomerKycs } from "./customer-kycs-service";
-import { CustomerKycStatus } from "./customer-kycs-types";
+import QUERY_CUSTOMER_KYCS from "./graphql/queryCustomerKycs.graphql";
+import { CustomerKycDataFragment } from "./graphql/fragmentCustomerKyc.graphql";
 
 export const CustomerKycList: FC = () => {
-  const kycs = useList({
-    id: "customerKYCs",
-    fetch: (q) => getCustomerKycs(q),
+  const { t } = useLingui();
+  const kycs: UseGraphqlList<CustomerKycDataFragment> = useGraphqlList({
+    query: QUERY_CUSTOMER_KYCS,
+    id: "ckys",
   });
 
   useEventsListener(
     [EventType.CustomerKycApproved, EventType.CustomerKycRejected, EventType.CustomerKycPending],
-    () => kycs.fetch(true, { isSilient: true })
+    () => kycs.refetch()
   );
 
   return (
-    <InfiniteScroll loadMore={() => kycs.fetch()} hasMore={kycs.isAbleToLoadMore}>
+    <InfiniteScroll loadMore={() => kycs.loadMore()} hasMore={kycs.isAbleToLoadMore}>
       <Stack gap={16} p={16}>
         <Group gap={5}>
           <ButtonSelect
@@ -38,7 +39,7 @@ export const CustomerKycList: FC = () => {
             onClear={() => kycs.removeParams(["status"])}
             value={kycs.params.status}
             options={Object.values(CustomerKycStatus).map((status) => ({
-              label: customerKycStatuses[status].label(),
+              label: t(customerKycStatuses[status].label),
               value: status,
             }))}
             onChange={(tagIds) => kycs.setParams({ status: tagIds })}
@@ -58,8 +59,8 @@ export const CustomerKycList: FC = () => {
 
         {kycs.isHasData && (
           <SimpleGrid cols={{ md: 3 }}>
-            {kycs.data.map((product) => {
-              return <CustomerKycCard key={product._id} kyc={product} />;
+            {kycs.data.map((kyc) => {
+              return <CustomerKycCard key={kyc._id} kyc={kyc} />;
             })}
           </SimpleGrid>
         )}

@@ -1,0 +1,24 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment EventData on Event {
+  _id
+  ref
+  time
+  type
+  channel
+  userId
+  actionType
+  data
+  persist
+  variant
+  sessionId
+  relatedEntities {
+    entity
+    id
+    data
+    index
+  }
+  user {
+    ...WorkspaceMemberData
+  }
+}

@@ -4,11 +4,11 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
-import { onReconnected } from "@/modules/events/event-service";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 import { useLoans } from "@/modules/loans/loans-context";
-import { getLoanPaymentPlan, renderLoanPeriod } from "@/modules/loans/loans-service";
-import { LoanAssetType, LoanPaymentPlanResult } from "@/modules/loans/loans-types";
+import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
+import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -30,7 +30,8 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCalculator } from "@tabler/icons-react";
-import { FC, Fragment, ReactNode, useEffect, useState } from "react";
+import { FC, Fragment, ReactNode, useMemo, useState } from "react";
+import QUERY_CALCULATE_LOAN_PAYMENT_PLAN from "../graphql/queryCalculateLoanPaymentPlan.graphql";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode }> = ({
@@ -42,11 +43,11 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
   const { t } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [paymentPlanResult, setPaymentPlanResult] = useState<LoanPaymentPlanResult>();
-  const [calculating, setCalculating] = useState(false);
+  // const [paymentPlanResult, setPaymentPlanResult] = useState<LoanPaymentPlanResult>();
+  // const [calculating, setCalculating] = useState(false);
 
   const [amount, setAmount] = useState<any>(1 * 1e7);
-  const [assetType, setAssetType] = useState<any>(LoanAssetType.MOTOBIKE_REGISTRATION);
+  const [assetType, setAssetType] = useState<any>(LoanAssetType.MotobikeRegistration);
   const [_packageDays, setPackageDays] = useState<any>(180);
   const [_packagePeriodDays, setPackagePeriodDays] = useState<any>(30);
   const [startTime, setStartTime] = useState(DateTime.toSeconds(new Date()));
@@ -83,47 +84,31 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
   const loanPackage = workspaceSetting?.loanSettings?.loanPackages?.find(
     (p) => assetType && p.assetTypes.includes(assetType) && p.days === packageDays
   );
-  const paymentPeriods =
-    paymentPlanResult?.paymentPeriods?.find((v) => v.periodDays === packagePeriodDays)?.periods ||
-    [];
 
-  useEffect(() => {
-    setPaymentPlanResult(undefined);
-
-    if (amount && loanPackage && opened) {
-      setCalculating(true);
-
-      getLoanPaymentPlan({
-        packageId: loanPackage.id,
+  const {
+    data: paymentPlanData,
+    loading: paymentPlanLoading,
+    error: paymentPlanError,
+  } = useQuery(QUERY_CALCULATE_LOAN_PAYMENT_PLAN, {
+    variables: {
+      input: {
+        packageId: loanPackage?.id ?? "",
         amount,
         startTime,
-      })
-        .then(setPaymentPlanResult)
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => setCalculating(false));
-    }
-  }, [amount, loanPackage, startTime, opened]);
+      },
+    },
+    skip: !loanPackage?.id || typeof amount !== "number" || !startTime || !opened,
+  });
 
-  onReconnected(() => {
-    if (amount && loanPackage && opened) {
-      setCalculating(true);
+  const paymentPeriods = useMemo(() => {
+    return (
+      paymentPlanData?.calculateLoanPaymentPlan?.paymentPeriods.find(
+        (v) => v.periodDays === packagePeriodDays
+      )?.periods || []
+    );
+  }, [paymentPlanData, packagePeriodDays]);
 
-      getLoanPaymentPlan({
-        packageId: loanPackage.id,
-        amount,
-        startTime,
-      })
-        .then(setPaymentPlanResult)
-        .catch((error) => {
-          console.error(error);
-        })
-        .finally(() => setCalculating(false));
-    }
-  }, [amount, loanPackage, startTime, opened]);
-
-  if (!loans.isInitialized || !loans.assetEstimations) return null;
+  if (!loans.isInitialized || !loans.assetEstimations || paymentPlanLoading) return null;
 
   return (
     <Fragment>
@@ -198,7 +183,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
             />
           </SimpleGrid>
 
-          {calculating && <Skeleton height={200} />}
+          {paymentPlanLoading && <Skeleton height={200} />}
 
           {paymentPeriods.length > 0 && (
             <InputWrapper label={<Trans>Payment periods</Trans>}>
@@ -295,7 +280,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
                     label={<Trans>Loan package type</Trans>}
                     value={
                       <Badge color={loanPackageTypes[loanPackage.type].color}>
-                        {loanPackageTypes[loanPackage.type].label()}
+                        {t(loanPackageTypes[loanPackage.type].label)}
                       </Badge>
                     }
                   />

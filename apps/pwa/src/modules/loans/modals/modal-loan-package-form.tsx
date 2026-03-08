@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { LoanPackageType } from "@/graphql/enums.graphql";
+import { LoanAssetType, LoanPackageType } from "@/graphql/enums.graphql";
 import { LoanPackage } from "@/graphql/types.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useLoans } from "@/modules/loans/loans-context";
-import { LoanAssetType } from "@/modules/loans/loans-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -131,7 +130,7 @@ export const ModalLoanPackageForm: FC<{
               value={form.values.type}
               data={Object.values(LoanPackageType).map((type) => ({
                 value: type,
-                label: loanPackageTypes[type].label(),
+                label: t(loanPackageTypes[type].label),
               }))}
               {...form.getInputProps("type")}
             />

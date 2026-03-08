@@ -607,3 +607,9 @@ body {
     user-select: none !important;
   }
 }
+
+button.removeOutline {
+  &.mantine-focus-auto:focus-visible {
+    outline: none;
+  }
+}

@@ -4,11 +4,10 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useLang } from "@/modules/lang/lang-context";
-import { partialPaymentReceipt } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -19,6 +18,8 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useState } from "react";
+import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import MUTATION_PARTIAL_PAYMENT_RECEIPT from "../graphql/mutationPartialPaymentReceipt.graphql";
 
 const ModalPayReceipt = dynamic(
   () => import("./modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
@@ -29,14 +30,16 @@ const ModalPayReceipt = dynamic(
 );
 
 interface ModalPartialPaymentProps {
-  onDone?: (receipts: ReceiptEntity[]) => void | Promise<void>;
-  receipt: ReceiptEntity;
+  onDone?: (receipts: ReceiptDataFragment[]) => void | Promise<void>;
+  receipt: ReceiptDataFragment;
 }
 
 export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
+
+  const [partialPaymentReceipt] = useMutation(MUTATION_PARTIAL_PAYMENT_RECEIPT);
 
   const form = useForm({
     initialValues: {
@@ -63,7 +66,14 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
         const onSubmit = form.onSubmit(async (values) => {
           setIsSubmitting(true);
           try {
-            const { receipts } = await partialPaymentReceipt(props.receipt.id, values);
+            const result = await partialPaymentReceipt({
+              variables: {
+                partialPaymentReceiptId: props.receipt.id,
+                input: values,
+              },
+            });
+            if (!result.data) return;
+            const receipts = result.data.partialPaymentReceipt;
             modals.close("ModalPartialPayment");
             modalPayReceipt.open({ receipt: receipts[0] });
           } catch (error) {
@@ -136,7 +146,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
 export const OnModalPartialPayment = (props: ModalPartialPaymentProps) => {
   return modals.open({
     modalId: "ModalPartialPayment",
-    title: <ModalHead name={t`Partial payment`} icon={IconCircleHalf2} />,
+    title: <ModalHead name={<Trans>Partial payment</Trans>} icon={IconCircleHalf2} />,
     children: <ModalPartialPayment {...props} />,
   });
 };

@@ -12,25 +12,25 @@ import packageJson from "../package.json";
 import { AppContext } from "./app.context";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
+import { usePageTitle } from "./hooks/use-page-title";
 import { socket } from "./modules/apis";
 import { RestQueryProvider } from "./modules/apis/query";
 import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
-import { type EventEntity } from "./modules/events/event-types";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
 import { StorageKey, type AppConfig, type AppMetadata } from "./types";
-import { usePageTitle } from "./hooks/use-page-title";
 
-import "@mantine/core/styles.css";
 import "@mantine/charts/styles.css";
+import "@mantine/core/styles.css";
 import "@mantine/dates/styles.css";
 import "@mantine/notifications/styles.css";
+import "@mantine/nprogress/styles.css";
 import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
-import "@mantine/nprogress/styles.css";
 import "@xyflow/react/dist/style.css";
 
+import { EventDataFragment } from "./modules/events/graphql/fragmentEvent.graphql";
 import "./styles/app.style.css";
 import "./styles/react-big-calendar.css";
 import { nonLoading } from "./utils/non-loading";
@@ -125,7 +125,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   };
 
   useEffect(() => {
-    const onEventNew = (event: EventEntity) => {
+    const onEventNew = (event: EventDataFragment) => {
       const global = getGlobal();
       const clientSessionId = global._sessionId as string;
       if (event.sessionId && event.sessionId !== clientSessionId) return;

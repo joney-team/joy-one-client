@@ -10,9 +10,10 @@ import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } fr
 import { modals } from "@mantine/modals";
 import { IconCopy, IconCopyCheck, IconMessageUser, IconX } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchDataFragment } from "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { Trans } from "@lingui/react/macro";
 
-const ModalCustomerForm: FC = () => {
+const ModalCustomerFormLink: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
   const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
@@ -98,10 +99,17 @@ const ModalCustomerForm: FC = () => {
   );
 };
 
-export const OnModalCustomerForm: () => void = () => {
+export const OnModalCustomerFormLink: () => void = () => {
   return modals.open({
-    modalId: "OpenCustomerFormModal",
-    title: <ModalHead name={t`Customer form link`} icon={IconMessageUser} />,
-    children: <ModalCustomerForm />,
+    modalId: "OpenCustomerFormLinkModal",
+    withCloseButton: false,
+    title: (
+      <ModalHead
+        onClose={() => modals.close("OpenCustomerFormLinkModal")}
+        name={<Trans>Customer form link</Trans>}
+        icon={IconMessageUser}
+      />
+    ),
+    children: <ModalCustomerFormLink />,
   });
 };

@@ -1,0 +1,17 @@
+query LiquidateLoanCalculate($loanId: String!) {
+  liquidateLoanCalculate(id: $loanId) {
+    capitalAmount
+    paidAmount
+    avancedPaymentAmount
+    remainCapitalAmount
+    remainCapitalAmountFeePercent
+    remainCapitalAmountFee
+    period
+    periodFeePerDay
+    periodFeeAmount
+    periodFeeDays
+    periodStartAt
+    feeAmount
+    lateInterestAmount
+  }
+}

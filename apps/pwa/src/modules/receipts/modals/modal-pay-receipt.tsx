@@ -7,26 +7,25 @@ import { Image } from "@/components/image";
 import { Modal } from "@/components/modal/modal";
 import { Renderer } from "@/components/renderer";
 import { Timer } from "@/components/timer";
-import { EventType } from "@/graphql/enums.graphql";
+import {
+  EventType,
+  ReceiptPaymentMethod,
+  ReceiptStatus,
+  ReceiptType,
+} from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventEntity } from "@/modules/events/event-types";
+import { EventDataFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { getLoan } from "@/modules/loans/loans-service";
+import QUERY_LOAN from "@/modules/loans/graphql/queryLoan.graphql";
 import {
   getStaticQrCode,
   getTransactionInfo,
   useBanks,
 } from "@/modules/plugins/banks/banks.services";
-import { getPaymentMethodIcon, getReceipt, payReceipt } from "@/modules/receipts/receipts-service";
-import {
-  ReceiptEntity,
-  ReceiptPaymentMethod,
-  ReceiptStatus,
-  ReceiptType,
-} from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
+import { WorkspaceBranchDataFragment } from "@/modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import WORKSPACE_BRANCH_QUERY from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
@@ -36,7 +35,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { loadImage } from "@joy-one-client/utils/assets";
 import { t } from "@lingui/core/macro";
@@ -70,9 +69,11 @@ import {
   useState,
 } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
+import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import MUTATION_PAY_RECEIPT from "../graphql/mutationPayReceipt.graphql";
+import QUERY_RECEIPT from "../graphql/queryReceipt.graphql";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { type ModalReceiptDetailRef } from "./modal-receipt-detail";
-import { WorkspaceBranchDataFragment } from "@/modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 
 const ModalReceiptDetail = dynamic(
   () => import("./modal-receipt-detail").then((mod) => mod.ModalReceiptDetail),
@@ -83,7 +84,7 @@ const ModalReceiptDetail = dynamic(
 );
 
 export interface ModalPayReceiptArgs {
-  receipt: Pick<ReceiptEntity, "id">;
+  receipt: Pick<ReceiptDataFragment, "id">;
   onPaid?: () => void;
   onClosed?: () => void;
 }
@@ -101,16 +102,28 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const banks = useBanks();
 
   const color = useColor();
-  const [receipt, setReceipt] = useState<ReceiptEntity | null>(null);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
-  const [loading, setLoading] = useState(true);
   const uploadFile = useUploadFile();
+
+  const {
+    data: receiptData,
+    loading: loadingReceipt,
+    refetch: refetchReceipt,
+  } = useQuery(QUERY_RECEIPT, {
+    variables: {
+      id: props.receipt.id,
+    },
+  });
+
+  const receipt = receiptData?.receipt;
 
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
 
+  const [payReceipt] = useMutation(MUTATION_PAY_RECEIPT);
+
   const [paymentMethod, setPaymentMethod] = useState(
     (workspaceSetting?.receiptPaymentMethodDefault ??
-      ReceiptPaymentMethod.CASH) as ReceiptPaymentMethod
+      ReceiptPaymentMethod.Cash) as ReceiptPaymentMethod
   );
   const paymentMethods = (
     workspaceSetting?.receiptPaymentMethodDefault
@@ -123,11 +136,18 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
       : Object.values(ReceiptPaymentMethod)
   ) as ReceiptPaymentMethod[];
 
-  const getDefaultTransactionDesc = async (receipt: ReceiptEntity) => {
-    if (receipt.type === ReceiptType.INCOME && receipt.relatedLoanId && receipt.relatedCustomer) {
+  const getDefaultTransactionDesc = async (receipt: ReceiptDataFragment) => {
+    if (receipt.type === ReceiptType.Income && receipt.relatedLoanId && receipt.relatedCustomer) {
       const customer = receipt.relatedCustomer;
-      const loan = await getLoan(receipt.relatedLoanId);
-      return `${removeAccents(customer.name).toUpperCase()} ${loan.code} ${receipt.code}`;
+      const loan = await client.query({
+        query: QUERY_LOAN,
+        variables: {
+          id: receipt.relatedLoanId,
+        },
+      });
+      return `${removeAccents(customer.name).toUpperCase()} ${loan.data?.loan.code} ${
+        receipt.code
+      }`;
     }
 
     return receipt.code;
@@ -143,7 +163,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
 
   const { data: workspaceBranchData } = useQuery(WORKSPACE_BRANCH_QUERY, {
     variables: { id: workspaceBranch?._id ?? "" },
-    skip: !receipt?.workspaceBranchId,
+    skip: !receipt?.workspaceBranch?._id,
   });
 
   const bankInformation = useMemo(() => {
@@ -181,9 +201,14 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const onClose = async () => {
     if (!receipt) return;
 
-    const data = await getReceipt(receipt.id);
+    const data = await client.query({
+      query: QUERY_RECEIPT,
+      variables: {
+        id: receipt.id,
+      },
+    });
 
-    if (data.status === ReceiptStatus.PAID) {
+    if (data.data?.receipt?.status === ReceiptStatus.Paid) {
       props.onPaid?.();
     } else {
       props.onClosed?.();
@@ -208,60 +233,32 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
         });
       }
 
-      const _receipt = await payReceipt(receipt.id, {
-        paymentMethod,
-        giveAmount,
+      const { data } = await payReceipt({
+        variables: {
+          payReceiptId: receipt.id,
+          input: {
+            paymentMethod,
+            giveAmount,
+          },
+        },
       });
 
-      if (_receipt.status === ReceiptStatus.PAID) {
+      if (!data?.payReceipt) return;
+
+      if (data?.payReceipt.status === ReceiptStatus.Paid) {
         onClose();
-        modalReceiptDetailRef.current?.open(_receipt.id);
+        modalReceiptDetailRef.current?.open(data.payReceipt.id);
       }
 
-      setTransactionDesc(await getDefaultTransactionDesc(_receipt));
-      setReceipt(_receipt);
+      setTransactionDesc(await getDefaultTransactionDesc(data.payReceipt));
+      refetchReceipt();
     } catch (error) {
       onError(error);
     }
   };
 
-  const fetchReceipt = async () => {
-    const data = await getReceipt(props.receipt.id);
-    setReceipt(data);
-
-    if (data.workspaceBranchId) {
-      const { data: branchData } = await client.query({
-        query: WORKSPACE_BRANCH_QUERY,
-        variables: { id: data.workspaceBranchId },
-      });
-      setWorkspaceBranch(branchData?.workspaceBranch ?? null);
-    } else {
-      setWorkspaceBranch(null);
-    }
-
-    setTransactionDesc(await getDefaultTransactionDesc(data));
-    return data;
-  };
-
-  const initialize = async () => {
-    if (!props.receipt) return;
-    setLoading(true);
-    try {
-      await fetchReceipt();
-    } catch (error) {
-      onError(error);
-      props.onClosed?.();
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    initialize();
-  }, []);
-
-  useEventsListener([EventType.ReceiptPaid], (ev: EventEntity) => {
-    if (ev.ref === receipt?.id) fetchReceipt();
+  useEventsListener([EventType.ReceiptPaid], (ev: EventDataFragment) => {
+    if (ev.ref === receipt?.id) refetchReceipt();
   });
 
   useEffect(() => {
@@ -273,10 +270,10 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   return (
     <Stack gap={16}>
       {(function () {
-        if (loading) return <Skeleton h={200} />;
+        if (loadingReceipt) return <Skeleton h={200} />;
         if (!receipt) return null;
 
-        if (receipt.status === ReceiptStatus.PAID)
+        if (receipt.status === ReceiptStatus.Paid)
           return (
             <Stack gap={16}>
               <Card
@@ -337,10 +334,9 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
               </Text>
               <Group gap={10}>
                 {paymentMethods.map((method) => {
-                  const Icon = getPaymentMethodIcon(method);
+                  const Icon = receiptPaymentMethods[method].icon;
 
-                  if (method === ReceiptPaymentMethod.BANK_TRANSFER && !bankInformation)
-                    return null;
+                  if (method === ReceiptPaymentMethod.BankTransfer && !bankInformation) return null;
 
                   return (
                     <Button
@@ -350,7 +346,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
                       variant={paymentMethod === method ? "filled" : "outline"}
                       onClick={() => setPaymentMethod(method)}
                     >
-                      {receiptPaymentMethods[method].label()}
+                      {t(receiptPaymentMethods[method].label)}
                     </Button>
                   );
                 })}
@@ -362,7 +358,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
 
               <Card withBorder p={10}>
                 {(function () {
-                  if (paymentMethod === ReceiptPaymentMethod.BANK_TRANSFER && bankInformation) {
+                  if (paymentMethod === ReceiptPaymentMethod.BankTransfer && bankInformation) {
                     return (
                       <Stack gap={8}>
                         <Center>
@@ -449,7 +445,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
                     );
                   }
 
-                  if (paymentMethod === ReceiptPaymentMethod.CASH) {
+                  if (paymentMethod === ReceiptPaymentMethod.Cash) {
                     return (
                       <Stack>
                         <Group justify="space-between">

@@ -5,11 +5,13 @@ import { WithCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { genders } from "@/constant";
+import { CustomerKycInput } from "@/graphql/types.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -36,13 +38,13 @@ import {
   IconUserScan,
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
-import { InputModalType, ModalInput } from "../../modals/modal-input";
-import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
-import { useUploadFile } from "../files/hooks/use-upload-file";
-import { useLang } from "../lang/lang-context";
-import { useLocations } from "../locations/locations-context";
-import { decodeCid, registerCustomerKyc } from "./customer-kycs-service";
-import { CustomerKycDto } from "./customer-kycs-types";
+import { InputModalType, ModalInput } from "../../../modals/modal-input";
+import { CustomerDataFragment } from "../../customers/graphql/fragmentCustomer.graphql";
+import { useUploadFile } from "../../files/hooks/use-upload-file";
+import { useLang } from "../../lang/lang-context";
+import { useLocations } from "../../locations/locations-context";
+import { decodeCid } from "../customer-kycs-service";
+import MUTATION_REGISTER_CUSTOMER_KYC from "../graphql/mutationRegisterCustomerKyc.graphql";
 
 interface ModalRegisterCustomerKycArgs {
   customer: CustomerDataFragment;
@@ -77,6 +79,8 @@ export const WithModalRegisterCustomerKyc: FC<{
   const { vnLocations } = useLocations();
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalRegisterCustomerKycArgs>();
+
+  const [registerCustomerKyc] = useMutation(MUTATION_REGISTER_CUSTOMER_KYC);
 
   const onClose = async () => close();
 
@@ -122,7 +126,7 @@ export const WithModalRegisterCustomerKyc: FC<{
     onSubmit: async (values) => {
       if (!props) return;
 
-      const dto: CustomerKycDto = {
+      const input: CustomerKycInput = {
         backOfCidImage: await uploadFile(values.backOfCidImage).then((res) => res.path),
         frontOfCidImage: await uploadFile(values.frontOfCidImage).then((res) => res.path),
         portraitImage: await uploadFile(values.portraitImage).then((res) => res.path),
@@ -135,7 +139,12 @@ export const WithModalRegisterCustomerKyc: FC<{
         cidCreatedAt: values.cidCreatedAt,
       };
 
-      await registerCustomerKyc(props.customer._id, dto);
+      await registerCustomerKyc({
+        variables: {
+          customerId: props.customer._id,
+          input: input,
+        },
+      });
       await props.onDone?.();
       close();
     },

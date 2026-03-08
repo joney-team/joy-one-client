@@ -2,7 +2,6 @@ import { Button } from "@/components/buttons/button";
 import { useColor } from "@/modules/theme/use-color";
 import { EntitySource } from "@/types";
 import { isCustomerPhoneExisted } from "@/modules/customers/customer-service";
-import { ImportLoanDto } from "@/modules/loans/loan-dtos";
 import { String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
@@ -63,7 +62,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
     }
   };
 
-  const normalizeLoanDtos = (rawLoans: any[]): ImportLoanDto[] => {
+  const normalizeLoanDtos = (rawLoans: any[]): any[] => {
     return rawLoans.reduce((dtos, rawLoan) => {
       // return {
       //   ...l,

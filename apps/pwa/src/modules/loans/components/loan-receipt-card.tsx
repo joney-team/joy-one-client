@@ -7,19 +7,21 @@ import { NumberFormat } from "@/components/format/number-format";
 import { HoverToEdit } from "@/components/hover-to-edit";
 import { Renderer } from "@/components/renderer";
 import { TooltipIcon } from "@/components/tooltip-icon";
+import { ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { InputModalType } from "@/modals/modal-input";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
-import { LoanEntity } from "@/modules/loans/loans-types";
+import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
+import MUTATION_UPDATE_RECEIPT from "@/modules/receipts/graphql/mutationUpdateReceipt.graphql";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { type ModalReceiptDetailRef } from "@/modules/receipts/modals/modal-receipt-detail";
-import { updateReceipt } from "@/modules/receipts/receipts-service";
-import { ReceiptEntity, ReceiptStatus, ReceiptType } from "@/modules/receipts/receipts-types";
+import { normalizeUpdateReceiptInput } from "@/modules/receipts/utils/normalize-update-receipt-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
+import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
@@ -31,6 +33,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
+import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
 
 const ModalReceiptDetail = dynamic(
   () =>
@@ -42,10 +45,9 @@ const ModalReceiptDetail = dynamic(
 );
 
 export const LoanReceiptCard: FC<{
-  receipt: ReceiptEntity;
-  receipts: ReceiptEntity[];
-  loan: LoanEntity;
-  refetch: () => Promise<any>;
+  receipt: ReceiptDataFragment;
+  receipts: ReceiptDataFragment[];
+  loan: LoanDataFragment;
 }> = (props) => {
   const workspace = useWorkspace();
   const { workspaceSetting } = useWorkspaceSetting();
@@ -56,10 +58,10 @@ export const LoanReceiptCard: FC<{
     useInspectLoanReceipt(receipt, loan);
 
   const prevReceipts = receipts.filter(
-    (v) => (v.data?.period?.period || 0) < period && v.type === ReceiptType.INCOME
+    (v) => (v.data?.period?.period || 0) < period && v.type === ReceiptType.Income
   );
   const isAbleToPay =
-    prevReceipts.every((v) => v.status === ReceiptStatus.PAID) ||
+    prevReceipts.every((v) => v.status === ReceiptStatus.Paid) ||
     isExpired ||
     !!data.lateInterest ||
     !!data.liquidation;
@@ -70,13 +72,25 @@ export const LoanReceiptCard: FC<{
     ? workspaceSetting?.loanSettings.receiptPdfUrl.replace("{id}", receipt.id)
     : undefined;
 
+  const [updateReceipt] = useMutation(MUTATION_UPDATE_RECEIPT);
+
   const onChangeAmount = async (amount: number) => {
     if (!isAbleToUpdate) return;
-    await updateReceipt(receipt.id, { ...receipt, amount });
+    await updateReceipt({
+      variables: {
+        updateReceiptId: receipt.id,
+        input: { ...normalizeUpdateReceiptInput(receipt), amount },
+      },
+    });
   };
 
   const onUpdateNote = async (note: string) => {
-    await updateReceipt(receipt.id, { ...receipt, note });
+    await updateReceipt({
+      variables: {
+        updateReceiptId: receipt.id,
+        input: { ...normalizeUpdateReceiptInput(receipt), note },
+      },
+    });
   };
 
   return (
@@ -332,7 +346,7 @@ export const LoanReceiptCard: FC<{
         </Table>
 
         {(function () {
-          if (receipt.status === ReceiptStatus.PENDING) {
+          if (receipt.status === ReceiptStatus.Pending) {
             return (
               <Stack align="center">
                 {isExpired && (
@@ -374,7 +388,7 @@ export const LoanReceiptCard: FC<{
             );
           }
 
-          if (receipt.status === ReceiptStatus.PAID) {
+          if (receipt.status === ReceiptStatus.Paid) {
             return (
               <Group justify="center">
                 <Badge color="green" variant="light">

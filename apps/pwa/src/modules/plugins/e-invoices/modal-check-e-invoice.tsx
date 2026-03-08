@@ -3,8 +3,9 @@
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { api } from "@/modules/apis";
-import { ReceiptEntity } from "@/modules/receipts/receipts-types";
+import QUERY_RECEIPT_BY_CODE from "@/modules/receipts/graphql/queryReceiptByCode.graphql";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Stack, TextInput } from "@mantine/core";
@@ -14,6 +15,7 @@ import JsonView from "@uiw/react-json-view";
 import { FC, useState } from "react";
 
 const ModalCheckEInvoice: FC = () => {
+  const client = useApolloClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [eInvoiceData, setEInvoiceData] = useState<Record<string, unknown>>({});
   const [receiptCode, setReceiptCode] = useState(localStorage.getItem("einvoice_code") ?? "");
@@ -22,8 +24,15 @@ const ModalCheckEInvoice: FC = () => {
     e.preventDefault();
     try {
       setIsSubmitting(true);
-      const receipt = await api.get<ReceiptEntity>(`/receipts/codes/${receiptCode}`);
-      const data = await api.post(`/plugins/e-invoices/generate-data`, { receiptId: receipt.id });
+      const receipt = await client.query({
+        query: QUERY_RECEIPT_BY_CODE,
+        variables: {
+          code: receiptCode,
+        },
+      });
+      const data = await api.post(`/plugins/e-invoices/generate-data`, {
+        receiptId: receipt.data?.receiptByCode?.id,
+      });
       setEInvoiceData(data);
       localStorage.setItem("einvoice_code", receiptCode);
     } catch (error) {

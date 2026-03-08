@@ -2,42 +2,47 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
+import { ReceiptPaymentMethod, ReceiptType } from "@/graphql/enums.graphql";
 import { FilesBox } from "@/modules/files/files-box";
-import { disburseReceipt, getPaymentMethodIcon } from "@/modules/receipts/receipts-service";
-import {
-  ReceiptEntity,
-  ReceiptPaymentMethod,
-  ReceiptType,
-} from "@/modules/receipts/receipts-types";
 import { UserCard } from "@/modules/users/components/user-card";
+import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
+import { useMutation } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import MUTATION_DISBURSE_RECEIPT from "../graphql/mutationDisburseReceipt.graphql";
 import { receiptPaymentMethods } from "../receipt-constants";
-import { AppEntity } from "@/types";
-import { Trans } from "@lingui/react/macro";
 
 interface ModalDisburesementReceiptProps {
-  receipt: ReceiptEntity;
+  receipt: ReceiptDataFragment;
 }
 
 export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (props) => {
   const { receipt } = props;
-  const [paymentMethod, setPaymentMethod] = useState(ReceiptPaymentMethod.CASH);
+  const { t } = useLingui();
+  const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
+    ReceiptPaymentMethod.Cash
+  );
+
+  const [disburseReceipt] = useMutation(MUTATION_DISBURSE_RECEIPT);
 
   const onSubmit = async () => {
-    await disburseReceipt(props.receipt.id, { paymentMethod })
-      .then(async () => {
-        modals.close("ModalDisburesementReceipt");
-      })
+    await disburseReceipt({
+      variables: {
+        disburseReceiptId: props.receipt.id,
+        input: { paymentMethod },
+      },
+    })
+      .then(() => modals.close("ModalDisburesementReceipt"))
       .catch(onError);
   };
 
-  const color = props.receipt.type === ReceiptType.EXPENSE ? "red" : "green";
+  const color = props.receipt.type === ReceiptType.Expense ? "red" : "green";
 
   return (
     <Stack gap={30}>
@@ -85,7 +90,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
       </Text>
       <Group gap={10}>
         {Object.values(ReceiptPaymentMethod).map((method) => {
-          const Icon = getPaymentMethodIcon(method);
+          const Icon = receiptPaymentMethods[method].icon;
 
           return (
             <Button
@@ -95,7 +100,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
               onClick={() => setPaymentMethod(method)}
               color="dark"
             >
-              {receiptPaymentMethods[method].label()}
+              {t(receiptPaymentMethods[method].label)}
             </Button>
           );
         })}
@@ -120,7 +125,7 @@ export const OnModalDisburesementReceipt = (props: ModalDisburesementReceiptProp
       <ModalHead
         name={<Trans>Approve Receipt</Trans>}
         icon={IconTag}
-        color={props.receipt.type === ReceiptType.EXPENSE ? "red" : "primary"}
+        color={props.receipt.type === ReceiptType.Expense ? "red" : "primary"}
       />
     ),
     children: <ModalDisburesementReceipt {...props} />,

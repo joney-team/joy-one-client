@@ -1,0 +1,32 @@
+query CalculateLoanPaymentPlan($input: CalculateLoanPaymentPlanInput!) {
+  calculateLoanPaymentPlan(input: $input) {
+    loanPackage {
+      id
+      assetTypes
+      type
+      days
+      periodDaysOptions
+      contractFee
+      unFixedCapitalRates
+      lateInterestRates {
+        lateDays
+        rate
+      }
+      description
+      liquidationFeeRate
+    }
+    paymentPeriods {
+      periodDays
+      periods {
+        period
+        startTime
+        endTime
+        totalAmount
+        fee
+        capitalAmount
+        remainCapitalAmount
+        note
+      }
+    }
+  }
+}

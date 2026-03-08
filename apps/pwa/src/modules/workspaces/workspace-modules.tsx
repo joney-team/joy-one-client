@@ -120,11 +120,11 @@ export const workspaceModuleConfigs = {
     permissions: WorkspacePermission.WORKSPACE_MEMBERS_VIEW,
     name: defineMessage`Members`,
   }),
-  timekeepings: combineModule({
-    href: "/timekeepings",
+  attendance: combineModule({
+    href: "/attendance",
     icon: IconCalendarCheck,
-    permissions: WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP,
-    name: defineMessage`Timekeepings`,
+    permissions: WorkspacePermission.ATTENDANCE_RECORDS_MANAGER,
+    name: defineMessage`Attendance`,
   }),
 
   // Customers

@@ -1,0 +1,10 @@
+#import "./fragmentLoan.graphql"
+
+mutation UpdateLoanPackage(
+  $loanId: String!
+  $input: UpdateLoanPackageInput!
+) {
+  updateLoanPackage(id: $loanId, input: $input) {
+    ...LoanData
+  }
+}

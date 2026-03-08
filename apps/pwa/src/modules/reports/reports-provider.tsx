@@ -23,11 +23,7 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
   useEventsListener(
     [EventType.ReportRealtimeSynced],
     (e) => {
-      if (
-        e.data &&
-        e.data.userId === workspace.member.userId &&
-        e.workspaceId === workspace.member.workspaceId
-      ) {
+      if (e.data && e.data.userId === workspace.member.userId) {
         realtimeReport.setData(e.data);
       }
     },

@@ -3,11 +3,10 @@
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { appEntities } from "@/constant";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, ReceiptPaymentMethod } from "@/graphql/enums.graphql";
 import { WorkingDayInterval } from "@/graphql/types.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
-import { ReceiptPaymentMethod } from "@/modules/receipts/receipts-types";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -159,7 +158,7 @@ export const WorkspaceOperationSettings: FC = () => {
           }
           data={Object.values(ReceiptPaymentMethod).map((value) => ({
             value,
-            label: receiptPaymentMethods[value].label(),
+            label: t(receiptPaymentMethods[value].label),
           }))}
           onChange={(value) => {
             updateWorkspaceSetting({

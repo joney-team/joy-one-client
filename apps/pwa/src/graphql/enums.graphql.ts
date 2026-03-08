@@ -12,6 +12,28 @@ export const AppLocale = {
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
+/** Attendance record method */
+export const AttendanceRecordMethod = {
+  Default: 'DEFAULT',
+  Manual: 'MANUAL'
+} as const;
+
+export type AttendanceRecordMethod = typeof AttendanceRecordMethod[keyof typeof AttendanceRecordMethod];
+/** Attendance record status */
+export const AttendanceRecordStatus = {
+  Approved: 'APPROVED',
+  Pending: 'PENDING',
+  Rejected: 'REJECTED'
+} as const;
+
+export type AttendanceRecordStatus = typeof AttendanceRecordStatus[keyof typeof AttendanceRecordStatus];
+/** Attendance record type */
+export const AttendanceRecordType = {
+  CheckIn: 'CHECK_IN',
+  CheckOut: 'CHECK_OUT'
+} as const;
+
+export type AttendanceRecordType = typeof AttendanceRecordType[keyof typeof AttendanceRecordType];
 /** Booking statuses */
 export const BookingStatus = {
   Cancelled: 'CANCELLED',
@@ -67,6 +89,14 @@ export const CustomerFormStatus = {
 } as const;
 
 export type CustomerFormStatus = typeof CustomerFormStatus[keyof typeof CustomerFormStatus];
+/** Customer KYC status */
+export const CustomerKycStatus = {
+  Approved: 'APPROVED',
+  Pending: 'PENDING',
+  Rejected: 'REJECTED'
+} as const;
+
+export type CustomerKycStatus = typeof CustomerKycStatus[keyof typeof CustomerKycStatus];
 /** Available entity sources */
 export const EntitySource = {
   Import: 'IMPORT',
@@ -97,6 +127,9 @@ export const EventType = {
   ActivityNew: 'ACTIVITY_NEW',
   ActivitySynced: 'ACTIVITY_SYNCED',
   ActivityUpdated: 'ACTIVITY_UPDATED',
+  AttendanceRecordApproved: 'ATTENDANCE_RECORD_APPROVED',
+  AttendanceRecordNew: 'ATTENDANCE_RECORD_NEW',
+  AttendanceRecordRejected: 'ATTENDANCE_RECORD_REJECTED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',

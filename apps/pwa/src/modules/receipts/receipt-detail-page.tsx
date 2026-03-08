@@ -10,7 +10,7 @@ export const ReceiptDetailPage: FC = () => {
   const receiptId = params.id;
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <ReceiptDetail receiptId={receiptId} />
     </Container>
   );

@@ -7,9 +7,10 @@ import { FC, MouseEvent, useState } from "react";
 
 interface ActionIconProps extends Omit<ActionIconPropsMantine, "onClick"> {
   onClick?: (event: MouseEvent<HTMLElement>) => unknown;
+  component?: "button" | "div";
 }
 
-export const ActionIcon: FC<ActionIconProps> = ({ onClick, ...rest }) => {
+export const ActionIcon: FC<ActionIconProps> = ({ onClick, component = "button", ...rest }) => {
   const [isLoading, setIsLoading] = useState(false);
   const loading = rest.loading ?? isLoading;
 
@@ -25,5 +26,7 @@ export const ActionIcon: FC<ActionIconProps> = ({ onClick, ...rest }) => {
     }
   };
 
-  return <ActionIconMantine {...rest} onClick={handleOnClick} loading={loading} />;
+  return (
+    <ActionIconMantine component={component} {...rest} onClick={handleOnClick} loading={loading} />
+  );
 };

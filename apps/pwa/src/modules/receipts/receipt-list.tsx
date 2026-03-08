@@ -6,23 +6,22 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { numberColumn } from "@/components/list/columns/number-column";
 import { statusColumn } from "@/components/list/columns/status-column";
-import { EventType } from "@/graphql/enums.graphql";
+import {
+  EventType,
+  ReceiptPaymentMethod,
+  ReceiptStatus,
+  ReceiptType,
+} from "@/graphql/enums.graphql";
 import { type ModalPrinterRef } from "@/modals/modal-printer";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
-import {
-  ReceiptEntity,
-  ReceiptPaymentMethod,
-  ReceiptStatus,
-  ReceiptType,
-} from "@/modules/receipts/receipts-types";
 import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { nonLoading } from "@/utils/non-loading";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import {
   IconArrowsDoubleSwNe,
@@ -37,6 +36,7 @@ import dynamic from "next/dynamic";
 import { Fragment, useRef, type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import { ReceiptDataFragment } from "./graphql/fragmentReceipt.graphql";
 import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
 import { type ModalPayReceiptRef } from "./modals/modal-pay-receipt";
 import { ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
@@ -67,6 +67,7 @@ const ModalPayReceipt = dynamic(
 );
 
 export const ReceiptList: FC = () => {
+  const { t } = useLingui();
   const { workspaceSetting } = useWorkspaceSetting();
   const banks = useBanks();
   const bank = banks.find((v) => workspaceSetting?.bankAccount?.bankId === v.id);
@@ -78,7 +79,7 @@ export const ReceiptList: FC = () => {
   return (
     <Fragment>
       <Stack p={16}>
-        <List<ReceiptEntity>
+        <List<ReceiptDataFragment>
           id="rps"
           name={<Trans>Receipts</Trans>}
           limit={18}
@@ -88,7 +89,7 @@ export const ReceiptList: FC = () => {
             code: codeColumn({
               onClick: (_, data) => modalReceiptDetailRef.current?.open(data.id),
             }),
-            workspaceBranchId: workspaceBranchColumn(),
+            workspaceBranch: workspaceBranchColumn(),
             createdAt: dateTimeColumn({
               name: <Trans>Created at</Trans>,
               sortable: true,
@@ -111,7 +112,7 @@ export const ReceiptList: FC = () => {
               icon: IconArrowsDoubleSwNe,
               minWidth: 110,
               options: Object.values(ReceiptType).map((type) => ({
-                label: receiptTypes[type].label(),
+                label: t(receiptTypes[type].label),
                 color: receiptTypes[type].color,
                 icon: receiptTypes[type].icon,
                 value: type,
@@ -129,7 +130,7 @@ export const ReceiptList: FC = () => {
               name: <Trans>Status</Trans>,
               defaultWidth: 180,
               options: Object.values(ReceiptStatus).map((status) => ({
-                label: receiptStatuses[status].label(),
+                label: t(receiptStatuses[status].label),
                 value: status,
                 color: receiptStatuses[status].color,
               })),
@@ -139,7 +140,7 @@ export const ReceiptList: FC = () => {
               icon: IconCreditCard,
               defaultWidth: 180,
               options: Object.values(ReceiptPaymentMethod).map((paymentMethod) => ({
-                label: receiptPaymentMethods[paymentMethod].label(),
+                label: t(receiptPaymentMethods[paymentMethod].label),
                 value: paymentMethod,
                 color: receiptPaymentMethods[paymentMethod].color,
                 icon: receiptPaymentMethods[paymentMethod].icon,
@@ -206,7 +207,7 @@ export const ReceiptList: FC = () => {
             {
               label: <Trans>Pay</Trans>,
               icon: IconCashRegister,
-              disabled: (data) => data.status === ReceiptStatus.PAID,
+              disabled: (data) => data.status === ReceiptStatus.Paid,
               onClick: (data) => modalPayReceiptRef.current?.open({ receipt: data }),
             },
           ]}

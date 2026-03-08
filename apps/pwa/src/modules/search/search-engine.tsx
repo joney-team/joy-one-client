@@ -4,14 +4,12 @@ import { Avatar } from "@/components/avatar";
 import { SpeedIllustration } from "@/components/illustrations/speed";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
-import { loanStatusColors } from "@/modules/loans/loans-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
 import { PartnerEntity } from "@/modules/partners/partners-types";
 import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
 import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { getProductIcon } from "@/modules/products/products-service";
 import { ProductEntity } from "@/modules/products/products-types";
-import { ReceiptEntity } from "@/modules/receipts/receipts-types";
 import { search, searchArray } from "@/modules/search/search-service";
 import {
   SearchCustomer,
@@ -42,6 +40,7 @@ import {
 import { type FC, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
+import { ReceiptDataFragment } from "../receipts/graphql/fragmentReceipt.graphql";
 import { TaskDataFragment } from "../tasks/graphql/fragmentTask.graphql";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
@@ -187,7 +186,7 @@ export const SearchEngine: FC = () => {
         }
 
         if (entity === AppEntity.RECEIPTS) {
-          const receipts = data as ReceiptEntity[];
+          const receipts = data as ReceiptDataFragment[];
 
           actionGroups.push({
             group: t`Receipts`,
@@ -243,7 +242,7 @@ export const SearchEngine: FC = () => {
                   return router.push(`/loans/${loan.code}`);
                 },
                 rightSection: (
-                  <Badge size="xs" color={loanStatusColors[loan.status]}>
+                  <Badge size="xs" color={loanStatuses[loan.status].color}>
                     {t(loanStatuses[loan.status].label)}
                   </Badge>
                 ),
