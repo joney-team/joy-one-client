@@ -1,6 +1,6 @@
-import { type AppPageMetadata } from "@/types";
-import { AppLocale } from "@/modules/lang/lang-types";
+import { AppLocale } from "@/graphql/types.graphql";
 import { getLocaleServer } from "@/modules/lang/lang-server-service";
+import { type AppPageMetadata } from "@/types";
 import { Metadata, ResolvingMetadata } from "next";
 
 type MetadataProps = {

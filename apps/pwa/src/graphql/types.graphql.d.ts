@@ -68,8 +68,8 @@ export type AppConfig = {
 
 /** Available locales */
 export const AppLocale = {
-  En: 'EN',
-  Vi: 'VI'
+  En: 'en',
+  Vi: 'vi'
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
@@ -139,6 +139,21 @@ export type AuthTokenResult = {
   __typename: 'AuthTokenResult';
   accessToken: Scalars['String']['output'];
   refreshToken: Scalars['String']['output'];
+};
+
+export type AuthUser = {
+  __typename: 'AuthUser';
+  _id: Scalars['String']['output'];
+  avatar: Scalars['String']['output'];
+  birthday: Maybe<Scalars['Float']['output']>;
+  email: Scalars['String']['output'];
+  isEmailVerified: Maybe<Scalars['Boolean']['output']>;
+  isPasswordProvided: Scalars['Boolean']['output'];
+  locale: AppLocale;
+  name: Scalars['String']['output'];
+  phone: Maybe<Scalars['String']['output']>;
+  role: UserRole;
+  settings: Maybe<UserSettings>;
 };
 
 export type BaseCustomFieldValue = {
@@ -1367,6 +1382,7 @@ export type Mutation = {
   updateLoanPackage: Loan;
   updateReceipt: Receipt;
   updateTaskStatuses: Array<TaskStatus>;
+  updateUserProfile: AuthUser;
   updateWorkspace: Workspace;
   updateWorkspaceBranch: WorkspaceBranch;
   updateWorkspaceMember: WorkspaceMember;
@@ -1823,6 +1839,11 @@ export type MutationUpdateTaskStatusesArgs = {
   contextType?: InputMaybe<TaskContextType>;
   isInherited?: InputMaybe<Scalars['Boolean']['input']>;
   statuses: Array<TaskStatusInput>;
+};
+
+
+export type MutationUpdateUserProfileArgs = {
+  input: UpdateUserProfileInput;
 };
 
 
@@ -2369,6 +2390,7 @@ export type Query = {
   appConfig: AppConfig;
   attendanceRecord: AttendanceRecord;
   attendanceRecords: AttendanceRecordsPaginated;
+  authUser: AuthUser;
   booking: Booking;
   bookings: BookingsPaginated;
   calculateLoanPaymentPlan: LoanPaymentPlanResult;
@@ -2391,7 +2413,7 @@ export type Query = {
   files: FilesPaginated;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
-  getDeviceByIdentifyId: Maybe<Device>;
+  getDeviceByIdentifyId: Device;
   getFileInfo: File;
   getProductByIds: Array<Product>;
   liquidateLoanCalculate: LoanLiquidationCalculated;
@@ -3391,6 +3413,16 @@ export type UpdateTaskInput = {
   workspaceBranchId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type UpdateUserProfileInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  birthday?: InputMaybe<Scalars['Float']['input']>;
+  color?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+  settings?: InputMaybe<UserSettingsInput>;
+};
+
 export type UserAuthProvider = {
   __typename: 'UserAuthProvider';
   providerId: Scalars['String']['output'];
@@ -3398,6 +3430,15 @@ export type UserAuthProvider = {
   username: Scalars['String']['output'];
 };
 
+/** Available roles of a user */
+export const UserRole = {
+  Admin: 'ADMIN',
+  BusinessPartner: 'BUSINESS_PARTNER',
+  SysAdmin: 'SYS_ADMIN',
+  Tester: 'TESTER'
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
 export type UserSettings = {
   __typename: 'UserSettings';
   isStartOfWeekSunday: Maybe<Scalars['Boolean']['output']>;
@@ -3405,6 +3446,14 @@ export type UserSettings = {
   locale: Maybe<AppLocale>;
   timezoneId: Maybe<Scalars['String']['output']>;
   timezoneUtc: Maybe<Scalars['String']['output']>;
+};
+
+export type UserSettingsInput = {
+  isStartOfWeekSunday?: InputMaybe<Scalars['Boolean']['input']>;
+  isTwelveHour?: InputMaybe<Scalars['Boolean']['input']>;
+  locale?: InputMaybe<AppLocale>;
+  timezoneId?: InputMaybe<Scalars['String']['input']>;
+  timezoneUtc?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type WorkingDayInterval = {

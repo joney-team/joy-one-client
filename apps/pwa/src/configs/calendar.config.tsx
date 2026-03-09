@@ -77,7 +77,7 @@ export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
     },
     formats: {
       timeGutterFormat: (date, culture) => {
-        const format = auth.user?.settings.isTwelveHour ? "hh:mm A" : "HH:mm";
+        const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
         return calendarDayJsLocalizer.format(date, format, culture);
       },
       dayFormat: (date) => {
@@ -85,7 +85,7 @@ export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
         return DateTime.format(date, { locale: lang.locale });
       },
       eventTimeRangeFormat: (date, culture) => {
-        const format = auth.user?.settings.isTwelveHour ? "hh:mm A" : "HH:mm";
+        const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
 
         return (
           calendarDayJsLocalizer.format(date.start, format, culture) +

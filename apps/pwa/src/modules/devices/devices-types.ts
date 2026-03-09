@@ -1,5 +1,5 @@
+import type { AppLocale } from "@/graphql/types.graphql";
 import { BaseMongoEntity } from "@/types";
-import { AppLocale } from "../lang/lang-types";
 
 interface IBrowser {
   name: string | undefined;

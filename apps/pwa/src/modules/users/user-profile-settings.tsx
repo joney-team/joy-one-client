@@ -9,14 +9,13 @@ import { Image } from "@/components/image";
 import { DateInput } from "@/components/inputs/date-input";
 import { TimeZoneInput } from "@/components/inputs/timezone-input";
 import { SectionTitle } from "@/components/session-title";
+import { AppLocale, EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventType } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
-import { localeNames } from "@/modules/lang/lang-service";
-import { AppLocale } from "@/modules/lang/lang-types";
+import { getClientLocale, localeNames } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -139,7 +138,7 @@ export const UserProfileSettings: FC = () => {
                   label={<Trans>Birthday</Trans>}
                   leftSection={<IconCalendar size={16} />}
                   value={auth.user!.birthday}
-                  onChange={(date) => form.setFieldValue("birthday", date)}
+                  onChange={(date) => form.setFieldValue("birthday", date ?? null)}
                 />
               </Stack>
             </FormSession>
@@ -155,13 +154,17 @@ export const UserProfileSettings: FC = () => {
                   label={<Trans>Language</Trans>}
                   description={<Trans>Change your language settings</Trans>}
                   leftSection={
-                    <Image src={`/lang/${form.values.settings.locale}.png`} w={16} h={16} />
+                    <Image
+                      src={`/lang/${form.values.settings?.locale ?? getClientLocale()}.png`}
+                      w={16}
+                      h={16}
+                    />
                   }
                   data={Object.values(AppLocale).map((locale) => ({
                     label: localeNames[locale],
                     value: locale,
                   }))}
-                  value={form.values.settings.locale}
+                  value={form.values.settings?.locale}
                   onChange={(l) => lang.changeLocale(l as AppLocale)}
                 />
 
@@ -191,13 +194,13 @@ export const UserProfileSettings: FC = () => {
                   <Stack gap={10} mt={10}>
                     <Checkbox
                       label={<Trans>Sunday</Trans>}
-                      checked={!!form.values.settings.isStartOfWeekSunday}
+                      checked={!!form.values.settings?.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", true)}
                     />
 
                     <Checkbox
                       label={<Trans>Monday</Trans>}
-                      checked={!!!form.values.settings.isStartOfWeekSunday}
+                      checked={!!!form.values.settings?.isStartOfWeekSunday}
                       onChange={() => form.setFieldValue("settings.isStartOfWeekSunday", false)}
                     />
                   </Stack>
@@ -207,13 +210,13 @@ export const UserProfileSettings: FC = () => {
                   <Stack gap={10} mt={10}>
                     <Checkbox
                       label={<Trans>12 hour</Trans>}
-                      checked={!!form.values.settings.isTwelveHour}
+                      checked={!!form.values.settings?.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", true)}
                     />
 
                     <Checkbox
                       label={<Trans>24 hour</Trans>}
-                      checked={!!!form.values.settings.isTwelveHour}
+                      checked={!!!form.values.settings?.isTwelveHour}
                       onChange={() => form.setFieldValue("settings.isTwelveHour", false)}
                     />
                   </Stack>

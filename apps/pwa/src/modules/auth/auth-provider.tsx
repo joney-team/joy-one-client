@@ -4,6 +4,7 @@ import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { useApp } from "@/app.context";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { EventType } from "@/graphql/enums.graphql";
+import { UpdateUserProfileInput } from "@/graphql/types.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
 import {
@@ -21,11 +22,10 @@ import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
 import { setUserLocale } from "@/modules/users/users-service";
-import { UpdateUserProfileDto } from "@/modules/users/users-types";
 import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import { useLingui } from "@lingui/react/macro";
 import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -55,8 +55,10 @@ import type {
   AuthSignInWithEmailPasswordDto,
   AuthSignUpWithEmailPasswordDto,
   AuthTokenResult,
-  UserAuthResult,
 } from "./auth-types";
+import { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
+import MUTATION_UPDATE_USER_PROFILE from "./graphql/mutationUpdateUserProfile.graphql";
+import QUERY_AUTH_USER from "./graphql/queryAuthUser.graphql";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -66,11 +68,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [user, setUser] = useState<UserAuthResult>();
+  const [user, setUser] = useState<AuthUserDataFragment>();
   const [device, setDevice] = useState<DeviceEntity>();
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
-  const syncLocaleDeviceToUser = async (_user: UserAuthResult) => {
+  const syncLocaleDeviceToUser = async (_user: AuthUserDataFragment) => {
     try {
       const currentLocale = getClientLocale();
       if (_user.locale !== currentLocale) {
@@ -113,7 +115,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
-    let authResult: UserAuthResult | undefined = undefined;
+    let authResult: AuthUserDataFragment | undefined = undefined;
     initializeMetaPages();
     setSessionId(uuid());
 
@@ -129,7 +131,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       // User information
       const accessToken = await getAccessToken();
       if (accessToken) {
-        authResult = await api.get<UserAuthResult>("/auth");
+        authResult = await client
+          .query({
+            query: QUERY_AUTH_USER,
+          })
+          .then((res) => res.data!.authUser);
         setUser(authResult);
       }
 
@@ -224,8 +230,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     await initialize("auth");
   };
 
-  const updateProfile = async (values: UpdateUserProfileDto) => {
-    return api.put(`/users/profile`, values).then((res) => setUser(res));
+  const [updateUserProfile] = useMutation(MUTATION_UPDATE_USER_PROFILE);
+  const updateProfile = async (values: UpdateUserProfileInput) => {
+    return updateUserProfile({ variables: { input: values } }).then((res) =>
+      setUser(res.data?.updateUserProfile)
+    );
   };
 
   const uploadAvatar = async (file: File) => {
@@ -307,7 +316,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const authType = search.get("authType");
       if (authType) router.removeQuery("authType", true);
 
-      if (!user.settings.timezoneId) detectTimeZone();
+      if (!user.settings?.timezoneId) detectTimeZone();
 
       Sentry.setUser({ id: user._id, username: user.name, email: user.email });
     }

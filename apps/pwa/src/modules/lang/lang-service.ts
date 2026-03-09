@@ -1,6 +1,6 @@
+import { AppLocale } from "@/graphql/enums.graphql";
 import { StorageKey } from "@/types";
 import { getCookie } from "cookies-next/client";
-import { AppLocale } from "./lang-types";
 
 export const getClientLocale = (): AppLocale => {
   let locale: AppLocale | undefined = undefined;
@@ -24,10 +24,10 @@ export const getClientLocale = (): AppLocale => {
     console.error(`Error getting locale: `, error);
   }
 
-  return locale || AppLocale.EN;
+  return locale || AppLocale.En;
 };
 
 export const localeNames = {
-  [AppLocale.VI]: "Tiếng Việt",
-  [AppLocale.EN]: "English",
+  [AppLocale.Vi]: "Tiếng Việt",
+  [AppLocale.En]: "English",
 };

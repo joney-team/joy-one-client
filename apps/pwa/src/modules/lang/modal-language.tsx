@@ -1,9 +1,9 @@
 "use client";
 
 import { Image } from "@/components/image";
+import { AppLocale } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
-import { AppLocale } from "@/modules/lang/lang-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { Trans } from "@lingui/react/macro";

@@ -22,11 +22,10 @@ import { FC, useEffect } from "react";
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
 import { genders } from "@/constant";
-import { WorkspaceType } from "@/graphql/enums.graphql";
+import { AppLocale, WorkspaceType } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { AppLocale } from "@/modules/lang/lang-types";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Gender } from "@/types";
@@ -34,10 +33,10 @@ import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
+import { CustomerRelationshipContactInput } from "../customer-detail/customer-relationship-contact-input";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 import CREATE_CUSTOMER_MUTATION from "../graphql/mutationCreateCustomer.graphql";
 import UPDATE_CUSTOMER_MUTATION from "../graphql/mutationUpdateCustomer.graphql";
-import { CustomerRelationshipContactInput } from "../customer-detail/customer-relationship-contact-input";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerDataFragment) => void | Promise<void>;
@@ -47,7 +46,7 @@ export interface CustomerFormProps {
 }
 
 export const medicalHistoryOptions: { [key in AppLocale]: string[] } = {
-  [AppLocale.VI]: [
+  [AppLocale.Vi]: [
     "Tiểu đường",
     "Huyết áp cao",
     "Huyết áp thấp",
@@ -58,7 +57,7 @@ export const medicalHistoryOptions: { [key in AppLocale]: string[] } = {
     "Thai/kinh nguyệt",
     "Thần kinh",
   ],
-  [AppLocale.EN]: [
+  [AppLocale.En]: [
     "Diabetes",
     "High blood pressure",
     "Low blood pressure",

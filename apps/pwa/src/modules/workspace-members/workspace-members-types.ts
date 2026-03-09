@@ -1,6 +1,6 @@
 import { WorkspaceMemberWorkingTimeType } from "@/graphql/types.graphql";
-import { UserEntity } from "@/modules/users/users-types";
 import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
+import { AuthUserDataFragment } from "../auth/graphql/fragmentAuthUser.graphql";
 
 export interface UpdateWorkspaceMemberDto {
   displayName?: string;
@@ -20,7 +20,7 @@ export interface WorkspaceMemberBranchesDto {
 
 export interface VerifyInvitaionTokenResponse {
   workspace: WorkspaceEntity;
-  invitorUser: UserEntity;
+  invitorUser: AuthUserDataFragment;
   workspaceId: string;
   invitorUserId: string;
 }

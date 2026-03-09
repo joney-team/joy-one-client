@@ -1,57 +1,9 @@
-import { BaseMongoEntity, Query } from "@/types";
-import { AppLocale } from "../lang/lang-types";
-import { WorkspaceRoleEntity } from "../workspace-roles/workspace-roles-types";
 import { WorkspaceType } from "@/graphql/types.graphql";
-
-export enum UserRole {
-  ADMIN = "ADMIN",
-  SYS_ADMIN = "SYS_ADMIN",
-}
 
 export interface UserAuthProvider {
   providerId: string;
   uid: string;
   username?: string;
-}
-
-export interface UserEntity extends BaseMongoEntity {
-  name: string;
-  avatar?: string;
-  email?: string;
-  birthday?: number | null;
-  phone?: string;
-  authVersion: number;
-  role: UserRole;
-  lastSignInAt?: number;
-  isEmailVerified?: boolean;
-  color?: string;
-  locale?: AppLocale;
-  isPasswordProvided: boolean;
-  settings: UserSettings;
-  providers: UserAuthProvider[];
-}
-
-export interface UpdateUserProfileDto {
-  name: string;
-  avatar?: string;
-  birthday?: number | null;
-  phone?: string;
-  email?: string;
-  settings?: UserSettings;
-}
-
-export interface UserQuery extends Query {
-  q?: string;
-}
-
-export interface UserClient {
-  userId: string;
-  workspaceId: string;
-  deviceId: string;
-}
-
-export interface UserClients {
-  [socketId: string]: UserClient;
 }
 
 export interface SignOutDto {
@@ -61,15 +13,6 @@ export interface SignOutDto {
 export interface UpdateUserPasswordDto {
   password: string;
   plainPassword: string;
-}
-
-export interface UserSettings {
-  locale?: AppLocale;
-  timezoneId?: string;
-  timezoneUtc?: string;
-  dateFormat?: string;
-  isStartOfWeekSunday?: boolean;
-  isTwelveHour?: boolean;
 }
 
 export interface UserMutualWorkspace {

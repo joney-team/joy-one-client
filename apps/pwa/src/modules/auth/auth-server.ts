@@ -7,8 +7,8 @@ import type {
   AuthSignInWithEmailPasswordDto,
   AuthSignUpWithEmailPasswordDto,
   AuthTokenResult,
-  UserAuthResult,
 } from "./auth-types";
+import { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
 
 export const serverSignInWithEmailPassword = async (dto: AuthSignInWithEmailPasswordDto) => {
   return apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", dto);
@@ -27,7 +27,7 @@ export const serverSignUpWithEmailPassword = async (dto: AuthSignUpWithEmailPass
 };
 
 export const serverAuthMe = async (dto: AuthMeDto) => {
-  return apiServerSide.post<UserAuthResult>("/auth/me", dto);
+  return apiServerSide.post<AuthUserDataFragment>("/auth/me", dto);
 };
 
 export const serverRefreshToken = async (dto: AuthRefreshTokenDto) => {

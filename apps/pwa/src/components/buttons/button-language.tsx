@@ -1,9 +1,10 @@
 "use client";
 
-import { locales } from "@/modules/lang/lang-constants";
+import { AppLocale } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
-import { AppLocale } from "@/modules/lang/lang-types";
+import { localeNames } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -11,7 +12,6 @@ import { IconLanguage, IconWorld } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { Image } from "../image";
 import { Modal } from "../modal/modal";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export const ButtonLanguage: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -30,7 +30,7 @@ export const ButtonLanguage: FC = () => {
           <ThemeIcon variant="transparent" color="gray">
             <IconWorld size={16} strokeWidth={1.5} />
           </ThemeIcon>
-          {locales[lang.locale].name()}
+          {localeNames[lang.locale]}
         </Group>
       </Anchor>
 
@@ -64,7 +64,7 @@ export const ButtonLanguage: FC = () => {
                 <Group gap={10}>
                   <Image src={`/lang/${locale}.png`} w={30} />
                   <Text fz={em(15)} fw={500}>
-                    {locales[locale].name()}
+                    {localeNames[locale]}
                   </Text>
                 </Group>
               </Card>

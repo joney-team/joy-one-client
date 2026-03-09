@@ -1,7 +1,4 @@
-export enum AppLocale {
-  VI = "vi",
-  EN = "en",
-}
+import { AppLocale } from "@/graphql/types.graphql";
 
 export interface LangContext {
   locale: AppLocale;

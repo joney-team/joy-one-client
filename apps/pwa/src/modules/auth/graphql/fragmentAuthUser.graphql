@@ -1,0 +1,19 @@
+fragment AuthUserData on AuthUser {
+  _id
+  name
+  email
+  avatar
+  role
+  locale
+  settings {
+    locale
+    timezoneId
+    timezoneUtc
+    isStartOfWeekSunday
+    isTwelveHour
+  }
+  phone
+  isEmailVerified
+  birthday
+  isPasswordProvided
+}

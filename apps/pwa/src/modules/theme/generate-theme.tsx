@@ -1,5 +1,6 @@
 "use client";
 
+import type { AppLocale } from "@/graphql/types.graphql";
 import { type AppMetadata } from "@/types";
 import { primaryColors } from "@joy-one-client/config/colors";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -28,7 +29,6 @@ import {
 } from "@mantine/core";
 import { LayoutContext } from "../../layout/layout-context";
 import { String } from "../../utils/string.utils";
-import { AppLocale } from "../lang/lang-types";
 
 export const getColorShape = (shape?: number) => {
   if (typeof shape === "number" && shape >= 0 && shape <= 9) {

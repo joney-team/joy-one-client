@@ -7,8 +7,8 @@ export const ActivityType = {
 export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
 /** Available locales */
 export const AppLocale = {
-  En: 'EN',
-  Vi: 'VI'
+  En: 'en',
+  Vi: 'vi'
 } as const;
 
 export type AppLocale = typeof AppLocale[keyof typeof AppLocale];
@@ -529,6 +529,15 @@ export const TaskPriority = {
 } as const;
 
 export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
+/** Available roles of a user */
+export const UserRole = {
+  Admin: 'ADMIN',
+  BusinessPartner: 'BUSINESS_PARTNER',
+  SysAdmin: 'SYS_ADMIN',
+  Tester: 'TESTER'
+} as const;
+
+export type UserRole = typeof UserRole[keyof typeof UserRole];
 /** The working time type of the workspace member */
 export const WorkspaceMemberWorkingTimeType = {
   Freelancer: 'FREELANCER',

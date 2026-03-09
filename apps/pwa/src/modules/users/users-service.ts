@@ -1,5 +1,5 @@
+import { AppLocale } from "@/graphql/types.graphql";
 import { api } from "../apis";
-import { AppLocale } from "../lang/lang-types";
 import { UpdateUserPasswordDto, UserPublicInformation } from "./users-types";
 
 export async function signOut() {

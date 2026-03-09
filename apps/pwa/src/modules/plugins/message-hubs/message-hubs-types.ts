@@ -1,4 +1,4 @@
-import { AppLocale } from "@/modules/lang/lang-types";
+import type { AppLocale } from "@/graphql/types.graphql";
 
 export type ChannelWidgetWelcomeInputType = "text" | "number" | "name" | "phone" | "email";
 

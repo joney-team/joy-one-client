@@ -15,12 +15,12 @@ import { deleteCookie, setCookie } from "cookies-next/client";
 
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { getClientLocale } from "./lang-service";
-import { AppLocale } from "./lang-types";
 
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { StorageKey } from "@/types";
 import { Context } from "./lang-context";
 
+import { AppLocale } from "@/graphql/enums.graphql";
 import { messages as defaultMessages } from "./catalog/en";
 
 defaultI18n.load(getClientLocale(), defaultMessages);

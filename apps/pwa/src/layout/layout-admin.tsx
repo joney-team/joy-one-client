@@ -2,29 +2,17 @@
 
 import { Button } from "@/components/buttons/button";
 import { ColorSchemes } from "@/components/color-schemes";
+import { UserRole } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
-import { UserRole } from "@/modules/users/users-types";
-import {
-  ActionIcon,
-  AppShell,
-  Burger,
-  Divider,
-  Group,
-  Image,
-  NavLink,
-  Stack,
-  Text,
-  Title,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
+import { ActionIcon, AppShell, Group, Image, NavLink, Stack, Text } from "@mantine/core";
 import { Icon, IconBuilding, IconLogout, IconPlayerPlay, IconTools } from "@tabler/icons-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { PropsWithChildren, type FC } from "react";
 
-const allowedRoles = [UserRole.SYS_ADMIN, UserRole.ADMIN];
+const allowedRoles: UserRole[] = [UserRole.SysAdmin, UserRole.Admin];
 
 const navItems: {
   route: string;

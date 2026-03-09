@@ -47,8 +47,8 @@ type AppConfig {
 
 """Available locales"""
 enum AppLocale {
-  EN
-  VI
+  en
+  vi
 }
 
 input AssignCustomerInput {
@@ -111,6 +111,20 @@ input AuthSignInWithEmailPasswordInput {
 type AuthTokenResult {
   accessToken: String!
   refreshToken: String!
+}
+
+type AuthUser {
+  _id: String!
+  avatar: String!
+  birthday: Float
+  email: String!
+  isEmailVerified: Boolean
+  isPasswordProvided: Boolean!
+  locale: AppLocale!
+  name: String!
+  phone: String
+  role: UserRole!
+  settings: UserSettings
 }
 
 type BaseCustomFieldValue {
@@ -1288,6 +1302,7 @@ type Mutation {
   updateLoanPackage(id: String!, input: UpdateLoanPackageInput!): Loan!
   updateReceipt(id: String!, input: UpdateReceiptInput!): Receipt!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
@@ -1735,6 +1750,7 @@ type Query {
   appConfig: AppConfig!
   attendanceRecord(id: String!): AttendanceRecord!
   attendanceRecords(limit: Float = 30, offset: Float, query: JSONObject): AttendanceRecordsPaginated!
+  authUser: AuthUser!
   booking(id: String!): Booking!
   bookings(limit: Float = 30, offset: Float, query: JSONObject): BookingsPaginated!
   calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
@@ -1757,7 +1773,7 @@ type Query {
   files(limit: Float = 30, offset: Float, query: JSONObject): FilesPaginated!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
-  getDeviceByIdentifyId(identifyId: String!): Device
+  getDeviceByIdentifyId(identifyId: String!): Device!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
   liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
@@ -2260,13 +2276,39 @@ input UpdateTaskInput {
   workspaceBranchId: String
 }
 
+input UpdateUserProfileInput {
+  avatar: String
+  birthday: Float
+  color: String
+  email: String
+  name: String!
+  phone: String
+  settings: UserSettingsInput
+}
+
 type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
 }
 
+"""Available roles of a user"""
+enum UserRole {
+  ADMIN
+  BUSINESS_PARTNER
+  SYS_ADMIN
+  TESTER
+}
+
 type UserSettings {
+  isStartOfWeekSunday: Boolean
+  isTwelveHour: Boolean
+  locale: AppLocale
+  timezoneId: String
+  timezoneUtc: String
+}
+
+input UserSettingsInput {
   isStartOfWeekSunday: Boolean
   isTwelveHour: Boolean
   locale: AppLocale

@@ -1,9 +1,9 @@
 "use server";
 
+import { AppLocale } from "@/graphql/enums.graphql";
 import { StorageKey } from "@/types";
 import { getCookie } from "cookies-next/server";
 import { cookies, headers } from "next/headers";
-import { AppLocale } from "./lang-types";
 
 export const getLocaleServer = async () => {
   let locale: AppLocale | undefined = undefined;
@@ -22,5 +22,5 @@ export const getLocaleServer = async () => {
     }
   }
 
-  return locale || AppLocale.EN;
+  return locale || AppLocale.En;
 };

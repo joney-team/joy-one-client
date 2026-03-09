@@ -1,13 +1,12 @@
-import { WorkspaceType } from "@/graphql/types.graphql";
-import { BaseMongoEntity } from "@/types";
-import { Icon } from "@tabler/icons-react";
-import { Dispatch, SetStateAction } from "react";
-import { AppLocale } from "../lang/lang-types";
-import { LocationEntity } from "../locations/locations-types";
-import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
-import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
+import type { AppLocale, WorkspaceType } from "@/graphql/types.graphql";
+import type { BaseMongoEntity } from "@/types";
+import type { Icon } from "@tabler/icons-react";
+import type { Dispatch, SetStateAction } from "react";
+import type { LocationEntity } from "../locations/locations-types";
+import type { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import type { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import type { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
+import type { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 
 export interface PluginMailerAccount {
   user: string;

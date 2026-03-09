@@ -1,21 +1,6 @@
+import { UpdateUserProfileInput } from "@/graphql/types.graphql";
 import { DeviceEntity } from "@/modules/devices/devices-types";
-import { UpdateUserProfileDto, UserEntity } from "@/modules/users/users-types";
-
-export type UserAuthResult = Pick<
-  UserEntity,
-  | "_id"
-  | "name"
-  | "email"
-  | "avatar"
-  | "role"
-  | "locale"
-  | "settings"
-  | "phone"
-  | "isEmailVerified"
-  | "birthday"
-> & {
-  isPasswordProvided: boolean;
-};
+import { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
 
 export interface AuthSignInWithFirebaseDto {
   idToken: string;
@@ -77,14 +62,14 @@ export interface AuthMeDto {
 }
 
 export interface AuthContext {
-  user: UserAuthResult;
+  user: AuthUserDataFragment;
   device: DeviceEntity;
   isInitialized: boolean;
   signOut: () => void;
   signInWithGoogle: () => Promise<void>;
   signInWithFacebook: () => Promise<void>;
   signInWithGithub: () => Promise<void>;
-  updateProfile: (values: UpdateUserProfileDto) => Promise<void>;
+  updateProfile: (values: UpdateUserProfileInput) => Promise<void>;
   signInWithEmailAndPassword: (dto: AuthSignInWithEmailPasswordDto) => Promise<void>;
   signUpWithEmailPassword: (dto: AuthSignUpWithEmailPasswordDto) => Promise<void>;
   registerNotification: () => Promise<void>;

@@ -18,14 +18,14 @@ type DateFormatProps = { value: RawDate } & (
 export const useCurrentTimeZone = () => {
   const auth = useAuth();
   const fallback = new Intl.DateTimeFormat().resolvedOptions().timeZone;
-  return auth.user?.settings.timezoneUtc ?? fallback;
+  return auth.user?.settings?.timezoneUtc ?? fallback;
 };
 
 export const DateFormat: FC<DateFormatProps> = (props): JSX.Element => {
   const { locale } = useLang();
   const auth = useAuth();
   const timeZone = useCurrentTimeZone();
-  const hour12 = ("hour12" in props && props.hour12) ?? auth.user?.settings.isTwelveHour;
+  const hour12 = ("hour12" in props && props.hour12) ?? auth.user?.settings?.isTwelveHour ?? false;
 
   const format = useMemo<Intl.DateTimeFormatOptions>(() => {
     if (props.type === "custom")
