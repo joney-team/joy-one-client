@@ -12,7 +12,7 @@ import { useColor } from "@/modules/theme/use-color";
 import QUERY_WORKSPACE_MEMBERS, {
   type WorkspaceMembersQuery,
 } from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
-import { getMemberRoleLabel } from "@/modules/workspace-members/workspace-members-service";
+import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -22,7 +22,6 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
-import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 
 const MenuItem = ({
   member,

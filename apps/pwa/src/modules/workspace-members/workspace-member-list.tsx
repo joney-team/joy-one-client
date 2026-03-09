@@ -13,10 +13,7 @@ import {
   type ModalUserInformationRef,
 } from "@/modules/users/modals/modal-user-information";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import {
-  getMemberRoleLabel,
-  updateWorkspaceMember,
-} from "@/modules/workspace-members/workspace-members-service";
+import { updateWorkspaceMember } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspaceDefaultRoleId,
