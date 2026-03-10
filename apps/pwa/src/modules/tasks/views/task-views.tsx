@@ -9,7 +9,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { useLocalStorage } from "@mantine/hooks";
 
 const TaskTabActions = dynamic(

@@ -3,7 +3,6 @@
 import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { ButtonHrmTimeKeeping } from "@/components/buttons/button-hrm-timekeepings";
 import { ButtonLanguage } from "@/components/buttons/button-language";
 import { ColorSchemes } from "@/components/color-schemes";
 import { Container } from "@/components/container";
@@ -18,7 +17,6 @@ import { ActionIcon, Divider, Group, Space, Stack, Text, ThemeIcon, em, rem } fr
 import {
   Icon,
   IconChevronRight,
-  IconClockCheck,
   IconLayout,
   IconLogout,
   IconNotification,
@@ -31,7 +29,6 @@ import {
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
-import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 
 export const Profile: FC = () => {
   const auth = useAuth();
@@ -39,7 +36,7 @@ export const Profile: FC = () => {
   const workspace = useWorkspace();
   const router = useRouter();
   const layout = useLayout();
-  const { isHrmTimekeepingAvailable } = useWorkspaceSetting();
+
   useEffect(() => {
     layout.setComponents({
       head: t`Profile`,
@@ -72,19 +69,11 @@ export const Profile: FC = () => {
           </Group>
 
           <Group>
-            <ButtonHrmTimeKeeping />
             <ColorSchemes />
           </Group>
         </Group>
 
         <Stack gap={10}>
-          {isHrmTimekeepingAvailable && (
-            <NavItem
-              icon={IconClockCheck}
-              name={t`Timekeeping History`}
-              href="/workspace/hrm/user-timekeepings"
-            />
-          )}
           <NavItem icon={IconNotification} name={t`Notifications`} href="/profile/notifications" />
           <NavItem icon={IconShieldLock} name={t`Secure`} href="/profile/secure" />
         </Stack>

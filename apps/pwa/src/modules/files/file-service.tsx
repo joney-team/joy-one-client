@@ -21,7 +21,7 @@ import {
   IconVideo,
 } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { FileEntity } from "./file-types";
 import { parseFile } from "./files-utils";
 
@@ -47,18 +47,18 @@ export function getMineTypeAccept(fileType: FileType[]) {
 }
 
 export async function getFiles(query?: any) {
-  return api.get<ResponseList<FileEntity>>(`/files`, { params: query });
+  return apiClient.get<ResponseList<FileEntity>>(`/files`, { params: query });
 }
 
 export async function removeFileFromRelativePath(relativePath: string) {
-  return api.delete(`/files/paths/${relativePath}`);
+  return apiClient.delete(`/files/paths/${relativePath}`);
 }
 
 export async function removeFile(fileId: string) {
   return onActionLoad({
     name: <Trans>Remove file</Trans>,
     icon: IconTrash,
-    process: () => api.delete(`/files/${fileId}`),
+    process: () => apiClient.delete(`/files/${fileId}`),
   });
 }
 
@@ -72,7 +72,7 @@ export async function reducePhotoSize(file: File, option: Options) {
 
 export async function getFileInfo(rawUrl: string) {
   const fileName = rawUrl.split("/").pop();
-  return api.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
+  return apiClient.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
 }
 
 export const fileTypeIcons: Record<FileType, Icon> = {

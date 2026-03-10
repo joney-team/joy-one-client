@@ -61,25 +61,6 @@ export interface ResponseList<T> {
   count: number;
 }
 
-export enum StorageKey {
-  ACCESS_TOKEN = "_u_udleafdmaz",
-  ACCESS_TOKEN_IV = "_u_synylghedt",
-  REFRESH_TOKEN = "_ur_yztnldjdsl",
-  REFRESH_TOKEN_IV = "_ur_ycclsptyde",
-  WORKSPACE_ID = "_w_rerrogiluu",
-  BRANCH_ID = "_b_rerkiwunauw",
-  DEVICE_ID = "_d_xhpvqngid",
-  META_ACCESS_TOKEN = "_m_at",
-  LOCALE = "_locale",
-  SESSION_ID = "_s_id",
-  WORKSPACE_AUTH_SESSION_ID = "_ws_sid",
-  LAYOUT_NAVIGATION_WIDTH = "_l_nw",
-  DASHBOARD_BOOKINGS_QUERY = "_db_bq",
-  DEVICE_IDENTIFY_ID = "_di_id",
-  TASKS_STATE = "_ts_st",
-  TASKS_VIEW = "_ts_v",
-}
-
 export enum Period {
   DATE = "date",
   WEEK = "week",

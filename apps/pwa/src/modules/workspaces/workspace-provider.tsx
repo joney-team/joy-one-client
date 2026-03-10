@@ -10,13 +10,13 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { joinWorkspaceMember } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { isExtendedApp } from "@/service";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import QUERY_USER_WORKSPACE_MEMBERS from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
 import QUERY_WORKSPACE_SETTING from "../workspace-settings/graphql/queryWorkspaceSetting.graphql";
 import { Context } from "./workspace-context";
@@ -70,7 +70,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const create = async (dto: WorkspaceDto) => {
-    const workspace = await api.post<WorkspaceEntity>("/workspaces", dto);
+    const workspace = await apiClient.post<WorkspaceEntity>("/workspaces", dto);
     const result = await fetchWorkspaceMembers();
 
     const userWorkspace = result.data?.userWorkspaceMembers.find(
@@ -86,7 +86,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const archive = async () => {
-    await api.delete(`/workspaces`);
+    await apiClient.delete(`/workspaces`);
     await fetchWorkspaceMembers();
     leave();
   };

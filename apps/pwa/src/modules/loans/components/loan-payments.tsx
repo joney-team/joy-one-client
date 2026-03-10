@@ -6,7 +6,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { EventType, LoanStatus, ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useEventsListener } from "@/modules/events/event-service";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
 import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
@@ -84,7 +84,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
     onConfirmModal({
       content: <Trans>Are you sure you want to revert the payment?</Trans>,
-      onConfirm: () => api.post(`/loans/${loan.id}/revert-fulfilled`),
+      onConfirm: () => apiClient.post(`/loans/${loan.id}/revert-fulfilled`),
     });
   };
 

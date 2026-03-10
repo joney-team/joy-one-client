@@ -2,10 +2,10 @@ import { NetworkMode, UseQueryResult, useQuery as useQueryTanstack } from "@tans
 
 import { EventType } from "@/graphql/types.graphql";
 import { useLocalStorage } from "@/hooks/use-local-storage";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { AxiosError } from "axios";
 import { useMemo } from "react";
-import { api } from ".";
+import { apiClient } from ".";
 import { onReconnected, useEventsListener } from "../events/event-service";
 import { EventDataFragment } from "../events/graphql/fragmentEvent.graphql";
 
@@ -42,10 +42,10 @@ export const useRestQuery = <T = any, P = Record<string, any>>(
     queryKey: queryKeyIn,
     queryFn: ({ signal }) => {
       if (query.method === "post") {
-        return api.post<T>(route, query.params, { signal });
+        return apiClient.post<T>(route, query.params, { signal });
       }
 
-      return api.get<T>(route, { params: query.params, signal });
+      return apiClient.get<T>(route, { params: query.params, signal });
     },
     enabled: isReadyToFetch,
     networkMode,

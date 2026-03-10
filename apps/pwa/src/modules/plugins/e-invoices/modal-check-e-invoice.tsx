@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import QUERY_RECEIPT_BY_CODE from "@/modules/receipts/graphql/queryReceiptByCode.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
@@ -30,7 +30,7 @@ const ModalCheckEInvoice: FC = () => {
           code: receiptCode,
         },
       });
-      const data = await api.post(`/plugins/e-invoices/generate-data`, {
+      const data = await apiClient.post(`/plugins/e-invoices/generate-data`, {
         receiptId: receipt.data?.receiptByCode?.id,
       });
       setEInvoiceData(data);

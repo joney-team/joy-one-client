@@ -1,22 +1,28 @@
+import { StorageKey } from "@/constants/storage-key";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { ResponseList, StorageKey } from "@/types";
+import type { ResponseList } from "@/types";
 import { isServer } from "@/utils/common.utils";
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { v4 as uuid } from "uuid";
-import { api } from "../apis";
-import type { DeviceEntity, RegisterDeviceDto, SetDeviceLocaleDto, SetDeviceNotificationTokenDto } from "./devices-types";
+import { apiClient } from "../apis";
+import type {
+  DeviceEntity,
+  RegisterDeviceDto,
+  SetDeviceLocaleDto,
+  SetDeviceNotificationTokenDto,
+} from "./devices-types";
 
 export async function registerDevice() {
   const identifyId = await getDeviceIdentifyId();
 
-  return api.post<DeviceEntity, RegisterDeviceDto>('/devices', {
+  return apiClient.post<DeviceEntity, RegisterDeviceDto>("/devices", {
     identifyId,
     locale: getClientLocale(),
   });
 }
 
 export async function getUserDevices(query?: any): Promise<ResponseList<DeviceEntity>> {
-  return api.get('/devices', { params: query });
+  return apiClient.get("/devices", { params: query });
 }
 
 export async function getDevice(): Promise<DeviceEntity | undefined> {
@@ -25,19 +31,20 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
 
   return new Promise((resolve) => {
     const action = () => {
-      api.get(`/devices/${identifyId}`)
+      apiClient
+        .get(`/devices/${identifyId}`)
         .then((res) => resolve(res))
         .catch((err) => {
-          if (typeof err === 'object' && err.status === 404) {
+          if (typeof err === "object" && err.status === 404) {
             resolve(undefined);
           } else {
             setTimeout(action, 3000);
           }
-        })
-    }
+        });
+    };
 
     action();
-  })
+  });
 }
 
 export const getDeviceIdentifyId = async (): Promise<string> => {
@@ -71,14 +78,16 @@ export async function initializeDevice() {
   return newDevice;
 }
 
-export async function setDeviceNotificationToken(dto: SetDeviceNotificationTokenDto): Promise<DeviceEntity> {
-  return api.post(`/devices/notification-token`, dto);
+export async function setDeviceNotificationToken(
+  dto: SetDeviceNotificationTokenDto
+): Promise<DeviceEntity> {
+  return apiClient.post(`/devices/notification-token`, dto);
 }
 
 export async function setDeviceLocale(dto: SetDeviceLocaleDto): Promise<DeviceEntity> {
-  return api.post(`/devices/locale`, dto);
+  return apiClient.post(`/devices/locale`, dto);
 }
 
 export function isNotificationAvailable() {
-  return !isServer() && 'Notification' in window;
+  return !isServer() && "Notification" in window;
 }

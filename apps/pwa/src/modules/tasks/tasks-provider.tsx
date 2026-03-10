@@ -3,7 +3,7 @@
 import { useRouter } from "@/hooks/use-router";
 import { TasksContext } from "@/modules/tasks/tasks-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { NetworkStatus } from "@apollo/client";
 import { useQuery } from "@apollo/client/react";
 import { useLocalStorage } from "@mantine/hooks";

@@ -1,7 +1,7 @@
 "use client";
 
 import { Fullscreen } from "@/components/fullscreen";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { AxiosError } from "axios";

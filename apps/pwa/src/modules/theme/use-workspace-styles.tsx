@@ -2,11 +2,13 @@ import { useEffect } from "react";
 import { useColor } from "./use-color";
 import { useColorScheme } from "./use-color-scheme";
 
-export const useWorkspaceStyles = () => {
+export const useWorkspaceStyles = (enabled = true) => {
   const colorScheme = useColorScheme();
   const color = useColor();
 
   useEffect(() => {
+    if (!enabled) return;
+
     const variables = {
       "--app-divider-color": color({ light: "gray.2", dark: "dark.5" }),
       "--app-background-color": color({ light: "#f3f3f3", dark: "#242424" }),
@@ -22,9 +24,11 @@ export const useWorkspaceStyles = () => {
         document.documentElement.style.removeProperty(key);
       });
     };
-  }, [colorScheme]);
+  }, [colorScheme, enabled]);
 
   useEffect(() => {
+    if (!enabled) return;
+
     const backgroundColor = `var(--app-background-color)`;
     const patternColor = `var(--app-background-pattern-color)`;
 
@@ -40,5 +44,5 @@ export const useWorkspaceStyles = () => {
       document.body.style.removeProperty("background-image");
       document.body.style.removeProperty("background-size");
     };
-  }, [colorScheme]);
+  }, [colorScheme, enabled]);
 };

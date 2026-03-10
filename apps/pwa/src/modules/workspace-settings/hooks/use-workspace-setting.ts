@@ -133,14 +133,6 @@ export const useWorkspaceSetting = () => {
     return getWorkspaceDisplayView();
   };
 
-  const isHrmTimekeepingAvailable = useMemo(() => {
-    return (
-      !!workspaceSetting?.hrmTimeKeepingsRules &&
-      !!workspaceSetting?.hrmTimeKeepingsRules.acceptLocations &&
-      workspaceSetting?.hrmTimeKeepingsRules.acceptLocations.length > 0
-    );
-  }, [workspaceSetting]);
-
   return {
     workspaceSetting,
     updateWorkspaceSetting,
@@ -148,7 +140,6 @@ export const useWorkspaceSetting = () => {
     workspaceView,
     updateWorkspaceView,
     resetWorkspaceView,
-    isHrmTimekeepingAvailable,
     currency: Currency.get(workspaceSetting?.currencyCode ?? "USD"),
   };
 };

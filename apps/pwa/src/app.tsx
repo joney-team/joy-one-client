@@ -10,6 +10,7 @@ import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "r
 import { v4 as uuid } from "uuid";
 import packageJson from "../package.json";
 import { AppContext } from "./app.context";
+import { StorageKey } from "./constants/storage-key";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { usePageTitle } from "./hooks/use-page-title";
@@ -19,7 +20,7 @@ import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
-import { StorageKey, type AppConfig, type AppMetadata } from "./types";
+import type { AppConfig, AppMetadata } from "./types";
 
 import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";

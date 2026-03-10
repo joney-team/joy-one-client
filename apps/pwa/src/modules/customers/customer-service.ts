@@ -2,13 +2,13 @@ import { Gender } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
 import { AppPageMetadata } from "@/types";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { apiServerSide } from "../apis/server";
 import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 
 export async function isCustomerPhoneExisted(phone: string) {
-  return api.get<boolean>(`/customers/phone/${phone}/exists`);
+  return apiClient.get<boolean>(`/customers/phone/${phone}/exists`);
 }
 
 export async function getCustomerMetadata(code: string) {
@@ -17,7 +17,7 @@ export async function getCustomerMetadata(code: string) {
 
 export async function customerInteraction(_id: string) {
   try {
-    await api.post(`/customers/${_id}/interaction`);
+    await apiClient.post(`/customers/${_id}/interaction`);
   } catch (error) {
     console.error(error);
   }

@@ -2,7 +2,7 @@
 
 import { EntityImages } from "@/components/entity-images";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useLang } from "@/modules/lang/lang-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -14,7 +14,7 @@ import { LoanAssetDataInputProps } from ".";
 export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
   const lang = useLang();
   const retreiveDeviceKey = async () => {
-    const { hash } = await api.post("/tools/md5", {
+    const { hash } = await apiClient.post("/tools/md5", {
       text: `${props.loanId}-${DateTime.format(new Date(), {
         dateStyle: "short",
         locale: lang.locale,

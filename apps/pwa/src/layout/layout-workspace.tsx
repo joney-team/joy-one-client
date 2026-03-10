@@ -12,6 +12,7 @@ import dynamic from "next/dynamic";
 import { Fragment, useEffect, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
+import { useRouteRule } from "@/hooks/use-router";
 
 const WorkspaceNavigation = dynamic(
   () => import("./navigation/workspace-navigation").then((m) => m.WorkspaceNavigation),
@@ -42,8 +43,10 @@ export const LayoutWorkspace: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
   const workspaceLayout = useWorkspaceLayout();
+  const routeRule = useRouteRule();
+  const isEnabled = !!routeRule.workspace;
 
-  useWorkspaceStyles();
+  useWorkspaceStyles(isEnabled);
 
   const headroom = useHeadroom({
     fixedAt:
@@ -56,11 +59,15 @@ export const LayoutWorkspace: FC = () => {
     layout.view === "mobile" && !layout.isStandalone ? !layout.isBrowerCollapsed : headroom;
 
   useEffect(() => {
+    if (!isEnabled) return;
+
     window.document.body.style.setProperty("--app-primary-color", color("primary"));
     return () => {
       window.document.body.style.removeProperty("--app-primary-color");
     };
-  }, [color, workspace]);
+  }, [color, workspace, isEnabled]);
+
+  if (!isEnabled) return null;
 
   return (
     <Fragment>

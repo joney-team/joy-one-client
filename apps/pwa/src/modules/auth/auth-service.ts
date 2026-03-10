@@ -1,10 +1,10 @@
 import { configs } from "@/configs/layout.config";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { decryptData, encryptData } from "@/utils/crypto.utils";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { serverRefreshToken } from "./auth-server";
 import {
   AuthRenewPasswordByCodeDto,
@@ -13,15 +13,15 @@ import {
 } from "./auth-types";
 
 export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
-  return api.post(`/auth/renew-password/request`, dto);
+  return apiClient.post(`/auth/renew-password/request`, dto);
 }
 
 export async function verifyRenewPasswordCode(dto: AuthVerifyRenewPasswordCodeDto) {
-  return api.post(`/auth/renew-password/verify`, dto);
+  return apiClient.post(`/auth/renew-password/verify`, dto);
 }
 
 export async function renewPassword(dto: AuthRenewPasswordByCodeDto) {
-  return api.post(`/auth/renew-password`, dto);
+  return apiClient.post(`/auth/renew-password`, dto);
 }
 
 export const saveTokens = async (tokens: { accessToken: string; refreshToken: string }) => {

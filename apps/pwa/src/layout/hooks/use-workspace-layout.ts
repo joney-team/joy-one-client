@@ -1,7 +1,7 @@
 "use client";
 
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { useLocalStorage } from "@mantine/hooks";
 import { useMemo } from "react";
 import { useLayout } from "../layout-context";

@@ -136,13 +136,6 @@ const defaultWorkspaceView: WorkspaceView = {
       dividerName: "hrm",
       moduleId: null,
     },
-    {
-      __typename: "WorkspaceViewComponent",
-      id: "",
-      type: "MODULE",
-      moduleId: "timekeepings",
-      dividerName: null,
-    },
   ],
   dashboardWidgets: [
     { __typename: "DisplayWidget", id: "", type: DashboardWidgetType.TODAY_REVENUE, state: null },
@@ -249,13 +242,6 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
         type: "DIVIDER",
         dividerName: "hrm",
         moduleId: null,
-      },
-      {
-        __typename: "WorkspaceViewComponent",
-        id: "",
-        type: "MODULE",
-        moduleId: "timekeepings",
-        dividerName: null,
       },
     ],
     dashboardWidgets: [
@@ -465,13 +451,6 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
         type: "DIVIDER",
         dividerName: "hrm",
         moduleId: null,
-      },
-      {
-        __typename: "WorkspaceViewComponent",
-        id: "",
-        type: "MODULE",
-        moduleId: "timekeepings",
-        dividerName: null,
       },
     ],
     reportWidgets: [

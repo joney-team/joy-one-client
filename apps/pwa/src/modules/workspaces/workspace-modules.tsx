@@ -284,15 +284,6 @@ export const workspaceModuleConfigs = {
     name: defineMessage`App settings`,
     description: defineMessage`Create an application with a custom domain, customize the application name, icon, color.`,
   }),
-  workspaceSettingsHrmTimekeepings: combineModule({
-    href: "/workspace-settings/hrm-timekeepings",
-    icon: IconCalendarCheck,
-    permissions: WorkspacePermission.WORKSPACE_SETTINGS,
-    restrictDisplay: ["spotlight"],
-    color: "violet",
-    name: defineMessage`Timekeepings settings`,
-    description: defineMessage`Support GPS Check-in, summarize working hours, late, overtime and support salary calculation.`,
-  }),
   workspaceSettingsDocuments: combineModule({
     href: "/workspace-settings/documents",
     icon: IconFiles,

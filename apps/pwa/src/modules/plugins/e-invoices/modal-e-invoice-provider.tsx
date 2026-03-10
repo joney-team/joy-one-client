@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -86,11 +86,14 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
       };
 
       const data = provider
-        ? await api.put<PluginEInvoicesProviderEntity>(
+        ? await apiClient.put<PluginEInvoicesProviderEntity>(
             `/plugins/e-invoices/providers/${provider._id}`,
             payload
           )
-        : await api.post<PluginEInvoicesProviderEntity>(`/plugins/e-invoices/providers`, payload);
+        : await apiClient.post<PluginEInvoicesProviderEntity>(
+            `/plugins/e-invoices/providers`,
+            payload
+          );
 
       await props.onDone?.(data);
     } catch (error) {

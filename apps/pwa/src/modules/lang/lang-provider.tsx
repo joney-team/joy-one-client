@@ -17,7 +17,7 @@ import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
 import { getClientLocale } from "./lang-service";
 
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { Context } from "./lang-context";
 
 import { AppLocale } from "@/graphql/enums.graphql";

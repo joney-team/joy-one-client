@@ -1,7 +1,7 @@
 "use client";
 
 import { ActionIcon } from "@/components/action-icon/action-icon";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { FileEntity } from "@/modules/files/file-types";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { useColor } from "@/modules/theme/use-color";
@@ -128,7 +128,9 @@ export const VoiceInput: FC<VoiceInputProps> = (props) => {
 
       formData.append("file", blob, fileName);
 
-      const file = await api.formData(`/files/convert/audio`, formData, { responseType: "blob" });
+      const file = await apiClient.formData(`/files/convert/audio`, formData, {
+        responseType: "blob",
+      });
       const fileMetadata = await uploadFile(new File([file], "voice.mp3", { type: "audio/mpeg" }));
       props.onComplete(fileMetadata);
       setIsOpened(false);

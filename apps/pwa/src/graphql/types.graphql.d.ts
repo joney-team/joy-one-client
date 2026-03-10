@@ -130,6 +130,10 @@ export type AttendanceRecordsPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type AuthRequestRenewUserPasswordInput = {
+  email: Scalars['String']['input'];
+};
+
 export type AuthSignInWithEmailPasswordInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
@@ -154,6 +158,10 @@ export type AuthUser = {
   phone: Maybe<Scalars['String']['output']>;
   role: UserRole;
   settings: Maybe<UserSettings>;
+};
+
+export type AuthVerifyRenewPasswordCodeInput = {
+  code: Scalars['String']['input'];
 };
 
 export type BaseCustomFieldValue = {
@@ -1362,14 +1370,18 @@ export type Mutation = {
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
+  requestRenewPassword: Scalars['Boolean']['output'];
   rescheduleBooking: Booking;
   revertApproveLoan: Loan;
   revertFulfilledLoan: Loan;
   revertLiquidationLoan: Loan;
   revertPaymentReceipt: Receipt;
+  setDeviceLocale: Device;
   setPluginExternalStorage: PluginExternalStorage;
   signInWithEmailPassword: AuthTokenResult;
   signLoan: Loan;
+  signOut: Scalars['Boolean']['output'];
+  signOutOtherDevices: AuthTokenResult;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateActivity: Activity;
@@ -1388,6 +1400,7 @@ export type Mutation = {
   updateWorkspaceMember: WorkspaceMember;
   updateWorkspaceRole: WorkspaceRole;
   updateWorkspaceSetting: WorkspaceSetting;
+  verifyRenewPasswordCode: VerifyRenewPasswordResult;
 };
 
 
@@ -1708,6 +1721,11 @@ export type MutationRemoveTagArgs = {
 };
 
 
+export type MutationRequestRenewPasswordArgs = {
+  input: AuthRequestRenewUserPasswordInput;
+};
+
+
 export type MutationRescheduleBookingArgs = {
   assigneeUserIds?: InputMaybe<Array<Scalars['String']['input']>>;
   createdAt?: InputMaybe<Scalars['Float']['input']>;
@@ -1740,6 +1758,11 @@ export type MutationRevertLiquidationLoanArgs = {
 
 export type MutationRevertPaymentReceiptArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationSetDeviceLocaleArgs = {
+  input: SetDeviceLocaleInput;
 };
 
 
@@ -1908,6 +1931,11 @@ export type MutationUpdateWorkspaceSettingArgs = {
   termsOfService?: InputMaybe<Scalars['String']['input']>;
   view?: InputMaybe<WorkspaceViewInput>;
   zaloOaGmfGroupSettings?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type MutationVerifyRenewPasswordCodeArgs = {
+  input: AuthVerifyRenewPasswordCodeInput;
 };
 
 export type Order = {
@@ -2447,6 +2475,7 @@ export type Query = {
   taskStatuses: ConfigTaskStatuses;
   tasks: TasksPaginated;
   tasksCount: Scalars['Float']['output'];
+  testErrorNotFound: Scalars['String']['output'];
   userWorkspaceMember: WorkspaceMember;
   userWorkspaceMembers: Array<WorkspaceMember>;
   workspace: Workspace;
@@ -3160,6 +3189,10 @@ export type SearchResultWorkspaceMember = SearchResult & {
   userId: Scalars['String']['output'];
 };
 
+export type SetDeviceLocaleInput = {
+  locale: AppLocale;
+};
+
 export type SiblingTasks = {
   __typename: 'SiblingTasks';
   next: Maybe<Task>;
@@ -3454,6 +3487,11 @@ export type UserSettingsInput = {
   locale?: InputMaybe<AppLocale>;
   timezoneId?: InputMaybe<Scalars['String']['input']>;
   timezoneUtc?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type VerifyRenewPasswordResult = {
+  __typename: 'VerifyRenewPasswordResult';
+  email: Scalars['String']['output'];
 };
 
 export type WorkingDayInterval = {

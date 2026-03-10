@@ -12,7 +12,7 @@ import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { CategoryColumn } from "../categories/components/category-column";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import QUERY_POSTS from "./graphql/queryPosts.graphql";
@@ -63,7 +63,7 @@ export const PostsList: FC = () => {
             permission: WorkspacePermission.POSTS_MANAGER,
             handler: async (data) => {
               onArchive({
-                process: () => api.delete("/posts/bulk", { ids: data.map((v) => v._id) }),
+                process: () => apiClient.delete("/posts/bulk", { ids: data.map((v) => v._id) }),
               });
             },
           },

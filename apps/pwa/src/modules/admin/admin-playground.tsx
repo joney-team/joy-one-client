@@ -7,16 +7,66 @@ import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { SectionTitle } from "@/components/session-title";
 import { TimeSlots } from "@/components/time-slots/time-slots";
 import { TimeEvent } from "@/components/time-slots/time-slots.types";
+import QUERY_APP_CONFIG from "@/configs/queryAppConfig.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import QUERY_AUTH_USER from "@/modules/auth/graphql/queryAuthUser.graphql";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
 import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useMemo, useState, type FC } from "react";
+import { apolloClient } from "../apollo/apollo-client";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useWorkspace } from "../workspaces/workspace-context";
+import QUERY_TEST_ERROR_NOT_FOUND from "./graphql/queryTestErrorNotFound.graphql";
+
+const GraphQLPlayground: FC = () => {
+  return (
+    <Group>
+      <Button
+        onClick={() =>
+          apolloClient
+            .query({
+              query: QUERY_APP_CONFIG,
+            })
+            .then((result) => {
+              console.log("result", result.data?.appConfig);
+            })
+        }
+      >
+        Get config
+      </Button>
+
+      <Button
+        onClick={() =>
+          apolloClient
+            .query({
+              query: QUERY_AUTH_USER,
+              fetchPolicy: "network-only",
+            })
+            .then((result) => {
+              console.log("result", result.data?.authUser);
+            })
+        }
+      >
+        Get with auth
+      </Button>
+
+      <Button
+        onClick={() =>
+          apolloClient.query({
+            query: QUERY_TEST_ERROR_NOT_FOUND,
+            fetchPolicy: "network-only",
+          })
+        }
+      >
+        Test error not found
+      </Button>
+    </Group>
+  );
+};
 
 const UseUploadFilePlayground: FC = () => {
   const uploadFile = useUploadFile();
@@ -104,6 +154,13 @@ export const AdminPlayground: FC = () => {
 
   return (
     <Stack p="md" gap="md">
+      <Paper withBorder>
+        <Stack p="md">
+          <SectionTitle name="GraphQL Playground" />
+          <GraphQLPlayground />
+        </Stack>
+      </Paper>
+
       <Paper withBorder>
         <Stack>
           <Group px={20} pt={20}>

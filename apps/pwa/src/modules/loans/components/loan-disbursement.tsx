@@ -8,7 +8,7 @@ import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { LoanStatus, ReceiptPaymentMethod, ReceiptType } from "@/graphql/enums.graphql";
 import { PluginBankAccount } from "@/graphql/types.graphql";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
@@ -80,7 +80,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const disbursementReceipt = disbursementReceiptData?.list.results[0];
 
   const onRevertApproval = async () => {
-    await api.post(`/loans/${loan.id}/revert-approve`);
+    await apiClient.post(`/loans/${loan.id}/revert-approve`);
   };
 
   const onSubmit = async () => {

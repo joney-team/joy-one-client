@@ -1,35 +1,34 @@
 import { ResponseList } from "@/types";
 import { Icon, IconBox, IconCategory2, IconGiftCard, IconPackage } from "@tabler/icons-react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { ProductDto, ProductEntity, ProductType } from "./products-types";
 
 export async function getProducts(query?: any): Promise<ResponseList<ProductEntity>> {
-  return api.get<ResponseList<ProductEntity>>(`/products`, { params: query })
+  return apiClient.get<ResponseList<ProductEntity>>(`/products`, { params: query });
 }
 
 export async function getProductByIds(ids: string[]): Promise<ProductEntity[]> {
-  return api.get<ProductEntity[]>(`/products/ids`, { params: { ids } })
+  return apiClient.get<ProductEntity[]>(`/products/ids`, { params: { ids } });
 }
 
 export async function createProduct(dto: ProductDto): Promise<ProductEntity> {
-  return api.post<ProductEntity>(`/products`, dto)
+  return apiClient.post<ProductEntity>(`/products`, dto);
 }
 
 export async function updateProduct(_id: string, dto: ProductDto) {
-  return api.put<ProductEntity>(`/products/${_id}`, dto)
+  return apiClient.put<ProductEntity>(`/products/${_id}`, dto);
 }
 
 export async function getProduct(_id: string): Promise<ProductEntity> {
-  return api.get<ProductEntity>(`/products/${_id}`)
+  return apiClient.get<ProductEntity>(`/products/${_id}`);
 }
 
 export async function archiveProduct(_id: string) {
-  return api.delete(`/products/${_id}/archive`)
+  return apiClient.delete(`/products/${_id}/archive`);
 }
 
 export async function interactProduct(_id: string) {
-  return api.patch(`/products/${_id}/interact`)
-    .catch(() => false)
+  return apiClient.patch(`/products/${_id}/interact`).catch(() => false);
 }
 
 export function getProductIcon(type: ProductType) {
@@ -38,16 +37,16 @@ export function getProductIcon(type: ProductType) {
     [ProductType.SERVICE]: IconCategory2,
     [ProductType.COMBO]: IconPackage,
     [ProductType.VOUCHER]: IconGiftCard,
-  }[type]
+  }[type];
 }
 
 export const productTypeOptions: {
   [key in ProductType]: {
     icon: Icon;
-  }
+  };
 } = {
   [ProductType.PRODUCT]: { icon: IconBox },
   [ProductType.SERVICE]: { icon: IconCategory2 },
   [ProductType.COMBO]: { icon: IconPackage },
   [ProductType.VOUCHER]: { icon: IconGiftCard },
-}
+};

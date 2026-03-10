@@ -4,7 +4,7 @@ import { EventType } from "@/graphql/types.graphql";
 import { ResponseList } from "@/types";
 import EventEmitter from "events";
 import { DependencyList, useEffect } from "react";
-import { api, socket } from "../apis";
+import { apiClient, socket } from "../apis";
 import { useAuth } from "../auth/auth-context";
 import { QueryEvents, UserEventDto } from "./event-types";
 import { EventDataFragment } from "./graphql/fragmentEvent.graphql";
@@ -73,7 +73,7 @@ export const useUserEventsListner = (
 };
 
 export function getEvents(query?: QueryEvents): Promise<ResponseList<EventDataFragment>> {
-  return api.get(`/events`, { params: query });
+  return apiClient.get(`/events`, { params: query });
 }
 
 export const onReconnected = (listener: () => void, deps?: DependencyList) => {

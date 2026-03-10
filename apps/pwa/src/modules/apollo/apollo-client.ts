@@ -1,8 +1,8 @@
 "use client";
 
+import { StorageKey } from "@/constants/storage-key";
 import { getGlobal } from "@/global";
 import { getLocalStorage } from "@/hooks/use-local-storage";
-import { StorageKey } from "@/types";
 import {
   ApolloClient,
   CombinedGraphQLErrors,
@@ -12,9 +12,8 @@ import {
 } from "@apollo/client";
 import { SetContextLink } from "@apollo/client/link/context";
 import { ErrorLink } from "@apollo/client/link/error";
-import { getAccessToken, retrieveAccessToken } from "../auth/auth-service";
+import axios from "axios";
 import { getClientLocale } from "../lang/lang-service";
-import environment from "@joy-one-client/config";
 
 let isRefreshing = false;
 let pendingRequests: (() => Promise<void>)[] = [];
@@ -44,15 +43,9 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
           if (!isRefreshing) {
             isRefreshing = true;
 
-            retrieveAccessToken()
-              .then((newAccessToken) => {
-                operation.setContext(({ headers = {} }) => ({
-                  headers: {
-                    ...headers,
-                    authorization: `Bearer ${newAccessToken}`,
-                  },
-                }));
-
+            axios
+              .post(`/api/auth/refresh`)
+              .then(() => {
                 resolvePendingRequests();
                 isRefreshing = false;
                 forward(operation).subscribe(observer);
@@ -63,13 +56,6 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
               });
           } else {
             addPendingRequest(async () => {
-              const accessToken = await getAccessToken();
-              operation.setContext(({ headers = {} }) => ({
-                headers: {
-                  ...headers,
-                  authorization: `Bearer ${accessToken}`,
-                },
-              }));
               forward(operation).subscribe(observer);
             });
           }
@@ -85,11 +71,10 @@ const errorLink = new ErrorLink(({ error, operation, forward }) => {
   }
 });
 
-const httpLink = new HttpLink({ uri: environment.API_CLIENT_SIDE_URL + "/graphql" });
+const httpLink = new HttpLink({ uri: "/api/graphql" });
 
 const authMiddleware = new SetContextLink(async ({ headers }) => {
   const workspaceId = getLocalStorage(StorageKey.WORKSPACE_ID);
-  const accessToken = await getAccessToken();
   const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
   const sessionId = getGlobal()._sessionId;
   const locale = getClientLocale();
@@ -101,7 +86,6 @@ const authMiddleware = new SetContextLink(async ({ headers }) => {
       "X-Device-Id": deviceId,
       "X-Session-Id": sessionId,
       "Accept-Language": locale,
-      Authorization: accessToken ? `Bearer ${accessToken}` : undefined,
     },
   };
 });

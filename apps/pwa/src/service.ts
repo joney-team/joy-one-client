@@ -1,16 +1,15 @@
 import config from "@joy-one-client/config";
-import { api } from "./modules/apis";
+import { apiClient } from "./modules/apis";
 import { AppConfig } from "./types";
 
 export function getAppConfig() {
-  return api.get<AppConfig>(`/config`);
+  return apiClient.get<AppConfig>(`/config`);
 }
 
 export function isExtendedApp() {
-  return process.env['NEXT_PUBLIC_EXTENDED_APP'] === 'true';
+  return process.env["NEXT_PUBLIC_EXTENDED_APP"] === "true";
 }
 
 export function isDevelopment() {
-  return (config.ENV as string) === 'development';
+  return (config.ENV as string) === "development";
 }
-

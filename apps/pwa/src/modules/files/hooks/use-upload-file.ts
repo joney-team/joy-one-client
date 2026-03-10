@@ -1,4 +1,4 @@
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import imageCompression from "browser-image-compression";
@@ -65,7 +65,7 @@ export const useUploadFile = () => {
       formData.append("id", options.id);
     }
 
-    return api.formData<FileEntity>("/files/upload", formData);
+    return apiClient.formData<FileEntity>("/files/upload", formData);
   };
 
   const uploadToExternalStorage = async (file: File, options: UploadFileOptions = {}) => {

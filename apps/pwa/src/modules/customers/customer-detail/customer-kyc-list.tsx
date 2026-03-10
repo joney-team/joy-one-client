@@ -19,7 +19,7 @@ export const CustomerKyc: FC<CustomerKycProps> = (props) => {
   if (!customerKyc) return null;
 
   return (
-    <Stack maw="100%" w={600}>
+    <Stack maw="100%">
       <CustomerKycCard kyc={customerKyc} hideCustomer />
     </Stack>
   );

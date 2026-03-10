@@ -2,9 +2,9 @@
 
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useColor } from "@/modules/theme/use-color";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { getId } from "@joy-one-client/utils/base-data";
@@ -122,7 +122,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
         return { data: [], count: 0 };
       }
 
-      return api.get(listRoute!, {
+      return apiClient.get(listRoute!, {
         params: {
           sortLastInteractionAt: -1,
           ...listParams,

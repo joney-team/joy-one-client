@@ -1,6 +1,6 @@
 "use client";
 
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { FileCapacity } from "@/modules/files/file-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatBytes } from "@/utils/file.utils";
@@ -18,7 +18,7 @@ export const WorkspaceCapacity: FC = () => {
   const workspace = useWorkspace();
 
   const fetchCapacity = async () => {
-    await api
+    await apiClient
       .get(`/files/capacity/workspace`)
       .then((res) => setCapacity(res))
       .catch(console.error);

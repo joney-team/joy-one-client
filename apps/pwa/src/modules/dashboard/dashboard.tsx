@@ -31,7 +31,7 @@ const DashboardBookings = dynamic(
 
 export const AppDashboard: FC = () => {
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <DashboardSuggestions />
       <DashboardWidgets />
       <DashboardBookings />

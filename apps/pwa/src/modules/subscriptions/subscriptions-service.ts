@@ -1,27 +1,27 @@
 import { ResponseList } from "@/types";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { SubscriptionDto, SubscriptionEntity } from "./subscriptions-types";
 
 export async function getSubscriptions() {
-  return api.get<ResponseList<SubscriptionEntity>>("/subscriptions");
+  return apiClient.get<ResponseList<SubscriptionEntity>>("/subscriptions");
 }
 
 export async function createSubscription(dto: SubscriptionDto) {
-  return api.post<SubscriptionEntity>("/subscriptions", dto);
+  return apiClient.post<SubscriptionEntity>("/subscriptions", dto);
 }
 
 export async function updateSubscription(id: string, dto: SubscriptionDto) {
-  return api.put<SubscriptionEntity>(`/subscriptions/${id}`, dto);
+  return apiClient.put<SubscriptionEntity>(`/subscriptions/${id}`, dto);
 }
 
 export async function setDefaultSubscription(id: string) {
-  return api.post<SubscriptionEntity>(`/subscriptions/${id}/default`);
+  return apiClient.post<SubscriptionEntity>(`/subscriptions/${id}/default`);
 }
 
 export async function setPrivateSubscription(id: string, value: boolean) {
-  return api.post<SubscriptionEntity>(`/subscriptions/${id}/private`, { private: value });
+  return apiClient.post<SubscriptionEntity>(`/subscriptions/${id}/private`, { private: value });
 }
 
 export async function removeSubscription(id: string) {
-  return api.delete(`/subscriptions/${id}`);
+  return apiClient.delete(`/subscriptions/${id}`);
 }

@@ -1,5 +1,5 @@
 import { AppLocale } from "@/graphql/enums.graphql";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { getCookie } from "cookies-next/client";
 
 export const getClientLocale = (): AppLocale => {

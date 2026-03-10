@@ -103,6 +103,10 @@ type AttendanceRecordsPaginated {
   total: Float!
 }
 
+input AuthRequestRenewUserPasswordInput {
+  email: String!
+}
+
 input AuthSignInWithEmailPasswordInput {
   email: String!
   password: String!
@@ -125,6 +129,10 @@ type AuthUser {
   phone: String
   role: UserRole!
   settings: UserSettings
+}
+
+input AuthVerifyRenewPasswordCodeInput {
+  code: String!
 }
 
 type BaseCustomFieldValue {
@@ -1282,14 +1290,18 @@ type Mutation {
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
+  requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   revertApproveLoan(id: String!): Loan!
   revertFulfilledLoan(id: String!): Loan!
   revertLiquidationLoan(id: String!): Loan!
   revertPaymentReceipt(id: String!): Receipt!
+  setDeviceLocale(input: SetDeviceLocaleInput!): Device!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   signInWithEmailPassword(input: AuthSignInWithEmailPasswordInput!): AuthTokenResult!
   signLoan(id: String!, input: SignLoanInput!): Loan!
+  signOut: Boolean!
+  signOutOtherDevices: AuthTokenResult!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateActivity(content: String, id: String!): Activity!
@@ -1308,6 +1320,7 @@ type Mutation {
   updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   updateWorkspaceSetting(allowDuplicateBookings: Boolean, allowPayTicketMultipleTimes: Boolean, allowTip: Boolean, bankAccount: PluginBankAccountInput, bookingsAutoRemindCustomerBookingBeforeDays: Float, bookingsAutoRemindCustomerBookingTime: String, currencyCode: String, hrmTimeKeepingsRules: HrmTimekeepingsRulesInput, isAuthSessionRestricted: Boolean, loanSettings: LoanSettingsInput, mailer: PluginMailerAccountInput, memberPermissions: [String!], privacyPolicy: String, receiptImagesRequired: Boolean, receiptPaymentMethodDefault: ReceiptPaymentMethod, schedule: WorkspaceScheduleInput, searchSettings: WorkspaceSearchSettingsInput, termsOfService: String, view: WorkspaceViewInput, zaloOaGmfGroupSettings: JSONObject): WorkspaceSetting!
+  verifyRenewPasswordCode(input: AuthVerifyRenewPasswordCodeInput!): VerifyRenewPasswordResult!
 }
 
 type Order {
@@ -1807,6 +1820,7 @@ type Query {
   taskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
   tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
   tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): Float!
+  testErrorNotFound: String!
   userWorkspaceMember: WorkspaceMember!
   userWorkspaceMembers: [WorkspaceMember!]!
   workspace: Workspace!
@@ -2037,6 +2051,10 @@ type SearchResultWorkspaceMember implements SearchResult {
   name: String!
   phone: String
   userId: String!
+}
+
+input SetDeviceLocaleInput {
+  locale: AppLocale!
 }
 
 type SiblingTasks {
@@ -2314,6 +2332,10 @@ input UserSettingsInput {
   locale: AppLocale
   timezoneId: String
   timezoneUtc: String
+}
+
+type VerifyRenewPasswordResult {
+  email: String!
 }
 
 type WorkingDayInterval {

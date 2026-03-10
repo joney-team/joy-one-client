@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
@@ -74,7 +74,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       }}
       onSelect={(e) => {
         if (!e) return;
-        api.patch(`/categories/${e._id}/interact`).catch(() => false);
+        apiClient.patch(`/categories/${e._id}/interact`).catch(() => false);
         return props.onSelect?.(e);
       }}
       onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect, type }) : undefined}

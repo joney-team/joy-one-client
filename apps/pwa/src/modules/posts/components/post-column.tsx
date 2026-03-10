@@ -2,7 +2,7 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { Column } from "@/components/list/types";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { AppEntity } from "@/types";
 import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconNews } from "@tabler/icons-react";
@@ -32,7 +32,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
         multiple: true,
         listRoute: "/posts",
         getSelectedOptions: async (ids: string[]) => {
-          const options = await api.get<PostEntity[]>("/posts/ids", { params: { ids } });
+          const options = await apiClient.get<PostEntity[]>("/posts/ids", { params: { ids } });
           return options.map((v) => ({
             label: v.title,
             value: v._id,
@@ -41,7 +41,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
         },
         search: async (query) => {
           const result = await searchEntity(AppEntity.POSTS, query);
-          const options = await api.get<PostEntity[]>("/posts/ids", {
+          const options = await apiClient.get<PostEntity[]>("/posts/ids", {
             params: { ids: result.map((v) => v._id) },
           });
           return options.map((v) => ({

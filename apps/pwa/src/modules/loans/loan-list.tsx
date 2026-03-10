@@ -41,7 +41,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
@@ -394,7 +394,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 title: <Trans>Reject</Trans>,
                 message: <Trans>Enter reject reason</Trans>,
                 onSubmit: async (reason) => {
-                  await api.post(`/loans/bulk-reject`, {
+                  await apiClient.post(`/loans/bulk-reject`, {
                     loanIds: data.map((v) => v.id),
                     reason,
                   });
@@ -412,7 +412,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             available: (data) =>
               data.every((v) => ([LoanStatus.Rejected] as LoanStatus[]).includes(v.status)),
             handler: async (data, ctx) => {
-              await api.post(`/loans/bulk-revert-rejected`, {
+              await apiClient.post(`/loans/bulk-revert-rejected`, {
                 loanIds: data.map((v) => v.id),
               });
               ctx.unSelect();

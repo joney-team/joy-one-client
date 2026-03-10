@@ -1,6 +1,6 @@
 import { ResponseList } from "@/types";
 import { useFetch } from "@/utils/use-fetch.util";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import {
   MessageAttachmentType,
   MessageBoxEntity,
@@ -14,52 +14,52 @@ import {
 import { EventType } from "@/graphql/enums.graphql";
 
 export async function getMessageBoxes(query?: any) {
-  return api.get<ResponseList<MessageBoxEntity>>("/message-boxes", { params: query });
+  return apiClient.get<ResponseList<MessageBoxEntity>>("/message-boxes", { params: query });
 }
 
 export async function getMessageBox(id: string) {
-  return api.get<MessageBoxEntity>(`/message-boxes/${id}`);
+  return apiClient.get<MessageBoxEntity>(`/message-boxes/${id}`);
 }
 
 export async function getMessages(query?: any) {
-  return api.get<ResponseList<MessageEntity>>("/messages", { params: query });
+  return apiClient.get<ResponseList<MessageEntity>>("/messages", { params: query });
 }
 
 export async function getMessageBoxesByIds(ids: string[]) {
   if (!ids || ids.length === 0) return [];
-  return api.get<MessageBoxEntity[]>(`/message-boxes/ids`, { params: { ids } });
+  return apiClient.get<MessageBoxEntity[]>(`/message-boxes/ids`, { params: { ids } });
 }
 
 export async function sendTextMessage(boxId: string, dto: SendMemberTextMessageDto) {
-  return api.post<MessageEntity>(`/message-boxes/${boxId}/messages`, dto);
+  return apiClient.post<MessageEntity>(`/message-boxes/${boxId}/messages`, dto);
 }
 
 export async function sendImageMessage(boxId: string, dto: SendMemberImageMessageDto) {
-  return api.post<MessageEntity>(`/message-boxes/${boxId}/messages/image`, dto);
+  return apiClient.post<MessageEntity>(`/message-boxes/${boxId}/messages/image`, dto);
 }
 
 export async function sendFileMessage(boxId: string, dto: SendMemberFileMessageDto) {
-  return api.post<MessageEntity>(`/message-boxes/${boxId}/messages/file`, dto);
+  return apiClient.post<MessageEntity>(`/message-boxes/${boxId}/messages/file`, dto);
 }
 
 export async function setCustomerToMessageBox(id: string, customerId?: string | null) {
-  return api.post(`/message-boxes/${id}/customer`, { customerId });
+  return apiClient.post(`/message-boxes/${id}/customer`, { customerId });
 }
 
 export async function setAssigneeToMessageBox(id: string, assigneeUserId?: string) {
-  return api.post(`/message-boxes/${id}/assignee`, { assigneeUserId });
+  return apiClient.post(`/message-boxes/${id}/assignee`, { assigneeUserId });
 }
 
 export async function closeMesssageBox(id: string) {
-  return api.post(`/message-boxes/${id}/close`);
+  return apiClient.post(`/message-boxes/${id}/close`);
 }
 
 export async function toggleMessageBoxAiAssistant(id: string, disabled?: boolean) {
-  return api.post(`/message-boxes/${id}/ai-assistant`, { disabled });
+  return apiClient.post(`/message-boxes/${id}/ai-assistant`, { disabled });
 }
 
 export async function removeMessageBox(id: string) {
-  return api.delete(`/message-boxes/${id}`);
+  return apiClient.delete(`/message-boxes/${id}`);
 }
 
 export const messageBoxStatusColors: { [key in MessageBoxStatus]: string } = {

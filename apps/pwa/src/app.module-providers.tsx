@@ -14,7 +14,6 @@ import { ModalsProvider } from "@mantine/modals";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren } from "react";
 import { useApp } from "./app.context";
-import { useRouteRule } from "./hooks/use-router";
 import { LayoutWorkspace } from "./layout/layout-workspace";
 import { nonLoading } from "./utils/non-loading";
 
@@ -87,7 +86,6 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
   const lang = useLang();
   const layout = useLayout();
-  const routeRule = useRouteRule();
 
   return (
     <MantineProvider
@@ -102,8 +100,7 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
                 <ModalsProvider>
                   {props.children}
 
-                  {routeRule.workspace && <LayoutWorkspace />}
-
+                  <LayoutWorkspace />
                   <ModalUpgradeVersion />
                   <ModalInstallWebAppTutorial />
                   <PreloadResource />

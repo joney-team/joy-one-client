@@ -1,24 +1,24 @@
 import { ResponseList } from "@/types";
 import { useEffect, useState } from "react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { useEventsListener } from "../events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
 import { PrescriptionDto, PrescriptionEntity } from "./prescriptions-types";
 
 export async function createPrescription(dto: PrescriptionDto) {
-  return api.post<PrescriptionEntity>(`/prescriptions`, dto);
+  return apiClient.post<PrescriptionEntity>(`/prescriptions`, dto);
 }
 
 export async function updatePrescription(id: string, dto: PrescriptionDto) {
-  return api.put<PrescriptionEntity>(`/prescriptions/${id}`, dto);
+  return apiClient.put<PrescriptionEntity>(`/prescriptions/${id}`, dto);
 }
 
 export async function removePrescription(id: string) {
-  return api.delete(`/prescriptions/${id}`);
+  return apiClient.delete(`/prescriptions/${id}`);
 }
 
 export async function getPrescriptions(query?: any) {
-  return api.get<ResponseList<PrescriptionEntity>>(`/prescriptions`, { params: query });
+  return apiClient.get<ResponseList<PrescriptionEntity>>(`/prescriptions`, { params: query });
 }
 
 let cached: PrescriptionEntity[] = [];

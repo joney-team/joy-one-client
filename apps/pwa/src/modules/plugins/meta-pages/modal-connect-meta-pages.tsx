@@ -5,13 +5,13 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
@@ -44,7 +44,7 @@ export const ModalConnectMetaPages: FC<{
 
   const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
-      await api.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await apiClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {
@@ -245,7 +245,7 @@ export const WithConnectMetaPagesModal: FC<{
 
   const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
-      await api.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await apiClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {

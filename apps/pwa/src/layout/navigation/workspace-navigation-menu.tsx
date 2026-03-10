@@ -15,7 +15,7 @@ import { TaskView } from "@/modules/tasks/views/types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import {

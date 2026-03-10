@@ -11,28 +11,28 @@ import {
   IconMoodCry,
   IconSquareRoundedCheck,
 } from "@tabler/icons-react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
 
 export async function getNotifications(q?: any) {
-  return api.get("/notifications", { params: q });
+  return apiClient.get("/notifications", { params: q });
 }
 
 export async function markNotificationAsReaded(notificationId: string) {
-  return api.post(`/notifications/${notificationId}/readed`);
+  return apiClient.post(`/notifications/${notificationId}/readed`);
 }
 
 export async function getNotificationStat() {
-  return api.get("/notifications/stat");
+  return apiClient.get("/notifications/stat");
 }
 
 export async function markAllNotificationsAsReaded() {
-  return api.post("/notifications/readed");
+  return apiClient.post("/notifications/readed");
 }
 
 export async function cleanNotifications() {
-  return api.delete("/notifications/clean");
+  return apiClient.delete("/notifications/clean");
 }
 
 export const notificationIcons: { [key in NotificationIcon]: Icon } = {

@@ -6,7 +6,6 @@ import { Renderer } from "@/components/renderer";
 import { configs } from "@/configs/layout.config";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
-import { HrmTimekeepingButton } from "@/modules/hrm-timekeepings/hrm-timekeeping-button";
 import { UserNotifications } from "@/modules/notifications/user-notifications";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -195,7 +194,6 @@ export const WorkspaceHeader: FC = memo(() => {
 
       <Group justify="end" wrap="nowrap" pr={5} gap={5}>
         <ColorSchemes />
-        <HrmTimekeepingButton />
         <UserNotifications />
         <WorkspaceHeaderAccount />
       </Group>

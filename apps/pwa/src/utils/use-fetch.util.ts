@@ -2,7 +2,7 @@ import { EventType } from "@/graphql/enums.graphql";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEventsListener } from "@/modules/events/event-service";
 import { EventDataFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
 import { objClean } from "./object.utils";

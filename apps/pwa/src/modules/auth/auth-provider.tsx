@@ -3,6 +3,7 @@
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
 import { useApp } from "@/app.context";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
+import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
 import { UpdateUserProfileInput } from "@/graphql/types.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
@@ -22,18 +23,18 @@ import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
 import { setUserLocale } from "@/modules/users/users-service";
-import { StorageKey } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import { useLingui } from "@lingui/react/macro";
 import * as Sentry from "@sentry/react";
+import axios from "axios";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken } from "firebase/messaging";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import {
@@ -44,6 +45,7 @@ import {
 import {
   clearTokens,
   getAccessToken,
+  getRefreshToken,
   getSessionId,
   onFacebookLogin,
   saveTokens,
@@ -119,6 +121,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     initializeMetaPages();
     setSessionId(uuid());
 
+    const isAuthMigratedResult = await axios.get<{ isMigrated: boolean }>(`/api/auth-migrate`);
+
     if (type === "auth") {
       setWorkspaceAuthSessionId(uuid());
     }
@@ -147,6 +151,13 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (type === "auth") {
         postAppChannelMessage("SIGN_IN");
       }
+
+      if (!isAuthMigratedResult.data.isMigrated) {
+        await axios.post(`/api/auth-migrate`, {
+          accessToken: accessToken,
+          refreshToken: await getRefreshToken(),
+        });
+      }
     } catch (error) {
       console.log(`Error when initializing auth > ${error}`);
     }
@@ -163,7 +174,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const signOut = async () => {
     try {
-      await Promise.all([api.post(`/auth/sign-out`), firebaseAuth.signOut()]);
+      await Promise.all([apiClient.post(`/auth/sign-out`), firebaseAuth.signOut()]);
       clearTokens();
       onReset();
       client.cache.reset();
@@ -225,7 +236,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signUpWithEmailPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-    const tokens = await api.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
+    const tokens = await apiClient.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
     await saveTokens(tokens);
     await initialize("auth");
   };
@@ -241,7 +252,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     const _file = await reducePhotoSize(file, { maxWidthOrHeight: 300 });
     const form = new FormData();
     form.append("file", _file);
-    const _user = await api.formData(`/users/avatar`, form);
+    const _user = await apiClient.formData(`/users/avatar`, form);
     return setUser(_user);
   };
 
@@ -299,14 +310,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signOutOtherDevices = async () => {
-    const tokens = await api.post(`/auth/sign-out/other-devices`);
+    const tokens = await apiClient.post(`/auth/sign-out/other-devices`);
     await saveTokens(tokens);
   };
 
   const syncUserLocale = async () => {
     if (!user || !lang.isInitialized) return;
     if (user.locale !== lang.locale) {
-      await api.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
+      await apiClient.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
     }
   };
 

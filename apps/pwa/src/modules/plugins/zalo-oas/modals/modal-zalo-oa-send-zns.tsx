@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { api } from "@/modules/apis";
+import { apiClient } from "@/modules/apis";
 import {
   PluginZaloOaZNSTemplateId,
   ZnsTemplateConfig,
@@ -51,7 +51,7 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      await api.post(`/plugins/zalo-oas/zns`, {
+      await apiClient.post(`/plugins/zalo-oas/zns`, {
         data: props.config.fields.reduce((acc, item) => {
           acc[item.fieldName] = values[item.fieldName];
           return acc;

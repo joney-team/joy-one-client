@@ -15,7 +15,7 @@ import {
 
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
-import { api } from "../apis";
+import { apiClient } from "../apis";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -25,11 +25,11 @@ export const AdminTools: FC = () => {
       <SectionTitle name="System Tools" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button color="red" onClick={() => api.post("/helpers/reset-redis")}>
+          <Button color="red" onClick={() => apiClient.post("/helpers/reset-redis")}>
             Redis | Reset Cache
           </Button>
 
-          <Button color="teal" onClick={() => api.patch("/search/sys/index-all")}>
+          <Button color="teal" onClick={() => apiClient.patch("/search/sys/index-all")}>
             Search | Re-Index All
           </Button>
         </Stack>
@@ -38,43 +38,49 @@ export const AdminTools: FC = () => {
       <SectionTitle name="Migrations" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => api.patch(`/files/move-to-external-storage`)}>
+          <Button onClick={() => apiClient.patch(`/files/move-to-external-storage`)}>
             Move files to external storage
           </Button>
 
-          <Button onClick={() => api.patch(`/tasks/rebalance-order`)}>Rebalance Task Order</Button>
+          <Button onClick={() => apiClient.patch(`/tasks/rebalance-order`)}>
+            Rebalance Task Order
+          </Button>
 
-          <Button onClick={() => api.patch(`/tasks/trigger-sync-all-tasks`)}>
+          <Button onClick={() => apiClient.patch(`/tasks/trigger-sync-all-tasks`)}>
             Trigger Sync All Tasks
           </Button>
 
-          <Button onClick={() => api.patch(`/files/migrate-file-refs`)}>Migrate file refs</Button>
+          <Button onClick={() => apiClient.patch(`/files/migrate-file-refs`)}>
+            Migrate file refs
+          </Button>
 
           <Divider miw="100%" />
 
-          <Button onClick={() => api.patch(`/loans/migrate-created-at`)}>
+          <Button onClick={() => apiClient.patch(`/loans/migrate-created-at`)}>
             Migrate Loan Created At
           </Button>
 
-          <Button onClick={() => api.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
+          <Button onClick={() => apiClient.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
 
-          <Button onClick={() => api.patch(`/loans/sync-all`)}>Sync All Loans</Button>
+          <Button onClick={() => apiClient.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
-          <Button onClick={() => api.patch(`/orders/sync-all`)}>Sync All Orders</Button>
+          <Button onClick={() => apiClient.patch(`/orders/sync-all`)}>Sync All Orders</Button>
 
-          <Button onClick={() => api.patch(`/loans/sync-customer-branch`)}>
+          <Button onClick={() => apiClient.patch(`/loans/sync-customer-branch`)}>
             Sync Loan branch to Customer branch
           </Button>
 
-          <Button onClick={() => api.patch(`/files/migrate`)}>Migrate files</Button>
-          <Button onClick={() => api.patch(`/files/remove-old-files`)}>Remove old files</Button>
+          <Button onClick={() => apiClient.patch(`/files/migrate`)}>Migrate files</Button>
+          <Button onClick={() => apiClient.patch(`/files/remove-old-files`)}>
+            Remove old files
+          </Button>
         </Stack>
       </Card>
 
       <SectionTitle name="VN Locations" icon={IconLocation} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => api.patch("/locations/crawls/vn-locations")}>
+          <Button onClick={() => apiClient.patch("/locations/crawls/vn-locations")}>
             Crawl VN Location
           </Button>
         </Stack>
@@ -95,7 +101,7 @@ export const AdminTools: FC = () => {
                   if (url) urls.push(url);
                 }
 
-                return api.post(`/plugins/meta-pages/webhook/runtime`, { urls });
+                return apiClient.post(`/plugins/meta-pages/webhook/runtime`, { urls });
               }}
             >
               Set
@@ -111,7 +117,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/execFetchExternalStorageSize`, {
+              apiClient.post(`/scheduling/execFetchExternalStorageSize`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -122,7 +128,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
+              apiClient.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -133,7 +139,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/execSendReportToAdmin`, {
+              apiClient.post(`/scheduling/execSendReportToAdmin`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -144,7 +150,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/execRejectPendingLoans`, {
+              apiClient.post(`/scheduling/execRejectPendingLoans`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -155,7 +161,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              api.post(`/scheduling/heathcheckSocialConnections`, {
+              apiClient.post(`/scheduling/heathcheckSocialConnections`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -171,7 +177,7 @@ export const AdminTools: FC = () => {
           <Button
             color="orange"
             onClick={() => {
-              api.patch(`/reports/sync-all-workspace-reports`).catch(onError);
+              apiClient.patch(`/reports/sync-all-workspace-reports`).catch(onError);
             }}
           >
             Sync Reports - All Workspaces
@@ -180,7 +186,7 @@ export const AdminTools: FC = () => {
           <Button
             color="red"
             variant="outline"
-            onClick={() => api.delete(`/reports/purge-range-reports`).catch(onError)}
+            onClick={() => apiClient.delete(`/reports/purge-range-reports`).catch(onError)}
           >
             Purge Range Reports
           </Button>
@@ -188,7 +194,7 @@ export const AdminTools: FC = () => {
           <Button
             color="red"
             variant="outline"
-            onClick={() => api.delete(`/reports/purge`).catch(onError)}
+            onClick={() => apiClient.delete(`/reports/purge`).catch(onError)}
           >
             Purge Reports
           </Button>
@@ -199,7 +205,9 @@ export const AdminTools: FC = () => {
       <Card shadow="xs">
         <Group>
           <Button
-            onClick={() => Promise.all(new Array(100).fill(0).map(() => api.get(`/receipts`)))}
+            onClick={() =>
+              Promise.all(new Array(100).fill(0).map(() => apiClient.get(`/receipts`)))
+            }
           >
             Test Rate Limit
           </Button>

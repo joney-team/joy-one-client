@@ -1,6 +1,6 @@
 "use client";
 
-import { StorageKey } from "@/types";
+import { StorageKey } from "@/constants/storage-key";
 import { isServer } from "@/utils/common.utils";
 import { readLocalStorageValue, useLocalStorage as useMantineLocalStorage } from "@mantine/hooks";
 
