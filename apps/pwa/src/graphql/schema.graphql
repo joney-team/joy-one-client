@@ -1812,6 +1812,7 @@ type Query {
   getDeviceByIdentifyId(identifyId: String!): Device!
   getFileInfo(fileId: String!): File!
   getProductByIds(ids: [String!]!): [Product!]!
+  isCustomerPhoneExisted(phone: String!): Boolean!
   liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
   loan(id: String!): Loan!
   loanByCode(code: String!): Loan!
@@ -2354,6 +2355,7 @@ type UserAuthProvider {
 enum UserRole {
   ADMIN
   BUSINESS_PARTNER
+  MEMBER
   SYS_ADMIN
   TESTER
 }

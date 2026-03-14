@@ -21,7 +21,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { normalizeCustomerInput } from "../customer-service";
+import { normalizeCustomerInput } from "../customer-constants";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
 

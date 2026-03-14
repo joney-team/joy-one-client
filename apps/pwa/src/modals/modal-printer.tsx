@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
-import { customerGenders } from "@/modules/customers/customer-service";
+import { customerGenders } from "@/modules/customers/customer-constants";
 import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { getClientLocale } from "@/modules/lang/lang-service";

@@ -1,6 +1,6 @@
 import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { ProductVoucherCard } from "@/modules/product-vouchers/product-voucher-card";

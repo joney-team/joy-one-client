@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { DateFormat } from "@/components/format/date-format";
 import { Hovered } from "@/components/hovered";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";

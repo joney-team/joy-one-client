@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { onArchive } from "@/utils/actions";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Text } from "@mantine/core";

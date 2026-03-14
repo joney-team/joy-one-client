@@ -5,7 +5,7 @@ import { Trans } from "@lingui/react/macro";
 import { Badge, em } from "@mantine/core";
 import { FC } from "react";
 import { NumberFormat } from "./format/number-format";
-import { UseList } from "./list/use-list";
+import { UseList } from "./list/use-rest-list";
 
 export interface ListQtyProps<T extends BaseData = any> {
   list: UseList<T>;

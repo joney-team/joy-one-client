@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { Renderer } from "@/components/renderer";
 import { EventType, FileType } from "@/graphql/enums.graphql";
 import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";

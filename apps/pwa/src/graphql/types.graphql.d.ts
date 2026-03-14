@@ -2493,6 +2493,7 @@ export type Query = {
   getDeviceByIdentifyId: Device;
   getFileInfo: File;
   getProductByIds: Array<Product>;
+  isCustomerPhoneExisted: Scalars['Boolean']['output'];
   liquidateLoanCalculate: LoanLiquidationCalculated;
   loan: Loan;
   loanByCode: Loan;
@@ -2719,6 +2720,11 @@ export type QueryGetFileInfoArgs = {
 
 export type QueryGetProductByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryIsCustomerPhoneExistedArgs = {
+  phone: Scalars['String']['input'];
 };
 
 
@@ -3534,6 +3540,7 @@ export type UserAuthProvider = {
 export const UserRole = {
   Admin: 'ADMIN',
   BusinessPartner: 'BUSINESS_PARTNER',
+  Member: 'MEMBER',
   SysAdmin: 'SYS_ADMIN',
   Tester: 'TESTER'
 } as const;

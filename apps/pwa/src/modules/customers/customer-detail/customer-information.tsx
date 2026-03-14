@@ -50,7 +50,7 @@ import {
 import { FC, Fragment, useRef, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
-import { customerGenders, normalizeCustomerInput } from "../customer-service";
+import { customerGenders, normalizeCustomerInput } from "../customer-constants";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
 import ASSIGN_CUSTOMER from "../graphql/mutationAssignCustomer.graphql";

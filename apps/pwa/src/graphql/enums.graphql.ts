@@ -533,6 +533,7 @@ export type TaskPriority = typeof TaskPriority[keyof typeof TaskPriority];
 export const UserRole = {
   Admin: 'ADMIN',
   BusinessPartner: 'BUSINESS_PARTNER',
+  Member: 'MEMBER',
   SysAdmin: 'SYS_ADMIN',
   Tester: 'TESTER'
 } as const;

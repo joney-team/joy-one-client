@@ -1,0 +1,3 @@
+query IsCustomerPhoneExisted($phone: String!) {
+  isCustomerPhoneExisted(phone: $phone)
+}

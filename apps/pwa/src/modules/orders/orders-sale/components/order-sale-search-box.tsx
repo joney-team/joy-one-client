@@ -2,7 +2,7 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { ScrollArea } from "@/components/scroll-area";
 import { apiClient } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";

@@ -1,7 +1,6 @@
 import { Button } from "@/components/buttons/button";
 import { EntitySource } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
-import { isCustomerPhoneExisted } from "@/modules/customers/customer-service";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
@@ -88,21 +87,21 @@ export const WorkspaceSettingImportLoans: FC = () => {
       },
     };
 
-    const customerDtos = customersFile
-      ? await customersFile.text().then(JSON.parse).then(normalizeCustomerDtos)
-      : null;
-    if (customerDtos) {
-      for (const dto of customerDtos) {
-        const isExisted = dto.phone ? await isCustomerPhoneExisted(dto.phone) : false;
+    // const customerDtos = customersFile
+    //   ? await customersFile.text().then(JSON.parse).then(normalizeCustomerDtos)
+    //   : null;
 
-        if (isExisted) {
-          result.customers.existed++;
-          continue;
-        }
+    // TODO: Implement customer creation
+    // if (customerDtos) {
+    //   for (const dto of customerDtos) {
+    //     const isExisted = dto.phone ? ... : false;
 
-        // TODO: create customer
-      }
-    }
+    //     if (isExisted) {
+    //       result.customers.existed++;
+    //       continue;
+    //     }
+    //   }
+    // }
 
     setResult(result);
   };

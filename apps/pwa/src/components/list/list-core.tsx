@@ -2,7 +2,6 @@
 
 import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { useLayout } from "@/layout/layout-context";
-import { apiClient } from "@/modules/apis";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import { Trans } from "@lingui/react/macro";
 import {

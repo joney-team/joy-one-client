@@ -7,7 +7,7 @@ export type CategoriesQueryVariables = Types.Exact<{
 }>;
 
 
-export type CategoriesQuery = { __typename: 'Query', list: { __typename: 'CategoriesPaginated', total: number, results: Array<{ __typename: 'Category', refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, _id: string, name: string, slug: string, icon: string | null, thumbnail: string | null, description: string | null, parentId: string | null, order: number, type: Types.CategoryType }> } };
+export type CategoriesQuery = { __typename: 'Query', list: { __typename: 'CategoriesPaginated', total: number, results: Array<{ __typename: 'Category', _id: string, type: Types.CategoryType, refs: Array<string> | null, name: string, slug: string, icon: string | null, thumbnail: string | null, description: string | null, parentId: string | null, order: number, createdAt: number | null, updatedAt: number | null }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

@@ -3,7 +3,7 @@
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { getCoupons } from "@/modules/coupons/coupon-service";
 import { ModalCouponForm } from "@/modules/coupons/modals/modal-coupon-form";

@@ -1,7 +1,7 @@
 "use client";
 
 import { ChillIllustration } from "@/components/illustrations/chill";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { WayPoint } from "@/components/way-point";
 import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";

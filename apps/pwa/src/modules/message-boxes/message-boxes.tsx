@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
 import { EventType } from "@/graphql/enums.graphql";

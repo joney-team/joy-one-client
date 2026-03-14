@@ -2,7 +2,7 @@
 
 import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { TextOverflow } from "@/components/text-overflow";
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";

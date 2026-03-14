@@ -3,7 +3,7 @@ import { type FC } from "react";
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { ListQty } from "@/components/list-qty";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { ProductCard } from "@/modules/products/components/product-card";

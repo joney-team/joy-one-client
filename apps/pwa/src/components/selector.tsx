@@ -31,7 +31,7 @@ import {
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconBackground, IconPlus } from "@tabler/icons-react";
 import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
-import { useList } from "./list/use-list";
+import { useList } from "./list/use-rest-list";
 
 type WithGroup = { _group?: string };
 type WithDisabled = { disabled?: boolean };

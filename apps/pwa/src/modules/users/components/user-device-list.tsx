@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";

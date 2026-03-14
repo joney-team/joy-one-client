@@ -12,7 +12,7 @@ import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
-import { customerGenders } from "../customer-service";
+import { customerGenders } from "../customer-constants";
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface CustomerCardProps extends CardProps {

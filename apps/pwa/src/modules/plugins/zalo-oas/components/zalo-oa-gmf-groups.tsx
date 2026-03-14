@@ -2,7 +2,7 @@
 
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-list";
+import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { apiClient } from "@/modules/apis";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";

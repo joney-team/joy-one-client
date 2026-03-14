@@ -1,53 +1,8 @@
 import { Gender } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
-import { AppPageMetadata } from "@/types";
-import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
-import { apiClient } from "../apis";
-import { apiServerSide } from "../apis/server";
-import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
-
-export async function isCustomerPhoneExisted(phone: string) {
-  return apiClient.get<boolean>(`/customers/phone/${phone}/exists`);
-}
-
-export async function getCustomerMetadata(code: string) {
-  return apiServerSide.get<AppPageMetadata>(`/customers/metadata/${code}`);
-}
-
-export async function customerInteraction(_id: string) {
-  try {
-    await apiClient.post(`/customers/${_id}/interaction`);
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// export async function archiveCustomer(_id: string) {
-//   const pendingReceipts = await getReceipts({
-//     relatedCustomerId: _id,
-//     status: ReceiptStatus.PENDING,
-//   });
-
-//   if (pendingReceipts.count > 0) {
-//     throw new Error(t`Customer has pending receipts`);
-//   }
-
-//   return api.delete(`/customers/${_id}`);
-// }
-
-// export function renderGener(gender?: Gender) {
-//   if (gender === Gender.Female) return "Nữ";
-//   if (gender === Gender.Male) return "Nam";
-//   if (gender === Gender.Other) return "Khác";
-//   return "N/A";
-// }
-
-// export function renderGenerIcon(gender?: Gender) {
-//   if (gender === Gender.Female) return IconGenderFemale;
-//   if (gender === Gender.Male) return IconGenderMale;
-//   return IconGenderBigender;
-// }
+import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
+import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
 
 export const customerGenders: {
   [key in Gender]: {
