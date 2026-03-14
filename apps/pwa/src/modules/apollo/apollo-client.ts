@@ -79,13 +79,23 @@ const authMiddleware = new SetContextLink(async ({ headers }) => {
   const sessionId = getGlobal()._sessionId;
   const locale = getClientLocale();
 
+  const extendHeaders = {
+    "X-Workspace-Id": workspaceId,
+    "X-Device-Id": deviceId,
+    "X-Session-Id": sessionId,
+    "Accept-Language": locale,
+  };
+
   return {
     headers: {
       ...headers,
-      "X-Workspace-Id": workspaceId,
-      "X-Device-Id": deviceId,
-      "X-Session-Id": sessionId,
-      "Accept-Language": locale,
+      ...Object.keys(extendHeaders).reduce((output, key) => {
+        const headerKey = key as keyof typeof extendHeaders;
+        if (extendHeaders[headerKey]) {
+          output[headerKey] = extendHeaders[headerKey];
+        }
+        return output;
+      }, {} as Record<string, string>),
     },
   };
 });
