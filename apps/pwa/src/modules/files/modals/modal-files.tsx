@@ -3,13 +3,11 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { numberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-list";
 import { Modal } from "@/components/modal/modal";
 import { WayPoint } from "@/components/way-point";
 import { configs } from "@/configs/layout.config";
 import { FileType } from "@/graphql/types.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { FileEntity } from "@/modules/files/file-types";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
 import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
@@ -18,13 +16,17 @@ import { Box, Card, em, Group, SimpleGrid, Stack, Text, ThemeIcon } from "@manti
 import { Dropzone } from "@mantine/dropzone";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useRef, useState } from "react";
-import { getFiles, getMineTypeAccept } from "../file-service";
+import { getMineTypeAccept } from "../file-service";
 import { useUploadFile } from "../hooks/use-upload-file";
+
+import { useGraphqlList } from "@/components/list/use-graphql-list";
+import { FileDataFragment } from "../graphql/fragmentFile.graphql";
+import QUERY_FILES from "../graphql/queryFiles.graphql";
 
 export interface ModalFilesArgs {
   fileTypes?: FileType[];
   length?: number;
-  onSelectedFiles: (files: Pick<FileEntity, "_id" | "type" | "path">[]) => void;
+  onSelectedFiles: (files: Pick<FileDataFragment, "_id" | "type" | "path">[]) => void;
 }
 
 export interface ModalFilesProps {
@@ -43,16 +45,23 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
   const modalFileGalleryRef = useRef<ModalFileGalleryRef | null>(null);
 
   const [args, setArgs] = useState<ModalFilesArgs | null>(null);
-  const files = useList({ fetch: (q) => getFiles({ ...q, strict: true }) });
+
+  const files = useGraphqlList({
+    query: QUERY_FILES,
+    id: "fs",
+    params: {
+      strict: true,
+    },
+  });
 
   const [_selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const selectedFiles = _selectedFiles
     .map((v) => files.data.find((f) => f._id === v))
-    .filter((v) => !!v) as FileEntity[];
+    .filter((v) => !!v) as FileDataFragment[];
 
   const onClose = () => setArgs(null);
 
-  const toggleSeleteFile = (file: Pick<FileEntity, "type" | "_id" | "url" | "path">) => {
+  const toggleSeleteFile = (file: Pick<FileDataFragment, "type" | "_id" | "url" | "path">) => {
     if (!args || (args.fileTypes && !args.fileTypes.includes(file.type))) return;
 
     if (_selectedFiles?.includes(file._id)) {
@@ -75,7 +84,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
     if (args.onSelectedFiles) {
       const _selected = _selectedFiles
         .map((v) => files.data.find((f) => f._id === v))
-        .filter((v) => !!v) as FileEntity[];
+        .filter((v) => !!v) as FileDataFragment[];
       args.onSelectedFiles(_selected);
       onClose();
     }
@@ -128,7 +137,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
                         modalFileGalleryRef.current?.open({
                           files: files.data,
                           index,
-                          onRemoved: () => files.fetch(true, { isSilient: true }),
+                          onRemoved: () => files.refetch(),
                         })
                       }
                     />
@@ -152,7 +161,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
               onDrop={async (_files) => {
                 for (const file of _files) {
                   const uploadedFile = await uploadFile(file);
-                  await files.fetch(true, { isSilient: true });
+                  await files.refetch();
                   toggleSeleteFile(uploadedFile);
                 }
               }}

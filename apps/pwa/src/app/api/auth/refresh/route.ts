@@ -25,8 +25,18 @@ export async function POST() {
 
     if (authTokenResult) {
       await Promise.all([
-        cookieStore.set(StorageKey.ACCESS_TOKEN, authTokenResult.accessToken),
-        cookieStore.set(StorageKey.REFRESH_TOKEN, authTokenResult.refreshToken),
+        cookieStore.set(StorageKey.ACCESS_TOKEN, authTokenResult.accessToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "lax",
+          maxAge: 60 * 15,
+        }),
+        cookieStore.set(StorageKey.REFRESH_TOKEN, authTokenResult.refreshToken, {
+          httpOnly: true,
+          secure: true,
+          sameSite: "lax",
+          maxAge: 60 * 60 * 24 * 30,
+        }),
       ]);
     }
 

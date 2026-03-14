@@ -103,6 +103,15 @@ type AttendanceRecordsPaginated {
   total: Float!
 }
 
+input AuthRefreshTokenInput {
+  refreshToken: String!
+}
+
+input AuthRenewPasswordByCodeInput {
+  code: String!
+  plainPassword: String!
+}
+
 input AuthRequestRenewUserPasswordInput {
   email: String!
 }
@@ -110,6 +119,13 @@ input AuthRequestRenewUserPasswordInput {
 input AuthSignInWithEmailPasswordInput {
   email: String!
   password: String!
+}
+
+input AuthSignUpWithEmailPasswordInput {
+  avatar: String
+  email: String!
+  name: String!
+  plainPassword: String!
 }
 
 type AuthTokenResult {
@@ -693,7 +709,7 @@ type Event {
   persist: Boolean
   ref: String
   refs: [String!]
-  relatedEntities: [RelatedEntity!]
+  relatedEntities: [RelatedEntity!]!
   sessionId: String
   source: EntitySource
   time: Float!
@@ -930,12 +946,6 @@ type File {
   path: String!
   ref: String
   refs: [String!]
-  relatedCustomerId: String
-  relatedHrmTimekeepingId: String
-  relatedMessageBoxId: String
-  relatedMessageId: String
-  relatedProductId: String
-  relatedReceiptId: String
   relativePath: String
   size: Float
   source: EntitySource
@@ -956,6 +966,12 @@ enum FileType {
   PHOTO
   UNKNOWN
   VIDEO
+}
+
+type FileUploadSigned {
+  dna: String!
+  isUseExternalStorage: Boolean!
+  signedUrl: String!
 }
 
 type FilesPaginated {
@@ -1270,7 +1286,6 @@ type Mutation {
   deleteWorkspaceRole(_id: String!): Boolean!
   disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
-  externalStorageVerifyDna(dna: String!): File!
   fetchExternalStorageSize: Float!
   fulfillLoan(id: String!, input: FulfillLoanInput!): Loan!
   generateCategorySlug(name: String!): String!
@@ -1282,14 +1297,17 @@ type Mutation {
   partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
   payReceipt(id: String!, input: PayReceiptInput!): Receipt!
   pluginExternalStorageSignUploadUrl(fileName: String!, id: String, refs: [String!]): SignUploadUrlResponse!
+  refreshToken(input: AuthRefreshTokenInput!): AuthTokenResult!
   registerCustomerKyc(customerId: String!, input: CustomerKycInput!): CustomerKyc!
   registerDevice(input: RegisterDeviceInput!): Device!
   rejectAttendanceRecord(id: String!, input: RejectAttendanceRecordInput!): AttendanceRecord!
   rejectCustomerKyc(customerId: String!, input: RejectCustomerKycInput!): CustomerKyc!
   rejectLoan(id: String!, input: RejectLoanInput!): [Loan!]!
+  removeFile(id: String!): Boolean!
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
+  renewPassword(input: AuthRenewPasswordByCodeInput!): Boolean!
   requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   revertApproveLoan(id: String!): Loan!
@@ -1302,6 +1320,8 @@ type Mutation {
   signLoan(id: String!, input: SignLoanInput!): Loan!
   signOut: Boolean!
   signOutOtherDevices: AuthTokenResult!
+  signUpWithEmailPassword(input: AuthSignUpWithEmailPasswordInput!): AuthTokenResult!
+  signUpload(input: SignUploadInput!): FileUploadSigned!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateActivity(content: String, id: String!): Activity!
@@ -1320,6 +1340,7 @@ type Mutation {
   updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   updateWorkspaceSetting(allowDuplicateBookings: Boolean, allowPayTicketMultipleTimes: Boolean, allowTip: Boolean, bankAccount: PluginBankAccountInput, bookingsAutoRemindCustomerBookingBeforeDays: Float, bookingsAutoRemindCustomerBookingTime: String, currencyCode: String, hrmTimeKeepingsRules: HrmTimekeepingsRulesInput, isAuthSessionRestricted: Boolean, loanSettings: LoanSettingsInput, mailer: PluginMailerAccountInput, memberPermissions: [String!], privacyPolicy: String, receiptImagesRequired: Boolean, receiptPaymentMethodDefault: ReceiptPaymentMethod, schedule: WorkspaceScheduleInput, searchSettings: WorkspaceSearchSettingsInput, termsOfService: String, view: WorkspaceViewInput, zaloOaGmfGroupSettings: JSONObject): WorkspaceSetting!
+  verifyExternalStorageDna(input: VerifyExternalStorageDnaInput!): File!
   verifyRenewPasswordCode(input: AuthVerifyRenewPasswordCodeInput!): VerifyRenewPasswordResult!
 }
 
@@ -1763,7 +1784,9 @@ type Query {
   appConfig: AppConfig!
   attendanceRecord(id: String!): AttendanceRecord!
   attendanceRecords(limit: Float = 30, offset: Float, query: JSONObject): AttendanceRecordsPaginated!
+  attendanceRecordsForToday: [AttendanceRecord!]!
   authUser: AuthUser!
+  availableEntities: [String!]!
   booking(id: String!): Booking!
   bookings(limit: Float = 30, offset: Float, query: JSONObject): BookingsPaginated!
   calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
@@ -1810,7 +1833,7 @@ type Query {
   receipt(id: String!): Receipt!
   receiptByCode(code: String!): Receipt!
   receipts(limit: Float = 30, offset: Float, query: JSONObject): ReceiptsPaginated!
-  search(entities: [String!]!, limit: Int, query: String!): [SearchResult!]!
+  search(entities: [String!], limit: Int, query: String!): [SearchResult!]!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
   tags(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: String): TagsPaginated!
@@ -1972,6 +1995,11 @@ interface SearchResult {
   id: String!
 }
 
+type SearchResultBase implements SearchResult {
+  entity: String!
+  id: String!
+}
+
 type SearchResultCategory implements SearchResult {
   entity: String!
   id: String!
@@ -1993,6 +2021,8 @@ type SearchResultLoan implements SearchResult {
   customerPhone: String
   entity: String!
   id: String!
+  imeil: String
+  status: String
 }
 
 type SearchResultOrders implements SearchResult {
@@ -2016,15 +2046,19 @@ type SearchResultPrescriptions implements SearchResult {
 }
 
 type SearchResultProduct implements SearchResult {
+  code: String
   entity: String!
   id: String!
+  image: String
   name: String!
+  type: String!
 }
 
 type SearchResultReceipt implements SearchResult {
   code: String!
   entity: String!
   id: String!
+  note: String!
 }
 
 type SearchResultTags implements SearchResult {
@@ -2064,6 +2098,12 @@ type SiblingTasks {
 
 input SignLoanInput {
   signature: String!
+}
+
+input SignUploadInput {
+  fileName: String!
+  id: String
+  refs: [String!]
 }
 
 type SignUploadUrlResponse {
@@ -2332,6 +2372,10 @@ input UserSettingsInput {
   locale: AppLocale
   timezoneId: String
   timezoneUtc: String
+}
+
+input VerifyExternalStorageDnaInput {
+  dna: String!
 }
 
 type VerifyRenewPasswordResult {

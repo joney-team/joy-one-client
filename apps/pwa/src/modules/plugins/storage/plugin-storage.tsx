@@ -32,7 +32,8 @@ import {
   IconLinkPlus,
   IconRefresh,
 } from "@tabler/icons-react";
-import { MouseEventHandler, type FC } from "react";
+import dynamic from "next/dynamic";
+import { MouseEventHandler, useRef, type FC } from "react";
 import FETCH_EXTERNAL_STORAGE_SIZE, {
   type FetchExternalStorageSizeMutation,
   type FetchExternalStorageSizeMutationVariables,
@@ -42,7 +43,7 @@ import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE, {
   type ToggleDisablePluginExternalStorageMutationVariables,
 } from "./mutationToggleDisablePluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
-import { PluginStorageModal } from "./plugin-storage-modal";
+import { PluginStorageModalRef } from "./plugin-storage-modal";
 import HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE, {
   type HealthcheckPluginExternalStorageMutation,
   type HealthcheckPluginExternalStorageMutationVariables,
@@ -52,14 +53,24 @@ import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQueryVariables,
 } from "./queryPluginExternalStorage.graphql";
 
+const PluginStorageModal = dynamic(
+  () => import("./plugin-storage-modal").then((mod) => mod.PluginStorageModal),
+  {
+    ssr: false,
+  }
+);
+
 export const PluginStorage: FC = () => {
   const color = useColor();
   const storage = useQuery<PluginExternalStorageQuery, PluginExternalStorageQueryVariables>(
     GET_PLUGIN_EXTERNAL_STORAGE,
     {
       fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-and-network",
     }
   );
+
+  const pluginStorageModalRef = useRef<PluginStorageModalRef>(null);
 
   const [healthCheck, { loading: healthCheckLoading }] = useMutation<
     HealthcheckPluginExternalStorageMutation,
@@ -114,7 +125,7 @@ export const PluginStorage: FC = () => {
 
   if (!storage.data?.pluginExternalStorage) {
     return (
-      <Stack align="center" py={30}>
+      <Stack align="center" py="md">
         <Container>
           <Card>
             <Stack align="center" py={15}>
@@ -134,134 +145,125 @@ export const PluginStorage: FC = () => {
                 </Text>
               </Stack>
 
-              <PluginStorageModal>
-                {(open) => (
-                  <Button mt={10} onClick={() => open()} leftIcon={IconLinkPlus}>
-                    <Trans>Connect</Trans>
-                  </Button>
-                )}
-              </PluginStorageModal>
+              <Button
+                mt="sm"
+                onClick={() => pluginStorageModalRef.current?.open()}
+                leftIcon={IconLinkPlus}
+              >
+                <Trans>Connect</Trans>
+              </Button>
+
+              <PluginStorageModal ref={pluginStorageModalRef} />
             </Stack>
           </Card>
         </Container>
       </Stack>
     );
   }
+  const { pluginExternalStorage: storageData } = storage.data;
+
+  const provider = pluginStorageProviders[storageData.provider];
+
+  const cors = JSON.stringify([
+    {
+      AllowedHeaders: ["*"],
+      AllowedMethods: ["GET", "PUT"],
+      AllowedOrigins: [window.location.origin],
+      ExposeHeaders: [],
+    },
+  ]);
 
   return (
-    <Stack align="center" py={20}>
-      <PluginStorageModal>
-        {(open) => {
-          if (!storage.data.pluginExternalStorage) return null;
+    <Stack align="center" py="md">
+      <Container size={900}>
+        <Stack>
+          <Card>
+            <Group align="start">
+              <ThemeIcon variant="light" size="xl" color={color("primary")}>
+                <IconCloudDataConnection size={50} />
+              </ThemeIcon>
+              <Stack gap={3} flex={1}>
+                <Title order={5} c={color("primary")}>
+                  {provider.name}
+                </Title>
 
-          const { pluginExternalStorage: storageData } = storage.data;
+                <Text>Bucket: {storageData.bucketName}</Text>
+                <Text>Region: {storageData.region}</Text>
+                <Text>
+                  <Trans>Capacity</Trans>:{" "}
+                  {storageData.size ? formatBytes(storageData.size) : <Trans>Unknown</Trans>}
+                </Text>
 
-          const provider = pluginStorageProviders[storageData.provider];
+                <Group mt="sm" gap="xs">
+                  <Tooltip label={<Trans>Refresh connection</Trans>}>
+                    <ActionIcon
+                      variant="light"
+                      size="md"
+                      color="gray"
+                      onClick={onHealthCheck}
+                      loading={healthCheckLoading}
+                    >
+                      <IconRefresh size={18} />
+                    </ActionIcon>
+                  </Tooltip>
 
-          const cors = JSON.stringify([
-            {
-              AllowedHeaders: ["*"],
-              AllowedMethods: ["GET", "PUT"],
-              AllowedOrigins: [window.location.origin],
-              ExposeHeaders: [],
-            },
-          ]);
-
-          return (
-            <Container size={900}>
-              <Stack>
-                <Card>
-                  <Group align="start">
-                    <ThemeIcon variant="light" size="xl" color={color("primary")}>
-                      <IconCloudDataConnection size={50} />
-                    </ThemeIcon>
-                    <Stack gap={3} flex={1}>
-                      <Title order={5} c={color("primary")}>
-                        {provider.name}
-                      </Title>
-
-                      <Text>Bucket: {storageData.bucketName}</Text>
-                      <Text>Region: {storageData.region}</Text>
-                      <Text>
-                        <Trans>Capacity</Trans>:{" "}
-                        {storageData.size ? formatBytes(storageData.size) : <Trans>Unknown</Trans>}
-                      </Text>
-
-                      <Group mt="sm" gap="xs">
-                        <Tooltip label={<Trans>Refresh connection</Trans>}>
-                          <ActionIcon
-                            variant="light"
-                            size="md"
-                            color="gray"
-                            onClick={onHealthCheck}
-                            loading={healthCheckLoading}
-                          >
-                            <IconRefresh size={18} />
-                          </ActionIcon>
-                        </Tooltip>
-
-                        <Tooltip label={<Trans>Edit</Trans>}>
-                          <ActionIcon
-                            color="gray"
-                            variant="light"
-                            size="md"
-                            onClick={() => open(storageData)}
-                          >
-                            <IconEdit size={18} />
-                          </ActionIcon>
-                        </Tooltip>
-                      </Group>
-                    </Stack>
-
-                    <Stack>
-                      <Switch
-                        defaultChecked={!storageData.isDisabled}
-                        onChange={() => toggleDisable()}
-                      />
-                    </Stack>
-                  </Group>
-                </Card>
-
-                <Card>
-                  <Stack>
-                    <Group>
-                      <Stack gap={0} flex={1}>
-                        <Text fw={600}>
-                          <Trans>Cross-origin resource sharing (CORS)</Trans>
-                        </Text>
-
-                        <Text c="gray" fz="xs">
-                          <Trans>
-                            To allow our app to upload files to your storage, you need to configure
-                            CORS.
-                          </Trans>{" "}
-                          <Anchor
-                            href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html"
-                            target="_blank"
-                            fz="xs"
-                          >
-                            <Trans>Read docs</Trans>
-                          </Anchor>
-                        </Text>
-                      </Stack>
-
-                      <CopyButton value={cors}>
-                        {({ copied, copy }) => (
-                          <ActionIcon variant="light" size="md" color="gray" onClick={copy}>
-                            {copied ? <IconCheck size={18} /> : <IconCopy size={18} />}
-                          </ActionIcon>
-                        )}
-                      </CopyButton>
-                    </Group>
-
-                    <Code p="md">{cors}</Code>
-                  </Stack>
-                </Card>
+                  <Tooltip label={<Trans>Edit</Trans>}>
+                    <ActionIcon
+                      color="gray"
+                      variant="light"
+                      size="md"
+                      onClick={() => pluginStorageModalRef.current?.open(storageData)}
+                    >
+                      <IconEdit size={18} />
+                    </ActionIcon>
+                  </Tooltip>
+                </Group>
               </Stack>
-            </Container>
-          );
-        }}
-      </PluginStorageModal>
+
+              <Stack>
+                <Switch defaultChecked={!storageData.isDisabled} onChange={() => toggleDisable()} />
+              </Stack>
+            </Group>
+          </Card>
+
+          <Card>
+            <Stack>
+              <Group>
+                <Stack gap={0} flex={1}>
+                  <Text fw={600}>
+                    <Trans>Cross-origin resource sharing (CORS)</Trans>
+                  </Text>
+
+                  <Text c="gray" fz="xs">
+                    <Trans>
+                      To allow our app to upload files to your storage, you need to configure CORS.
+                    </Trans>{" "}
+                    <Anchor
+                      href="https://docs.aws.amazon.com/AmazonS3/latest/userguide/enabling-cors-examples.html"
+                      target="_blank"
+                      fz="xs"
+                    >
+                      <Trans>Read docs</Trans>
+                    </Anchor>
+                  </Text>
+                </Stack>
+
+                <CopyButton value={cors}>
+                  {({ copied, copy }) => (
+                    <ActionIcon variant="light" size="md" color="gray" onClick={copy}>
+                      {copied ? <IconCheck size={18} /> : <IconCopy size={18} />}
+                    </ActionIcon>
+                  )}
+                </CopyButton>
+              </Group>
+
+              <Code p="md">{cors}</Code>
+            </Stack>
+          </Card>
+        </Stack>
+      </Container>
+
+      <PluginStorageModal ref={pluginStorageModalRef} />
     </Stack>
   );
 };

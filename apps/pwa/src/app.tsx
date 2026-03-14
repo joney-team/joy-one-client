@@ -20,7 +20,7 @@ import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
-import type { AppConfig, AppMetadata } from "./types";
+import type { AppMetadata } from "./types";
 
 import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";
@@ -35,6 +35,7 @@ import { EventDataFragment } from "./modules/events/graphql/fragmentEvent.graphq
 import "./styles/app.style.css";
 import "./styles/react-big-calendar.css";
 import { nonLoading } from "./utils/non-loading";
+import { AppConfigDataFragment } from "./configs/fragmentAppConfig.graphql";
 
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
@@ -80,10 +81,10 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   usePageTitle();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [config, setConfig] = useState<AppConfig>();
+  const [config, setConfig] = useState<AppConfigDataFragment>();
 
   const fetchAppConfig = async () => {
-    await new Promise<AppConfig>((resolve) => {
+    await new Promise<AppConfigDataFragment>((resolve) => {
       const process = async () => {
         try {
           const global = getGlobal();

@@ -1,9 +1,10 @@
 import { createContext, useContext } from "react";
-import type { AppConfig, AppMetadata } from "./types";
+import type { AppConfigDataFragment } from "./configs/fragmentAppConfig.graphql";
+import type { AppMetadata } from "./types";
 
 export interface UseApp {
   isInitialized: boolean;
-  config: AppConfig;
+  config: AppConfigDataFragment;
   metadata: AppMetadata;
   joinWorkspaceRoom: (workspaceId: string) => Promise<void>;
   joinSocket: () => Promise<void>;

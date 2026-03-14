@@ -130,6 +130,15 @@ export type AttendanceRecordsPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type AuthRefreshTokenInput = {
+  refreshToken: Scalars['String']['input'];
+};
+
+export type AuthRenewPasswordByCodeInput = {
+  code: Scalars['String']['input'];
+  plainPassword: Scalars['String']['input'];
+};
+
 export type AuthRequestRenewUserPasswordInput = {
   email: Scalars['String']['input'];
 };
@@ -137,6 +146,13 @@ export type AuthRequestRenewUserPasswordInput = {
 export type AuthSignInWithEmailPasswordInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type AuthSignUpWithEmailPasswordInput = {
+  avatar?: InputMaybe<Scalars['String']['input']>;
+  email: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  plainPassword: Scalars['String']['input'];
 };
 
 export type AuthTokenResult = {
@@ -759,7 +775,7 @@ export type Event = {
   persist: Maybe<Scalars['Boolean']['output']>;
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedEntities: Maybe<Array<RelatedEntity>>;
+  relatedEntities: Array<RelatedEntity>;
   sessionId: Maybe<Scalars['String']['output']>;
   source: Maybe<EntitySource>;
   time: Scalars['Float']['output'];
@@ -1002,12 +1018,6 @@ export type File = {
   path: Scalars['String']['output'];
   ref: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
-  relatedCustomerId: Maybe<Scalars['String']['output']>;
-  relatedHrmTimekeepingId: Maybe<Scalars['String']['output']>;
-  relatedMessageBoxId: Maybe<Scalars['String']['output']>;
-  relatedMessageId: Maybe<Scalars['String']['output']>;
-  relatedProductId: Maybe<Scalars['String']['output']>;
-  relatedReceiptId: Maybe<Scalars['String']['output']>;
   relativePath: Maybe<Scalars['String']['output']>;
   size: Maybe<Scalars['Float']['output']>;
   source: Maybe<EntitySource>;
@@ -1031,6 +1041,13 @@ export const FileType = {
 } as const;
 
 export type FileType = typeof FileType[keyof typeof FileType];
+export type FileUploadSigned = {
+  __typename: 'FileUploadSigned';
+  dna: Scalars['String']['output'];
+  isUseExternalStorage: Scalars['Boolean']['output'];
+  signedUrl: Scalars['String']['output'];
+};
+
 export type FilesPaginated = {
   __typename: 'FilesPaginated';
   results: Array<File>;
@@ -1350,7 +1367,6 @@ export type Mutation = {
   deleteWorkspaceRole: Scalars['Boolean']['output'];
   disburseReceipt: Receipt;
   duplicateTask: Task;
-  externalStorageVerifyDna: File;
   fetchExternalStorageSize: Scalars['Float']['output'];
   fulfillLoan: Loan;
   generateCategorySlug: Scalars['String']['output'];
@@ -1362,14 +1378,17 @@ export type Mutation = {
   partialPaymentReceipt: Array<Receipt>;
   payReceipt: Receipt;
   pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
+  refreshToken: AuthTokenResult;
   registerCustomerKyc: CustomerKyc;
   registerDevice: Device;
   rejectAttendanceRecord: AttendanceRecord;
   rejectCustomerKyc: CustomerKyc;
   rejectLoan: Array<Loan>;
+  removeFile: Scalars['Boolean']['output'];
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
+  renewPassword: Scalars['Boolean']['output'];
   requestRenewPassword: Scalars['Boolean']['output'];
   rescheduleBooking: Booking;
   revertApproveLoan: Loan;
@@ -1382,6 +1401,8 @@ export type Mutation = {
   signLoan: Loan;
   signOut: Scalars['Boolean']['output'];
   signOutOtherDevices: AuthTokenResult;
+  signUpWithEmailPassword: AuthTokenResult;
+  signUpload: FileUploadSigned;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateActivity: Activity;
@@ -1400,6 +1421,7 @@ export type Mutation = {
   updateWorkspaceMember: WorkspaceMember;
   updateWorkspaceRole: WorkspaceRole;
   updateWorkspaceSetting: WorkspaceSetting;
+  verifyExternalStorageDna: File;
   verifyRenewPasswordCode: VerifyRenewPasswordResult;
 };
 
@@ -1630,11 +1652,6 @@ export type MutationDuplicateTaskArgs = {
 };
 
 
-export type MutationExternalStorageVerifyDnaArgs = {
-  dna: Scalars['String']['input'];
-};
-
-
 export type MutationFulfillLoanArgs = {
   id: Scalars['String']['input'];
   input: FulfillLoanInput;
@@ -1680,6 +1697,11 @@ export type MutationPluginExternalStorageSignUploadUrlArgs = {
 };
 
 
+export type MutationRefreshTokenArgs = {
+  input: AuthRefreshTokenInput;
+};
+
+
 export type MutationRegisterCustomerKycArgs = {
   customerId: Scalars['String']['input'];
   input: CustomerKycInput;
@@ -1709,6 +1731,11 @@ export type MutationRejectLoanArgs = {
 };
 
 
+export type MutationRemoveFileArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type MutationRemoveReactionArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
@@ -1718,6 +1745,11 @@ export type MutationRemoveReactionArgs = {
 
 export type MutationRemoveTagArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationRenewPasswordArgs = {
+  input: AuthRenewPasswordByCodeInput;
 };
 
 
@@ -1784,6 +1816,16 @@ export type MutationSignInWithEmailPasswordArgs = {
 export type MutationSignLoanArgs = {
   id: Scalars['String']['input'];
   input: SignLoanInput;
+};
+
+
+export type MutationSignUpWithEmailPasswordArgs = {
+  input: AuthSignUpWithEmailPasswordInput;
+};
+
+
+export type MutationSignUploadArgs = {
+  input: SignUploadInput;
 };
 
 
@@ -1931,6 +1973,11 @@ export type MutationUpdateWorkspaceSettingArgs = {
   termsOfService?: InputMaybe<Scalars['String']['input']>;
   view?: InputMaybe<WorkspaceViewInput>;
   zaloOaGmfGroupSettings?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type MutationVerifyExternalStorageDnaArgs = {
+  input: VerifyExternalStorageDnaInput;
 };
 
 
@@ -2418,7 +2465,9 @@ export type Query = {
   appConfig: AppConfig;
   attendanceRecord: AttendanceRecord;
   attendanceRecords: AttendanceRecordsPaginated;
+  attendanceRecordsForToday: Array<AttendanceRecord>;
   authUser: AuthUser;
+  availableEntities: Array<Scalars['String']['output']>;
   booking: Booking;
   bookings: BookingsPaginated;
   calculateLoanPaymentPlan: LoanPaymentPlanResult;
@@ -2808,7 +2857,7 @@ export type QueryReceiptsArgs = {
 
 
 export type QuerySearchArgs = {
-  entities: Array<Scalars['String']['input']>;
+  entities?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   query: Scalars['String']['input'];
 };
@@ -3097,6 +3146,12 @@ export type SearchResult = {
   id: Scalars['String']['output'];
 };
 
+export type SearchResultBase = SearchResult & {
+  __typename: 'SearchResultBase';
+  entity: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+};
+
 export type SearchResultCategory = SearchResult & {
   __typename: 'SearchResultCategory';
   entity: Scalars['String']['output'];
@@ -3121,6 +3176,8 @@ export type SearchResultLoan = SearchResult & {
   customerPhone: Maybe<Scalars['String']['output']>;
   entity: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  imeil: Maybe<Scalars['String']['output']>;
+  status: Maybe<Scalars['String']['output']>;
 };
 
 export type SearchResultOrders = SearchResult & {
@@ -3148,9 +3205,12 @@ export type SearchResultPrescriptions = SearchResult & {
 
 export type SearchResultProduct = SearchResult & {
   __typename: 'SearchResultProduct';
+  code: Maybe<Scalars['String']['output']>;
   entity: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  image: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
+  type: Scalars['String']['output'];
 };
 
 export type SearchResultReceipt = SearchResult & {
@@ -3158,6 +3218,7 @@ export type SearchResultReceipt = SearchResult & {
   code: Scalars['String']['output'];
   entity: Scalars['String']['output'];
   id: Scalars['String']['output'];
+  note: Scalars['String']['output'];
 };
 
 export type SearchResultTags = SearchResult & {
@@ -3201,6 +3262,12 @@ export type SiblingTasks = {
 
 export type SignLoanInput = {
   signature: Scalars['String']['input'];
+};
+
+export type SignUploadInput = {
+  fileName: Scalars['String']['input'];
+  id?: InputMaybe<Scalars['String']['input']>;
+  refs?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type SignUploadUrlResponse = {
@@ -3487,6 +3554,10 @@ export type UserSettingsInput = {
   locale?: InputMaybe<AppLocale>;
   timezoneId?: InputMaybe<Scalars['String']['input']>;
   timezoneUtc?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type VerifyExternalStorageDnaInput = {
+  dna: Scalars['String']['input'];
 };
 
 export type VerifyRenewPasswordResult = {

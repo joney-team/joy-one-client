@@ -8,7 +8,7 @@ import { Trans } from "@lingui/react/macro";
 import { Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCloudDataConnection } from "@tabler/icons-react";
-import { Fragment, type ReactNode, useState } from "react";
+import { forwardRef, Fragment, type ReactNode, useImperativeHandle, useState } from "react";
 import SET_PLUGIN_EXTERNAL_STORAGE, {
   type SetPluginExternalStorageMutation,
   type SetPluginExternalStorageMutationVariables,
@@ -17,6 +17,7 @@ import { pluginStorageProviders } from "./plugin-storage-constants";
 import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQuery,
 } from "./queryPluginExternalStorage.graphql";
+import { useDisclosure } from "@mantine/hooks";
 
 const PluginStorageModalContent = ({
   isOpened,
@@ -61,7 +62,7 @@ const PluginStorageModalContent = ({
         />
       }
     >
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={onSubmit} autoFocus={false}>
         <Stack>
           <Select
             {...form.getInputProps("provider")}
@@ -113,28 +114,44 @@ const PluginStorageModalContent = ({
   );
 };
 
-export const PluginStorageModal = ({
-  children,
-}: {
-  children: (
-    open: (storage?: PluginExternalStorageQuery["pluginExternalStorage"]) => void
-  ) => ReactNode;
-}) => {
+export type PluginStorageModalRef = {
+  open: (storage?: PluginExternalStorageQuery["pluginExternalStorage"]) => void;
+  close: () => void;
+};
+
+export const PluginStorageModal = forwardRef<
+  PluginStorageModalRef,
+  {
+    children?: (ref: PluginStorageModalRef) => ReactNode;
+  }
+>(({ children }, ref) => {
+  const [opened, { open, close }] = useDisclosure(false);
   const [storage, setStorage] = useState<
     PluginExternalStorageQuery["pluginExternalStorage"] | null
   >(null);
 
+  useImperativeHandle(ref, () => ({
+    open: (storage) => {
+      setStorage(storage ?? null);
+      open();
+    },
+    close: () => {
+      close();
+    },
+  }));
+
   return (
     <Fragment>
-      {children((storage) => {
-        setStorage(storage ?? null);
+      {children?.({
+        open: (storage) => {
+          setStorage(storage ?? null);
+        },
+        close: () => {
+          setStorage(null);
+        },
       })}
 
-      <PluginStorageModalContent
-        isOpened={!!storage}
-        storage={storage}
-        onClose={() => setStorage(null)}
-      />
+      <PluginStorageModalContent isOpened={opened} storage={storage} onClose={close} />
     </Fragment>
   );
-};
+});

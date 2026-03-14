@@ -1,0 +1,14 @@
+fragment AppConfigData on AppConfig {
+  name
+  version
+  timeZone
+  UTC
+  workspaceDomainIP
+  metaAppId
+  metaAppScope
+  metaAppVersion
+  zaloAppId
+  firebase {
+    appId
+  }
+}

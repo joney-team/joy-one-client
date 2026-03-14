@@ -1,10 +1,6 @@
 import { AppEntity } from "@/types";
 import { apiClient } from "../apis";
-import { SearchEntityResult, SearchResult } from "./search-types";
-
-export async function search(q: string) {
-  return apiClient.get<SearchResult>("/search", { params: { q } });
-}
+import { SearchEntityResult } from "./search-types";
 
 export async function searchGetAvailableEntities() {
   return apiClient.get<AppEntity[]>("/search/available-entities");

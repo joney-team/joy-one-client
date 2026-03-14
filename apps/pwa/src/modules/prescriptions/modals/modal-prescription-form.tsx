@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
+import { ProductType } from "@/graphql/enums.graphql";
 import { getView } from "@/layout/layout-service";
 import { PrintButton } from "@/modals/modal-printer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
@@ -18,15 +19,13 @@ import {
   PrescriptionItem,
 } from "@/modules/prescriptions/prescriptions-types";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -62,6 +61,7 @@ interface ModalPrescriptionFormProps {
 
 export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => {
   const workspace = useWorkspace();
+  const { t } = useLingui();
   const itemNotes = [t`Take after eating`, t`Take before eating`];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -112,13 +112,13 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
   return (
     <Stack pb={10}>
       <TextInput
-        label={t`Prescription name`}
+        label={<Trans>Prescription name</Trans>}
         withAsterisk
         placeholder={t`Ex: Prescription 1, Treatment of leukemia...`}
         {...form.getInputProps("name")}
       />
 
-      <InputWrapper label={t`List`} withAsterisk>
+      <InputWrapper label={<Trans>List</Trans>} withAsterisk>
         <Stack>
           {items.map((item, index) => {
             return (
@@ -132,7 +132,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                       <ProductSelector
                         flex={1}
-                        type={[ProductType.PRODUCT]}
+                        type={[ProductType.Product]}
                         onSelect={(product) =>
                           handler.setItem(index, {
                             ...item,
@@ -174,7 +174,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                     <Group gap={8} wrap="nowrap">
                       <TextInput
-                        label={t`Unit`}
+                        label={<Trans>Unit</Trans>}
                         maw={100}
                         value={item.unit}
                         onChange={(e) =>
@@ -183,14 +183,14 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={t`Days number`}
+                        label={<Trans>Days number</Trans>}
                         value={item.days}
                         onChange={(e) => handler.setItem(index, { ...item, days: +e })}
                         maw={100}
                       />
 
                       <NumberInput
-                        label={t`Morning`}
+                        label={<Trans>Morning</Trans>}
                         value={item.qty.morning}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, morning: +e } })
@@ -199,7 +199,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={t`Noon`}
+                        label={<Trans>Noon</Trans>}
                         value={item.qty.noon}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, noon: +e } })
@@ -208,7 +208,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                       />
 
                       <NumberInput
-                        label={t`Afternoon`}
+                        label={<Trans>Afternoon</Trans>}
                         value={item.qty.afternoon}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, afternoon: +e } })
@@ -218,7 +218,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                     </Group>
 
                     <TextInput
-                      label={t`Usage`}
+                      label={<Trans>Usage</Trans>}
                       value={item.note}
                       onChange={(e) =>
                         handler.setItem(index, { ...item, note: e.currentTarget.value })
@@ -265,14 +265,14 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                 },
               }}
             >
-              {t`Add pill`}
+              {<Trans>Add pill</Trans>}
             </Button>
           </Center>
         </Stack>
       </InputWrapper>
 
       <Textarea
-        label={t`Advice`}
+        label={<Trans>Advice</Trans>}
         {...form.getInputProps("note")}
         placeholder={t`Ex: Take after eating, take before eating...`}
       />
@@ -311,7 +311,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
                   variant="outline"
                   radius={200}
                 >
-                  {t`Select prescription template`}
+                  {<Trans>Select prescription template</Trans>}
                 </Button>
               );
             }}

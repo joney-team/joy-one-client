@@ -2,9 +2,8 @@
 
 import { Avatar } from "@/components/avatar";
 import { Errored } from "@/components/errored";
-import { useLayout } from "@/layout/layout-context";
 import { EventType } from "@/graphql/enums.graphql";
-import { removeFileFromRelativePath } from "@/modules/files/file-service";
+import { useLayout } from "@/layout/layout-context";
 import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
 import { getPartner, updatePartner } from "@/modules/partners/partners-service";
 import { PartnerEntity } from "@/modules/partners/partners-types";
@@ -67,10 +66,8 @@ export const PartnerDetail: FC = () => {
 
   const uploadLogo = async (file: File) => {
     try {
-      const _currentAvatar = partner.logo;
       const _file = await uploadFile(file, { compressSize: 1 });
       await updatePartner(partner._id, { ...partner, logo: _file.path });
-      if (_currentAvatar) await removeFileFromRelativePath(_currentAvatar).catch(onError);
     } catch (error) {
       onError(error);
     }

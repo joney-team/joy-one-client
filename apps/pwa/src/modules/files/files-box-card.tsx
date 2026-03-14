@@ -3,18 +3,18 @@
 import AspectRatio from "@/components/aspect-ratio/aspect-ratio";
 import { FileType } from "@/graphql/enums.graphql";
 import { detectFileType } from "@/modules/files/file-service";
-import { FileEntity } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { ActionIcon, Card, CardProps, Center, em, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconArrowsDiagonal, IconX } from "@tabler/icons-react";
 import { FC, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
-import { fileTypes } from "./files-constants";
 import { useColor } from "../theme/use-color";
+import { fileTypes } from "./files-constants";
+import { FileDataFragment } from "./graphql/fragmentFile.graphql";
 
 export const FileBoxCard: FC<{
-  file: File | FileEntity;
+  file: File | FileDataFragment;
   onRemove?: () => void;
   disabled?: boolean;
   onGallery: () => void;

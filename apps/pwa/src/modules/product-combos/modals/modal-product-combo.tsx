@@ -14,11 +14,10 @@ import {
   productComboStatusOptions,
   revertProductComboHistory,
 } from "@/modules/product-combos/product-combos-service";
-import { productTypeOptions } from "@/modules/products/products-service";
+import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { useFetch } from "@/utils/use-fetch.util";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -75,13 +74,13 @@ export const ModalProductCombo: FC<{
             <Modal
               opened={opened}
               onClose={close}
-              title={<ModalHead name={t`Combo`} icon={IconPackage} />}
+              title={<ModalHead name={<Trans>Combo</Trans>} icon={IconPackage} />}
               size="xl"
             >
               {(function () {
                 if (combo.isFetching) return <Skeleton height={100} />;
                 if (combo.error || !combo.data) return <Errored error={combo.error} />;
-                const Icon = productTypeOptions[combo.data.product.type].icon;
+                const { icon: Icon } = productTypes[combo.data.product.type];
 
                 return (
                   <Stack>

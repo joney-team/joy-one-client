@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Editor } from "@/components/editor/editor";
 import { ModalHead } from "@/components/modal/modal-head";
+import { ProductType } from "@/graphql/enums.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { createCouponRule, updateCouponRule } from "@/modules/coupons/coupon-service";
 import {
@@ -16,7 +17,6 @@ import {
   FreeOnProductData,
 } from "@/modules/coupons/coupon-types";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductType } from "@/modules/products/products-types";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -259,7 +259,7 @@ const RuleBenfitForm: FC<{
           return (
             <Fragment>
               <ProductSelector
-                type={[ProductType.PRODUCT, ProductType.SERVICE]}
+                type={[ProductType.Product, ProductType.Service]}
                 onSelect={(product) =>
                   onChange({ ...benefit, data: { ...data, product, productId: product._id } })
                 }
@@ -310,7 +310,7 @@ const RuleBenfitForm: FC<{
           return (
             <Fragment>
               <ProductSelector
-                type={[ProductType.PRODUCT, ProductType.SERVICE]}
+                type={[ProductType.Product, ProductType.Service]}
                 onSelect={(product) =>
                   onChange({ ...benefit, data: { ...data, product, productId: product._id } })
                 }

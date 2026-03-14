@@ -6,10 +6,10 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Stack, Text } from "@mantine/core";
@@ -17,9 +17,9 @@ import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
-import { getProductIcon } from "./products-service";
 
 import QUERY_PRODUCTS from "./graphql/queryProducts.graphql";
+import { productTypes } from "./products-constants";
 
 export const ProductList: FC = () => {
   return (
@@ -29,9 +29,9 @@ export const ProductList: FC = () => {
         name={<Trans>Products</Trans>}
         icon={IconBox}
         query={QUERY_PRODUCTS}
-        fixedParams={{ type: ProductType.PRODUCT }}
+        fixedParams={{ type: ProductType.Product }}
         creatable={{
-          onCreate: () => OnProductModal({ type: ProductType.PRODUCT }),
+          onCreate: () => OnProductModal({ type: ProductType.Product }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
         }}
         columns={{
@@ -43,7 +43,7 @@ export const ProductList: FC = () => {
               return (
                 <EntityImage
                   src={data.image}
-                  icon={getProductIcon(data.type)}
+                  icon={productTypes[data.type].icon}
                   size={50}
                   radius={8}
                 />

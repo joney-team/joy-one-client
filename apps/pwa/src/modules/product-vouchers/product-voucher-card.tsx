@@ -2,9 +2,8 @@
 
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
+import { ProductType } from "@/graphql/enums.graphql";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductType } from "@/modules/products/products-types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -20,6 +19,7 @@ import {
 import { FC } from "react";
 import { EntityImage } from "../../components/entity-image";
 import { Renderer } from "../../components/renderer";
+import { productTypes } from "../products/products-constants";
 import { productVoucherStatuses } from "./product-vouchers-constants";
 
 interface ProductVoucherCardProps extends PolymorphicComponentProps<"div", CardProps> {
@@ -36,7 +36,7 @@ export const ProductVoucherCard: FC<ProductVoucherCardProps> = (props) => {
         <EntityImage
           size={44}
           src={voucher.productVoucher.image}
-          icon={getProductIcon(ProductType.VOUCHER)}
+          icon={productTypes[ProductType.Voucher].icon}
         />
 
         <Stack gap={3} flex={1}>

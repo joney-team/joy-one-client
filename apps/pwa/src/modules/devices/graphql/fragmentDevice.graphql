@@ -1,0 +1,9 @@
+fragment DeviceData on Device {
+  _id
+  source
+  identifyId
+  notificationToken
+  locale
+  userAgent
+  lastActiveAt
+}

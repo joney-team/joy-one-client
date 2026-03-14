@@ -6,7 +6,7 @@ import { modals } from "@mantine/modals";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { FormProduct, FormProductProps } from "../components/form-product";
 import { productTypes } from "../products-constants";
-import { ProductType } from "../products-types";
+import { ProductType } from "@/graphql/enums.graphql";
 
 const ModalContent = (props: FormProductProps) => {
   return <FormProduct {...props} onClose={() => modals.close("ModalProductForm")} />;
@@ -18,7 +18,7 @@ export const OnProductModal = (props: FormProductProps) => {
 
   let title = product ? t`Update product` : t`Create new product`;
   if (type || product)
-    title += ` ${productTypes[type ?? product?.type ?? ProductType.PRODUCT].label()}`;
+    title += ` ${t(productTypes[type ?? product?.type ?? ProductType.Product].label)}`;
 
   return modals.open({
     modalId: "ModalProductForm",

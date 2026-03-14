@@ -4,27 +4,10 @@ import { decryptData, encryptData } from "@/utils/crypto.utils";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
-import { apiClient } from "../apis";
 import { serverRefreshToken } from "./auth-server";
-import {
-  AuthRenewPasswordByCodeDto,
-  AuthRequestRenewUserPasswordDto,
-  AuthVerifyRenewPasswordCodeDto,
-} from "./auth-types";
 
-export async function requestRenewPassword(dto: AuthRequestRenewUserPasswordDto) {
-  return apiClient.post(`/auth/renew-password/request`, dto);
-}
-
-export async function verifyRenewPasswordCode(dto: AuthVerifyRenewPasswordCodeDto) {
-  return apiClient.post(`/auth/renew-password/verify`, dto);
-}
-
-export async function renewPassword(dto: AuthRenewPasswordByCodeDto) {
-  return apiClient.post(`/auth/renew-password`, dto);
-}
-
-export const saveTokens = async (tokens: { accessToken: string; refreshToken: string }) => {
+// @deprecated
+export const saveClientTokens = async (tokens: { accessToken: string; refreshToken: string }) => {
   await Promise.all([saveAccessToken(tokens.accessToken), saveRefrehToken(tokens.refreshToken)]);
 };
 

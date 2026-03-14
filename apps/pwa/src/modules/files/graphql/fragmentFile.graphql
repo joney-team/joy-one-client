@@ -1,0 +1,15 @@
+fragment FileData on File {
+  _id
+  refs
+  createdAt
+  updatedAt
+  type
+  fileName
+  path
+  thumbnail
+  relativePath
+  size
+  ref
+  uploadByUserId
+  url
+}

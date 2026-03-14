@@ -1,14 +1,14 @@
-import { Period } from "@/types";
+import { ProductType } from "@/graphql/types.graphql";
 import { BookingRealtimeReport, BookingsReport } from "@/modules/bookings/booking-types";
 import { CustomerRealtimeReport, CustomersReport } from "@/modules/customers/customer-types";
 import { LoansRangReport, LoansRealtimeReport } from "@/modules/loans/loans-types";
-import { ProductType } from "@/modules/products/products-types";
 import { ReceiptsRangeReport, ReceiptsRealtimeReport } from "@/modules/receipts/receipts-types";
 import { TasksRealtimeReport, TasksReport } from "@/modules/tasks/tasks-types";
+import { Period } from "@/types";
 
 export enum ReportType {
-  RANGE = 'range',
-  REALTIME = 'realtime',
+  RANGE = "range",
+  REALTIME = "realtime",
 }
 
 export interface ProductReport {

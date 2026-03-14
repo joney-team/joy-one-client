@@ -1,12 +1,6 @@
+import { ProductType } from "@/graphql/types.graphql";
 import { type ProductStock } from "@/modules/product-stocks/product-stocks-types";
 import { BaseMongoEntity, Query } from "@/types";
-
-export enum ProductType {
-  PRODUCT = "PRODUCT",
-  SERVICE = "SERVICE",
-  COMBO = "COMBO",
-  VOUCHER = "VOUCHER",
-}
 
 export interface ProductDto {
   name: string;

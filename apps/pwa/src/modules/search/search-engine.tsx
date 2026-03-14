@@ -3,45 +3,29 @@
 import { Avatar } from "@/components/avatar";
 import { SpeedIllustration } from "@/components/illustrations/speed";
 import { Renderer } from "@/components/renderer";
+import { appEntities } from "@/constant";
 import { useRouter } from "@/hooks/use-router";
-import { OrderEntity } from "@/modules/orders/order-entity";
-import { PartnerEntity } from "@/modules/partners/partners-types";
-import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-prescription-form";
-import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductEntity } from "@/modules/products/products-types";
-import { search, searchArray } from "@/modules/search/search-service";
-import {
-  SearchCustomer,
-  SearchEntityResult,
-  SearchLoan,
-  SearchResult,
-} from "@/modules/search/search-types";
+import { searchArray } from "@/modules/search/search-service";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useLingui } from "@lingui/react/macro";
+import { useLazyQuery } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Card, Center, Loader, rem, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { Spotlight, SpotlightActionData, SpotlightActionGroupData } from "@mantine/spotlight";
 import {
   Icon,
   IconCashRegister,
-  IconClipboardText,
   IconCreditCardPay,
-  IconMessageCircle,
-  IconNews,
-  IconPill,
   IconSearch,
   IconStack2,
   IconTopologyStar3,
 } from "@tabler/icons-react";
-import { type FC, useMemo, useState } from "react";
+import { type FC, ReactNode, useMemo, useState } from "react";
 import { loanStatuses } from "../loans/loans-constants";
 import { productTypes } from "../products/products-constants";
-import { ReceiptDataFragment } from "../receipts/graphql/fragmentReceipt.graphql";
-import { TaskDataFragment } from "../tasks/graphql/fragmentTask.graphql";
 import { updateTaskPath } from "../tasks/tasks-route-helpers";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import {
@@ -49,6 +33,7 @@ import {
   useWorkspaceModules,
   WorkspaceModule,
 } from "../workspaces/workspace-modules";
+import QUERY_SEARCH from "./graphql/querySearch.graphql";
 
 export const SearchEngine: FC = () => {
   const { i18n, t } = useLingui();
@@ -59,8 +44,14 @@ export const SearchEngine: FC = () => {
   const router = useRouter();
 
   const [query, setQuery] = useState("");
-  const [searchResult, setSearchResult] = useState<SearchResult | undefined>(undefined);
-  const [isSearching, setIsSearching] = useState(false);
+
+  const [searchQuery, { data: searchResult, loading: isSearchLoading }] = useLazyQuery(
+    QUERY_SEARCH,
+    {
+      fetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-and-network",
+    }
+  );
 
   const isHasSearchResult =
     !!query && query.length > 0 && !!searchResult && Object.keys(searchResult).length > 0;
@@ -79,7 +70,7 @@ export const SearchEngine: FC = () => {
       ? searchArray(searchModules, [], query, (mod) => mod.name + (mod.description || ""))
       : [];
 
-  const strictSearchEntity = (entity: AppEntity) => {
+  const strictSearchEntity = (entity: string) => {
     if ((workspaceSetting?.searchSettings?.hideEntities || []).includes(entity)) return false;
     return true;
   };
@@ -89,241 +80,126 @@ export const SearchEngine: FC = () => {
     if (!workspace.isAvailable) return actionGroups;
 
     if (isHasSearchResult) {
-      Object.keys(searchResult).forEach((entity) => {
-        const data = (searchResult as any)[entity] as SearchEntityResult[];
-        if (!data || !strictSearchEntity(entity as AppEntity)) return;
+      let groups: Record<string, SpotlightActionData[]> = {};
 
-        if (isMessageBoxesEnabled && entity === AppEntity.MESSAGE_BOXES) {
-          actionGroups.push({
-            group: t`Message boxes`,
-            actions: data.map((box) => {
-              return {
-                id: box._id,
-                label: box.name || box.senderName,
-                description: box.description,
-                leftSection: <ActionIcon icon={IconMessageCircle} />,
-                onClick: async () => {
-                  return router.push(`/message-boxes/${box._id}`);
-                },
-              };
-            }),
+      searchResult.search.forEach((result) => {
+        if (!strictSearchEntity(result.entity)) return;
+
+        if (!groups[result.entity]) {
+          groups[result.entity] = [];
+        }
+
+        if (result.__typename === "SearchResultCustomer") {
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            description: [result.phone].filter((v) => !!v).join(" - "),
+            leftSection: <Avatar customer={result} radius={8} />,
+            onClick: async () => {
+              return router.push(`/customers/${result.code}`);
+            },
           });
         }
 
-        if (entity === AppEntity.POSTS) {
-          actionGroups.push({
-            group: t`Posts`,
-            actions: data.map((post) => {
-              return {
-                id: post._id,
-                label: post.title,
-                description: post.excerpt,
-                leftSection: <ActionIcon icon={IconNews} />,
-                onClick: async () => {
-                  return router.push(`/posts/${post._id}`);
-                },
-                datatype: entity,
-              };
-            }),
+        if (result.__typename === "SearchResultWorkspaceMember") {
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            description: [result.phone].filter((v) => !!v).join(" - "),
+            leftSection: <Avatar user={result} size={30} />,
           });
         }
 
-        if (entity === AppEntity.CUSTOMERS) {
-          const customers = data as SearchCustomer[];
-
-          actionGroups.push({
-            group: t`Customers`,
-            actions: customers.map((customer) => {
-              return {
-                id: customer._id,
-                label: `${customer.name}`,
-                description: [
-                  customer.phone,
-                  customer.email,
-                  renderEntityCode(customer.code, customer.plainCode),
-                ]
-                  .filter((v) => !!v)
-                  .filter((v) => !!v)
-                  .join(" - "),
-                leftSection: <Avatar customer={customer as any} radius={8} />,
-                onClick: async () => {
-                  return router.push(`/customers/${customer.code}`);
-                },
-                datatype: entity,
-              };
-            }),
+        if (result.__typename === "SearchResultProduct") {
+          const productType = productTypes[result.type as keyof typeof productTypes];
+          if (!productType) return;
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            leftSection: <ActionIcon icon={productType.icon} />,
+            onClick: async () => {
+              return router.push(`/products/${result.id}`);
+            },
           });
         }
 
-        if (entity === AppEntity.PRODUCTS) {
-          const products = data as ProductEntity[];
-
-          products.forEach((product) => {
-            const ProductIcon = getProductIcon(product.type);
-            const action: SpotlightActionData = {
-              id: product._id,
-              label: `${product.name}`,
-              description: product.tags?.join(", "),
-              leftSection: <ActionIcon icon={ProductIcon} />,
-              onClick: async () => {
-                return router.push(`/products/${product._id}`);
-              },
-              datatype: entity,
-            };
-
-            const existed = actionGroups.findIndex(
-              (v) => v.group === productTypes[product.type].label()
-            );
-            if (existed >= 0) {
-              actionGroups[existed].actions.push(action);
-            } else {
-              actionGroups.push({
-                group: productTypes[product.type].label(),
-                actions: [action],
-              });
-            }
+        if (result.__typename === "SearchResultReceipt") {
+          groups[result.entity].push({
+            id: result.id,
+            label: renderEntityCode(result.code),
+            description: [t`Receipt`, result.note].filter((v) => !!v).join(" - "),
+            leftSection: <ActionIcon icon={IconCashRegister} />,
+            onClick: async () => {
+              return router.push(`/receipts/${result.id}`);
+            },
           });
         }
 
-        if (entity === AppEntity.RECEIPTS) {
-          const receipts = data as ReceiptDataFragment[];
-
-          actionGroups.push({
-            group: t`Receipts`,
-            actions: receipts.map((receipt) => {
-              return {
-                id: receipt.id,
-                label: `${renderEntityCode(receipt.code)}`,
-                description: [t`Receipt`, receipt.note].filter((v) => !!v).join(" - "),
-                leftSection: <ActionIcon icon={IconCashRegister} />,
-                onClick: async () => {
-                  return router.push(`/receipts/${receipt.id}`);
-                },
-              };
-            }),
+        if (result.__typename === "SearchResultTask") {
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            description: [renderEntityCode(result.code)].filter((v) => !!v).join(" - "),
+            leftSection: <ActionIcon icon={IconStack2} />,
+            onClick: async () => {
+              return router.push(updateTaskPath({ code: result.code }));
+            },
           });
         }
 
-        if (entity === AppEntity.TASKS) {
-          const tasks = data as TaskDataFragment[];
+        if (result.__typename === "SearchResultLoan") {
+          const loanStatus = loanStatuses[result.status as keyof typeof loanStatuses];
+          if (!loanStatus) return;
 
-          actionGroups.push({
-            group: t`Tasks`,
-            actions: tasks.map((task) => {
-              return {
-                id: task._id,
-                label: `${task.name}`,
-                description: [renderEntityCode(task.code)].filter((v) => !!v).join(" - "),
-                leftSection: <ActionIcon icon={IconStack2} />,
-                onClick: async () => router.push(updateTaskPath({ code: task.code })),
-              };
-            }),
+          groups[result.entity].push({
+            id: result.id,
+            label: renderEntityCode(result.code),
+            description: [result.customerName, result.customerPhone].filter((v) => !!v).join(" - "),
+            leftSection: <ActionIcon icon={IconCreditCardPay} />,
+            onClick: async () => {
+              return router.push(`/loans/${result.code}`);
+            },
+            rightSection: (
+              <Badge size="xs" color={loanStatus.color}>
+                {t(loanStatus.label)}
+              </Badge>
+            ),
           });
         }
 
-        if (entity === AppEntity.LOANS) {
-          const loans = data as SearchLoan[];
-
-          actionGroups.push({
-            group: t`Loans`,
-            actions: loans.map((loan) => {
-              return {
-                id: loan.id!,
-                label: renderEntityCode(loan.code),
-                description: [
-                  loan.customerName,
-                  loan.customerPhone,
-                  loan.imeil ? `IMEIL: ${loan.imeil}` : "",
-                ]
-                  .filter((v) => !!v)
-                  .join(" - "),
-                leftSection: <ActionIcon icon={IconCreditCardPay} />,
-                onClick: async () => {
-                  return router.push(`/loans/${loan.code}`);
-                },
-                rightSection: (
-                  <Badge size="xs" color={loanStatuses[loan.status].color}>
-                    {t(loanStatuses[loan.status].label)}
-                  </Badge>
-                ),
-              };
-            }),
+        if (result.__typename === "SearchResultPartner") {
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            description: [result.phone].filter((v) => !!v).join(" - "),
+            leftSection: <ActionIcon icon={IconTopologyStar3} />,
+            onClick: async () => {
+              return router.push(`/partners`);
+            },
           });
         }
 
-        if (entity === AppEntity.PARTNERS) {
-          const partners = data as PartnerEntity[];
-
-          actionGroups.push({
-            group: t`Partners`,
-            actions: partners.map((partner) => {
-              return {
-                id: partner._id,
-                label: `${partner.name}`,
-                description: [partner.phone, partner.email].filter((v) => !!v).join(" - "),
-                leftSection: <ActionIcon icon={IconTopologyStar3} />,
-                onClick: async () => {
-                  return router.push(`/partners`);
-                },
-              };
-            }),
+        if (result.__typename === "SearchResultWorkspaceMember") {
+          groups[result.entity].push({
+            id: result.id,
+            label: result.name,
+            description: [result.phone, result.email].filter((v) => !!v).join(" - "),
+            leftSection: <Avatar user={result} size={30} />,
+            onClick: async () => {
+              return router.push(`/members/${result.userId}`);
+            },
           });
         }
+      });
 
-        if (entity === AppEntity.WORKSPACE_MEMBERS) {
-          actionGroups.push({
-            group: t`Members`,
-            actions: data.map((doc) => {
-              return {
-                id: doc.id,
-                label: `${doc.name}`,
-                description: [doc.phone, doc.email].filter((v) => !!v).join(" - "),
-                leftSection: <Avatar user={doc} size={30} />,
-                onClick: async () => {
-                  // TODO: Implement page member information
-                  return router.push(`/members/${doc.userId}`);
-                },
-              };
-            }),
-          });
-        }
-
-        if (entity === AppEntity.ORDERS) {
-          const orders = data as OrderEntity[];
-
-          actionGroups.push({
-            group: t`Orders`,
-            actions: orders.map((order) => {
-              return {
-                id: order.id,
-                label: `${renderEntityCode(order.code)}`,
-                description: t`Orders`,
-                leftSection: <ActionIcon icon={IconClipboardText} />,
-                onClick: async () => {
-                  return router.push(`/orders/${order.code}`);
-                },
-              };
-            }),
-          });
-        }
-
-        if (entity === AppEntity.PRESCRIPTIONS) {
-          const prescriptions = data as PrescriptionEntity[];
-
-          actionGroups.push({
-            group: t`Prescriptions`,
-            actions: prescriptions.map((prescription) => {
-              return {
-                id: prescription._id,
-                label: `${prescription.name}`,
-                leftSection: <ActionIcon icon={IconPill} />,
-                onClick: async () => {
-                  return OnModalPrescriptionForm({ prescription });
-                },
-              };
-            }),
-          });
-        }
+      Object.keys(groups).forEach((entity) => {
+        actionGroups.push({
+          group: t(appEntities[entity as AppEntity].name),
+          actions: groups[entity].map((group) => ({
+            ...group,
+            datatype: entity,
+          })),
+        });
       });
     }
 
@@ -356,12 +232,11 @@ export const SearchEngine: FC = () => {
 
   const handleSearch = useDebouncedCallback(async (q: string) => {
     try {
-      const result = await search(q);
-      setSearchResult(result);
+      await searchQuery({
+        variables: { query: q },
+      });
     } catch (error) {
       onError(error);
-    } finally {
-      setIsSearching(false);
     }
   }, 300);
 
@@ -372,8 +247,8 @@ export const SearchEngine: FC = () => {
       actions={actions}
       onQueryChange={(q) => {
         setQuery(q);
+
         if (q.length > 0) {
-          setIsSearching(true);
           handleSearch(q);
         }
       }}
@@ -381,7 +256,7 @@ export const SearchEngine: FC = () => {
         leftSection: <IconSearch style={{ width: rem(20), height: rem(20) }} stroke={1.5} />,
         placeholder: `${t`Search`}...`,
         rightSection: (
-          <Renderer visible={isSearching}>
+          <Renderer visible={isSearchLoading}>
             <Loader size={18} type="dots" color="gray" />
           </Renderer>
         ),
@@ -390,10 +265,10 @@ export const SearchEngine: FC = () => {
       highlightQuery
       filter={(_, actions) => actions}
       nothingFound={
-        query.length > 0 && !isSearching ? (
-          <EmptySearch message={t`No search results`} />
+        query.length > 0 && !isSearchLoading ? (
+          <EmptySearch message={<Trans>No search results</Trans>} />
         ) : (
-          <EmptySearch message={t`Type something to search`} />
+          <EmptySearch message={<Trans>Type something to search</Trans>} />
         )
       }
       styles={{
@@ -407,7 +282,7 @@ export const SearchEngine: FC = () => {
   );
 };
 
-const EmptySearch: FC<{ message: string }> = (props) => {
+const EmptySearch: FC<{ message: ReactNode }> = (props) => {
   return (
     <Stack align="center" justify="center" p={32}>
       <SpeedIllustration width={140} />

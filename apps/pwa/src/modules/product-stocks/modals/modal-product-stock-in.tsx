@@ -5,6 +5,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalHead } from "@/components/modal/modal-head";
+import { ProductType } from "@/graphql/enums.graphql";
 import {
   multipleProductsStockIn,
   productStockRecordTypeOptions,
@@ -14,12 +15,11 @@ import {
   ProductStockRecordType,
 } from "@/modules/product-stocks/product-stocks-types";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductEntity } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { required } from "@/utils/form.validate";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Group,
@@ -35,7 +35,6 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingWarehouse, IconChevronDown, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
-
 interface ProductStockInModalProps {
   product?: ProductEntity;
 }
@@ -52,6 +51,7 @@ export interface ProductStockInRecordItem {
 export const ModalProductStockIn: FC<{
   children: (open: (args?: ProductStockInModalProps) => void) => ReactNode;
 }> = ({ children }) => {
+  const { t } = useLingui();
   const [opened, { open, close }] = useDisclosure(false);
   const color = useColor();
   const _product = useRef<ProductEntity | null>(null);
@@ -118,13 +118,13 @@ export const ModalProductStockIn: FC<{
       })}
 
       <Modal
-        title={<ModalHead name={t`Stock in`} icon={IconBuildingWarehouse} />}
+        title={<ModalHead name={<Trans>Stock in</Trans>} icon={IconBuildingWarehouse} />}
         onClose={onClose}
         opened={opened}
         size={1000}
       >
         <Stack gap={10}>
-          <InputWrapper label={t`List`}>
+          <InputWrapper label={<Trans>List</Trans>}>
             <Table withTableBorder withColumnBorders withRowBorders horizontalSpacing={8}>
               <Table.Thead>
                 <Table.Tr>
@@ -171,7 +171,7 @@ export const ModalProductStockIn: FC<{
                       <Table.Td>{i + 1}</Table.Td>
                       <Table.Td miw={200}>
                         <ProductSelector
-                          type={ProductType.PRODUCT}
+                          type={ProductType.Product}
                           excludeIds={form.values.items.map((v) => v.product?._id || "")}
                           onSelect={(product) => onChange({ ...item, product })}
                           target={(ctx) => {

@@ -29,7 +29,7 @@ import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gall
 import GET_FILE_INFO, {
   type GetFileInfoQuery,
   type GetFileInfoQueryVariables,
-} from "@/modules/files/modals/queryFileInfo.graphql";
+} from "@/modules/files/graphql/queryFileInfo.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";

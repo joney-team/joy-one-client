@@ -8,14 +8,14 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
+import { ProductType } from "@/graphql/enums.graphql";
 import { productTypes } from "@/modules/products/products-constants";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductType } from "@/modules/products/products-types";
 import { ReceiptReportItem } from "@/modules/receipts/receipts-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { WidgetProps } from "@/widgets/widgets-types";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -41,9 +41,9 @@ import {
 import Link from "next/link";
 import { FC, useRef, useState } from "react";
 import { ReportWidgetsContext } from "../types";
-import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 
 export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (props) => {
+  const { t } = useLingui();
   const filterState = useRef<any>({});
   const forceUpdate = useForceUpdate();
   const workspace = useWorkspace();
@@ -131,7 +131,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
           <Group gap={10} px={16}>
             {Object.values(ProductType).map((v) => {
               const isActive = filterState.current.productType === v;
-              const Icon = getProductIcon(v);
+              const Icon = productTypes[v].icon;
               const count = Object.keys(groupByProducts)
                 .map((productId) => groupByProducts[productId])
                 .filter((productReport) => productReport.productType === v).length;
@@ -153,7 +153,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
                     }
                   }}
                 >
-                  {productTypes[v].label()}
+                  {t(productTypes[v].label)}
 
                   <Circle
                     ml={10}

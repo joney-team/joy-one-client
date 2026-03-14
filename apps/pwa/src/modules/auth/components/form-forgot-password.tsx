@@ -2,19 +2,26 @@
 
 import { Button } from "@/components/buttons/button";
 import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Center, em, PasswordInput, PinInput, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
-import { renewPassword, requestRenewPassword, verifyRenewPasswordCode } from "../auth-service";
-import { Trans, useLingui } from "@lingui/react/macro";
+import MUTATION_RENEW_PASSWORD from "../graphql/mutationRenewPassword.graphql";
+import MUTATION_REQUEST_RENEW_PASSWORD from "../graphql/mutationRequestRenewPassword.graphql";
+import MUTATION_VERIFY_RENEW_PASSWORD_CODE from "../graphql/mutationVerifyRenewPasswordCode.graphql";
 
 export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
   const { t } = useLingui();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+
+  const [renewPassword] = useMutation(MUTATION_RENEW_PASSWORD);
+  const [requestRenewPassword] = useMutation(MUTATION_REQUEST_RENEW_PASSWORD);
+  const [verifyRenewPasswordCode] = useMutation(MUTATION_VERIFY_RENEW_PASSWORD_CODE);
 
   const form = useForm({
     initialValues: {
@@ -44,7 +51,13 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
     setIsSubmitting(true);
     try {
       if (!isVerified) {
-        await requestRenewPassword(values);
+        await requestRenewPassword({
+          variables: {
+            input: {
+              email: values.email,
+            },
+          },
+        });
         setIsSent(true);
         notifications.show({
           autoClose: true,
@@ -53,7 +66,14 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
           icon: <IconMail strokeWidth={1.5} size={18} />,
         });
       } else {
-        await renewPassword(values);
+        await renewPassword({
+          variables: {
+            input: {
+              code: values.code,
+              plainPassword: values.plainPassword,
+            },
+          },
+        });
         notifications.show({
           autoClose: true,
           title: <Trans>Success</Trans>,
@@ -70,7 +90,13 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
 
   const onVerify = async (code: string) => {
     try {
-      await verifyRenewPasswordCode({ code });
+      await verifyRenewPasswordCode({
+        variables: {
+          input: {
+            code,
+          },
+        },
+      });
       form.setFieldValue("code", code);
       setIsVerified(true);
     } catch (error) {

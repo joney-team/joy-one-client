@@ -1,7 +1,7 @@
 "use client";
 
+import { FileType } from "@/graphql/enums.graphql";
 import { getFileTypeIcon } from "@/modules/files/file-service";
-import { FileEntity } from "@/modules/files/file-types";
 import { formatBytes } from "@/utils/file.utils";
 import {
   Box,
@@ -17,14 +17,14 @@ import {
 import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { Image } from "../../components/image";
-import { FileType } from "@/graphql/enums.graphql";
+import { FileDataFragment } from "./graphql/fragmentFile.graphql";
 
 export interface InternalFileCardProps {
-  file: FileEntity;
+  file: FileDataFragment;
   isActive?: boolean;
-  onClick?: (file: FileEntity) => void;
+  onClick?: (file: FileDataFragment) => void;
   disabled?: boolean;
-  onDoubleClick?: (file: FileEntity) => void;
+  onDoubleClick?: (file: FileDataFragment) => void;
 }
 
 export const InternalFileCard: FC<InternalFileCardProps> = (props) => {
@@ -140,7 +140,7 @@ export const InternalFileCard: FC<InternalFileCardProps> = (props) => {
             </Text>
           </Group>
           <Text w="max-content" ta="right" fz={em(10)} c="gray">
-            {formatBytes(file.size)}
+            {formatBytes(file.size ?? 0)}
           </Text>
         </Group>
       </Stack>

@@ -2,14 +2,16 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { Column } from "@/components/list/types";
+import { ProductType } from "@/graphql/enums.graphql";
 import { AppEntity } from "@/types";
 import { Anchor, Group, Stack, Text } from "@mantine/core";
 import { IconBox } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { searchEntity } from "../../search/search-service";
-import { getProductByIds, getProductIcon } from "../products-service";
-import { ProductEntity, ProductType } from "../products-types";
+import { productTypes } from "../products-constants";
+import { getProductByIds } from "../products-service";
+import { ProductEntity } from "../products-types";
 
 export interface ProductColumnArgs extends Omit<Column, "render"> {
   extraInfos?: (value: ProductEntity) => ReactNode;
@@ -23,7 +25,7 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
     render: ({ value }) => {
       if (!value) return "--";
 
-      const Icon = getProductIcon(value.type);
+      const { icon: Icon } = productTypes[value.type as ProductType];
 
       return (
         <Anchor component={Link} href={`/products/${value._id}`} className="link">
@@ -65,7 +67,7 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
           }));
         },
         render: ({ data }) => {
-          const Icon = getProductIcon(data.type);
+          const { icon: Icon } = productTypes[data.type as ProductType];
 
           return (
             <Group gap={8} className="clickable">

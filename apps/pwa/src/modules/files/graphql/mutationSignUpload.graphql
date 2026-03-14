@@ -1,0 +1,7 @@
+mutation SignUpload($input: SignUploadInput!) {
+  signUpload(input: $input) {
+    signedUrl
+    dna
+    isUseExternalStorage
+  }
+}

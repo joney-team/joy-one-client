@@ -1,4 +1,4 @@
-query Search($query: String!, $entities: [String!]!, $limit: Int) {
+query Search($query: String!, $entities: [String!], $limit: Int) {
   search(query: $query, entities: $entities, limit: $limit) {
     id
     entity
@@ -15,6 +15,7 @@ query Search($query: String!, $entities: [String!]!, $limit: Int) {
     }
     ... on SearchResultReceipt {
       code
+      note
     }
     ... on SearchResultTask {
       name
@@ -37,6 +38,7 @@ query Search($query: String!, $entities: [String!]!, $limit: Int) {
     }
     ... on SearchResultProduct {
       name
+      type
     }
     ... on SearchResultPartner {
       name
@@ -49,6 +51,8 @@ query Search($query: String!, $entities: [String!]!, $limit: Int) {
       code
       customerName
       customerPhone
+      imeil
+      status
     }
   }
 }

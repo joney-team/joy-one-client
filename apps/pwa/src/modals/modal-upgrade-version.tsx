@@ -1,13 +1,13 @@
 "use client";
 
+import { useApp } from "@/app.context";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
-import { useApp } from "@/app.context";
 import { getAppConfig } from "@/service";
+import { Trans } from "@lingui/react/macro";
 import { Anchor, Group, Modal, Stack, Text, Title, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { FC, useEffect } from "react";
-import { Trans } from "@lingui/react/macro";
 
 export const ModalUpgradeVersion: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);

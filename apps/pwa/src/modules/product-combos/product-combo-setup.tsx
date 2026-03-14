@@ -3,10 +3,10 @@
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { numberColumn } from "@/components/list/columns/number-column";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Badge, em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
@@ -23,9 +23,9 @@ export const ProductComboSetup: FC = () => {
         icon={IconSettings}
         name={<Trans>List combos</Trans>}
         query={QUERY_PRODUCT_COMBOS}
-        fixedParams={{ type: ProductType.COMBO }}
+        fixedParams={{ type: ProductType.Combo }}
         creatable={{
-          onCreate: () => OnProductModal({ type: ProductType.COMBO }),
+          onCreate: () => OnProductModal({ type: ProductType.Combo }),
           permission: WorkspacePermission.PRODUCTS_SERVICES_WRITE,
         }}
         columns={{

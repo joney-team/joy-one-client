@@ -1,27 +1,35 @@
 "use server";
 
+import { StorageKey } from "@/constants/storage-key";
+import type {
+  AuthSignInWithEmailPasswordInput,
+  AuthSignUpWithEmailPasswordInput,
+  AuthTokenResult,
+} from "@/graphql/types.graphql";
 import { cookies } from "next/headers";
 import { apiServerSide } from "../apis/server";
-import type {
-  AuthMeDto,
-  AuthRefreshTokenDto,
-  AuthSignInWithEmailPasswordDto,
-  AuthSignUpWithEmailPasswordDto,
-  AuthTokenResult,
-} from "./auth-types";
-import type { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
-import { StorageKey } from "@/constants/storage-key";
+import type { AuthRefreshTokenInput } from "./auth-types";
 
 export async function saveTokens(tokens: AuthTokenResult) {
   const cookieStore = await cookies();
   await Promise.all([
-    cookieStore.set(StorageKey.ACCESS_TOKEN, tokens.accessToken),
-    cookieStore.set(StorageKey.REFRESH_TOKEN, tokens.refreshToken),
+    cookieStore.set(StorageKey.ACCESS_TOKEN, tokens.accessToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 60 * 15,
+    }),
+    cookieStore.set(StorageKey.REFRESH_TOKEN, tokens.refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      maxAge: 60 * 60 * 24 * 30,
+    }),
   ]);
 }
 
-export const serverSignInWithEmailPassword = async (dto: AuthSignInWithEmailPasswordDto) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", dto);
+export const serverSignInWithEmailPassword = async (input: AuthSignInWithEmailPasswordInput) => {
+  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", input);
   await saveTokens(result);
   return result;
 };
@@ -44,16 +52,12 @@ export const serverSignInWithFirebase = async (idToken: string, username?: strin
   return result;
 };
 
-export const serverSignUpWithEmailPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
+export const serverSignUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
+  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", input);
   await saveTokens(result);
   return result;
 };
 
-export const serverAuthMe = async (dto: AuthMeDto) => {
-  return apiServerSide.post<AuthUserDataFragment>("/auth/me", dto);
-};
-
-export const serverRefreshToken = async (dto: AuthRefreshTokenDto) => {
-  return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", dto);
+export const serverRefreshToken = async (input: AuthRefreshTokenInput) => {
+  return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", input);
 };

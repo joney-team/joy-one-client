@@ -3,14 +3,15 @@
 import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductType } from "@/graphql/enums.graphql";
+import { ProductEntity } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import { productTypes } from "../products-constants";
 
 interface ProductSelectorProps
   extends Omit<SelectorProps<ProductEntity>, "onSelect" | "onSearch" | "renderOption" | "target"> {
@@ -40,7 +41,7 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
         })
       }
       renderOption={(product) => {
-        const Icon = getProductIcon(product.type);
+        const { icon: Icon } = productTypes[product.type as ProductType];
 
         return (
           <Combobox.Option value={product._id} key={product._id}>

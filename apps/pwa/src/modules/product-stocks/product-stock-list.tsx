@@ -6,9 +6,8 @@ import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { numberColumn } from "@/components/list/columns/number-column";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductColumn } from "@/modules/products/components/product-column";
-import { ProductType } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -33,7 +32,7 @@ export const ProductStockList: FC = () => {
             columns={{
               createdAt: dateTimeColumn({ sortable: true, name: <Trans>Time</Trans> }),
               productId: ProductColumn({
-                type: ProductType.PRODUCT,
+                type: ProductType.Product,
                 name: <Trans>Product</Trans>,
                 valuePath: "product",
                 extraInfos: (value) => {

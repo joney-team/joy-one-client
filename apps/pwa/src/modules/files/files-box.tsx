@@ -1,12 +1,12 @@
 "use client";
 
-import { useList } from "@/components/list/use-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
-import { detectFileType, getFiles, removeFile } from "@/modules/files/file-service";
+import { detectFileType } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { nonLoading } from "@/utils/non-loading";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -27,6 +27,10 @@ import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import { Renderer } from "../../components/renderer";
 import { FileBoxCard } from "./files-box-card";
 import { useUploadFile } from "./hooks/use-upload-file";
+
+import { FileDataFragment } from "./graphql/fragmentFile.graphql";
+import MUTATAION_REMOVE_FILE from "./graphql/mutationRemoveFile.graphql";
+import QUERY_FILES from "./graphql/queryFiles.graphql";
 
 const ModalFileGallery = dynamic(
   () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
@@ -72,13 +76,16 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     setRawFiles(files);
   };
 
-  const uploadedFiles = useList({
-    autoFetch: !!props.refs,
-    id: `uploaded-files-${props.refs?.join(",")}`,
-    fetch: (p) => {
-      if (!props.refs) return { count: 0, data: [] };
-      return getFiles({ ...p, refs: props.refs, strictRelated: true });
+  const [removeFile] = useMutation(MUTATAION_REMOVE_FILE);
+
+  const { data: filesData, refetch } = useQuery(QUERY_FILES, {
+    variables: {
+      query: {
+        refs: props.refs,
+      },
     },
+    fetchPolicy: "cache-and-network",
+    nextFetchPolicy: "cache-and-network",
   });
 
   const addFile = async (_fs: File[]) => {
@@ -89,7 +96,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
         _files.map((file) => {
           return uploadFile(file, { refs: props.refs });
         })
-      ).then(() => uploadedFiles.fetch(true, { isSilient: true }));
+      ).then(() => refetch());
     } else {
       if (props.replace) {
         setRawFiles(_files);
@@ -103,7 +110,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     }
   };
 
-  const onRemove = async (file: FileEntity | File) => {
+  const onRemove = async (file: FileDataFragment | File) => {
     if (file instanceof File) {
       setRawFiles((s) => {
         const _data = s.filter((v) => v !== file);
@@ -111,16 +118,14 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
         return _data;
       });
     } else {
-      await removeFile(file._id);
-      uploadedFiles.fetch(true, { isSilient: true });
+      await removeFile({ variables: { fileId: file._id } });
+      refetch();
     }
   };
 
-  useEventsListener([EventType.FileNew, EventType.FileRemoved], () =>
-    uploadedFiles.fetch(true, { isSilient: true })
-  );
+  useEventsListener([EventType.FileNew, EventType.FileRemoved], () => refetch());
 
-  const length = uploadedFiles.data.length + rawFiles.length;
+  const length = filesData?.list.results.length ?? 0 + rawFiles.length;
 
   useImperativeHandle(
     ref,
@@ -159,7 +164,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
         >
           <Renderer visible={length > 0}>
             <Group gap={10}>
-              {uploadedFiles.data.map((file, index) => {
+              {filesData?.list.results.map((file, index) => {
                 const specificDisabled = props.specificDisabledRelated?.find(
                   (v) => !!(file as any)[v]
                 );
@@ -172,7 +177,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                     onRemove={() => onRemove(file)}
                     onGallery={() =>
                       modalFileGalleryRef.current?.open({
-                        files: uploadedFiles.data,
+                        files: filesData?.list.results ?? [],
                         index,
                         disabled: props.disabled,
                       })

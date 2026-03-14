@@ -7,7 +7,7 @@ export type FilesQueryVariables = Types.Exact<{
 }>;
 
 
-export type FilesQuery = { __typename: 'Query', list: { __typename: 'FilesPaginated', total: number, results: Array<{ __typename: 'File', refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, _id: string, type: Types.FileType, fileName: string, path: string, thumbnail: string | null, externalUrl: string | null, relativePath: string | null, size: number | null, ref: string | null, relatedCustomerId: string | null, relatedReceiptId: string | null, relatedHrmTimekeepingId: string | null, relatedMessageId: string | null, relatedMessageBoxId: string | null, relatedProductId: string | null, uploadByUserId: string | null, url: string }> } };
+export type FilesQuery = { __typename: 'Query', list: { __typename: 'FilesPaginated', total: number, results: Array<{ __typename: 'File', _id: string, refs: Array<string> | null, createdAt: number | null, updatedAt: number | null, type: Types.FileType, fileName: string, path: string, thumbnail: string | null, relativePath: string | null, size: number | null, ref: string | null, uploadByUserId: string | null, url: string }> } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

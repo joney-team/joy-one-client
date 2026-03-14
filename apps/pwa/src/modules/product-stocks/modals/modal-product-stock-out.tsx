@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
+import { ProductType } from "@/graphql/enums.graphql";
 import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
 import {
   productStockOut,
@@ -12,7 +13,7 @@ import {
   ProductStockRecordType,
 } from "@/modules/product-stocks/product-stocks-types";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductEntity } from "@/modules/products/products-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -88,7 +89,7 @@ export const ModalProductStockOut: FC<{
         <Stack gap={10}>
           <Stack>
             <ProductSelector
-              type={ProductType.PRODUCT}
+              type={ProductType.Product}
               isStockCheck
               excludeIds={form.values.product?._id ? [form.values.product?._id] : []}
               onSelect={(product) => form.setFieldValue("product", product)}

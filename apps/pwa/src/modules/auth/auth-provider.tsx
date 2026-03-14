@@ -5,7 +5,11 @@ import { useApp } from "@/app.context";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
-import { UpdateUserProfileInput } from "@/graphql/types.graphql";
+import {
+  AuthSignInWithEmailPasswordInput,
+  AuthSignUpWithEmailPasswordInput,
+  UpdateUserProfileInput,
+} from "@/graphql/types.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
 import {
@@ -41,6 +45,7 @@ import {
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
+  serverSignUpWithEmailPassword,
 } from "./auth-server";
 import {
   clearTokens,
@@ -48,17 +53,13 @@ import {
   getRefreshToken,
   getSessionId,
   onFacebookLogin,
-  saveTokens,
+  saveClientTokens,
   setSessionId,
   setWorkspaceAuthSessionId,
 } from "./auth-service";
-import type {
-  AuthContext,
-  AuthSignInWithEmailPasswordDto,
-  AuthSignUpWithEmailPasswordDto,
-  AuthTokenResult,
-} from "./auth-types";
+import type { AuthContext } from "./auth-types";
 import { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
+import MUTATION_SIGN_OUT from "./graphql/mutationSignOut.graphql";
 import MUTATION_UPDATE_USER_PROFILE from "./graphql/mutationUpdateUserProfile.graphql";
 import QUERY_AUTH_USER from "./graphql/queryAuthUser.graphql";
 
@@ -134,6 +135,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
       // User information
       const accessToken = await getAccessToken();
+
+      if (!isAuthMigratedResult.data.isMigrated && accessToken) {
+        await axios.post(`/api/auth-migrate`, {
+          accessToken: accessToken,
+          refreshToken: await getRefreshToken(),
+        });
+      }
+
       if (accessToken) {
         authResult = await client
           .query({
@@ -151,13 +160,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (type === "auth") {
         postAppChannelMessage("SIGN_IN");
       }
-
-      if (!isAuthMigratedResult.data.isMigrated) {
-        await axios.post(`/api/auth-migrate`, {
-          accessToken: accessToken,
-          refreshToken: await getRefreshToken(),
-        });
-      }
     } catch (error) {
       console.log(`Error when initializing auth > ${error}`);
     }
@@ -172,9 +174,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     router.replace("/");
   };
 
-  const signOut = async () => {
+  const [signOut] = useMutation(MUTATION_SIGN_OUT);
+
+  const handleSignOut = async () => {
     try {
-      await Promise.all([apiClient.post(`/auth/sign-out`), firebaseAuth.signOut()]);
+      await Promise.all([signOut(), firebaseAuth.signOut()]);
       clearTokens();
       onReset();
       client.cache.reset();
@@ -186,7 +190,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const handleSignInWithFirebase = async (idToken: string, username?: string) => {
     const tokens = await serverSignInWithFirebase(idToken, username);
-    await saveTokens(tokens);
+    await saveClientTokens(tokens);
     await initialize("auth");
   };
 
@@ -207,7 +211,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     try {
       const authResponse = await onFacebookLogin();
       const tokens = await serverSignInWithFacebook(authResponse.accessToken);
-      await saveTokens(tokens);
+      await saveClientTokens(tokens);
       await initialize("auth");
       localStorage.setItem(StorageKey.META_ACCESS_TOKEN, authResponse.accessToken);
     } catch (error) {
@@ -229,15 +233,15 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordDto) => {
+  const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordInput) => {
     const result = await serverSignInWithEmailPassword(dto);
-    await saveTokens(result);
+    await saveClientTokens(result);
     await initialize("auth");
   };
 
-  const signUpWithEmailPassword = async (dto: AuthSignUpWithEmailPasswordDto) => {
-    const tokens = await apiClient.post<AuthTokenResult>("/auth/sign-up/email-password", dto);
-    await saveTokens(tokens);
+  const signUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
+    const result = await serverSignUpWithEmailPassword(input);
+    await saveClientTokens(result);
     await initialize("auth");
   };
 
@@ -311,7 +315,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const signOutOtherDevices = async () => {
     const tokens = await apiClient.post(`/auth/sign-out/other-devices`);
-    await saveTokens(tokens);
+    await saveClientTokens(tokens);
   };
 
   const syncUserLocale = async () => {
@@ -395,7 +399,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     device: device!,
     user: user!,
     isInitialized,
-    signOut,
+    signOut: handleSignOut,
     updateProfile,
     signInWithEmailAndPassword,
     signUpWithEmailPassword,

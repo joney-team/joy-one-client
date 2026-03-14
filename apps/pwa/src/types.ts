@@ -138,22 +138,6 @@ export interface AppCurrency {
   symbolPosition?: "prefix" | "suffix";
 }
 
-export interface AppConfig {
-  name: string;
-  version: string;
-  timeZone: string;
-  UTC: string;
-  workspaceDomainIP: string;
-  metaAppId: string;
-  metaAppVersion: string;
-  zaloAppId: string;
-}
-
-export enum EntitySource {
-  INTERNAL = "INTERNAL",
-  IMPORT = "IMPORT",
-}
-
 export interface AppMetadata {
   title: string;
   webURL: string;

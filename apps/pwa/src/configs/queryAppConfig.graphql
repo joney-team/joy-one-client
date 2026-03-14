@@ -1,16 +1,7 @@
+#import "./fragmentAppConfig.graphql"
+
 query AppConfig {
   appConfig {
-    name
-    version
-    timeZone
-    UTC
-    workspaceDomainIP
-    metaAppId
-    metaAppScope
-    metaAppVersion
-    zaloAppId
-    firebase {
-      appId
-    }
+    ...AppConfigData
   }
 }

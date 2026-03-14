@@ -1,9 +1,14 @@
+import QUERY_APP_CONFIG from "@/configs/queryAppConfig.graphql";
 import config from "@joy-one-client/config";
-import { apiClient } from "./modules/apis";
-import { AppConfig } from "./types";
+import { AppConfigDataFragment } from "./configs/fragmentAppConfig.graphql";
+import { apolloClient } from "./modules/apollo/apollo-client";
 
-export function getAppConfig() {
-  return apiClient.get<AppConfig>(`/config`);
+export async function getAppConfig(): Promise<AppConfigDataFragment> {
+  const result = await apolloClient.query({
+    query: QUERY_APP_CONFIG,
+  });
+
+  return result.data?.appConfig!;
 }
 
 export function isExtendedApp() {

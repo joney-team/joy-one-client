@@ -6,12 +6,12 @@ import { Image } from "@/components/image";
 import { Modal } from "@/components/modal/modal";
 import { FileType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { downloadFileFromURL, removeFile } from "@/modules/files/file-service";
+import { downloadFileFromURL } from "@/modules/files/file-service";
 import { FileEntity } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
-import { useQuery } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
@@ -27,10 +27,8 @@ import {
 } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useEffect, useImperativeHandle, useState } from "react";
 import { useFileSize } from "../files-hooks";
-import QUERY_FILE_INFO, {
-  type GetFileInfoQuery,
-  type GetFileInfoQueryVariables,
-} from "./queryFileInfo.graphql";
+import MUTATAION_REMOVE_FILE from "../graphql/mutationRemoveFile.graphql";
+import QUERY_FILE_INFO from "../graphql/queryFileInfo.graphql";
 
 export interface ModalFileGalleryArgs {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -60,6 +58,8 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
     const fileSize = useFileSize(renderFileUrl(activeFile?.url));
     const disabled = args?.disabled || args?.readonly;
 
+    const [removeFile] = useMutation(MUTATAION_REMOVE_FILE);
+
     const onClose = () => {
       setArgs(null);
     };
@@ -78,7 +78,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
     const bodyHeight = layout.height - head;
     const renderFile = parseFile(activeFile?.url || "");
 
-    const fileInfo = useQuery<GetFileInfoQuery, GetFileInfoQueryVariables>(QUERY_FILE_INFO, {
+    const fileInfo = useQuery(QUERY_FILE_INFO, {
       skip: !renderFile.fileId,
       variables: { fileId: renderFile.fileId || "" },
     });
@@ -103,7 +103,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
 
     const onRemove = async () => {
       if (!activeFile || !activeFile._id) return;
-      await removeFile(activeFile._id)
+      await removeFile({ variables: { fileId: activeFile._id } })
         .then(async () => {
           if (!args) return;
           const files = args.files.filter(

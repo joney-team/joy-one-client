@@ -1,0 +1,7 @@
+#import "./fragmentFile.graphql"
+
+mutation VerifyExternalStorageDna($input: VerifyExternalStorageDnaInput!) {
+  verifyExternalStorageDna(input: $input) {
+    ...FileData
+  }
+}

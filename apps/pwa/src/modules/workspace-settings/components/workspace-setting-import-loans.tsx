@@ -1,13 +1,13 @@
 import { Button } from "@/components/buttons/button";
-import { useColor } from "@/modules/theme/use-color";
-import { EntitySource } from "@/types";
+import { EntitySource } from "@/graphql/enums.graphql";
+import { CustomerInput } from "@/graphql/types.graphql";
 import { isCustomerPhoneExisted } from "@/modules/customers/customer-service";
+import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { ActionIcon, Card, Group, SimpleGrid, Stack, Text } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { IconFileImport, IconFileTypeJs, IconX } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
-import { CustomerInput } from "@/graphql/types.graphql";
 
 interface Result {
   customers: {
@@ -48,7 +48,7 @@ export const WorkspaceSettingImportLoans: FC = () => {
             createdAt: createdAt
               ? +((createdAt as string).match(/Date\((\d+)\)/)?.[1] ?? 0)
               : undefined,
-            source: EntitySource.IMPORT,
+            source: EntitySource.Import,
           };
 
           acc.push(data);

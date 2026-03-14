@@ -2,10 +2,10 @@
 
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
+import { ProductType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductEntity, ProductType } from "@/modules/products/products-types";
+import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
@@ -34,6 +34,7 @@ import {
 import { FC, Fragment } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
+import { productTypes } from "../products-constants";
 
 export const ProductCard: FC<
   {
@@ -47,7 +48,7 @@ export const ProductCard: FC<
   const { product, isHideEdit, preventLink, onClick, imageSize = 80, ...rest } = props;
   const router = useRouter();
   const workspace = useWorkspace();
-  const Icon = getProductIcon(product.type);
+  const { icon: Icon } = productTypes[product.type];
 
   return (
     <Card
@@ -57,8 +58,8 @@ export const ProductCard: FC<
       onClick={() => {
         if (onClick) return onClick();
         if (preventLink) return;
-        if (product.type === ProductType.SERVICE) router.push(`/services/${product._id}`);
-        if (product.type === ProductType.PRODUCT) router.push(`/products/${product._id}`);
+        if (product.type === ProductType.Service) router.push(`/services/${product._id}`);
+        if (product.type === ProductType.Product) router.push(`/products/${product._id}`);
       }}
       style={{ cursor: "pointer" }}
       {...rest}
@@ -105,9 +106,9 @@ export const ProductCard: FC<
               </Text>
             </Group>
 
-            <Renderer visible={product.type === ProductType.COMBO}>
+            <Renderer visible={product.type === ProductType.Combo}>
               {product.combos?.map((combo, i) => {
-                const ComboIcon = getProductIcon(combo.product.type);
+                const { icon: ComboIcon } = productTypes[ProductType.Combo];
                 return (
                   <Group key={i} gap={5}>
                     <ThemeIcon variant="transparent" size="xs" color="dark" radius={100} ml={-3}>
@@ -161,7 +162,7 @@ export const ProductCard: FC<
               </Group>
             )}
 
-            <Renderer visible={product.type === ProductType.VOUCHER}>
+            <Renderer visible={product.type === ProductType.Voucher}>
               <Group gap={5}>
                 <ThemeIcon variant="transparent" size="xs" color="dark" radius={100} ml={-3}>
                   <IconGiftCard size={20} />

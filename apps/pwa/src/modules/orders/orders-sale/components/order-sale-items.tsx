@@ -8,16 +8,16 @@ import { QuantityInput } from "@/components/inputs/quantity-input";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { getProductIcon } from "@/modules/products/products-service";
-import { ProductType } from "@/modules/products/products-types";
+import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { t } from "@lingui/core/macro";
 import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
+import { ProductType } from "@/graphql/enums.graphql";
+import { Trans, useLingui } from "@lingui/react/macro";
 
 export const OrderSaleItemComponent: FC<{
   index: number;
@@ -25,6 +25,7 @@ export const OrderSaleItemComponent: FC<{
   onUpdate: (item: OrderItem) => void;
   onRemove: () => void;
 }> = ({ index, item, onUpdate, onRemove }) => {
+  const { t } = useLingui();
   const color = useColor();
   const { view } = useLayout();
 
@@ -77,7 +78,7 @@ export const OrderSaleItemComponent: FC<{
                     value={item.assigneeUsers}
                     onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
                     tooltipLabel={
-                      item.product.type === ProductType.PRODUCT
+                      item.product.type === ProductType.Product
                         ? t`Assignee products revenue`
                         : t`Assignee services revenue`
                     }
@@ -136,7 +137,7 @@ export const OrderSaleItemComponent: FC<{
 
               <EntityImage
                 src={item.product.image}
-                icon={getProductIcon(item.product.type)}
+                icon={productTypes[item.product.type].icon}
                 size={40}
                 readonly
               />
@@ -151,8 +152,8 @@ export const OrderSaleItemComponent: FC<{
                   style={{ cursor: "pointer" }}
                   onClick={() => {
                     openInput({
-                      title: item.note ? t`Edit note` : t`Add note`,
-                      label: t`Note`,
+                      title: item.note ? <Trans>Edit note</Trans> : <Trans>Add note</Trans>,
+                      label: <Trans>Note</Trans>,
                       value: item.note,
                       type: InputModalType.TEXTAREA,
                       onDone: (value) => onUpdate({ ...item, note: value }),
@@ -167,7 +168,7 @@ export const OrderSaleItemComponent: FC<{
                   )}
 
                   <Text fz={12} c={color("blue")}>
-                    {item.note || t`Note`}
+                    {item.note || <Trans>Note</Trans>}
                   </Text>
                 </Group>
               </Stack>
@@ -179,7 +180,7 @@ export const OrderSaleItemComponent: FC<{
                 value={item.assigneeUsers}
                 onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
                 tooltipLabel={
-                  item.product.type === ProductType.PRODUCT
+                  item.product.type === ProductType.Product
                     ? t`Assignee products revenue`
                     : t`Assignee services revenue`
                 }
@@ -266,19 +267,19 @@ export const OrderSaleItems: FC = () => {
       <Stack gap={0}>
         {orderSale.activeOrder.items.length === 0 && (
           <Stack justify="center" align="center">
-            <Empty message={t`Add product/service to order`} hideBorder />
+            <Empty message={<Trans>Add product/service to order</Trans>} hideBorder />
           </Stack>
         )}
 
         {view === "mobile" && (
           <Group justify="center" align="center" py={20}>
             <ProductSelector
-              type={[ProductType.PRODUCT, ProductType.SERVICE]}
+              type={[ProductType.Product, ProductType.Service]}
               onSelect={(product) => orderSale.addProduct(product)}
               target={(ctx) => {
                 return (
                   <Button leftIcon={IconPlus} variant="outline" color="gray" onClick={ctx.toggle}>
-                    {t`Add product/service to order`}
+                    <Trans>Add product/service to order</Trans>
                   </Button>
                 );
               }}

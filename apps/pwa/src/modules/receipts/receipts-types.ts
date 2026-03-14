@@ -1,4 +1,4 @@
-import { ProductType } from "@/modules/products/products-types";
+import { ProductType } from "@/graphql/types.graphql";
 import { LoanReceiptReport } from "../loans/loans-types";
 
 export interface ReceiptProductReport {

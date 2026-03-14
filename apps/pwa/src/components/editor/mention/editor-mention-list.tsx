@@ -1,9 +1,6 @@
 "use client";
 
-import QUERY_SEARCH, {
-  type SearchQuery,
-  type SearchQueryVariables,
-} from "@/modules/search/graphql/querySearch.graphql";
+import QUERY_SEARCH, { type SearchQuery } from "@/modules/search/graphql/querySearch.graphql";
 import { classNames } from "@/utils/ui.utils";
 import { Card, Group, Loader, Stack, Text, ThemeIcon } from "@mantine/core";
 
@@ -141,10 +138,7 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
   const [isHidden, setIsHidden] = useState(false);
   const refClickOutside = useClickOutside(() => setIsHidden(true));
 
-  const { data: searchResult, loading: isSearchLoading } = useQuery<
-    SearchQuery,
-    SearchQueryVariables
-  >(QUERY_SEARCH, {
+  const { data: searchResult, loading: isSearchLoading } = useQuery(QUERY_SEARCH, {
     variables: {
       query: textSearch,
       limit: 5,

@@ -3,8 +3,8 @@
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { ComboIllustration } from "@/components/illustrations/combo";
+import { ProductType } from "@/graphql/enums.graphql";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductType } from "@/modules/products/products-types";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Stack, Title } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -30,7 +30,7 @@ export const ProductCombosOnboarding: FC = () => {
             <Center>
               <Button
                 leftIcon={IconPlus}
-                onClick={() => OnProductModal({ type: ProductType.COMBO })}
+                onClick={() => OnProductModal({ type: ProductType.Combo })}
               >
                 <Trans>Create combos</Trans>
               </Button>

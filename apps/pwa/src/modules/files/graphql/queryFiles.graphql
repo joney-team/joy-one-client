@@ -1,27 +1,10 @@
+#import "./fragmentFile.graphql"
+
 query Files($limit: Float, $offset: Float, $query: JSONObject) {
   list: files(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      refs
-      createdAt
-      updatedAt
-      _id
-      type
-      fileName
-      path
-      thumbnail
-      externalUrl
-      relativePath
-      size
-      ref
-      relatedCustomerId
-      relatedReceiptId
-      relatedHrmTimekeepingId
-      relatedMessageId
-      relatedMessageBoxId
-      relatedProductId
-      uploadByUserId
-      url
+      ...FileData
     }
   }
 }

@@ -6,18 +6,14 @@ import { Editor } from "@/components/editor/editor";
 import { ImageInput } from "@/components/inputs/image-input";
 import { LaunchingSoon } from "@/components/launching-soon";
 import { Renderer } from "@/components/renderer";
+import { ProductType } from "@/graphql/enums.graphql";
 import { CategoryType } from "@/modules/categories/category-types";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
-import {
-  ProductCombo,
-  ProductEntity,
-  ProductSupply,
-  ProductType,
-} from "@/modules/products/products-types";
+import { ProductCombo, ProductEntity, ProductSupply } from "@/modules/products/products-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -61,8 +57,8 @@ export type FormProductProps = {
 );
 
 const defaultUnitPerType: { [key in ProductType]?: () => string } = {
-  [ProductType.COMBO]: () => t`Combo`,
-  [ProductType.VOUCHER]: () => t`Voucher`,
+  [ProductType.Combo]: () => t`Combo`,
+  [ProductType.Voucher]: () => t`Voucher`,
 };
 
 enum FormProductTab {
@@ -81,7 +77,7 @@ const FormProductCombo: FC<{
   return (
     <Group wrap="nowrap" flex={1}>
       <ProductSelector
-        type={[ProductType.PRODUCT, ProductType.SERVICE]}
+        type={[ProductType.Product, ProductType.Service]}
         onSelect={(product) => onChange({ ...combo, product, productId: product._id })}
         target={(ctx) => {
           return (
@@ -166,7 +162,7 @@ export const FormProduct: FC<
         }
       },
       voucherAmount: (value: number) => {
-        if (type === ProductType.VOUCHER) {
+        if (type === ProductType.Voucher) {
           if (typeof value !== "number") return t`Must be provided`;
           if (value < 0) return t`Minimum amount is ${0}`;
         }
@@ -178,7 +174,7 @@ export const FormProduct: FC<
     setIsSubmitting(true);
     try {
       // Validate
-      if (type === ProductType.COMBO) {
+      if (type === ProductType.Combo) {
         if (combos.length === 0)
           throw new Error(`${t`Must be provided`} ${t`Products`}/${t`Services`}`);
       }
@@ -246,7 +242,7 @@ export const FormProduct: FC<
 
                 <TextInput label={t`Code`} {...form.getInputProps("code")} />
 
-                <Renderer visible={type === ProductType.PRODUCT}>
+                <Renderer visible={type === ProductType.Product}>
                   <NumberInput
                     label={t`Min per use`}
                     description={t`Default is ${1}`}
@@ -297,7 +293,7 @@ export const FormProduct: FC<
                   {...form.getInputProps("price")}
                 />
 
-                <Renderer visible={type === ProductType.VOUCHER}>
+                <Renderer visible={type === ProductType.Voucher}>
                   <NumberInput
                     withAsterisk
                     label={t`Voucher amount`}
@@ -330,7 +326,7 @@ export const FormProduct: FC<
                     {...form.getInputProps("isHiddenInReceiptWhenNoPrice")}
                   />
 
-                  <Renderer visible={type === ProductType.PRODUCT}>
+                  <Renderer visible={type === ProductType.Product}>
                     <Switch
                       label={t`Stock check`}
                       checked={form.values.isStockCheck}
@@ -356,7 +352,11 @@ export const FormProduct: FC<
                   </Renderer>
                 </Stack>
 
-                <Renderer visible={[ProductType.PRODUCT, ProductType.SERVICE].includes(type)}>
+                <Renderer
+                  visible={([ProductType.Product, ProductType.Service] as ProductType[]).includes(
+                    type
+                  )}
+                >
                   <Stack>
                     <Divider mb={-10} label={t`Product supplies`} labelPosition="left" fw={700} />
                     <Text fz={em(10)} c="gray">
@@ -404,7 +404,7 @@ export const FormProduct: FC<
 
                       <Group mt={5}>
                         <ProductSelector
-                          type={[ProductType.PRODUCT]}
+                          type={[ProductType.Product]}
                           excludeIds={[...supplies.map((s) => s.productId), product?._id || ""]}
                           onSelect={(product) => {
                             handlers.append({
@@ -433,7 +433,7 @@ export const FormProduct: FC<
                   </Stack>
                 </Renderer>
 
-                <Renderer visible={type === ProductType.COMBO}>
+                <Renderer visible={type === ProductType.Combo}>
                   <Stack>
                     <Divider
                       mb={-10}
@@ -470,7 +470,7 @@ export const FormProduct: FC<
                       <Group>
                         <ProductSelector
                           excludeIds={combos.map((c) => c.productId)}
-                          type={[ProductType.PRODUCT, ProductType.SERVICE]}
+                          type={[ProductType.Product, ProductType.Service]}
                           isStockCheck={true}
                           onSelect={(product) => {
                             if (combos.some((c) => c.productId === product._id)) return;
@@ -500,7 +500,7 @@ export const FormProduct: FC<
                   </Stack>
                 </Renderer>
 
-                <Renderer visible={type === ProductType.VOUCHER}>
+                <Renderer visible={type === ProductType.Voucher}>
                   <Stack>
                     <Divider
                       mb={-10}
@@ -540,7 +540,7 @@ export const FormProduct: FC<
 
                     <Group>
                       <ProductSelector
-                        type={[ProductType.SERVICE, ProductType.PRODUCT]}
+                        type={[ProductType.Service, ProductType.Product]}
                         excludeIds={voucherIncludeProducts.map((p) => p._id)}
                         onSelect={(product) => {
                           if (voucherIncludeProducts.some((p) => p._id === product._id)) return;
@@ -570,7 +570,7 @@ export const FormProduct: FC<
                     <Group>
                       <ProductSelector
                         excludeIds={voucherIncludeProducts.map((p) => p._id)}
-                        type={[ProductType.SERVICE, ProductType.PRODUCT]}
+                        type={[ProductType.Service, ProductType.Product]}
                         onSelect={(product) => {
                           if (combos.some((c) => c.productId === product._id)) return;
                           voucherExcludeProductsHandler.append(product);

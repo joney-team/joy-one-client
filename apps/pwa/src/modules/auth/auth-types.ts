@@ -23,42 +23,8 @@ export interface AuthSignUpWithEmailPasswordDto {
   avatar?: string;
 }
 
-export interface AuthRefreshTokenDto {
+export interface AuthRefreshTokenInput {
   refreshToken: string;
-}
-
-export interface AuthSignUpWithEmailPasswordDto {
-  name: string;
-  email: string;
-  plainPassword: string;
-  avatar?: string;
-}
-
-export type AuthTokenResult = {
-  accessToken: string;
-  refreshToken: string;
-};
-
-export interface AuthSignOutOtherDevicesDto {
-  deviceId: string;
-}
-
-export interface AuthRequestRenewUserPasswordDto {
-  email: string;
-}
-
-export interface AuthVerifyRenewPasswordCodeDto {
-  code: string;
-}
-
-export interface AuthRenewPasswordByCodeDto {
-  code: string;
-  plainPassword: string;
-}
-
-export interface AuthMeDto {
-  accessToken: string;
-  deviceId: string;
 }
 
 export interface AuthContext {

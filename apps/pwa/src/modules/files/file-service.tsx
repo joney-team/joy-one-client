@@ -1,9 +1,6 @@
 "use client";
 
 import { FileType } from "@/graphql/enums.graphql";
-import { ResponseList } from "@/types";
-import { onActionLoad } from "@/utils/actions";
-import { Trans } from "@lingui/react/macro";
 import {
   IMAGE_MIME_TYPE,
   MS_EXCEL_MIME_TYPE,
@@ -11,18 +8,8 @@ import {
   MS_WORD_MIME_TYPE,
   PDF_MIME_TYPE,
 } from "@mantine/dropzone";
-import {
-  Icon,
-  IconFile,
-  IconMusic,
-  IconPdf,
-  IconPhoto,
-  IconTrash,
-  IconVideo,
-} from "@tabler/icons-react";
+import { Icon, IconFile, IconMusic, IconPdf, IconPhoto, IconVideo } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
-import { apiClient } from "../apis";
-import { FileEntity } from "./file-types";
 import { parseFile } from "./files-utils";
 
 export function getFileExtension(fileName: string | File) {
@@ -46,33 +33,12 @@ export function getMineTypeAccept(fileType: FileType[]) {
   return output;
 }
 
-export async function getFiles(query?: any) {
-  return apiClient.get<ResponseList<FileEntity>>(`/files`, { params: query });
-}
-
-export async function removeFileFromRelativePath(relativePath: string) {
-  return apiClient.delete(`/files/paths/${relativePath}`);
-}
-
-export async function removeFile(fileId: string) {
-  return onActionLoad({
-    name: <Trans>Remove file</Trans>,
-    icon: IconTrash,
-    process: () => apiClient.delete(`/files/${fileId}`),
-  });
-}
-
 export async function reducePhotoSize(file: File, option: Options) {
   const isImage = IMAGE_MIME_TYPE.includes(file.type as any);
   if (!isImage) return file;
 
   const reducedFile = new File([await imageCompression(file, option)], file.name);
   return reducedFile;
-}
-
-export async function getFileInfo(rawUrl: string) {
-  const fileName = rawUrl.split("/").pop();
-  return apiClient.get<FileEntity>(`/files/${fileName?.split(".")[0]}/info`);
 }
 
 export const fileTypeIcons: Record<FileType, Icon> = {

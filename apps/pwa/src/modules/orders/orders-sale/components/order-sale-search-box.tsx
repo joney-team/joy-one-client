@@ -6,7 +6,7 @@ import { useList } from "@/components/list/use-list";
 import { ScrollArea } from "@/components/scroll-area";
 import { apiClient } from "@/modules/apis";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
-import { getProductIcon } from "@/modules/products/products-service";
+import { productTypes } from "@/modules/products/products-constants";
 import { ProductEntity } from "@/modules/products/products-types";
 import { SearchCustomer, SearchProduct, SearchResult } from "@/modules/search/search-types";
 import { useColor } from "@/modules/theme/use-color";
@@ -141,7 +141,7 @@ export const OrderSaleSearchBox: FC = () => {
                             <EntityImage
                               src={product.image}
                               size={40}
-                              icon={getProductIcon(product.type)}
+                              icon={productTypes[product.type].icon}
                             />
                             <Stack gap={3}>
                               <Text>{product.name}</Text>
@@ -225,7 +225,7 @@ export const OrderSaleSearchBox: FC = () => {
                           <EntityImage
                             src={product.image}
                             size={40}
-                            icon={getProductIcon(product.type)}
+                            icon={productTypes[product.type].icon}
                           />
                           <Stack gap={3}>
                             <Text>{product.name}</Text>

@@ -1,7 +1,6 @@
 import { ResponseList } from "@/types";
-import { Icon, IconBox, IconCategory2, IconGiftCard, IconPackage } from "@tabler/icons-react";
 import { apiClient } from "../apis";
-import { ProductDto, ProductEntity, ProductType } from "./products-types";
+import { ProductDto, ProductEntity } from "./products-types";
 
 export async function getProducts(query?: any): Promise<ResponseList<ProductEntity>> {
   return apiClient.get<ResponseList<ProductEntity>>(`/products`, { params: query });
@@ -30,23 +29,3 @@ export async function archiveProduct(_id: string) {
 export async function interactProduct(_id: string) {
   return apiClient.patch(`/products/${_id}/interact`).catch(() => false);
 }
-
-export function getProductIcon(type: ProductType) {
-  return {
-    [ProductType.PRODUCT]: IconBox,
-    [ProductType.SERVICE]: IconCategory2,
-    [ProductType.COMBO]: IconPackage,
-    [ProductType.VOUCHER]: IconGiftCard,
-  }[type];
-}
-
-export const productTypeOptions: {
-  [key in ProductType]: {
-    icon: Icon;
-  };
-} = {
-  [ProductType.PRODUCT]: { icon: IconBox },
-  [ProductType.SERVICE]: { icon: IconCategory2 },
-  [ProductType.COMBO]: { icon: IconPackage },
-  [ProductType.VOUCHER]: { icon: IconGiftCard },
-};
