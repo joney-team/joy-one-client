@@ -59,6 +59,7 @@ type AttendanceRecord {
   _id: String!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
+  device: Device!
   deviceId: String!
   isArchived: Boolean
   locationCoordinates: Coordinates
@@ -635,6 +636,11 @@ input CustomerRelationshipContactInput {
 type CustomersPaginated {
   results: [Customer!]!
   total: Float!
+}
+
+input DefaultRecordAttendanceInput {
+  locationCoordinates: CoordinatesInput
+  photoUrl: String
 }
 
 type Device {
@@ -1282,6 +1288,7 @@ type Mutation {
   createTask(input: CreateTaskInput!): Task!
   createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
   createWorkspaceRole(color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
+  defaultAttendanceCaptureRecord(input: DefaultRecordAttendanceInput!): AttendanceRecord!
   deleteCategory(id: String!): Boolean!
   deleteWorkspaceRole(_id: String!): Boolean!
   disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
@@ -1308,6 +1315,7 @@ type Mutation {
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
   renewPassword(input: AuthRenewPasswordByCodeInput!): Boolean!
+  requestAttendanceCaptureRecord(input: RecordAttendanceInput!): AttendanceRecord!
   requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   revertApproveLoan(id: String!): Loan!
@@ -1957,6 +1965,12 @@ enum ReceiptType {
 type ReceiptsPaginated {
   results: [Receipt!]!
   total: Float!
+}
+
+input RecordAttendanceInput {
+  locationCoordinates: CoordinatesInput
+  note: String
+  photoUrl: String
 }
 
 input RegisterDeviceInput {

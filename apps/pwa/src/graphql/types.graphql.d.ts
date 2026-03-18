@@ -82,6 +82,7 @@ export type AttendanceRecord = {
   _id: Scalars['String']['output'];
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
+  device: Device;
   deviceId: Scalars['String']['output'];
   isArchived: Maybe<Scalars['Boolean']['output']>;
   locationCoordinates: Maybe<Coordinates>;
@@ -696,6 +697,11 @@ export type CustomersPaginated = {
   __typename: 'CustomersPaginated';
   results: Array<Customer>;
   total: Scalars['Float']['output'];
+};
+
+export type DefaultRecordAttendanceInput = {
+  locationCoordinates?: InputMaybe<CoordinatesInput>;
+  photoUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type Device = {
@@ -1363,6 +1369,7 @@ export type Mutation = {
   createTask: Task;
   createWorkspaceBranch: WorkspaceBranch;
   createWorkspaceRole: WorkspaceRole;
+  defaultAttendanceCaptureRecord: AttendanceRecord;
   deleteCategory: Scalars['Boolean']['output'];
   deleteWorkspaceRole: Scalars['Boolean']['output'];
   disburseReceipt: Receipt;
@@ -1389,6 +1396,7 @@ export type Mutation = {
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
   renewPassword: Scalars['Boolean']['output'];
+  requestAttendanceCaptureRecord: AttendanceRecord;
   requestRenewPassword: Scalars['Boolean']['output'];
   rescheduleBooking: Booking;
   revertApproveLoan: Loan;
@@ -1630,6 +1638,11 @@ export type MutationCreateWorkspaceRoleArgs = {
 };
 
 
+export type MutationDefaultAttendanceCaptureRecordArgs = {
+  input: DefaultRecordAttendanceInput;
+};
+
+
 export type MutationDeleteCategoryArgs = {
   id: Scalars['String']['input'];
 };
@@ -1750,6 +1763,11 @@ export type MutationRemoveTagArgs = {
 
 export type MutationRenewPasswordArgs = {
   input: AuthRenewPasswordByCodeInput;
+};
+
+
+export type MutationRequestAttendanceCaptureRecordArgs = {
+  input: RecordAttendanceInput;
 };
 
 
@@ -3112,6 +3130,12 @@ export type ReceiptsPaginated = {
   __typename: 'ReceiptsPaginated';
   results: Array<Receipt>;
   total: Scalars['Float']['output'];
+};
+
+export type RecordAttendanceInput = {
+  locationCoordinates?: InputMaybe<CoordinatesInput>;
+  note?: InputMaybe<Scalars['String']['input']>;
+  photoUrl?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type RegisterDeviceInput = {
