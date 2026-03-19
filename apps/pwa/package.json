@@ -28,6 +28,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
+    "@embedpdf/react-pdf-viewer": "^2.9.1",
     "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@floating-ui/react-dom": "^2.1.6",
     "@graphql-codegen/cli": "^6.1.0",

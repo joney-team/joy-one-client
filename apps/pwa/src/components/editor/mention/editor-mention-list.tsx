@@ -131,7 +131,6 @@ const MentionListItem = ({
 };
 
 export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, ref) => {
-  console.log("props", props);
   const textSearch = props.query;
   const { t } = useLingui();
   const [selectedIndex, setSelectedIndex] = useState(0);

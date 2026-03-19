@@ -11,12 +11,23 @@ import { FileEntity } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Anchor, em, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  Anchor,
+  Center,
+  em,
+  Group,
+  Loader,
+  SimpleGrid,
+  Stack,
+  Text,
+} from "@mantine/core";
 import {
   IconBrowser,
   IconChevronLeft,
@@ -25,10 +36,16 @@ import {
   IconTrash,
   IconX,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useEffect, useImperativeHandle, useState } from "react";
 import { useFileSize } from "../files-hooks";
 import MUTATAION_REMOVE_FILE from "../graphql/mutationRemoveFile.graphql";
 import QUERY_FILE_INFO from "../graphql/queryFileInfo.graphql";
+
+const FilePdfViewer = dynamic(() => import("../file-pdf-viewer").then((mod) => mod.FilePdfViewer), {
+  ssr: false,
+  loading: nonLoading,
+});
 
 export interface ModalFileGalleryArgs {
   files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
@@ -107,7 +124,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
         .then(async () => {
           if (!args) return;
           const files = args.files.filter(
-            (v) => typeof v === "object" && v._id !== activeFile._id
+            (v) => typeof v === "object" && v._id !== activeFile._id,
           ) as FileEntity[];
           await args?.onRemoved?.();
           if (files.length === 0) return onClose();
@@ -123,7 +140,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
         process: () =>
           downloadFileFromURL(
             renderFileUrl(activeFile.url),
-            activeFile.fileName || renderFile.name
+            activeFile.fileName || renderFile.name,
           ),
       });
     };
@@ -258,6 +275,10 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                     );
                   }
 
+                  if (renderFile.type === FileType.Pdf) {
+                    return <FilePdfViewer file={activeFile} />;
+                  }
+
                   if (renderFile.type === FileType.Video) {
                     return (
                       <video
@@ -294,5 +315,5 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
         </Modal>
       </Fragment>
     );
-  }
+  },
 );

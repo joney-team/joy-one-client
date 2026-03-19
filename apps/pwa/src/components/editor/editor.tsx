@@ -9,13 +9,11 @@ import TipTapTaskList from "@tiptap/extension-task-list";
 import TextAlign from "@tiptap/extension-text-align";
 import StarterKit from "@tiptap/starter-kit";
 
-import { FileType } from "@/graphql/enums.graphql";
 import { UploadFileOptions } from "@/modules/files/file-types";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { type ModalFilesRef } from "@/modules/files/modals/modal-files";
 import { Box, BoxProps, Loader } from "@mantine/core";
-import { useDebouncedCallback } from "@mantine/hooks";
+import { useDebouncedCallback, useFileDialog } from "@mantine/hooks";
 import {
   getTaskListExtension,
   RichTextEditor,
@@ -26,31 +24,17 @@ import { IconPhoto } from "@tabler/icons-react";
 import TaskItem from "@tiptap/extension-task-item";
 import { Editor as EditorType, Extensions, JSONContent, useEditor } from "@tiptap/react";
 import { BubbleMenu } from "@tiptap/react/menus";
-import {
-  ClipboardEventHandler,
-  forwardRef,
-  Fragment,
-  useImperativeHandle,
-  useMemo,
-  useRef,
-} from "react";
+import { ClipboardEventHandler, forwardRef, Fragment, useImperativeHandle, useMemo } from "react";
 import { ImageResize } from "./image/editor-image-resize";
 
 import { classNames } from "@/utils/ui.utils";
 import styles from "./editor.module.css";
 
-import { nonLoading } from "@/utils/non-loading";
-import dynamic from "next/dynamic";
+import { onActionLoad } from "@/utils/actions";
+import { onError } from "@/utils/exceptions.utils";
+import { Trans } from "@lingui/react/macro";
 import { AttachmentExtension } from "./attachment/editor-attachment";
 import { MentionExtension } from "./mention/editor-mention";
-
-const ModalFiles = dynamic(
-  () => import("@/modules/files/modals/modal-files").then((mod) => mod.ModalFiles),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
 
 interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">> {
   defaultValue?: string | JSONContent | undefined | null;
@@ -69,34 +53,45 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
 
 function InsertImageControl() {
   const { editor } = useRichTextEditorContext();
-  const modalFiles = useRef<ModalFilesRef>(null);
+  const uploadFile = useUploadFile();
 
-  return (
-    <Fragment>
-      <RichTextEditor.Control
-        onClick={() => {
-          modalFiles.current?.open({
-            fileTypes: [FileType.Photo],
-            onSelectedFiles: (files) => {
-              files.forEach((file) => {
+  const fileDialog = useFileDialog({
+    accept: "image/*",
+    multiple: true,
+    onChange(files) {
+      if (!files || files.length === 0) return;
+      fileDialog.reset();
+
+      onActionLoad({
+        name: <Trans>Uploading files</Trans>,
+        process: async () => {
+          await Promise.all(
+            Array.from(files).map(async (file) => {
+              try {
+                const fileInfo = await uploadFile(file);
                 editor?.commands.insertContent({
                   type: "image",
                   attrs: {
-                    src: renderFileUrl(file.path),
+                    src: renderFileUrl(fileInfo.path),
                     style: "width: 500px; height: auto;",
                   },
                 });
-              });
-            },
-          });
-        }}
-        aria-label="Insert star emoji"
-        title="Insert star emoji"
-      >
+                return fileInfo;
+              } catch (error) {
+                onError(error);
+              }
+            }),
+          );
+        },
+      });
+    },
+  });
+
+  return (
+    <Fragment>
+      <RichTextEditor.Control onClick={fileDialog.open}>
         <IconPhoto stroke={1.5} size="1rem" />
       </RichTextEditor.Control>
-
-      <ModalFiles ref={modalFiles} />
     </Fragment>
   );
 }
@@ -128,7 +123,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       autoFocus = false,
       ...rest
     },
-    ref
+    ref,
   ) => {
     const uploadFile = useUploadFile();
 
@@ -162,6 +157,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
 
     const editor = useEditor(
       {
+        immediatelyRender: false,
         extensions: editorExtensions,
         content: defaultValue,
         onUpdate: readonly
@@ -169,11 +165,10 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
           : (e) => {
               onChange(e.editor.getHTML(), e.editor.getJSON(), e.editor.getText());
             },
-        immediatelyRender: false,
         autofocus: autoFocus,
         editable: !readonly,
       },
-      [readonly, editorExtensions]
+      [readonly, editorExtensions],
     );
 
     const onDropImage = async (files: File[]) => {
@@ -306,5 +301,5 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
         </RichTextEditor>
       </Box>
     );
-  }
+  },
 );

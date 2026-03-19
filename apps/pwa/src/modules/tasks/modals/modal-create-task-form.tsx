@@ -25,19 +25,13 @@ import {
   IconUserFilled,
 } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useMemo } from "react";
-import { TaskTimeline } from "../components/task-timeline";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
-import CREATE_TASK_MUTATION, {
-  type CreateTaskMutation,
-  type CreateTaskMutationVariables,
-} from "../graphql/mutationCreateTask.graphql";
-import TASK_STATUS_QUERY, {
-  type TaskStatusesQuery,
-  type TaskStatusesQueryVariables,
-} from "../graphql/queryTaskStatuses.graphql";
-import { useTaskStatuses } from "../hooks/use-task-statuses";
 import { useTaskMenu } from "../components/task-menu/task-menu";
 import { TaskMenuAction } from "../components/task-menu/task-menu-types";
+import { TaskTimeline } from "../components/task-timeline";
+import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import CREATE_TASK_MUTATION from "../graphql/mutationCreateTask.graphql";
+import TASK_STATUS_QUERY from "../graphql/queryTaskStatuses.graphql";
+import { useTaskStatuses } from "../hooks/use-task-statuses";
 import { taskPriorities } from "../tasks-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
 
@@ -58,7 +52,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     {
       fetchPolicy: "cache-and-network",
       nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   useEffect(() => {
@@ -69,9 +63,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     });
   }, [initial?.folder?._id]);
 
-  const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
-    CREATE_TASK_MUTATION
-  );
+  const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
   const form = useForm<Partial<TaskDataFragment> & { status: TaskDataFragment["status"] }>({
     initialValues: {
@@ -80,7 +72,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
       tags: initial?.tags ?? [],
       status: initial?.status ?? DefaultTaskStatusId.TODO,
       statuses: taskStatusesData?.taskStatuses.statuses ?? [],
-      assigneeUsers: initial?.assigneeUsers ?? member ? [member!] : [],
+      assigneeUsers: (initial?.assigneeUsers ?? member) ? [member!] : [],
       ...initial,
     },
   });
