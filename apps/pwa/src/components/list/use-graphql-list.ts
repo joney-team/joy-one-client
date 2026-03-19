@@ -100,7 +100,7 @@ export const useGraphqlList = <T extends BaseData>({
   useEffect(() => {
     if (!isReadyToFetch) return;
     fetch({ variables });
-  }, [isReadyToFetch]);
+  }, [isReadyToFetch, variables]);
 
   useEffect(() => {
     if (!queryData) return;

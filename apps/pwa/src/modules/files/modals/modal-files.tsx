@@ -15,7 +15,15 @@ import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Group, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { IconCheck, IconPhotoSquareRounded, IconUpload } from "@tabler/icons-react";
-import { forwardRef, Fragment, ReactNode, useImperativeHandle, useRef, useState } from "react";
+import {
+  forwardRef,
+  Fragment,
+  ReactNode,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { getMineTypeAccept } from "../file-service";
 import { useUploadFile } from "../hooks/use-upload-file";
 
@@ -56,12 +64,16 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
 
   const [args, setArgs] = useState<ModalFilesArgs | null>(null);
 
+  const params = useMemo(() => {
+    return {
+      strict: true,
+    };
+  }, []);
+
   const files = useGraphqlList({
     query: QUERY_FILES,
     id: "fs",
-    params: {
-      strict: true,
-    },
+    params,
   });
 
   const [_selectedFiles, setSelectedFiles] = useState<string[]>([]);
