@@ -94,13 +94,13 @@ export const useGraphqlList = <T extends BaseData>({
   const [fetch, { data: queryData, loading, error: queryError, refetch, fetchMore }] =
     useLazyQuery<UseGraphqlListData>(args.query, {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
+      nextFetchPolicy: "cache-first",
     });
 
   useEffect(() => {
     if (!isReadyToFetch) return;
     fetch({ variables });
-  }, [isReadyToFetch, variables]);
+  }, [isReadyToFetch]);
 
   useEffect(() => {
     if (!queryData) return;
@@ -232,7 +232,7 @@ export const useGraphqlList = <T extends BaseData>({
         onEvent(e);
       }
     },
-    [args.events, listKey, params, isReadyToFetch, listData, listTotal]
+    [args.events, listKey, params, isReadyToFetch, listData, listTotal],
   );
 
   // Auto fetch when server reconnected
@@ -262,10 +262,10 @@ export const useGraphqlList = <T extends BaseData>({
         setParams(
           Object.keys(params).reduce(
             (acc, key) => ({ ...acc, [`${listKey}-${key}`]: params[key] }),
-            {}
-          )
+            {},
+          ),
         ),
-        { scroll: false }
+        { scroll: false },
       );
     },
     removeParams: (keys: string[]) => {

@@ -15,12 +15,13 @@ import { onError } from "@/utils/exceptions.utils";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
 import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
-import { useMemo, useState, type FC } from "react";
+import { useMemo, useRef, useState, type FC } from "react";
 import { apolloClient } from "../apollo/apollo-client";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useWorkspace } from "../workspaces/workspace-context";
 import QUERY_TEST_ERROR_NOT_FOUND from "./graphql/queryTestErrorNotFound.graphql";
+import { ModalFiles, ModalFilesRef } from "../files/modals/modal-files";
 
 const GraphQLPlayground: FC = () => {
   return (
@@ -151,6 +152,7 @@ export const AdminPlayground: FC = () => {
   const workspace = useWorkspace();
   const [value, setValue] = useState("= @receiptAmount");
   const displayTime = new Date().setHours(15, 0, 0, 0);
+  const modalFiles = useRef<ModalFilesRef | null>(null);
 
   return (
     <Stack p="md" gap="md">
@@ -158,6 +160,16 @@ export const AdminPlayground: FC = () => {
         <Stack p="md">
           <SectionTitle name="GraphQL Playground" />
           <GraphQLPlayground />
+
+          <Button
+            onClick={() =>
+              modalFiles.current?.open({ onSelectedFiles: (files) => console.log("files", files) })
+            }
+          >
+            Open Modal Files
+          </Button>
+
+          <ModalFiles ref={modalFiles} />
         </Stack>
       </Paper>
 

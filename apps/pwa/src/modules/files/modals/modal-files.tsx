@@ -9,7 +9,7 @@ import { configs } from "@/configs/layout.config";
 import { FileType } from "@/graphql/types.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
-import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Group, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -20,8 +20,18 @@ import { getMineTypeAccept } from "../file-service";
 import { useUploadFile } from "../hooks/use-upload-file";
 
 import { useGraphqlList } from "@/components/list/use-graphql-list";
+import { nonLoading } from "@/utils/non-loading";
+import dynamic from "next/dynamic";
 import { FileDataFragment } from "../graphql/fragmentFile.graphql";
 import QUERY_FILES from "../graphql/queryFiles.graphql";
+
+const ModalFileGallery = dynamic(
+  () => import("./modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  {
+    ssr: false,
+    loading: nonLoading,
+  },
+);
 
 export interface ModalFilesArgs {
   fileTypes?: FileType[];
