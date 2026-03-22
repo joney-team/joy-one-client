@@ -37,6 +37,8 @@ import { sumAttendanceRecords } from "../attendance-utils";
 import MUTATION_APPROVE_ATTENDANCE_RECORD from "../graphql/mutationApproveAttendanceRecord.graphql";
 import MUTATION_REJECT_ATTENDANCE_RECORD from "../graphql/mutationRejectAttendanceRecord.graphql";
 import QUERY_ATTENDANCE_RECORDS from "../graphql/queryAttendanceRecords.graphql";
+import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 
 const ModalConfirm = dynamic(
   () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
@@ -65,6 +67,7 @@ export type ModalAttendanceRecordsRef = {
 
 const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) => {
   const { t } = useLingui();
+  const workspace = useWorkspace();
   const [selectedDate, setSelectedDate] = useState(date);
   const { member, loading: isMemberLoading, error: memberError } = useWorkspaceMember(userId);
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
@@ -251,66 +254,68 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
                   </Stack>
                 </Group>
 
-                <Group justify="end">
-                  <Menu>
-                    <Menu.Target>
-                      <ActionIcon variant="subtle" color="gray">
-                        <IconDotsVertical size={16} />
-                      </ActionIcon>
-                    </Menu.Target>
+                {workspace.hasPermission(WorkspacePermission.ATTENDANCE_RECORDS_MANAGER) && (
+                  <Group justify="end">
+                    <Menu>
+                      <Menu.Target>
+                        <ActionIcon variant="subtle" color="gray">
+                          <IconDotsVertical size={16} />
+                        </ActionIcon>
+                      </Menu.Target>
 
-                    <Menu.Dropdown>
-                      {(
-                        [
-                          AttendanceRecordStatus.Pending,
-                          AttendanceRecordStatus.Rejected,
-                        ] as AttendanceRecordStatus[]
-                      ).includes(record.status) && (
-                        <Menu.Item
-                          leftSection={<IconCheck size={16} />}
-                          onClick={() =>
-                            approveAttendance({
-                              variables: {
-                                approveAttendanceRecordId: record._id,
-                              },
-                            })
-                          }
-                        >
-                          <Trans>Approve</Trans>
-                        </Menu.Item>
-                      )}
+                      <Menu.Dropdown>
+                        {(
+                          [
+                            AttendanceRecordStatus.Pending,
+                            AttendanceRecordStatus.Rejected,
+                          ] as AttendanceRecordStatus[]
+                        ).includes(record.status) && (
+                          <Menu.Item
+                            leftSection={<IconCheck size={16} />}
+                            onClick={() =>
+                              approveAttendance({
+                                variables: {
+                                  approveAttendanceRecordId: record._id,
+                                },
+                              })
+                            }
+                          >
+                            <Trans>Approve</Trans>
+                          </Menu.Item>
+                        )}
 
-                      {(
-                        [
-                          AttendanceRecordStatus.Approved,
-                          AttendanceRecordStatus.Pending,
-                        ] as AttendanceRecordStatus[]
-                      ).includes(record.status) && (
-                        <Menu.Item
-                          leftSection={<IconX size={16} />}
-                          onClick={() =>
-                            modalConfirmRef.current?.open({
-                              onConfirm: () =>
-                                rejectAttendance({
-                                  variables: {
-                                    rejectAttendanceRecordId: record._id,
-                                    input: {},
-                                  },
-                                }),
-                              content: (
-                                <Trans>
-                                  Are you sure you want to reject this attendance record?
-                                </Trans>
-                              ),
-                            })
-                          }
-                        >
-                          <Trans>Reject</Trans>
-                        </Menu.Item>
-                      )}
-                    </Menu.Dropdown>
-                  </Menu>
-                </Group>
+                        {(
+                          [
+                            AttendanceRecordStatus.Approved,
+                            AttendanceRecordStatus.Pending,
+                          ] as AttendanceRecordStatus[]
+                        ).includes(record.status) && (
+                          <Menu.Item
+                            leftSection={<IconX size={16} />}
+                            onClick={() =>
+                              modalConfirmRef.current?.open({
+                                onConfirm: () =>
+                                  rejectAttendance({
+                                    variables: {
+                                      rejectAttendanceRecordId: record._id,
+                                      input: {},
+                                    },
+                                  }),
+                                content: (
+                                  <Trans>
+                                    Are you sure you want to reject this attendance record?
+                                  </Trans>
+                                ),
+                              })
+                            }
+                          >
+                            <Trans>Reject</Trans>
+                          </Menu.Item>
+                        )}
+                      </Menu.Dropdown>
+                    </Menu>
+                  </Group>
+                )}
               </Group>
             </Card>
           );

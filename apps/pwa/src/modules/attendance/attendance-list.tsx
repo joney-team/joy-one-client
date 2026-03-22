@@ -70,7 +70,10 @@ export const AttendanceList: FC = () => {
       monthDate: ({ date }) => {
         const memberRecords = groupAttendanceRecordsByUsers(
           data?.attendanceRecords.results.filter((record) => {
-            return DateTime.isSame(record.time, date, "day");
+            return (
+              DateTime.isSame(record.time, date, "day") &&
+              record.status === AttendanceRecordStatus.Approved
+            );
           }) ?? [],
         );
 
