@@ -78,7 +78,7 @@ const RelatedLoans = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCustomer = dynamic(
@@ -86,7 +86,7 @@ const ModalCustomer = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const LoanCustomerKyc = dynamic(
@@ -94,7 +94,7 @@ const LoanCustomerKyc = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={300} />,
-  }
+  },
 );
 
 const LoanDisburesement = dynamic(
@@ -102,7 +102,7 @@ const LoanDisburesement = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={300} />,
-  }
+  },
 );
 
 const LoanPayments = dynamic(
@@ -110,7 +110,7 @@ const LoanPayments = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={300} />,
-  }
+  },
 );
 
 const LoanDocuments = dynamic(
@@ -118,7 +118,7 @@ const LoanDocuments = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={300} />,
-  }
+  },
 );
 
 const ModalSignLoan = dynamic(
@@ -126,7 +126,7 @@ const ModalSignLoan = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const EventList = dynamic(
@@ -134,7 +134,7 @@ const EventList = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const Activities = dynamic(
@@ -142,7 +142,7 @@ const Activities = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const LoanDetail: NextPage = () => {
@@ -169,7 +169,6 @@ export const LoanDetail: NextPage = () => {
   } = useQuery(QUERY_LOAN_BY_CODE, {
     variables: { code },
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   const loan = loanData?.loanByCode;
@@ -196,7 +195,7 @@ export const LoanDetail: NextPage = () => {
         refetchLoan();
       }
     },
-    [loanData?.loanByCode?.id]
+    [loanData?.loanByCode?.id],
   );
 
   const {
@@ -618,7 +617,7 @@ export const LoanDetail: NextPage = () => {
             <Renderer
               visible={
                 ([LoanStatus.PendingSign, LoanStatus.Pending] as LoanStatus[]).includes(
-                  loan?.status
+                  loan?.status,
                 ) && workspace.hasPermission(WorkspacePermission.LOANS_ARCHIVE)
               }
             >

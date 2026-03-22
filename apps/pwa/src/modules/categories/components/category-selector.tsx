@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity, ResponseList } from "@/types";
@@ -14,8 +14,10 @@ import { FC, ReactNode } from "react";
 import { CategoryEntity, CategoryType } from "../category-types";
 import { OnModalCategory } from "../modals/modal-category";
 
-interface CategorySelectorProps
-  extends Omit<SelectorProps<CategoryEntity>, "onSelect" | "onSearch" | "renderOption"> {
+interface CategorySelectorProps extends Omit<
+  SelectorProps<CategoryEntity>,
+  "onSelect" | "onSearch" | "renderOption"
+> {
   type?: CategoryType;
   excludeIds?: string[];
   onSelect?: (value?: CategoryEntity) => void;
@@ -74,7 +76,7 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       }}
       onSelect={(e) => {
         if (!e) return;
-        apiClient.patch(`/categories/${e._id}/interact`).catch(() => false);
+        restClient.patch(`/categories/${e._id}/interact`).catch(() => false);
         return props.onSelect?.(e);
       }}
       onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect, type }) : undefined}

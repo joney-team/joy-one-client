@@ -23,7 +23,6 @@ export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFoc
       parentId: activityId,
     },
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   return (

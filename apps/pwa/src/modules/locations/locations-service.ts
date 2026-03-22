@@ -42,7 +42,7 @@ export const getGeolocation = async () => {
           } else {
             reject(err);
           }
-        }
+        },
       );
     } else {
       reject(new Error(t`Your browser does not support geolocation.`));
@@ -77,7 +77,7 @@ export function degreesToRadians(degrees: number): number {
 
 export function findAvailableLocationToCheckIn(
   coords: Coordinates,
-  checkInLocations: CheckInLocation[]
+  checkInLocations: CheckInLocation[],
 ) {
   return checkInLocations.find((location) => {
     const distance = calculateDistance(coords, location.coordinates);
@@ -85,21 +85,44 @@ export function findAvailableLocationToCheckIn(
   });
 }
 
-// export const detectEntityLocation = (address: string) => {
-//   let entityLocation: LocationEntity = {};
-//   const infos = address.split(',').map(v => v.trim()).reverse();
-//   const province = cachedLocations.find(v => v.type === 'province' && v.name.includes(infos[0]))
-//   const district = cachedLocations.find(v => v.type === 'district' && v.name.includes(infos[1]))
-//   const ward = cachedLocations.find(v => v.type === 'ward' && v.name.includes(infos[2]))
-
-//   entityLocation.provinceId = province?.id;
-//   entityLocation.districtId = district?.id;
-//   entityLocation.wardId = ward?.id;
-//   entityLocation.address = address.split(',').slice(0, 2).join(', ');
-
-//   return entityLocation;
-// }
-
 export const getGoogleMapLinkCoord = (coord: Coordinates) => {
   return `https://www.google.com/maps/place/${coord.lat},${coord.lng}`;
 };
+
+type GoogleMapsParsedResult = {
+  placeName?: string;
+  viewLat?: number;
+  viewLng?: number;
+  zoom?: number;
+  placeLat?: number;
+  placeLng?: number;
+};
+
+export function parseGoogleMapsUrl(url: string): GoogleMapsParsedResult {
+  const result: GoogleMapsParsedResult = {};
+
+  const decodedUrl = decodeURIComponent(url);
+
+  // Extract place name from URLs like /maps/place/Place+Name/
+  const placeNameMatch = decodedUrl.match(/\/maps\/place\/([^/]+)/);
+  if (placeNameMatch) {
+    result.placeName = placeNameMatch[1].replace(/\+/g, " ").trim();
+  }
+
+  // Extract map center coordinates and zoom from URLs like /@lat,lng,zoomz
+  const atMatch = decodedUrl.match(/@([-.\d]+),([-.\d]+),([.\d]+)z/);
+  if (atMatch) {
+    result.viewLat = Number(atMatch[1]);
+    result.viewLng = Number(atMatch[2]);
+    result.zoom = Number(atMatch[3]);
+  }
+
+  // Extract place coordinates from URLs containing !3dlat!4dlng
+  const placeMatch = decodedUrl.match(/!3d([-.\d]+)!4d([-.\d]+)/);
+  if (placeMatch) {
+    result.placeLat = Number(placeMatch[1]);
+    result.placeLng = Number(placeMatch[2]);
+  }
+
+  return result;
+}

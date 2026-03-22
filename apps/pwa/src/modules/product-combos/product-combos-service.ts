@@ -1,26 +1,26 @@
 import { ResponseList } from "@/types";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { ProductComboEntity } from "./product-combos-entity";
 import { ProductComboStatus, UseProductComboDto } from "./product-combos-types";
 
 export async function getProductCombos(query?: any) {
-  return apiClient.get<ResponseList<ProductComboEntity>>(`/product-combos`, { params: query });
+  return restClient.get<ResponseList<ProductComboEntity>>(`/product-combos`, { params: query });
 }
 
 export async function getProductCombo(id: string) {
-  return apiClient.get<ProductComboEntity>(`/product-combos/${id}`);
+  return restClient.get<ProductComboEntity>(`/product-combos/${id}`);
 }
 
 export async function getProductCombosByCustomer(customerId: string) {
-  return apiClient.get<ProductComboEntity[]>(`/product-combos/customers/${customerId}`);
+  return restClient.get<ProductComboEntity[]>(`/product-combos/customers/${customerId}`);
 }
 
 export async function useProductCombo(id: string, dto: UseProductComboDto) {
-  return apiClient.post<ProductComboEntity>(`/product-combos/${id}/use`, dto);
+  return restClient.post<ProductComboEntity>(`/product-combos/${id}/use`, dto);
 }
 
 export async function revertProductComboHistory(historyId: string) {
-  return apiClient.delete(`/product-combos/history/${historyId}`);
+  return restClient.delete(`/product-combos/history/${historyId}`);
 }
 
 export const productComboStatusOptions: {

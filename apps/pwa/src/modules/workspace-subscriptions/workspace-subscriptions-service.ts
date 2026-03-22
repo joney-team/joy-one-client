@@ -1,4 +1,4 @@
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { getClientLocale } from "../lang/lang-service";
 import {
   CalculateWorkspaceSubscriptionBillingResponse,
@@ -8,19 +8,19 @@ import {
 } from "./workspace-subscriptions-types";
 
 export async function getWorkspaceSubscription() {
-  return apiClient.get<WorkspaceSubscriptionEntity>(`/workspace-subscriptions`);
+  return restClient.get<WorkspaceSubscriptionEntity>(`/workspace-subscriptions`);
 }
 
 export async function selectWorkspaceSubscription(dto: SelectWorkspaceSubscriptionDto) {
-  return apiClient.post<WorkspaceSubscriptionEntity>(`/workspace-subscriptions/select`, dto);
+  return restClient.post<WorkspaceSubscriptionEntity>(`/workspace-subscriptions/select`, dto);
 }
 
 export async function calculateWorkspaceSubscriptionBillings(
-  dto: CalculateWorkspaceSubscriptionBillingsDto
+  dto: CalculateWorkspaceSubscriptionBillingsDto,
 ) {
-  return apiClient.post<CalculateWorkspaceSubscriptionBillingResponse>(
+  return restClient.post<CalculateWorkspaceSubscriptionBillingResponse>(
     "/workspace-subscriptions/calculate-billings",
-    dto
+    dto,
   );
 }
 

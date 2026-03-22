@@ -2,36 +2,36 @@
 
 import { AppPageMetadata, ResponseList } from "@/types";
 import { MantineColor } from "@mantine/core";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { ReorderTagsDto, TagDto, TagEntity, TagType } from "./tags-types";
 
 export async function createTag(dto: TagDto) {
-  return apiClient.post(`/tags`, dto);
+  return restClient.post(`/tags`, dto);
 }
 
 export async function getTags(query?: any) {
-  return apiClient.get<ResponseList<TagEntity>>(`/tags`, { params: query });
+  return restClient.get<ResponseList<TagEntity>>(`/tags`, { params: query });
 }
 
 export async function updateTag(_id: string, dto: TagDto) {
-  return apiClient.put(`/tags/${_id}`, dto);
+  return restClient.put(`/tags/${_id}`, dto);
 }
 
 export async function removeTag(_id: string) {
-  return apiClient.delete(`/tags/${_id}`);
+  return restClient.delete(`/tags/${_id}`);
 }
 
 export async function reorderTags(dto: ReorderTagsDto) {
-  return apiClient.put(`/tags/reorder`, dto);
+  return restClient.put(`/tags/reorder`, dto);
 }
 
 export async function getTagMetadata(slug: string): Promise<AppPageMetadata> {
-  return apiClient.get(`/tags/metadata/${slug}`);
+  return restClient.get(`/tags/metadata/${slug}`);
 }
 
 export async function interactTag(tagId: string) {
   try {
-    await apiClient.post(`/tags/${tagId}/interact`);
+    await restClient.post(`/tags/${tagId}/interact`);
   } catch (error) {}
 }
 

@@ -1,7 +1,4 @@
-import QUERY_WORKSPACE_MEMBER, {
-  type WorkspaceMemberQuery,
-  type WorkspaceMemberQueryVariables,
-} from "@/modules/workspace-members/graphql/queryWorkspaceMember.graphql";
+import QUERY_WORKSPACE_MEMBER from "@/modules/workspace-members/graphql/queryWorkspaceMember.graphql";
 import { useQuery } from "@apollo/client/react";
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
 import { FC, Fragment, useRef } from "react";
@@ -40,18 +37,14 @@ const ModalUserInformation = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const UserMention: FC<{ userId: string }> = ({ userId }) => {
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
-  const { data } = useQuery<WorkspaceMemberQuery, WorkspaceMemberQueryVariables>(
-    QUERY_WORKSPACE_MEMBER,
-    {
-      variables: { userId },
-      fetchPolicy: "cache-first",
-    }
-  );
+  const { data } = useQuery(QUERY_WORKSPACE_MEMBER, {
+    variables: { userId },
+  });
 
   const user = data?.workspaceMember;
 
@@ -127,7 +120,7 @@ const CustomerMention: FC<{ customerId: string }> = ({ customerId }) => {
     {
       variables: { customerId },
       fetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const customer = data?.customer;

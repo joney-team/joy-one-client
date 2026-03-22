@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { appEntities } from "@/constant";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -74,9 +74,9 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
       let customField: CustomFieldEntity;
 
       if (props.customField) {
-        customField = await apiClient.put(`/custom-fields/${props.customField._id}`, values);
+        customField = await restClient.put(`/custom-fields/${props.customField._id}`, values);
       } else {
-        customField = await apiClient.post("/custom-fields", values);
+        customField = await restClient.post("/custom-fields", values);
       }
 
       if (customField) onSuccess?.(customField);
@@ -88,7 +88,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   const onArchive = useCallback(async () => {
     if (!customField) return;
     try {
-      await apiClient.delete(`/custom-fields/${customField._id}`);
+      await restClient.delete(`/custom-fields/${customField._id}`);
       props.onArchive?.();
     } catch (error) {
       onError(error);

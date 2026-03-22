@@ -57,7 +57,7 @@ const PluginStorageModal = dynamic(
   () => import("./plugin-storage-modal").then((mod) => mod.PluginStorageModal),
   {
     ssr: false,
-  }
+  },
 );
 
 export const PluginStorage: FC = () => {
@@ -66,8 +66,7 @@ export const PluginStorage: FC = () => {
     GET_PLUGIN_EXTERNAL_STORAGE,
     {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const pluginStorageModalRef = useRef<PluginStorageModalRef>(null);

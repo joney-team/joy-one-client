@@ -1,9 +1,9 @@
 import { ResponseList } from "@/types";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { ProductVoucherEntity, ProductVoucherStatus } from "./product-vouchers-types";
 
 export async function getProductVouchers(query?: any) {
-  return apiClient.get<ResponseList<ProductVoucherEntity>>(`/product-vouchers`, { params: query });
+  return restClient.get<ResponseList<ProductVoucherEntity>>(`/product-vouchers`, { params: query });
 }
 
 export const productVoucherStatusColor: { [key in ProductVoucherStatus]: string } = {

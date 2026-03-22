@@ -4,7 +4,7 @@ import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { useList } from "@/components/list/use-rest-list";
 import { ScrollArea } from "@/components/scroll-area";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { productTypes } from "@/modules/products/products-constants";
 import { ProductEntity } from "@/modules/products/products-types";
@@ -44,7 +44,7 @@ export const OrderSaleSearchBox: FC = () => {
     params: {
       sortLastInteractionAt: -1,
     },
-    fetch: (params) => apiClient.get("/products", { params }),
+    fetch: (params) => restClient.get("/products", { params }),
   });
 
   const searchResultCount = useMemo(() => {

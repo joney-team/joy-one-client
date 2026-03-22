@@ -5,7 +5,7 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { useRouter } from "@/hooks/use-router";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
 import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
@@ -44,7 +44,7 @@ export const ModalConnectMetaPages: FC<{
 
   const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
-      await apiClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await restClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {
@@ -245,7 +245,7 @@ export const WithConnectMetaPagesModal: FC<{
 
   const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
-      await apiClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await restClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {

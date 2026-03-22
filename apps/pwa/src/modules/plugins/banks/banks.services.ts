@@ -1,4 +1,4 @@
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { ResponseList } from "@/types";
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect } from "react";
@@ -10,7 +10,7 @@ let banks: BankInformation[] = [];
 export async function getBanks() {
   if (banks.length) return { data: banks, count: banks.length };
   try {
-    const data = await apiClient.get<ResponseList<BankInformation>>(`/plugins/banks`);
+    const data = await restClient.get<ResponseList<BankInformation>>(`/plugins/banks`);
     banks = data.data;
     return data;
   } catch (error) {
@@ -30,7 +30,7 @@ export const useBanks = () => {
 
 export async function getQrCodePaymentUrl(
   bankAccount: PluginBankAccount,
-  payload: { amount: number; description?: string }
+  payload: { amount: number; description?: string },
 ) {
   const banks = await getBanks();
   const bank = banks.data.find((v) => v.id === bankAccount.bankId);
@@ -44,7 +44,7 @@ export async function getQrCodePaymentUrl(
 
 export async function getQrCode(
   bankAccount: PluginBankAccount,
-  payload: { amount: number; description?: string }
+  payload: { amount: number; description?: string },
 ): Promise<BankQrCode> {
   const banks = await getBanks();
   const bank = banks.data.find((v) => v.id === bankAccount.bankId);
@@ -58,7 +58,7 @@ export function getStaticQrCode(
   payload: {
     amount: number;
     description?: string;
-  }
+  },
 ): BankQrCode {
   let url = `https://img.vietqr.io/image/${bank?.bin}-${bankAccount.accountNumber}-compact.jpg`;
   const query = new URLSearchParams();

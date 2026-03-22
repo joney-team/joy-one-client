@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { DateTimeInput } from "@/components/inputs/date-time-input";
 import { DynamicSelectionInput } from "@/components/inputs/dynamic-selection-input";
 import { ImageInput } from "@/components/inputs/image-input";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
 import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
@@ -96,9 +96,9 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
       let promotion: PromotionEntity | null = null;
 
       if (props.promotion) {
-        promotion = await apiClient.put<PromotionEntity>(`/promotions/${props.promotion.id}`, dto);
+        promotion = await restClient.put<PromotionEntity>(`/promotions/${props.promotion.id}`, dto);
       } else {
-        promotion = await apiClient.post<PromotionEntity>("/promotions", dto);
+        promotion = await restClient.post<PromotionEntity>("/promotions", dto);
       }
 
       if (promotion) {

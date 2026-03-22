@@ -10,7 +10,7 @@ import { cookies } from "next/headers";
 import { apiServerSide } from "../apis/server";
 import type { AuthRefreshTokenInput } from "./auth-types";
 
-export async function saveTokens(tokens: AuthTokenResult) {
+export async function saveServerTokens(tokens: AuthTokenResult) {
   const cookieStore = await cookies();
   await Promise.all([
     cookieStore.set(StorageKey.ACCESS_TOKEN, tokens.accessToken, {
@@ -30,7 +30,7 @@ export async function saveTokens(tokens: AuthTokenResult) {
 
 export const serverSignInWithEmailPassword = async (input: AuthSignInWithEmailPasswordInput) => {
   const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", input);
-  await saveTokens(result);
+  await saveServerTokens(result);
   return result;
 };
 
@@ -38,7 +38,7 @@ export const serverSignInWithFacebook = async (accessToken: string) => {
   const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/facebook", {
     accessToken,
   });
-  await saveTokens(result);
+  await saveServerTokens(result);
   return result;
 };
 
@@ -48,13 +48,13 @@ export const serverSignInWithFirebase = async (idToken: string, username?: strin
     username,
   });
 
-  await saveTokens(result);
+  await saveServerTokens(result);
   return result;
 };
 
 export const serverSignUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
   const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", input);
-  await saveTokens(result);
+  await saveServerTokens(result);
   return result;
 };
 

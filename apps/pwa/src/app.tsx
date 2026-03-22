@@ -14,7 +14,7 @@ import { StorageKey } from "./constants/storage-key";
 import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { usePageTitle } from "./hooks/use-page-title";
-import { socket } from "./modules/apis";
+import { socket } from "./modules/apis/rest-client";
 import { RestQueryProvider } from "./modules/apis/query";
 import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
@@ -57,7 +57,7 @@ const EventsHandler = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GeneralAnalytics = dynamic(
@@ -65,12 +65,12 @@ const GeneralAnalytics = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const NavigationProgress = dynamic(
   () => import("@mantine/nprogress").then((mod) => mod.NavigationProgress),
-  { ssr: false, loading: nonLoading }
+  { ssr: false, loading: nonLoading },
 );
 
 export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => {
@@ -168,7 +168,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
       joinWorkspaceRoom,
       joinSocket,
     }),
-    [config, isInitialized, props.metadata]
+    [config, isInitialized, props.metadata],
   );
 
   return (

@@ -1,4 +1,4 @@
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import {
   BankTransactionCallbackDto,
   BankTransactionEntity,
@@ -6,13 +6,13 @@ import {
 } from "./bank-transaction-types";
 
 export async function createBankTransaction(dto: CreateBankTransactionDto) {
-  return apiClient.post<BankTransactionEntity>(`/bank-transactions`, dto);
+  return restClient.post<BankTransactionEntity>(`/bank-transactions`, dto);
 }
 
 export async function bankTransactionCallback(dto: BankTransactionCallbackDto) {
-  return apiClient.post<BankTransactionEntity>("/bank-transactions/callback", dto);
+  return restClient.post<BankTransactionEntity>("/bank-transactions/callback", dto);
 }
 
 export async function getBankTransaction(id: string) {
-  return apiClient.get<BankTransactionEntity>(`/bank-transactions/${id}`);
+  return restClient.get<BankTransactionEntity>(`/bank-transactions/${id}`);
 }

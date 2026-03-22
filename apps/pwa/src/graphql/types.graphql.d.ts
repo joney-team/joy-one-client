@@ -131,6 +131,34 @@ export type AttendanceRecordsPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type AttendanceSetting = {
+  __typename: 'AttendanceSetting';
+  _id: Scalars['String']['output'];
+  allowedDistanceInMeters: Maybe<Scalars['Float']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  locations: Maybe<Array<AttendanceSettingLocation>>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  source: Maybe<EntitySource>;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+export type AttendanceSettingLocation = {
+  __typename: 'AttendanceSettingLocation';
+  allowedDistanceInMeters: Scalars['Float']['output'];
+  coordinates: Coordinates;
+  id: Scalars['String']['output'];
+  name: Maybe<Scalars['String']['output']>;
+};
+
+export type AttendanceSettingLocationInput = {
+  allowedDistanceInMeters: Scalars['Float']['input'];
+  coordinates: CoordinatesInput;
+  id: Scalars['String']['input'];
+  name?: InputMaybe<Scalars['String']['input']>;
+};
+
 export type AuthRefreshTokenInput = {
   refreshToken: Scalars['String']['input'];
 };
@@ -817,6 +845,7 @@ export const EventType = {
   AttendanceRecordApproved: 'ATTENDANCE_RECORD_APPROVED',
   AttendanceRecordNew: 'ATTENDANCE_RECORD_NEW',
   AttendanceRecordRejected: 'ATTENDANCE_RECORD_REJECTED',
+  AttendanceSettingUpdated: 'ATTENDANCE_SETTING_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
@@ -1414,6 +1443,7 @@ export type Mutation = {
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
   updateActivity: Activity;
+  updateAttendanceSetting: AttendanceSetting;
   updateBooking: Booking;
   updateCategory: Category;
   updateCustomer: Customer;
@@ -1855,6 +1885,11 @@ export type MutationSyncTaskArgs = {
 export type MutationUpdateActivityArgs = {
   content?: InputMaybe<Scalars['String']['input']>;
   id: Scalars['String']['input'];
+};
+
+
+export type MutationUpdateAttendanceSettingArgs = {
+  input: UpdateAttendanceSettingInput;
 };
 
 
@@ -2484,6 +2519,7 @@ export type Query = {
   attendanceRecord: AttendanceRecord;
   attendanceRecords: AttendanceRecordsPaginated;
   attendanceRecordsForToday: Array<AttendanceRecord>;
+  attendanceSetting: AttendanceSetting;
   authUser: AuthUser;
   availableEntities: Array<Scalars['String']['output']>;
   booking: Booking;
@@ -2569,7 +2605,7 @@ export type QueryActivitiesArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   parentId?: InputMaybe<Scalars['String']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
   type?: InputMaybe<ActivityType>;
 };
 
@@ -2585,6 +2621,7 @@ export type QueryAttendanceRecordArgs = {
 
 
 export type QueryAttendanceRecordsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2597,6 +2634,7 @@ export type QueryBookingArgs = {
 
 
 export type QueryBookingsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2609,6 +2647,7 @@ export type QueryCalculateLoanPaymentPlanArgs = {
 
 
 export type QueryCategoriesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2621,6 +2660,7 @@ export type QueryCategoryArgs = {
 
 
 export type QueryCouponRulesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2628,6 +2668,7 @@ export type QueryCouponRulesArgs = {
 
 
 export type QueryCouponsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2635,6 +2676,7 @@ export type QueryCouponsArgs = {
 
 
 export type QueryCustomFieldsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2657,6 +2699,7 @@ export type QueryCustomerFormArgs = {
 
 
 export type QueryCustomerFormsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2669,6 +2712,7 @@ export type QueryCustomerKycArgs = {
 
 
 export type QueryCustomerKycsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2679,7 +2723,7 @@ export type QueryCustomersArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 
@@ -2689,6 +2733,7 @@ export type QueryCustomersByIdsArgs = {
 
 
 export type QueryEInvoicesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2701,8 +2746,10 @@ export type QueryEventArgs = {
 
 
 export type QueryEventsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
   ref?: InputMaybe<Scalars['String']['input']>;
   type?: InputMaybe<EventType>;
   userId?: InputMaybe<Scalars['String']['input']>;
@@ -2710,6 +2757,7 @@ export type QueryEventsArgs = {
 
 
 export type QueryFilesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2762,17 +2810,15 @@ export type QueryLoanByCodeArgs = {
 
 
 export type QueryLoansArgs = {
-  customerCidNumber?: InputMaybe<Scalars['String']['input']>;
-  customerId?: InputMaybe<Scalars['String']['input']>;
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
-  status?: InputMaybe<Array<LoanStatus>>;
 };
 
 
 export type QueryOrdersArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2780,6 +2826,7 @@ export type QueryOrdersArgs = {
 
 
 export type QueryPartnersArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2792,6 +2839,7 @@ export type QueryPostArgs = {
 
 
 export type QueryPostsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2799,6 +2847,7 @@ export type QueryPostsArgs = {
 
 
 export type QueryPrescriptionsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2806,6 +2855,7 @@ export type QueryPrescriptionsArgs = {
 
 
 export type QueryProductCombosArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2813,6 +2863,7 @@ export type QueryProductCombosArgs = {
 
 
 export type QueryProductStockRecordsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2820,6 +2871,7 @@ export type QueryProductStockRecordsArgs = {
 
 
 export type QueryProductStocksArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2827,6 +2879,7 @@ export type QueryProductStocksArgs = {
 
 
 export type QueryProductVouchersArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2834,6 +2887,7 @@ export type QueryProductVouchersArgs = {
 
 
 export type QueryProductsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2841,6 +2895,7 @@ export type QueryProductsArgs = {
 
 
 export type QueryPromotionsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2853,7 +2908,7 @@ export type QueryReactionsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 
@@ -2874,6 +2929,7 @@ export type QueryReceiptByCodeArgs = {
 
 
 export type QueryReceiptsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2901,7 +2957,7 @@ export type QueryTagsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
   type?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2942,7 +2998,7 @@ export type QueryTasksArgs = {
   parentId?: InputMaybe<Scalars['String']['input']>;
   partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
   priority?: InputMaybe<TaskPriority>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
   toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
@@ -2962,7 +3018,7 @@ export type QueryTasksCountArgs = {
   parentId?: InputMaybe<Scalars['String']['input']>;
   partnerIds?: InputMaybe<Array<Scalars['String']['input']>>;
   priority?: InputMaybe<TaskPriority>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   tagIds?: InputMaybe<Array<Scalars['String']['input']>>;
   toTrackingTime?: InputMaybe<Scalars['Float']['input']>;
@@ -2970,6 +3026,7 @@ export type QueryTasksCountArgs = {
 
 
 export type QueryWorkspaceApiAppsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -2982,6 +3039,7 @@ export type QueryWorkspaceBranchArgs = {
 
 
 export type QueryWorkspaceBranchesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -3009,7 +3067,6 @@ export type QueryWorkspaceMembersArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
-  sortCreatedAt?: InputMaybe<SortDirection>;
   userId?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
@@ -3020,6 +3077,7 @@ export type QueryWorkspaceMembersByIdsArgs = {
 
 
 export type QueryWorkspaceStatsArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
@@ -3306,13 +3364,6 @@ export type SignUploadUrlResponse = {
   signedUrl: Scalars['String']['output'];
 };
 
-/** Available sort directions */
-export const SortDirection = {
-  Asc: 'ASC',
-  Desc: 'DESC'
-} as const;
-
-export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 export type SyncTaskResult = {
   __typename: 'SyncTaskResult';
   task: Task;
@@ -3486,6 +3537,11 @@ export type TasksPaginated = {
   __typename: 'TasksPaginated';
   results: Array<Task>;
   total: Scalars['Float']['output'];
+};
+
+export type UpdateAttendanceSettingInput = {
+  allowedDistanceInMeters?: InputMaybe<Scalars['Float']['input']>;
+  locations?: InputMaybe<Array<AttendanceSettingLocationInput>>;
 };
 
 export type UpdateLoanAmountInput = {

@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION from "@/modules/customer-forms/graphql/mutationBulkUpdateCustomerFormWorkspaceBranch.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
@@ -48,13 +48,13 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
   const ids = args?.ids ?? [];
 
   const [bulkUpdateCustomerFormWorkspaceBranch] = useMutation(
-    BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION
+    BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION,
   );
 
   const onSubmit = async () => {
     try {
       if (entity === AppEntity.LOANS) {
-        await apiClient.post(`/loans/bulk-update-workspace-branch`, {
+        await restClient.post(`/loans/bulk-update-workspace-branch`, {
           ids,
           workspaceBranchId: branch?._id || null,
         });
@@ -72,7 +72,7 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
       }
 
       if (entity === AppEntity.CUSTOMERS) {
-        await apiClient.post(`/customers/bulk-update-workspace-branch`, {
+        await restClient.post(`/customers/bulk-update-workspace-branch`, {
           ids,
           workspaceBranchId: branch?._id || null,
         });

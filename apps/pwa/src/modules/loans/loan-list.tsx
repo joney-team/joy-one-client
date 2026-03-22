@@ -41,7 +41,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
@@ -54,12 +54,12 @@ import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
 const ModalUpdateWorkspaceBranch = dynamic(
   () =>
     import("@/modules/workspace-branches/modals/modal-update-workspace-branch").then(
-      (res) => res.ModalUpdateWorkspaceBranch
+      (res) => res.ModalUpdateWorkspaceBranch,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCreateLoan = dynamic(
@@ -67,7 +67,7 @@ const ModalCreateLoan = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface LoanListProps {
@@ -236,7 +236,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 loan.nextReceiptAt &&
                 DateTime.isBefore(
                   loan.nextReceiptAt,
-                  DateTime.add(new Date(), "day", warningReceiptBeforeDays + 1)
+                  DateTime.add(new Date(), "day", warningReceiptBeforeDays + 1),
                 );
 
               const { end } = DateTime.getRange(new Date(), "day");
@@ -394,7 +394,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 title: <Trans>Reject</Trans>,
                 message: <Trans>Enter reject reason</Trans>,
                 onSubmit: async (reason) => {
-                  await apiClient.post(`/loans/bulk-reject`, {
+                  await restClient.post(`/loans/bulk-reject`, {
                     loanIds: data.map((v) => v.id),
                     reason,
                   });
@@ -412,7 +412,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             available: (data) =>
               data.every((v) => ([LoanStatus.Rejected] as LoanStatus[]).includes(v.status)),
             handler: async (data, ctx) => {
-              await apiClient.post(`/loans/bulk-revert-rejected`, {
+              await restClient.post(`/loans/bulk-revert-rejected`, {
                 loanIds: data.map((v) => v.id),
               });
               ctx.unSelect();
@@ -425,7 +425,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
             label: <Trans>Archive</Trans>,
             available: (data) =>
               data.every((v) =>
-                ([LoanStatus.Pending, LoanStatus.PendingSign] as LoanStatus[]).includes(v.status)
+                ([LoanStatus.Pending, LoanStatus.PendingSign] as LoanStatus[]).includes(v.status),
               ),
             handler: (data) =>
               archiveLoans({

@@ -1,11 +1,8 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type LoansQueryVariables = Types.Exact<{
-  customerCidNumber?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  status?: Types.InputMaybe<Array<Types.LoanStatus>>;
   limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
-  sortCreatedAt?: Types.InputMaybe<Types.SortDirection>;
   query?: Types.InputMaybe<Types.Scalars['JSONObject']['input']>;
 }>;
 

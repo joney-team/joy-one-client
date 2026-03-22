@@ -1,5 +1,5 @@
 import { ResponseList } from "@/types";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import {
   BillingBankAccount,
   WorkspaceBalance,
@@ -8,26 +8,26 @@ import {
 } from "./workspace-billings-types";
 
 export async function getWorkspaceBalance() {
-  return apiClient.get<WorkspaceBalance>("/workspace-billings/balance");
+  return restClient.get<WorkspaceBalance>("/workspace-billings/balance");
 }
 
 export async function adminGetWorkspaceBalance(workspaceId: string) {
-  return apiClient.get<WorkspaceBalance>(`/workspace-billings/admin/${workspaceId}/balance`);
+  return restClient.get<WorkspaceBalance>(`/workspace-billings/admin/${workspaceId}/balance`);
 }
 
 export async function adminDepositWorkspaceBalance(
   workspaceId: string,
-  dto: WorkspaceBillingDepositDto
+  dto: WorkspaceBillingDepositDto,
 ) {
-  return apiClient.post(`/workspace-billings/admin/${workspaceId}/deposit`, dto);
+  return restClient.post(`/workspace-billings/admin/${workspaceId}/deposit`, dto);
 }
 
 export async function getWorkspaceBillings(query?: any) {
-  return apiClient.get<ResponseList<WorkspaceBillingEntity>>(`/workspace-billings`, {
+  return restClient.get<ResponseList<WorkspaceBillingEntity>>(`/workspace-billings`, {
     params: query,
   });
 }
 
 export async function getBillingBankAccount() {
-  return apiClient.get<BillingBankAccount>(`/workspace-billings/bank-account`);
+  return restClient.get<BillingBankAccount>(`/workspace-billings/bank-account`);
 }

@@ -1,19 +1,13 @@
 #import "./fragmentLoan.graphql"
 
 query Loans(
-  $customerCidNumber: String
-  $status: [LoanStatus!]
   $limit: Float
   $offset: Float
-  $sortCreatedAt: SortDirection
   $query: JSONObject
 ) {
   list: loans(
-    customerCidNumber: $customerCidNumber
-    status: $status
     limit: $limit
     offset: $offset
-    sortCreatedAt: $sortCreatedAt
     query: $query
   ) {
     total

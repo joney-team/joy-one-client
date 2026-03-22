@@ -1,6 +1,6 @@
 "use client";
 
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -45,7 +45,7 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
               onActionLoad({
                 name: <Trans>Create {entity}</Trans>,
                 process: async () => {
-                  const category = await apiClient.post<CategoryEntity>("/categories", {
+                  const category = await restClient.post<CategoryEntity>("/categories", {
                     name: value,
                     type: props.type,
                   });

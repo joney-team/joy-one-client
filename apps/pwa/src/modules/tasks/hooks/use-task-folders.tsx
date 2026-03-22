@@ -16,6 +16,11 @@ import { onError } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";
 import { parseTaskPath } from "../tasks-route-helpers";
+import {
+  InternalEvent,
+  onInternalEvent,
+  useInternalEventsListener,
+} from "@/hooks/use-internal-event";
 
 export type TaskFolder = TagDataFragment;
 
@@ -28,7 +33,7 @@ export const useTaskFolders = () => {
   });
 
   const folders = Array.from(data?.tags.results ?? []).sort(
-    (a, b) => (a.order ?? 0) - (b.order ?? 0)
+    (a, b) => (a.order ?? 0) - (b.order ?? 0),
   );
 
   const activatedFolder = folders.find((v) => v.slug === params.slug);
@@ -46,7 +51,7 @@ export const useTaskFolders = () => {
   };
 
   const [bulkUpdateTags] = useMutation<BulkUpdateTagsMutation, BulkUpdateTagsMutationVariables>(
-    BULK_UPDATE_TAGS_MUTATION
+    BULK_UPDATE_TAGS_MUTATION,
   );
 
   const onBulkUpdateTags = async (items: (Partial<TagDataFragment> & { _id: string })[]) => {
@@ -67,7 +72,7 @@ export const useTaskFolders = () => {
                 .sort((a, b) => a.order - b.order),
             },
           };
-        }
+        },
       );
 
       await bulkUpdateTags({
@@ -81,7 +86,10 @@ export const useTaskFolders = () => {
   };
 
   useEventsListener([EventType.TagsArchived, EventType.TagsUpdated], () => {
-    // TODO: Optimize -> Only trigger refetch with related data
+    refetch();
+  });
+
+  useInternalEventsListener([InternalEvent.WORKSPACE_CHANGED], () => {
     refetch();
   });
 

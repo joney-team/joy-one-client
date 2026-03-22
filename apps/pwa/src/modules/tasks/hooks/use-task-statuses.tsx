@@ -36,7 +36,6 @@ export const useFolderStatuses = (folderId?: string | null) => {
   const taskStatusesData = useQuery(QUERY_TASK_STATUSES, {
     variables,
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   const statuses = useMemo(() => {

@@ -1,10 +1,11 @@
 "use client";
 
+import { Empty } from "@/components/empty";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { SectionTitle } from "@/components/session-title";
 import { WayPoint } from "@/components/way-point";
-import { LoanStatus, SortDirection } from "@/graphql/enums.graphql";
+import { LoanStatus } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -17,7 +18,6 @@ import LOANS_QUERY, {
   type LoansQueryVariables,
 } from "../graphql/queryLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
-import { Empty } from "@/components/empty";
 
 export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }> = ({
   customerCidNumber,
@@ -29,8 +29,10 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
 
   const variables = useMemo<LoansQueryVariables>(() => {
     return {
-      customerCidNumber,
-      sortCreatedAt: SortDirection.Asc,
+      query: {
+        customerCidNumber,
+        sortCreatedAt: "ASC",
+      },
     };
   }, [customerCidNumber]);
 

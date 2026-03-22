@@ -2,7 +2,7 @@
 
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useColor } from "@/modules/theme/use-color";
 import { StorageKey } from "@/constants/storage-key";
 import { wait } from "@/utils/common.utils";
@@ -51,8 +51,10 @@ export type SelectorTarget<T extends SelectOption> = (ctx: SelectorContext<T>) =
 export type SelectorRenderOption<T extends SelectOption> = (item: T, key: string) => ReactNode;
 export type SelectorOnSearch<T extends SelectOption> = (value: string) => T[] | Promise<T[]>;
 
-export interface SelectorBaseProps<T extends SelectOption>
-  extends Omit<InputWrapperProps, "value" | "onSelect" | "onChange"> {
+export interface SelectorBaseProps<T extends SelectOption> extends Omit<
+  InputWrapperProps,
+  "value" | "onSelect" | "onChange"
+> {
   listRoute?: string;
   listParams?: Record<string, any>;
   value?: T | null | undefined;
@@ -122,7 +124,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
         return { data: [], count: 0 };
       }
 
-      return apiClient.get(listRoute!, {
+      return restClient.get(listRoute!, {
         params: {
           sortLastInteractionAt: -1,
           ...listParams,
@@ -184,14 +186,17 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     return [...combinedOptions];
   }, [searchOptions, search, value, excludeIds, propsPinnedOptions, list.data]);
 
-  const groupOptions = options.reduce((acc, item) => {
-    const group = getGroup(item);
-    if (group) {
-      acc[group] = acc[group] || [];
-      acc[group].push(item);
-    }
-    return acc;
-  }, {} as Record<string, T[]>);
+  const groupOptions = options.reduce(
+    (acc, item) => {
+      const group = getGroup(item);
+      if (group) {
+        acc[group] = acc[group] || [];
+        acc[group].push(item);
+      }
+      return acc;
+    },
+    {} as Record<string, T[]>,
+  );
 
   const handleSearch = useDebouncedCallback(
     async (q?: string) => {
@@ -211,7 +216,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
         setSearching(false);
       }
     },
-    props.staticSearch ? 0 : 300
+    props.staticSearch ? 0 : 300,
   );
 
   const handleOpen = async () => {
@@ -336,7 +341,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                         styles={{ groupLabel: { fontSize: 12 } }}
                       >
                         {groupOptions[group].map((item, itemIndex) =>
-                          props.renderOption(item, `group-${groupIndex}-option-${itemIndex}`)
+                          props.renderOption(item, `group-${groupIndex}-option-${itemIndex}`),
                         )}
                       </Combobox.Group>
                     );

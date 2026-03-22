@@ -7,7 +7,6 @@ export type ActivitiesQueryVariables = Types.Exact<{
   offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   ids?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
-  sortCreatedAt?: Types.InputMaybe<Types.SortDirection>;
   parentId?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 

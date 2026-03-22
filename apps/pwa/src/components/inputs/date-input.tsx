@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 import {
   DateInput as MantineDateInput,
   DateInputProps as MantineDateInputProps,
@@ -9,11 +9,13 @@ import {
 import { IconCalendar } from "@tabler/icons-react";
 import { type FC, type ReactNode } from "react";
 
-interface DateInputProps
-  extends Omit<MantineDateInputProps, "value" | "onChange" | "defaultValue"> {
-  value?: number | null;
+interface DateInputProps extends Omit<
+  MantineDateInputProps,
+  "value" | "onChange" | "defaultValue"
+> {
+  value?: RawDate | null;
   onChange?: (date?: number | null) => any;
-  defaultValue?: number | null;
+  defaultValue?: RawDate | null;
   leftSection?: ReactNode;
 }
 

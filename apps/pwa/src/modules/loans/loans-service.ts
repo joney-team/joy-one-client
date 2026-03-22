@@ -1,7 +1,7 @@
 import { LoanAssetEstimations } from "./loans-types";
 
 import { t } from "@lingui/core/macro";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { UseUploadFile } from "../files/hooks/use-upload-file";
 
 export async function prepareLoanAssetData(data: any, uploadFile: UseUploadFile) {
@@ -50,7 +50,7 @@ export const defaultLoanAssetEstimations: LoanAssetEstimations = {
 
 export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
   try {
-    let data = await apiClient.get(`/loans/asset-estimations`);
+    let data = await restClient.get(`/loans/asset-estimations`);
 
     Object.keys(defaultLoanAssetEstimations).forEach((key) => {
       if (typeof data[key] === "undefined") {
@@ -65,7 +65,7 @@ export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
 }
 
 export async function setLoanAssetEstimations(data: LoanAssetEstimations) {
-  await apiClient.post(`/loans/asset-estimations`, data);
+  await restClient.post(`/loans/asset-estimations`, data);
 }
 
 export function renderLoanPeriod(days: number) {

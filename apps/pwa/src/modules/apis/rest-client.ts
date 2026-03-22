@@ -7,7 +7,7 @@ import { io } from "socket.io-client";
 import { getAccessToken, retrieveAccessToken } from "../auth/auth-service";
 import { getClientLocale } from "../lang/lang-service";
 
-export const apiClient = new ApiInstance({
+export const restClient = new ApiInstance({
   getToken: async () => getAccessToken(),
   retrieveToken: async () => retrieveAccessToken(),
   getWorkspaceId: () => getLocalStorage(StorageKey.WORKSPACE_ID),

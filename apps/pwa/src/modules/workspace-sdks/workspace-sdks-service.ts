@@ -1,14 +1,14 @@
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { WorkspaceDto } from "../workspaces/workspaces-types";
 
 export async function createWorkspaceSdk(dto: WorkspaceDto) {
-  return apiClient.post("/workspace-sdks", dto);
+  return restClient.post("/workspace-sdks", dto);
 }
 
 export async function removeWorkspaceSdk(id: string) {
-  return apiClient.delete(`/workspace-sdks/${id}`);
+  return restClient.delete(`/workspace-sdks/${id}`);
 }
 
 export async function getWorkspaceSdks(query?: any) {
-  return apiClient.get(`/workspace-sdks`, { params: query });
+  return restClient.get(`/workspace-sdks`, { params: query });
 }

@@ -104,16 +104,6 @@ const EntityImage: FC<EntityImageProps> = (props) => {
   return (
     <ModalFileGallery>
       {(openGallery) => {
-        const onViewDetail = () => {
-          openGallery({
-            files: props.images!.map((src) => ({
-              fileName: `${props.name || "image"} ${props.index + 1}`,
-              url: src instanceof File ? URL.createObjectURL(src) : (src as string),
-              type: FileType.Photo,
-            })),
-          });
-        };
-
         return (
           <Card
             ref={hover.ref}

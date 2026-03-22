@@ -104,6 +104,32 @@ type AttendanceRecordsPaginated {
   total: Float!
 }
 
+type AttendanceSetting {
+  _id: String!
+  allowedDistanceInMeters: Float
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  isArchived: Boolean
+  locations: [AttendanceSettingLocation!]
+  refs: [String!]
+  source: EntitySource
+  updatedAt: Float
+}
+
+type AttendanceSettingLocation {
+  allowedDistanceInMeters: Float!
+  coordinates: Coordinates!
+  id: String!
+  name: String
+}
+
+input AttendanceSettingLocationInput {
+  allowedDistanceInMeters: Float!
+  coordinates: CoordinatesInput!
+  id: String!
+  name: String
+}
+
 input AuthRefreshTokenInput {
   refreshToken: String!
 }
@@ -749,6 +775,7 @@ enum EventType {
   ATTENDANCE_RECORD_APPROVED
   ATTENDANCE_RECORD_NEW
   ATTENDANCE_RECORD_REJECTED
+  ATTENDANCE_SETTING_UPDATED
   BANK_TRANSACTION_CANCELLED
   BANK_TRANSACTION_FAILED
   BANK_TRANSACTION_FULFILLED
@@ -1333,6 +1360,7 @@ type Mutation {
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
   updateActivity(content: String, id: String!): Activity!
+  updateAttendanceSetting(input: UpdateAttendanceSettingInput!): AttendanceSetting!
   updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
   updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   updateCustomer(id: String!, input: CustomerInput!): Customer!
@@ -1787,34 +1815,445 @@ type PromotionsPaginated {
 }
 
 type Query {
-  activities(contextId: String!, contextType: String!, ids: [String!], limit: Float = 30, offset: Float, parentId: String, sortCreatedAt: SortDirection, type: ActivityType): ActivitiesPaginated!
+  activities(
+    contextId: String!
+    contextType: String!
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    parentId: String
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    type: ActivityType
+  ): ActivitiesPaginated!
   activity(id: String!): Activity!
   appConfig: AppConfig!
   attendanceRecord(id: String!): AttendanceRecord!
-  attendanceRecords(limit: Float = 30, offset: Float, query: JSONObject): AttendanceRecordsPaginated!
+  attendanceRecords(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): AttendanceRecordsPaginated!
   attendanceRecordsForToday: [AttendanceRecord!]!
+  attendanceSetting: AttendanceSetting!
   authUser: AuthUser!
   availableEntities: [String!]!
   booking(id: String!): Booking!
-  bookings(limit: Float = 30, offset: Float, query: JSONObject): BookingsPaginated!
+  bookings(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): BookingsPaginated!
   calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
-  categories(limit: Float = 30, offset: Float, query: JSONObject): CategoriesPaginated!
+  categories(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CategoriesPaginated!
   category(id: String!): Category!
-  couponRules(limit: Float = 30, offset: Float, query: JSONObject): CouponRulesPaginated!
-  coupons(limit: Float = 30, offset: Float, query: JSONObject): CouponsPaginated!
-  customFields(limit: Float = 30, offset: Float, query: JSONObject): CustomFieldsPaginated!
+  couponRules(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CouponRulesPaginated!
+  coupons(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CouponsPaginated!
+  customFields(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CustomFieldsPaginated!
   customer(id: String!): Customer!
   customerByCode(code: String!): Customer!
   customerForm(id: String!): CustomerForm!
-  customerForms(limit: Float = 30, offset: Float, query: JSONObject): CustomerFormsPaginated!
+  customerForms(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CustomerFormsPaginated!
   customerKyc(customerId: String!): CustomerKyc
-  customerKycs(limit: Float = 30, offset: Float, query: JSONObject): CustomerKycsPaginated!
-  customers(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): CustomersPaginated!
+  customerKycs(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CustomerKycsPaginated!
+  customers(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): CustomersPaginated!
   customersByIds(ids: [String!]!): [Customer!]!
-  eInvoices(limit: Float = 30, offset: Float, query: JSONObject): PluginEInvoicesPaginated!
+  eInvoices(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PluginEInvoicesPaginated!
   event(id: String!): Event!
-  events(limit: Float = 30, offset: Float, ref: String, type: EventType, userId: String): EventsPaginated!
-  files(limit: Float = 30, offset: Float, query: JSONObject): FilesPaginated!
+  events(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ref: String
+    type: EventType
+    userId: String
+  ): EventsPaginated!
+  files(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): FilesPaginated!
   getCategoriesByIds(ids: [String!]!): [Category!]!
   getCategoryBySlug(slug: String!): Category!
   getDeviceByIdentifyId(identifyId: String!): Device!
@@ -1824,50 +2263,699 @@ type Query {
   liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
   loan(id: String!): Loan!
   loanByCode(code: String!): Loan!
-  loans(customerCidNumber: String, customerId: String, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, status: [LoanStatus!]): LoansPaginated!
-  orders(limit: Float = 30, offset: Float, query: JSONObject): OrdersPaginated!
-  partners(limit: Float = 30, offset: Float, query: JSONObject): PartnersPaginated!
+  loans(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): LoansPaginated!
+  orders(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): OrdersPaginated!
+  partners(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PartnersPaginated!
   pluginExternalStorage: PluginExternalStorage
   post(id: String!): Posts!
-  posts(limit: Float = 30, offset: Float, query: JSONObject): PostsPaginated!
-  prescriptions(limit: Float = 30, offset: Float, query: JSONObject): PrescriptionsPaginated!
-  productCombos(limit: Float = 30, offset: Float, query: JSONObject): ProductCombosPaginated!
-  productStockRecords(limit: Float = 30, offset: Float, query: JSONObject): ProductStockRecordPaginated!
-  productStocks(limit: Float = 30, offset: Float, query: JSONObject): ProductStocksPaginated!
-  productVouchers(limit: Float = 30, offset: Float, query: JSONObject): ProductVouchersPaginated!
-  products(limit: Float = 30, offset: Float, query: JSONObject): ProductsPaginated!
-  promotions(limit: Float = 30, offset: Float, query: JSONObject): PromotionsPaginated!
-  reactions(entity: String!, entityId: String!, ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection): ReactionsPaginated!
+  posts(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PostsPaginated!
+  prescriptions(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PrescriptionsPaginated!
+  productCombos(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ProductCombosPaginated!
+  productStockRecords(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ProductStockRecordPaginated!
+  productStocks(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ProductStocksPaginated!
+  productVouchers(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ProductVouchersPaginated!
+  products(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ProductsPaginated!
+  promotions(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PromotionsPaginated!
+  reactions(
+    entity: String!
+    entityId: String!
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ReactionsPaginated!
   reactionsCount(entity: String!, entityId: String!): ReactionsCount!
   receipt(id: String!): Receipt!
   receiptByCode(code: String!): Receipt!
-  receipts(limit: Float = 30, offset: Float, query: JSONObject): ReceiptsPaginated!
+  receipts(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ReceiptsPaginated!
   search(entities: [String!], limit: Int, query: String!): [SearchResult!]!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
-  tags(ids: [String!], limit: Float = 30, offset: Float, sortCreatedAt: SortDirection, type: String): TagsPaginated!
+  tags(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    type: String
+  ): TagsPaginated!
   task(_id: String!): Task!
   taskByCode(code: String!): Task!
   taskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
   taskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
-  tasks(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): TasksPaginated!
-  tasksCount(all: Boolean, assigneeUserIds: [String!], folderId: String, fromTrackingTime: Float, ids: [String!], isClosedOnly: Boolean, isProgressOnly: Boolean, limit: Float = 30, offset: Float, parentId: String, partnerIds: [String!], priority: TaskPriority, sortCreatedAt: SortDirection, status: String, tagIds: [String!], toTrackingTime: Float): Float!
+  tasks(
+    all: Boolean
+    assigneeUserIds: [String!]
+    folderId: String
+    fromTrackingTime: Float
+    ids: [String!]
+    isClosedOnly: Boolean
+    isProgressOnly: Boolean
+    limit: Float = 30
+    offset: Float
+    parentId: String
+    partnerIds: [String!]
+    priority: TaskPriority
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    status: String
+    tagIds: [String!]
+    toTrackingTime: Float
+  ): TasksPaginated!
+  tasksCount(
+    all: Boolean
+    assigneeUserIds: [String!]
+    folderId: String
+    fromTrackingTime: Float
+    ids: [String!]
+    isClosedOnly: Boolean
+    isProgressOnly: Boolean
+    limit: Float = 30
+    offset: Float
+    parentId: String
+    partnerIds: [String!]
+    priority: TaskPriority
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    status: String
+    tagIds: [String!]
+    toTrackingTime: Float
+  ): Float!
   testErrorNotFound: String!
   userWorkspaceMember: WorkspaceMember!
   userWorkspaceMembers: [WorkspaceMember!]!
   workspace: Workspace!
-  workspaceApiApps(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceApiAppsPaginated!
+  workspaceApiApps(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): WorkspaceApiAppsPaginated!
   workspaceBranch(id: String!): WorkspaceBranch!
-  workspaceBranches(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceBranchesPaginated!
+  workspaceBranches(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): WorkspaceBranchesPaginated!
   workspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
   workspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
   workspaceMember(userId: String!): WorkspaceMember!
-  workspaceMembers(ids: [String!], ignoreSelf: Boolean, limit: Float = 30, offset: Float, query: JSONObject, sortCreatedAt: SortDirection, userId: [String!]): WorkspaceMembersPaginated!
+  workspaceMembers(
+    ids: [String!]
+    ignoreSelf: Boolean
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    userId: [String!]
+  ): WorkspaceMembersPaginated!
   workspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
   workspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
   workspaceRoles: [WorkspaceRole!]!
   workspaceSetting: WorkspaceSetting!
-  workspaceStats(limit: Float = 30, offset: Float, query: JSONObject): WorkspaceStatsPaginated!
+  workspaceStats(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): WorkspaceStatsPaginated!
 }
 
 type Reaction {
@@ -2126,12 +3214,6 @@ type SignUploadUrlResponse {
   signedUrl: String!
 }
 
-"""Available sort directions"""
-enum SortDirection {
-  ASC
-  DESC
-}
-
 type SyncTaskResult {
   task: Task!
   updateInfos: [String!]!
@@ -2292,6 +3374,11 @@ input TaskTimeTrackingInput {
 type TasksPaginated {
   results: [Task!]!
   total: Float!
+}
+
+input UpdateAttendanceSettingInput {
+  allowedDistanceInMeters: Float
+  locations: [AttendanceSettingLocationInput!]
 }
 
 input UpdateLoanAmountInput {

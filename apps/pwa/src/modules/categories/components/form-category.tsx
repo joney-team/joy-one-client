@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { CustomField } from "@/modules/custom-fields/custom-field-types";
@@ -55,7 +55,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
   const autoGenerateSlug = useDebouncedCallback(async (name: string) => {
     try {
       if (!name) return;
-      const response = await apiClient.post<{ slug: string }>("/categories/slug", { name });
+      const response = await restClient.post<{ slug: string }>("/categories/slug", { name });
       form.setFieldValue("slug", response.slug);
     } catch (error) {
       onError(error);
@@ -72,16 +72,16 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
       let category: CategoryEntity;
 
       if (props.category) {
-        category = await apiClient.put<CategoryEntity, CategoryDto>(
+        category = await restClient.put<CategoryEntity, CategoryDto>(
           `/categories/${props.category._id}`,
           {
             ...rest,
             thumbnail: thumbnailValue?.path ?? props.category.thumbnail,
             customFieldValues: getCustomFieldValue(values.customFields),
-          }
+          },
         );
       } else {
-        category = await apiClient.post<CategoryEntity, CategoryDto>("/categories", {
+        category = await restClient.post<CategoryEntity, CategoryDto>("/categories", {
           ...rest,
           thumbnail: thumbnailValue?.path,
           customFieldValues: getCustomFieldValue(values.customFields),
@@ -97,7 +97,7 @@ export const FormCategory: FC<FormCategoryProps> = (props) => {
   const onArchive = useCallback(async () => {
     if (!category) return;
     try {
-      await apiClient.delete(`/categories/${category._id}`);
+      await restClient.delete(`/categories/${category._id}`);
       props.onArchive?.();
     } catch (error) {
       onError(error);

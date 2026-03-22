@@ -40,7 +40,7 @@ import styles from "./editor-attachment.module.css";
 
 const ModalFileGallery = dynamic(
   () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
-  { ssr: false, loading: nonLoading }
+  { ssr: false, loading: nonLoading },
 );
 
 const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
@@ -199,7 +199,7 @@ export const AttachmentNodeView = ({ node }: ReactNodeViewProps) => {
   const refFile = getRefFile(id);
   const uploadFile = useUploadFile();
   const [uploadStatus, setUploadStatus] = useState<"uploading" | "uploaded" | "failed">(
-    "uploading"
+    "uploading",
   );
 
   const onUploadFile = async (file: File) => {

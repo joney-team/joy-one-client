@@ -94,7 +94,6 @@ export const useGraphqlList = <T extends BaseData>({
   const [fetch, { data: queryData, loading, error: queryError, refetch, fetchMore }] =
     useLazyQuery<UseGraphqlListData>(args.query, {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-first",
     });
 
   useEffect(() => {

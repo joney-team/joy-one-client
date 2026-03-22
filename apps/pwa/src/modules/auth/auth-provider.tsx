@@ -38,7 +38,7 @@ import { getToken } from "firebase/messaging";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import {
@@ -248,7 +248,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const [updateUserProfile] = useMutation(MUTATION_UPDATE_USER_PROFILE);
   const updateProfile = async (values: UpdateUserProfileInput) => {
     return updateUserProfile({ variables: { input: values } }).then((res) =>
-      setUser(res.data?.updateUserProfile)
+      setUser(res.data?.updateUserProfile),
     );
   };
 
@@ -256,7 +256,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     const _file = await reducePhotoSize(file, { maxWidthOrHeight: 300 });
     const form = new FormData();
     form.append("file", _file);
-    const _user = await apiClient.formData(`/users/avatar`, form);
+    const _user = await restClient.formData(`/users/avatar`, form);
     return setUser(_user);
   };
 
@@ -314,14 +314,14 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signOutOtherDevices = async () => {
-    const tokens = await apiClient.post(`/auth/sign-out/other-devices`);
+    const tokens = await restClient.post(`/auth/sign-out/other-devices`);
     await saveClientTokens(tokens);
   };
 
   const syncUserLocale = async () => {
     if (!user || !lang.isInitialized) return;
     if (user.locale !== lang.locale) {
-      await apiClient.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
+      await restClient.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
     }
   };
 
@@ -349,7 +349,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
         setUser(event.data);
       }
     },
-    [user?._id]
+    [user?._id],
   );
 
   useEffect(() => {
@@ -364,7 +364,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     () => {
       if (app.isInitialized) initialize("init");
     },
-    [app.isInitialized]
+    [app.isInitialized],
   );
 
   useEffect(() => {

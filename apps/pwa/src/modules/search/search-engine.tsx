@@ -49,8 +49,7 @@ export const SearchEngine: FC = () => {
     QUERY_SEARCH,
     {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const isHasSearchResult =

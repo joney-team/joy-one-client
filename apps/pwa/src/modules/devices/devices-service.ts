@@ -4,7 +4,7 @@ import type { ResponseList } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { v4 as uuid } from "uuid";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import type {
   DeviceEntity,
   RegisterDeviceDto,
@@ -15,14 +15,14 @@ import type {
 export async function registerDevice() {
   const identifyId = await getDeviceIdentifyId();
 
-  return apiClient.post<DeviceEntity, RegisterDeviceDto>("/devices", {
+  return restClient.post<DeviceEntity, RegisterDeviceDto>("/devices", {
     identifyId,
     locale: getClientLocale(),
   });
 }
 
 export async function getUserDevices(query?: any): Promise<ResponseList<DeviceEntity>> {
-  return apiClient.get("/devices", { params: query });
+  return restClient.get("/devices", { params: query });
 }
 
 export async function getDevice(): Promise<DeviceEntity | undefined> {
@@ -31,7 +31,7 @@ export async function getDevice(): Promise<DeviceEntity | undefined> {
 
   return new Promise((resolve) => {
     const action = () => {
-      apiClient
+      restClient
         .get(`/devices/${identifyId}`)
         .then((res) => resolve(res))
         .catch((err) => {
@@ -79,13 +79,13 @@ export async function initializeDevice() {
 }
 
 export async function setDeviceNotificationToken(
-  dto: SetDeviceNotificationTokenDto
+  dto: SetDeviceNotificationTokenDto,
 ): Promise<DeviceEntity> {
-  return apiClient.post(`/devices/notification-token`, dto);
+  return restClient.post(`/devices/notification-token`, dto);
 }
 
 export async function setDeviceLocale(dto: SetDeviceLocaleDto): Promise<DeviceEntity> {
-  return apiClient.post(`/devices/locale`, dto);
+  return restClient.post(`/devices/locale`, dto);
 }
 
 export function isNotificationAvailable() {

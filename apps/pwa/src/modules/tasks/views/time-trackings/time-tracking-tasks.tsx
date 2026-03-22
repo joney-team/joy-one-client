@@ -14,19 +14,20 @@ import { ActionIcon, Card, Divider, Group, ScrollArea, Stack, Text, Tooltip } fr
 import { IconStopwatch } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useMemo, useRef } from "react";
+import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
 import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import type { ModalTaskTimeTrackingRef } from "../../modals/modal-task-time-tracking";
 import { TimeTrackingTask } from "./time-tracking-task";
 import { TaskTimeTracking, TaskTimeTrackingUser } from "./time-tracking-types";
+import { CalendarView } from "@/types";
 
 const ModalTaskTimeTracking = dynamic(
   () => import("../../modals/modal-task-time-tracking").then((mod) => mod.ModalTaskTimeTracking),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
@@ -36,6 +37,7 @@ export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
   const searchs = useSearchParams();
   const queryDate = searchs.get("date");
   const modalTaskTimeTrackingRef = useRef<ModalTaskTimeTrackingRef>(null);
+  const [view, setView] = useState<CalendarView>(CalendarView.MONTH);
 
   const groupVariables = useMemo<TasksQueryVariables>(() => {
     const date = queryDate ? new Date(+queryDate * 1000) : new Date();
@@ -60,19 +62,22 @@ export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
     getTasks();
   }, [groupVariables]);
 
-  const timeTrackingUsers = tasks.reduce((acc, task) => {
-    task.timeTrackings?.forEach((timeTracking) => {
-      if (!timeTracking.user) return;
-      const user = timeTracking.user;
-      if (!acc.find((u) => u.user?.userId === user.userId)) {
-        acc.push({ user, timeTrackings: [timeTracking] });
-      } else {
-        acc.find((u) => u.user?.userId === user.userId)?.timeTrackings.push(timeTracking);
-      }
-    });
+  const timeTrackingUsers = tasks.reduce(
+    (acc, task) => {
+      task.timeTrackings?.forEach((timeTracking) => {
+        if (!timeTracking.user) return;
+        const user = timeTracking.user;
+        if (!acc.find((u) => u.user?.userId === user.userId)) {
+          acc.push({ user, timeTrackings: [timeTracking] });
+        } else {
+          acc.find((u) => u.user?.userId === user.userId)?.timeTrackings.push(timeTracking);
+        }
+      });
 
-    return acc;
-  }, [] as { user: TaskTimeTrackingUser; timeTrackings: TaskTimeTracking[] }[]);
+      return acc;
+    },
+    [] as { user: TaskTimeTrackingUser; timeTrackings: TaskTimeTracking[] }[],
+  );
 
   const onChangeDate = (date: Date) => {
     const isThisMonth = DateTime.isSame(date, new Date(), "month");
@@ -94,9 +99,11 @@ export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
   return (
     <ScrollArea.Autosize mah="100%" flex={1}>
       <Stack p="sm">
-        <Card shadow="xs" p={16}>
+        <Card shadow="xs" p="md">
           <Calendar
             key={queryDate}
+            view={view}
+            onViewChange={setView}
             initialDate={queryDate ? new Date(+queryDate * 1000) : new Date()}
             onChange={(range) => onChangeDate(range.start)}
             renderDayHead={(date, hovered, isOutOfRange) => {
@@ -129,8 +136,8 @@ export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
                 (task) =>
                   task.timeTrackings &&
                   task.timeTrackings.some(
-                    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
-                  )
+                    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day"),
+                  ),
               );
 
               return (

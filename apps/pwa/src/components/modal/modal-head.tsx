@@ -25,9 +25,11 @@ export const ModalHead: FC<Props> = (props) => {
   return (
     <Group px={props.px} gap={8} w="100%" flex={1}>
       <Group gap="xs" flex={1}>
-        <ThemeIcon color={modalColor} radius="md">
-          {props.icon && <props.icon stroke={1.8} size={18} />}
-        </ThemeIcon>
+        {props.icon && (
+          <ThemeIcon color={modalColor} radius="md">
+            <props.icon stroke={1.8} size={18} />
+          </ThemeIcon>
+        )}
 
         <Text fw="700" fz={16} c={modalColor} style={{ flex: 1 }}>
           {props.name}

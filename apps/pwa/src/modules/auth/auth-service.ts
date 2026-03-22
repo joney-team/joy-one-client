@@ -54,7 +54,7 @@ export const getAccessToken = async () => {
     const decryptedToken = await decryptData(
       `${config.SECRET_KEY}_access_token`,
       encryptedToken,
-      encryptedTokenIv
+      encryptedTokenIv,
     );
     return decryptedToken;
   } catch (error) {
@@ -70,7 +70,7 @@ export const getRefreshToken = async () => {
     const decryptedToken = await decryptData(
       `${config.SECRET_KEY}_refresh_token`,
       encryptedToken,
-      encryptedTokenIv
+      encryptedTokenIv,
     );
     return decryptedToken;
   } catch (error) {
@@ -99,7 +99,7 @@ export const onFacebookLogin = async () => {
       {
         scope: configs.metaScope.join(","),
         return_scopes: true,
-      }
+      },
     );
   });
 };

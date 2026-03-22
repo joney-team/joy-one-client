@@ -7,7 +7,6 @@ query Activities(
   $offset: Float
   $limit: Float
   $ids: [String!]
-  $sortCreatedAt: SortDirection
   $parentId: String
 ) {
   activities(
@@ -17,7 +16,6 @@ query Activities(
     offset: $offset
     limit: $limit
     ids: $ids
-    sortCreatedAt: $sortCreatedAt
     parentId: $parentId
   ) {
     total

@@ -1,0 +1,29 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment AttendanceRecord on AttendanceRecord {
+  _id
+  refs
+  deviceId
+  userId
+  workspaceId
+  time
+  type
+  method
+  status
+  locationCoordinates {
+    lat
+    lng
+  }
+  photoUrl
+  note
+  rejectedAt
+  rejectedByUserId
+  rejectedReason
+  member {
+    ...WorkspaceMemberData
+  }
+  device {
+    _id
+    deviceName
+  }
+}

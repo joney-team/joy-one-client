@@ -613,3 +613,8 @@ button.removeOutline {
     outline: none;
   }
 }
+
+.optional-flag {
+  font-size: 0.75rem;
+  color: var(--mantine-color-dimmed);
+}

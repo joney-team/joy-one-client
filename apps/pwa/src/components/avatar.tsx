@@ -132,6 +132,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
       opacity={props.opacity}
       position="bottom-end"
       {...props.onlineIndicatorProps}
+      onClick={onClick}
     >
       <MantineAvatar
         {...rest}

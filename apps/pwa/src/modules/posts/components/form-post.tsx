@@ -34,7 +34,7 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
-import { apiClient } from "../../apis";
+import { restClient } from "../../apis/rest-client";
 import { PostEntity } from "../posts-types";
 import { DateFormat } from "@/components/format/date-format";
 
@@ -68,7 +68,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
   const autoGenerateSlug = useDebouncedCallback(async (title: string) => {
     try {
       if (!title) return;
-      const response = await apiClient.post<{ slug: string }>("/posts/slug", { title });
+      const response = await restClient.post<{ slug: string }>("/posts/slug", { title });
       form.setFieldValue("slug", response.slug);
     } catch (error) {
       onError(error);
@@ -88,9 +88,9 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       };
 
       if (post) {
-        _post = await apiClient.put<PostEntity>(`/posts/${post._id}`, payload);
+        _post = await restClient.put<PostEntity>(`/posts/${post._id}`, payload);
       } else {
-        _post = await apiClient.post<PostEntity>("/posts", payload);
+        _post = await restClient.post<PostEntity>("/posts", payload);
       }
 
       form.setInitialValues({

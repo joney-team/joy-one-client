@@ -13,7 +13,7 @@ import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { useRestQuery } from "../apis/use-rest-query";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
@@ -46,7 +46,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         </Trans>
       ),
       onConfirm: async () => {
-        await apiClient.delete(`/plugins/e-invoices/${invoice._id}/cancel`);
+        await restClient.delete(`/plugins/e-invoices/${invoice._id}/cancel`);
         await refetch();
       },
       cancelLabel: <Trans>Keep</Trans>,
@@ -65,7 +65,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           mt={16}
           size="xs"
           leftIcon={IconFileInvoice}
-          onClick={() => apiClient.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
+          onClick={() => restClient.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
         >
           {t`Export E-Invoice`}
         </Button>

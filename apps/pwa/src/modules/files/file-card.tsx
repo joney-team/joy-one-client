@@ -35,7 +35,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { renderFileUrl } from "./files-utils";
 
 interface FileCardProps extends CardProps {
@@ -58,8 +58,8 @@ export const FileCard: FC<FileCardProps> = ({
     typeof src === "string"
       ? renderFileUrl(src)
       : src instanceof File
-      ? URL.createObjectURL(src)
-      : "";
+        ? URL.createObjectURL(src)
+        : "";
 
   const [calculatedFileSize, setCalculatedFileSize] = useState<number | null>(null);
   const [file, setFile] = useState<FileEntity | null>();
@@ -72,7 +72,7 @@ export const FileCard: FC<FileCardProps> = ({
       if (typeof src === "string") {
         const fileId = detectFileIdFromUrl(src);
         if (fileId) {
-          const _file = await apiClient.get(`/files/${fileId}/info`);
+          const _file = await restClient.get(`/files/${fileId}/info`);
           setFile(_file);
         } else {
           const size = await getFileSizeFromUrl(fileUri);

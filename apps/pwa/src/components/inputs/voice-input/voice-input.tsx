@@ -1,7 +1,7 @@
 "use client";
 
 import { ActionIcon } from "@/components/action-icon/action-icon";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { FileEntity } from "@/modules/files/file-types";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { useColor } from "@/modules/theme/use-color";
@@ -121,14 +121,14 @@ export const VoiceInput: FC<VoiceInputProps> = (props) => {
         mimeType === "audio/webm;codecs=opus"
           ? "webm"
           : mimeType === "audio/mp4"
-          ? "mp4"
-          : mimeType.split("/")[1] || "webm";
+            ? "mp4"
+            : mimeType.split("/")[1] || "webm";
 
       const fileName = `voice.${fileExt}`;
 
       formData.append("file", blob, fileName);
 
-      const file = await apiClient.formData(`/files/convert/audio`, formData, {
+      const file = await restClient.formData(`/files/convert/audio`, formData, {
         responseType: "blob",
       });
       const fileMetadata = await uploadFile(new File([file], "voice.mp3", { type: "audio/mpeg" }));

@@ -130,6 +130,7 @@ export const EventType = {
   AttendanceRecordApproved: 'ATTENDANCE_RECORD_APPROVED',
   AttendanceRecordNew: 'ATTENDANCE_RECORD_NEW',
   AttendanceRecordRejected: 'ATTENDANCE_RECORD_REJECTED',
+  AttendanceSettingUpdated: 'ATTENDANCE_SETTING_UPDATED',
   BankTransactionCancelled: 'BANK_TRANSACTION_CANCELLED',
   BankTransactionFailed: 'BANK_TRANSACTION_FAILED',
   BankTransactionFulfilled: 'BANK_TRANSACTION_FULFILLED',
@@ -498,13 +499,6 @@ export const ReceiptType = {
 } as const;
 
 export type ReceiptType = typeof ReceiptType[keyof typeof ReceiptType];
-/** Available sort directions */
-export const SortDirection = {
-  Asc: 'ASC',
-  Desc: 'DESC'
-} as const;
-
-export type SortDirection = typeof SortDirection[keyof typeof SortDirection];
 /** Available tag types */
 export const TagType = {
   Customer: 'CUSTOMER',

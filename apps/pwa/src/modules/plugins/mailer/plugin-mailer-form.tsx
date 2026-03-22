@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -61,7 +61,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
       else {
         setIsSubmitting(true);
         try {
-          await apiClient.post("/plugins/mailer/workspace/test", {
+          await restClient.post("/plugins/mailer/workspace/test", {
             to: payload.testEmail,
             accountUser: payload.user,
             accountPass: payload.pass,

@@ -1,24 +1,24 @@
 import { ResponseList } from "@/types";
 import { useEffect, useState } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { useEventsListener } from "../events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
 import { PrescriptionDto, PrescriptionEntity } from "./prescriptions-types";
 
 export async function createPrescription(dto: PrescriptionDto) {
-  return apiClient.post<PrescriptionEntity>(`/prescriptions`, dto);
+  return restClient.post<PrescriptionEntity>(`/prescriptions`, dto);
 }
 
 export async function updatePrescription(id: string, dto: PrescriptionDto) {
-  return apiClient.put<PrescriptionEntity>(`/prescriptions/${id}`, dto);
+  return restClient.put<PrescriptionEntity>(`/prescriptions/${id}`, dto);
 }
 
 export async function removePrescription(id: string) {
-  return apiClient.delete(`/prescriptions/${id}`);
+  return restClient.delete(`/prescriptions/${id}`);
 }
 
 export async function getPrescriptions(query?: any) {
-  return apiClient.get<ResponseList<PrescriptionEntity>>(`/prescriptions`, { params: query });
+  return restClient.get<ResponseList<PrescriptionEntity>>(`/prescriptions`, { params: query });
 }
 
 let cached: PrescriptionEntity[] = [];
@@ -37,7 +37,7 @@ export const usePrescriptions = () => {
 
   useEventsListener(
     [EventType.PrescriptionsNew, EventType.PrescriptionsUpdated, EventType.PrescriptionsRemoved],
-    () => fetch()
+    () => fetch(),
   );
 
   useEffect(() => {

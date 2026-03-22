@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { onError } from "@/utils/exceptions.utils";
 import { t } from "@lingui/core/macro";
@@ -59,7 +59,7 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
 
     if (
       [PluginEInvoicesProviderType.MATBAO, PluginEInvoicesProviderType.MATBAO_DEMO].includes(
-        form.values.type
+        form.values.type,
       )
     ) {
       return (
@@ -81,18 +81,18 @@ const ModalEInvoiceProvider: FC<ModalEInvoiceProviderProps> = (props) => {
         auth: mode === "create" || mode === "update_auth" ? values.auth : undefined,
         templates:
           mode === "create"
-            ? providerConfigs.data[values.type].defaultTemplates ?? {}
-            : provider?.templates ?? {},
+            ? (providerConfigs.data[values.type].defaultTemplates ?? {})
+            : (provider?.templates ?? {}),
       };
 
       const data = provider
-        ? await apiClient.put<PluginEInvoicesProviderEntity>(
+        ? await restClient.put<PluginEInvoicesProviderEntity>(
             `/plugins/e-invoices/providers/${provider._id}`,
-            payload
+            payload,
           )
-        : await apiClient.post<PluginEInvoicesProviderEntity>(
+        : await restClient.post<PluginEInvoicesProviderEntity>(
             `/plugins/e-invoices/providers`,
-            payload
+            payload,
           );
 
       await props.onDone?.(data);

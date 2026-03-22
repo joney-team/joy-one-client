@@ -16,7 +16,7 @@ import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import QUERY_USER_WORKSPACE_MEMBERS from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
 import QUERY_WORKSPACE_SETTING from "../workspace-settings/graphql/queryWorkspaceSetting.graphql";
 import { Context } from "./workspace-context";
@@ -26,6 +26,7 @@ import {
   WorkspaceEntity,
   WorkspaceMemberInvitationState,
 } from "./workspaces-types";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -42,16 +43,14 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     QUERY_USER_WORKSPACE_MEMBERS,
     {
       fetchPolicy: "network-only",
-      nextFetchPolicy: "network-only",
-    }
+    },
   );
 
   const [fetchWorkspaceSetting, { data: workspaceSettingData }] = useLazyQuery(
     QUERY_WORKSPACE_SETTING,
     {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const member = useMemo(
@@ -59,22 +58,25 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       auth.user
         ? workspaceMembersData?.userWorkspaceMembers.find((w) => w.workspaceId === workspaceId)
         : undefined,
-    [workspaceMembersData, workspaceId]
+    [workspaceMembersData, workspaceId],
   );
 
   const select = async (workspaceId: string) => {
     startAppLoading("initial-workspace");
     setIsInitialized(true);
     client.cache.reset();
-    await initialize(workspaceId);
+    const success = await initialize(workspaceId);
+    if (success) {
+      emitInternalEvent(InternalEvent.WORKSPACE_CHANGED, workspaceId);
+    }
   };
 
   const create = async (dto: WorkspaceDto) => {
-    const workspace = await apiClient.post<WorkspaceEntity>("/workspaces", dto);
+    const workspace = await restClient.post<WorkspaceEntity>("/workspaces", dto);
     const result = await fetchWorkspaceMembers();
 
     const userWorkspace = result.data?.userWorkspaceMembers.find(
-      (userWorkspace) => userWorkspace.workspaceId === workspace._id
+      (userWorkspace) => userWorkspace.workspaceId === workspace._id,
     );
 
     if (userWorkspace) select(userWorkspace.workspaceId);
@@ -86,7 +88,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const archive = async () => {
-    await apiClient.delete(`/workspaces`);
+    await restClient.delete(`/workspaces`);
     await fetchWorkspaceMembers();
     leave();
   };
@@ -102,6 +104,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = async (selectedWorkspaceId: string | null) => {
+    let isJoined = false;
+
     try {
       await runWithDelay(async () => {
         const result = await fetchWorkspaceMembers();
@@ -109,12 +113,13 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         const workspaceMember = result.data?.userWorkspaceMembers.find(
           (member) =>
             member.workspaceId === selectedWorkspaceId ||
-            member.workspaceId === app.metadata.workspaceId
+            member.workspaceId === app.metadata.workspaceId,
         );
 
         if (selectedWorkspaceId && workspaceMember && workspaceMember.workspaceId) {
           setWorkspaceId(selectedWorkspaceId);
           await fetchWorkspaceSetting();
+          isJoined = true;
         } else {
           setWorkspaceId(undefined);
         }
@@ -125,6 +130,8 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       setIsInitialized(true);
       endAppLoading("initial-workspace");
     }
+
+    return isJoined;
   };
 
   useEventsListener(
@@ -144,7 +151,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       EventType.WorkspaceBranchNew,
       EventType.WorkspaceMemberSynced,
     ],
-    () => fetchWorkspaceMembers()
+    () => fetchWorkspaceMembers(),
   );
 
   useEventsListener([EventType.WorkspaceSettingUpdated], () => {

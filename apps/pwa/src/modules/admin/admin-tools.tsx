@@ -15,7 +15,7 @@ import {
 
 import { onError } from "@/utils/exceptions.utils";
 import { type FC } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 
 export const AdminTools: FC = () => {
   const workspace = useWorkspace();
@@ -25,11 +25,11 @@ export const AdminTools: FC = () => {
       <SectionTitle name="System Tools" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button color="red" onClick={() => apiClient.post("/helpers/reset-redis")}>
+          <Button color="red" onClick={() => restClient.post("/helpers/reset-redis")}>
             Redis | Reset Cache
           </Button>
 
-          <Button color="teal" onClick={() => apiClient.patch("/search/sys/index-all")}>
+          <Button color="teal" onClick={() => restClient.patch("/search/sys/index-all")}>
             Search | Re-Index All
           </Button>
         </Stack>
@@ -38,40 +38,40 @@ export const AdminTools: FC = () => {
       <SectionTitle name="Migrations" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => apiClient.patch(`/files/move-to-external-storage`)}>
+          <Button onClick={() => restClient.patch(`/files/move-to-external-storage`)}>
             Move files to external storage
           </Button>
 
-          <Button onClick={() => apiClient.patch(`/tasks/rebalance-order`)}>
+          <Button onClick={() => restClient.patch(`/tasks/rebalance-order`)}>
             Rebalance Task Order
           </Button>
 
-          <Button onClick={() => apiClient.patch(`/tasks/trigger-sync-all-tasks`)}>
+          <Button onClick={() => restClient.patch(`/tasks/trigger-sync-all-tasks`)}>
             Trigger Sync All Tasks
           </Button>
 
-          <Button onClick={() => apiClient.patch(`/files/migrate-file-refs`)}>
+          <Button onClick={() => restClient.patch(`/files/migrate-file-refs`)}>
             Migrate file refs
           </Button>
 
           <Divider miw="100%" />
 
-          <Button onClick={() => apiClient.patch(`/loans/migrate-created-at`)}>
+          <Button onClick={() => restClient.patch(`/loans/migrate-created-at`)}>
             Migrate Loan Created At
           </Button>
 
-          <Button onClick={() => apiClient.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
+          <Button onClick={() => restClient.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
 
-          <Button onClick={() => apiClient.patch(`/loans/sync-all`)}>Sync All Loans</Button>
+          <Button onClick={() => restClient.patch(`/loans/sync-all`)}>Sync All Loans</Button>
 
-          <Button onClick={() => apiClient.patch(`/orders/sync-all`)}>Sync All Orders</Button>
+          <Button onClick={() => restClient.patch(`/orders/sync-all`)}>Sync All Orders</Button>
 
-          <Button onClick={() => apiClient.patch(`/loans/sync-customer-branch`)}>
+          <Button onClick={() => restClient.patch(`/loans/sync-customer-branch`)}>
             Sync Loan branch to Customer branch
           </Button>
 
-          <Button onClick={() => apiClient.patch(`/files/migrate`)}>Migrate files</Button>
-          <Button onClick={() => apiClient.patch(`/files/remove-old-files`)}>
+          <Button onClick={() => restClient.patch(`/files/migrate`)}>Migrate files</Button>
+          <Button onClick={() => restClient.patch(`/files/remove-old-files`)}>
             Remove old files
           </Button>
         </Stack>
@@ -80,7 +80,7 @@ export const AdminTools: FC = () => {
       <SectionTitle name="VN Locations" icon={IconLocation} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => apiClient.patch("/locations/crawls/vn-locations")}>
+          <Button onClick={() => restClient.patch("/locations/crawls/vn-locations")}>
             Crawl VN Location
           </Button>
         </Stack>
@@ -101,7 +101,7 @@ export const AdminTools: FC = () => {
                   if (url) urls.push(url);
                 }
 
-                return apiClient.post(`/plugins/meta-pages/webhook/runtime`, { urls });
+                return restClient.post(`/plugins/meta-pages/webhook/runtime`, { urls });
               }}
             >
               Set
@@ -117,7 +117,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              apiClient.post(`/scheduling/execFetchExternalStorageSize`, {
+              restClient.post(`/scheduling/execFetchExternalStorageSize`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -128,7 +128,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              apiClient.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
+              restClient.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -139,7 +139,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              apiClient.post(`/scheduling/execSendReportToAdmin`, {
+              restClient.post(`/scheduling/execSendReportToAdmin`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -150,7 +150,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              apiClient.post(`/scheduling/execRejectPendingLoans`, {
+              restClient.post(`/scheduling/execRejectPendingLoans`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -161,7 +161,7 @@ export const AdminTools: FC = () => {
           <Button
             color="cyan"
             onClick={() =>
-              apiClient.post(`/scheduling/heathcheckSocialConnections`, {
+              restClient.post(`/scheduling/heathcheckSocialConnections`, {
                 workspaceId: workspace.member.workspaceId,
               })
             }
@@ -177,7 +177,7 @@ export const AdminTools: FC = () => {
           <Button
             color="orange"
             onClick={() => {
-              apiClient.patch(`/reports/sync-all-workspace-reports`).catch(onError);
+              restClient.patch(`/reports/sync-all-workspace-reports`).catch(onError);
             }}
           >
             Sync Reports - All Workspaces
@@ -186,7 +186,7 @@ export const AdminTools: FC = () => {
           <Button
             color="red"
             variant="outline"
-            onClick={() => apiClient.delete(`/reports/purge-range-reports`).catch(onError)}
+            onClick={() => restClient.delete(`/reports/purge-range-reports`).catch(onError)}
           >
             Purge Range Reports
           </Button>
@@ -194,7 +194,7 @@ export const AdminTools: FC = () => {
           <Button
             color="red"
             variant="outline"
-            onClick={() => apiClient.delete(`/reports/purge`).catch(onError)}
+            onClick={() => restClient.delete(`/reports/purge`).catch(onError)}
           >
             Purge Reports
           </Button>
@@ -206,7 +206,7 @@ export const AdminTools: FC = () => {
         <Group>
           <Button
             onClick={() =>
-              Promise.all(new Array(100).fill(0).map(() => apiClient.get(`/receipts`)))
+              Promise.all(new Array(100).fill(0).map(() => restClient.get(`/receipts`)))
             }
           >
             Test Rate Limit

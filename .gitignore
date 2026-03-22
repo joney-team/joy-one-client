@@ -5,3 +5,5 @@ dist
 build
 *build.log
 standalone
+
+config-env.ts

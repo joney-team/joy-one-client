@@ -28,7 +28,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Update packages/config/index.ts from CLIENT_ENVIRONMENTS
+      - name: Generate packages/config/config-env.ts from CLIENT_ENVIRONMENTS
         run: |
           BRANCH_NAME="${{ github.ref_name }}"
           ENVIRONMENTS="${{ vars.CLIENT_ENVIRONMENTS }}"
@@ -40,11 +40,10 @@ jobs:
           export BRANCH_NAME
           node << 'EOF'
           const fs = require('fs');
-          const path = require('path');
           
           const branchName = process.env.BRANCH_NAME;
           const envContent = fs.readFileSync('/tmp/client-environments.env', 'utf8');
-          const configPath = 'packages/config/index.ts';
+          const configPath = 'packages/config/config-env.ts';
           
           // Parse environment variables for the current branch
           // New format: sections are marked by comments like #staging, #production
@@ -80,28 +79,24 @@ jobs:
             }
           }
           
-          // Read the config file
-          let configContent = fs.readFileSync(configPath, 'utf8');
-          
-          // Update each environment variable in the defaultConfig object
-          for (const [key, value] of Object.entries(envVars)) {
-            // Escape special characters in value for JavaScript string
-            const escapedValue = value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
-            
-            // Escape special regex characters in key name
-            const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            
-            // Replace the key-value pair, preserving indentation
-            // Match pattern: KEY: "old_value" or KEY: 'old_value'
-            const regex = new RegExp(`(^\\s*${escapedKey}:\\s*)(["'])([^"']*)(["'])`, 'm');
-            configContent = configContent.replace(regex, `$1"${escapedValue}"`);
+          if (Object.keys(envVars).length === 0) {
+            throw new Error(`No environment variables found for branch: ${branchName}`);
           }
+
+          // Generate a complete config-env.ts file so all variables are available at runtime.
+          const sortedEntries = Object.entries(envVars).sort(([a], [b]) => a.localeCompare(b));
+          const configContent = [
+            'export default {',
+            ...sortedEntries.map(([key, value]) => `  ${JSON.stringify(key)}: ${JSON.stringify(value)},`),
+            '} as Record<string, string>;',
+            '',
+          ].join('\n');
           
-          // Write the updated config file
+          // Write the generated config file
           fs.writeFileSync(configPath, configContent, 'utf8');
           
-          console.log(`Updated packages/config/index.ts for ${branchName} environment`);
-          console.log('Updated variables:', Object.keys(envVars).join(', '));
+          console.log(`Generated packages/config/config-env.ts for ${branchName} environment`);
+          console.log('Included variables:', Object.keys(envVars).join(', '));
           EOF
           
           # Clean up

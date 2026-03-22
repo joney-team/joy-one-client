@@ -43,8 +43,6 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
   const { t } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
-  // const [paymentPlanResult, setPaymentPlanResult] = useState<LoanPaymentPlanResult>();
-  // const [calculating, setCalculating] = useState(false);
 
   const [amount, setAmount] = useState<any>(1 * 1e7);
   const [assetType, setAssetType] = useState<any>(LoanAssetType.MotobikeRegistration);
@@ -82,33 +80,32 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
     packagePeriodDaysOptions.find((d) => d === _packagePeriodDays) ?? packagePeriodDaysOptions[0];
 
   const loanPackage = workspaceSetting?.loanSettings?.loanPackages?.find(
-    (p) => assetType && p.assetTypes.includes(assetType) && p.days === packageDays
+    (p) => assetType && p.assetTypes.includes(assetType) && p.days === packageDays,
   );
 
-  const {
-    data: paymentPlanData,
-    loading: paymentPlanLoading,
-    error: paymentPlanError,
-  } = useQuery(QUERY_CALCULATE_LOAN_PAYMENT_PLAN, {
-    variables: {
-      input: {
-        packageId: loanPackage?.id ?? "",
-        amount,
-        startTime,
+  const { data: paymentPlanData, loading: paymentPlanLoading } = useQuery(
+    QUERY_CALCULATE_LOAN_PAYMENT_PLAN,
+    {
+      variables: {
+        input: {
+          packageId: loanPackage?.id ?? "",
+          amount,
+          startTime,
+        },
       },
+      skip: !loanPackage?.id || typeof amount !== "number" || !startTime || !opened,
     },
-    skip: !loanPackage?.id || typeof amount !== "number" || !startTime || !opened,
-  });
+  );
 
   const paymentPeriods = useMemo(() => {
     return (
       paymentPlanData?.calculateLoanPaymentPlan?.paymentPeriods.find(
-        (v) => v.periodDays === packagePeriodDays
+        (v) => v.periodDays === packagePeriodDays,
       )?.periods || []
     );
   }, [paymentPlanData, packagePeriodDays]);
 
-  if (!loans.isInitialized || !loans.assetEstimations || paymentPlanLoading) return null;
+  if (!loans.isInitialized || !loans.assetEstimations) return null;
 
   return (
     <Fragment>

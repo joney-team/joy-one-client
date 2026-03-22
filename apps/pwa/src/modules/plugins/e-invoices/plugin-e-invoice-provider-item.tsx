@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import { SectionTitle } from "@/components/session-title";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
@@ -55,7 +55,7 @@ const ModalConfirm = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface PluginEInvoiceProviderItemProps {
@@ -81,7 +81,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
 
   const syncTemplates = useDebouncedCallback(() => {
     if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) {
-      apiClient
+      restClient
         .put(`/plugins/e-invoices/providers/${provider._id}`, {
           ...provider,
           templates,
@@ -91,7 +91,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   }, 2000);
 
   const archive = async () => {
-    await apiClient.delete(`/plugins/e-invoices/providers/${provider._id}`);
+    await restClient.delete(`/plugins/e-invoices/providers/${provider._id}`);
     await onRefetch();
   };
 
@@ -100,7 +100,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
       icon: IconTemplate,
       content: <Trans>Are you sure you want to reset the templates?</Trans>,
       onConfirm: async () => {
-        await apiClient.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
+        await restClient.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
         await onRefetch();
       },
       confirmLabel: <Trans>Reset</Trans>,
@@ -170,8 +170,8 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                       name: <Trans>Healthcheck</Trans>,
                       icon: IconRefresh,
                       process: async () => {
-                        await apiClient.post(
-                          `/plugins/e-invoices/providers/${provider._id}/healthcheck`
+                        await restClient.post(
+                          `/plugins/e-invoices/providers/${provider._id}/healthcheck`,
                         );
                         await onRefetch();
                       },
@@ -231,7 +231,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                         ([key, value]) => ({
                           label: value.name(),
                           value: key,
-                        })
+                        }),
                       )}
                       value={templates[type]?.autoCreateMode}
                       onChange={(value) => {

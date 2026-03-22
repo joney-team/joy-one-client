@@ -33,7 +33,7 @@ const TaskDetailProperties = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const Activities = dynamic(
@@ -41,7 +41,7 @@ const Activities = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const FilesBox = dynamic(() => import("@/modules/files/files-box").then((mod) => mod.FilesBox), {
@@ -62,8 +62,7 @@ export const TaskDetail: FC = () => {
     QUERY_TASK_BY_CODE,
     {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   useEffect(() => {

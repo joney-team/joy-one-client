@@ -51,7 +51,6 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     TASK_STATUS_QUERY,
     {
       fetchPolicy: "cache-and-network",
-      nextFetchPolicy: "cache-and-network",
     },
   );
 

@@ -13,7 +13,7 @@ import { Trans } from "@lingui/react/macro";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEdit } from "@tabler/icons-react";
 import { Fragment } from "react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { EventType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PromotionDescription } from "./components/promotion-description";
@@ -137,14 +137,14 @@ export const PromotionsList = () => {
                       (status) => ({
                         id: status,
                         label: promotionStatuses[status].label(),
-                      })
+                      }),
                     )}
                     onSelect={(value) => {
                       onActionLoad({
                         name: <Trans>Update promotion status</Trans>,
                         icon: IconCheck,
                         process: () =>
-                          apiClient.patch(`/promotions/${promotion.id}/status`, {
+                          restClient.patch(`/promotions/${promotion.id}/status`, {
                             status: value?.id as PromotionStatus,
                           }),
                       });

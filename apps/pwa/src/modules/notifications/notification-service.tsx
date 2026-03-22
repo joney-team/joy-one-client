@@ -11,28 +11,28 @@ import {
   IconMoodCry,
   IconSquareRoundedCheck,
 } from "@tabler/icons-react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { getColor } from "../theme/use-color";
 import { NotificationEntity, NotificationIcon, NotificationType } from "./notification-types";
 
 export async function getNotifications(q?: any) {
-  return apiClient.get("/notifications", { params: q });
+  return restClient.get("/notifications", { params: q });
 }
 
 export async function markNotificationAsReaded(notificationId: string) {
-  return apiClient.post(`/notifications/${notificationId}/readed`);
+  return restClient.post(`/notifications/${notificationId}/readed`);
 }
 
 export async function getNotificationStat() {
-  return apiClient.get("/notifications/stat");
+  return restClient.get("/notifications/stat");
 }
 
 export async function markAllNotificationsAsReaded() {
-  return apiClient.post("/notifications/readed");
+  return restClient.post("/notifications/readed");
 }
 
 export async function cleanNotifications() {
-  return apiClient.delete("/notifications/clean");
+  return restClient.delete("/notifications/clean");
 }
 
 export const notificationIcons: { [key in NotificationIcon]: Icon } = {
@@ -69,7 +69,7 @@ export function renderNotificationColor(noti: NotificationEntity, theme?: Mantin
 export async function showInAppNotification(
   notification: NotificationEntity,
   router: AppRouter,
-  theme?: MantineTheme
+  theme?: MantineTheme,
 ) {
   const Icon = renderNotificationIcon(notification);
   const color = renderNotificationColor(notification, theme);

@@ -18,7 +18,8 @@
     "codegen:compile": "pnpm run codegen:schema && pnpm run codegen",
     "codegen:schema": "graphql-codegen --config ./codegen-schema.ts",
     "codegen": "graphql-codegen --config ./codegen.ts",
-    "compile": "pnpm run codegen:compile && pnpm run translate && pnpm run translate:compile"
+    "compile": "pnpm run codegen:compile && pnpm run translate && pnpm run translate:compile",
+    "test": "vitest"
   },
   "dependencies": {
     "@apollo/client": "^4.0.11",
@@ -31,6 +32,7 @@
     "@embedpdf/react-pdf-viewer": "^2.9.1",
     "@fingerprintjs/fingerprintjs": "^5.0.1",
     "@floating-ui/react-dom": "^2.1.6",
+    "@googlemaps/js-api-loader": "^2.0.2",
     "@graphql-codegen/cli": "^6.1.0",
     "@joy-one-client/apis": "workspace:*",
     "@joy-one-client/config": "workspace:*",
@@ -82,7 +84,7 @@
     "graphql-tag": "^2.12.6",
     "html-react-parser": "^5.2.11",
     "motion": "^12.23.26",
-    "next": "16.1.4",
+    "next": "16.1.6",
     "react": "19.2.3",
     "react-big-calendar": "^1.19.4",
     "react-dom": "19.2.3",
@@ -109,6 +111,7 @@
     "@lingui/swc-plugin": "^5.10.0",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/react": "^16.3.1",
+    "@types/google.maps": "^3.58.1",
     "@types/node": "^25.0.3",
     "@types/react": "19.2.7",
     "@types/react-big-calendar": "^1.16.3",

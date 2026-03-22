@@ -27,7 +27,6 @@ export const useTasksQuery = ({
     TasksCountQueryVariables
   >(QUERY_TASKS_COUNT, {
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   useEffect(() => {
@@ -37,7 +36,6 @@ export const useTasksQuery = ({
 
   const [fetchTasks, { data, loading, fetchMore, error }] = useLazyQuery(QUERY_TASKS, {
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   const tasks = useMemo(() => {
@@ -59,7 +57,7 @@ export const useTasksQuery = ({
               ...prev,
               tasksCount: result.data?.tasks.total ?? 0,
             };
-          }
+          },
         );
       }
     } catch {}
@@ -90,7 +88,7 @@ export const useTasksQuery = ({
                 ...dataCountPrev,
                 tasksCount: fetchMoreResult.tasks.total,
               };
-            }
+            },
           );
         }
 
@@ -101,7 +99,7 @@ export const useTasksQuery = ({
             results: [
               ...(prev.tasks.results ?? []),
               ...(fetchMoreResult.tasks.results ?? []).filter(
-                (task) => !(prev.tasks.results ?? []).some((t) => t._id === task._id)
+                (task) => !(prev.tasks.results ?? []).some((t) => t._id === task._id),
               ),
             ],
           },
@@ -160,7 +158,7 @@ export const useTasksQuery = ({
               results: [...prev.tasks.results.filter((t) => t._id !== task._id)],
             },
           };
-        }
+        },
       );
 
       client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
@@ -171,10 +169,10 @@ export const useTasksQuery = ({
         (prev) => {
           if (!prev) return prev;
           return { ...prev, tasksCount: prev.tasksCount - 1 };
-        }
+        },
       );
     },
-    [data, dataCount, client]
+    [data, dataCount, client],
   );
 
   return {

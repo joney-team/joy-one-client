@@ -6,7 +6,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { EventType, LoanStatus, ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useEventsListener } from "@/modules/events/event-service";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
 import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
@@ -67,13 +67,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
       EventType.ReceiptUnarchived,
       EventType.ReceiptChangeWorkspaceBranch,
     ],
-    () => refetchReceipts()
+    () => refetchReceipts(),
   );
 
   const receipts = receiptsData?.list.results || [];
 
   const liquidationReceipt = receipts.find(
-    (v) => v.type === ReceiptType.Income && v.data?.liquidation
+    (v) => v.type === ReceiptType.Income && v.data?.liquidation,
   );
   const isAbleToLiquidation =
     loan?.status !== LoanStatus.Completed &&
@@ -84,7 +84,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
     onConfirmModal({
       content: <Trans>Are you sure you want to revert the payment?</Trans>,
-      onConfirm: () => apiClient.post(`/loans/${loan.id}/revert-fulfilled`),
+      onConfirm: () => restClient.post(`/loans/${loan.id}/revert-fulfilled`),
     });
   };
 
@@ -173,7 +173,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                     (v) =>
                       v.type === ReceiptType.Income &&
                       (v.data?.period?.period === paymentPeriod.period ||
-                        v.data?.lateInterest?.period === paymentPeriod.period)
+                        v.data?.lateInterest?.period === paymentPeriod.period),
                   );
 
                   return (
@@ -323,7 +323,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
               (v) =>
                 v.type === ReceiptType.Income &&
                 (v.data?.period?.period === paymentPeriod.period ||
-                  v.data?.lateInterest?.period === paymentPeriod.period)
+                  v.data?.lateInterest?.period === paymentPeriod.period),
             );
 
             return (

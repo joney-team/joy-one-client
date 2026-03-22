@@ -26,7 +26,7 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useState } from "react";
-import { apiClient } from "../../apis";
+import { restClient } from "../../apis/rest-client";
 import { workspaceTypes } from "../workspace-constants";
 
 export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
@@ -74,7 +74,7 @@ export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
   const onAutoFillCode = useDebouncedCallback((name: string) => {
     if (name.length === 0) return;
 
-    apiClient
+    restClient
       .post(`/workspaces/random-code`, { name })
       .then((res) => form.setFieldValue("code", res.result))
       .catch(() => false);
@@ -140,7 +140,7 @@ export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
             onChange={(e) =>
               form.setFieldValue(
                 "code",
-                String.toSlug(e.currentTarget.value).split("-")[0].toUpperCase()
+                String.toSlug(e.currentTarget.value).split("-")[0].toUpperCase(),
               )
             }
           />

@@ -1,27 +1,27 @@
 import { ResponseList } from "@/types";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { SubscriptionDto, SubscriptionEntity } from "./subscriptions-types";
 
 export async function getSubscriptions() {
-  return apiClient.get<ResponseList<SubscriptionEntity>>("/subscriptions");
+  return restClient.get<ResponseList<SubscriptionEntity>>("/subscriptions");
 }
 
 export async function createSubscription(dto: SubscriptionDto) {
-  return apiClient.post<SubscriptionEntity>("/subscriptions", dto);
+  return restClient.post<SubscriptionEntity>("/subscriptions", dto);
 }
 
 export async function updateSubscription(id: string, dto: SubscriptionDto) {
-  return apiClient.put<SubscriptionEntity>(`/subscriptions/${id}`, dto);
+  return restClient.put<SubscriptionEntity>(`/subscriptions/${id}`, dto);
 }
 
 export async function setDefaultSubscription(id: string) {
-  return apiClient.post<SubscriptionEntity>(`/subscriptions/${id}/default`);
+  return restClient.post<SubscriptionEntity>(`/subscriptions/${id}/default`);
 }
 
 export async function setPrivateSubscription(id: string, value: boolean) {
-  return apiClient.post<SubscriptionEntity>(`/subscriptions/${id}/private`, { private: value });
+  return restClient.post<SubscriptionEntity>(`/subscriptions/${id}/private`, { private: value });
 }
 
 export async function removeSubscription(id: string) {
-  return apiClient.delete(`/subscriptions/${id}`);
+  return restClient.delete(`/subscriptions/${id}`);
 }

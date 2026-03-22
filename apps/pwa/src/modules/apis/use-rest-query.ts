@@ -5,7 +5,7 @@ import { useLocalStorage } from "@/hooks/use-local-storage";
 import { StorageKey } from "@/constants/storage-key";
 import { AxiosError } from "axios";
 import { useMemo } from "react";
-import { apiClient } from ".";
+import { restClient } from "./rest-client";
 import { onReconnected, useEventsListener } from "../events/event-service";
 import { EventDataFragment } from "../events/graphql/fragmentEvent.graphql";
 
@@ -23,7 +23,7 @@ export interface UseRestQueryArgs<T, P = Record<string, any>> {
 export type UseRestQuery<T> = UseQueryResult<T, AxiosError<unknown, any>>;
 
 export const useRestQuery = <T = any, P = Record<string, any>>(
-  args: string | (UseRestQueryArgs<T, P> & { route: string })
+  args: string | (UseRestQueryArgs<T, P> & { route: string }),
 ): UseRestQuery<T> => {
   const isReadyToFetch = typeof args === "string" ? true : !args.isSkip;
   const query = typeof args === "string" ? ({} as UseRestQueryArgs<T>) : args;
@@ -42,10 +42,10 @@ export const useRestQuery = <T = any, P = Record<string, any>>(
     queryKey: queryKeyIn,
     queryFn: ({ signal }) => {
       if (query.method === "post") {
-        return apiClient.post<T>(route, query.params, { signal });
+        return restClient.post<T>(route, query.params, { signal });
       }
 
-      return apiClient.get<T>(route, { params: query.params, signal });
+      return restClient.get<T>(route, { params: query.params, signal });
     },
     enabled: isReadyToFetch,
     networkMode,
@@ -65,7 +65,7 @@ export const useRestQuery = <T = any, P = Record<string, any>>(
         stack.refetch().catch(console.error);
       }
     },
-    [refetchEvents, isReadyToFetch, route, params]
+    [refetchEvents, isReadyToFetch, route, params],
   );
 
   onReconnected(() => {
@@ -88,7 +88,7 @@ export interface UseDynmicRestQueryArgs<T> {
 export type UseDynmicRestQuery<T> = UseQueryResult<T, AxiosError>;
 
 export function useDynmicRestQuery<T = any>(
-  args: UseDynmicRestQueryArgs<T>
+  args: UseDynmicRestQueryArgs<T>,
 ): UseDynmicRestQuery<T> {
   const { key, queryFn, isSkip } = args;
   const isReadyToFetch = !isSkip;
@@ -111,7 +111,7 @@ export function useDynmicRestQuery<T = any>(
         stack.refetch().catch(console.error);
       }
     },
-    [refetchEvents, queryKey, isReadyToFetch]
+    [refetchEvents, queryKey, isReadyToFetch],
   );
 
   return stack;

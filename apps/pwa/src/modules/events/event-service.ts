@@ -3,7 +3,7 @@
 import { EventType } from "@/graphql/types.graphql";
 import EventEmitter from "events";
 import { DependencyList, useEffect } from "react";
-import { socket } from "../apis";
+import { socket } from "../apis/rest-client";
 import { useAuth } from "../auth/auth-context";
 import { UserEventDto } from "./event-types";
 import { EventDataFragment } from "./graphql/fragmentEvent.graphql";
@@ -22,7 +22,7 @@ export const removeEventsListner = (type: EventType, listener: (...args: any[]) 
 export const useEventsListener = (
   type: EventType | EventType[],
   listener: (event: EventDataFragment) => void,
-  deps?: DependencyList
+  deps?: DependencyList,
 ) => {
   useEffect(() => {
     if (!type || (Array.isArray(type) && type.length === 0)) return () => {};
@@ -45,7 +45,7 @@ export const useEventsListener = (
 
 export const usePureEventsListner = (
   listener: (event: EventDataFragment) => void,
-  deps?: DependencyList
+  deps?: DependencyList,
 ) => {
   useEffect(() => {
     socket.on("EVENT_NEW", listener);
@@ -58,7 +58,7 @@ export const usePureEventsListner = (
 
 export const useUserEventsListner = (
   listener: (event: UserEventDto) => void,
-  deps?: DependencyList
+  deps?: DependencyList,
 ) => {
   const auth = useAuth();
 

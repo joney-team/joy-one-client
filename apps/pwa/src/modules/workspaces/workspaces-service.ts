@@ -14,7 +14,7 @@ import {
   IconSparkles,
   IconStethoscope,
 } from "@tabler/icons-react";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { WorkspaceDataFragment } from "./graphql/fragmentWorkspace.graphql";
 import { UpdateWorkspaceMutationVariables } from "./graphql/mutationUpdateWorkspace.graphql";
 import { WorkspaceEntity, WorkspaceInviteInformation } from "./workspaces-types";
@@ -40,23 +40,23 @@ export function getWorkspaceTypeIcon(type: WorkspaceType) {
 }
 
 export async function getWorkspaceByInviteCode(inviteCode: string) {
-  return apiClient.get<AppPageMetadata>(`/workspaces/invite/${inviteCode}/metadata`);
+  return restClient.get<AppPageMetadata>(`/workspaces/invite/${inviteCode}/metadata`);
 }
 
 export async function getWorkspaceInviteInformation(inviteCode: string) {
-  return apiClient.get<WorkspaceInviteInformation>(`/workspaces/invite/${inviteCode}`);
+  return restClient.get<WorkspaceInviteInformation>(`/workspaces/invite/${inviteCode}`);
 }
 
 export async function regenerateWorkspaceInviteCode() {
-  return apiClient.post<WorkspaceEntity>("/workspaces/regenerate-invite-code");
+  return restClient.post<WorkspaceEntity>("/workspaces/regenerate-invite-code");
 }
 
 export async function getWorkspaceById(id: string) {
-  return apiClient.get<WorkspaceEntity>(`/workspaces/ids/${id}`);
+  return restClient.get<WorkspaceEntity>(`/workspaces/ids/${id}`);
 }
 
 export function normalizeWorkspaceInput(
-  workspace: WorkspaceDataFragment
+  workspace: WorkspaceDataFragment,
 ): UpdateWorkspaceMutationVariables {
   return {
     name: workspace?.name ?? "",

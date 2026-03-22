@@ -36,7 +36,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface GanttTasksGroupProps {
@@ -57,7 +57,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const { state } = useTasks();
   const [isOpened, setIsOpened] = useState(
-    isDefaultOpen || Boolean(localStorage.getItem(`gtg-${folder?._id ?? "d"}`))
+    isDefaultOpen || Boolean(localStorage.getItem(`gtg-${folder?._id ?? "d"}`)),
   );
 
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
@@ -170,14 +170,15 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
     const startIndexCaptured = gantt.columns.findIndex(
       (column) =>
-        DateTime.toSeconds(column.start) >= startDate || DateTime.toSeconds(column.end) >= startDate
+        DateTime.toSeconds(column.start) >= startDate ||
+        DateTime.toSeconds(column.end) >= startDate,
     );
 
     const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
 
     const endIndexCaptured = gantt.columns.findIndex(
       (column) =>
-        DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
+        DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate,
     );
 
     const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;
@@ -319,7 +320,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
             </div>
           </Fragment>,
           ganttRefs.body.current,
-          folder?._id ?? "root" + "-folder-gantt"
+          folder?._id ?? "root" + "-folder-gantt",
         )}
 
       {opened &&

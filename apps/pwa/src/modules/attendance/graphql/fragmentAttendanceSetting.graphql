@@ -1,0 +1,11 @@
+fragment AttendanceSetting on AttendanceSetting {
+  locations {
+    id
+    name
+    allowedDistanceInMeters
+    coordinates {
+      lat
+      lng
+    }
+  }
+}

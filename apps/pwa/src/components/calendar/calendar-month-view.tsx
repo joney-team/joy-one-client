@@ -7,19 +7,21 @@ import { Badge, Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine
 import { useHover } from "@mantine/hooks";
 import { FC } from "react";
 import { DateFormat } from "../format/date-format";
-import { CalendarProps } from "./calendar-types";
+import { CalendarProps, CalendarViewProps } from "./calendar-types";
 
-const DateSlot: FC<{
-  weekIndex?: number;
-  dayIndex?: number;
-  thisDate: Date;
-  isInThisMonth: boolean;
-  isToday: boolean;
-  borderColor: string;
-  renderDay?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
-  renderDayHead?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
-  minHeight?: number;
-}> = (props) => {
+const DateSlot: FC<
+  {
+    weekIndex?: number;
+    dayIndex?: number;
+    thisDate: Date;
+    isInThisMonth: boolean;
+    isToday: boolean;
+    borderColor: string;
+    renderDay?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
+    renderDayHead?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
+    minHeight?: number;
+  } & Pick<CalendarProps, "components">
+> = (props) => {
   const { dayIndex, thisDate, isInThisMonth, isToday, weekIndex, borderColor } = props;
 
   const color = useColor();
@@ -31,6 +33,8 @@ const DateSlot: FC<{
     light: isInThisMonth ? "white" : "gray.1",
     dark: isInThisMonth ? "var(--mantine-color-default-hover)" : "var(--mantine-color-body)",
   };
+
+  const MonthDateComponent = props.components?.monthDate;
 
   return (
     <Stack
@@ -68,6 +72,14 @@ const DateSlot: FC<{
       </Group>
 
       {props.renderDay ? props.renderDay(thisDate, hover.hovered, !props.isInThisMonth) : null}
+
+      {MonthDateComponent ? (
+        <MonthDateComponent
+          date={thisDate}
+          hovered={hover.hovered}
+          isOutOfRange={!props.isInThisMonth}
+        />
+      ) : null}
     </Stack>
   );
 };
@@ -75,12 +87,7 @@ const DateSlot: FC<{
 const dayCols = new Array(7).fill(0);
 const dayRows = new Array(6).fill(0);
 
-export const CalendarMonthView: FC<
-  CalendarProps & {
-    startAt: Date;
-    endAt: Date;
-  }
-> = (props) => {
+export const CalendarMonthView: FC<CalendarViewProps> = (props) => {
   const borderColor = alpha("gray", 0.1);
   const startOfWeek = DateTime.getRange(props.startAt, "week").start;
 
@@ -128,6 +135,7 @@ export const CalendarMonthView: FC<
                 renderDay={props.renderDay}
                 renderDayHead={props.renderDayHead}
                 minHeight={props.daySlotMinHeight}
+                components={props.components}
               />
             );
           });

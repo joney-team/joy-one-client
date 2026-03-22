@@ -66,7 +66,7 @@ export class ApiInstance {
         }
 
         throw error;
-      }
+      },
     );
 
     this.instance = instance;
@@ -103,7 +103,7 @@ export class ApiInstance {
   async post<Response = any, Payload = any>(
     url: string,
     payload?: Payload,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ) {
     return this.instance
       .post<Response>(url, payload, await this.bindConfig(config ?? {}))
@@ -113,7 +113,7 @@ export class ApiInstance {
   async put<Response = any, Payload = any>(
     url: string,
     payload?: Payload,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ) {
     return this.instance
       .put<Response>(url, payload, await this.bindConfig(config ?? {}))
@@ -123,7 +123,7 @@ export class ApiInstance {
   async patch<Response = any, Payload = any>(
     url: string,
     payload?: Payload,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ) {
     return this.instance
       .patch<Response>(url, payload, await this.bindConfig(config ?? {}))
@@ -133,7 +133,7 @@ export class ApiInstance {
   async delete<Response = any, Payload = any>(
     url: string,
     payload?: Payload,
-    config?: AxiosRequestConfig
+    config?: AxiosRequestConfig,
   ) {
     return this.instance
       .delete<Response>(url, {

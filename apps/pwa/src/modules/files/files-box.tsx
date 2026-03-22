@@ -37,7 +37,7 @@ const ModalFileGallery = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface FilesBoxProps {
@@ -85,7 +85,6 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
       },
     },
     fetchPolicy: "cache-and-network",
-    nextFetchPolicy: "cache-and-network",
   });
 
   const addFile = async (_fs: File[]) => {
@@ -95,7 +94,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
       Promise.all(
         _files.map((file) => {
           return uploadFile(file, { refs: props.refs });
-        })
+        }),
       ).then(() => refetch());
     } else {
       if (props.replace) {
@@ -131,7 +130,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     ref,
     (): FilesBoxRef => ({
       add: async (_files) => addFile(_files),
-    })
+    }),
   );
 
   return (
@@ -166,7 +165,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
             <Group gap={10}>
               {filesData?.list.results.map((file, index) => {
                 const specificDisabled = props.specificDisabledRelated?.find(
-                  (v) => !!(file as any)[v]
+                  (v) => !!(file as any)[v],
                 );
 
                 return (
@@ -245,6 +244,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
           </Renderer>
         </Stack>
       </Card>
+
       <ModalFileGallery ref={modalFileGalleryRef} />
     </Dropzone>
   );

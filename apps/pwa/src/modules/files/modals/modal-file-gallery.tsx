@@ -17,17 +17,7 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Anchor,
-  Center,
-  em,
-  Group,
-  Loader,
-  SimpleGrid,
-  Stack,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Anchor, em, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import {
   IconBrowser,
   IconChevronLeft,
@@ -48,7 +38,7 @@ const FilePdfViewer = dynamic(() => import("../file-pdf-viewer").then((mod) => m
 });
 
 export interface ModalFileGalleryArgs {
-  files: FileEntity[] | { _id?: string; url: string; fileName?: string; type?: FileType }[];
+  files: FileEntity[] | { url: string; _id?: string; fileName?: string; type?: FileType }[];
   index?: number;
   readonly?: boolean;
   disabled?: boolean;
@@ -74,6 +64,16 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
     const activeFile = args?.files[index];
     const fileSize = useFileSize(renderFileUrl(activeFile?.url));
     const disabled = args?.disabled || args?.readonly;
+
+    useImperativeHandle(ref, () => ({
+      open: (p) => {
+        if (p.index) setIndex(p.index);
+        setArgs(p);
+      },
+      close: () => {
+        onClose();
+      },
+    }));
 
     const [removeFile] = useMutation(MUTATAION_REMOVE_FILE);
 
@@ -145,24 +145,12 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
       });
     };
 
-    useImperativeHandle(ref, () => ({
-      open: (p) => {
-        if (p.index) setIndex(p.index);
-        setArgs(p);
-      },
-      close: () => {
-        onClose();
-      },
-    }));
-
     return (
       <Fragment>
-        {props.children &&
-          typeof props.children === "function" &&
-          props.children((p) => {
-            setIndex(p.index || 0);
-            setArgs(p);
-          })}
+        {props.children?.((p) => {
+          setIndex(p.index || 0);
+          setArgs(p);
+        })}
 
         <Modal
           opened={!!args}

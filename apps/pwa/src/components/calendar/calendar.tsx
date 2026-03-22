@@ -6,25 +6,27 @@ import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Stack, Text } from "@mantine/core";
 import { IconCalendarDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { Button } from "../buttons/button";
 import { CalendarViewSelector } from "../calendar-view-selector";
 import { DateFormat } from "../format/date-format";
 import { LaunchingSoon } from "../launching-soon";
 import { CalendarMonthView } from "./calendar-month-view";
+import { CalendarProps, CalendarViewProps } from "./calendar-types";
+import { normalizeCalendarView } from "./calendar-utils";
 
-interface CalendarProps {
-  initialDate?: Date;
-  onChange?: (range: { start: Date; end: Date }) => void;
-  renderDay?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
-  renderDayHead?: (date: Date, hovered: boolean, isOutOfRange: boolean) => React.ReactNode;
-  daySlotMinHeight?: number;
-}
+const calendarViews: Record<CalendarView, FC<CalendarViewProps> | undefined> = {
+  [CalendarView.DAY]: undefined,
+  [CalendarView.WEEK]: undefined,
+  [CalendarView.MONTH]: CalendarMonthView,
+};
 
 export const Calendar: FC<CalendarProps> = (props) => {
   const color = useColor();
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
-  const [view, setView] = useState<CalendarView>(CalendarView.MONTH);
+  const view = useMemo(() => {
+    return normalizeCalendarView(props.view);
+  }, [props.view]);
 
   const range = DateTime.getRange(date, view);
 
@@ -82,11 +84,21 @@ export const Calendar: FC<CalendarProps> = (props) => {
     ),
   };
 
-  const calendarViews: Record<CalendarView, React.ReactNode | undefined> = {
-    [CalendarView.DAY]: undefined,
-    [CalendarView.WEEK]: undefined,
-    [CalendarView.MONTH]: <CalendarMonthView {...props} startAt={range.start} endAt={range.end} />,
-  };
+  const calendarView = useMemo(() => {
+    const Component = calendarViews[view];
+    if (!Component) return <LaunchingSoon shadow="none" />;
+
+    return (
+      <Component
+        startAt={range.start}
+        endAt={range.end}
+        renderDay={props.renderDay}
+        renderDayHead={props.renderDayHead}
+        daySlotMinHeight={props.daySlotMinHeight}
+        components={props.components}
+      />
+    );
+  }, [view, range, props.renderDay, props.renderDayHead, props.components, props.daySlotMinHeight]);
 
   return (
     <Stack>
@@ -112,11 +124,11 @@ export const Calendar: FC<CalendarProps> = (props) => {
             </Button>
           )}
 
-          <CalendarViewSelector view={view} onChange={setView} />
+          <CalendarViewSelector view={view} onChange={(v) => props.onViewChange?.(v)} />
         </Group>
       </Group>
 
-      {calendarViews[view] || <LaunchingSoon shadow="none" />}
+      {calendarView}
     </Stack>
   );
 };

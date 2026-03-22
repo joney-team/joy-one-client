@@ -321,6 +321,15 @@ export const workspaceModuleConfigs = {
     name: defineMessage`Roles`,
     description: defineMessage`Manage member roles and access permissions`,
   }),
+  workspaceSettingsAttendance: combineModule({
+    href: "/workspace-settings/attendance",
+    icon: IconCalendarCheck,
+    permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER,
+    restrictDisplay: ["spotlight"],
+    color: "indigo",
+    name: defineMessage`Attendance settings`,
+    description: defineMessage`Manage attendance: location check-in, attendance rules, ...`,
+  }),
 
   workspaceSettingsApiApps: combineModule({
     href: "/workspace-settings/api-apps",
@@ -528,6 +537,6 @@ export const useActivatedWorkspaceModule = () => {
   const pathname = usePathname();
 
   return workspaceModules.find(
-    (m) => pathname === m.href || (pathname.startsWith(m.href) && !m.hrefExact)
+    (m) => pathname === m.href || (pathname.startsWith(m.href) && !m.hrefExact),
   );
 };

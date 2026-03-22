@@ -1,13 +1,13 @@
 "use client";
 
-import { InputModalProps, ModalInput } from "@/modals/modal-input";
+import { InputModalState, ModalInput } from "@/modals/modal-input";
 import { ActionIcon, Group } from "@mantine/core";
 import { IconPencil } from "@tabler/icons-react";
 import { FC, PropsWithChildren } from "react";
 import { Hovered } from "./hovered";
 
 interface HoverToEditProps {
-  input: InputModalProps;
+  input: InputModalState;
   justify?: "start" | "end";
   disabled?: boolean;
 }

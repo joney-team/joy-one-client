@@ -4,7 +4,7 @@ import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
 import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
-import { apiClient } from "@/modules/apis";
+import { restClient } from "@/modules/apis/rest-client";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { ResponseList } from "@/types";
 import { t } from "@lingui/core/macro";
@@ -18,7 +18,7 @@ export const ZaloOaGmfGroups: FC = () => {
   const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
 
   const { data, count } = useList({
-    fetch: async () => apiClient.get<ResponseList<ZaloOaGmfGroup>>("/plugins/zalo-oas/gmf-groups"),
+    fetch: async () => restClient.get<ResponseList<ZaloOaGmfGroup>>("/plugins/zalo-oas/gmf-groups"),
     events: [EventType.WorkspaceSettingUpdated],
   });
 

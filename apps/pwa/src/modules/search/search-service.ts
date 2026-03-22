@@ -1,17 +1,17 @@
 import { AppEntity } from "@/types";
-import { apiClient } from "../apis";
+import { restClient } from "../apis/rest-client";
 import { SearchEntityResult } from "./search-types";
 
 export async function searchGetAvailableEntities() {
-  return apiClient.get<AppEntity[]>("/search/available-entities");
+  return restClient.get<AppEntity[]>("/search/available-entities");
 }
 
 export async function searchEntity<T = SearchEntityResult>(
   entity: AppEntity,
   q: string,
-  filter?: any
+  filter?: any,
 ) {
-  return apiClient.get<T[]>(`/search/entities/${entity}`, { params: { q, ...filter } });
+  return restClient.get<T[]>(`/search/entities/${entity}`, { params: { q, ...filter } });
 }
 
 export function removeAccents(str: string): string {
@@ -22,7 +22,7 @@ export function searchArray<T>(
   array: T[],
   fieldsToSearch: (keyof T)[],
   query: string,
-  index?: (item: T) => string
+  index?: (item: T) => string,
 ): T[] {
   if (!query || query.length === 0) return array;
 
