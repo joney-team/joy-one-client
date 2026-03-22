@@ -26,4 +26,11 @@ fragment AttendanceRecord on AttendanceRecord {
     _id
     deviceName
   }
+  location {
+    name 
+    coordinates {
+      lat
+      lng
+    }
+  }
 }

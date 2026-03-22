@@ -1,0 +1,7 @@
+#import "./fragmentAttendanceRecord.graphql"
+
+mutation RejectAttendanceRecord($rejectAttendanceRecordId: String!, $input: RejectAttendanceRecordInput!) {
+  rejectAttendanceRecord(id: $rejectAttendanceRecordId, input: $input) {
+    ...AttendanceRecord
+  }
+}

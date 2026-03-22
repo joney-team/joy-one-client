@@ -2,15 +2,17 @@ import { Avatar } from "@/components/avatar";
 import { Calendar } from "@/components/calendar/calendar";
 import { CalendarComponents } from "@/components/calendar/calendar-types";
 import { normalizeCalendarView } from "@/components/calendar/calendar-utils";
+import { AttendanceRecordStatus, EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Card, Group, Stack } from "@mantine/core";
+import { Card, Group, Stack, Text } from "@mantine/core";
 import { useSearchParams } from "next/dist/client/components/navigation";
 import dynamic from "next/dynamic";
 import { FC, useMemo, useRef } from "react";
 import { useVariablesQuery } from "../apollo/use-query";
+import { useEventsListener } from "../events/event-service";
 import { groupAttendanceRecordsByUsers, sumAttendanceRecords } from "./attendance-utils";
 import QUERY_ATTENDANCE_RECORDS, {
   type AttendanceRecordsQueryVariables,
@@ -50,11 +52,16 @@ export const AttendanceList: FC = () => {
     return {
       query: {
         timeRangeTime: `${view}-${DateTime.toSeconds(queryDate ?? new Date())}`,
+        status: AttendanceRecordStatus.Approved,
       },
     };
   }, [queryDate, view]);
 
-  const { data } = useVariablesQuery(QUERY_ATTENDANCE_RECORDS, variables);
+  const { data, refetch } = useVariablesQuery(QUERY_ATTENDANCE_RECORDS, variables);
+
+  useEventsListener([EventType.AttendanceRecordApproved, EventType.AttendanceRecordNew], () =>
+    refetch(),
+  );
 
   const components = useMemo<CalendarComponents | undefined>(() => {
     if (!data || data.attendanceRecords.results.length === 0) return;
@@ -78,7 +85,8 @@ export const AttendanceList: FC = () => {
                   className="clickable"
                   component="button"
                   withBorder
-                  p={4}
+                  py={4}
+                  px="xs"
                   onClick={() =>
                     modalAttendanceRecordsRef.current?.open({
                       userId: memberRecord.member.userId,
@@ -87,8 +95,15 @@ export const AttendanceList: FC = () => {
                   }
                 >
                   <Group gap="xs">
-                    <Avatar user={memberRecord.member} size={28} />
-                    {DateTime.toHHMM(sumAttendanceRecords(memberRecord.records))}
+                    <Avatar user={memberRecord.member} size={30} />
+                    <Stack gap={0}>
+                      <Text fz="xs" fw={500}>
+                        {memberRecord.member.name}
+                      </Text>
+                      <Text fz="xs" ta="left">
+                        {DateTime.toHHMM(sumAttendanceRecords(memberRecord.records))}
+                      </Text>
+                    </Stack>
                   </Group>
                 </Card>
               );

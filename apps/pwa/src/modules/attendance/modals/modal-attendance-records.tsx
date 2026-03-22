@@ -6,22 +6,45 @@ import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { DateInput } from "@/components/inputs/date-input";
 import { Modal } from "@/components/modal/modal";
+import { AttendanceRecordStatus, EventType } from "@/graphql/enums.graphql";
+import { type ModalConfirmRef } from "@/modals/modal-confirm";
 import { useVariablesQuery } from "@/modules/apollo/use-query";
+import { useEventsListener } from "@/modules/events/event-service";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { getGoogleMapLinkCoord } from "@/modules/locations/locations-service";
 import { useWorkspaceMember } from "@/modules/workspace-members/hooks/use-workspace-member";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { nonLoading } from "@/utils/non-loading";
+import { useMutation } from "@apollo/client/react";
 import { DateTime, type RawDate } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Anchor, Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconCalendarCheck, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { Anchor, Badge, Card, Group, Menu, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  IconCalendarCheck,
+  IconCheck,
+  IconChevronLeft,
+  IconChevronRight,
+  IconClock,
+  IconDotsVertical,
+  IconLocation,
+  IconX,
+} from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
-import { attendanceRecordTypes } from "../attendance-constants";
-import QUERY_ATTENDANCE_RECORDS from "../graphql/queryAttendanceRecords.graphql";
-import { getGoogleMapLinkCoord } from "@/modules/locations/locations-service";
+import { attendanceRecordStatuses, attendanceRecordTypes } from "../attendance-constants";
 import { sumAttendanceRecords } from "../attendance-utils";
+import MUTATION_APPROVE_ATTENDANCE_RECORD from "../graphql/mutationApproveAttendanceRecord.graphql";
+import MUTATION_REJECT_ATTENDANCE_RECORD from "../graphql/mutationRejectAttendanceRecord.graphql";
+import QUERY_ATTENDANCE_RECORDS from "../graphql/queryAttendanceRecords.graphql";
+
+const ModalConfirm = dynamic(
+  () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
+  {
+    ssr: false,
+    loading: nonLoading,
+  },
+);
 
 const ModalFileGallery = dynamic(
   () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
@@ -45,17 +68,31 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
   const [selectedDate, setSelectedDate] = useState(date);
   const { member, loading: isMemberLoading, error: memberError } = useWorkspaceMember(userId);
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalConfirmRef = useRef<ModalConfirmRef>(null);
+
+  const [approveAttendance] = useMutation(MUTATION_APPROVE_ATTENDANCE_RECORD);
+  const [rejectAttendance] = useMutation(MUTATION_REJECT_ATTENDANCE_RECORD);
 
   const {
     data,
     loading: isAttendanceLoading,
     error: attendanceError,
+    refetch,
   } = useVariablesQuery(QUERY_ATTENDANCE_RECORDS, {
     query: {
       timeRangeTime: `date-${DateTime.toSeconds(selectedDate)}`,
       userId,
     },
   });
+
+  useEventsListener(
+    [
+      EventType.AttendanceRecordApproved,
+      EventType.AttendanceRecordNew,
+      EventType.AttendanceRecordRejected,
+    ],
+    () => refetch(),
+  );
 
   const onViewPhotos = useCallback(
     (index: number) => {
@@ -148,39 +185,132 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
         .sort((a, b) => a.time - b.time)
         .map((record, index) => {
           const { icon: Icon, color } = attendanceRecordTypes[record.type];
+          const { label, color: statusColor } = attendanceRecordStatuses[record.status];
 
           return (
             <Card key={record._id} withBorder shadow="none" p="xs">
               <Group justify="space-between" gap="xs">
                 <Group gap="xs">
-                  <ThemeIcon color={color} size="lg">
-                    <Icon size={18} />
-                  </ThemeIcon>
-                  <Stack gap={0}>
-                    <DateFormat value={record.time} />
+                  <Avatar
+                    radius="sm"
+                    size={65}
+                    className="clickable"
+                    src={renderFileUrl(record.photoUrl)}
+                    onClick={() => {
+                      if (!record.photoUrl) return;
+                      onViewPhotos(index);
+                    }}
+                  />
+                  <Stack gap={5}>
+                    <Group gap="xs">
+                      <Badge
+                        tt="capitalize"
+                        color={color}
+                        leftSection={<Icon size={14} />}
+                        radius="lg"
+                      >
+                        {t(attendanceRecordTypes[record.type].label)}
+                      </Badge>
+
+                      {(
+                        [
+                          AttendanceRecordStatus.Rejected,
+                          AttendanceRecordStatus.Pending,
+                        ] as AttendanceRecordStatus[]
+                      ).includes(record.status) && (
+                        <Badge color={statusColor} radius="lg" variant="light">
+                          {t(label)}
+                        </Badge>
+                      )}
+                    </Group>
+
+                    <Group>
+                      <Text fz="xs">
+                        <IconClock size={14} style={{ marginBottom: -3, marginRight: 3 }} />
+                        <DateFormat value={record.time} />
+                      </Text>
+                    </Group>
 
                     {record.locationCoordinates && (
-                      <Anchor
-                        href={getGoogleMapLinkCoord(record.locationCoordinates)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        fz="xs"
-                      >
-                        <Trans>View location</Trans>
-                      </Anchor>
+                      <Group>
+                        <Anchor
+                          href={getGoogleMapLinkCoord(record.locationCoordinates)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          fz="xs"
+                          c="dark"
+                          truncate="end"
+                          maw={300}
+                        >
+                          <IconLocation size={14} style={{ marginBottom: -3, marginRight: 3 }} />
+
+                          {record.location?.name ?? <Trans>View location</Trans>}
+                        </Anchor>
+                      </Group>
                     )}
                   </Stack>
                 </Group>
 
-                <Avatar
-                  radius="sm"
-                  className="clickable"
-                  src={renderFileUrl(record.photoUrl)}
-                  onClick={() => {
-                    if (!record.photoUrl) return;
-                    onViewPhotos(index);
-                  }}
-                />
+                <Group justify="end">
+                  <Menu>
+                    <Menu.Target>
+                      <ActionIcon variant="subtle" color="gray">
+                        <IconDotsVertical size={16} />
+                      </ActionIcon>
+                    </Menu.Target>
+
+                    <Menu.Dropdown>
+                      {(
+                        [
+                          AttendanceRecordStatus.Pending,
+                          AttendanceRecordStatus.Rejected,
+                        ] as AttendanceRecordStatus[]
+                      ).includes(record.status) && (
+                        <Menu.Item
+                          leftSection={<IconCheck size={16} />}
+                          onClick={() =>
+                            approveAttendance({
+                              variables: {
+                                approveAttendanceRecordId: record._id,
+                              },
+                            })
+                          }
+                        >
+                          <Trans>Approve</Trans>
+                        </Menu.Item>
+                      )}
+
+                      {(
+                        [
+                          AttendanceRecordStatus.Approved,
+                          AttendanceRecordStatus.Pending,
+                        ] as AttendanceRecordStatus[]
+                      ).includes(record.status) && (
+                        <Menu.Item
+                          leftSection={<IconX size={16} />}
+                          onClick={() =>
+                            modalConfirmRef.current?.open({
+                              onConfirm: () =>
+                                rejectAttendance({
+                                  variables: {
+                                    rejectAttendanceRecordId: record._id,
+                                    input: {},
+                                  },
+                                }),
+                              content: (
+                                <Trans>
+                                  Are you sure you want to reject this attendance record?
+                                </Trans>
+                              ),
+                            })
+                          }
+                        >
+                          <Trans>Reject</Trans>
+                        </Menu.Item>
+                      )}
+                    </Menu.Dropdown>
+                  </Menu>
+                </Group>
               </Group>
             </Card>
           );
@@ -199,6 +329,7 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
       )}
 
       <ModalFileGallery ref={modalFileGalleryRef} />
+      <ModalConfirm ref={modalConfirmRef} />
     </Stack>
   );
 };

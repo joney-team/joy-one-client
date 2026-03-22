@@ -1,13 +1,13 @@
 import { AttendanceRecordStatus, AttendanceRecordType } from "@/graphql/enums.graphql";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { AttendanceRecordFragment } from "./graphql/fragmentAttendanceRecors.graphql";
+import { type WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { type AttendanceRecordFragment } from "./graphql/fragmentAttendanceRecord.graphql";
 
 export function sumAttendanceRecords(
   records: Pick<AttendanceRecordFragment, "time" | "userId" | "type" | "status">[],
 ): number {
   const pendingCheckInsByUser = new Map<string, number[]>();
 
-  return records
+  return Array.from(records)
     .sort((a, b) => a.time - b.time)
     .filter((record) => record.status === AttendanceRecordStatus.Approved)
     .reduce((acc, record) => {

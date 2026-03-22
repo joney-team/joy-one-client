@@ -1,0 +1,14 @@
+import type * as Types from '../../../graphql/types.graphql.d';
+
+export type RejectAttendanceRecordMutationVariables = Types.Exact<{
+  rejectAttendanceRecordId: Types.Scalars['String']['input'];
+  input: Types.RejectAttendanceRecordInput;
+}>;
+
+
+export type RejectAttendanceRecordMutation = { __typename: 'Mutation', rejectAttendanceRecord: { __typename: 'AttendanceRecord', _id: string, refs: Array<string> | null, deviceId: string, userId: string, workspaceId: string, time: number, type: Types.AttendanceRecordType, method: Types.AttendanceRecordMethod, status: Types.AttendanceRecordStatus, photoUrl: string | null, note: string | null, rejectedAt: number | null, rejectedByUserId: string | null, rejectedReason: string | null, locationCoordinates: { __typename: 'Coordinates', lat: number, lng: number } | null, member: { __typename: 'WorkspaceMember', _id: string, userId: string, name: string, email: string, phone: string | null, color: string | null, avatar: string | null, memberId: string | null, workspaceId: string, permissions: Array<string>, workingTimeType: Types.WorkspaceMemberWorkingTimeType | null, memberDisplayName: string | null, joinedAt: number | null, workspace: { __typename: 'Workspace', _id: string, code: string, type: Types.WorkspaceType, inviteCode: string | null, name: string, logo: string | null, hotline: string | null, phone: string | null, locale: Types.AppLocale | null, appIcon: string | null, appColor: string | null, appName: string | null, appDomain: string | null, appColorShape: number | null, branches: number, isArchived: boolean | null, location: { __typename: 'Location', address: string | null } | null }, workspaceBranches: Array<{ __typename: 'WorkspaceMemberWorkspaceBranchInfo', _id: string, name: string, hotline: string | null }>, roles: Array<{ __typename: 'WorkspaceMemberRole', _id: string, name: string, color: string | null }> }, device: { __typename: 'Device', _id: string, deviceName: string | null }, location: { __typename: 'AttendanceRecordLocation', name: string, coordinates: { __typename: 'Coordinates', lat: number, lng: number } } | null } };
+
+
+import { TypedDocumentNode } from '@apollo/client/core';
+export const RejectAttendanceRecordDocument = (import("graphql").DocumentNode) as TypedDocumentNode<RejectAttendanceRecordMutation, RejectAttendanceRecordMutationVariables>;
+export default RejectAttendanceRecordDocument 

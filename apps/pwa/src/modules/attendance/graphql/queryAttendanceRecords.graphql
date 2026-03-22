@@ -1,4 +1,4 @@
-#import "./fragmentAttendanceRecors.graphql"
+#import "./fragmentAttendanceRecord.graphql"
 
 query AttendanceRecords($limit: Float, $offset: Float, $query: JSONObject) {
   attendanceRecords(limit: $limit, offset: $offset, query: $query) {

@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
+import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
 import { Divider, Group, ModalProps, Stack, ThemeIcon } from "@mantine/core";
 import { IconAlertTriangle, type Icon as TablerIcon } from "@tabler/icons-react";
@@ -45,7 +46,11 @@ export const ModalConfirm = forwardRef<ModalConfirmRef, ModalConfirmProps>((prop
 
   const onConfirm = async () => {
     if (!args) return;
-    await args?.onConfirm();
+    try {
+      await args?.onConfirm();
+    } catch (error) {
+      onError(error);
+    }
     setArgs(null);
   };
 

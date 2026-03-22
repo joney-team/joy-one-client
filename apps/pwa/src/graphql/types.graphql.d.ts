@@ -85,7 +85,9 @@ export type AttendanceRecord = {
   device: Device;
   deviceId: Scalars['String']['output'];
   isArchived: Maybe<Scalars['Boolean']['output']>;
+  location: Maybe<AttendanceRecordLocation>;
   locationCoordinates: Maybe<Coordinates>;
+  locationId: Maybe<Scalars['String']['output']>;
   member: WorkspaceMember;
   method: AttendanceRecordMethod;
   note: Maybe<Scalars['String']['output']>;
@@ -101,6 +103,12 @@ export type AttendanceRecord = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   userId: Scalars['String']['output'];
   workspaceId: Scalars['String']['output'];
+};
+
+export type AttendanceRecordLocation = {
+  __typename: 'AttendanceRecordLocation';
+  coordinates: Coordinates;
+  name: Scalars['String']['output'];
 };
 
 /** Attendance record method */
@@ -134,7 +142,6 @@ export type AttendanceRecordsPaginated = {
 export type AttendanceSetting = {
   __typename: 'AttendanceSetting';
   _id: Scalars['String']['output'];
-  allowedDistanceInMeters: Maybe<Scalars['Float']['output']>;
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
@@ -149,14 +156,14 @@ export type AttendanceSettingLocation = {
   allowedDistanceInMeters: Scalars['Float']['output'];
   coordinates: Coordinates;
   id: Scalars['String']['output'];
-  name: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type AttendanceSettingLocationInput = {
   allowedDistanceInMeters: Scalars['Float']['input'];
   coordinates: CoordinatesInput;
   id: Scalars['String']['input'];
-  name?: InputMaybe<Scalars['String']['input']>;
+  name: Scalars['String']['input'];
 };
 
 export type AuthRefreshTokenInput = {

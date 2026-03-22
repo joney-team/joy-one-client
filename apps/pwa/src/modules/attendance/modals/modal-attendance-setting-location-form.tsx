@@ -1,19 +1,17 @@
-import { FC, forwardRef, Fragment, useImperativeHandle, useRef, useState } from "react";
-import { AttendanceSettingFragment } from "../graphql/fragmentAttendanceSetting.graphql";
+import { ActionIcon } from "@/components/action-icon/action-icon";
+import { Button } from "@/components/buttons/button";
+import { Form } from "@/components/form";
 import { Modal } from "@/components/modal/modal";
+import { AttendanceSettingLocationInput } from "@/graphql/types.graphql";
+import { InputModalType, ModalInput, ModalInputRef } from "@/modals/modal-input";
+import { parseGoogleMapsUrl } from "@/modules/locations/locations-service";
+import { onError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, NumberInput, Stack, TextInput, Tooltip } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconBrandGoogleMaps, IconGps } from "@tabler/icons-react";
-import { Button } from "@/components/buttons/button";
-import { Form } from "@/components/form";
-import { AttendanceSettingLocationInput } from "@/graphql/types.graphql";
+import { FC, forwardRef, Fragment, useImperativeHandle, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { ActionIcon } from "@/components/action-icon/action-icon";
-import { InputModalType, ModalInput, ModalInputRef } from "@/modals/modal-input";
-import { onError } from "@/utils/exceptions.utils";
-import { parseGoogleMapsUrl } from "@/modules/locations/locations-service";
-import { all } from "axios";
 
 export interface ModalAttendanceSettingLocationFormState {
   location?: AttendanceSettingLocationInput;
@@ -60,7 +58,7 @@ const LocationForm: FC<ModalAttendanceSettingLocationFormState & { onClose: () =
   const onSubmit = form.onSubmit(async (values) => {
     props.onFinish({
       id: values.id,
-      name: values.name,
+      name: values.name!,
       allowedDistanceInMeters: values.allowedDistanceInMeters,
       coordinates: {
         lat: values.coordinates.lat!,
@@ -133,17 +131,7 @@ const LocationForm: FC<ModalAttendanceSettingLocationFormState & { onClose: () =
             {...form.getInputProps("allowedDistanceInMeters")}
           />
 
-          <TextInput
-            label={
-              <Fragment>
-                <Trans>Name</Trans>{" "}
-                <span className="optional-flag">
-                  (<Trans>Optional</Trans>)
-                </span>
-              </Fragment>
-            }
-            {...form.getInputProps("name")}
-          />
+          <TextInput label={<Trans>Name</Trans>} {...form.getInputProps("name")} />
 
           <Button type="submit">
             <Trans>Save</Trans>

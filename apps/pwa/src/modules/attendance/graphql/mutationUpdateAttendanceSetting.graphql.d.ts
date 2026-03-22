@@ -5,7 +5,7 @@ export type UpdateAttendanceSettingMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateAttendanceSettingMutation = { __typename: 'Mutation', updateAttendanceSetting: { __typename: 'AttendanceSetting', locations: Array<{ __typename: 'AttendanceSettingLocation', id: string, name: string | null, allowedDistanceInMeters: number, coordinates: { __typename: 'Coordinates', lat: number, lng: number } }> | null } };
+export type UpdateAttendanceSettingMutation = { __typename: 'Mutation', updateAttendanceSetting: { __typename: 'AttendanceSetting', locations: Array<{ __typename: 'AttendanceSettingLocation', id: string, name: string, allowedDistanceInMeters: number, coordinates: { __typename: 'Coordinates', lat: number, lng: number } }> | null } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

@@ -62,7 +62,9 @@ type AttendanceRecord {
   device: Device!
   deviceId: String!
   isArchived: Boolean
+  location: AttendanceRecordLocation
   locationCoordinates: Coordinates
+  locationId: String
   member: WorkspaceMember!
   method: AttendanceRecordMethod!
   note: String
@@ -78,6 +80,11 @@ type AttendanceRecord {
   updatedAt: Float
   userId: String!
   workspaceId: String!
+}
+
+type AttendanceRecordLocation {
+  coordinates: Coordinates!
+  name: String!
 }
 
 """Attendance record method"""
@@ -106,7 +113,6 @@ type AttendanceRecordsPaginated {
 
 type AttendanceSetting {
   _id: String!
-  allowedDistanceInMeters: Float
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   isArchived: Boolean
@@ -120,14 +126,14 @@ type AttendanceSettingLocation {
   allowedDistanceInMeters: Float!
   coordinates: Coordinates!
   id: String!
-  name: String
+  name: String!
 }
 
 input AttendanceSettingLocationInput {
   allowedDistanceInMeters: Float!
   coordinates: CoordinatesInput!
   id: String!
-  name: String
+  name: String!
 }
 
 input AuthRefreshTokenInput {

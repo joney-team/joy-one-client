@@ -5,16 +5,17 @@ import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { AttendanceSettingLocationInput } from "@/graphql/types.graphql";
 import { nonLoading } from "@/utils/non-loading";
+import { useMutation } from "@apollo/client/react";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, InputWrapper, Skeleton, Stack, Text } from "@mantine/core";
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useRef, useState } from "react";
 import { AttendanceSettingFragment } from "./graphql/fragmentAttendanceSetting.graphql";
+import UPLOAD_ATTENDANCE_SETTING_MUTATION from "./graphql/mutationUpdateAttendanceSetting.graphql";
 import { useAttendanceSetting } from "./hooks/use-attendance-setting";
 import { type ModalAttendanceSettingLocationFormRef } from "./modals/modal-attendance-setting-location-form";
-import { useMutation } from "@apollo/client/react";
-import UPLOAD_ATTENDANCE_SETTING_MUTATION from "./graphql/mutationUpdateAttendanceSetting.graphql";
 
 const ModalAttendanceSettingLocationForm = dynamic(
   () =>
@@ -26,7 +27,7 @@ const ModalAttendanceSettingLocationForm = dynamic(
 
 const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ setting }) => {
   const [locations, setLocations] = useState<AttendanceSettingLocationInput[]>(
-    setting.locations ?? [],
+    removeTypeName(setting.locations ?? []),
   );
   const modalAttendanceSettingLocationFormRef = useRef<ModalAttendanceSettingLocationFormRef>(null);
 
