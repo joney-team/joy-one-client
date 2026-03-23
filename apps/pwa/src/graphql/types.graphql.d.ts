@@ -596,6 +596,7 @@ export type CustomerForm = {
   updatedAt: Maybe<Scalars['Float']['output']>;
   vnLocation: Maybe<Location>;
   workspaceBranch: Maybe<WorkspaceBranch>;
+  workspaceBranchId: Maybe<Scalars['String']['output']>;
   workspaceId: Scalars['String']['output'];
 };
 
@@ -1805,6 +1806,8 @@ export type MutationRenewPasswordArgs = {
 
 export type MutationRequestAttendanceCaptureRecordArgs = {
   input: RecordAttendanceInput;
+  time: Scalars['Float']['input'];
+  type: AttendanceRecordType;
 };
 
 

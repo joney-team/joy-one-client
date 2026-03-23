@@ -540,6 +540,7 @@ type CustomerForm {
   updatedAt: Float
   vnLocation: Location
   workspaceBranch: WorkspaceBranch
+  workspaceBranchId: String
   workspaceId: String!
 }
 
@@ -1348,7 +1349,7 @@ type Mutation {
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
   renewPassword(input: AuthRenewPasswordByCodeInput!): Boolean!
-  requestAttendanceCaptureRecord(input: RecordAttendanceInput!): AttendanceRecord!
+  requestAttendanceCaptureRecord(input: RecordAttendanceInput!, time: Float!, type: AttendanceRecordType!): AttendanceRecord!
   requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   revertApproveLoan(id: String!): Loan!
