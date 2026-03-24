@@ -55,7 +55,6 @@ export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
 export type AppConfig = {
   __typename: 'AppConfig';
   UTC: Scalars['String']['output'];
-  firebase: FirebaseClientConfig;
   metaAppId: Scalars['String']['output'];
   metaAppScope: Array<Scalars['String']['output']>;
   metaAppVersion: Scalars['String']['output'];
@@ -80,6 +79,9 @@ export type AssignCustomerInput = {
 export type AttendanceRecord = {
   __typename: 'AttendanceRecord';
   _id: Scalars['String']['output'];
+  approvedAt: Maybe<Scalars['Float']['output']>;
+  approvedBy: Maybe<WorkspaceMember>;
+  approvedByUserId: Maybe<Scalars['String']['output']>;
   createdAt: Maybe<Scalars['Float']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
   device: Device;
@@ -94,6 +96,7 @@ export type AttendanceRecord = {
   photoUrl: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   rejectedAt: Maybe<Scalars['Float']['output']>;
+  rejectedBy: Maybe<WorkspaceMember>;
   rejectedByUserId: Maybe<Scalars['String']['output']>;
   rejectedReason: Maybe<Scalars['String']['output']>;
   source: Maybe<EntitySource>;
@@ -182,6 +185,11 @@ export type AuthRequestRenewUserPasswordInput = {
 export type AuthSignInWithEmailPasswordInput = {
   email: Scalars['String']['input'];
   password: Scalars['String']['input'];
+};
+
+export type AuthSignInWithFirebaseInput = {
+  idToken: Scalars['String']['input'];
+  username?: InputMaybe<Scalars['String']['input']>;
 };
 
 export type AuthSignUpWithEmailPasswordInput = {
@@ -1097,17 +1105,6 @@ export type FilesPaginated = {
   total: Scalars['Float']['output'];
 };
 
-export type FirebaseClientConfig = {
-  __typename: 'FirebaseClientConfig';
-  apiKey: Scalars['String']['output'];
-  appId: Scalars['String']['output'];
-  authDomain: Scalars['String']['output'];
-  measurementId: Scalars['String']['output'];
-  messagingSenderId: Scalars['String']['output'];
-  projectId: Scalars['String']['output'];
-  storageBucket: Scalars['String']['output'];
-};
-
 export type FulfillLoanInput = {
   fulfilledAt?: InputMaybe<Scalars['Float']['input']>;
   paymentMethod: ReceiptPaymentMethod;
@@ -1443,6 +1440,7 @@ export type Mutation = {
   setDeviceLocale: Device;
   setPluginExternalStorage: PluginExternalStorage;
   signInWithEmailPassword: AuthTokenResult;
+  signInWithFirebase: AuthTokenResult;
   signLoan: Loan;
   signOut: Scalars['Boolean']['output'];
   signOutOtherDevices: AuthTokenResult;
@@ -1868,6 +1866,11 @@ export type MutationSetPluginExternalStorageArgs = {
 
 export type MutationSignInWithEmailPasswordArgs = {
   input: AuthSignInWithEmailPasswordInput;
+};
+
+
+export type MutationSignInWithFirebaseArgs = {
+  input: AuthSignInWithFirebaseInput;
 };
 
 

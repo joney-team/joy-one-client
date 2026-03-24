@@ -3,21 +3,22 @@ import { Calendar } from "@/components/calendar/calendar";
 import { CalendarComponents } from "@/components/calendar/calendar-types";
 import { normalizeCalendarView } from "@/components/calendar/calendar-utils";
 import { AttendanceRecordStatus, EventType } from "@/graphql/enums.graphql";
-import { useRouter } from "@/hooks/use-router";
+import { useRouterQuery } from "@/hooks/use-router";
 import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
+import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Card, Group, Stack, Text } from "@mantine/core";
-import { useSearchParams } from "next/dist/client/components/navigation";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useRef } from "react";
-import { useVariablesQuery } from "../apollo/use-query";
 import { useEventsListener } from "../events/event-service";
 import { groupAttendanceRecordsByUsers, sumAttendanceRecords } from "./attendance-utils";
 import QUERY_ATTENDANCE_RECORDS, {
   type AttendanceRecordsQueryVariables,
 } from "./graphql/queryAttendanceRecords.graphql";
 import { ModalAttendanceRecordsRef } from "./modals/modal-attendance-records";
+import { PendingAttendanceList } from "./pending-attendance-list";
 
 const ModalAttendanceRecords = dynamic(
   () => import("./modals/modal-attendance-records").then((mod) => mod.ModalAttendanceRecords),
@@ -27,11 +28,14 @@ const ModalAttendanceRecords = dynamic(
   },
 );
 
-export const AttendanceList: FC = () => {
-  const searchs = useSearchParams();
-  const queryDate = searchs.get("date");
-  const view = normalizeCalendarView(searchs.get("view"));
-  const { removeQueries, setQueries } = useRouter();
+interface AttendanceListProps {
+  date: string | null;
+  view: string | null;
+}
+
+export const AttendanceList: FC<AttendanceListProps> = ({ date: queryDate, view: queryView }) => {
+  const view = normalizeCalendarView(queryView);
+  const { removeQueries, setQueries } = useRouterQuery();
   const modalAttendanceRecordsRef = useRef<ModalAttendanceRecordsRef>(null);
 
   const onChangeDate = (date: Date) => {
@@ -57,7 +61,10 @@ export const AttendanceList: FC = () => {
     };
   }, [queryDate, view]);
 
-  const { data, refetch } = useVariablesQuery(QUERY_ATTENDANCE_RECORDS, variables);
+  const { data, refetch } = useQuery(QUERY_ATTENDANCE_RECORDS, {
+    variables,
+    fetchPolicy: "cache-and-network",
+  });
 
   useEventsListener([EventType.AttendanceRecordApproved, EventType.AttendanceRecordNew], () =>
     refetch(),
@@ -138,10 +145,19 @@ export const AttendanceList: FC = () => {
             }
           }}
           components={components}
+          head={<PendingAttendanceList />}
         />
       </Card>
 
       <ModalAttendanceRecords ref={modalAttendanceRecordsRef} />
     </Stack>
   );
+};
+
+export const AttendanceListPage: FC = () => {
+  const search = useSearchParams();
+  const date = search.get("date");
+  const view = search.get("view");
+
+  return <AttendanceList key={`${date}-${view}`} date={date} view={view} />;
 };

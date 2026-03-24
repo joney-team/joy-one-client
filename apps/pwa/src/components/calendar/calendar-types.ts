@@ -1,7 +1,8 @@
 import { CalendarView } from "@/types";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 
 export interface CalendarComponents {
+  head?: FC<unknown>;
   monthDate?: FC<{ date: Date; hovered: boolean; isOutOfRange: boolean }>;
 }
 
@@ -14,6 +15,7 @@ export interface CalendarProps {
   view?: string;
   onViewChange?: (view: CalendarView) => void;
   components?: CalendarComponents;
+  head?: ReactNode;
 }
 
 export interface CalendarViewProps extends CalendarProps {

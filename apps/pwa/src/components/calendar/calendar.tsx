@@ -115,6 +115,8 @@ export const Calendar: FC<CalendarProps> = (props) => {
           </Group>
 
           {calendarRange[view]}
+
+          {props.head}
         </Group>
 
         <Group gap={5}>

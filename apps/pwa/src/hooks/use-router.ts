@@ -20,7 +20,7 @@ export interface AppRouter extends Omit<AppRouterInstance, "push"> {
   push: (
     route: string,
     query?: { [key: string]: string | number },
-    options?: NavigateOptions
+    options?: NavigateOptions,
   ) => void | Promise<void>;
 }
 
@@ -28,6 +28,45 @@ export const getParams = (params: URLSearchParams, pathname?: string) => {
   if (params.size === 0) return pathname || "";
   if (pathname) return pathname + "?" + params.toString();
   return "?" + params.toString();
+};
+
+export const useRouterQuery = () => {
+  const router = useNextRouter();
+  const pathname = usePathname();
+
+  return {
+    setQuery: (key: string, value?: string, replace?: boolean) => {
+      const params = new URLSearchParams(window.location.search);
+      if (value && value !== null) params.set(key, value);
+      else params.delete(key);
+      if (replace) return router.replace(`${pathname}${getParams(params)}`);
+      return router.push(`${pathname}${getParams(params)}`);
+    },
+    removeQuery: (key: string, replace?: boolean) => {
+      const params = new URLSearchParams(window.location.search);
+      params.delete(key);
+      if (replace) return router.replace(`${pathname}${getParams(params)}`);
+      return router.push(`${pathname}${getParams(params)}`);
+    },
+    setQueries: (queries: { [key: string]: string }, replace?: boolean) => {
+      const params = new URLSearchParams(window.location.search);
+      Object.keys(queries).forEach((key) => {
+        if (queries[key]) params.set(key, queries[key]);
+        else params.delete(key);
+      });
+      if (replace) return router.replace(`${pathname}${getParams(params)}`);
+      return router.push(`${pathname}${getParams(params)}`);
+    },
+    removeQueries: (keys: string[], replace?: boolean) => {
+      const params = new URLSearchParams(window.location.search);
+      keys.forEach((key) => params.delete(key));
+      if (replace) return router.replace(`${pathname}${getParams(params)}`);
+      return router.push(`${pathname}${getParams(params)}`);
+    },
+    removeAllQueries: () => {
+      return router.replace(pathname);
+    },
+  };
 };
 
 export const useRouter = (): AppRouter => {
@@ -115,4 +154,15 @@ export const useRouteRule = () => {
 
     return defaultRouteRule;
   }, [pathname]);
+};
+
+export const useParams = <T extends Record<string, string>>() => {
+  const pathname = usePathname();
+  const params = new URLSearchParams(window.location.search);
+
+  return {
+    params: Object.fromEntries(params.entries()) as T,
+    pathname,
+    search: window.location.search,
+  };
 };

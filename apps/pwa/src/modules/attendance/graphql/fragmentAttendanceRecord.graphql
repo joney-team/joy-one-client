@@ -16,8 +16,6 @@ fragment AttendanceRecord on AttendanceRecord {
   }
   photoUrl
   note
-  rejectedAt
-  rejectedByUserId
   rejectedReason
   member {
     ...WorkspaceMemberData
@@ -27,10 +25,20 @@ fragment AttendanceRecord on AttendanceRecord {
     deviceName
   }
   location {
-    name 
+    name
     coordinates {
       lat
       lng
     }
+  }
+  approvedAt
+  approvedBy {
+    _id
+    name
+  }
+  rejectedAt
+  rejectedBy {
+    _id
+    name
   }
 }
