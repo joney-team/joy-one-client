@@ -19,7 +19,7 @@ export class DateTime {
     options?: {
       minYear?: number;
       maxYear?: number;
-    }
+    },
   ): boolean {
     // Check if it's a valid number
     if (!Number.isFinite(value) || Number.isNaN(value)) {
@@ -272,7 +272,7 @@ export class DateTime {
       const date2 = new Date(
         _compareDate.getFullYear(),
         _compareDate.getMonth(),
-        _compareDate.getDate()
+        _compareDate.getDate(),
       );
       return Math.floor(Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24));
     }
@@ -280,10 +280,10 @@ export class DateTime {
     if (safeUnit === "week") {
       // Get the start of the week for both dates
       const date1 = this.getMonday(
-        new Date(_date.getFullYear(), _date.getMonth(), _date.getDate())
+        new Date(_date.getFullYear(), _date.getMonth(), _date.getDate()),
       );
       const date2 = this.getMonday(
-        new Date(_compareDate.getFullYear(), _compareDate.getMonth(), _compareDate.getDate())
+        new Date(_compareDate.getFullYear(), _compareDate.getMonth(), _compareDate.getDate()),
       );
       return Math.floor(Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60 * 60 * 24 * 7));
     }
@@ -411,15 +411,25 @@ export class DateTime {
     };
   }
 
-  static isBefore(date: RawDate, compareDate: RawDate) {
+  static isBefore(date: RawDate, compareDate: RawDate, allowEqual = false) {
     const _date = this.normalizeDate(date);
     const _compareDate = this.normalizeDate(compareDate);
+
+    if (allowEqual) {
+      return _date.getTime() <= _compareDate.getTime();
+    }
+
     return _date.getTime() < _compareDate.getTime();
   }
 
-  static isAfter(date: RawDate, compareDate: RawDate) {
+  static isAfter(date: RawDate, compareDate: RawDate, allowEqual = false) {
     const _date = this.normalizeDate(date);
     const _compareDate = this.normalizeDate(compareDate);
+
+    if (allowEqual) {
+      return _date.getTime() >= _compareDate.getTime();
+    }
+
     return _date.getTime() > _compareDate.getTime();
   }
 

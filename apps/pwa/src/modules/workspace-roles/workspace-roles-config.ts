@@ -230,6 +230,10 @@ export const permissionGroups: Record<PermissionGroupKey, PermissionGroup> = {
         value: WorkspacePermission.WORKSPACE_MEMBERS_MANAGER,
         dependentPermissions: [WorkspacePermission.WORKSPACE_MEMBERS_VIEW],
       },
+      {
+        value: WorkspacePermission.ATTENDANCE_RECORDS_MANAGER,
+        dependentPermissions: [WorkspacePermission.WORKSPACE_MEMBERS_VIEW],
+      },
     ],
   },
   [PermissionGroupKey.WORKSPACE]: {

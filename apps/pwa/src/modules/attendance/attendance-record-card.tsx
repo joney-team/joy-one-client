@@ -37,7 +37,7 @@ export const AttendanceRecordCard: FC<{
           <Avatar
             radius="sm"
             size={65}
-            className={onViewPhotos ? "clickable" : undefined}
+            className={!!onViewPhotos ? "clickable" : undefined}
             src={renderFileUrl(record.photoUrl)}
             onClick={() => {
               if (!record.photoUrl) return;

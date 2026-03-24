@@ -146,7 +146,6 @@ msgid "Activity"
 msgstr "Activity"
 
 #: src/components/inputs/time-trackings-input.tsx:546
-#: src/modules/attendance/attendance-setting.tsx:113
 #: src/modules/customers/customer-detail/customer-information.tsx:393
 #: src/modules/loans/modals/modal-loan-package-form.tsx:323
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
@@ -217,6 +216,10 @@ msgstr "Add KYC"
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:97
 msgid "Add loan package"
 msgstr "Add loan package"
+
+#: src/modules/attendance/attendance-setting.tsx:123
+msgid "Add location"
+msgstr "Add location"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:145
 msgid "Add modules"
@@ -356,7 +359,7 @@ msgstr "AI assistant updated"
 msgid "AI assistants"
 msgstr "AI assistants"
 
-#: src/modules/workspaces/workspace-modules.tsx:440
+#: src/modules/workspaces/workspace-modules.tsx:430
 msgid "AI Assistants"
 msgstr "AI Assistants"
 
@@ -392,15 +395,15 @@ msgstr "All time trackings"
 msgid "Allow cumulative coupon rules"
 msgstr "Allow cumulative coupon rules"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:230
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:236
 msgid "Allow duplicate bookings"
 msgstr "Allow duplicate bookings"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:127
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:133
 msgid "Allow multiple payments (Installment or Deposit)"
 msgstr "Allow multiple payments (Installment or Deposit)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:185
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:191
 msgid "Allow tip"
 msgstr "Allow tip"
 
@@ -434,7 +437,7 @@ msgstr "API App created"
 msgid "API App updated"
 msgstr "API App updated"
 
-#: src/modules/workspaces/workspace-modules.tsx:340
+#: src/modules/workspaces/workspace-modules.tsx:330
 msgid "API Apps"
 msgstr "API Apps"
 
@@ -447,7 +450,7 @@ msgstr "API Key"
 msgid "APIs System"
 msgstr "APIs System"
 
-#: src/modules/workspaces/workspace-modules.tsx:284
+#: src/modules/workspaces/workspace-modules.tsx:283
 #: src/modules/workspaces/workspace.tsx:65
 msgid "App settings"
 msgstr "App settings"
@@ -456,7 +459,6 @@ msgstr "App settings"
 msgid "Application password"
 msgstr "Application password"
 
-#: src/modules/attendance/attendance-setting.tsx:121
 #: src/modules/custom-fields/components/form-custom-field.tsx:122
 #: src/modules/custom-fields/custom-field-list.tsx:39
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:68
@@ -475,7 +477,7 @@ msgstr "Apply all products"
 msgid "Apply changes"
 msgstr "Apply changes"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:283
+#: src/modules/attendance/attendance-record-card.tsx:116
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:59
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:229
 #: src/modules/loans/components/loan-documents.tsx:115
@@ -604,7 +606,7 @@ msgstr "Are you sure you want to mark as done?"
 msgid "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 msgstr "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:305
+#: src/modules/attendance/attendance-record-card.tsx:138
 msgid "Are you sure you want to reject this attendance record?"
 msgstr "Are you sure you want to reject this attendance record?"
 
@@ -727,17 +729,18 @@ msgstr "At the time of loan signing"
 msgid "Attachments"
 msgstr "Attachments"
 
-#: src/modules/workspaces/workspace-modules.tsx:127
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
+#: src/modules/workspaces/workspace-modules.tsx:126
 msgid "Attendance"
 msgstr "Attendance"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:356
+#: src/modules/attendance/attendance-setting.tsx:60
+msgid "Attendance locations"
+msgstr "Attendance locations"
+
+#: src/modules/attendance/modals/modal-attendance-records.tsx:206
 msgid "Attendance records"
 msgstr "Attendance records"
-
-#: src/modules/workspaces/workspace-modules.tsx:330
-msgid "Attendance settings"
-msgstr "Attendance settings"
 
 #: src/modules/bookings/booking-list.tsx:374
 #: src/modules/bookings/components/booking-card.tsx:325
@@ -762,7 +765,7 @@ msgstr "Auto"
 msgid "Auto create mode"
 msgstr "Auto create mode"
 
-#: src/modules/workspaces/workspace-modules.tsx:441
+#: src/modules/workspaces/workspace-modules.tsx:431
 msgid "Auto reply messages according to the script"
 msgstr "Auto reply messages according to the script"
 
@@ -774,7 +777,7 @@ msgstr "Automatically reply to customer messages"
 msgid "Automatically returning in {tick}s..."
 msgstr "Automatically returning in {tick}s..."
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:244
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:250
 msgid "Available entities to search"
 msgstr "Available entities to search"
 
@@ -837,7 +840,7 @@ msgstr "Bank Transactions"
 msgid "Bank Transfer"
 msgstr "Bank Transfer"
 
-#: src/modules/workspaces/workspace-modules.tsx:395
+#: src/modules/workspaces/workspace-modules.tsx:385
 msgid "Banks"
 msgstr "Banks"
 
@@ -893,8 +896,8 @@ msgstr "Booking information"
 #: src/modules/customers/customer-detail/customer-detail.tsx:94
 #: src/modules/dashboard/dashboard-bookings.tsx:89
 #: src/modules/workspace-roles/workspace-roles-config.ts:106
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:198
-#: src/modules/workspaces/workspace-modules.tsx:154
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:204
+#: src/modules/workspaces/workspace-modules.tsx:153
 msgid "Bookings"
 msgstr "Bookings"
 
@@ -917,7 +920,7 @@ msgstr "Branch"
 #: src/layout/navigation/workspace-navigation-drawer.tsx:271
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:217
 #: src/modules/workspace-members/components/workspace-member-setting.tsx:146
-#: src/modules/workspaces/workspace-modules.tsx:312
+#: src/modules/workspaces/workspace-modules.tsx:311
 msgid "Branches"
 msgstr "Branches"
 
@@ -1030,8 +1033,8 @@ msgstr "Cashier"
 #: src/constant.ts:28
 #: src/modules/categories/category-list.tsx:23
 #: src/modules/products/components/form-product.tsx:306
-#: src/modules/workspace-roles/workspace-roles-config.ts:253
-#: src/modules/workspaces/workspace-modules.tsx:358
+#: src/modules/workspace-roles/workspace-roles-config.ts:257
+#: src/modules/workspaces/workspace-modules.tsx:348
 msgid "Categories"
 msgstr "Categories"
 
@@ -1258,7 +1261,7 @@ msgstr "Close all folders"
 msgid "Closed"
 msgstr "Closed"
 
-#: src/modules/workspaces/workspace-modules.tsx:458
+#: src/modules/workspaces/workspace-modules.tsx:448
 msgid "Cloud Storage"
 msgstr "Cloud Storage"
 
@@ -1300,7 +1303,7 @@ msgstr "Combo"
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:47
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:80
 #: src/modules/product-combos/product-combos-layout.tsx:57
-#: src/modules/workspaces/workspace-modules.tsx:186
+#: src/modules/workspaces/workspace-modules.tsx:185
 msgid "Combos"
 msgstr "Combos"
 
@@ -1595,7 +1598,7 @@ msgstr "Create"
 msgid "Create {entity}"
 msgstr "Create {entity}"
 
-#: src/modules/workspaces/workspace-modules.tsx:285
+#: src/modules/workspaces/workspace-modules.tsx:284
 msgid "Create an application with a custom domain, customize the application name, icon, color."
 msgstr "Create an application with a custom domain, customize the application name, icon, color."
 
@@ -1778,7 +1781,7 @@ msgstr "Credit history"
 msgid "Credit report"
 msgstr "Credit report"
 
-#: src/modules/workspaces/workspace-modules.tsx:303
+#: src/modules/workspaces/workspace-modules.tsx:302
 msgid "Credit settings"
 msgstr "Credit settings"
 
@@ -1786,7 +1789,7 @@ msgstr "Credit settings"
 msgid "Cross-origin resource sharing (CORS)"
 msgstr "Cross-origin resource sharing (CORS)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:142
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:148
 msgid "Currency"
 msgstr "Currency"
 
@@ -1794,6 +1797,10 @@ msgstr "Currency"
 #: src/modules/loans/components/loan-customer-kyc.tsx:88
 msgid "Current address"
 msgstr "Current address"
+
+#: src/components/calendar/calendar.tsx:34
+msgid "Current month"
+msgstr "Current month"
 
 #: src/modules/users/components/update-password.tsx:54
 msgid "Current password"
@@ -1806,6 +1813,10 @@ msgstr "Current time"
 #: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:126
 msgid "Current timeline"
 msgstr "Current timeline"
+
+#: src/components/calendar/calendar.tsx:30
+msgid "Current week"
+msgstr "Current week"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:214
 msgid "Custom domain"
@@ -1829,7 +1840,7 @@ msgstr "Custom field updated"
 
 #: src/modules/custom-fields/custom-field-list.tsx:24
 #: src/modules/products/components/form-product.tsx:585
-#: src/modules/workspaces/workspace-modules.tsx:367
+#: src/modules/workspaces/workspace-modules.tsx:357
 msgid "Custom fields"
 msgstr "Custom fields"
 
@@ -1906,7 +1917,7 @@ msgid "Customer forms"
 msgstr "Customer forms"
 
 #: src/constant.ts:8
-#: src/modules/workspaces/workspace-modules.tsx:141
+#: src/modules/workspaces/workspace-modules.tsx:140
 msgid "Customer Forms"
 msgstr "Customer Forms"
 
@@ -1938,7 +1949,7 @@ msgstr "Customer updated"
 #: src/constant.ts:7
 #: src/modules/customers/customer-list.tsx:51
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
-#: src/modules/workspaces/workspace-modules.tsx:135
+#: src/modules/workspaces/workspace-modules.tsx:134
 msgid "Customers"
 msgstr "Customers"
 
@@ -1946,7 +1957,7 @@ msgstr "Customers"
 msgid "Customers limit rule"
 msgstr "Customers limit rule"
 
-#: src/modules/workspaces/workspace-modules.tsx:267
+#: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Customize the features needed on the navigation bar"
 msgstr "Customize the features needed on the navigation bar"
 
@@ -1967,7 +1978,7 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: src/components/list/list-core.tsx:423
-#: src/modules/workspace-roles/workspace-roles-config.ts:267
+#: src/modules/workspace-roles/workspace-roles-config.ts:271
 msgid "Data"
 msgstr "Data"
 
@@ -2015,7 +2026,7 @@ msgstr "Default"
 msgid "Default is {0}"
 msgstr "Default is {0}"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:154
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:160
 msgid "Default payment method"
 msgstr "Default payment method"
 
@@ -2032,7 +2043,7 @@ msgstr "Default price must be in the price range"
 msgid "Default role when not specified"
 msgstr "Default role when not specified"
 
-#: src/modules/attendance/attendance-setting.tsx:50
+#: src/modules/attendance/attendance-setting.tsx:61
 msgid "Define the allowed locations for attendance"
 msgstr "Define the allowed locations for attendance"
 
@@ -2182,7 +2193,7 @@ msgstr "Divider"
 msgid "Docs"
 msgstr "Docs"
 
-#: src/modules/workspaces/workspace-modules.tsx:293
+#: src/modules/workspaces/workspace-modules.tsx:292
 msgid "Documents"
 msgstr "Documents"
 
@@ -2249,8 +2260,8 @@ msgstr "E-invoice removed"
 #: src/modules/e-invoices/e-invoice-list.tsx:41
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-list.tsx:52
 #: src/modules/receipts/receipt-e-invoices.tsx:81
-#: src/modules/workspaces/workspace-modules.tsx:224
-#: src/modules/workspaces/workspace-modules.tsx:449
+#: src/modules/workspaces/workspace-modules.tsx:223
+#: src/modules/workspaces/workspace-modules.tsx:439
 msgid "E-Invoices"
 msgstr "E-Invoices"
 
@@ -2666,7 +2677,7 @@ msgstr "File"
 msgid "File downloading"
 msgstr "File downloading"
 
-#: src/modules/workspaces/workspace-modules.tsx:376
+#: src/modules/workspaces/workspace-modules.tsx:366
 msgid "File manager"
 msgstr "File manager"
 
@@ -2698,7 +2709,7 @@ msgid "Folder"
 msgstr "Folder"
 
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:45
-#: src/modules/workspaces/workspace-modules.tsx:341
+#: src/modules/workspaces/workspace-modules.tsx:331
 msgid "For developers, manipulate data through APIs"
 msgstr "For developers, manipulate data through APIs"
 
@@ -2800,7 +2811,7 @@ msgstr "Gender"
 msgid "General"
 msgstr "General"
 
-#: src/modules/workspaces/workspace-modules.tsx:257
+#: src/modules/workspaces/workspace-modules.tsx:256
 msgid "General Settings"
 msgstr "General Settings"
 
@@ -2910,7 +2921,7 @@ msgstr "ID images"
 msgid "ID number"
 msgstr "ID number"
 
-#: src/modules/workspaces/workspace-modules.tsx:423
+#: src/modules/workspaces/workspace-modules.tsx:413
 msgid "Identify brand through Email. Help you take better care of customers through Email."
 msgstr "Identify brand through Email. Help you take better care of customers through Email."
 
@@ -3041,7 +3052,7 @@ msgstr "Install Web App"
 msgid "Installment"
 msgstr "Installment"
 
-#: src/modules/workspaces/workspace-modules.tsx:396
+#: src/modules/workspaces/workspace-modules.tsx:386
 msgid "Integrate bank accounts to receive and pay money."
 msgstr "Integrate bank accounts to receive and pay money."
 
@@ -3053,20 +3064,20 @@ msgstr "Integrate channels like Zalo, Facebook, Websites, ... to centralize all 
 msgid "Integrate ChatBox into your website <0/> Easy & quick setup"
 msgstr "Integrate ChatBox into your website <0/> Easy & quick setup"
 
-#: src/modules/workspaces/workspace-modules.tsx:432
+#: src/modules/workspaces/workspace-modules.tsx:422
 msgid "Integrate ChatBox into your website."
 msgstr "Integrate ChatBox into your website."
 
-#: src/modules/workspaces/workspace-modules.tsx:414
+#: src/modules/workspaces/workspace-modules.tsx:404
 msgid "Integrate Fanpage Facebook, manage Messenger messages."
 msgstr "Integrate Fanpage Facebook, manage Messenger messages."
 
-#: src/modules/workspaces/workspace-modules.tsx:387
+#: src/modules/workspaces/workspace-modules.tsx:377
 msgid "Integrate other services / utilities"
 msgstr "Integrate other services / utilities"
 
 #: src/modules/plugins/storage/plugin-storage.tsx:143
-#: src/modules/workspaces/workspace-modules.tsx:459
+#: src/modules/workspaces/workspace-modules.tsx:449
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Integrate with cloud storage services: S3, ..."
 
@@ -3074,7 +3085,7 @@ msgstr "Integrate with cloud storage services: S3, ..."
 msgid "Integrate with E-Invoices services: <0>MatBao</0>, ..."
 msgstr "Integrate with E-Invoices services: <0>MatBao</0>, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:450
+#: src/modules/workspaces/workspace-modules.tsx:440
 msgid "Integrate with E-Invoices services: MatBao, ..."
 msgstr "Integrate with E-Invoices services: MatBao, ..."
 
@@ -3082,7 +3093,7 @@ msgstr "Integrate with E-Invoices services: MatBao, ..."
 msgid "Integrate with LLM models"
 msgstr "Integrate with LLM models"
 
-#: src/modules/workspaces/workspace-modules.tsx:403
+#: src/modules/workspaces/workspace-modules.tsx:393
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Integrate Zalo OA, manage customer interactions."
 
@@ -3221,7 +3232,7 @@ msgstr "KYC pending"
 msgid "KYC rejected"
 msgstr "KYC rejected"
 
-#: src/modules/workspaces/workspace-modules.tsx:148
+#: src/modules/workspaces/workspace-modules.tsx:147
 msgid "KYCs"
 msgstr "KYCs"
 
@@ -3326,7 +3337,7 @@ msgstr "Leave a comment..."
 msgid "Leave blank if the capital rate for each period is the same"
 msgstr "Leave blank if the capital rate for each period is the same"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:222
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:228
 msgid "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 msgstr "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 
@@ -3454,7 +3465,7 @@ msgstr "Loan asset data"
 msgid "Loan asset estimations"
 msgstr "Loan asset estimations"
 
-#: src/modules/workspaces/workspace-modules.tsx:238
+#: src/modules/workspaces/workspace-modules.tsx:237
 msgid "Loan Asset Estimations"
 msgstr "Loan Asset Estimations"
 
@@ -3581,7 +3592,7 @@ msgstr "Loan revert rejected"
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:92
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
-#: src/modules/workspaces/workspace-modules.tsx:232
+#: src/modules/workspaces/workspace-modules.tsx:231
 #: src/widgets/reports/modules.ts:223
 msgid "Loans"
 msgstr "Loans"
@@ -3653,10 +3664,6 @@ msgstr "Location"
 msgid "Location Settings"
 msgstr "Location Settings"
 
-#: src/modules/attendance/attendance-setting.tsx:49
-msgid "Locations"
-msgstr "Locations"
-
 #: src/modules/auth/auth-require.tsx:122
 #: src/modules/auth/auth-require.tsx:136
 #: src/modules/auth/components/form-sign-in.tsx:73
@@ -3681,7 +3688,7 @@ msgstr "Longitude"
 msgid "Low"
 msgstr "Low"
 
-#: src/modules/workspaces/workspace-modules.tsx:422
+#: src/modules/workspaces/workspace-modules.tsx:412
 msgid "Mailer"
 msgstr "Mailer"
 
@@ -3715,10 +3722,6 @@ msgstr "Male"
 msgid "Manage attendance records"
 msgstr "Manage attendance records"
 
-#: src/modules/workspaces/workspace-modules.tsx:331
-msgid "Manage attendance: location check-in, attendance rules, ..."
-msgstr "Manage attendance: location check-in, attendance rules, ..."
-
 #: src/modules/workspace-roles/workspace-roles-constants.ts:102
 msgid "Manage billings"
 msgstr "Manage billings"
@@ -3743,7 +3746,7 @@ msgstr "Manage coupons"
 msgid "Manage custom fields"
 msgstr "Manage custom fields"
 
-#: src/modules/workspaces/workspace-modules.tsx:368
+#: src/modules/workspaces/workspace-modules.tsx:358
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Manage custom fields for objects: product, service, post, ..."
 
@@ -3759,7 +3762,7 @@ msgstr "Manage customer interaction via Zalo OA"
 msgid "Manage customer KYC"
 msgstr "Manage customer KYC"
 
-#: src/modules/workspaces/workspace-modules.tsx:322
+#: src/modules/workspaces/workspace-modules.tsx:321
 msgid "Manage member roles and access permissions"
 msgstr "Manage member roles and access permissions"
 
@@ -3783,7 +3786,7 @@ msgstr "Manage posts"
 msgid "Manage prescriptions"
 msgstr "Manage prescriptions"
 
-#: src/modules/workspaces/workspace-modules.tsx:359
+#: src/modules/workspaces/workspace-modules.tsx:349
 msgid "Manage product, service, post, ..."
 msgstr "Manage product, service, post, ..."
 
@@ -3804,11 +3807,11 @@ msgid "Manage tables"
 msgstr "Manage tables"
 
 #: src/modules/workspace-branches/workspace-branch-list.tsx:66
-#: src/modules/workspaces/workspace-modules.tsx:313
+#: src/modules/workspaces/workspace-modules.tsx:312
 msgid "Manage the branches of the Workspace"
 msgstr "Manage the branches of the Workspace"
 
-#: src/modules/workspaces/workspace-modules.tsx:247
+#: src/modules/workspaces/workspace-modules.tsx:246
 msgid "Manage the settings of the Workspace"
 msgstr "Manage the settings of the Workspace"
 
@@ -3820,7 +3823,7 @@ msgstr "Manage vouchers"
 msgid "Manage widgets"
 msgstr "Manage widgets"
 
-#: src/modules/workspaces/workspace-modules.tsx:469
+#: src/modules/workspaces/workspace-modules.tsx:459
 msgid "Manage your profile settings"
 msgstr "Manage your profile settings"
 
@@ -3863,6 +3866,7 @@ msgstr "Medical history"
 msgid "Medium"
 msgstr "Medium"
 
+#: src/modules/attendance/attendance-list.tsx:183
 #: src/modules/products/product-detail.tsx:172
 #: src/modules/workspace-roles/workspace-roles-constants.ts:10
 #: src/modules/workspace-roles/workspace-roles-constants.ts:19
@@ -3944,7 +3948,7 @@ msgid "Message boxes"
 msgstr "Message boxes"
 
 #: src/constant.ts:25
-#: src/modules/workspaces/workspace-modules.tsx:160
+#: src/modules/workspaces/workspace-modules.tsx:159
 msgid "Message Boxes"
 msgstr "Message Boxes"
 
@@ -3961,7 +3965,7 @@ msgid "Message hub updated"
 msgstr "Message hub updated"
 
 #: src/modules/message-boxes/message-boxes-integrate.tsx:61
-#: src/modules/workspaces/workspace-modules.tsx:431
+#: src/modules/workspaces/workspace-modules.tsx:421
 msgid "Message Hubs"
 msgstr "Message Hubs"
 
@@ -3977,7 +3981,7 @@ msgstr "Message updated"
 msgid "Messages"
 msgstr "Messages"
 
-#: src/modules/workspaces/workspace-modules.tsx:349
+#: src/modules/workspaces/workspace-modules.tsx:339
 msgid "Messages settings"
 msgstr "Messages settings"
 
@@ -3985,7 +3989,7 @@ msgstr "Messages settings"
 msgid "Meta pages"
 msgstr "Meta pages"
 
-#: src/modules/workspaces/workspace-modules.tsx:413
+#: src/modules/workspaces/workspace-modules.tsx:403
 msgid "Meta Pages"
 msgstr "Meta Pages"
 
@@ -4043,7 +4047,7 @@ msgstr "Model name"
 #: src/layout/navigation/workspace-navigation-drawer.tsx:194
 #: src/modules/search/search-engine.tsx:207
 #: src/modules/users/user-profile.tsx:119
-#: src/modules/workspaces/workspace-modules.tsx:266
+#: src/modules/workspaces/workspace-modules.tsx:265
 msgid "Modules"
 msgstr "Modules"
 
@@ -4347,7 +4351,7 @@ msgstr "No asset estimation"
 msgid "No assignees found"
 msgstr "No assignees found"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:326
+#: src/modules/attendance/modals/modal-attendance-records.tsx:176
 msgid "No attendance records found"
 msgstr "No attendance records found"
 
@@ -4531,7 +4535,7 @@ msgstr "Open messages"
 msgid "Open with browser"
 msgstr "Open with browser"
 
-#: src/modules/workspaces/workspace-modules.tsx:275
+#: src/modules/workspaces/workspace-modules.tsx:274
 #: src/modules/workspaces/workspace.tsx:60
 msgid "Operation settings"
 msgstr "Operation settings"
@@ -4571,8 +4575,8 @@ msgstr "Order synced"
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:21
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
-#: src/modules/workspaces/workspace-modules.tsx:212
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:131
+#: src/modules/workspaces/workspace-modules.tsx:211
 msgid "Orders"
 msgstr "Orders"
 
@@ -4646,7 +4650,7 @@ msgstr "Partial payment"
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:35
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
-#: src/modules/workspaces/workspace-modules.tsx:193
+#: src/modules/workspaces/workspace-modules.tsx:192
 msgid "Partners"
 msgstr "Partners"
 
@@ -4712,7 +4716,7 @@ msgstr "Pay successful"
 #: src/modules/loans/loan-detail.tsx:563
 #: src/modules/receipts/receipt-list.tsx:139
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:140
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:146
 msgid "Payment"
 msgstr "Payment"
 
@@ -4785,6 +4789,11 @@ msgstr "Payment status"
 #: src/modules/workspace-billings/workspace-billings-contants.ts:19
 msgid "Pending"
 msgstr "Pending"
+
+#: src/modules/attendance/pending-attendance-list.tsx:48
+#: src/modules/attendance/pending-attendance-list.tsx:58
+msgid "Pending requests"
+msgstr "Pending requests"
 
 #: src/modules/loans/loans-constants.tsx:29
 msgid "Pending signature"
@@ -4901,7 +4910,7 @@ msgstr "Plugin"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:204
 #: src/modules/users/user-profile.tsx:123
-#: src/modules/workspaces/workspace-modules.tsx:386
+#: src/modules/workspaces/workspace-modules.tsx:376
 msgid "Plugins"
 msgstr "Plugins"
 
@@ -4938,7 +4947,7 @@ msgstr "Post updated"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/posts/posts-list.tsx:29
-#: src/modules/workspace-roles/workspace-roles-config.ts:243
+#: src/modules/workspace-roles/workspace-roles-config.ts:247
 #: src/modules/workspaces/workspace-modules.tsx:97
 msgid "Posts"
 msgstr "Posts"
@@ -4971,7 +4980,7 @@ msgstr "Prescription updated"
 
 #: src/constant.ts:16
 #: src/modules/workspace-roles/workspace-roles-config.ts:217
-#: src/modules/workspaces/workspace-modules.tsx:199
+#: src/modules/workspaces/workspace-modules.tsx:198
 msgid "Prescriptions"
 msgstr "Prescriptions"
 
@@ -5137,7 +5146,7 @@ msgstr "Product Vouchers"
 #: src/modules/products/components/form-product.tsx:179
 #: src/modules/products/components/form-product.tsx:440
 #: src/modules/products/product-list.tsx:29
-#: src/modules/workspaces/workspace-modules.tsx:168
+#: src/modules/workspaces/workspace-modules.tsx:167
 msgid "Products"
 msgstr "Products"
 
@@ -5166,7 +5175,7 @@ msgstr "Profile"
 
 #: src/layout/header/header-account.tsx:71
 #: src/modules/users/user-profile-settings.tsx:56
-#: src/modules/workspaces/workspace-modules.tsx:468
+#: src/modules/workspaces/workspace-modules.tsx:458
 msgid "Profile settings"
 msgstr "Profile settings"
 
@@ -5330,7 +5339,7 @@ msgid "Receipt code"
 msgstr "Receipt code"
 
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:223
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:174
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:180
 msgid "Receipt images required"
 msgstr "Receipt images required"
 
@@ -5350,7 +5359,7 @@ msgstr "Receipt unarchived"
 #: src/modules/loans/components/loan-payments.tsx:166
 #: src/modules/receipts/receipt-list.tsx:84
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
-#: src/modules/workspaces/workspace-modules.tsx:218
+#: src/modules/workspaces/workspace-modules.tsx:217
 #: src/widgets/reports/widgets/report-products.widget.tsx:255
 msgid "Receipts"
 msgstr "Receipts"
@@ -5396,7 +5405,7 @@ msgstr "Register new account"
 msgid "Registration number"
 msgstr "Registration number"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:312
+#: src/modules/attendance/attendance-record-card.tsx:143
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:75
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:233
 #: src/modules/loans/components/loan-documents.tsx:234
@@ -5463,11 +5472,11 @@ msgstr "Remaining amount"
 msgid "Remaining principal"
 msgstr "Remaining principal"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:202
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:208
 msgid "Remind customers before the appointment n (days)"
 msgstr "Remind customers before the appointment n (days)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:212
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:218
 msgid "Reminder time"
 msgstr "Reminder time"
 
@@ -5548,8 +5557,8 @@ msgstr "Report realtime synced"
 msgid "Report synced"
 msgstr "Report synced"
 
-#: src/modules/workspace-roles/workspace-roles-config.ts:263
-#: src/modules/workspaces/workspace-modules.tsx:478
+#: src/modules/workspace-roles/workspace-roles-config.ts:267
+#: src/modules/workspaces/workspace-modules.tsx:468
 #: src/widgets/reports/widgets/report-credit.widget.tsx:638
 msgid "Reports"
 msgstr "Reports"
@@ -5701,7 +5710,7 @@ msgid "Role updated"
 msgstr "Role updated"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:210
-#: src/modules/workspaces/workspace-modules.tsx:321
+#: src/modules/workspaces/workspace-modules.tsx:320
 msgid "Roles"
 msgstr "Roles"
 
@@ -5767,7 +5776,7 @@ msgstr "Scroll to today"
 #: src/modules/tasks/components/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/components/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/components/task-menu/task-menu-tags.tsx:99
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:243
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:249
 #: src/widgets/components/manage-widgets.tsx:35
 msgid "Search"
 msgstr "Search"
@@ -5985,7 +5994,7 @@ msgstr "Service"
 #: src/modules/products/components/form-product.tsx:179
 #: src/modules/products/components/form-product.tsx:440
 #: src/modules/services/service-list.tsx:28
-#: src/modules/workspaces/workspace-modules.tsx:174
+#: src/modules/workspaces/workspace-modules.tsx:173
 msgid "Services"
 msgstr "Services"
 
@@ -5998,11 +6007,11 @@ msgstr "Session expired, please login again"
 msgid "Set default"
 msgstr "Set default"
 
-#: src/modules/workspaces/workspace-modules.tsx:304
+#: src/modules/workspaces/workspace-modules.tsx:303
 msgid "Set loan package, interest, late payment penalty, ..."
 msgstr "Set loan package, interest, late payment penalty, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:258
+#: src/modules/workspaces/workspace-modules.tsx:257
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Set name, address, Hotline, Workspace type, ..."
 
@@ -6187,6 +6196,10 @@ msgstr "Start time must be before end time"
 msgid "Status"
 msgstr "Status"
 
+#: src/modules/attendance/attendance-list.tsx:195
+msgid "Statuses"
+msgstr "Statuses"
+
 #: src/modules/products/components/form-product.tsx:331
 msgid "Stock check"
 msgstr "Stock check"
@@ -6223,7 +6236,7 @@ msgid "Stock out reverted"
 msgstr "Stock out reverted"
 
 #: src/modules/product-stocks/product-stock-list.tsx:30
-#: src/modules/workspaces/workspace-modules.tsx:180
+#: src/modules/workspaces/workspace-modules.tsx:179
 msgid "Stocks"
 msgstr "Stocks"
 
@@ -6258,13 +6271,17 @@ msgstr "Success"
 msgid "Suggest time"
 msgstr "Suggest time"
 
-#: src/modules/workspaces/workspace-modules.tsx:350
+#: src/modules/workspaces/workspace-modules.tsx:340
 msgid "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
 msgstr "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:377
+#: src/modules/workspaces/workspace-modules.tsx:367
 msgid "Summarize images / documents / files, ..."
 msgstr "Summarize images / documents / files, ..."
+
+#: src/modules/attendance/attendance-list.tsx:177
+msgid "Summary"
+msgstr "Summary"
 
 #: src/modules/users/user-profile-settings.tsx:196
 msgid "Sunday"
@@ -6351,7 +6368,7 @@ msgid "Task synced"
 msgstr "Task synced"
 
 #: src/constant.ts:10
-#: src/modules/workspaces/workspace-modules.tsx:206
+#: src/modules/workspaces/workspace-modules.tsx:205
 #: src/widgets/reports/modules.ts:136
 msgid "Tasks"
 msgstr "Tasks"
@@ -6398,7 +6415,7 @@ msgstr "Terms of service"
 msgid "Terms of use"
 msgstr "Terms of use"
 
-#: src/modules/workspaces/workspace-modules.tsx:294
+#: src/modules/workspaces/workspace-modules.tsx:293
 msgid "Terms of use, privacy policy, user manual, ..."
 msgstr "Terms of use, privacy policy, user manual, ..."
 
@@ -6579,7 +6596,8 @@ msgstr "To allow our app to upload files to your storage, you need to configure 
 msgid "To not miss important information"
 msgstr "To not miss important information"
 
-#: src/components/calendar/calendar.tsx:123
+#: src/components/calendar/calendar.tsx:27
+#: src/components/calendar/calendar.tsx:140
 #: src/components/inputs/due-date-input.tsx:205
 #: src/configs/calendar.config.tsx:65
 #: src/modules/bookings/booking-list.tsx:495
@@ -6642,12 +6660,24 @@ msgstr "Total"
 msgid "TotalLong"
 msgstr "Total"
 
+#: src/modules/attendance/attendance-list.tsx:192
+msgid "Total shifts"
+msgstr "Total shifts"
+
 #: src/components/inputs/time-trackings-input.tsx:178
 msgid "Total time"
 msgstr "Total time"
 
+#: src/modules/attendance/attendance-list.tsx:186
+msgid "Total working days"
+msgstr "Total working days"
+
+#: src/modules/attendance/attendance-list.tsx:189
+msgid "Total working time"
+msgstr "Total working time"
+
 #. placeholder {0}: DateTime.toHHMM(summary)
-#: src/modules/attendance/modals/modal-attendance-records.tsx:183
+#: src/modules/attendance/modals/modal-attendance-records.tsx:160
 msgid "Total working time: {0}"
 msgstr "Total working time: {0}"
 
@@ -7081,7 +7111,7 @@ msgstr "View E-Invoice"
 msgid "View Invoice"
 msgstr "View Invoice"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:250
+#: src/modules/attendance/attendance-record-card.tsx:83
 msgid "View location"
 msgstr "View location"
 
@@ -7121,7 +7151,7 @@ msgstr "View receipts"
 msgid "View reports"
 msgstr "View reports"
 
-#: src/modules/workspaces/workspace-modules.tsx:479
+#: src/modules/workspaces/workspace-modules.tsx:469
 msgid "View reports and analytics"
 msgstr "View reports and analytics"
 
@@ -7226,11 +7256,11 @@ msgstr "Welcome to {0}"
 msgid "Withdraw"
 msgstr "Withdraw"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:77
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:78
 msgid "Work schedule"
 msgstr "Work schedule"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:79
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:80
 msgid "Work schedule applied to the booking, timekeeping, and other features."
 msgstr "Work schedule applied to the booking, timekeeping, and other features."
 
@@ -7242,11 +7272,11 @@ msgstr "Working days"
 msgid "Working time type"
 msgstr "Working time type"
 
-#: src/modules/workspaces/workspace-modules.tsx:276
+#: src/modules/workspaces/workspace-modules.tsx:275
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Working time, invoice, service voucher, payment method, search settings, ..."
 
-#: src/modules/workspace-roles/workspace-roles-config.ts:236
+#: src/modules/workspace-roles/workspace-roles-config.ts:240
 msgid "Workspace"
 msgstr "Workspace"
 
@@ -7289,7 +7319,7 @@ msgstr "Workspace setting updated"
 msgid "Workspace settings"
 msgstr "Workspace settings"
 
-#: src/modules/workspaces/workspace-modules.tsx:249
+#: src/modules/workspaces/workspace-modules.tsx:248
 msgid "Workspace Settings"
 msgstr "Workspace Settings"
 
@@ -7426,7 +7456,7 @@ msgstr "Zalo OA inactive"
 msgid "Zalo OA updated"
 msgstr "Zalo OA updated"
 
-#: src/modules/workspaces/workspace-modules.tsx:405
+#: src/modules/workspaces/workspace-modules.tsx:395
 msgid "Zalo OAs"
 msgstr "Zalo OAs"
 

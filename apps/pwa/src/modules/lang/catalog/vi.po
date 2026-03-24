@@ -147,7 +147,6 @@ msgid "Activity"
 msgstr "Hoạt động"
 
 #: src/components/inputs/time-trackings-input.tsx:546
-#: src/modules/attendance/attendance-setting.tsx:113
 #: src/modules/customers/customer-detail/customer-information.tsx:393
 #: src/modules/loans/modals/modal-loan-package-form.tsx:323
 #: src/modules/orders/orders-sale/components/order-sale-tip.tsx:49
@@ -218,6 +217,10 @@ msgstr "Thêm KYC"
 #: src/modules/workspace-settings/components/workspace-setting-loans.tsx:97
 msgid "Add loan package"
 msgstr "Thêm gói vay"
+
+#: src/modules/attendance/attendance-setting.tsx:123
+msgid "Add location"
+msgstr "Thêm vị trí"
 
 #: src/modules/workspaces/workspace-module-setup.tsx:145
 msgid "Add modules"
@@ -357,7 +360,7 @@ msgstr "Cập nhật trợ lý AI"
 msgid "AI assistants"
 msgstr "Trợ lý AI"
 
-#: src/modules/workspaces/workspace-modules.tsx:440
+#: src/modules/workspaces/workspace-modules.tsx:430
 msgid "AI Assistants"
 msgstr "Trợ lý AI"
 
@@ -393,15 +396,15 @@ msgstr "Tất cả thời gian"
 msgid "Allow cumulative coupon rules"
 msgstr "Cho phép cộng dồn các khuyến mãi khác"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:230
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:236
 msgid "Allow duplicate bookings"
 msgstr "Cho phép đặt lịch hẹn trùng/đè lên nhau"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:127
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:133
 msgid "Allow multiple payments (Installment or Deposit)"
 msgstr "Cho phép thanh toán nhiều lần (Trả góp hoặc Cọc tiền trước)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:185
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:191
 msgid "Allow tip"
 msgstr "Cho phép nhận Tip"
 
@@ -435,7 +438,7 @@ msgstr "Tạo App APIs"
 msgid "API App updated"
 msgstr "Cập nhật App APIs"
 
-#: src/modules/workspaces/workspace-modules.tsx:340
+#: src/modules/workspaces/workspace-modules.tsx:330
 msgid "API Apps"
 msgstr "Ứng dụng API"
 
@@ -448,7 +451,7 @@ msgstr "Mã API"
 msgid "APIs System"
 msgstr "Hệ thống API"
 
-#: src/modules/workspaces/workspace-modules.tsx:284
+#: src/modules/workspaces/workspace-modules.tsx:283
 #: src/modules/workspaces/workspace.tsx:65
 msgid "App settings"
 msgstr "Cài đặt App"
@@ -457,7 +460,6 @@ msgstr "Cài đặt App"
 msgid "Application password"
 msgstr "Mật khẩu ứng dụng"
 
-#: src/modules/attendance/attendance-setting.tsx:121
 #: src/modules/custom-fields/components/form-custom-field.tsx:122
 #: src/modules/custom-fields/custom-field-list.tsx:39
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:68
@@ -476,7 +478,7 @@ msgstr "Áp dụng tất cả sản phẩm"
 msgid "Apply changes"
 msgstr "Áp dụng thay đổi"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:283
+#: src/modules/attendance/attendance-record-card.tsx:116
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:59
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:229
 #: src/modules/loans/components/loan-documents.tsx:115
@@ -605,7 +607,7 @@ msgstr "Bạn có chắc chắn muốn đánh dấu là đã xử lí xong?"
 msgid "Are you sure you want to reject the expense? This action cannot be undone. The receipt will be deleted."
 msgstr "Bạn có chắc chắn muốn từ chối chi phí không? Thao tác này không thể hoàn tác. Hoá đơn sẽ bị xoá."
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:305
+#: src/modules/attendance/attendance-record-card.tsx:138
 msgid "Are you sure you want to reject this attendance record?"
 msgstr "Bạn có chắc chắn muốn từ chối bản ghi chấm công này không?"
 
@@ -728,17 +730,18 @@ msgstr "Tại thời điểm ký hồ sơ vay"
 msgid "Attachments"
 msgstr "Tệp đính kèm"
 
-#: src/modules/workspaces/workspace-modules.tsx:127
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
+#: src/modules/workspaces/workspace-modules.tsx:126
 msgid "Attendance"
 msgstr "Chấm công"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:356
+#: src/modules/attendance/attendance-setting.tsx:60
+msgid "Attendance locations"
+msgstr "Vị trí chấm công"
+
+#: src/modules/attendance/modals/modal-attendance-records.tsx:206
 msgid "Attendance records"
 msgstr "Bản ghi chấm công"
-
-#: src/modules/workspaces/workspace-modules.tsx:330
-msgid "Attendance settings"
-msgstr "Cài đặt chấm công"
 
 #: src/modules/bookings/booking-list.tsx:374
 #: src/modules/bookings/components/booking-card.tsx:325
@@ -763,7 +766,7 @@ msgstr "Tự động"
 msgid "Auto create mode"
 msgstr "Chế độ tự động tạo"
 
-#: src/modules/workspaces/workspace-modules.tsx:441
+#: src/modules/workspaces/workspace-modules.tsx:431
 msgid "Auto reply messages according to the script"
 msgstr "Trả lời tin nhắn tự động theo kịch bản"
 
@@ -775,7 +778,7 @@ msgstr "Tự động trả lời tin nhắn khách hàng"
 msgid "Automatically returning in {tick}s..."
 msgstr "Hệ thống sẽ tự động quay về sai {tick} giây..."
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:244
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:250
 msgid "Available entities to search"
 msgstr "Các dữ liệu có thể tìm kiếm"
 
@@ -838,7 +841,7 @@ msgstr "Giao dịch ngân hàng"
 msgid "Bank Transfer"
 msgstr "CK ngân hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:395
+#: src/modules/workspaces/workspace-modules.tsx:385
 msgid "Banks"
 msgstr "Ngân hàng"
 
@@ -894,8 +897,8 @@ msgstr "Thông tin lịch hẹn"
 #: src/modules/customers/customer-detail/customer-detail.tsx:94
 #: src/modules/dashboard/dashboard-bookings.tsx:89
 #: src/modules/workspace-roles/workspace-roles-config.ts:106
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:198
-#: src/modules/workspaces/workspace-modules.tsx:154
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:204
+#: src/modules/workspaces/workspace-modules.tsx:153
 msgid "Bookings"
 msgstr "Lịch hẹn"
 
@@ -918,7 +921,7 @@ msgstr "Chi nhánh"
 #: src/layout/navigation/workspace-navigation-drawer.tsx:271
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:217
 #: src/modules/workspace-members/components/workspace-member-setting.tsx:146
-#: src/modules/workspaces/workspace-modules.tsx:312
+#: src/modules/workspaces/workspace-modules.tsx:311
 msgid "Branches"
 msgstr "Chi nhánh"
 
@@ -1031,8 +1034,8 @@ msgstr "Người thu"
 #: src/constant.ts:28
 #: src/modules/categories/category-list.tsx:23
 #: src/modules/products/components/form-product.tsx:306
-#: src/modules/workspace-roles/workspace-roles-config.ts:253
-#: src/modules/workspaces/workspace-modules.tsx:358
+#: src/modules/workspace-roles/workspace-roles-config.ts:257
+#: src/modules/workspaces/workspace-modules.tsx:348
 msgid "Categories"
 msgstr "Danh mục"
 
@@ -1259,7 +1262,7 @@ msgstr "Đóng tất cả thư mục"
 msgid "Closed"
 msgstr "Đã đóng"
 
-#: src/modules/workspaces/workspace-modules.tsx:458
+#: src/modules/workspaces/workspace-modules.tsx:448
 msgid "Cloud Storage"
 msgstr "Cloud Storage"
 
@@ -1301,7 +1304,7 @@ msgstr "Combo"
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:47
 #: src/modules/orders/orders-sale/components/order-sale-combos.tsx:80
 #: src/modules/product-combos/product-combos-layout.tsx:57
-#: src/modules/workspaces/workspace-modules.tsx:186
+#: src/modules/workspaces/workspace-modules.tsx:185
 msgid "Combos"
 msgstr "Combos"
 
@@ -1596,7 +1599,7 @@ msgstr "Tạo"
 msgid "Create {entity}"
 msgstr "Tạo {entity}"
 
-#: src/modules/workspaces/workspace-modules.tsx:285
+#: src/modules/workspaces/workspace-modules.tsx:284
 msgid "Create an application with a custom domain, customize the application name, icon, color."
 msgstr "Tạo ứng dụng với tên miền riêng, tuỳ biến tên ứng dụng, biểu tượng, màu sắc."
 
@@ -1779,7 +1782,7 @@ msgstr "Lịch sử tín dụng"
 msgid "Credit report"
 msgstr "Báo cáo tín dụng"
 
-#: src/modules/workspaces/workspace-modules.tsx:303
+#: src/modules/workspaces/workspace-modules.tsx:302
 msgid "Credit settings"
 msgstr "Cài đặt tín dụng"
 
@@ -1787,7 +1790,7 @@ msgstr "Cài đặt tín dụng"
 msgid "Cross-origin resource sharing (CORS)"
 msgstr "Chia sẻ tài nguyên giữa các nguồn khác nhau (CORS)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:142
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:148
 msgid "Currency"
 msgstr "Tiền tệ"
 
@@ -1795,6 +1798,10 @@ msgstr "Tiền tệ"
 #: src/modules/loans/components/loan-customer-kyc.tsx:88
 msgid "Current address"
 msgstr "Địa chỉ hiện tại"
+
+#: src/components/calendar/calendar.tsx:34
+msgid "Current month"
+msgstr "Tháng hiện tại"
 
 #: src/modules/users/components/update-password.tsx:54
 msgid "Current password"
@@ -1807,6 +1814,10 @@ msgstr "Thời gian hiện tại"
 #: src/modules/tasks/views/gantt/gantt-task/components/gantt-task-draw-timeline.tsx:126
 msgid "Current timeline"
 msgstr "Thời gian hiện tại"
+
+#: src/components/calendar/calendar.tsx:30
+msgid "Current week"
+msgstr "Tuần hiện tại"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:214
 msgid "Custom domain"
@@ -1830,7 +1841,7 @@ msgstr "Cập nhật trường tùy chỉnh"
 
 #: src/modules/custom-fields/custom-field-list.tsx:24
 #: src/modules/products/components/form-product.tsx:585
-#: src/modules/workspaces/workspace-modules.tsx:367
+#: src/modules/workspaces/workspace-modules.tsx:357
 msgid "Custom fields"
 msgstr "Trường tùy chỉnh"
 
@@ -1907,7 +1918,7 @@ msgid "Customer forms"
 msgstr "Form khách hàng"
 
 #: src/constant.ts:8
-#: src/modules/workspaces/workspace-modules.tsx:141
+#: src/modules/workspaces/workspace-modules.tsx:140
 msgid "Customer Forms"
 msgstr "Form khách hàng"
 
@@ -1939,7 +1950,7 @@ msgstr "Cập nhật khách hàng"
 #: src/constant.ts:7
 #: src/modules/customers/customer-list.tsx:51
 #: src/modules/workspace-roles/workspace-roles-config.ts:55
-#: src/modules/workspaces/workspace-modules.tsx:135
+#: src/modules/workspaces/workspace-modules.tsx:134
 msgid "Customers"
 msgstr "Khách hàng"
 
@@ -1947,7 +1958,7 @@ msgstr "Khách hàng"
 msgid "Customers limit rule"
 msgstr "Quy tắc giới hạn khách hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:267
+#: src/modules/workspaces/workspace-modules.tsx:266
 msgid "Customize the features needed on the navigation bar"
 msgstr "Tuỳ chỉnh ẩn/hiện các tính năng cần thiết trên thanh điều hướng"
 
@@ -1968,7 +1979,7 @@ msgid "Dashboard"
 msgstr "Dashboard"
 
 #: src/components/list/list-core.tsx:423
-#: src/modules/workspace-roles/workspace-roles-config.ts:267
+#: src/modules/workspace-roles/workspace-roles-config.ts:271
 msgid "Data"
 msgstr "Dữ liệu"
 
@@ -2016,7 +2027,7 @@ msgstr "Mặc định"
 msgid "Default is {0}"
 msgstr "Mặc định là {0}"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:154
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:160
 msgid "Default payment method"
 msgstr "Phương thức thanh toán mặc định"
 
@@ -2033,7 +2044,7 @@ msgstr "Giá mặc định phải nằm trong khoảng giá"
 msgid "Default role when not specified"
 msgstr "Vai trò mặc định khi không được chỉ định"
 
-#: src/modules/attendance/attendance-setting.tsx:50
+#: src/modules/attendance/attendance-setting.tsx:61
 msgid "Define the allowed locations for attendance"
 msgstr "Xác định các vị trí được phép để chấm công"
 
@@ -2183,7 +2194,7 @@ msgstr "Phân cách"
 msgid "Docs"
 msgstr "Tài liệu"
 
-#: src/modules/workspaces/workspace-modules.tsx:293
+#: src/modules/workspaces/workspace-modules.tsx:292
 msgid "Documents"
 msgstr "Tài liệu"
 
@@ -2250,8 +2261,8 @@ msgstr "HĐĐT đã xóa"
 #: src/modules/e-invoices/e-invoice-list.tsx:41
 #: src/modules/plugins/e-invoices/plugin-e-invoice-provider-list.tsx:52
 #: src/modules/receipts/receipt-e-invoices.tsx:81
-#: src/modules/workspaces/workspace-modules.tsx:224
-#: src/modules/workspaces/workspace-modules.tsx:449
+#: src/modules/workspaces/workspace-modules.tsx:223
+#: src/modules/workspaces/workspace-modules.tsx:439
 msgid "E-Invoices"
 msgstr "HĐĐT"
 
@@ -2667,7 +2678,7 @@ msgstr "Tài liệu"
 msgid "File downloading"
 msgstr "Tải tập tin"
 
-#: src/modules/workspaces/workspace-modules.tsx:376
+#: src/modules/workspaces/workspace-modules.tsx:366
 msgid "File manager"
 msgstr "Quản lí tệp tin"
 
@@ -2699,7 +2710,7 @@ msgid "Folder"
 msgstr "Thư mục"
 
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:45
-#: src/modules/workspaces/workspace-modules.tsx:341
+#: src/modules/workspaces/workspace-modules.tsx:331
 msgid "For developers, manipulate data through APIs"
 msgstr "Dành cho nhà phát triển, thao tác với dữ liệu thông qua APIs"
 
@@ -2801,7 +2812,7 @@ msgstr "Giới tính"
 msgid "General"
 msgstr "Tổng quan"
 
-#: src/modules/workspaces/workspace-modules.tsx:257
+#: src/modules/workspaces/workspace-modules.tsx:256
 msgid "General Settings"
 msgstr "Cài đặt chung"
 
@@ -2911,7 +2922,7 @@ msgstr "Hình ảnh CCCD"
 msgid "ID number"
 msgstr "Số CCCD"
 
-#: src/modules/workspaces/workspace-modules.tsx:423
+#: src/modules/workspaces/workspace-modules.tsx:413
 msgid "Identify brand through Email. Help you take better care of customers through Email."
 msgstr "Nhận diện thương hiệu thông qua Email. Giúp bạn chăm sóc khách hàng qua Email tốt hơn."
 
@@ -3042,7 +3053,7 @@ msgstr "Cài đặt ứng dụng web"
 msgid "Installment"
 msgstr "Trả góp"
 
-#: src/modules/workspaces/workspace-modules.tsx:396
+#: src/modules/workspaces/workspace-modules.tsx:386
 msgid "Integrate bank accounts to receive and pay money."
 msgstr "Tích hợp tài khoản ngân hàng nhận tiền, thanh toán."
 
@@ -3054,20 +3065,20 @@ msgstr "Tích hợp các kênh như Zalo, Facebook, Websites,... để tập tru
 msgid "Integrate ChatBox into your website <0/> Easy & quick setup"
 msgstr "Tích hợp ChatBox vào trang web của bạn <0/> Thiết lập dễ dàng và nhanh chóng"
 
-#: src/modules/workspaces/workspace-modules.tsx:432
+#: src/modules/workspaces/workspace-modules.tsx:422
 msgid "Integrate ChatBox into your website."
 msgstr "Tích hợp ChatBox vào website của bạn."
 
-#: src/modules/workspaces/workspace-modules.tsx:414
+#: src/modules/workspaces/workspace-modules.tsx:404
 msgid "Integrate Fanpage Facebook, manage Messenger messages."
 msgstr "Tích hợp Fanpage Facebook, quản lí tin nhắn Messenger."
 
-#: src/modules/workspaces/workspace-modules.tsx:387
+#: src/modules/workspaces/workspace-modules.tsx:377
 msgid "Integrate other services / utilities"
 msgstr "Tích hợp các dịch vụ / tiện ích khác"
 
 #: src/modules/plugins/storage/plugin-storage.tsx:143
-#: src/modules/workspaces/workspace-modules.tsx:459
+#: src/modules/workspaces/workspace-modules.tsx:449
 msgid "Integrate with cloud storage services: S3, ..."
 msgstr "Tích hợp với các dịch vụ lưu trữ đám mây: S3, ..."
 
@@ -3075,7 +3086,7 @@ msgstr "Tích hợp với các dịch vụ lưu trữ đám mây: S3, ..."
 msgid "Integrate with E-Invoices services: <0>MatBao</0>, ..."
 msgstr "Tích hợp với các dịch vụ Hóa đơn điện tử: <0>Mắt Bảo</0>, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:450
+#: src/modules/workspaces/workspace-modules.tsx:440
 msgid "Integrate with E-Invoices services: MatBao, ..."
 msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
 
@@ -3083,7 +3094,7 @@ msgstr "Tích hợp với các dịch vụ HDDT Mắt Bão, ..."
 msgid "Integrate with LLM models"
 msgstr "Tích hợp với các mô hình LLM"
 
-#: src/modules/workspaces/workspace-modules.tsx:403
+#: src/modules/workspaces/workspace-modules.tsx:393
 msgid "Integrate Zalo OA, manage customer interactions."
 msgstr "Tích hợp Zalo OA, quản lí tương tác với khách hàng."
 
@@ -3222,7 +3233,7 @@ msgstr "KYC đang chờ xử lý"
 msgid "KYC rejected"
 msgstr "KYC bị từ chối"
 
-#: src/modules/workspaces/workspace-modules.tsx:148
+#: src/modules/workspaces/workspace-modules.tsx:147
 msgid "KYCs"
 msgstr "KYCs"
 
@@ -3327,7 +3338,7 @@ msgstr "Để lại bình luận..."
 msgid "Leave blank if the capital rate for each period is the same"
 msgstr "Để trống nếu lãi suất vốn từng thời kỳ bằng nhau"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:222
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:228
 msgid "Leave blank or fill in 0 if you do not want to remind the customer. <0/> The reminder will be sent via Zalo OA, SMS and Email if these services are enabled."
 msgstr "Để trống hoặc điền số 0 nếu không muốn nhắc khách hàng. <0/> Lời nhắc sẽ được gửi qua Zalo OA, SMS và Email nếu các dịch vụ này được bật."
 
@@ -3455,7 +3466,7 @@ msgstr "Dữ liệu tài sản cho vay"
 msgid "Loan asset estimations"
 msgstr "Ước tính tài sản cho vay"
 
-#: src/modules/workspaces/workspace-modules.tsx:238
+#: src/modules/workspaces/workspace-modules.tsx:237
 msgid "Loan Asset Estimations"
 msgstr "Định giá tài sản"
 
@@ -3582,7 +3593,7 @@ msgstr "Hoàn tác từ chối"
 #: src/constant.ts:17
 #: src/modules/loans/loan-list.tsx:92
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
-#: src/modules/workspaces/workspace-modules.tsx:232
+#: src/modules/workspaces/workspace-modules.tsx:231
 #: src/widgets/reports/modules.ts:223
 msgid "Loans"
 msgstr "Hồ sơ vay"
@@ -3654,10 +3665,6 @@ msgstr "Vị trí"
 msgid "Location Settings"
 msgstr "Cài đặt vị trí"
 
-#: src/modules/attendance/attendance-setting.tsx:49
-msgid "Locations"
-msgstr "Các vị trí"
-
 #: src/modules/auth/auth-require.tsx:122
 #: src/modules/auth/auth-require.tsx:136
 #: src/modules/auth/components/form-sign-in.tsx:73
@@ -3682,7 +3689,7 @@ msgstr "Kinh độ"
 msgid "Low"
 msgstr "Thấp"
 
-#: src/modules/workspaces/workspace-modules.tsx:422
+#: src/modules/workspaces/workspace-modules.tsx:412
 msgid "Mailer"
 msgstr "Mailer"
 
@@ -3716,10 +3723,6 @@ msgstr "Nam"
 msgid "Manage attendance records"
 msgstr "Quản lí chấm công"
 
-#: src/modules/workspaces/workspace-modules.tsx:331
-msgid "Manage attendance: location check-in, attendance rules, ..."
-msgstr "Quản lý chấm công: check-in theo vị trí, quy tắc chấm công, ..."
-
 #: src/modules/workspace-roles/workspace-roles-constants.ts:102
 msgid "Manage billings"
 msgstr "Quản lý hóa đơn"
@@ -3744,7 +3747,7 @@ msgstr "Quản lý coupons"
 msgid "Manage custom fields"
 msgstr "Quản lý trường tùy chỉnh"
 
-#: src/modules/workspaces/workspace-modules.tsx:368
+#: src/modules/workspaces/workspace-modules.tsx:358
 msgid "Manage custom fields for objects: product, service, post, ..."
 msgstr "Quản lí trường tùy chỉnh cho các đối tượng: sản phẩm, dịch vụ, bài viết, ..."
 
@@ -3760,7 +3763,7 @@ msgstr "Quản lý tương tác khách hàng qua Zalo OA"
 msgid "Manage customer KYC"
 msgstr "Quản lý KYC của khách hàng"
 
-#: src/modules/workspaces/workspace-modules.tsx:322
+#: src/modules/workspaces/workspace-modules.tsx:321
 msgid "Manage member roles and access permissions"
 msgstr "Quản lý vai trò, quyền truy cập của thành viên"
 
@@ -3784,7 +3787,7 @@ msgstr "Quản lý bài viết"
 msgid "Manage prescriptions"
 msgstr "Quản lý đơn thuốc"
 
-#: src/modules/workspaces/workspace-modules.tsx:359
+#: src/modules/workspaces/workspace-modules.tsx:349
 msgid "Manage product, service, post, ..."
 msgstr "Quản lí danh mục sản phẩm, dịch vụ, bài viết, ..."
 
@@ -3805,11 +3808,11 @@ msgid "Manage tables"
 msgstr "Quản lý bảng"
 
 #: src/modules/workspace-branches/workspace-branch-list.tsx:66
-#: src/modules/workspaces/workspace-modules.tsx:313
+#: src/modules/workspaces/workspace-modules.tsx:312
 msgid "Manage the branches of the Workspace"
 msgstr "Quản lý các chi nhánh của Workspace"
 
-#: src/modules/workspaces/workspace-modules.tsx:247
+#: src/modules/workspaces/workspace-modules.tsx:246
 msgid "Manage the settings of the Workspace"
 msgstr "Quản lí cài đặt Workspace"
 
@@ -3821,7 +3824,7 @@ msgstr "Quản lý chứng từ"
 msgid "Manage widgets"
 msgstr "Quản lý tiện ích"
 
-#: src/modules/workspaces/workspace-modules.tsx:469
+#: src/modules/workspaces/workspace-modules.tsx:459
 msgid "Manage your profile settings"
 msgstr "Quản lí thông tin tài khoản"
 
@@ -3864,6 +3867,7 @@ msgstr "Tiền sử bệnh"
 msgid "Medium"
 msgstr "Trung bình"
 
+#: src/modules/attendance/attendance-list.tsx:183
 #: src/modules/products/product-detail.tsx:172
 #: src/modules/workspace-roles/workspace-roles-constants.ts:10
 #: src/modules/workspace-roles/workspace-roles-constants.ts:19
@@ -3945,7 +3949,7 @@ msgid "Message boxes"
 msgstr "Hộp tin nhắn"
 
 #: src/constant.ts:25
-#: src/modules/workspaces/workspace-modules.tsx:160
+#: src/modules/workspaces/workspace-modules.tsx:159
 msgid "Message Boxes"
 msgstr "Tin nhắn"
 
@@ -3962,7 +3966,7 @@ msgid "Message hub updated"
 msgstr "Đã cập nhật trung tâm tin nhắn"
 
 #: src/modules/message-boxes/message-boxes-integrate.tsx:61
-#: src/modules/workspaces/workspace-modules.tsx:431
+#: src/modules/workspaces/workspace-modules.tsx:421
 msgid "Message Hubs"
 msgstr "Message Hubs"
 
@@ -3978,7 +3982,7 @@ msgstr "Đã cập nhật tin nhắn"
 msgid "Messages"
 msgstr "Tin nhắn"
 
-#: src/modules/workspaces/workspace-modules.tsx:349
+#: src/modules/workspaces/workspace-modules.tsx:339
 msgid "Messages settings"
 msgstr "Cài đặt tin nhắn"
 
@@ -3986,7 +3990,7 @@ msgstr "Cài đặt tin nhắn"
 msgid "Meta pages"
 msgstr "Trang meta"
 
-#: src/modules/workspaces/workspace-modules.tsx:413
+#: src/modules/workspaces/workspace-modules.tsx:403
 msgid "Meta Pages"
 msgstr "Meta Pages"
 
@@ -4044,7 +4048,7 @@ msgstr "Tên mẫu"
 #: src/layout/navigation/workspace-navigation-drawer.tsx:194
 #: src/modules/search/search-engine.tsx:207
 #: src/modules/users/user-profile.tsx:119
-#: src/modules/workspaces/workspace-modules.tsx:266
+#: src/modules/workspaces/workspace-modules.tsx:265
 msgid "Modules"
 msgstr "Chức năng"
 
@@ -4348,7 +4352,7 @@ msgstr "Không ước tính tài sản"
 msgid "No assignees found"
 msgstr "Không tìm thấy thành viên"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:326
+#: src/modules/attendance/modals/modal-attendance-records.tsx:176
 msgid "No attendance records found"
 msgstr "Không tìm thấy bản ghi chấm công"
 
@@ -4532,7 +4536,7 @@ msgstr "Mở tin nhắn"
 msgid "Open with browser"
 msgstr "Mở bằng trình duyệt"
 
-#: src/modules/workspaces/workspace-modules.tsx:275
+#: src/modules/workspaces/workspace-modules.tsx:274
 #: src/modules/workspaces/workspace.tsx:60
 msgid "Operation settings"
 msgstr "Cài đặt vận hành"
@@ -4572,8 +4576,8 @@ msgstr "Đơn hàng đã được đồng bộ"
 #: src/constant.ts:20
 #: src/modules/orders/order-hooks.tsx:21
 #: src/modules/workspace-roles/workspace-roles-config.ts:157
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:125
-#: src/modules/workspaces/workspace-modules.tsx:212
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:131
+#: src/modules/workspaces/workspace-modules.tsx:211
 msgid "Orders"
 msgstr "Đơn hàng"
 
@@ -4647,7 +4651,7 @@ msgstr "Thanh toán một phần"
 #: src/constant.ts:9
 #: src/modules/partners/partner-list.tsx:35
 #: src/modules/workspace-roles/workspace-roles-config.ts:222
-#: src/modules/workspaces/workspace-modules.tsx:193
+#: src/modules/workspaces/workspace-modules.tsx:192
 msgid "Partners"
 msgstr "Đối tác"
 
@@ -4713,7 +4717,7 @@ msgstr "Thanh toán thành công"
 #: src/modules/loans/loan-detail.tsx:563
 #: src/modules/receipts/receipt-list.tsx:139
 #: src/modules/workspace-billings/workspace-billings-contants.ts:9
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:140
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:146
 msgid "Payment"
 msgstr "Thanh toán"
 
@@ -4786,6 +4790,11 @@ msgstr "Trạng thái thanh toán"
 #: src/modules/workspace-billings/workspace-billings-contants.ts:19
 msgid "Pending"
 msgstr "Đang xử lí"
+
+#: src/modules/attendance/pending-attendance-list.tsx:48
+#: src/modules/attendance/pending-attendance-list.tsx:58
+msgid "Pending requests"
+msgstr "Yêu cầu đang xử lí"
 
 #: src/modules/loans/loans-constants.tsx:29
 msgid "Pending signature"
@@ -4902,7 +4911,7 @@ msgstr "Plugin"
 
 #: src/layout/navigation/workspace-navigation-drawer.tsx:204
 #: src/modules/users/user-profile.tsx:123
-#: src/modules/workspaces/workspace-modules.tsx:386
+#: src/modules/workspaces/workspace-modules.tsx:376
 msgid "Plugins"
 msgstr "Tích hợp"
 
@@ -4939,7 +4948,7 @@ msgstr "Bài viết đã cập nhật"
 #: src/constant.ts:27
 #: src/modules/categories/category-constants.ts:8
 #: src/modules/posts/posts-list.tsx:29
-#: src/modules/workspace-roles/workspace-roles-config.ts:243
+#: src/modules/workspace-roles/workspace-roles-config.ts:247
 #: src/modules/workspaces/workspace-modules.tsx:97
 msgid "Posts"
 msgstr "Bài viết"
@@ -4972,7 +4981,7 @@ msgstr "Đã cập nhật đơn thuốc"
 
 #: src/constant.ts:16
 #: src/modules/workspace-roles/workspace-roles-config.ts:217
-#: src/modules/workspaces/workspace-modules.tsx:199
+#: src/modules/workspaces/workspace-modules.tsx:198
 msgid "Prescriptions"
 msgstr "Đơn thuốc"
 
@@ -5138,7 +5147,7 @@ msgstr "Voucher sản phẩm"
 #: src/modules/products/components/form-product.tsx:179
 #: src/modules/products/components/form-product.tsx:440
 #: src/modules/products/product-list.tsx:29
-#: src/modules/workspaces/workspace-modules.tsx:168
+#: src/modules/workspaces/workspace-modules.tsx:167
 msgid "Products"
 msgstr "Sản phẩm"
 
@@ -5167,7 +5176,7 @@ msgstr "Tài khoản"
 
 #: src/layout/header/header-account.tsx:71
 #: src/modules/users/user-profile-settings.tsx:56
-#: src/modules/workspaces/workspace-modules.tsx:468
+#: src/modules/workspaces/workspace-modules.tsx:458
 msgid "Profile settings"
 msgstr "Cài đặt tài khoản"
 
@@ -5331,7 +5340,7 @@ msgid "Receipt code"
 msgstr "Mã hoá đơn"
 
 #: src/modules/receipts/modals/modal-pay-receipt.tsx:223
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:174
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:180
 msgid "Receipt images required"
 msgstr "Yêu cầu cung cấp hình ảnh giao dịch"
 
@@ -5351,7 +5360,7 @@ msgstr "Hoá đơn đã khôi phục"
 #: src/modules/loans/components/loan-payments.tsx:166
 #: src/modules/receipts/receipt-list.tsx:84
 #: src/modules/workspace-roles/workspace-roles-config.ts:119
-#: src/modules/workspaces/workspace-modules.tsx:218
+#: src/modules/workspaces/workspace-modules.tsx:217
 #: src/widgets/reports/widgets/report-products.widget.tsx:255
 msgid "Receipts"
 msgstr "Hoá đơn"
@@ -5397,7 +5406,7 @@ msgstr "Đăng ký tài khoản mới"
 msgid "Registration number"
 msgstr "Số đăng ký"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:312
+#: src/modules/attendance/attendance-record-card.tsx:143
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:75
 #: src/modules/customers/customer-detail/customer-kyc-card.tsx:233
 #: src/modules/loans/components/loan-documents.tsx:234
@@ -5464,11 +5473,11 @@ msgstr "Số tiền còn lại"
 msgid "Remaining principal"
 msgstr "Tiền gốc còn lại"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:202
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:208
 msgid "Remind customers before the appointment n (days)"
 msgstr "Nhắc nhở khách hàng trước cuộc hẹn n (ngày)"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:212
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:218
 msgid "Reminder time"
 msgstr "Thời gian nhắc nhở"
 
@@ -5549,8 +5558,8 @@ msgstr "Báo cáo được đồng bộ hóa theo thời gian thực"
 msgid "Report synced"
 msgstr "Đã đồng bộ hóa báo cáo"
 
-#: src/modules/workspace-roles/workspace-roles-config.ts:263
-#: src/modules/workspaces/workspace-modules.tsx:478
+#: src/modules/workspace-roles/workspace-roles-config.ts:267
+#: src/modules/workspaces/workspace-modules.tsx:468
 #: src/widgets/reports/widgets/report-credit.widget.tsx:638
 msgid "Reports"
 msgstr "Báo cáo"
@@ -5702,7 +5711,7 @@ msgid "Role updated"
 msgstr "Đã cập nhật vai trò"
 
 #: src/modules/workspace-api-apps/workspace-api-app-modal.tsx:210
-#: src/modules/workspaces/workspace-modules.tsx:321
+#: src/modules/workspaces/workspace-modules.tsx:320
 msgid "Roles"
 msgstr "Phân quyền"
 
@@ -5768,7 +5777,7 @@ msgstr "Di chuyển đến ngày hôm nay"
 #: src/modules/tasks/components/task-menu/task-menu-customer.tsx:143
 #: src/modules/tasks/components/task-menu/task-menu-folder.tsx:98
 #: src/modules/tasks/components/task-menu/task-menu-tags.tsx:99
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:243
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:249
 #: src/widgets/components/manage-widgets.tsx:35
 msgid "Search"
 msgstr "Tìm kiếm"
@@ -5986,7 +5995,7 @@ msgstr "Dịch vụ"
 #: src/modules/products/components/form-product.tsx:179
 #: src/modules/products/components/form-product.tsx:440
 #: src/modules/services/service-list.tsx:28
-#: src/modules/workspaces/workspace-modules.tsx:174
+#: src/modules/workspaces/workspace-modules.tsx:173
 msgid "Services"
 msgstr "Dịch vụ"
 
@@ -5999,11 +6008,11 @@ msgstr "Phiên đã hết hạn, vui lòng đăng nhập lại"
 msgid "Set default"
 msgstr "Đặt mặc định"
 
-#: src/modules/workspaces/workspace-modules.tsx:304
+#: src/modules/workspaces/workspace-modules.tsx:303
 msgid "Set loan package, interest, late payment penalty, ..."
 msgstr "Thiết lập gói vay, lãi, phạt trả chậm, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:258
+#: src/modules/workspaces/workspace-modules.tsx:257
 msgid "Set name, address, Hotline, Workspace type, ..."
 msgstr "Cài đặt tên, địa chỉ, Hotline, loại hình workspace, ..."
 
@@ -6188,6 +6197,10 @@ msgstr "Thời gian bắt đầu phải trước thời gian kết thúc"
 msgid "Status"
 msgstr "Trạng thái"
 
+#: src/modules/attendance/attendance-list.tsx:195
+msgid "Statuses"
+msgstr "Trạng thái"
+
 #: src/modules/products/components/form-product.tsx:331
 msgid "Stock check"
 msgstr "Kiểm tra hàng tồn kho"
@@ -6224,7 +6237,7 @@ msgid "Stock out reverted"
 msgstr "Hoàn tác xuất hàng"
 
 #: src/modules/product-stocks/product-stock-list.tsx:30
-#: src/modules/workspaces/workspace-modules.tsx:180
+#: src/modules/workspaces/workspace-modules.tsx:179
 msgid "Stocks"
 msgstr "Kho"
 
@@ -6259,13 +6272,17 @@ msgstr "Thành công"
 msgid "Suggest time"
 msgstr "Đề xuất thời gian"
 
-#: src/modules/workspaces/workspace-modules.tsx:350
+#: src/modules/workspaces/workspace-modules.tsx:340
 msgid "Summarize customer messages from various channels: Zalo, Facebook, Landing Page, ..."
 msgstr "Tổng hợp tin nhắn của khách hàng từ các kênh: Zalo, Facebook, Landing Page, ..."
 
-#: src/modules/workspaces/workspace-modules.tsx:377
+#: src/modules/workspaces/workspace-modules.tsx:367
 msgid "Summarize images / documents / files, ..."
 msgstr "Tổng hợp hình ảnh / tài liệu / tệp tin, ..."
+
+#: src/modules/attendance/attendance-list.tsx:177
+msgid "Summary"
+msgstr "Tổng hợp"
 
 #: src/modules/users/user-profile-settings.tsx:196
 msgid "Sunday"
@@ -6352,7 +6369,7 @@ msgid "Task synced"
 msgstr "Đã đồng bộ hóa công việc"
 
 #: src/constant.ts:10
-#: src/modules/workspaces/workspace-modules.tsx:206
+#: src/modules/workspaces/workspace-modules.tsx:205
 #: src/widgets/reports/modules.ts:136
 msgid "Tasks"
 msgstr "Công việc"
@@ -6399,7 +6416,7 @@ msgstr "Điều khoản dịch vụ"
 msgid "Terms of use"
 msgstr "Điều khoản sử dụng"
 
-#: src/modules/workspaces/workspace-modules.tsx:294
+#: src/modules/workspaces/workspace-modules.tsx:293
 msgid "Terms of use, privacy policy, user manual, ..."
 msgstr "Điều khoản sử dụng, chính sách bảo mật, hướng dẫn sử dụng, ..."
 
@@ -6580,7 +6597,8 @@ msgstr "Để cho ứng dụng của chúng tôi có thể upload file lên bộ
 msgid "To not miss important information"
 msgstr "Để không bỏ lỡ những thông tin quan trọng"
 
-#: src/components/calendar/calendar.tsx:123
+#: src/components/calendar/calendar.tsx:27
+#: src/components/calendar/calendar.tsx:140
 #: src/components/inputs/due-date-input.tsx:205
 #: src/configs/calendar.config.tsx:65
 #: src/modules/bookings/booking-list.tsx:495
@@ -6643,12 +6661,24 @@ msgstr "T.Tiền"
 msgid "TotalLong"
 msgstr "Thành tiền"
 
+#: src/modules/attendance/attendance-list.tsx:192
+msgid "Total shifts"
+msgstr "Tổng ca làm việc"
+
 #: src/components/inputs/time-trackings-input.tsx:178
 msgid "Total time"
 msgstr "Tổng thời gian"
 
+#: src/modules/attendance/attendance-list.tsx:186
+msgid "Total working days"
+msgstr "Tổng ngày làm việc"
+
+#: src/modules/attendance/attendance-list.tsx:189
+msgid "Total working time"
+msgstr "Tổng thời gian làm việc"
+
 #. placeholder {0}: DateTime.toHHMM(summary)
-#: src/modules/attendance/modals/modal-attendance-records.tsx:183
+#: src/modules/attendance/modals/modal-attendance-records.tsx:160
 msgid "Total working time: {0}"
 msgstr "Tổng thời gian làm việc: {0}"
 
@@ -7082,7 +7112,7 @@ msgstr "Xem hóa đơn điện tử"
 msgid "View Invoice"
 msgstr "Xem hóa đơn"
 
-#: src/modules/attendance/modals/modal-attendance-records.tsx:250
+#: src/modules/attendance/attendance-record-card.tsx:83
 msgid "View location"
 msgstr "Xem vị trí"
 
@@ -7122,7 +7152,7 @@ msgstr "Xem hoá đơn"
 msgid "View reports"
 msgstr "Xem báo cáo"
 
-#: src/modules/workspaces/workspace-modules.tsx:479
+#: src/modules/workspaces/workspace-modules.tsx:469
 msgid "View reports and analytics"
 msgstr "Xem báo cáo và phân tích"
 
@@ -7227,11 +7257,11 @@ msgstr "Chào mừng đến với {0}"
 msgid "Withdraw"
 msgstr "Rút"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:77
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:78
 msgid "Work schedule"
 msgstr "Lịch làm việc"
 
-#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:79
+#: src/modules/workspace-settings/components/workspace-setting-operation.tsx:80
 msgid "Work schedule applied to the booking, timekeeping, and other features."
 msgstr "Lịch làm việc áp dụng cho việc đặt chỗ, chấm công và các tính năng khác."
 
@@ -7243,11 +7273,11 @@ msgstr "Lịch làm việc"
 msgid "Working time type"
 msgstr "Loại thời gian làm việc"
 
-#: src/modules/workspaces/workspace-modules.tsx:276
+#: src/modules/workspaces/workspace-modules.tsx:275
 msgid "Working time, invoice, service voucher, payment method, search settings, ..."
 msgstr "Thời gian làm việc, hóa đơn, phiếu dịch vụ, phương thức thanh toán, cài đặt tìm kiếm, ..."
 
-#: src/modules/workspace-roles/workspace-roles-config.ts:236
+#: src/modules/workspace-roles/workspace-roles-config.ts:240
 msgid "Workspace"
 msgstr "Không gian làm việc"
 
@@ -7290,7 +7320,7 @@ msgstr "Đã cập nhật tùy chọn cài đặt workspace"
 msgid "Workspace settings"
 msgstr "Cài đặt workspace"
 
-#: src/modules/workspaces/workspace-modules.tsx:249
+#: src/modules/workspaces/workspace-modules.tsx:248
 msgid "Workspace Settings"
 msgstr "Cài đặt Workspace"
 
@@ -7427,7 +7457,7 @@ msgstr "Zalo OA không hoạt động"
 msgid "Zalo OA updated"
 msgstr "Zalo OA đã cập nhật"
 
-#: src/modules/workspaces/workspace-modules.tsx:405
+#: src/modules/workspaces/workspace-modules.tsx:395
 msgid "Zalo OAs"
 msgstr "Zalo OAs"
 

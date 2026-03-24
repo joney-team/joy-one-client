@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { AttendanceSettingLocationInput } from "@/graphql/types.graphql";
 import { nonLoading } from "@/utils/non-loading";
@@ -11,7 +10,7 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, InputWrapper, Skeleton, Stack, Text } from "@mantine/core";
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, useRef, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { AttendanceSettingFragment } from "./graphql/fragmentAttendanceSetting.graphql";
 import UPLOAD_ATTENDANCE_SETTING_MUTATION from "./graphql/mutationUpdateAttendanceSetting.graphql";
 import { useAttendanceSetting } from "./hooks/use-attendance-setting";
@@ -25,7 +24,7 @@ const ModalAttendanceSettingLocationForm = dynamic(
   { ssr: false, loading: nonLoading },
 );
 
-const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ setting }) => {
+const AttendanceSettingContent: FC<{ setting: AttendanceSettingFragment }> = ({ setting }) => {
   const [locations, setLocations] = useState<AttendanceSettingLocationInput[]>(
     removeTypeName(setting.locations ?? []),
   );
@@ -43,16 +42,28 @@ const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ set
     });
   };
 
+  useEffect(() => {
+    const isDiff =
+      JSON.stringify(removeTypeName(setting.locations ?? [])) !== JSON.stringify(locations);
+    if (!isDiff) return;
+
+    const timeout = setTimeout(() => {
+      onApply();
+    }, 1000);
+
+    return () => clearTimeout(timeout);
+  }, [setting.locations, locations]);
+
   return (
     <Stack>
       <InputWrapper
-        label={<Trans>Locations</Trans>}
+        label={<Trans>Attendance locations</Trans>}
         description={<Trans>Define the allowed locations for attendance</Trans>}
       >
-        <Stack>
+        <Stack pt="sm">
           {locations.map((location) => (
             <Card key={location.id} shadow="none" withBorder>
-              <Group justify="space-between">
+              <Group justify="space-between" wrap="nowrap">
                 <Stack gap={0}>
                   <Text fw={500}>{location.name}</Text>
                   <Text size="sm" c="dimmed">
@@ -65,7 +76,6 @@ const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ set
                   <ActionIcon
                     color="gray"
                     variant="subtle"
-                    size="xs"
                     onClick={() =>
                       modalAttendanceSettingLocationFormRef.current?.open({
                         location,
@@ -85,7 +95,6 @@ const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ set
                   <ActionIcon
                     color="gray"
                     variant="subtle"
-                    size="xs"
                     onClick={() =>
                       setLocations((prev) => prev.filter((loc) => loc.id !== location.id))
                     }
@@ -97,30 +106,26 @@ const AttendanceSettingCard: FC<{ setting: AttendanceSettingFragment }> = ({ set
             </Card>
           ))}
 
-          <Button
-            size="compact-sm"
-            variant="outline"
-            color="gray"
-            onClick={() =>
-              modalAttendanceSettingLocationFormRef.current?.open({
-                onFinish: (location) => {
-                  setLocations((prev) => [...prev, location]);
-                },
-              })
-            }
-            leftIcon={IconPlus}
-          >
-            <Trans>Add</Trans>
-          </Button>
+          <Group>
+            <Button
+              size="xs"
+              variant="outline"
+              color="gray"
+              onClick={() =>
+                modalAttendanceSettingLocationFormRef.current?.open({
+                  onFinish: (location) => {
+                    setLocations((prev) => [...prev, location]);
+                  },
+                })
+              }
+              leftIcon={IconPlus}
+            >
+              <Trans>Add location</Trans>
+            </Button>
+          </Group>
           <ModalAttendanceSettingLocationForm ref={modalAttendanceSettingLocationFormRef} />
         </Stack>
       </InputWrapper>
-
-      <Group justify="center">
-        <Button onClick={onApply}>
-          <Trans>Apply</Trans>
-        </Button>
-      </Group>
     </Stack>
   );
 };
@@ -129,26 +134,12 @@ export const AttendanceSetting: FC = () => {
   const { attendanceSetting, loading, error } = useAttendanceSetting();
 
   if (loading) {
-    return (
-      <Container py="md" size="xs">
-        <Skeleton height={300} />
-      </Container>
-    );
+    return <Skeleton height={200} />;
   }
 
   if (error || !attendanceSetting) {
-    return (
-      <Container py="md" size="xs">
-        <Errored error={error} />
-      </Container>
-    );
+    return <Errored error={error} />;
   }
 
-  return (
-    <Container py="md" size="xs">
-      <Card>
-        <AttendanceSettingCard setting={attendanceSetting} />
-      </Card>
-    </Container>
-  );
+  return <AttendanceSettingContent setting={attendanceSetting} />;
 };

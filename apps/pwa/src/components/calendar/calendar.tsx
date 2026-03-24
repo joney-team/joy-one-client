@@ -3,7 +3,7 @@
 import { useColor } from "@/modules/theme/use-color";
 import { CalendarView } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Stack, Text } from "@mantine/core";
 import { IconCalendarDown, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import { FC, useMemo, useState } from "react";
@@ -14,15 +14,30 @@ import { LaunchingSoon } from "../launching-soon";
 import { CalendarMonthView } from "./calendar-month-view";
 import { CalendarProps, CalendarViewProps } from "./calendar-types";
 import { normalizeCalendarView } from "./calendar-utils";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 
-const calendarViews: Record<CalendarView, FC<CalendarViewProps> | undefined> = {
-  [CalendarView.DAY]: undefined,
-  [CalendarView.WEEK]: undefined,
-  [CalendarView.MONTH]: CalendarMonthView,
+const calendarViews: Record<
+  CalendarView,
+  {
+    component?: FC<CalendarViewProps> | undefined;
+    recentLabel: MacroMessageDescriptor;
+  }
+> = {
+  [CalendarView.DAY]: {
+    recentLabel: defineMessage`Today`,
+  },
+  [CalendarView.WEEK]: {
+    recentLabel: defineMessage`Current week`,
+  },
+  [CalendarView.MONTH]: {
+    component: CalendarMonthView,
+    recentLabel: defineMessage`Current month`,
+  },
 };
 
 export const Calendar: FC<CalendarProps> = (props) => {
   const color = useColor();
+  const { t } = useLingui();
   const [date, setDate] = useState<Date>(props.initialDate || new Date());
   const view = useMemo(() => {
     return normalizeCalendarView(props.view);
@@ -85,7 +100,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
   };
 
   const calendarView = useMemo(() => {
-    const Component = calendarViews[view];
+    const Component = calendarViews[view]?.component;
     if (!Component) return <LaunchingSoon shadow="none" />;
 
     return (
@@ -122,7 +137,7 @@ export const Calendar: FC<CalendarProps> = (props) => {
         <Group gap={5}>
           {!DateTime.isSame(date, new Date(), view) && (
             <Button size="compact-sm" leftIcon={IconCalendarDown} variant="light" onClick={goToday}>
-              <Trans>Today</Trans>
+              {calendarViews[view] ? t(calendarViews[view]?.recentLabel) : <Trans>Today</Trans>}
             </Button>
           )}
 

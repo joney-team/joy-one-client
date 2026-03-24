@@ -6,13 +6,13 @@ import { Card } from "@mantine/core";
 
 const WorkspaceOperationSettings = renderPage(() =>
   import("@/modules/workspace-settings/components/workspace-setting-operation").then(
-    (mod) => mod.WorkspaceOperationSettings
-  )
+    (mod) => mod.WorkspaceOperationSettings,
+  ),
 );
 
 const Content = () => {
   return (
-    <Container p={16}>
+    <Container p="sm">
       <Card shadow="xs">
         <WorkspaceOperationSettings />
       </Card>

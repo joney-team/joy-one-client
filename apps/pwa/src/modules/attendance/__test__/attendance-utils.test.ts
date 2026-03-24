@@ -1,10 +1,10 @@
 import { describe, it, expect } from "vitest";
-import { sumAttendanceRecords } from "../attendance-utils";
+import { getWorkingDurationTime } from "../attendance-utils";
 import { AttendanceRecordStatus, AttendanceRecordType } from "@/graphql/enums.graphql";
 
 describe("sumAttendanceRecords", () => {
   it("should return 0 for empty records", () => {
-    const result = sumAttendanceRecords([]);
+    const result = getWorkingDurationTime([]);
     expect(result).toBe(0);
   });
 
@@ -23,7 +23,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(10800);
   });
 
@@ -54,7 +54,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(1000 + 2000);
   });
 
@@ -85,7 +85,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(1000 + 2000);
   });
 
@@ -98,7 +98,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(0);
   });
 
@@ -111,7 +111,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(0);
   });
 
@@ -130,7 +130,7 @@ describe("sumAttendanceRecords", () => {
         status: AttendanceRecordStatus.Approved,
       },
     ];
-    const result = sumAttendanceRecords(records);
+    const result = getWorkingDurationTime(records);
     expect(result).toBe(0);
   });
 });

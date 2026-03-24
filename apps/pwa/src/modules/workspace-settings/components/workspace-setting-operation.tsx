@@ -37,6 +37,7 @@ import {
   type ModalWorkspaceSettingWorkingDaysRef,
   ModalWorkspaceSettingWorkingDays,
 } from "../modals/modal-workspace-setting-working-days";
+import { AttendanceSetting } from "@/modules/attendance/attendance-setting";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 
@@ -68,7 +69,7 @@ export const WorkspaceOperationSettings: FC = () => {
 
         return output;
       }, {}),
-    [workingDaysIntervals]
+    [workingDaysIntervals],
   );
 
   return (
@@ -106,11 +107,10 @@ export const WorkspaceOperationSettings: FC = () => {
 
         <Group>
           <Button
-            radius={100}
-            size="compact-sm"
-            miw={100}
-            leftIcon={workingDaysIntervals.length > 0 ? IconPencil : IconPlus}
+            size="xs"
             variant="outline"
+            color="gray"
+            leftIcon={workingDaysIntervals.length > 0 ? IconPencil : IconPlus}
             onClick={() => workspaceSettingWorkingDaysRef.current?.open()}
           >
             {workingDaysIntervals.length > 0 ? <Trans>Edit</Trans> : <Trans>Add</Trans>}
@@ -118,6 +118,12 @@ export const WorkspaceOperationSettings: FC = () => {
         </Group>
 
         <ModalWorkspaceSettingWorkingDays ref={workspaceSettingWorkingDaysRef} />
+      </FormSession>
+
+      <Divider opacity={0.5} my={30} />
+
+      <FormSession title={<Trans>Attendance</Trans>}>
+        <AttendanceSetting />
       </FormSession>
 
       <Divider opacity={0.5} my={30} />

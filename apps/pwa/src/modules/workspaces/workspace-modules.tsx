@@ -123,7 +123,6 @@ export const workspaceModuleConfigs = {
   attendance: combineModule({
     href: "/attendance",
     icon: IconCalendarCheck,
-    permissions: WorkspacePermission.ATTENDANCE_RECORDS_MANAGER,
     name: defineMessage`Attendance`,
   }),
 
@@ -320,15 +319,6 @@ export const workspaceModuleConfigs = {
     color: "orange",
     name: defineMessage`Roles`,
     description: defineMessage`Manage member roles and access permissions`,
-  }),
-  workspaceSettingsAttendance: combineModule({
-    href: "/workspace-settings/attendance",
-    icon: IconCalendarCheck,
-    permissions: WorkspacePermission.WORKSPACE_ROLES_MANAGER,
-    restrictDisplay: ["spotlight"],
-    color: "indigo",
-    name: defineMessage`Attendance settings`,
-    description: defineMessage`Manage attendance: location check-in, attendance rules, ...`,
   }),
 
   workspaceSettingsApiApps: combineModule({

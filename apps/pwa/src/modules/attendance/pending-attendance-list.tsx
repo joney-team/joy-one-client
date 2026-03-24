@@ -11,6 +11,7 @@ import { IconCalendarPause, IconClockCheck } from "@tabler/icons-react";
 import { useEventsListener } from "../events/event-service";
 import { AttendanceRecordCard } from "./attendance-record-card";
 import QUERY_ATTENDANCE_RECORDS from "./graphql/queryAttendanceRecords.graphql";
+import { NumberFormat } from "@/components/format/number-format";
 
 export const PendingAttendanceList: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -44,7 +45,7 @@ export const PendingAttendanceList: FC = () => {
     <Fragment>
       {total > 0 && (
         <Button onClick={open} size="compact-sm" color="orange" leftIcon={IconCalendarPause}>
-          <Trans>Pending requests ({total})</Trans>
+          <Trans>Pending requests</Trans> (<NumberFormat value={total} />)
         </Button>
       )}
 

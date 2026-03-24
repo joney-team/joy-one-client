@@ -22,7 +22,7 @@ import dynamic from "next/dynamic";
 import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } from "react";
 import { attendanceRecordTypes } from "../attendance-constants";
 import { AttendanceRecordCard } from "../attendance-record-card";
-import { sumAttendanceRecords } from "../attendance-utils";
+import { getWorkingDurationTime } from "../attendance-utils";
 import QUERY_ATTENDANCE_RECORDS from "../graphql/queryAttendanceRecords.graphql";
 import { useQuery } from "@apollo/client/react";
 
@@ -107,7 +107,7 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
   }
 
   const records = Array.from(data?.attendanceRecords.results ?? []);
-  const summary = sumAttendanceRecords(records);
+  const summary = getWorkingDurationTime(records);
 
   return (
     <Stack pt="sm" gap="xs">

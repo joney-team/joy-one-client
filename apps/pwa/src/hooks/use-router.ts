@@ -155,14 +155,3 @@ export const useRouteRule = () => {
     return defaultRouteRule;
   }, [pathname]);
 };
-
-export const useParams = <T extends Record<string, string>>() => {
-  const pathname = usePathname();
-  const params = new URLSearchParams(window.location.search);
-
-  return {
-    params: Object.fromEntries(params.entries()) as T,
-    pathname,
-    search: window.location.search,
-  };
-};

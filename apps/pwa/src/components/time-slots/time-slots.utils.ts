@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { TIME_SLOTS_CONFIG, useTimeSlots } from "./time-slots.constants";
 import { TimeEvent, TimeInterval } from "./time-slots.types";
-import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 
 export function getMousePosInElement(e: MouseEvent, el: HTMLElement) {
   const rect = el.getBoundingClientRect();
@@ -27,11 +26,11 @@ export const useTimeSlotsAttributes = () => {
         if (!rootRef.current) return;
 
         const cursorColumnIndex = rootRef.current.getAttribute(
-          TIME_SLOTS_CONFIG.cursorColumnIndexAttr
+          TIME_SLOTS_CONFIG.cursorColumnIndexAttr,
         );
 
         const selectColumnIndex = rootRef.current.getAttribute(
-          TIME_SLOTS_CONFIG.selectColumnIndexAttr
+          TIME_SLOTS_CONFIG.selectColumnIndexAttr,
         );
 
         setAttributes({
@@ -92,7 +91,7 @@ export function displayMinutes(minutes: number) {
 
 export function strictAvailableTimes(
   availableTimes: { start: number; end: number }[],
-  user: { start: number; end: number }
+  user: { start: number; end: number },
 ): { start: number; end: number } | null {
   // sort available
   const sorted = [...availableTimes].sort((a, b) => a.start - b.start);
@@ -151,14 +150,14 @@ export function getSelectedTimeRange(args: {
           end: toMinutes + args.stepInMinutes,
         }
       : toMinutes < fromMinutes
-      ? {
-          start: toMinutes,
-          end: fromMinutes,
-        }
-      : {
-          start: fromMinutes,
-          end: toMinutes + args.stepInMinutes,
-        };
+        ? {
+            start: toMinutes,
+            end: fromMinutes,
+          }
+        : {
+            start: fromMinutes,
+            end: toMinutes + args.stepInMinutes,
+          };
 
   if (availableTimeIntervals.length > 0) {
     return strictAvailableTimes(availableTimeIntervals, timeRange);
@@ -178,7 +177,7 @@ export function groupOverlappingEvents(events: TimeEvent[]): TimeEvent[][] {
 
   // sort by start time
   const sorted = [...events].sort(
-    (a, b) => (getMinutesFromStringTime(a.start) ?? 0) - (getMinutesFromStringTime(b.start) ?? 0)
+    (a, b) => (getMinutesFromStringTime(a.start) ?? 0) - (getMinutesFromStringTime(b.start) ?? 0),
   );
 
   const groups: TimeEvent[][] = [];
