@@ -7,17 +7,16 @@ import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Group, Modal, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
+import { useDisclosure } from "@mantine/hooks";
 import { IconCloudDataConnection } from "@tabler/icons-react";
 import { forwardRef, Fragment, type ReactNode, useImperativeHandle, useState } from "react";
 import SET_PLUGIN_EXTERNAL_STORAGE, {
-  type SetPluginExternalStorageMutation,
   type SetPluginExternalStorageMutationVariables,
 } from "./mutationSetPluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
 import GET_PLUGIN_EXTERNAL_STORAGE, {
   type PluginExternalStorageQuery,
 } from "./queryPluginExternalStorage.graphql";
-import { useDisclosure } from "@mantine/hooks";
 
 const PluginStorageModalContent = ({
   isOpened,
@@ -28,10 +27,7 @@ const PluginStorageModalContent = ({
   onClose: () => void;
   storage?: PluginExternalStorageQuery["pluginExternalStorage"];
 }) => {
-  const [setPluginExternalStorage] = useMutation<
-    SetPluginExternalStorageMutation,
-    SetPluginExternalStorageMutationVariables
-  >(SET_PLUGIN_EXTERNAL_STORAGE);
+  const [setPluginExternalStorage] = useMutation(SET_PLUGIN_EXTERNAL_STORAGE);
 
   const form = useForm<SetPluginExternalStorageMutationVariables>({
     initialValues: {

@@ -34,24 +34,12 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { MouseEventHandler, useRef, type FC } from "react";
-import FETCH_EXTERNAL_STORAGE_SIZE, {
-  type FetchExternalStorageSizeMutation,
-  type FetchExternalStorageSizeMutationVariables,
-} from "./mutationFetchExternalStorageSize.graphql";
-import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE, {
-  type ToggleDisablePluginExternalStorageMutation,
-  type ToggleDisablePluginExternalStorageMutationVariables,
-} from "./mutationToggleDisablePluginExternalStorage.graphql";
+import FETCH_EXTERNAL_STORAGE_SIZE from "./mutationFetchExternalStorageSize.graphql";
+import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE from "./mutationToggleDisablePluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
 import { PluginStorageModalRef } from "./plugin-storage-modal";
-import HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE, {
-  type HealthcheckPluginExternalStorageMutation,
-  type HealthcheckPluginExternalStorageMutationVariables,
-} from "./queryHealthcheckPluginExternalStorage.graphql";
-import GET_PLUGIN_EXTERNAL_STORAGE, {
-  type PluginExternalStorageQuery,
-  type PluginExternalStorageQueryVariables,
-} from "./queryPluginExternalStorage.graphql";
+import HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE from "./queryHealthcheckPluginExternalStorage.graphql";
+import GET_PLUGIN_EXTERNAL_STORAGE from "./queryPluginExternalStorage.graphql";
 
 const PluginStorageModal = dynamic(
   () => import("./plugin-storage-modal").then((mod) => mod.PluginStorageModal),
@@ -61,30 +49,19 @@ const PluginStorageModal = dynamic(
 );
 
 export const PluginStorage: FC = () => {
+  const pluginStorageModalRef = useRef<PluginStorageModalRef>(null);
   const color = useColor();
-  const storage = useQuery<PluginExternalStorageQuery, PluginExternalStorageQueryVariables>(
-    GET_PLUGIN_EXTERNAL_STORAGE,
-    {
-      fetchPolicy: "cache-and-network",
-    },
+  const storage = useQuery(GET_PLUGIN_EXTERNAL_STORAGE, {
+    fetchPolicy: "cache-and-network",
+  });
+
+  const [healthCheck, { loading: healthCheckLoading }] = useMutation(
+    HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE,
   );
 
-  const pluginStorageModalRef = useRef<PluginStorageModalRef>(null);
+  const [fetchExternalStorageSize] = useMutation(FETCH_EXTERNAL_STORAGE_SIZE);
 
-  const [healthCheck, { loading: healthCheckLoading }] = useMutation<
-    HealthcheckPluginExternalStorageMutation,
-    HealthcheckPluginExternalStorageMutationVariables
-  >(HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE);
-
-  const [fetchExternalStorageSize] = useMutation<
-    FetchExternalStorageSizeMutation,
-    FetchExternalStorageSizeMutationVariables
-  >(FETCH_EXTERNAL_STORAGE_SIZE);
-
-  const [toggleDisable] = useMutation<
-    ToggleDisablePluginExternalStorageMutation,
-    ToggleDisablePluginExternalStorageMutationVariables
-  >(TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE);
+  const [toggleDisable] = useMutation(TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE);
 
   const onHealthCheck: MouseEventHandler = async (e) => {
     try {
@@ -106,7 +83,7 @@ export const PluginStorage: FC = () => {
     }
   };
 
-  if (storage.loading) {
+  if (storage.loading && !storage.data) {
     return (
       <Stack py={20}>
         <Skeleton height={200} />
