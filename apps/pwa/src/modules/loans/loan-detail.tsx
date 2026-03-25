@@ -255,7 +255,7 @@ export const LoanDetail: NextPage = () => {
       </Stack>
     );
 
-  if (loanLoading || customerKycLoading || customerLoading)
+  if ((loanLoading && !loanData) || customerKycLoading || customerLoading)
     return (
       <Stack p={16}>
         <Skeleton height={250} />

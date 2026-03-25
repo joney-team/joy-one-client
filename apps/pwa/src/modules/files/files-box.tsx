@@ -85,6 +85,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
       },
     },
     fetchPolicy: "cache-and-network",
+    skip: !props.refs,
   });
 
   const addFile = async (_fs: File[]) => {
