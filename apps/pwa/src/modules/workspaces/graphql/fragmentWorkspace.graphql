@@ -1,4 +1,4 @@
-fragment WorkspaceData on Workspace {
+fragment Workspace on Workspace {
   _id
   code
   type

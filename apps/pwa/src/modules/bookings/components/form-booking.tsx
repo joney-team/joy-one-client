@@ -46,7 +46,7 @@ import { FC, Fragment, useEffect, useMemo } from "react";
 import { BookingStatus } from "@/graphql/enums.graphql";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 import CREATE_BOOKING_MUTATION, {
   CreateBookingMutationVariables,
 } from "../graphql/mutationCreateBooking.graphql";
@@ -59,12 +59,12 @@ export interface BookingFormProps {
   customer?: CustomerFragment;
   assigneeUsers?: WorkspaceMemberFragment[];
 
-  reschedule?: BookingDataFragment;
-  update?: BookingDataFragment;
+  reschedule?: BookingFragment;
+  update?: BookingFragment;
 
   onFinished?: () => void;
   onCancel?: () => void;
-  onRescheduled?: (booking: BookingDataFragment) => void;
+  onRescheduled?: (booking: BookingFragment) => void;
 }
 
 export const BookingForm: FC<BookingFormProps> = (props) => {

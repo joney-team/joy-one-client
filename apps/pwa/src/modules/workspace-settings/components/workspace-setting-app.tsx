@@ -66,7 +66,7 @@ export const WorkspaceAppSettings: FC = () => {
         {
           id: `Workspace:${result.data.updateWorkspace._id}`,
           fragment: WORKSPACE_DATE_FRAGMENT,
-          fragmentName: "WorkspaceData",
+          fragmentName: "Workspace",
         },
         (data) => {
           if (!data) return data;
@@ -75,7 +75,7 @@ export const WorkspaceAppSettings: FC = () => {
             ...data,
             ...result.data?.updateWorkspace,
           };
-        }
+        },
       );
     },
   });

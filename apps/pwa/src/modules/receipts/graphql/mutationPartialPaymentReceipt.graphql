@@ -5,6 +5,6 @@ mutation PartialPaymentReceipt(
   $input: PartialPaymentInput!
 ) {
   partialPaymentReceipt(id: $partialPaymentReceiptId, input: $input) {
-    ...ReceiptData
+    ...Receipt
   }
 }

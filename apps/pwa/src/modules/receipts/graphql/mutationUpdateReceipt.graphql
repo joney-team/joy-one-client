@@ -2,6 +2,6 @@
 
 mutation UpdateReceipt($updateReceiptId: String!, $input: UpdateReceiptInput!) {
   updateReceipt(id: $updateReceiptId, input: $input) {
-    ...ReceiptData
+    ...Receipt
   }
 }

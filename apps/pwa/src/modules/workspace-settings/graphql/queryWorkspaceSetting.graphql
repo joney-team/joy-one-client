@@ -2,6 +2,6 @@
 
 query WorkspaceSetting {
   workspaceSetting {
-    ...WorkspaceSettingData
+    ...WorkspaceSetting
   }
 }

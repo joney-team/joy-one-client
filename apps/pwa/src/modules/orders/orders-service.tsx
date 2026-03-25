@@ -2,7 +2,7 @@
 
 import { ResponseList } from "@/types";
 import { restClient } from "../apis/rest-client";
-import { ReceiptDataFragment } from "../receipts/graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../receipts/graphql/fragmentReceipt.graphql";
 import { OrderEntity } from "./order-entity";
 import { OrderCalculateDto, OrderDto } from "./orders-dtos";
 import { OrderEntityCalculated, OrderPaymentStatus, PayOrderDto } from "./orders-types";
@@ -36,7 +36,7 @@ export async function calculateOrder(dto: OrderCalculateDto) {
 }
 
 export async function payOrder(id: string, dto: PayOrderDto) {
-  return restClient.post<ReceiptDataFragment>(`/orders/${id}/pay`, dto);
+  return restClient.post<ReceiptFragment>(`/orders/${id}/pay`, dto);
 }
 
 export async function archiveOrder(id: string) {

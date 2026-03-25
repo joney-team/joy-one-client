@@ -4,7 +4,7 @@ query Receipts($limit: Float, $offset: Float, $query: JSONObject) {
   list: receipts(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      ...ReceiptData
+      ...Receipt
     }
   }
 }

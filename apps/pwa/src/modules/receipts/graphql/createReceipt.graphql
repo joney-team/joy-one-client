@@ -2,6 +2,6 @@
 
 mutation CreateReceipt($input: CreateReceiptInput!) {
   createReceipt(input: $input) {
-    ...ReceiptData
+    ...Receipt
   }
 }

@@ -1,7 +1,7 @@
 import { CustomerFormInput } from "@/graphql/types.graphql";
-import { CustomerFormDataFragment } from "@/modules/customer-forms/graphql/fragmentCustomerForm.graphql";
+import { CustomerFormFragment } from "@/modules/customer-forms/graphql/fragmentCustomerForm.graphql";
 
-export function normalizeCustomerFormInput(input: CustomerFormDataFragment): CustomerFormInput {
+export function normalizeCustomerFormInput(input: CustomerFormFragment): CustomerFormInput {
   return {
     name: input.name,
     phone: input.phone,

@@ -58,7 +58,7 @@ import {
   setWorkspaceAuthSessionId,
 } from "./auth-service";
 import type { AuthContext } from "./auth-types";
-import { AuthUserDataFragment } from "./graphql/fragmentAuthUser.graphql";
+import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
 import MUTATION_SIGN_OUT from "./graphql/mutationSignOut.graphql";
 import MUTATION_UPDATE_USER_PROFILE from "./graphql/mutationUpdateUserProfile.graphql";
 import QUERY_AUTH_USER from "./graphql/queryAuthUser.graphql";
@@ -71,11 +71,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const { t } = useLingui();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [user, setUser] = useState<AuthUserDataFragment>();
+  const [user, setUser] = useState<AuthUserFragment>();
   const [device, setDevice] = useState<DeviceEntity>();
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
-  const syncLocaleDeviceToUser = async (_user: AuthUserDataFragment) => {
+  const syncLocaleDeviceToUser = async (_user: AuthUserFragment) => {
     try {
       const currentLocale = getClientLocale();
       if (_user.locale !== currentLocale) {
@@ -118,7 +118,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
-    let authResult: AuthUserDataFragment | undefined = undefined;
+    let authResult: AuthUserFragment | undefined = undefined;
     initializeMetaPages();
     setSessionId(uuid());
 

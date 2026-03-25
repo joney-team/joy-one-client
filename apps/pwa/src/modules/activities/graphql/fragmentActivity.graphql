@@ -1,6 +1,6 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 
-fragment ActivityData on Activity {
+fragment Activity on Activity {
   _id
   contextType
   contextId

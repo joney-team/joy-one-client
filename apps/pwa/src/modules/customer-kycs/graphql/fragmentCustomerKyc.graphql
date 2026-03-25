@@ -1,6 +1,6 @@
 #import "../../locations/graphql/fragmentLocation.graphql"
 
-fragment CustomerKycData on CustomerKyc {
+fragment CustomerKyc on CustomerKyc {
   _id
   customerId
   customer {
@@ -17,14 +17,14 @@ fragment CustomerKycData on CustomerKyc {
     cidNumber
     cidFullName
     cidLocation {
-      ...LocationData
+      ...Location
     }
     cidRaw
     cidGender
     cidBirthday
     cidCreatedAt
     cidVnLocation {
-      ...LocationData
+      ...Location
     }
     rejectReason
     createdAt

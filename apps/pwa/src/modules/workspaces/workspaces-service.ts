@@ -15,7 +15,7 @@ import {
   IconStethoscope,
 } from "@tabler/icons-react";
 import { restClient } from "../apis/rest-client";
-import { WorkspaceDataFragment } from "./graphql/fragmentWorkspace.graphql";
+import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
 import { UpdateWorkspaceMutationVariables } from "./graphql/mutationUpdateWorkspace.graphql";
 import { WorkspaceEntity, WorkspaceInviteInformation } from "./workspaces-types";
 
@@ -56,7 +56,7 @@ export async function getWorkspaceById(id: string) {
 }
 
 export function normalizeWorkspaceInput(
-  workspace: WorkspaceDataFragment,
+  workspace: WorkspaceFragment,
 ): UpdateWorkspaceMutationVariables {
   return {
     name: workspace?.name ?? "",

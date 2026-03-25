@@ -11,7 +11,7 @@ fragment WorkspaceMember on WorkspaceMember {
   memberId
   workspaceId
   workspace {
-    ...WorkspaceData
+    ...Workspace
   }
   workspaceBranches {
     _id

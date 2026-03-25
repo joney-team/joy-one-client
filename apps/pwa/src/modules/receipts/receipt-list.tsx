@@ -36,7 +36,7 @@ import dynamic from "next/dynamic";
 import { Fragment, useRef, type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
-import { ReceiptDataFragment } from "./graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
 import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
 import { type ModalPayReceiptRef } from "./modals/modal-pay-receipt";
 import { ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
@@ -47,7 +47,7 @@ const ModalReceiptDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalPrinter = dynamic(
@@ -55,7 +55,7 @@ const ModalPrinter = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalPayReceipt = dynamic(
@@ -63,7 +63,7 @@ const ModalPayReceipt = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const ReceiptList: FC = () => {
@@ -79,7 +79,7 @@ export const ReceiptList: FC = () => {
   return (
     <Fragment>
       <Stack p={16}>
-        <List<ReceiptDataFragment>
+        <List<ReceiptFragment>
           id="rps"
           name={<Trans>Receipts</Trans>}
           limit={18}

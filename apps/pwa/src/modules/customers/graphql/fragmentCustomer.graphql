@@ -27,19 +27,19 @@ fragment Customer on Customer {
   lastCheckin
   workspaceBranchId
   workspaceBranch {
-    ...WorkspaceBranchData
+    ...WorkspaceBranch
   }
   location {
-    ...LocationData
+    ...Location
   }
   secondaryLocation {
-    ...LocationData
+    ...Location
   }
   vnLocation {
-    ...LocationData
+    ...Location
   }
   vnSecondaryLocation {
-    ...LocationData
+    ...Location
   }
   relationshipContacts {
     name

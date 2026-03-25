@@ -66,9 +66,9 @@ import { loanAssetTypes, loanStatuses } from "./loans-constants";
 import { useCustomer } from "../customers/hooks/useCustomer";
 
 import { useMutation, useQuery } from "@apollo/client/react";
-import { CustomerKycDataFragment } from "../customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import { CustomerKycFragment } from "../customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { useCustomerKyc } from "../customer-kycs/hooks/use-customer-kyc";
-import { LoanDataFragment } from "./graphql/fragmentLoan.graphql";
+import { LoanFragment } from "./graphql/fragmentLoan.graphql";
 import QUERY_LOAN_BY_CODE from "./graphql/queryLoanByCode.graphql";
 
 import MUTATION_ARCHIVE_LOAN from "./graphql/mutationArchiveLoan.graphql";
@@ -658,7 +658,7 @@ export const LoanDetail: NextPage = () => {
   );
 };
 
-const getStepActive = (loan: LoanDataFragment, kyc?: CustomerKycDataFragment | null): number => {
+const getStepActive = (loan: LoanFragment, kyc?: CustomerKycFragment | null): number => {
   if (!kyc || kyc.status !== CustomerKycStatus.Approved) return 0;
   if (loan.status === LoanStatus.Pending) return 1;
   if (loan.status === LoanStatus.Rejected) return 1;

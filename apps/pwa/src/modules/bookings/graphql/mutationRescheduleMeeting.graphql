@@ -26,6 +26,6 @@ mutation RescheduleBooking(
     createdAt: $createdAt
     workspaceBranchId: $workspaceBranchId
   ) {
-    ...BookingData
+    ...Booking
   }
 }

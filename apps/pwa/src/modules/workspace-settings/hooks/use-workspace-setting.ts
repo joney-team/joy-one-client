@@ -13,7 +13,7 @@ import { Currency } from "@joy-one-client/utils/currency";
 import { normalizeObject } from "@joy-one-client/utils/object";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { useMemo } from "react";
-import { WorkspaceSettingDataFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
+import { WorkspaceSettingFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
 import { getDefaultWorkspaceView } from "../workspace-settings-view";
 
 export const useWorkspaceSetting = () => {
@@ -28,7 +28,7 @@ export const useWorkspaceSetting = () => {
 
   const [handleUpdate] = useMutation(UPDATE_WORKSPACE_SETTING_MUTATION);
 
-  const updateWorkspaceSetting = async (partial: Partial<WorkspaceSettingDataFragment>) => {
+  const updateWorkspaceSetting = async (partial: Partial<WorkspaceSettingFragment>) => {
     if (!data?.workspaceSetting) return;
     const prevWorkspaceSetting = { ...data.workspaceSetting };
 
@@ -51,7 +51,7 @@ export const useWorkspaceSetting = () => {
               ...partial,
             },
           };
-        }
+        },
       );
 
       const result = await handleUpdate({ variables });
@@ -70,7 +70,7 @@ export const useWorkspaceSetting = () => {
                 ...result.data?.updateWorkspaceSetting,
               },
             };
-          }
+          },
         );
       }
     } catch (error) {
@@ -84,7 +84,7 @@ export const useWorkspaceSetting = () => {
             ...prev,
             workspaceSetting: prevWorkspaceSetting,
           };
-        }
+        },
       );
 
       throw error;

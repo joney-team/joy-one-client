@@ -1,4 +1,4 @@
-fragment AppConfigData on AppConfig {
+fragment AppConfig on AppConfig {
   name
   version
   timeZone

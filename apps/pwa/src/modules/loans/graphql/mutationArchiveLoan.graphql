@@ -2,6 +2,6 @@
 
 mutation ArchiveLoan($archiveLoanId: String!) {
   archiveLoan(id: $archiveLoanId) {
-    ...LoanData
+    ...Loan
   }
 }

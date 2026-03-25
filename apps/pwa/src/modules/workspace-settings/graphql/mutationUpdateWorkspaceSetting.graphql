@@ -44,6 +44,6 @@ mutation UpdateWorkspaceSetting(
     zaloOaGmfGroupSettings: $zaloOaGmfGroupSettings
     allowPayTicketMultipleTimes: $allowPayTicketMultipleTimes
   ) {
-    ...WorkspaceSettingData
+    ...WorkspaceSetting
   }
 }

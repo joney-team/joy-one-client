@@ -76,11 +76,11 @@ fragment Task on Task {
   }
 
   timeTrackings {
-    ...TaskTimeTrackingData
+    ...TaskTimeTracking
   }
 
   statuses {
-    ...TaskStatusData
+    ...TaskStatus
   }
 
   createdAt

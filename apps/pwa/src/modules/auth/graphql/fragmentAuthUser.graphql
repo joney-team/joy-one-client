@@ -1,4 +1,4 @@
-fragment AuthUserData on AuthUser {
+fragment AuthUser on AuthUser {
   _id
   name
   email

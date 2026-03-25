@@ -18,7 +18,7 @@ import { customerFormStatuses } from "./customer-form-constants";
 import { OnModalCustomerFormLink } from "./modals/modal-customer-form-link";
 
 import { useMutation } from "@apollo/client/react";
-import { CustomerFormDataFragment } from "./graphql/fragmentCustomerForm.graphql";
+import { CustomerFormFragment } from "./graphql/fragmentCustomerForm.graphql";
 import BULK_ARCHIVE_CUSTOMER_FORMS_MUTATION from "./graphql/mutationBulkArchiveCustomerForms.graphql";
 import QUERY_CUSTOMER_FORMS from "./graphql/queryCustomerForms.graphql";
 
@@ -31,7 +31,7 @@ export const CustomerFormList: FC = () => {
     <ModalUpdateWorkspaceBranch>
       {(modalUpdateWorkspaceBranch) => (
         <Stack p={16}>
-          <List<CustomerFormDataFragment>
+          <List<CustomerFormFragment>
             id="cfms"
             query={QUERY_CUSTOMER_FORMS}
             creatable={{

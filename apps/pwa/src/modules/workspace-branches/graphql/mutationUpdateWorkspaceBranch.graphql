@@ -2,6 +2,6 @@
 
 mutation UpdateWorkspaceBranch($input: WorkspaceBranchInput!, $id: String!) {
   updateWorkspaceBranch(input: $input, id: $id) {
-    ...WorkspaceBranchData
+    ...WorkspaceBranch
   }
 }

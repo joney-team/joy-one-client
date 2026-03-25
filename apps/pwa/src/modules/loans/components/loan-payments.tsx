@@ -25,14 +25,14 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_HEALTH_CHECK_LOAN from "../graphql/mutationHealthCheckLoan.graphql";
 import MUTATION_REVERT_LIQUIDATION_LOAN from "../graphql/mutationRevertLiquidationLoan.graphql";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanPaymentsProps {
-  loan: LoanDataFragment;
+  loan: LoanFragment;
   refetch: () => void;
 }
 

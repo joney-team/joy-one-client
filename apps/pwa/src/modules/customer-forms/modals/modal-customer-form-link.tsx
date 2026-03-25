@@ -10,14 +10,14 @@ import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } fr
 import { modals } from "@mantine/modals";
 import { IconCopy, IconCopyCheck, IconMessageUser, IconX } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { WorkspaceBranchDataFragment } from "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { Trans } from "@lingui/react/macro";
 
 const ModalCustomerFormLink: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
   const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
-    WorkspaceBranchDataFragment,
+    WorkspaceBranchFragment,
     "_id" | "name" | "hotline"
   > | null>(null);
   const link = `${config.APP_URL}/customer-forms/new/${workspace.member.workspaceId}/${

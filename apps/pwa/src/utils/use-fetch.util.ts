@@ -1,7 +1,7 @@
 import { EventType } from "@/graphql/enums.graphql";
 import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useEventsListener } from "@/modules/events/event-service";
-import { EventDataFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
+import { EventFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { StorageKey } from "@/constants/storage-key";
 import { AxiosError } from "axios";
 import { useEffect, useRef, useState } from "react";
@@ -18,7 +18,7 @@ export interface UseFetchArgs<T = any> {
     | EventType[]
     | {
         types: EventType[];
-        condition?: (data: EventDataFragment, currentData: T) => boolean;
+        condition?: (data: EventFragment, currentData: T) => boolean;
       };
   default?: T;
   isAlwayRefetchWhenReconnect?: boolean;
@@ -147,7 +147,7 @@ export function useFetch<T = any>(args: UseFetchArgs<T>, deps?: any[]): UseFetch
         fetch({ isSilient: true });
       }
     },
-    [args.refetchEvents, state.data, isReadyToEventListen, fetchKey]
+    [args.refetchEvents, state.data, isReadyToEventListen, fetchKey],
   );
 
   return objClean({

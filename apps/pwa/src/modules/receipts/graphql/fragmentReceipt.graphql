@@ -2,7 +2,7 @@
 #import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 
-fragment ReceiptData on Receipt {
+fragment Receipt on Receipt {
   refs
   createdAt
   updatedAt
@@ -37,7 +37,7 @@ fragment ReceiptData on Receipt {
     ...Customer
   }
   workspaceBranch {
-    ...WorkspaceBranchData
+    ...WorkspaceBranch
   }
   cashierUser {
     ...WorkspaceMember

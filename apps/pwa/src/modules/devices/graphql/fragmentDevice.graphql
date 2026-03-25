@@ -1,4 +1,4 @@
-fragment DeviceData on Device {
+fragment Device on Device {
   _id
   source
   identifyId

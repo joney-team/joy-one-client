@@ -1,7 +1,7 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 #import "../../customers/graphql/fragmentCustomer.graphql"
 
-fragment BookingData on Booking {
+fragment Booking on Booking {
   _id
   title
   note

@@ -1,4 +1,4 @@
-fragment TaskStatusData on TaskStatus {
+fragment TaskStatus on TaskStatus {
   id
   name
   color

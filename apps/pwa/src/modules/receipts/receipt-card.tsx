@@ -47,7 +47,7 @@ import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
-import { ReceiptDataFragment } from "./graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
 import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 import { useMutation } from "@apollo/client/react";
@@ -71,7 +71,7 @@ const ModalReceiptDetail = dynamic(
 );
 
 interface ReceiptCardProps {
-  receipt: ReceiptDataFragment;
+  receipt: ReceiptFragment;
   hideCustomer?: boolean;
   hideRelatedUsers?: boolean;
   cardProps?: CardProps;

@@ -2,6 +2,6 @@
 
 mutation RevertPaymentReceipt($revertPaymentReceiptId: String!) {
   revertPaymentReceipt(id: $revertPaymentReceiptId) {
-    ...ReceiptData
+    ...Receipt
   }
 }

@@ -4,7 +4,7 @@ query CustomerForms($limit: Float, $offset: Float, $query: JSONObject) {
   list: customerForms(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      ...CustomerFormData
+      ...CustomerForm
     }
   }
 }

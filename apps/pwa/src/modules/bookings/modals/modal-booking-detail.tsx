@@ -14,7 +14,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import dynamic from "next/dynamic";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
 import type { ModalCancelBookingRef } from "./modal-cancel-booking";
 import type { ModalRescheduleBookingRef } from "./modal-reschedule-booking";
@@ -24,7 +24,7 @@ const ModalRescheduleBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCancelBooking = dynamic(
@@ -32,21 +32,21 @@ const ModalCancelBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export interface ModalBookingDetailRef {
-  open: (booking: BookingDataFragment) => void;
+  open: (booking: BookingFragment) => void;
   close: () => void;
 }
 
 export const ModalBookingDetail = forwardRef<
   ModalBookingDetailRef,
   {
-    children?: (open: (booking: BookingDataFragment) => void) => ReactNode;
+    children?: (open: (booking: BookingFragment) => void) => ReactNode;
   }
 >((props, ref) => {
-  const [booking, setBooking] = useState<BookingDataFragment | null>(null);
+  const [booking, setBooking] = useState<BookingFragment | null>(null);
   const modalCancelBookingRef = useRef<ModalCancelBookingRef>(null);
   const modalRescheduleBookingRef = useRef<ModalRescheduleBookingRef>(null);
 

@@ -2,6 +2,6 @@
 
 query Loan($id: String!) {
   loan(id: $id) {
-    ...LoanData
+    ...Loan
   }
 }

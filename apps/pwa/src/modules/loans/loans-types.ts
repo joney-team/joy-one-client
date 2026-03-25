@@ -1,6 +1,6 @@
 import { LoanAssetType } from "@/graphql/enums.graphql";
 import { LoanLiquidationCalculated, LoanPaymentPeriod } from "@/graphql/types.graphql";
-import { LoanDataFragment } from "./graphql/fragmentLoan.graphql";
+import { LoanFragment } from "./graphql/fragmentLoan.graphql";
 
 // ======================= Start Loan Asset Data =======================
 interface LoanAssetData {
@@ -107,8 +107,8 @@ export interface LoansRealtimeReport {
 }
 
 export interface LoansRangReport {
-  newLoans: Pick<LoanDataFragment, "id" | "amount" | "customerId">[];
-  fulfilledLoans: Pick<LoanDataFragment, "id" | "amount" | "customerId">[];
+  newLoans: Pick<LoanFragment, "id" | "amount" | "customerId">[];
+  fulfilledLoans: Pick<LoanFragment, "id" | "amount" | "customerId">[];
   contracts: {
     new: number;
     fulfilled: number;

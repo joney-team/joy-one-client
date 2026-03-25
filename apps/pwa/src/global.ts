@@ -1,11 +1,11 @@
-import { AppConfigDataFragment } from "./configs/fragmentAppConfig.graphql";
+import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
 import type { AppMetadata, ViewportType } from "./types";
 
 export interface Global extends Window {
   FB: any;
   FBInitialized: boolean;
   electron: any;
-  _appConfig: AppConfigDataFragment;
+  _appConfig: AppConfigFragment;
   _metadata: AppMetadata;
   _sessionId: string;
   _view: ViewportType;

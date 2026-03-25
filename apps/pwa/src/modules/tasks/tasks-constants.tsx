@@ -1,6 +1,6 @@
 import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
-import { TaskStatusDataFragment } from "./graphql/fragmentTaskStatus.graphql";
+import { TaskStatusFragment } from "./graphql/fragmentTaskStatus.graphql";
 import { DefaultTaskStatusId } from "./tasks-types";
 import { TaskPriority } from "@/graphql/enums.graphql";
 
@@ -43,7 +43,7 @@ export const defaultTaskStatus: Record<
   },
 };
 
-export const normalizeTaskStatuses = (statuses: TaskStatusDataFragment[]) => {
+export const normalizeTaskStatuses = (statuses: TaskStatusFragment[]) => {
   return statuses
     .map((status) => {
       if (Object.values(DefaultTaskStatusId).includes(status.id as DefaultTaskStatusId)) {

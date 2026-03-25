@@ -2,6 +2,6 @@
 
 mutation BulkUpdateCustomerFormWorkspaceBranch($input: BulkUpdateWorkspaceBranchInput!) {
   bulkUpdateCustomerFormWorkspaceBranch(input: $input) {
-    ...CustomerFormData
+    ...CustomerForm
   }
 }

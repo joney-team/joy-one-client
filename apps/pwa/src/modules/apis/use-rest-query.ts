@@ -7,13 +7,13 @@ import { AxiosError } from "axios";
 import { useMemo } from "react";
 import { restClient } from "./rest-client";
 import { onReconnected, useEventsListener } from "../events/event-service";
-import { EventDataFragment } from "../events/graphql/fragmentEvent.graphql";
+import { EventFragment } from "../events/graphql/fragmentEvent.graphql";
 
 export interface UseRestQueryArgs<T, P = Record<string, any>> {
   params?: P;
   isSkip?: boolean;
   refetchEvents?: EventType[];
-  refetchCondition?: (data: EventDataFragment, currentData: T) => boolean;
+  refetchCondition?: (data: EventFragment, currentData: T) => boolean;
   refetchWhenReconnected?: boolean;
   method?: "get" | "post";
   networkMode?: NetworkMode;
@@ -82,7 +82,7 @@ export interface UseDynmicRestQueryArgs<T> {
   queryFn: (args: { signal: AbortSignal }) => Promise<T>;
   isSkip?: boolean;
   refetchEvents?: EventType[];
-  refetchCondition?: (data: EventDataFragment, currentData: T) => boolean;
+  refetchCondition?: (data: EventFragment, currentData: T) => boolean;
 }
 
 export type UseDynmicRestQuery<T> = UseQueryResult<T, AxiosError>;

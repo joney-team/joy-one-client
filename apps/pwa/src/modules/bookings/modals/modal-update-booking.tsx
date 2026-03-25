@@ -3,9 +3,9 @@ import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCalendar } from "@tabler/icons-react";
 import { BookingForm } from "../components/form-booking";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
-export const OnModalUpdateBooking = (booking: BookingDataFragment) => {
+export const OnModalUpdateBooking = (booking: BookingFragment) => {
   return modals.open({
     title: <ModalHead name={<Trans>Update booking</Trans>} icon={IconCalendar} />,
     modalId: "UpdateBooking",

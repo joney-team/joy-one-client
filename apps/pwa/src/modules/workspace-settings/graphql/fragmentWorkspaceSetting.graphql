@@ -1,4 +1,4 @@
-fragment WorkspaceSettingData on WorkspaceSetting {
+fragment WorkspaceSetting on WorkspaceSetting {
   _id
   schedule {
     timezone

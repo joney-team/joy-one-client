@@ -1,6 +1,6 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 
-fragment TaskTimeTrackingData on TaskTimeTracking {
+fragment TaskTimeTracking on TaskTimeTracking {
   id
   workspaceId
   userId

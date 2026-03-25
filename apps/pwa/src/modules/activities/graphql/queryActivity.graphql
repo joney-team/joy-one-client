@@ -2,6 +2,6 @@
 
 query Activity($id: String!) {
   activity(id: $id) {
-    ...ActivityData
+    ...Activity
   }
 }

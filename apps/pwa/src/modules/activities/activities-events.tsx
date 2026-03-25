@@ -4,7 +4,7 @@ import { type FC } from "react";
 import { useEventsListener } from "../events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
 import { useApolloClient } from "@apollo/client/react";
-import { ActivityDataFragment } from "./graphql/fragmentActivity.graphql";
+import { ActivityFragment } from "./graphql/fragmentActivity.graphql";
 import ACTIVITY_QUERY, {
   type ActivityQuery,
   type ActivityQueryVariables,
@@ -33,17 +33,17 @@ export const ActivitiesEvents: FC = () => {
           _id: activityData.data?.activity._id,
         });
 
-        client.cache.updateFragment<ActivityDataFragment>(
+        client.cache.updateFragment<ActivityFragment>(
           {
             id: identifiedId,
             fragment: ACTIVITY_FRAGMENT,
-            fragmentName: "ActivityData",
+            fragmentName: "Activity",
           },
-          (prev) => activityData.data?.activity ?? prev
+          (prev) => activityData.data?.activity ?? prev,
         );
       }
     },
-    []
+    [],
   );
 
   return null;

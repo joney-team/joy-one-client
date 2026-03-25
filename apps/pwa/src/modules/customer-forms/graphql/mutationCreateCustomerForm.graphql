@@ -2,6 +2,6 @@
 
 mutation CreateCustomerForm($input: CustomerFormInput!) {
   createCustomerForm(input: $input) {
-    ...CustomerFormData
+    ...CustomerForm
   }
 }

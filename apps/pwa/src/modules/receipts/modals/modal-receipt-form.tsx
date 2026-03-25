@@ -9,7 +9,7 @@ import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { LoanDataFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
+import { LoanFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
@@ -20,7 +20,7 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 import { receiptTypes } from "../receipt-constants";
 
 import MUTATION_CREATE_RECEIPT from "../graphql/createReceipt.graphql";
@@ -31,7 +31,7 @@ interface ReceiptFormValues {
   note?: string;
   data?: any;
   relatedCustomer?: Pick<CustomerFragment, "_id" | "name" | "avatar" | "phone"> | undefined;
-  relatedLoan?: LoanDataFragment | undefined;
+  relatedLoan?: LoanFragment | undefined;
   expireAt?: number | null;
 }
 
@@ -39,8 +39,8 @@ interface ModalReceiptFormProps {
   type?: ReceiptType;
   data?: any;
   relatedCustomer?: Pick<CustomerFragment, "_id" | "name" | "avatar" | "phone">;
-  relatedLoan?: LoanDataFragment;
-  onDone?: (receipt: ReceiptDataFragment) => Promise<any> | any;
+  relatedLoan?: LoanFragment;
+  onDone?: (receipt: ReceiptFragment) => Promise<any> | any;
 }
 
 export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {

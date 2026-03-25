@@ -1,4 +1,4 @@
-fragment CategoryData on Category {
+fragment Category on Category {
   _id
   type
   refs

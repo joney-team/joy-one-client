@@ -21,13 +21,13 @@ import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } f
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_LIQUIDATE_LOAN from "../graphql/mutationLiquidateLoan.graphql";
 import QUERY_LIQUIDATE_LOAN_CALCULATE from "../graphql/queryLiquidateLoanCalculate.graphql";
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalLoanLiquidationProps {
-  loan: LoanDataFragment;
+  loan: LoanFragment;
   onLiquidated: (receiptId: string) => void;
 }
 

@@ -14,10 +14,10 @@ import { Center, Modal, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCreditCardPay } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 
 interface ModalSignLoanProps {
-  loan: Pick<LoanDataFragment, "id" | "code">;
+  loan: Pick<LoanFragment, "id" | "code">;
 }
 
 export const ModalSignLoan: FC<{

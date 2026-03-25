@@ -2,6 +2,6 @@
 
 mutation SignLoan($signLoanId: String!, $input: SignLoanInput!) {
   signLoan(id: $signLoanId, input: $input) {
-    ...LoanData
+    ...Loan
   }
 }

@@ -6,7 +6,7 @@ import { DependencyList, useEffect } from "react";
 import { socket } from "../apis/rest-client";
 import { useAuth } from "../auth/auth-context";
 import { UserEventDto } from "./event-types";
-import { EventDataFragment } from "./graphql/fragmentEvent.graphql";
+import { EventFragment } from "./graphql/fragmentEvent.graphql";
 
 export const eventsEmitter = new EventEmitter();
 eventsEmitter.setMaxListeners(500);
@@ -21,7 +21,7 @@ export const removeEventsListner = (type: EventType, listener: (...args: any[]) 
 
 export const useEventsListener = (
   type: EventType | EventType[],
-  listener: (event: EventDataFragment) => void,
+  listener: (event: EventFragment) => void,
   deps?: DependencyList,
 ) => {
   useEffect(() => {
@@ -44,7 +44,7 @@ export const useEventsListener = (
 };
 
 export const usePureEventsListner = (
-  listener: (event: EventDataFragment) => void,
+  listener: (event: EventFragment) => void,
   deps?: DependencyList,
 ) => {
   useEffect(() => {

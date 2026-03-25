@@ -1,5 +1,5 @@
 import { CustomField } from "./modules/custom-fields/custom-field-types";
-import { WorkspaceBranchDataFragment } from "./modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "./modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceMemberFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface RelatedEntity {
@@ -18,7 +18,7 @@ export interface BaseEntity {
   assigneeUserIds?: string[];
   assigneeUsers?: WorkspaceMemberFragment[];
   workspaceBranchId?: string;
-  workspaceBranch?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">;
+  workspaceBranch?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
   relatedEntities?: RelatedEntity[];
   customFields?: CustomField[];
 }

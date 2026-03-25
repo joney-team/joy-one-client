@@ -1,7 +1,7 @@
 "use client";
 
 import { TaskFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
-import { TaskTimeTrackingDataFragment } from "@/modules/tasks/graphql/fragmentTaskTimeTracking.graphql";
+import { TaskTimeTrackingFragment } from "@/modules/tasks/graphql/fragmentTaskTimeTracking.graphql";
 import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -64,7 +64,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
   const groupByUsers = timeTrackings.reduce<
     {
       user: WorkspaceMemberFragment;
-      timeTrackings: TaskTimeTrackingDataFragment[];
+      timeTrackings: TaskTimeTrackingFragment[];
     }[]
   >((acc, curr) => {
     if (!curr.endAt || !curr.user) return acc;
@@ -85,8 +85,8 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
 
   const inProgressTracking = timeTrackings.find((v) => !!!v.endAt);
 
-  const onStartTracking = (t?: TaskTimeTrackingDataFragment) => {
-    const timeTracking: TaskTimeTrackingDataFragment = {
+  const onStartTracking = (t?: TaskTimeTrackingFragment) => {
+    const timeTracking: TaskTimeTrackingFragment = {
       __typename: "TaskTimeTracking",
       ...t,
       id: uuid(),
@@ -220,7 +220,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
 };
 
 const InProgressTimeTrackingTimmer: FC<{
-  timeTracking: TaskTimeTrackingDataFragment;
+  timeTracking: TaskTimeTrackingFragment;
 }> = (props) => {
   const forceUpdate = useForceUpdate();
   const now = DateTime.toSeconds(new Date());
@@ -241,7 +241,7 @@ const InProgressTimeTrackingTimmer: FC<{
 export const TimeTrackingGroupByUser: FC<{
   onRemove: (id: string) => void;
   user: WorkspaceMemberFragment;
-  timeTrackings: TaskTimeTrackingDataFragment[];
+  timeTrackings: TaskTimeTrackingFragment[];
 }> = (props) => {
   const totalTime =
     props.timeTrackings
@@ -329,11 +329,11 @@ export const TimeTrackingGroupByUser: FC<{
 };
 
 export const TimeTrackingForm: FC<{
-  timeTracking?: TaskTimeTrackingDataFragment | null;
-  onSubmit: (timeTracking: TaskTimeTrackingDataFragment) => any;
-  onStartTracking: (t?: TaskTimeTrackingDataFragment) => void;
+  timeTracking?: TaskTimeTrackingFragment | null;
+  onSubmit: (timeTracking: TaskTimeTrackingFragment) => any;
+  onStartTracking: (t?: TaskTimeTrackingFragment) => void;
   onStopTracking: () => void;
-  onChange?: (timeTracking: TaskTimeTrackingDataFragment) => void;
+  onChange?: (timeTracking: TaskTimeTrackingFragment) => void;
 }> = (props) => {
   const { t } = useLingui();
   const workspace = useWorkspace();
@@ -341,11 +341,11 @@ export const TimeTrackingForm: FC<{
   const endAtRef = useRef<HTMLInputElement>(null);
   const timeTrackingRef = useRef<HTMLInputElement>(null);
 
-  const onChange = useDebouncedCallback((values: TaskTimeTrackingDataFragment) => {
+  const onChange = useDebouncedCallback((values: TaskTimeTrackingFragment) => {
     props.onChange?.(values);
   }, 500);
 
-  const form = useForm<TaskTimeTrackingDataFragment>({
+  const form = useForm<TaskTimeTrackingFragment>({
     initialValues: props.timeTracking
       ? { ...props.timeTracking }
       : {

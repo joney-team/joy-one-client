@@ -2,6 +2,6 @@
 
 mutation RegisterDevice($input: RegisterDeviceInput!) {
   registerDevice(input: $input) {
-    ...DeviceData
+    ...Device
   }
 }

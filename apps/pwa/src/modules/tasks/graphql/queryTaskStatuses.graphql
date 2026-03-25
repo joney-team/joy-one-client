@@ -8,10 +8,10 @@ query TaskStatuses(
   taskStatuses(contextType: $contextType, contextId: $contextId, mode: $mode) {
     isInherited
     statuses {
-      ...TaskStatusData
+      ...TaskStatus
     }
     workspaceStatuses {
-      ...TaskStatusData
+      ...TaskStatus
     }
   }
 }

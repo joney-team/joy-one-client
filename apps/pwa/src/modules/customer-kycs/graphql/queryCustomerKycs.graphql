@@ -4,7 +4,7 @@ query CustomerKycs($limit: Float, $offset: Float, $query: JSONObject) {
   list: customerKycs(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      ...CustomerKycData
+      ...CustomerKyc
     }
   }
 }

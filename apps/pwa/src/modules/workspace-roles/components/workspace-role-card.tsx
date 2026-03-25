@@ -10,10 +10,10 @@ import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";
 import { FC, Fragment, useMemo } from "react";
-import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
+import { WorkspaceRoleFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 
 interface WorkspaceRoleCardProps {
-  role: WorkspaceRoleDataFragment;
+  role: WorkspaceRoleFragment;
 }
 
 export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
@@ -23,7 +23,7 @@ export const WorkspaceRoleCard: FC<WorkspaceRoleCardProps> = ({ role }) => {
 
   const permissions = role?.permissions ?? [];
   const permissionCounts = Object.values(WorkspacePermission).filter((key) =>
-    permissions.includes(key)
+    permissions.includes(key),
   ).length;
 
   const description = useMemo(() => {

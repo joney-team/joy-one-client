@@ -5,12 +5,12 @@ import { ActionIcon, Group, Input, InputWrapper, InputWrapperProps } from "@mant
 import { IconChevronDown, IconX } from "@tabler/icons-react";
 import { FC } from "react";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchSelector } from "./workspace-branch-selector";
 
 interface WorkspaceBranchInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null;
-  onChange: (value: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null) => void;
+  value?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline"> | null;
+  onChange: (value: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline"> | null) => void;
   disabled?: boolean;
   autoHide?: boolean;
 }

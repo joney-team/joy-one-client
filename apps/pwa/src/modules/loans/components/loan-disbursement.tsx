@@ -9,7 +9,7 @@ import { Loading } from "@/components/loading";
 import { LoanStatus, ReceiptPaymentMethod, ReceiptType } from "@/graphql/enums.graphql";
 import { PluginBankAccount } from "@/graphql/types.graphql";
 import { restClient } from "@/modules/apis/rest-client";
-import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
@@ -39,13 +39,13 @@ import {
 } from "@mantine/core";
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_FULFILL_LOAN from "../graphql/mutationFulfillLoan.graphql";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDisburesementProps {
-  loan: LoanDataFragment;
-  kyc: CustomerKycDataFragment;
+  loan: LoanFragment;
+  kyc: CustomerKycFragment;
   onDisbursed?: () => Promise<void>;
 }
 

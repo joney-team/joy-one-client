@@ -5,6 +5,6 @@ mutation UpdateLoanAssetData(
   $input: UpdateLoanAssetDataInput!
 ) {
   updateLoanAssetData(id: $updateLoanAssetDataId, input: $input) {
-    ...LoanData
+    ...Loan
   }
 }

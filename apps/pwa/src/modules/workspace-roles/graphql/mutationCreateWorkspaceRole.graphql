@@ -2,6 +2,6 @@
 
 mutation CreateWorkspaceRole($name: String!, $permissions: [String!]!, $description: String, $color: String) {
   createWorkspaceRole(name: $name, permissions: $permissions, description: $description, color: $color) {
-    ...WorkspaceRoleData
+    ...WorkspaceRole
   }
 }

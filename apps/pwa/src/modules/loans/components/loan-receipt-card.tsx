@@ -10,7 +10,7 @@ import { TooltipIcon } from "@/components/tooltip-icon";
 import { ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { InputModalType } from "@/modals/modal-input";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
-import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import MUTATION_UPDATE_RECEIPT from "@/modules/receipts/graphql/mutationUpdateReceipt.graphql";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
@@ -33,7 +33,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 
 const ModalReceiptDetail = dynamic(
   () =>
@@ -45,9 +45,9 @@ const ModalReceiptDetail = dynamic(
 );
 
 export const LoanReceiptCard: FC<{
-  receipt: ReceiptDataFragment;
-  receipts: ReceiptDataFragment[];
-  loan: LoanDataFragment;
+  receipt: ReceiptFragment;
+  receipts: ReceiptFragment[];
+  loan: LoanFragment;
 }> = (props) => {
   const workspace = useWorkspace();
   const { workspaceSetting } = useWorkspaceSetting();

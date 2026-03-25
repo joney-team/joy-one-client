@@ -18,10 +18,10 @@ import { useRestQuery } from "../apis/use-rest-query";
 import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { ReceiptDataFragment } from "./graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
 
 interface ReceiptEInvoicesProps {
-  receipt: Pick<ReceiptDataFragment, "id" | "status">;
+  receipt: Pick<ReceiptFragment, "id" | "status">;
 }
 
 export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {

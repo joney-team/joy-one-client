@@ -4,12 +4,12 @@ import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mant
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { Hovered } from "../../components/hovered";
-import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchesSelector } from "./workspace-branches-selector";
 
 interface WorkspaceBranchesInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">[];
-  onChange: (value: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">[]) => void;
+  value: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[];
+  onChange: (value: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[]) => void;
   disabled?: boolean;
   autoHide?: boolean;
 }
@@ -17,9 +17,9 @@ interface WorkspaceBranchesInputProps extends Omit<InputWrapperProps, "value" | 
 export const WorkspaceBranchesInput: FC<WorkspaceBranchesInputProps> = (props) => {
   const { value, onChange, disabled, autoHide, ...rest } = props;
   const [branches, setBranches] =
-    useState<Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">[]>(value);
+    useState<Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[]>(value);
 
-  const onAdd = (branch: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">) => {
+  const onAdd = (branch: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">) => {
     const isSelected = branches.some((v) => branch?._id === v._id);
     const workspaceBranches = isSelected
       ? branches.filter((v) => v._id !== branch._id)

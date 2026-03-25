@@ -2,6 +2,6 @@
 
 mutation ApproveLoan($approveLoanId: String!) {
   approveLoan(id: $approveLoanId) {
-    ...LoanData
+    ...Loan
   }
 }

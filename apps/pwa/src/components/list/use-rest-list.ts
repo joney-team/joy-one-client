@@ -3,7 +3,7 @@
 import { EventDataActionType, EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
-import { EventDataFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
+import { EventFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getWorkspaceId } from "@/modules/workspaces/workspaces-service";
 import { type BaseData, getId } from "@joy-one-client/utils/base-data";
@@ -22,7 +22,7 @@ export interface UseListFetchReponse<T = any> {
 
 export type UseListArgsFetch<T = any> = (
   query: any,
-  controller: AbortController
+  controller: AbortController,
 ) => Promise<UseListFetchReponse<T>> | UseListFetchReponse<T>;
 
 export interface UseListArgs<T = any> {
@@ -37,23 +37,23 @@ export interface UseListArgs<T = any> {
     | EventType[]
     | {
         types: EventType[];
-        condition?: (data: EventDataFragment, currentData: T[]) => boolean;
+        condition?: (data: EventFragment, currentData: T[]) => boolean;
       };
-  isIgnoreEventActionType?: boolean;
+  isIgnoreEventDataActionType?: boolean;
 }
 
 export type UseListFetch<T = any> = (
   isReset?: boolean,
-  options?: { isSilient?: boolean; addonQuery?: any }
+  options?: { isSilient?: boolean; addonQuery?: any },
 ) => Promise<UseListFetchReponse<T> | void>;
 export type UseListSetParam = (
   key: string,
   value: any | any[],
-  options?: { isSilient?: boolean }
+  options?: { isSilient?: boolean },
 ) => void;
 export type UseListSetParams = (
   params: { [key: string]: any | any[] },
-  options?: { isSilient?: boolean }
+  options?: { isSilient?: boolean },
 ) => void;
 export type UseListRemoveParam = (key: string, options?: { isSilient?: boolean }) => void;
 export type UseListRemoveParams = (keys: string[], options?: { isSilient?: boolean }) => void;
@@ -165,7 +165,7 @@ export const useList = <T extends BaseData>({
     cachedData || {
       count: 0,
       data: [],
-    }
+    },
   );
 
   const ref = useRef<UseListData<T>>(list);
@@ -215,7 +215,7 @@ export const useList = <T extends BaseData>({
           ...stateQuery.current,
           ...options?.addonQuery,
         },
-        controller.current
+        controller.current,
       );
 
       if (Array.isArray(response.data)) {
@@ -279,9 +279,9 @@ export const useList = <T extends BaseData>({
 
   // Event listener
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
-  const onEvent = async (e: EventDataFragment) => {
+  const onEvent = async (e: EventFragment) => {
     try {
-      if (args.isIgnoreEventActionType) {
+      if (args.isIgnoreEventDataActionType) {
         return fetch(true, { isSilient: true });
       }
 
@@ -292,7 +292,7 @@ export const useList = <T extends BaseData>({
       if (e.actionType === EventDataActionType.Create) {
         const response = await args.fetch(
           { ...params, ...stateQuery.current },
-          new AbortController()
+          new AbortController(),
         );
         if (response.count > list.count) {
           status.current.newDataCount = response.count - list.count;
@@ -332,7 +332,7 @@ export const useList = <T extends BaseData>({
         onEvent(e);
       }
     },
-    [args.events, listKey, params, isReadyToFetch, list.count]
+    [args.events, listKey, params, isReadyToFetch, list.count],
   );
 
   const isAbleToLoadMore =
@@ -377,10 +377,10 @@ export const useList = <T extends BaseData>({
         setParams(
           Object.keys(params).reduce(
             (acc, key) => ({ ...acc, [`${listKey}-${key}`]: params[key] }),
-            {}
-          )
+            {},
+          ),
         ),
-        { scroll: false }
+        { scroll: false },
       );
     },
     removeParams: (keys, options) => {

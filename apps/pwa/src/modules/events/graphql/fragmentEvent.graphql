@@ -1,6 +1,6 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 
-fragment EventData on Event {
+fragment Event on Event {
   _id
   ref
   time

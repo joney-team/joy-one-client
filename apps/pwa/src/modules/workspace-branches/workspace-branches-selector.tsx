@@ -8,9 +8,9 @@ import { Combobox, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
-import { WorkspaceBranchDataFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 
-type WorkspaceBranchOption = Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">;
+type WorkspaceBranchOption = Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
 
 interface WorkspaceBranchesSelectorProps extends Partial<SelectorProps<WorkspaceBranchOption>> {}
 

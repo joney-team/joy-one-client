@@ -1,13 +1,13 @@
 import { LoanReceiptData } from "../loans-types";
 
-import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import { ReceiptStatus } from "@/graphql/enums.graphql";
 
 export const useInspectLoanReceipt = (
-  receipt: Pick<ReceiptDataFragment, "data" | "expireAt" | "status" | "amount">,
-  loan: LoanDataFragment
+  receipt: Pick<ReceiptFragment, "data" | "expireAt" | "status" | "amount">,
+  loan: LoanFragment,
 ) => {
   const receiptData = receipt.data as LoanReceiptData;
   const { period } = receiptData;
@@ -21,7 +21,7 @@ export const useInspectLoanReceipt = (
   const isPartialPayment = receiptData.partial || receiptData.remainPartial;
   const expiredDays = isExpired ? DateTime.diff(new Date(), receipt.expireAt!, "day") : 0;
   const relatedPaymentPeriod = loan.paymentPeriods?.find(
-    (v) => v.period === receiptData.period?.period
+    (v) => v.period === receiptData.period?.period,
   );
   const paymentPeriodRate = relatedPaymentPeriod
     ? receipt.amount / relatedPaymentPeriod.totalAmount

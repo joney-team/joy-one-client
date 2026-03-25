@@ -3,7 +3,7 @@
 import { CustomerKycStatus, FileType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import MUTATION_APPROVE_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationApproveCustomerKyc.graphql";
 import MUTATION_REJECT_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationRejectCustomerKyc.graphql";
 import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
@@ -33,9 +33,9 @@ import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 
 interface CustomerKycCardProps {
-  kyc: CustomerKycDataFragment;
+  kyc: CustomerKycFragment;
   hideCustomer?: boolean;
-  onApproved?: (kyc: CustomerKycDataFragment) => void;
+  onApproved?: (kyc: CustomerKycFragment) => void;
   cardProps?: CardProps;
 }
 

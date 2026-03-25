@@ -42,7 +42,7 @@ import {
   IconNotes,
 } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_APPROVE_LOAN from "../graphql/mutationApproveLoan.graphql";
 import MUTATION_UPDATE_LOAN_PACKAGE from "../graphql/mutationUpdateLoanPackage.graphql";
 import MUTATION_REJECT_LOAN from "../graphql/mutationRejectLoan.graphql";
@@ -50,7 +50,7 @@ import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDocumentsProps {
-  loan: LoanDataFragment;
+  loan: LoanFragment;
   updateAssetData: (assetData: any) => void;
   children?: ReactNode;
 }

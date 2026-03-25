@@ -16,7 +16,7 @@ query Events(
   ) {
     total
     results {
-      ...EventData
+      ...Event
     }
   }
 }

@@ -15,7 +15,7 @@ export const useGenerateWorkspaceInviteCode = () => {
         {
           id: `Workspace:${member.workspaceId}`,
           fragment: WORKSPACE_DATE_FRAGMENT,
-          fragmentName: "WorkspaceData",
+          fragmentName: "Workspace",
         },
         (data) => {
           if (!data) return data;
@@ -24,7 +24,7 @@ export const useGenerateWorkspaceInviteCode = () => {
             ...data,
             code: result.data?.generateWorkspaceInviteCode ?? data.code,
           };
-        }
+        },
       );
     },
   });

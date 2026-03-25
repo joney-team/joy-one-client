@@ -2,6 +2,6 @@
 
 mutation ApproveCustomerKyc($customerId: String!) {
   approveCustomerKyc(customerId: $customerId) {
-    ...CustomerKycData
+    ...CustomerKyc
   }
 }

@@ -1,4 +1,4 @@
-fragment WorkspaceRoleData on WorkspaceRole {
+fragment WorkspaceRole on WorkspaceRole {
   _id
   name
   description

@@ -2,6 +2,6 @@
 
 mutation RevertLiquidationLoan($revertLiquidationLoanId: String!) {
   revertLiquidationLoan(id: $revertLiquidationLoanId) {
-    ...LoanData
+    ...Loan
   }
 }

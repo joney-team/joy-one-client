@@ -2,6 +2,6 @@
 
 mutation CancelBooking($id: String!, $reason: String!) {
   cancelBooking(id: $id, reason: $reason) {
-    ...BookingData
+    ...Booking
   }
 }

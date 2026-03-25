@@ -5,6 +5,6 @@ mutation DisburseReceipt(
   $input: DisburseReceiptInput!
 ) {
   disburseReceipt(id: $disburseReceiptId, input: $input) {
-    ...ReceiptData
+    ...Receipt
   }
 }

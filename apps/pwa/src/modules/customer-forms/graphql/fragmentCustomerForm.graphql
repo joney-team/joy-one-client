@@ -1,4 +1,4 @@
-fragment CustomerFormData on CustomerForm {
+fragment CustomerForm on CustomerForm {
   _id
   refs
   createdAt

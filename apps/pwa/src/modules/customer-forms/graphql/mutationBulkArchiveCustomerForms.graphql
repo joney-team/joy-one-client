@@ -2,6 +2,6 @@
 
 mutation BulkArchiveCustomerForms($input: BulkArchiveInput!) {
   bulkArchiveCustomerForms(input: $input) {
-    ...CustomerFormData
+    ...CustomerForm
   }
 }

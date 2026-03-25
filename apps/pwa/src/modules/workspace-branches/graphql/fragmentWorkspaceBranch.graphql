@@ -1,4 +1,4 @@
-fragment WorkspaceBranchData on WorkspaceBranch {
+fragment WorkspaceBranch on WorkspaceBranch {
   _id
   name
   hotline

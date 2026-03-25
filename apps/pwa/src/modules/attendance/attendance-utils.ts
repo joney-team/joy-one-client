@@ -1,7 +1,7 @@
 import { AttendanceRecordStatus, AttendanceRecordType } from "@/graphql/enums.graphql";
 import { type WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { type AttendanceRecordFragment } from "./graphql/fragmentAttendanceRecord.graphql";
-import { WorkspaceSettingDataFragment } from "../workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
+import { WorkspaceSettingFragment } from "../workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
 import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
 import { WorkingDayInterval } from "@/graphql/types.graphql";
 import { getMinutesFromStringTime } from "@/components/time-slots/time-slots.utils";
@@ -218,7 +218,7 @@ export interface SummaryAttendanceRecord {
 
 export function summaryAttendanceRecords(args: {
   records: AttendanceRecordFragment[];
-  workspaceSchedule?: WorkspaceSettingDataFragment["schedule"];
+  workspaceSchedule?: WorkspaceSettingFragment["schedule"];
 }): SummaryAttendanceRecord[] {
   const groupedRecordsByUsers = groupAttendanceRecordsByUsers(
     args.records

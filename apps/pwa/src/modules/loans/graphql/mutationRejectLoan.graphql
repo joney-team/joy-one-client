@@ -2,6 +2,6 @@
 
 mutation RejectLoan($input: RejectLoanInput!, $rejectLoanId: String!) {
   rejectLoan(input: $input, id: $rejectLoanId) {
-    ...LoanData
+    ...Loan
   }
 }

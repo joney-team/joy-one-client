@@ -18,7 +18,7 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useState } from "react";
-import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 import MUTATION_PARTIAL_PAYMENT_RECEIPT from "../graphql/mutationPartialPaymentReceipt.graphql";
 
 const ModalPayReceipt = dynamic(
@@ -26,12 +26,12 @@ const ModalPayReceipt = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface ModalPartialPaymentProps {
-  onDone?: (receipts: ReceiptDataFragment[]) => void | Promise<void>;
-  receipt: ReceiptDataFragment;
+  onDone?: (receipts: ReceiptFragment[]) => void | Promise<void>;
+  receipt: ReceiptFragment;
 }
 
 export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {

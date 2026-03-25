@@ -13,11 +13,11 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconBuilding, IconCheck, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { WorkspaceBranchDataFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceBranchFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
 import CREATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationCreateWorkspaceBranch.graphql";
 import UPDATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationUpdateWorkspaceBranch.graphql";
 
-export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchDataFragment }> = ({ branch }) => {
+export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchFragment }> = ({ branch }) => {
   const [loading, setLoading] = useState(false);
 
   const [updateWorkspaceBranch] = useMutation(UPDATE_WORKSPACE_BRANCH_MUTATION);
@@ -92,7 +92,7 @@ export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchDataFragment }> 
   );
 };
 
-export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchDataFragment) => {
+export const OnWorkspaceBranchModal = (branch?: WorkspaceBranchFragment) => {
   return modals.open({
     title: (
       <ModalHead

@@ -9,10 +9,10 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Circle } from "../../../components/circle";
 import { Selector, SelectorContext } from "../../../components/selector";
-import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
+import { WorkspaceRoleFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 import { useWorkspaceRoles } from "../hooks/use-workspace-roles";
 
-type WorkspaceRoleOption = Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">;
+type WorkspaceRoleOption = Pick<WorkspaceRoleFragment, "_id" | "name" | "color">;
 
 interface WorkspaceRolesSelectorProps {
   onSelect: (role: WorkspaceRoleOption) => void;

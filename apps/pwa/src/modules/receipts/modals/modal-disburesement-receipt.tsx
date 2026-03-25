@@ -14,19 +14,19 @@ import { Group, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
 import { FC, useState } from "react";
-import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 import MUTATION_DISBURSE_RECEIPT from "../graphql/mutationDisburseReceipt.graphql";
 import { receiptPaymentMethods } from "../receipt-constants";
 
 interface ModalDisburesementReceiptProps {
-  receipt: ReceiptDataFragment;
+  receipt: ReceiptFragment;
 }
 
 export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (props) => {
   const { receipt } = props;
   const { t } = useLingui();
   const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
-    ReceiptPaymentMethod.Cash
+    ReceiptPaymentMethod.Cash,
   );
 
   const [disburseReceipt] = useMutation(MUTATION_DISBURSE_RECEIPT);

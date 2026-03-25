@@ -31,11 +31,11 @@ import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@xyflow/react/dist/style.css";
 
-import { EventDataFragment } from "./modules/events/graphql/fragmentEvent.graphql";
+import { EventFragment } from "./modules/events/graphql/fragmentEvent.graphql";
 import "./styles/app.style.css";
 import "./styles/react-big-calendar.css";
 import { nonLoading } from "./utils/non-loading";
-import { AppConfigDataFragment } from "./configs/fragmentAppConfig.graphql";
+import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
 
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
@@ -81,10 +81,10 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   usePageTitle();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [config, setConfig] = useState<AppConfigDataFragment>();
+  const [config, setConfig] = useState<AppConfigFragment>();
 
   const fetchAppConfig = async () => {
-    await new Promise<AppConfigDataFragment>((resolve) => {
+    await new Promise<AppConfigFragment>((resolve) => {
       const process = async () => {
         try {
           const global = getGlobal();
@@ -127,7 +127,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   };
 
   useEffect(() => {
-    const onEventNew = (event: EventDataFragment) => {
+    const onEventNew = (event: EventFragment) => {
       const global = getGlobal();
       const clientSessionId = global._sessionId as string;
       if (event.sessionId && event.sessionId !== clientSessionId) return;

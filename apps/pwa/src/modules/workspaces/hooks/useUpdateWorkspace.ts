@@ -11,7 +11,7 @@ export const useUpdateWorkspace = () => {
         {
           id: `Workspace:${result.data.updateWorkspace._id}`,
           fragment: WORKSPACE_DATE_FRAGMENT,
-          fragmentName: "WorkspaceData",
+          fragmentName: "Workspace",
         },
         (data) => {
           if (!data) return data;
@@ -20,7 +20,7 @@ export const useUpdateWorkspace = () => {
             ...data,
             ...result.data?.updateWorkspace,
           };
-        }
+        },
       );
     },
   });

@@ -1,7 +1,7 @@
 #import "../../locations/graphql/fragmentLocation.graphql"
 #import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
 
-fragment LoanData on Loan {
+fragment Loan on Loan {
   id
   code
   customerId
@@ -15,7 +15,7 @@ fragment LoanData on Loan {
   }
   workspaceBranchId
   workspaceBranch {
-    ...WorkspaceBranchData
+    ...WorkspaceBranch
   }
   signature
   amount
@@ -56,10 +56,10 @@ fragment LoanData on Loan {
   metadata {
     cidNumber
     cidVnLocation {
-      ...LocationData
+      ...Location
     }
     cidLocation {
-      ...LocationData
+      ...Location
     }
   }
   status

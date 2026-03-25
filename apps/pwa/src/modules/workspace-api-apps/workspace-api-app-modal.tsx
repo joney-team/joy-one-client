@@ -45,8 +45,8 @@ import {
   IconRefresh,
 } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
-import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { WorkspaceRoleDataFragment } from "../workspace-roles/graphql/fragmentWorkspaceRole.graphql";
+import { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceRoleFragment } from "../workspace-roles/graphql/fragmentWorkspaceRole.graphql";
 import { useWorkspaceRoles } from "../workspace-roles/hooks/use-workspace-roles";
 import { workspaceDefaultRoles } from "../workspace-roles/workspace-roles-constants";
 
@@ -77,8 +77,8 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 
   const form = useForm<{
     name: string;
-    roles: Pick<WorkspaceRoleDataFragment, "_id" | "name" | "color">[];
-    workspaceBranches: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">[];
+    roles: Pick<WorkspaceRoleFragment, "_id" | "name" | "color">[];
+    workspaceBranches: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[];
   }>({
     initialValues: getInitialValues(props.app),
     validate: {
@@ -89,7 +89,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   const { roles: workspaceRoles } = useWorkspaceRoles();
   const roles = workspaceRoles.filter((v) => form.values.roles.some((v2) => v2._id === v._id));
   const isMainWorkspaceAccessable = roles.some((v) =>
-    v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
+    v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
   );
 
   const onResetKey = () => {

@@ -29,7 +29,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
 import { useColor } from "../theme/use-color";
-import { ActivityDataFragment } from "./graphql/fragmentActivity.graphql";
+import { ActivityFragment } from "./graphql/fragmentActivity.graphql";
 
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import styles from "./activity-card.module.css";
@@ -67,10 +67,10 @@ const ActivityReplies = dynamic(
         <Skeleton miw="100%" h={50} />
       </Stack>
     ),
-  }
+  },
 );
 
-export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity }) => {
+export const ActivityCard: FC<{ activity: ActivityFragment }> = ({ activity }) => {
   const isReply = Boolean(activity.parentId);
   const color = useColor();
   const editorRef = useRef<EditorRef>(null);
@@ -85,7 +85,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
   const isSelf = activity.createdByUser._id === user._id;
 
   const [archive] = useMutation<ArchiveActivityMutation, ArchiveActivityMutationVariables>(
-    ARCHIVE_ACTIVITY_MUTATION
+    ARCHIVE_ACTIVITY_MUTATION,
   );
 
   const onArchive = async () => {
@@ -103,7 +103,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
   };
 
   const [update] = useMutation<UpdateActivityMutation, UpdateActivityMutationVariables>(
-    UPDATE_ACTIVITY_MUTATION
+    UPDATE_ACTIVITY_MUTATION,
   );
 
   const onSaveEdit = async () => {
@@ -122,7 +122,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
             {
               id: identifiedId,
               fragment: ACTIVITY_FRAGMENT,
-              fragmentName: "ActivityData",
+              fragmentName: "Activity",
             },
             (prev) => {
               if (!prev) return prev;
@@ -131,7 +131,7 @@ export const ActivityCard: FC<{ activity: ActivityDataFragment }> = ({ activity 
                 content,
                 contentLastModifiedAt: DateTime.getNowInSeconds(),
               };
-            }
+            },
           );
         },
       });

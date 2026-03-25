@@ -6,10 +6,10 @@ import { useColor } from "@/modules/theme/use-color";
 import { Group } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { FC, MouseEventHandler } from "react";
-import { TaskStatusDataFragment } from "../graphql/fragmentTaskStatus.graphql";
+import { TaskStatusFragment } from "../graphql/fragmentTaskStatus.graphql";
 
 export const TaskStatusIcon: FC<
-  Pick<TaskStatusDataFragment, "id" | "color" | "progress"> & {
+  Pick<TaskStatusFragment, "id" | "color" | "progress"> & {
     size?: number;
     onClick?: MouseEventHandler<HTMLDivElement> | undefined;
     opacity?: number;

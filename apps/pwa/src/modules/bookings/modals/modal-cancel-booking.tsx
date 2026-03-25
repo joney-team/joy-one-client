@@ -7,14 +7,14 @@ import { Center, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconCalendarMinus } from "@tabler/icons-react";
 import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
 import { Modal } from "@/components/modal/modal";
 import { useMutation } from "@apollo/client/react";
 import MUTATION_CANCEL_BOOKING from "../graphql/mutationCancelBooking.graphql";
 
 interface ModalCancelBookingProps {
-  booking: Pick<BookingDataFragment, "_id">;
+  booking: Pick<BookingFragment, "_id">;
   onCancelled?: () => void;
   onClose: () => void;
 }

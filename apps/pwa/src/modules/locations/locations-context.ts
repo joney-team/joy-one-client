@@ -1,18 +1,18 @@
 import { createContext, useContext } from "react";
-import { LocationDataFragment } from "./graphql/fragmentLocation.graphql";
+import { LocationFragment } from "./graphql/fragmentLocation.graphql";
 import { RawLocation } from "./locations-types";
 
 export type RenderVnLocation = (
-  location: Partial<LocationDataFragment> | null | undefined,
+  location: Partial<LocationFragment> | null | undefined,
   args?: {
     shortProvine?: boolean;
     shortDistrict?: boolean;
     shortWard?: boolean;
-  }
+  },
 ) => string;
 
 export type GetGoogleMapLink = (
-  location: Partial<LocationDataFragment> | string | null | undefined
+  location: Partial<LocationFragment> | string | null | undefined,
 ) => string;
 
 interface LocationsContextValue {

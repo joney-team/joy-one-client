@@ -1,4 +1,4 @@
-fragment LocationData on Location {
+fragment Location on Location {
   provinceId
   districtId
   wardId

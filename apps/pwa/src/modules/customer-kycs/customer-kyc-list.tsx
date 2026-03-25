@@ -15,18 +15,18 @@ import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { customerKycStatuses } from "./customer-kyc-constants";
 import QUERY_CUSTOMER_KYCS from "./graphql/queryCustomerKycs.graphql";
-import { CustomerKycDataFragment } from "./graphql/fragmentCustomerKyc.graphql";
+import { CustomerKycFragment } from "./graphql/fragmentCustomerKyc.graphql";
 
 export const CustomerKycList: FC = () => {
   const { t } = useLingui();
-  const kycs: UseGraphqlList<CustomerKycDataFragment> = useGraphqlList({
+  const kycs: UseGraphqlList<CustomerKycFragment> = useGraphqlList({
     query: QUERY_CUSTOMER_KYCS,
     id: "ckys",
   });
 
   useEventsListener(
     [EventType.CustomerKycApproved, EventType.CustomerKycRejected, EventType.CustomerKycPending],
-    () => kycs.refetch()
+    () => kycs.refetch(),
   );
 
   return (

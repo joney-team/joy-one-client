@@ -14,8 +14,8 @@ import { useForm } from "@mantine/form";
 import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
-import { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { CustomerFormDataFragment } from "./graphql/fragmentCustomerForm.graphql";
+import { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { CustomerFormFragment } from "./graphql/fragmentCustomerForm.graphql";
 import CREATE_CUSTOMER_FORM_MUTATION from "./graphql/mutationCreateCustomerForm.graphql";
 
 export const CustomerFormRegister: FC = () => {
@@ -29,7 +29,7 @@ export const CustomerFormRegister: FC = () => {
       : null;
   const state = useRef<{
     workspace: WorkspaceEntity | null;
-    workspaceBranch: WorkspaceBranchDataFragment | null;
+    workspaceBranch: WorkspaceBranchFragment | null;
   }>({
     workspace: null,
     workspaceBranch: null,
@@ -37,7 +37,7 @@ export const CustomerFormRegister: FC = () => {
 
   const [createCustomerForm] = useMutation(CREATE_CUSTOMER_FORM_MUTATION);
 
-  const [customerForm, setCustomerForm] = useState<CustomerFormDataFragment | null>(null);
+  const [customerForm, setCustomerForm] = useState<CustomerFormFragment | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
 
   const form = useForm<{

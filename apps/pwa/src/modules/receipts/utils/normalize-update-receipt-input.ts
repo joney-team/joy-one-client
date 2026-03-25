@@ -1,7 +1,7 @@
 import { UpdateReceiptInput } from "@/graphql/types.graphql";
-import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 
-export function normalizeUpdateReceiptInput(receipt: ReceiptDataFragment): UpdateReceiptInput {
+export function normalizeUpdateReceiptInput(receipt: ReceiptFragment): UpdateReceiptInput {
   return {
     amount: receipt.amount,
     note: receipt.note,

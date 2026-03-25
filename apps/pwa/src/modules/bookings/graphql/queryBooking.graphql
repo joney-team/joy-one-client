@@ -2,6 +2,6 @@
 
 query Booking($id: String!) {
   booking(id: $id) {
-    ...BookingData
+    ...Booking
   }
 }

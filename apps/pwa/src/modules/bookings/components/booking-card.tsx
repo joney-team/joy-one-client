@@ -35,10 +35,10 @@ import { FC, useEffect, useState } from "react";
 import { CustomerInput } from "../../customers/components/customer-input";
 import { WorkspaceMembersInput } from "../../workspace-members/components/workspace-members-input";
 import { bookingStatuses } from "../booking-constants";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
 interface BookingCardProps extends CardProps {
-  booking: BookingDataFragment;
+  booking: BookingFragment;
   hideCustomerInfo?: boolean;
   hideCtas?: boolean;
   refresh?: () => any | Promise<any>;

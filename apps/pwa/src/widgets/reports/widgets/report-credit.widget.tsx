@@ -25,19 +25,19 @@ import { ReportWidgetsContext } from "../types";
 
 import { LoanPackageType, ReceiptStatus } from "@/graphql/enums.graphql";
 import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
-import { LoanDataFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
+import { LoanFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
 import QUERY_LOAN_BY_CODE from "@/modules/loans/graphql/queryLoanByCode.graphql";
-import { ReceiptDataFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
 import { useApolloClient } from "@apollo/client/react";
 
 interface CreditReportItem {
   time: number;
   type: LoanPackageType;
-  loan: LoanDataFragment;
+  loan: LoanFragment;
   cashier?: WorkspaceMemberFragment;
   customer?: CustomerFragment;
-  receipt: ReceiptDataFragment;
+  receipt: ReceiptFragment;
   fee: {
     total: number;
     packageTypes: {
@@ -89,12 +89,12 @@ interface CreditReport {
 const chunkingSize = 300;
 
 const exportReport = async (
-  receipts: ReceiptDataFragment[],
+  receipts: ReceiptFragment[],
   client: ApolloClientType,
 ): Promise<CreditReport> => {
   const reports: CreditReportItem[] = [];
   const customers: CustomerFragment[] = [];
-  const loans: LoanDataFragment[] = [];
+  const loans: LoanFragment[] = [];
 
   const loanCodes = [...new Set([...receipts.map((v) => v.relatedLoanCode)])].filter(
     (v) => !!v,
@@ -302,7 +302,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
       name: <Trans>Export data</Trans>,
       process: async () => {
         try {
-          let receipts: ReceiptDataFragment[] = [];
+          let receipts: ReceiptFragment[] = [];
           let count = 0;
 
           const query = {

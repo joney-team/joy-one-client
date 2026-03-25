@@ -1,6 +1,6 @@
-import { ReceiptDataFragment } from "../graphql/fragmentReceipt.graphql";
+import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 
-export function isPartialPayment(receipt: Pick<ReceiptDataFragment, "data" | "ref">) {
+export function isPartialPayment(receipt: Pick<ReceiptFragment, "data" | "ref">) {
   return (
     receipt &&
     receipt.ref &&

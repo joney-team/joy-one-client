@@ -12,11 +12,11 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
-import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
+import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
 
 interface LoanCardProps {
-  data: LoanDataFragment;
+  data: LoanFragment;
   hideCustomer?: boolean;
   cardProps?: CardProps;
 }

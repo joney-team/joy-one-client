@@ -4,7 +4,7 @@ query Bookings($limit: Float, $offset: Float, $query: JSONObject) {
   list: bookings(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      ...BookingData
+      ...Booking
     }
   }
 }

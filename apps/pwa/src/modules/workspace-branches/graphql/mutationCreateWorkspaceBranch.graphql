@@ -2,6 +2,6 @@
 
 mutation CreateWorkspaceBranch($input: WorkspaceBranchInput!) {
   createWorkspaceBranch(input: $input) {
-    ...WorkspaceBranchData
+    ...WorkspaceBranch
   }
 }

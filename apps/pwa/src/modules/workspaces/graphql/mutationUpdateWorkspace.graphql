@@ -28,6 +28,6 @@ mutation UpdateWorkspace(
     appColorShape: $appColorShape
     locale: $locale
   ) {
-    ...WorkspaceData
+    ...Workspace
   }
 }

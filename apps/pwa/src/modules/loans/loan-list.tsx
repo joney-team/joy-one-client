@@ -45,7 +45,7 @@ import { restClient } from "../apis/rest-client";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
-import { LoanDataFragment } from "./graphql/fragmentLoan.graphql";
+import { LoanFragment } from "./graphql/fragmentLoan.graphql";
 import MUTATION_BULK_ARCHIVE_LOANS from "./graphql/mutationBulkArchiveLoans.graphql";
 import QUERY_LOANS from "./graphql/queryLoans.graphql";
 import { loanAssetTypes, loanPackageTypes, loanStatuses } from "./loans-constants";
@@ -87,7 +87,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
 
   return (
     <Fragment>
-      <List<LoanDataFragment>
+      <List<LoanFragment>
         id={`loans-list-${(props.strictStatus || ["all"]).join("-")}`}
         name={<Trans>Loans</Trans>}
         limit={16}

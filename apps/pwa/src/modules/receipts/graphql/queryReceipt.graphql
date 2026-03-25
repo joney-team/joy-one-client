@@ -2,6 +2,6 @@
 
 query Receipt($id: String!) {
   receipt(id: $id) {
-    ...ReceiptData
+    ...Receipt
   }
 }

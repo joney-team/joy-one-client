@@ -24,6 +24,6 @@ mutation CreateBooking(
     createdAt: $createdAt
     workspaceBranchId: $workspaceBranchId
   ) {
-    ...BookingData
+    ...Booking
   }
 }

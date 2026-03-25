@@ -5,11 +5,11 @@ import { Trans } from "@lingui/react/macro";
 import { IconCalendar } from "@tabler/icons-react";
 import { forwardRef, useImperativeHandle, useState } from "react";
 import { BookingForm } from "../components/form-booking";
-import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
+import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
 type RescheduleBookingArgs = {
-  booking: BookingDataFragment;
-  onRescheduled?: (booking: BookingDataFragment) => void;
+  booking: BookingFragment;
+  onRescheduled?: (booking: BookingFragment) => void;
 };
 
 export interface ModalRescheduleBookingRef {

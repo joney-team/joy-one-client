@@ -3,11 +3,11 @@
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useLingui } from "@lingui/react/macro";
 import { FC, useMemo } from "react";
-import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
+import { WorkspaceRoleFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 import { workspaceSpecialRoleIds } from "../workspace-roles-constants";
 import { WorkspaceDefaultRoleId } from "../workspace-roles-types";
 
-export const WorkspaceRoleName: FC<{ role: Pick<WorkspaceRoleDataFragment, "name" | "_id"> }> = ({
+export const WorkspaceRoleName: FC<{ role: Pick<WorkspaceRoleFragment, "name" | "_id"> }> = ({
   role,
 }) => {
   const { t } = useLingui();
@@ -25,7 +25,7 @@ export const WorkspaceMemberRoleName: FC<{
   const { t } = useLingui();
 
   const roles = useMemo(() => {
-    const getWorkspaceRoleName = (role: Pick<WorkspaceRoleDataFragment, "name" | "_id">) => {
+    const getWorkspaceRoleName = (role: Pick<WorkspaceRoleFragment, "name" | "_id">) => {
       if (Object.values(WorkspaceDefaultRoleId).includes(role._id as WorkspaceDefaultRoleId)) {
         return t(workspaceSpecialRoleIds[role._id as WorkspaceDefaultRoleId].name);
       }

@@ -58,7 +58,7 @@ const ModalCreateBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalBookingDetail = dynamic(
@@ -66,7 +66,7 @@ const ModalBookingDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const normalizeQuery = (query: any) => {
@@ -110,7 +110,7 @@ export const BookingList: FC = () => {
         getAll: true,
       });
     },
-    isIgnoreEventActionType: true,
+    isIgnoreEventDataActionType: true,
     events: [
       EventType.BookingNew,
       EventType.BookingUpdated,
@@ -122,7 +122,7 @@ export const BookingList: FC = () => {
   });
 
   const [assignees, isAssigneesReady, setWorkspaceMember] = useWorkspaceMembers(
-    bookings.params.assigneeUserIds
+    bookings.params.assigneeUserIds,
   );
 
   const normalizedQuery = normalizeQuery(bookings.params);
@@ -202,7 +202,7 @@ export const BookingList: FC = () => {
   };
 
   const selectedAssignees = assignees.filter((u) =>
-    normalizedQuery.assigneeUserIds.includes(u.userId)
+    normalizedQuery.assigneeUserIds.includes(u.userId),
   );
 
   const selectStatus = (status?: string) => {
@@ -419,7 +419,7 @@ export const BookingList: FC = () => {
                           <IconCircleFilled
                             size={13}
                             color={color(
-                              bookingStatuses[option.id as BookingStatus]?.color ?? "primary"
+                              bookingStatuses[option.id as BookingStatus]?.color ?? "primary",
                             )}
                           />
                           <Text fz="sm" c="gray" fw={500}>
@@ -433,7 +433,8 @@ export const BookingList: FC = () => {
                   target={(ctx) => {
                     const statusColor = !normalizedQuery.status
                       ? "primary"
-                      : bookingStatuses[normalizedQuery.status as BookingStatus].color ?? "primary";
+                      : (bookingStatuses[normalizedQuery.status as BookingStatus].color ??
+                        "primary");
 
                     const statusLabel = !normalizedQuery.status ? (
                       <Trans>Active</Trans>

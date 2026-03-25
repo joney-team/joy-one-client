@@ -3,7 +3,7 @@ import type { BaseMongoEntity } from "@/types";
 import type { Icon } from "@tabler/icons-react";
 import type { Dispatch, SetStateAction } from "react";
 import type { LocationEntity } from "../locations/locations-types";
-import type { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import type { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import type { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import type { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
 import type { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
@@ -65,7 +65,7 @@ export interface WorkspaceContext {
   archive: () => Promise<void>;
   join: (code: string) => Promise<void>;
   ref: string;
-  defaultBranch?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline"> | null;
+  defaultBranch?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline"> | null;
   isShouldEnableBranches: boolean;
   isShowBranches: boolean;
 }

@@ -5,7 +5,7 @@ import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
+import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
@@ -33,7 +33,7 @@ import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanCustomerKycProps {
   customer: CustomerFragment;
-  kyc: CustomerKycDataFragment;
+  kyc: CustomerKycFragment;
 }
 
 export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
