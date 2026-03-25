@@ -7,13 +7,13 @@ import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/co
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useHover } from "@mantine/hooks";
 import { IconEye, IconUpload, IconX } from "@tabler/icons-react";
-import { FC, useRef } from "react";
+import { FC, ReactNode, useRef } from "react";
 import { Empty } from "./empty";
 import { Image } from "./image";
 import { Renderer } from "./renderer";
 
 interface EntityImagesProps {
-  name?: string;
+  name?: ReactNode;
   images?: (string | File)[];
   disabled?: boolean;
   onChange?: (images: (string | File)[]) => void;
@@ -115,7 +115,8 @@ const EntityImage: FC<EntityImageProps> = (props) => {
             h={h}
             p={0}
             onClick={(e) => {
-              e?.stopPropagation();
+              e.preventDefault();
+              e.stopPropagation();
               openGallery({
                 files: props.images!.map((src) => ({
                   fileName: `${props.name || "image"} ${props.index + 1}`,

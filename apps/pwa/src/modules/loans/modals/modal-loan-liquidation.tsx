@@ -14,33 +14,25 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
-import { type ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-receipt";
 import { onActionLoad } from "@/utils/actions";
-import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Card, Center, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
-import { FC, Fragment, useRef, useState } from "react";
+import { FC, Fragment, useState } from "react";
 import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_LIQUIDATE_LOAN from "../graphql/mutationLiquidateLoan.graphql";
 import QUERY_LIQUIDATE_LOAN_CALCULATE from "../graphql/queryLiquidateLoanCalculate.graphql";
 import { loanAssetTypes } from "../loans-constants";
 
-const ModalPayReceipt = dynamic(
-  () => import("@/modules/receipts/modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
-  {
-    ssr: false,
-    loading: nonLoading,
-  }
-);
+interface ModalLoanLiquidationProps {
+  loan: LoanDataFragment;
+  onLiquidated: (receiptId: string) => void;
+}
 
-export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
+export const ModalLoanLiquidation: FC<ModalLoanLiquidationProps> = ({ loan, onLiquidated }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
-
   const { t } = useLingui();
 
   const [liquidateLoan] = useMutation(MUTATION_LIQUIDATE_LOAN);
@@ -48,7 +40,6 @@ export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
   const {
     data: customerData,
     refetch: customerRefetch,
-    loading: customerLoading,
     error: customerError,
   } = useQuery(QUERY_CUSTOMER, {
     variables: {
@@ -95,9 +86,7 @@ export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
           if (!result.data) return;
 
           onClose();
-          modalPayReceiptRef.current?.open({
-            receipt: { id: result.data?.liquidateLoan },
-          });
+          onLiquidated(result.data.liquidateLoan);
         } catch (error) {
           throw error;
         } finally {
@@ -238,7 +227,7 @@ export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
           </Tooltip>
           <LoanRowInfo
             label={`${t`Remain capital amount fee`} (${calculated.remainCapitalAmountFeePercent.toLocaleString(
-              getClientLocale()
+              getClientLocale(),
             )}%)`}
             value={calculated.remainCapitalAmountFee}
             renderValue={(value) => <CurrencyFormat value={value} />}
@@ -266,19 +255,17 @@ export const ModalLoanLiquidation: FC<LoanDataFragment> = (loan) => {
           <Trans>Liquidation</Trans>
         </Button>
       </Center>
-
-      <ModalPayReceipt ref={modalPayReceiptRef} />
     </Stack>
   );
 };
 
-export const OnModalLoanLiquidation = (loan: LoanDataFragment) => {
+export const OnModalLoanLiquidation = (state: ModalLoanLiquidationProps) => {
   return modals.open({
     size: "xl",
     modalId: "ModalLoanLiquidation",
     title: (
       <ModalHead name={<Trans>Loan liquidation</Trans>} color="orange" icon={IconBrandSpeedtest} />
     ),
-    children: <ModalLoanLiquidation {...loan} />,
+    children: <ModalLoanLiquidation {...state} />,
   });
 };

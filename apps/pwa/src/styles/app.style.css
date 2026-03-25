@@ -18,6 +18,7 @@
   --color-illustration-dark: rgb(59, 59, 59);
   --color-illustration-character-hair: rgb(77, 77, 77);
 }
+
 /* End Color Scheme */
 
 :root {
@@ -185,7 +186,7 @@
   outline: none !important;
 }
 
-.rbc-time-content > * + * > * {
+.rbc-time-content>*+*>* {
   border-color: var(--mantine-color-default-border) !important;
 }
 
@@ -617,4 +618,12 @@ button.removeOutline {
 .optional-flag {
   font-size: 0.75rem;
   color: var(--mantine-color-dimmed);
+}
+
+.mantine-Stepper-stepIcon {
+  &>span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 }

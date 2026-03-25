@@ -9,17 +9,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
-import {
-  BoxProps,
-  Card,
-  CardProps,
-  em,
-  Group,
-  Stack,
-  StackProps,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
+import { Card, CardProps, em, Group, Stack, StackProps, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";
 import { IconUpload } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
@@ -54,7 +44,6 @@ interface FilesBoxProps {
   replace?: boolean;
   length?: number;
   itemCardProps?: CardProps;
-  props?: BoxProps;
   wrapperStyle?: React.CSSProperties;
 }
 
@@ -136,12 +125,11 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
 
   return (
     <Dropzone
-      onDrop={(_files) => addFile(_files)}
       disabled={disabled}
-      activateOnClick={false}
       openRef={openRef}
-      {...props.props}
+      onDrop={(_files) => addFile(_files)}
       style={{ outline: "none" }}
+      activateOnClick={false}
     >
       <Card
         withBorder

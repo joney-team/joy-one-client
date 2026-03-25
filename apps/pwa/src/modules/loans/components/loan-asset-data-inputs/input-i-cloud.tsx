@@ -5,7 +5,7 @@ import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { restClient } from "@/modules/apis/rest-client";
 import { useLang } from "@/modules/lang/lang-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, InputWrapper, SimpleGrid, TextInput, Tooltip } from "@mantine/core";
 import { IconCursorText, IconLockPlus } from "@tabler/icons-react";
 import { type FC, Fragment } from "react";
@@ -27,7 +27,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
     <Fragment>
       <SimpleGrid cols={{ md: 2 }}>
         <TextInput
-          label={t`Device name`}
+          label={<Trans>Device name</Trans>}
           value={props.value?.deviceName || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), deviceName: event.currentTarget.value })
@@ -36,7 +36,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
         />
 
         <TextInput
-          label={t`Asset type`}
+          label={<Trans>Asset type</Trans>}
           value={props.value?.assetType || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), assetType: event.currentTarget.value })
@@ -54,7 +54,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
         />
 
         <TextInput
-          label={t`Serial`}
+          label={<Trans>Serial</Trans>}
           value={props.value?.serial || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), serial: event.currentTarget.value })
@@ -63,7 +63,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
         />
 
         <TextInput
-          label={t`Device storage`}
+          label={<Trans>Device storage</Trans>}
           value={props.value?.storage || ""}
           onChange={(event) =>
             props.onChange?.({ ...(props.value as any), storage: event.currentTarget.value })
@@ -75,7 +75,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
           <Group align="end" gap={5}>
             <TextInput
               flex={1}
-              label={t`Device key`}
+              label={<Trans>Device key</Trans>}
               value={props.value?.deviceSecretKey || ""}
               readOnly
               onChange={(event) =>
@@ -87,7 +87,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
             />
             <ModalInput>
               {(openInput) => (
-                <Tooltip label={t`Enter device key`}>
+                <Tooltip label={<Trans>Enter device key</Trans>}>
                   <ActionIcon
                     size={34}
                     variant="outline"
@@ -106,7 +106,7 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
                 </Tooltip>
               )}
             </ModalInput>
-            <Tooltip label={t`Generate device key`}>
+            <Tooltip label={<Trans>Generate device key</Trans>}>
               <ActionIcon size={34} variant="outline" color="gray" onClick={retreiveDeviceKey}>
                 <IconLockPlus size={18} />
               </ActionIcon>
@@ -115,9 +115,9 @@ export const InputICloud: FC<LoanAssetDataInputProps<"ICLOUD">> = (props) => {
         )}
       </SimpleGrid>
 
-      <InputWrapper label={t`Asset images`}>
+      <InputWrapper label={<Trans>Asset images</Trans>}>
         <EntityImages
-          name={t`Asset images`}
+          name={<Trans>Asset images</Trans>}
           images={props.value?.images}
           onChange={(images) => props.onChange?.({ ...(props.value as any), images })}
           disabled={props.disabled}

@@ -10,12 +10,12 @@ import { restClient } from "@/modules/apis/rest-client";
 import { useEventsListener } from "@/modules/events/event-service";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
 import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
+import { ModalPayReceipt, ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
 import {
@@ -24,7 +24,7 @@ import {
   IconPlus,
   IconRefresh,
 } from "@tabler/icons-react";
-import { FC, Fragment } from "react";
+import { FC, Fragment, useRef } from "react";
 import { LoanDataFragment } from "../graphql/fragmentLoan.graphql";
 import MUTATION_HEALTH_CHECK_LOAN from "../graphql/mutationHealthCheckLoan.graphql";
 import MUTATION_REVERT_LIQUIDATION_LOAN from "../graphql/mutationRevertLiquidationLoan.graphql";
@@ -42,6 +42,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const { hasPermission } = useWorkspace();
   const [healthCheckLoan] = useMutation(MUTATION_HEALTH_CHECK_LOAN);
   const [revertLiquidationLoan] = useMutation(MUTATION_REVERT_LIQUIDATION_LOAN);
+  const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
 
   const {
     data: receiptsData,
@@ -55,6 +56,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
         getAll: true,
       },
     },
+    fetchPolicy: "cache-and-network",
   });
 
   useEventsListener(
@@ -96,7 +98,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     });
   };
 
-  if (!loan || !loan.paymentPeriods || loading) return <Skeleton h={200} />;
+  if (!loan || !loan.paymentPeriods || (loading && !receiptsData)) return <Skeleton h={200} />;
 
   const CTAs: FC = () => {
     return (
@@ -106,7 +108,16 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
             color="orange"
             variant="subtle"
             leftIcon={IconBrandSpeedtest}
-            onClick={() => OnModalLoanLiquidation(loan)}
+            onClick={() =>
+              OnModalLoanLiquidation({
+                loan,
+                onLiquidated: (receiptId) => {
+                  modalPayReceiptRef.current?.open({
+                    receipt: { id: receiptId },
+                  });
+                },
+              })
+            }
           >
             <Trans>Liquidation</Trans>
           </Button>
@@ -119,13 +130,13 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           }
         >
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertFulfill}>
-            {t`Revert fulfilled`}
+            <Trans>Revert fulfilled</Trans>
           </Button>
         </Renderer>
 
         <Renderer visible={!!liquidationReceipt && loan.status !== LoanStatus.Completed}>
           <Button color="red" variant="subtle" leftIcon={IconRefresh} onClick={onRevertLiquidation}>
-            {t`Revert liquidation`}
+            <Trans>Revert liquidation</Trans>
           </Button>
         </Renderer>
 
@@ -135,7 +146,7 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           leftIcon={IconCircleDashedCheck}
           onClick={() => healthCheckLoan({ variables: { healthCheckLoanId: loan.id } })}
         >
-          {t`Check`}
+          <Trans>Check</Trans>
         </Button>
       </Fragment>
     );
@@ -157,13 +168,23 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
               <Table.Thead>
                 <Table.Tr>
                   <Table.Th w={100} ta="center">
-                    {t`Period`}
+                    <Trans>Period</Trans>
                   </Table.Th>
-                  <Table.Th w={250}>{t`Time`}</Table.Th>
-                  <Table.Th>{t`Interest`}</Table.Th>
-                  <Table.Th>{t`Principal`}</Table.Th>
-                  <Table.Th>{t`Total`}</Table.Th>
-                  <Table.Th>{t`Receipts`}</Table.Th>
+                  <Table.Th w={250}>
+                    <Trans>Time</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Interest</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Principal</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Total</Trans>
+                  </Table.Th>
+                  <Table.Th>
+                    <Trans>Receipts</Trans>
+                  </Table.Th>
                 </Table.Tr>
               </Table.Thead>
 
@@ -407,7 +428,15 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
                 variant="subtle"
                 leftIcon={IconBrandSpeedtest}
                 onClick={() => {
-                  OnModalLoanLiquidation(loan);
+                  OnModalLoanLiquidation({
+                    loan,
+                    onLiquidated: (receiptId) => {
+                      refetchReceipts();
+                      modalPayReceiptRef.current?.open({
+                        receipt: { id: receiptId },
+                      });
+                    },
+                  });
                 }}
               >
                 <Trans>Liquidation</Trans>
@@ -420,6 +449,8 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
           </Center>
         </Stack>
       </Renderer>
+
+      <ModalPayReceipt ref={modalPayReceiptRef} />
     </Fragment>
   );
 };
