@@ -145,8 +145,6 @@ export const AttendanceList: FC<AttendanceListProps> = ({ date: queryDate, view:
     });
   }, [data, workspaceSetting]);
 
-  if (summary) console.log("shifts", summary[0].shifts);
-
   return (
     <Stack p="sm">
       <Card shadow="xs" p="md">
@@ -190,9 +188,6 @@ export const AttendanceList: FC<AttendanceListProps> = ({ date: queryDate, view:
                     </Table.Th>
                     <Table.Th>
                       <Trans>Total shifts</Trans>
-                    </Table.Th>
-                    <Table.Th>
-                      <Trans>Statuses</Trans>
                     </Table.Th>
                   </Table.Tr>
                 </Table.Thead>

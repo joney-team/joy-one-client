@@ -72,7 +72,7 @@ const AttendanceSettingContent: FC<{ setting: AttendanceSettingFragment }> = ({ 
                   </Text>
                 </Stack>
 
-                <Group>
+                <Group gap={2}>
                   <ActionIcon
                     color="gray"
                     variant="subtle"
@@ -89,7 +89,7 @@ const AttendanceSettingContent: FC<{ setting: AttendanceSettingFragment }> = ({ 
                       })
                     }
                   >
-                    <IconEdit size={16} />
+                    <IconEdit size={16} strokeWidth={1.5} />
                   </ActionIcon>
 
                   <ActionIcon
@@ -99,7 +99,7 @@ const AttendanceSettingContent: FC<{ setting: AttendanceSettingFragment }> = ({ 
                       setLocations((prev) => prev.filter((loc) => loc.id !== location.id))
                     }
                   >
-                    <IconTrash size={16} />
+                    <IconTrash size={16} strokeWidth={1.5} />
                   </ActionIcon>
                 </Group>
               </Group>

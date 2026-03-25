@@ -155,7 +155,9 @@ export const ModalWorkspaceSettingWorkingDays = forwardRef<ModalWorkspaceSetting
         <Modal
           opened={opened}
           onClose={close}
-          title={<ModalHead name={<Trans>Working days</Trans>} icon={IconCalendar} />}
+          title={
+            <ModalHead name={<Trans>Working days</Trans>} icon={IconCalendar} onClose={close} />
+          }
           size={1200}
         >
           <TimeSlots
@@ -178,7 +180,7 @@ export const ModalWorkspaceSettingWorkingDays = forwardRef<ModalWorkspaceSetting
             }}
             onEventClick={(event) => {
               const workingDayInterval = workspaceSetting?.schedule?.workingDays.find(
-                (interval) => interval.id === event.id
+                (interval) => interval.id === event.id,
               );
 
               if (!workingDayInterval) return;
@@ -264,7 +266,7 @@ export const ModalWorkspaceSettingWorkingDays = forwardRef<ModalWorkspaceSetting
                   schedule: {
                     ...workspaceSetting.schedule,
                     workingDays: workspaceSetting.schedule.workingDays.filter(
-                      (workingDay) => workingDay.id !== selectedInterval.id
+                      (workingDay) => workingDay.id !== selectedInterval.id,
                     ),
                   },
                 });
@@ -277,5 +279,5 @@ export const ModalWorkspaceSettingWorkingDays = forwardRef<ModalWorkspaceSetting
         </Modal>
       </Fragment>
     );
-  }
+  },
 );
