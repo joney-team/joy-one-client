@@ -1,4 +1,4 @@
-#import "fragmentProduct.graphql"
+#import "./fragmentProduct.graphql"
 
 query Products($limit: Float, $offset: Float, $query: JSONObject) {
   list: products(limit: $limit, offset: $offset, query: $query) {

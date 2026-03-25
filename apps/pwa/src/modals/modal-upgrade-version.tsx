@@ -10,7 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { FC, useEffect } from "react";
 
 export const ModalUpgradeVersion: FC = () => {
-  const [opened, { open, close }] = useDisclosure(true);
+  const [opened, { open, close }] = useDisclosure(false);
   const app = useApp();
 
   const detectChangeVersion = async (currentVersion: string) => {
