@@ -2,11 +2,11 @@
 
 import { Tooltip, TooltipProps } from "@mantine/core";
 import { Icon, IconProps } from "@tabler/icons-react";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 
 interface TooltipIconProps extends IconProps {
   icon: Icon;
-  label: string;
+  label: ReactNode;
   tooltip?: TooltipProps;
   disabled?: boolean;
 }

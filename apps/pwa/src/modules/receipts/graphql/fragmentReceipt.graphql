@@ -31,6 +31,7 @@ fragment ReceiptData on Receipt {
   paymentMethod
   expireAt
   status
+  isFixedAmount
 
   relatedCustomer {
     ...CustomerData

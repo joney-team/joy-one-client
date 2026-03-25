@@ -208,7 +208,7 @@ export type AuthTokenResult = {
 export type AuthUser = {
   __typename: 'AuthUser';
   _id: Scalars['String']['output'];
-  avatar: Scalars['String']['output'];
+  avatar: Maybe<Scalars['String']['output']>;
   birthday: Maybe<Scalars['Float']['output']>;
   email: Scalars['String']['output'];
   isEmailVerified: Maybe<Scalars['Boolean']['output']>;
@@ -3154,6 +3154,7 @@ export type Receipt = {
   giveAmount: Maybe<Scalars['AnyType']['output']>;
   id: Scalars['String']['output'];
   isArchived: Maybe<Scalars['Boolean']['output']>;
+  isFixedAmount: Maybe<Scalars['Boolean']['output']>;
   note: Maybe<Scalars['String']['output']>;
   paidAt: Maybe<Scalars['Float']['output']>;
   paymentMethod: Maybe<ReceiptPaymentMethod>;
@@ -3576,6 +3577,7 @@ export type UpdateReceiptInput = {
   cashierUserId?: InputMaybe<Scalars['String']['input']>;
   data?: InputMaybe<Scalars['JSONObject']['input']>;
   expireAt?: InputMaybe<Scalars['Float']['input']>;
+  isFixedAmount?: InputMaybe<Scalars['Boolean']['input']>;
   note?: InputMaybe<Scalars['String']['input']>;
   paidAt?: InputMaybe<Scalars['Float']['input']>;
   paymentMethod?: InputMaybe<ReceiptPaymentMethod>;

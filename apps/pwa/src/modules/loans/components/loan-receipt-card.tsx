@@ -41,7 +41,7 @@ const ModalReceiptDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const LoanReceiptCard: FC<{
@@ -58,7 +58,7 @@ export const LoanReceiptCard: FC<{
     useInspectLoanReceipt(receipt, loan);
 
   const prevReceipts = receipts.filter(
-    (v) => (v.data?.period?.period || 0) < period && v.type === ReceiptType.Income
+    (v) => (v.data?.period?.period || 0) < period && v.type === ReceiptType.Income,
   );
   const isAbleToPay =
     prevReceipts.every((v) => v.status === ReceiptStatus.Paid) ||
@@ -79,7 +79,7 @@ export const LoanReceiptCard: FC<{
     await updateReceipt({
       variables: {
         updateReceiptId: receipt.id,
-        input: { ...normalizeUpdateReceiptInput(receipt), amount },
+        input: { ...normalizeUpdateReceiptInput(receipt), amount, isFixedAmount: true },
       },
     });
   };
@@ -320,7 +320,7 @@ export const LoanReceiptCard: FC<{
                 <Group gap={5} justify="end">
                   <TooltipIcon
                     icon={IconInfoCircle}
-                    label={t`Update amount`}
+                    label={<Trans>Amount has been changed</Trans>}
                     disabled={!receipt.dataChanged?.amount}
                     color="orange"
                   />

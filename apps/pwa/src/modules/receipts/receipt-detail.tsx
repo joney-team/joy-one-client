@@ -30,7 +30,7 @@ const EventsList = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const ReceiptDetail: FC<{
@@ -66,7 +66,7 @@ export const ReceiptDetail: FC<{
       ) {
         refetchReceipt();
       }
-    }
+    },
   );
 
   const receipt = receiptData?.receipt;
@@ -114,7 +114,7 @@ export const ReceiptDetail: FC<{
     });
   };
 
-  if (isLoadingReceipt)
+  if (isLoadingReceipt && !receipt)
     return (
       <Stack p={p}>
         <Skeleton height={200} />

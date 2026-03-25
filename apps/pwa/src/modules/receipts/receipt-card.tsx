@@ -52,13 +52,14 @@ import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
 import { useMutation } from "@apollo/client/react";
 import MUTATION_ARCHIVE_RECEIPT from "./graphql/mutationArchiveReceipt.graphql";
+import { normalizeUpdateReceiptInput } from "./utils/normalize-update-receipt-input";
 
 const ModalPayReceipt = dynamic(
   () => import("./modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalReceiptDetail = dynamic(
@@ -66,7 +67,7 @@ const ModalReceiptDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface ReceiptCardProps {
@@ -197,7 +198,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                           <Text ta="left" fz={8} fw={500} mt={-2}>
                             {renderEntityCode(
                               receipt.relatedCustomer?.code,
-                              receipt.relatedCustomer?.plainCode
+                              receipt.relatedCustomer?.plainCode,
                             )}
                           </Text>
                         </Stack>
@@ -214,7 +215,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {receipt.relatedLoanCode && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Loan`}
+                    <Trans>Loan</Trans>
                   </Table.Th>
                   <Table.Td ta="right">
                     <Group h={20} justify="end">
@@ -235,7 +236,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {receipt.relatedOrderId && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Order`}
+                    <Trans>Order</Trans>
                   </Table.Th>
                   <Table.Td ta="right">
                     <Group h={20} justify="end">
@@ -260,7 +261,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               <Renderer visible={!!receipt.expireAt && receipt.status === ReceiptStatus.Pending}>
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Due date`}
+                    <Trans>Due date</Trans>
                   </Table.Th>
                   <Table.Td ta="right" c={isExpired ? "red" : undefined}>
                     {receipt.expireAt && <DateFormat value={receipt.expireAt} type="date-time" />}
@@ -270,7 +271,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
               <Table.Tr>
                 <Table.Th fz={13} fw={500} ta="left">
-                  {t`Content`}
+                  <Trans>Content</Trans>
                 </Table.Th>
                 <Table.Td fw={700}>
                   <HoverToEdit
@@ -281,7 +282,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                       value: receipt.note,
                       onDone: (v) => {
                         if (!isAbleToUpdate || !props.onUpdate) return;
-                        props.onUpdate({ ...receipt, note: v });
+                        props.onUpdate({ ...normalizeUpdateReceiptInput(receipt), note: v });
                       },
                     }}
                   >
@@ -298,7 +299,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {props.isShowImage && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Receipt`}
+                    <Trans>Receipt</Trans>
                   </Table.Th>
                   <Table.Td fw={700} ta="end">
                     <Group justify="end">
@@ -326,7 +327,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.cashierUser && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Cashier`}
+                    <Trans>Cashier</Trans>
                   </Table.Th>
                   <Table.Td fw={700}>
                     <Group justify="end">
@@ -339,7 +340,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.paidAt && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Paid at`}
+                    <Trans>Paid at</Trans>
                   </Table.Th>
                   <Table.Td fw={700} ta="right">
                     <HoverToEdit
@@ -350,7 +351,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         value: receipt.paidAt,
                         onDone: (v) => {
                           if (!isAbleToUpdate || !props.onUpdate) return;
-                          props.onUpdate({ ...receipt, paidAt: v });
+                          props.onUpdate({ ...normalizeUpdateReceiptInput(receipt), paidAt: v });
                         },
                       }}
                     >
@@ -365,7 +366,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               <Renderer visible={receipt.status === ReceiptStatus.Paid}>
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`Payment method`}
+                    <Trans>Payment method</Trans>
                   </Table.Th>
                   <Table.Td>
                     <HoverToEdit
@@ -373,7 +374,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                       disabled={!isAbleToUpdate}
                       input={{
                         type: InputModalType.SELECT,
-                        title: t`Payment method`,
+                        title: <Trans>Payment method</Trans>,
                         value: receipt.paymentMethod,
                         options: Object.values(ReceiptPaymentMethod).map((v) => ({
                           label: t(receiptPaymentMethods[v].label),
@@ -381,7 +382,10 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         })),
                         onDone: (v: ReceiptPaymentMethod) => {
                           if (!isAbleToUpdate || !props.onUpdate) return;
-                          props.onUpdate({ ...receipt, paymentMethod: v });
+                          props.onUpdate({
+                            ...normalizeUpdateReceiptInput(receipt),
+                            paymentMethod: v,
+                          });
                         },
                       }}
                     >
@@ -390,7 +394,12 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                           ? receiptPaymentMethods[receipt.paymentMethod]
                           : undefined;
 
-                        if (!paymentMethodOption) return <Text>{t`Unknown`}</Text>;
+                        if (!paymentMethodOption)
+                          return (
+                            <Text>
+                              <Trans>Unknown</Trans>
+                            </Text>
+                          );
 
                         return (
                           <Group gap={5}>
@@ -411,7 +420,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
               {!!receipt.disbursementUser && (
                 <Table.Tr>
                   <Table.Th fz={13} fw={500} ta="left">
-                    {t`User disbursement`}
+                    <Trans>User disbursement</Trans>
                   </Table.Th>
                   <Table.Td fw={700}>
                     <Group justify="end">
@@ -437,7 +446,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         icon: IconCashRegister,
                         onDone: (amount) => {
                           if (!amount) return;
-                          props.onUpdate?.({ ...receipt, amount });
+                          props.onUpdate?.({ ...normalizeUpdateReceiptInput(receipt), amount });
                         },
                       }}
                     >
@@ -451,7 +460,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                         if (receipt.type === ReceiptType.Expense) {
                           return receipt.status === ReceiptStatus.Paid ? (
                             <Badge color="green" size="sm">
-                              {t`Approved`}
+                              <Trans>Approved</Trans>
                             </Badge>
                           ) : (
                             <Stack align="end">
@@ -463,7 +472,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                                     size="xs"
                                     onClick={() => OnModalDisburesementReceipt({ receipt })}
                                   >
-                                    {t`Approve Expense`}
+                                    <Trans>Approve Expense</Trans>
                                   </Button>
 
                                   <Button
@@ -474,12 +483,12 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                                     onClick={onRejectExpense}
                                     variant="outline"
                                   >
-                                    {t`Reject`}
+                                    <Trans>Reject</Trans>
                                   </Button>
                                 </Group>
                               ) : (
                                 <Badge color="red" size="sm">
-                                  {t`Not Approved`}
+                                  <Trans>Not Approved</Trans>
                                 </Badge>
                               )}
                             </Stack>
@@ -518,7 +527,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                     leftIcon={IconCashRegister}
                     onClick={() => modal.open({ receipt: receipt })}
                   >
-                    {t`Pay`}
+                    <Trans>Pay</Trans>
                   </Button>
                 )}
               </ModalPayReceipt>

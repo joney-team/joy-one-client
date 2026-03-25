@@ -176,7 +176,7 @@ type AuthTokenResult {
 
 type AuthUser {
   _id: String!
-  avatar: String!
+  avatar: String
   birthday: Float
   email: String!
   isEmailVerified: Boolean
@@ -3016,6 +3016,7 @@ type Receipt {
   giveAmount: AnyType
   id: String!
   isArchived: Boolean
+  isFixedAmount: Boolean
   note: String
   paidAt: Float
   paymentMethod: ReceiptPaymentMethod
@@ -3406,6 +3407,7 @@ input UpdateReceiptInput {
   cashierUserId: String
   data: JSONObject
   expireAt: Float
+  isFixedAmount: Boolean
   note: String
   paidAt: Float
   paymentMethod: ReceiptPaymentMethod

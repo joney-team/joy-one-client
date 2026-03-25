@@ -5,7 +5,7 @@ export type UpdateUserProfileMutationVariables = Types.Exact<{
 }>;
 
 
-export type UpdateUserProfileMutation = { __typename: 'Mutation', updateUserProfile: { __typename: 'AuthUser', _id: string, name: string, email: string, avatar: string, role: Types.UserRole, locale: Types.AppLocale, phone: string | null, isEmailVerified: boolean | null, birthday: number | null, isPasswordProvided: boolean, settings: { __typename: 'UserSettings', locale: Types.AppLocale | null, timezoneId: string | null, timezoneUtc: string | null, isStartOfWeekSunday: boolean | null, isTwelveHour: boolean | null } | null } };
+export type UpdateUserProfileMutation = { __typename: 'Mutation', updateUserProfile: { __typename: 'AuthUser', _id: string, name: string, email: string, avatar: string | null, role: Types.UserRole, locale: Types.AppLocale, phone: string | null, isEmailVerified: boolean | null, birthday: number | null, isPasswordProvided: boolean, settings: { __typename: 'UserSettings', locale: Types.AppLocale | null, timezoneId: string | null, timezoneUtc: string | null, isStartOfWeekSunday: boolean | null, isTwelveHour: boolean | null } | null } };
 
 
 import { TypedDocumentNode } from '@apollo/client/core';

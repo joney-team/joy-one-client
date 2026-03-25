@@ -13,5 +13,6 @@ export function normalizeUpdateReceiptInput(receipt: ReceiptDataFragment): Updat
     assigneeUserIds: receipt.assigneeUserIds,
     paidAt: receipt.paidAt,
     tipAmount: receipt.tipAmount,
+    isFixedAmount: receipt.isFixedAmount,
   };
 }
