@@ -2,7 +2,7 @@
 
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
-import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
+import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import REMOVE_TAG_MUTATION, {
   type RemoveTagMutation,
   type RemoveTagMutationVariables,
@@ -46,16 +46,16 @@ import styles from "./workspace-navigation-task-folders.module.css";
 const ModalConfigureStatuses = dynamic(
   () =>
     import("@/modules/tasks/modals/modal-configure-statuses").then(
-      (mod) => mod.ModalConfigureStatuses
+      (mod) => mod.ModalConfigureStatuses,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const TaskFolderNavigationItem: FC<{
-  tag: TagDataFragment;
+  tag: TagFragment;
   onOpen: () => void;
 }> = ({ tag, onOpen }) => {
   const router = useRouter();
@@ -83,7 +83,7 @@ const TaskFolderNavigationItem: FC<{
     REMOVE_TAG_MUTATION,
     {
       refetchQueries: [GET_TAGS_QUERY],
-    }
+    },
   );
 
   const onRemoveTag = () => {
@@ -121,7 +121,7 @@ const TaskFolderNavigationItem: FC<{
   useEffect(() => {
     sortable.node.current?.style.setProperty(
       "--active-color",
-      activeColor ?? "var(--mantine-color-dimmed)"
+      activeColor ?? "var(--mantine-color-dimmed)",
     );
   }, [activeColor]);
 
@@ -300,7 +300,7 @@ export const WorkspaceNavigationTaskFolders: FC = () => {
       activationConstraint: {
         distance: 10,
       },
-    })
+    }),
   );
 
   return (
@@ -313,7 +313,7 @@ export const WorkspaceNavigationTaskFolders: FC = () => {
         const oldIndex = items.findIndex((v) => v._id === active.id.toString());
         const newIndex = items.findIndex((v) => v._id === over?.id.toString());
         bulkUpdateTags(
-          arrayMove(items, oldIndex, newIndex).map((v, i) => ({ _id: v._id, order: i + 1 }))
+          arrayMove(items, oldIndex, newIndex).map((v, i) => ({ _id: v._id, order: i + 1 })),
         );
       }}
     >

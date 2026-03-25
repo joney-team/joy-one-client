@@ -1,6 +1,6 @@
 "use client";
 
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useLingui } from "@lingui/react/macro";
 import { FC, useMemo } from "react";
 import { WorkspaceRoleDataFragment } from "../graphql/fragmentWorkspaceRole.graphql";
@@ -20,7 +20,7 @@ export const WorkspaceRoleName: FC<{ role: Pick<WorkspaceRoleDataFragment, "name
 };
 
 export const WorkspaceMemberRoleName: FC<{
-  member: Pick<WorkspaceMemberDataFragment, "memberId" | "roles">;
+  member: Pick<WorkspaceMemberFragment, "memberId" | "roles">;
 }> = ({ member }) => {
   const { t } = useLingui();
 

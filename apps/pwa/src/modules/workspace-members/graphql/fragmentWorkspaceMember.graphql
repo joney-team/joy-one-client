@@ -1,6 +1,6 @@
 #import "../../workspaces/graphql/fragmentWorkspace.graphql"
 
-fragment WorkspaceMemberData on WorkspaceMember {
+fragment WorkspaceMember on WorkspaceMember {
   _id
   userId
   name

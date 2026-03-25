@@ -34,16 +34,16 @@ fragment ReceiptData on Receipt {
   isFixedAmount
 
   relatedCustomer {
-    ...CustomerData
+    ...Customer
   }
   workspaceBranch {
     ...WorkspaceBranchData
   }
   cashierUser {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
   disbursementUser {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 
   isArchived

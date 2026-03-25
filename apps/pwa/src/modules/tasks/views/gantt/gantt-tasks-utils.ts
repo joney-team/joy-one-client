@@ -1,4 +1,4 @@
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 
 export function getDatesFromRange(from: any, to: any): Date[] {
   if (!from || !to) return [];
@@ -63,7 +63,7 @@ export function getWeeksFromRange(from: any, to: any, startOnMonday = false) {
 export function getDateRangeBreakdown(
   startDate: Date,
   endDate: Date,
-  startOfWeek: number = 0
+  startOfWeek: number = 0,
 ): {
   dates: Date[];
   weeks: { start: Date; end: Date; dates: number }[];

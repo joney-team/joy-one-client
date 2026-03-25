@@ -1,11 +1,11 @@
-import { TaskDataFragment } from "../../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../../graphql/fragmentTask.graphql";
 import { TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 
 export interface GanttTaskProps {
-  task: TaskDataFragment;
-  prevTask: TaskDataFragment | null;
-  nextTask: TaskDataFragment | null;
-  nextParentTask: TaskDataFragment | null;
+  task: TaskFragment;
+  prevTask: TaskFragment | null;
+  nextTask: TaskFragment | null;
+  nextParentTask: TaskFragment | null;
   groupVariables: TasksQueryVariables | null;
   isAllowTopDroppable?: boolean;
 }

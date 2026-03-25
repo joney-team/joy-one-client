@@ -2,6 +2,6 @@
 
 query Customer($id: String!) {
   customer(id: $id) {
-    ...CustomerData
+    ...Customer
   }
 }

@@ -23,7 +23,7 @@ query ProductStocks($limit: Float, $offset: Float, $query: JSONObject) {
       note
       records
       createdByUser {
-        ...WorkspaceMemberData       
+        ...WorkspaceMember       
       }
     }
   }

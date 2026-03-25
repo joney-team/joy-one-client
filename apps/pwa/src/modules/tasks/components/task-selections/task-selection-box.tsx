@@ -4,13 +4,13 @@ import { useColor } from "@/modules/theme/use-color";
 import { Group } from "@mantine/core";
 import { IconSquareCheckFilled, IconSquareDashed } from "@tabler/icons-react";
 import { type FC } from "react";
-import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { type TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTaskSelections } from "./task-selections-context";
 import { classNames } from "@/utils/ui.utils";
 
 export const TaskSelectionBox: FC<{
-  task: TaskDataFragment;
+  task: TaskFragment;
   groupVariables: TasksQueryVariables | null;
   className?: string;
   activeClassName?: string;

@@ -17,7 +17,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconFolder, IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
 
 export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
@@ -25,7 +25,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
   const color = useColor();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["folder"]>(task.folder ?? null);
+  const [selected, setSelected] = useState<TaskFragment["folder"]>(task.folder ?? null);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
@@ -34,7 +34,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
     QUERY_TAGS,
     {
       fetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const onGetFolders = useCallback(
@@ -53,7 +53,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
         return setIsSearchEmpty(false);
       }
     },
-    [getFolders]
+    [getFolders],
   );
 
   const onFetchMore = useCallback(async () => {

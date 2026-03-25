@@ -35,15 +35,15 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
 import { CustomerRelationshipContactInput } from "../customer-detail/customer-relationship-contact-input";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 import CREATE_CUSTOMER_MUTATION from "../graphql/mutationCreateCustomer.graphql";
 import UPDATE_CUSTOMER_MUTATION from "../graphql/mutationUpdateCustomer.graphql";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 
 export interface CustomerFormProps {
-  onDone?: (customer: CustomerDataFragment) => void | Promise<void>;
+  onDone?: (customer: CustomerFragment) => void | Promise<void>;
   onClose?: () => void;
-  customer?: CustomerDataFragment;
+  customer?: CustomerFragment;
   relationship?: boolean;
 }
 
@@ -83,7 +83,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const [createCustomer] = useMutation(CREATE_CUSTOMER_MUTATION);
   const [updateCustomer] = useMutation(UPDATE_CUSTOMER_MUTATION);
 
-  const form = useForm<Partial<CustomerDataFragment>>({
+  const form = useForm<Partial<CustomerFragment>>({
     initialValues: normalizeObject({
       name: props.customer?.name || "",
       ...(props.customer

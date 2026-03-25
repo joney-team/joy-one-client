@@ -48,7 +48,7 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
@@ -150,9 +150,9 @@ const CardProperty: FC<
 };
 
 interface BoardTaskCardProps {
-  task: TaskDataFragment;
-  prevTask?: TaskDataFragment | null;
-  nextTask?: TaskDataFragment | null;
+  task: TaskFragment;
+  prevTask?: TaskFragment | null;
+  nextTask?: TaskFragment | null;
   showStatus?: boolean;
   scrollContainerRef?: HTMLDivElement | null;
   groupVariables: TasksQueryVariables | null;
@@ -187,7 +187,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
       !!task?.dueDate &&
       task.dueDate < DateTime.getNowInSeconds() &&
       task.status !== DefaultTaskStatusId.CLOSED,
-    [task]
+    [task],
   );
 
   const subtaskVariables: TasksQueryVariables = useMemo(() => {
@@ -232,7 +232,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           return attachClosestEdge({ task }, { element, input, allowedEdges: ["top", "bottom"] });
         },
         onDragEnter({ source, self }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -242,14 +242,14 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           setOver({ edge: closestEdge, rect: source.data.rect as DOMRect });
         },
         onDragLeave({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id) return;
 
           setOver(null);
         },
         onDrag({ source, self }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -264,7 +264,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
         onDrop({ source, self }) {
           setOver(null);
 
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
           if (sourceTask._id === task._id || sourceTask._id === task.parentId) return;
 
@@ -286,7 +286,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
             updateTasks([{ _id: sourceTask._id, order, status: task.status, context }]);
           }
         },
-      })
+      }),
     );
   }, [task, groupVariables]);
 

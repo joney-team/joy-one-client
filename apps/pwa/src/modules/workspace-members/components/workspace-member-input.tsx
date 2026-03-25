@@ -6,12 +6,14 @@ import {
 import { ActionIcon, em } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC } from "react";
-import { WorkspaceMemberDataFragment } from "../graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../graphql/fragmentWorkspaceMember.graphql";
 
-interface WorkspaceMemberInputProps
-  extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
-  value?: WorkspaceMemberDataFragment | null;
-  onChange?: (value?: WorkspaceMemberDataFragment | null) => void;
+interface WorkspaceMemberInputProps extends Omit<
+  WorkspaceMemberSelectorProps,
+  "value" | "onChange" | "target"
+> {
+  value?: WorkspaceMemberFragment | null;
+  onChange?: (value?: WorkspaceMemberFragment | null) => void;
   collapsed?: boolean;
   clearable?: boolean;
   userCardProps?: Omit<UserCardProps, "user">;

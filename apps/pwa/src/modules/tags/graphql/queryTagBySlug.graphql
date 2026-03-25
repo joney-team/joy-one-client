@@ -2,6 +2,6 @@
 
 query TagBySlug($slug: String!) {
   tagBySlug(slug: $slug) {
-    ...TagData
+    ...Tag
   }
 }

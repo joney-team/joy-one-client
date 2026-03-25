@@ -21,7 +21,7 @@ import {
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 
 import { useColor } from "@/modules/theme/use-color";
-import { type TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { type TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import { type UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 
@@ -33,17 +33,17 @@ interface OverlayOptions extends CardProps {}
 
 export const TaskRowDraggable: FC<{
   rootRef: RefObject<HTMLElement | null>;
-  task: TaskDataFragment;
+  task: TaskFragment;
   groupVariables: TasksQueryVariables | null;
-  nextParentTask: TaskDataFragment | null;
+  nextParentTask: TaskFragment | null;
   isAllowTopDroppable?: boolean;
-  nextTask: TaskDataFragment | null;
-  prevTask: TaskDataFragment | null;
+  nextTask: TaskFragment | null;
+  prevTask: TaskFragment | null;
   subTasksGroupVariables: TasksQueryVariables | null;
   children: (draggingRef: Ref<HTMLDivElement | null>) => ReactNode;
   disabled?: boolean;
   droppableOptions?: {
-    inherits?: (keyof TaskDataFragment)[];
+    inherits?: (keyof TaskFragment)[];
   };
   overlayOptions?: OverlayOptions;
 }> = ({
@@ -82,12 +82,12 @@ export const TaskRowDraggable: FC<{
   const droppableIndicatorBottomIndentRef = useRef<HTMLDivElement>(null);
 
   const inherits =
-    droppableOptions.inherits?.reduce<Partial<TaskDataFragment>>(
+    droppableOptions.inherits?.reduce<Partial<TaskFragment>>(
       (acc, key) => ({
         ...acc,
         [key]: task[key],
       }),
-      {}
+      {},
     ) ?? {};
 
   // Drag drop handlers
@@ -127,7 +127,7 @@ export const TaskRowDraggable: FC<{
       dropTargetForElements({
         element: droppableTopSiblingRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask || !isAllowTopDroppable) return false;
 
           return (
@@ -144,7 +144,7 @@ export const TaskRowDraggable: FC<{
           droppableIndicatorTopRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -165,7 +165,7 @@ export const TaskRowDraggable: FC<{
       dropTargetForElements({
         element: droppableBottomSiblingRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return false;
 
           if (isLastChild && !sourceTask.parentId && sourceTask._id !== task.parentId) {
@@ -186,7 +186,7 @@ export const TaskRowDraggable: FC<{
           droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -223,7 +223,7 @@ export const TaskRowDraggable: FC<{
       dropTargetForElements({
         element: droppableBottomChildrenRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return false;
 
           return (
@@ -239,7 +239,7 @@ export const TaskRowDraggable: FC<{
           droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -278,7 +278,7 @@ export const TaskRowDraggable: FC<{
           droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
           droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
         },
-      })
+      }),
     );
   }, [
     task,

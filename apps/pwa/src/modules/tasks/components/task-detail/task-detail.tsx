@@ -17,7 +17,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
 import dynamic from "next/dynamic";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import QUERY_TASK_BY_CODE, {
   type TaskByCodeQuery,
   type TaskByCodeQueryVariables,
@@ -83,7 +83,7 @@ export const TaskDetail: FC = () => {
   const taskMenu = useTaskMenu({ task, groupVariables: null });
   const modalId = `task-detail-${taskCode}`;
 
-  const debouncedUpdateTask = useDebouncedCallback(async (values: Partial<TaskDataFragment>) => {
+  const debouncedUpdateTask = useDebouncedCallback(async (values: Partial<TaskFragment>) => {
     if (!task) return;
 
     const isDiff = JSON.stringify(task) !== JSON.stringify(values);

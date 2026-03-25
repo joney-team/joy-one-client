@@ -28,7 +28,7 @@ import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantin
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
-import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
 import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
@@ -52,7 +52,7 @@ export const WorkspaceMemberList: FC = () => {
 
   return (
     <Stack p={16}>
-      <List<WorkspaceMemberDataFragment>
+      <List<WorkspaceMemberFragment>
         id="workspace-members"
         query={QUERY_WORKSPACE_MEMBERS}
         name={<Trans>Members</Trans>}
@@ -118,7 +118,7 @@ export const WorkspaceMemberList: FC = () => {
               const roles = data.roles.map(normalizeRole);
               const owner = roles.find((v: any) => v._id === WorkspaceDefaultRoleId.OWNER);
               const isCanAssignRole = workspace.hasPermission(
-                WorkspacePermission.WORKSPACE_ROLES_MANAGER
+                WorkspacePermission.WORKSPACE_ROLES_MANAGER,
               );
 
               if (owner) {
@@ -193,28 +193,28 @@ export const WorkspaceMemberList: FC = () => {
                         });
                         const options = results.data?.branches ?? [];
                         return bindOptions(
-                          options.map((v) => ({ label: v.name, value: v._id, data: v }))
+                          options.map((v) => ({ label: v.name, value: v._id, data: v })),
                         );
                       },
                       search: async (q) => {
                         const options = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
                         return bindOptions(
-                          options.map((v) => ({ label: v.name, value: v._id, data: v }))
+                          options.map((v) => ({ label: v.name, value: v._id, data: v })),
                         );
                       },
                       listRoute: "/workspace-branches",
                     },
                   }
                 : workspace.member.workspaceBranches.length > 1
-                ? {
-                    staticSelector: {
-                      options: workspace.member.workspaceBranches.map((v) => ({
-                        label: v.name,
-                        value: v._id,
-                      })),
-                    },
-                  }
-                : undefined,
+                  ? {
+                      staticSelector: {
+                        options: workspace.member.workspaceBranches.map((v) => ({
+                          label: v.name,
+                          value: v._id,
+                        })),
+                      },
+                    }
+                  : undefined,
           },
         }}
         card={({ data }) => <MemberCard member={data} />}
@@ -231,7 +231,7 @@ export const WorkspaceMemberList: FC = () => {
   );
 };
 
-const MemberCard: FC<{ member: WorkspaceMemberDataFragment }> = (props) => {
+const MemberCard: FC<{ member: WorkspaceMemberFragment }> = (props) => {
   const { member } = props;
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 

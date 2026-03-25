@@ -9,7 +9,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
@@ -81,7 +81,7 @@ export interface TaskTimeTrackingModalArgs {
 }
 
 const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () => void }> = (
-  args
+  args,
 ) => {
   const workspace = useWorkspace();
   const lang = useLang();
@@ -93,7 +93,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const endAtRef = useRef<HTMLInputElement>(null);
 
   const [name, setName] = useState("");
-  const [user, setUser] = useState<WorkspaceMemberDataFragment>(workspace.member);
+  const [user, setUser] = useState<WorkspaceMemberFragment>(workspace.member);
   const [date, setDate] = useState(args.date);
 
   const forceUpdate = useForceUpdate();
@@ -101,7 +101,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const color = useColor();
 
   const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
-    CREATE_TASK_MUTATION
+    CREATE_TASK_MUTATION,
   );
 
   const onSubmit = async () => {
@@ -115,13 +115,13 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
         new Date(slot.startAt * 1000).getHours(),
         new Date(slot.startAt * 1000).getMinutes(),
         0,
-        0
+        0,
       );
       const endAt = time.setHours(
         new Date(slot.endAt * 1000).getHours(),
         new Date(slot.endAt * 1000).getMinutes(),
         0,
-        0
+        0,
       );
 
       if (startAt > endAt) {
@@ -233,7 +233,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
                     : {
                         startAt: startAt,
                         endAt: startAt + 60 * 60,
-                      }
+                      },
                 );
               }}
               rightSection={

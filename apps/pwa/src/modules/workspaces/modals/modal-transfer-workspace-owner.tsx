@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { transferOwner } from "@/modules/workspace-roles/workspace-roles-service";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
@@ -15,7 +15,7 @@ import { FC, useState } from "react";
 
 export const ModalTransferWorkspaceOwner: FC = () => {
   const auth = useAuth();
-  const [newOwner, setNewOwner] = useState<WorkspaceMemberDataFragment>();
+  const [newOwner, setNewOwner] = useState<WorkspaceMemberFragment>();
 
   const onSubmit = async () => {
     if (!newOwner) return;

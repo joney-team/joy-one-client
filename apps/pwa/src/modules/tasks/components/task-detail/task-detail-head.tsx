@@ -17,7 +17,7 @@ import {
 } from "@tabler/icons-react";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, useMemo } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import QUERY_SIBLING_TASKS, {
   type SiblingTasksQuery,
   type SiblingTasksQueryVariables,
@@ -31,11 +31,11 @@ import { TaskMenuAction } from "../task-menu/task-menu-types";
 import styles from "./task-detail.module.css";
 
 interface TaskDetailHeadProps {
-  task: TaskDataFragment;
+  task: TaskFragment;
   close: () => void;
 }
 
-const TaskCodeButton: FC<{ task: TaskDataFragment }> = (props) => {
+const TaskCodeButton: FC<{ task: TaskFragment }> = (props) => {
   const { task } = props;
   const hover = useHover();
   const color = useColor();
@@ -91,7 +91,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
       variables: {
         id: task._id,
       },
-    }
+    },
   );
 
   const isCanNext = siblingTasks.data?.siblingTasks.next !== null;
@@ -100,7 +100,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
   const onNext = () => {
     if (siblingTasks.data?.siblingTasks.next) {
       router.push(
-        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.next.code}`)
+        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.next.code}`),
       );
     }
   };
@@ -108,7 +108,7 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
   const onPrev = () => {
     if (siblingTasks.data?.siblingTasks.previous) {
       router.push(
-        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.previous.code}`)
+        pathname.replace(`/${task.code}`, `/${siblingTasks.data?.siblingTasks.previous.code}`),
       );
     }
   };

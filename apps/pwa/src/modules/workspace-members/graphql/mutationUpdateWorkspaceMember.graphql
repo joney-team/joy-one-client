@@ -14,6 +14,6 @@ mutation UpdateWorkspaceMember(
     workingTimeType: $workingTimeType
     workspaceBranchIds: $workspaceBranchIds
   ) {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 }

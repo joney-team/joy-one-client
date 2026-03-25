@@ -1,6 +1,6 @@
 import { ResponseList } from "@/types";
 import { restClient } from "../apis/rest-client";
-import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 import {
   UpdateWorkspaceMemberDto,
   VerifyInvitaionTokenResponse,
@@ -16,7 +16,7 @@ export async function updateWorkspaceMember(memberId: string, dto: UpdateWorkspa
 }
 
 export async function joinWorkspaceMember(inviteCode: string) {
-  return restClient.post<WorkspaceMemberDataFragment>(`/workspace-members/join`, { inviteCode });
+  return restClient.post<WorkspaceMemberFragment>(`/workspace-members/join`, { inviteCode });
 }
 
 export async function verifyWorkspaceMemberInvitation(token: string) {
@@ -27,13 +27,13 @@ export async function verifyWorkspaceMemberInvitation(token: string) {
 
 export async function getWorkspaceMemberByIds(userIds: string[]) {
   if (!userIds || userIds.length === 0) return [];
-  return restClient.get<WorkspaceMemberDataFragment[]>(`/workspace-members/ids`, {
+  return restClient.get<WorkspaceMemberFragment[]>(`/workspace-members/ids`, {
     params: { ids: [...new Set(userIds.toString().split(","))] },
   });
 }
 
 export async function getWorkspaceMemberList(query?: any) {
-  return restClient.get<ResponseList<WorkspaceMemberDataFragment>>(`/workspace-members`, {
+  return restClient.get<ResponseList<WorkspaceMemberFragment>>(`/workspace-members`, {
     params: query,
   });
 }

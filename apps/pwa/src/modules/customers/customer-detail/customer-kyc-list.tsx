@@ -4,11 +4,11 @@ import { Errored } from "@/components/errored";
 import { useCustomerKyc } from "@/modules/customer-kycs/hooks/use-customer-kyc";
 import { Skeleton, Stack } from "@mantine/core";
 import { FC } from "react";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 import { CustomerKycCard } from "./customer-kyc-card";
 
 interface CustomerKycProps {
-  customer: Pick<CustomerDataFragment, "_id">;
+  customer: Pick<CustomerFragment, "_id">;
 }
 
 export const CustomerKyc: FC<CustomerKycProps> = (props) => {

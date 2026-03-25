@@ -2,6 +2,6 @@
 
 query TaskMention($id: String!) {
   task(_id: $id) {
-    ...TaskData
+    ...Task
   }
 }

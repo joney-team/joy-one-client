@@ -1,7 +1,7 @@
 import type { PlaceDropdownMenuOptions } from "@/components/context-menu/context-menu-helpers";
 import type { ContextMenuProps } from "@/components/context-menu/context-menu-types";
 import type { FC } from "react";
-import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import type { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import type { UpdateTask } from "../../hooks/use-update-tasks";
 import type { ScrollToDate } from "../../views/gantt/gantt-tasks-types";
@@ -18,7 +18,7 @@ export enum TaskMenuAction {
   CHANGE_FOLDER = "CHANGE_FOLDER",
 }
 
-export type TaskMenuData = Partial<TaskDataFragment> & { _id: string };
+export type TaskMenuData = Partial<TaskFragment> & { _id: string };
 
 export type TaskMenuContext = {
   groupVariables: TasksQueryVariables | null;

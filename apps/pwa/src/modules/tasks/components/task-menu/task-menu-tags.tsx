@@ -18,7 +18,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
 
 export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
@@ -26,7 +26,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
   const color = useColor();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["tags"]>(task.tags ?? []);
+  const [selected, setSelected] = useState<TaskFragment["tags"]>(task.tags ?? []);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
@@ -35,7 +35,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
     QUERY_TAGS,
     {
       fetchPolicy: "cache-and-network",
-    }
+    },
   );
 
   const onGetTags = useCallback(
@@ -54,7 +54,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
         return setIsSearchEmpty(false);
       }
     },
-    [getTags]
+    [getTags],
   );
 
   const onFetchMore = useCallback(async () => {

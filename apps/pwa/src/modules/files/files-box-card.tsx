@@ -11,10 +11,10 @@ import { FC, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
 import { useColor } from "../theme/use-color";
 import { fileTypes } from "./files-constants";
-import { FileDataFragment } from "./graphql/fragmentFile.graphql";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
 
 export const FileBoxCard: FC<{
-  file: File | FileDataFragment;
+  file: File | FileFragment;
   onRemove?: () => void;
   disabled?: boolean;
   onGallery: () => void;

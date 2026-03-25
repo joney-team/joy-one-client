@@ -55,7 +55,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
   const importEstimations = async (file: File) => {
     setImporting(true);
-    const fileData = await convertExcelToJson(file);
+    const File = await convertExcelToJson(file);
 
     let data: LoanAssetEstimations = {
       brands: [],
@@ -64,7 +64,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       colors: [],
     };
 
-    for (let row of fileData) {
+    for (let row of File) {
       const rawBrandName = row["Nhãn hiệu"];
       const rawModelName = row["Dòng"];
       const rawProductManufacturingYear = row["Năm sản xuất"];
@@ -80,7 +80,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       if (!assetType) continue;
 
       let brand = data.brands.find(
-        (brand) => brand.name === rawBrandName && brand.assetType === assetType
+        (brand) => brand.name === rawBrandName && brand.assetType === assetType,
       );
       if (!brand) {
         brand = { id: data.brands.length.toString(), name: rawBrandName, assetType };
@@ -88,7 +88,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       }
 
       let model = data.models.find(
-        (model) => model.name === rawModelName && model.brandId === brand!.id
+        (model) => model.name === rawModelName && model.brandId === brand!.id,
       );
       if (!model) {
         model = { id: data.models.length.toString(), name: rawModelName, brandId: brand.id };
@@ -185,7 +185,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                 (v) => ({
                   label: t(loanAssetTypes[v].label),
                   value: v,
-                })
+                }),
               )}
               onChange={(value) => {
                 router.setQuery("assetType", value as string, true);
@@ -261,14 +261,14 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                           <Table.Td>
                             {
                               loans.assetEstimations.brands.find(
-                                (brand) => brand.id === estimation.brandId
+                                (brand) => brand.id === estimation.brandId,
                               )?.name
                             }
                           </Table.Td>
                           <Table.Td>
                             {
                               loans.assetEstimations.models.find(
-                                (model) => model.id === estimation.modelId
+                                (model) => model.id === estimation.modelId,
                               )?.name
                             }
                           </Table.Td>

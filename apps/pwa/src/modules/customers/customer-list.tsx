@@ -28,7 +28,7 @@ import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-co
 import { useWorkspace } from "../workspaces/workspace-context";
 import { type ModalCustomerRef } from "./customer-modal";
 
-import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "./graphql/fragmentCustomer.graphql";
 import QUERY_CUSTOMERS from "./graphql/queryCustomers.graphql";
 
 const ModalCustomer = dynamic(
@@ -36,7 +36,7 @@ const ModalCustomer = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const CustomerList: FC = () => {
@@ -46,7 +46,7 @@ export const CustomerList: FC = () => {
   return (
     <Fragment>
       <Stack p={16}>
-        <List<CustomerDataFragment>
+        <List<CustomerFragment>
           id="cus"
           name={<Trans>Customers</Trans>}
           icon={IconUserSquare}

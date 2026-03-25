@@ -3,7 +3,7 @@
 #import "./fragmentTaskStatus.graphql"
 #import "./fragmentTaskTimeTracking.graphql"
 
-fragment TaskData on Task {
+fragment Task on Task {
   _id
   code
   name
@@ -38,11 +38,11 @@ fragment TaskData on Task {
   }
 
   assigneeUsers {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 
   customer {
-    ...CustomerData
+    ...Customer
   }
 
   parentId

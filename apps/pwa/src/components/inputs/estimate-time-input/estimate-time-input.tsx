@@ -1,6 +1,6 @@
 "use client";
 
-import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
+import { TaskFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
 import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -38,11 +38,11 @@ export const EstimateTimeInput: FC<EstimateTimeInputProps> = (props) => {
 };
 
 export interface QuickEstimateTimeInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  task: TaskDataFragment;
+  task: TaskFragment;
 }
 
 export const QuickEstimateTimeInput: FC<PropsWithChildren<QuickEstimateTimeInputProps>> = (
-  props
+  props,
 ) => {
   const [opened, setOpened] = useState(false);
   const { t } = useLingui();

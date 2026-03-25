@@ -1,11 +1,11 @@
 "use client";
 
 import { Fragment, type FC } from "react";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../graphql/fragmentTask.graphql";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { DateFormat } from "@/components/format/date-format";
 
-export const TaskTimeline: FC<{ task: Pick<TaskDataFragment, "startDate" | "dueDate"> }> = ({
+export const TaskTimeline: FC<{ task: Pick<TaskFragment, "startDate" | "dueDate"> }> = ({
   task,
 }) => {
   const { startDate, dueDate } = task;

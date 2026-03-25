@@ -9,13 +9,13 @@ import { FileType } from "@/graphql/enums.graphql";
 import axios from "axios";
 
 import { useLingui } from "@lingui/react/macro";
-import { FileDataFragment } from "../graphql/fragmentFile.graphql";
+import { FileFragment } from "../graphql/fragmentFile.graphql";
 import MUTATION_SIGN_UPLOAD from "../graphql/mutationSignUpload.graphql";
 import MUTATION_VERIFY_EXTERNAL_STORAGE_DNA from "../graphql/mutationVerifyExternalStorageDna.graphql";
 
 export const reduceFileSize = async (
   file: File,
-  options: { maxSizeMB?: number; maxWidthOrHeight?: number }
+  options: { maxSizeMB?: number; maxWidthOrHeight?: number },
 ) => {
   const isImage = IMAGE_MIME_TYPE.includes(file.type as any);
   if (!isImage) return file;
@@ -26,7 +26,7 @@ export const reduceFileSize = async (
 
   return new File(
     [await imageCompression(file, { maxWidthOrHeight: options.maxWidthOrHeight })],
-    file.name
+    file.name,
   );
 };
 
@@ -37,7 +37,7 @@ export const useUploadFile = () => {
 
   return async (
     file: File,
-    options: UploadFileOptions = {}
+    options: UploadFileOptions = {},
   ): Promise<{
     _id: string;
     url: string;
@@ -79,7 +79,7 @@ export const useUploadFile = () => {
     const formData = new FormData();
     formData.append("file", file);
 
-    const result = await axios.post<FileDataFragment>(signedUrl, formData, {
+    const result = await axios.post<FileFragment>(signedUrl, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

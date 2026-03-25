@@ -27,13 +27,13 @@ query Orders($limit: Float, $offset: Float, $query: JSONObject) {
       relatedUserIds
       isFulfilled
       createdByUser {
-        ...WorkspaceMemberData
+        ...WorkspaceMember
       }
       assigneeUsers {
-        ...WorkspaceMemberData
+        ...WorkspaceMember
       }
       relatedCustomer {
-        ...CustomerData
+        ...Customer
       }
     }
   }

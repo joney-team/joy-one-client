@@ -5,9 +5,9 @@ import { ActionIcon, Card, Group, InputWrapperProps, Text } from "@mantine/core"
 import { IconX } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CustomerSelector } from "./customer-selector";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
-export type CustomerValue = Pick<CustomerDataFragment, "_id" | "name" | "phone">;
+export type CustomerValue = Pick<CustomerFragment, "_id" | "name" | "phone">;
 
 interface CustomersInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: CustomerValue[];

@@ -7,7 +7,7 @@ import { WorkspaceMemberWorkingTimeType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import {
   removeWorkspaceMember,
@@ -41,7 +41,7 @@ interface WorkspaceMemberSettingProps {
 }
 
 const WorkspaceMemberSettingContent: FC<
-  WorkspaceMemberSettingProps & { userMember: WorkspaceMemberDataFragment }
+  WorkspaceMemberSettingProps & { userMember: WorkspaceMemberFragment }
 > = (props) => {
   const workspace = useWorkspace();
   const auth = useAuth();
@@ -54,7 +54,7 @@ const WorkspaceMemberSettingContent: FC<
   const isHasPermission = workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER);
   const isAbleToUpdate = isHasPermission || isMe;
   const isMainWorkspaceAccessable = userMember.permissions.includes(
-    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS
+    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS,
   );
   const isOwner = userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
 

@@ -5,7 +5,7 @@ fragment TaskTimeTrackingData on TaskTimeTracking {
   workspaceId
   userId
   user {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
   note
   startAt

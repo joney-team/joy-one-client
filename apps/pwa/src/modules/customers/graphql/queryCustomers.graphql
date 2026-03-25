@@ -4,7 +4,7 @@ query Customers($ids: [String!], $limit: Float, $offset: Float) {
   list: customers(ids: $ids, limit: $limit, offset: $offset) {
     total
     results {
-      ...CustomerData
+      ...Customer
     }
   }
 }

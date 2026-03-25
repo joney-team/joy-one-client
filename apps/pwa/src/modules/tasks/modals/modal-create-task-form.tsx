@@ -28,7 +28,7 @@ import { FC, Fragment, useEffect, useMemo } from "react";
 import { useTaskMenu } from "../components/task-menu/task-menu";
 import { TaskMenuAction } from "../components/task-menu/task-menu-types";
 import { TaskTimeline } from "../components/task-timeline";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../graphql/fragmentTask.graphql";
 import CREATE_TASK_MUTATION from "../graphql/mutationCreateTask.graphql";
 import TASK_STATUS_QUERY from "../graphql/queryTaskStatuses.graphql";
 import { useTaskStatuses } from "../hooks/use-task-statuses";
@@ -36,7 +36,7 @@ import { taskPriorities } from "../tasks-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
 
 export interface CreateTaskFormProps {
-  initial?: Partial<TaskDataFragment>;
+  initial?: Partial<TaskFragment>;
   onCreated?: (id: string) => void;
   onClose?: () => void;
 }
@@ -64,7 +64,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
   const [createTask] = useMutation(CREATE_TASK_MUTATION);
 
-  const form = useForm<Partial<TaskDataFragment> & { status: TaskDataFragment["status"] }>({
+  const form = useForm<Partial<TaskFragment> & { status: TaskFragment["status"] }>({
     initialValues: {
       name: initial?.name ?? "",
       description: initial?.description ?? "",

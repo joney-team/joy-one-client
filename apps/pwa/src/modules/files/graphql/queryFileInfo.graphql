@@ -2,6 +2,6 @@
 
 query GetFileInfo($fileId: String!) {
   getFileInfo(fileId: $fileId) {
-    ...FileData
+    ...File
   }
 }

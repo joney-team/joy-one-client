@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
+import { TaskFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -16,7 +16,7 @@ export interface ModalSharelinkRef {
 }
 
 interface ModalShareLinkArgs {
-  task?: Pick<TaskDataFragment, "_id">;
+  task?: Pick<TaskFragment, "_id">;
   url: string;
 }
 

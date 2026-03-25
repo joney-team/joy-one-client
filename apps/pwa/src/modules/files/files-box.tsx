@@ -18,7 +18,7 @@ import { Renderer } from "../../components/renderer";
 import { FileBoxCard } from "./files-box-card";
 import { useUploadFile } from "./hooks/use-upload-file";
 
-import { FileDataFragment } from "./graphql/fragmentFile.graphql";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
 import MUTATAION_REMOVE_FILE from "./graphql/mutationRemoveFile.graphql";
 import QUERY_FILES from "./graphql/queryFiles.graphql";
 
@@ -99,7 +99,7 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     }
   };
 
-  const onRemove = async (file: FileDataFragment | File) => {
+  const onRemove = async (file: FileFragment | File) => {
     if (file instanceof File) {
       setRawFiles((s) => {
         const _data = s.filter((v) => v !== file);

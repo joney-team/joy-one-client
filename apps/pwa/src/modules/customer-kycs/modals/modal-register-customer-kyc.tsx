@@ -39,7 +39,7 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren, ReactNode, useState } from "react";
 import { InputModalType, ModalInput } from "../../../modals/modal-input";
-import { CustomerDataFragment } from "../../customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../../customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "../../files/hooks/use-upload-file";
 import { useLang } from "../../lang/lang-context";
 import { useLocations } from "../../locations/locations-context";
@@ -47,7 +47,7 @@ import { decodeCid } from "../customer-kycs-service";
 import MUTATION_REGISTER_CUSTOMER_KYC from "../graphql/mutationRegisterCustomerKyc.graphql";
 
 interface ModalRegisterCustomerKycArgs {
-  customer: CustomerDataFragment;
+  customer: CustomerFragment;
   onDone?: () => void | Promise<void>;
 }
 
@@ -342,7 +342,7 @@ export const WithModalRegisterCustomerKyc: FC<{
                                   (l) =>
                                     l.type === "ward" &&
                                     l.parentId === form.values.cidVnLocation?.provinceId &&
-                                    form.values.cidVnLocation?.provinceId
+                                    form.values.cidVnLocation?.provinceId,
                                 )
                                 .map((l) => ({ value: l.id, label: l.fullName }))}
                               flex={1}

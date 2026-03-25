@@ -20,7 +20,7 @@ import { Trans } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
 
 const MenuItem = ({
@@ -80,9 +80,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   const { member } = useWorkspace();
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  const [selected, setSelected] = useState<TaskDataFragment["assigneeUsers"]>(
-    task.assigneeUsers ?? []
-  );
+  const [selected, setSelected] = useState<TaskFragment["assigneeUsers"]>(task.assigneeUsers ?? []);
   const [textSearch, setTextSearch] = useDebouncedState("", 300);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
@@ -106,7 +104,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
       await getMembers({ variables: { ignoreSelf: true, limit: 10 } });
       return setIsSearchEmpty(false);
     },
-    [getMembers]
+    [getMembers],
   );
 
   const onFetchMore = useCallback(async () => {

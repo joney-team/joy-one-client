@@ -19,6 +19,6 @@ fragment EventData on Event {
     index
   }
   user {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 }

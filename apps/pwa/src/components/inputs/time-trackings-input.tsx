@@ -1,9 +1,9 @@
 "use client";
 
-import { TaskDataFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
+import { TaskFragment } from "@/modules/tasks/graphql/fragmentTask.graphql";
 import { TaskTimeTrackingDataFragment } from "@/modules/tasks/graphql/fragmentTaskTimeTracking.graphql";
 import { useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -47,7 +47,7 @@ import { Renderer } from "../renderer";
 import { DateInput } from "./date-input";
 
 interface TimeTrackingsInputProps extends GroupProps {
-  task: TaskDataFragment;
+  task: TaskFragment;
 }
 
 export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest }) => {
@@ -63,7 +63,7 @@ export const TimeTrackingsInput: FC<TimeTrackingsInputProps> = ({ task, ...rest 
 
   const groupByUsers = timeTrackings.reduce<
     {
-      user: WorkspaceMemberDataFragment;
+      user: WorkspaceMemberFragment;
       timeTrackings: TaskTimeTrackingDataFragment[];
     }[]
   >((acc, curr) => {
@@ -240,7 +240,7 @@ const InProgressTimeTrackingTimmer: FC<{
 
 export const TimeTrackingGroupByUser: FC<{
   onRemove: (id: string) => void;
-  user: WorkspaceMemberDataFragment;
+  user: WorkspaceMemberFragment;
   timeTrackings: TaskTimeTrackingDataFragment[];
 }> = (props) => {
   const totalTime =
@@ -463,7 +463,7 @@ export const TimeTrackingForm: FC<{
                       if (!form.values.startAt || !e.currentTarget.value) return;
                       const [hours, minutes] = e.currentTarget.value.split(":");
                       const startAt = DateTime.toSeconds(
-                        new Date().setHours(+hours, +minutes, 0, 0)
+                        new Date().setHours(+hours, +minutes, 0, 0),
                       );
                       form.setFieldValue("startAt", startAt);
 

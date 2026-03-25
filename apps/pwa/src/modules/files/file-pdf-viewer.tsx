@@ -1,10 +1,10 @@
 import { renderFileUrl } from "./files-utils";
-import { FileDataFragment } from "./graphql/fragmentFile.graphql";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
 import { PDFViewer } from "@embedpdf/react-pdf-viewer";
 
 import styles from "./file-pdf-viewer.module.css";
 
-export const FilePdfViewer = ({ file }: { file: Pick<FileDataFragment, "url"> }) => {
+export const FilePdfViewer = ({ file }: { file: Pick<FileFragment, "url"> }) => {
   return (
     <div className={styles.FilePdfViewer}>
       <PDFViewer

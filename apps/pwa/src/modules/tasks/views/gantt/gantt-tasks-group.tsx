@@ -5,7 +5,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
 import { TaskContextType } from "@/graphql/enums.graphql";
 import { InternalEvent, onInternalEvent } from "@/hooks/use-internal-event";
-import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
+import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -40,7 +40,7 @@ const ModalCreateTask = dynamic(
 );
 
 interface GanttTasksGroupProps {
-  folder?: TagDataFragment;
+  folder?: TagFragment;
   pure?: boolean;
   isDefaultOpen?: boolean;
 }

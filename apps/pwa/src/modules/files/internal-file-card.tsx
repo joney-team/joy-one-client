@@ -17,14 +17,14 @@ import {
 import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { Image } from "../../components/image";
-import { FileDataFragment } from "./graphql/fragmentFile.graphql";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
 
 export interface InternalFileCardProps {
-  file: FileDataFragment;
+  file: FileFragment;
   isActive?: boolean;
-  onClick?: (file: FileDataFragment) => void;
+  onClick?: (file: FileFragment) => void;
   disabled?: boolean;
-  onDoubleClick?: (file: FileDataFragment) => void;
+  onDoubleClick?: (file: FileFragment) => void;
 }
 
 export const InternalFileCard: FC<InternalFileCardProps> = (props) => {

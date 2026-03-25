@@ -5,6 +5,6 @@ mutation AssignCustomer(
   $input: AssignCustomerInput!
 ) {
   assignCustomer(id: $id, input: $input) {
-    ...CustomerData
+    ...Customer
   }
 }

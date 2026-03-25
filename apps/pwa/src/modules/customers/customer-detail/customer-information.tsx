@@ -51,7 +51,7 @@ import { FC, Fragment, useRef, useState } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
 import { customerGenders, normalizeCustomerInput } from "../customer-constants";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
 import ASSIGN_CUSTOMER from "../graphql/mutationAssignCustomer.graphql";
 import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
@@ -64,12 +64,12 @@ import type { ModalCustomerRef } from "../customer-modal";
 const ModalCustomerRelationshipContacts = dynamic(
   () =>
     import("../modals/modal-customer-relationship-contacts").then(
-      (mod) => mod.ModalCustomerRelationshipContacts
+      (mod) => mod.ModalCustomerRelationshipContacts,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCustomer = dynamic(() => import("../customer-modal").then((mod) => mod.ModalCustomer), {
@@ -78,7 +78,7 @@ const ModalCustomer = dynamic(() => import("../customer-modal").then((mod) => mo
 });
 
 interface CustomerInformationsProps {
-  customer: CustomerDataFragment;
+  customer: CustomerFragment;
   withBorder?: boolean;
 }
 
@@ -311,7 +311,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         (v) =>
                           v._id &&
                           customer.tagIds?.includes(v._id) === true &&
-                          v.type === TagType.CUSTOMER
+                          v.type === TagType.CUSTOMER,
                       )
                       .map((tag) => (
                         <Badge

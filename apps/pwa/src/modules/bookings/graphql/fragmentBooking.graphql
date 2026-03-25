@@ -13,9 +13,9 @@ fragment BookingData on Booking {
   transferToBookingId
   status
   assigneeUsers {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
   customer {
-    ...CustomerData
+    ...Customer
   }
 }

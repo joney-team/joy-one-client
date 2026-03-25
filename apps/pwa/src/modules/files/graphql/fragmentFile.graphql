@@ -1,4 +1,4 @@
-fragment FileData on File {
+fragment File on File {
   _id
   refs
   createdAt

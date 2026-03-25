@@ -9,13 +9,13 @@ import { Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { useRouter } from "next/navigation";
 import { FC, useEffect } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { normalizeTaskStatuses } from "../../tasks-constants";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { TaskTimeTracking, TaskTimeTrackingUser } from "./time-tracking-types";
 
 export const TimeTrackingTask: FC<{
-  task: TaskDataFragment;
+  task: TaskFragment;
   date: Date;
 }> = ({ task, date }) => {
   const now = DateTime.toSeconds(new Date());
@@ -30,7 +30,7 @@ export const TimeTrackingTask: FC<{
   const taskStatus = taskStatuses.find((s) => s.id === task.status);
 
   const timeTrackings = (task.timeTrackings || []).filter(
-    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day")
+    (v) => v.startAt && DateTime.isSame(v.startAt, date, "day"),
   );
 
   const isHasInProgressTimeTracking = timeTrackings.find((v) => !!!v.endAt);
@@ -42,7 +42,7 @@ export const TimeTrackingTask: FC<{
     const user = t.user;
     if (acc.find((v: any) => v.user?._id === user?.userId)) {
       return acc.map((g: any) =>
-        g.user?._id === user?.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g
+        g.user?._id === user?.userId ? { ...g, timeTrackings: [...g.timeTrackings, t] } : g,
       );
     } else {
       return [...acc, { user, timeTrackings: [t] }];

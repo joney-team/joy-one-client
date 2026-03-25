@@ -30,7 +30,7 @@ import { useUploadFile } from "../hooks/use-upload-file";
 import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
-import { FileDataFragment } from "../graphql/fragmentFile.graphql";
+import { FileFragment } from "../graphql/fragmentFile.graphql";
 import QUERY_FILES from "../graphql/queryFiles.graphql";
 
 const ModalFileGallery = dynamic(
@@ -44,7 +44,7 @@ const ModalFileGallery = dynamic(
 export interface ModalFilesArgs {
   fileTypes?: FileType[];
   length?: number;
-  onSelectedFiles: (files: Pick<FileDataFragment, "_id" | "type" | "path">[]) => void;
+  onSelectedFiles: (files: Pick<FileFragment, "_id" | "type" | "path">[]) => void;
 }
 
 export interface ModalFilesProps {
@@ -79,11 +79,11 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
   const [_selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const selectedFiles = _selectedFiles
     .map((v) => files.data.find((f) => f._id === v))
-    .filter((v) => !!v) as FileDataFragment[];
+    .filter((v) => !!v) as FileFragment[];
 
   const onClose = () => setArgs(null);
 
-  const toggleSeleteFile = (file: Pick<FileDataFragment, "type" | "_id" | "url" | "path">) => {
+  const toggleSeleteFile = (file: Pick<FileFragment, "type" | "_id" | "url" | "path">) => {
     if (!args || (args.fileTypes && !args.fileTypes.includes(file.type))) return;
 
     if (_selectedFiles?.includes(file._id)) {
@@ -106,7 +106,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
     if (args.onSelectedFiles) {
       const _selected = _selectedFiles
         .map((v) => files.data.find((f) => f._id === v))
-        .filter((v) => !!v) as FileDataFragment[];
+        .filter((v) => !!v) as FileFragment[];
       args.onSelectedFiles(_selected);
       onClose();
     }

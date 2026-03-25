@@ -2,6 +2,6 @@
 
 query UserWorkspaceMember {
   userWorkspaceMember {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 }

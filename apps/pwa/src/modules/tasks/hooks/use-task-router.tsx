@@ -3,7 +3,7 @@
 import { TagEntity } from "@/modules/tags/tags-types";
 import { usePathname, useRouter } from "next/navigation";
 import { TaskView } from "../views/types";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../graphql/fragmentTask.graphql";
 
 export const getCurrentTaskView = (pathname?: string) => {
   const viewFromPathname = pathname?.split("/")[2] as TaskView;
@@ -20,7 +20,7 @@ export const useTaskRouter = () => {
 
   return {
     view,
-    open: (task: Pick<TaskDataFragment, "code">) => {
+    open: (task: Pick<TaskFragment, "code">) => {
       const url = `/tasks/${view}/${task.code}`;
       router.push(url, { scroll: false });
     },

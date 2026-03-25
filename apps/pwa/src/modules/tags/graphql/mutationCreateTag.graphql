@@ -2,6 +2,6 @@
 
 mutation CreateTag($input: TagInput!) {
   createTag(input: $input) {
-    ...TagData
+    ...Tag
   }
 }

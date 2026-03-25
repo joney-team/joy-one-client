@@ -12,7 +12,7 @@ import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modals/mod
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import MUTATION_CREATE_LOAN from "@/modules/loans/graphql/mutationCreateLoan.graphql";
@@ -65,7 +65,7 @@ import {
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
-  customer?: CustomerDataFragment;
+  customer?: CustomerFragment;
 }
 
 export interface ModalCreateLoanRef {
@@ -117,7 +117,7 @@ export const ModalCreateLoan = forwardRef<
   const [isInitialized, setIsInitialized] = useState(false);
   const [isFetchingCustomerKyc, setIsFetchingCustomerKyc] = useState(false);
 
-  const [customer, setCustomer] = useState<CustomerDataFragment>();
+  const [customer, setCustomer] = useState<CustomerFragment>();
 
   const { customerKyc } = useCustomerKyc(customer?._id);
 
@@ -178,7 +178,7 @@ export const ModalCreateLoan = forwardRef<
     setCustomer(p.customer);
     form.setFieldValue(
       "workspaceBranch",
-      previousLoan?.data?.list?.results?.[0]?.workspaceBranch || workspace.defaultBranch
+      previousLoan?.data?.list?.results?.[0]?.workspaceBranch || workspace.defaultBranch,
     );
 
     setIsFetchingCustomerKyc(false);
@@ -215,7 +215,7 @@ export const ModalCreateLoan = forwardRef<
       if (!customer) return;
       const location = await getGeolocation();
       const loanPackage = loanPackages.find(
-        (p) => p.assetTypes.includes(values.assetType) && p.days === values.packageDays
+        (p) => p.assetTypes.includes(values.assetType) && p.days === values.packageDays,
       );
       if (!loanPackage) return;
 
@@ -484,7 +484,7 @@ export const ModalCreateLoan = forwardRef<
 });
 
 const Session: FC<PropsWithChildren<{ name: string; icon: Icon; isWithoutCard?: boolean }>> = (
-  props
+  props,
 ) => {
   return (
     <Stack gap={5}>

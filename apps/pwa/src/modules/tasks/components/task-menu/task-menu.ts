@@ -9,7 +9,7 @@ import {
   removeInternalEventsListner,
 } from "@/hooks/use-internal-event";
 import { useEffect, useState } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 import type { UpdateTask } from "../../hooks/use-update-tasks";
 import {
@@ -30,7 +30,7 @@ export const useTaskMenu: (
     options?: PlaceDropdownMenuOptions;
     updateTask?: (task: UpdateTask) => Promise<void>;
     onClose?: () => void;
-  } & Partial<TaskMenuContext>
+  } & Partial<TaskMenuContext>,
 ) => TaskMenuContextType = ({
   task,
   options: defaultOptions,
@@ -38,7 +38,7 @@ export const useTaskMenu: (
   updateTask: defaultUpdateTask,
   onClose: defaultOnClose,
 }) => {
-  const contextMenu = useContextMenu<Partial<TaskDataFragment> & { _id: string }>();
+  const contextMenu = useContextMenu<Partial<TaskFragment> & { _id: string }>();
   const [activatedAction, setActivatedAction] = useState<TaskMenuAction | null>(null);
 
   useEffect(() => {

@@ -22,16 +22,16 @@ import {
   useState,
 } from "react";
 import { normalizeCustomerInput } from "../customer-constants";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
 
 interface ModalCustomerRelationshipContactsArgs {
-  customer: CustomerDataFragment;
+  customer: CustomerFragment;
   onClose: () => void;
 }
 
 export const ModalCustomerRelationshipContactsContent: FC<ModalCustomerRelationshipContactsArgs> = (
-  props
+  props,
 ) => {
   const { customer, onClose } = props;
   const customerInput = normalizeCustomerInput(props.customer);
@@ -90,7 +90,7 @@ export const ModalCustomerRelationshipContacts = forwardRef<
 >((props, ref) => {
   const { children } = props;
   const [args, setArgs] = useState<Pick<ModalCustomerRelationshipContactsArgs, "customer"> | null>(
-    null
+    null,
   );
 
   useImperativeHandle(ref, () => ({

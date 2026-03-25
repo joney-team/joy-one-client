@@ -25,7 +25,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, PropsWithChildren, ReactNode, useMemo, useRef } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { taskPriorities } from "../../tasks-constants";
@@ -129,7 +129,7 @@ const FormField: FC<
   );
 };
 
-export const TaskDetailProperties: FC<{ task: TaskDataFragment; onClose: () => void }> = ({
+export const TaskDetailProperties: FC<{ task: TaskFragment; onClose: () => void }> = ({
   task,
   onClose,
 }) => {
@@ -220,7 +220,7 @@ export const TaskDetailProperties: FC<{ task: TaskDataFragment; onClose: () => v
                           ref={ref}
                           size={24}
                           radius={5}
-                          color={hovered ? completedStatus?.color ?? "gray" : "gray"}
+                          color={hovered ? (completedStatus?.color ?? "gray") : "gray"}
                           variant={hovered ? "filled" : "light"}
                           onClick={async (e) => {
                             e.preventDefault();

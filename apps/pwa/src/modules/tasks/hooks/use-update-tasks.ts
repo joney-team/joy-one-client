@@ -9,7 +9,7 @@ import MUTATION_BULK_UPDATE_TASKS, {
 import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useCallback } from "react";
-import TASK_FRAGMENT, { type TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import TASK_FRAGMENT, { type TaskFragment } from "../graphql/fragmentTask.graphql";
 import QUERY_TASKS, {
   type TasksQuery,
   type TasksQueryVariables,
@@ -25,9 +25,7 @@ export type UpdateTask = Partial<TasksQuery["tasks"]["results"][number]> & {
   context?: UpdateTaskContext;
 };
 
-const normalizeTaskForSubmit = (
-  task: Partial<TaskDataFragment> & { _id: string }
-): UpdateTaskInput => {
+const normalizeTaskForSubmit = (task: Partial<TaskFragment> & { _id: string }): UpdateTaskInput => {
   let input: UpdateTaskInput = { _id: task._id };
 
   if ("name" in task) {
@@ -119,10 +117,10 @@ export const useUpdateTasks = () => {
             _id: updatedTask._id,
           });
 
-          const currentData = client.cache.readFragment<TaskDataFragment>({
+          const currentData = client.cache.readFragment<TaskFragment>({
             id: identifiedId,
             fragment: TASK_FRAGMENT,
-            fragmentName: "TaskData",
+            fragmentName: "Task",
           });
 
           if (!currentData) return;
@@ -134,7 +132,7 @@ export const useUpdateTasks = () => {
             fragment: TASK_FRAGMENT,
             data: updatedData,
             id: identifiedId,
-            fragmentName: "TaskData",
+            fragmentName: "Task",
           });
 
           // Change status
@@ -156,7 +154,7 @@ export const useUpdateTasks = () => {
                     results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
-              }
+              },
             );
 
             // Add to target status group
@@ -182,7 +180,7 @@ export const useUpdateTasks = () => {
                     ],
                   },
                 };
-              }
+              },
             );
           }
 
@@ -208,7 +206,7 @@ export const useUpdateTasks = () => {
                     results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
-              }
+              },
             );
 
             client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
@@ -229,7 +227,7 @@ export const useUpdateTasks = () => {
                     ],
                   },
                 };
-              }
+              },
             );
           }
 
@@ -251,7 +249,7 @@ export const useUpdateTasks = () => {
                     results: [...prev.tasks.results.filter((t) => t._id !== updatedTask._id)],
                   },
                 };
-              }
+              },
             );
           }
         });
@@ -267,7 +265,7 @@ export const useUpdateTasks = () => {
         onError(error);
       }
     },
-    [client]
+    [client],
   );
 
   return { updateTasks };

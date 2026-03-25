@@ -2,7 +2,7 @@ import { CouponEntity } from "@/modules/coupons/coupon-types";
 import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
 import { ProductVoucherEntity } from "@/modules/product-vouchers/product-vouchers-types";
 import { BasePostgresEntity } from "@/types";
-import { CustomerDataFragment } from "../customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../customers/graphql/fragmentCustomer.graphql";
 import { PromotionEntity } from "../promotions/promotions-types";
 import { OrderDiscount, OrderItem, OrderPaymentStatus, OrderType } from "./orders-types";
 
@@ -27,6 +27,6 @@ export interface OrderEntity extends BasePostgresEntity {
   note?: string;
   // Related entities
   relatedCustomerId?: string;
-  relatedCustomer?: CustomerDataFragment;
+  relatedCustomer?: CustomerFragment;
   relatedUserIds: string[];
 }

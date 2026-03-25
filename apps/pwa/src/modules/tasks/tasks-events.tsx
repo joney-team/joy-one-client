@@ -37,13 +37,13 @@ export const TasksEvents: FC = () => {
           {
             id: identifiedId,
             fragment: TASK_FRAGMENT,
-            fragmentName: "TaskData",
+            fragmentName: "Task",
           },
-          (prev) => task.data?.task ?? prev
+          (prev) => task.data?.task ?? prev,
         );
       }
     },
-    [state]
+    [state],
   );
 
   return null;

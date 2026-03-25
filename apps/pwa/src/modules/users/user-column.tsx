@@ -6,7 +6,7 @@ import { AppEntity } from "@/types";
 import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import QUERY_WORKSPACE_MEMBERS_BY_IDS from "../workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import { ModalUserInformation } from "./modals/modal-user-information";
@@ -21,7 +21,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
     defaultWidth: 200,
     render: ({ value }) => {
       if (!value) return null;
-      const user = value as WorkspaceMemberDataFragment;
+      const user = value as WorkspaceMemberFragment;
 
       return (
         <ModalUserInformation>
@@ -75,7 +75,7 @@ export const userColumn = (args?: UserColumnArgs): Column => {
               label: v.name,
               value: v.userId,
               data: v,
-            }))
+            })),
           );
         },
         render: ({ data: member }) => {

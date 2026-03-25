@@ -2,7 +2,7 @@
 
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
-import { TagDataFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
+import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import BULK_UPDATE_TAGS_MUTATION, {
   type BulkUpdateTagsMutation,
   type BulkUpdateTagsMutationVariables,
@@ -22,7 +22,7 @@ import {
   useInternalEventsListener,
 } from "@/hooks/use-internal-event";
 
-export type TaskFolder = TagDataFragment;
+export type TaskFolder = TagFragment;
 
 export const useTaskFolders = () => {
   const params = useParams<{ slug: string }>();
@@ -54,7 +54,7 @@ export const useTaskFolders = () => {
     BULK_UPDATE_TAGS_MUTATION,
   );
 
-  const onBulkUpdateTags = async (items: (Partial<TagDataFragment> & { _id: string })[]) => {
+  const onBulkUpdateTags = async (items: (Partial<TagFragment> & { _id: string })[]) => {
     try {
       client.cache.updateQuery<TagsQuery, TagsQueryVariables>(
         {

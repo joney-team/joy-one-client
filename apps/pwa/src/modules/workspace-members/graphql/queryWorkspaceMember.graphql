@@ -2,6 +2,6 @@
 
 query WorkspaceMember($userId: String!) {
   workspaceMember(userId: $userId) {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
 }

@@ -9,7 +9,7 @@ import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { isInWorkingDayInterval } from "@/modules/workspace-settings/workspace-settings-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormError } from "@/utils/exceptions.utils";
@@ -44,7 +44,7 @@ import {
 import { FC, Fragment, useEffect, useMemo } from "react";
 
 import { BookingStatus } from "@/graphql/enums.graphql";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { BookingDataFragment } from "../graphql/fragmentBooking.graphql";
 import CREATE_BOOKING_MUTATION, {
@@ -56,8 +56,8 @@ import UPDATE_BOOKING_MUTATION from "../graphql/mutationUpdateBooking.graphql";
 export interface BookingFormProps {
   startTime?: Date;
   endTime?: Date;
-  customer?: CustomerDataFragment;
-  assigneeUsers?: WorkspaceMemberDataFragment[];
+  customer?: CustomerFragment;
+  assigneeUsers?: WorkspaceMemberFragment[];
 
   reschedule?: BookingDataFragment;
   update?: BookingDataFragment;
@@ -274,8 +274,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                         currentStartTime?.getHours() ?? 0,
                         currentStartTime?.getMinutes() ?? 0,
                         0,
-                        0
-                      )
+                        0,
+                      ),
                     );
 
                     const endTime = new Date(
@@ -283,8 +283,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                         currentEndTime?.getHours() ?? 0,
                         currentEndTime?.getMinutes() ?? 0,
                         0,
-                        0
-                      )
+                        0,
+                      ),
                     );
 
                     form.setValues({
@@ -315,8 +315,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                       startTime: new Date(
                         DateTime.normalizeDate(form.values.startTime ?? new Date()).setHours(
                           value[0],
-                          value[1]
-                        )
+                          value[1],
+                        ),
                       ),
                     });
                   }}
@@ -334,8 +334,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
                       endTime: new Date(
                         DateTime.normalizeDate(form.values.endTime ?? new Date()).setHours(
                           value[0],
-                          value[1]
-                        )
+                          value[1],
+                        ),
                       ),
                     });
                   }}

@@ -3,12 +3,12 @@
 import { TaskContextType } from "@/graphql/enums.graphql";
 import { useQuery } from "@apollo/client/react";
 import { useMemo } from "react";
-import { TaskDataFragment } from "../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../graphql/fragmentTask.graphql";
 import QUERY_TASK_STATUSES from "../graphql/queryTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
-export function getTaskStatuses(task: Pick<TaskDataFragment, "status" | "statuses">) {
+export function getTaskStatuses(task: Pick<TaskFragment, "status" | "statuses">) {
   const statuses = normalizeTaskStatuses(task.statuses);
   const status = statuses.find((s) => s.id === task.status) ?? statuses[0];
 
@@ -18,7 +18,7 @@ export function getTaskStatuses(task: Pick<TaskDataFragment, "status" | "statuse
   };
 }
 
-export const useTaskStatuses = (task: Pick<TaskDataFragment, "status" | "statuses">) => {
+export const useTaskStatuses = (task: Pick<TaskFragment, "status" | "statuses">) => {
   const { statuses, status } = useMemo(() => getTaskStatuses(task), [task]);
   return { statuses, status };
 };

@@ -8,15 +8,14 @@ import { ActionIcon, Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
-import { WorkspaceMemberDataFragment } from "../graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../graphql/fragmentWorkspaceMember.graphql";
 
-export type WorkspaceMemberSelectorValue = WorkspaceMemberDataFragment;
+export type WorkspaceMemberSelectorValue = WorkspaceMemberFragment;
 
-export interface WorkspaceMemberSelectorProps
-  extends Omit<
-    SelectorProps<WorkspaceMemberSelectorValue>,
-    "listRoute" | "searchPlaceholder" | "renderOption"
-  > {
+export interface WorkspaceMemberSelectorProps extends Omit<
+  SelectorProps<WorkspaceMemberSelectorValue>,
+  "listRoute" | "searchPlaceholder" | "renderOption"
+> {
   iconSize?: number;
   avatarSize?: number;
   collapsed?: boolean;

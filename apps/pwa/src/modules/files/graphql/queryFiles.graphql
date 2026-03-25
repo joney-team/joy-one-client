@@ -4,7 +4,7 @@ query Files($limit: Float, $offset: Float, $query: JSONObject) {
   list: files(limit: $limit, offset: $offset, query: $query) {
     total
     results {
-      ...FileData
+      ...File
     }
   }
 }

@@ -5,7 +5,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
 import { customerGenders } from "@/modules/customers/customer-constants";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { OrderEntity } from "@/modules/orders/order-entity";
@@ -54,7 +54,7 @@ interface PrinterArgs {
   receipt?: ReceiptDataFragment;
   bankQrCode?: BankQrCode;
   prescription?: PrescriptionEntity;
-  customer?: Pick<CustomerDataFragment, "_id">;
+  customer?: Pick<CustomerFragment, "_id">;
   order?: OrderEntity;
 }
 
@@ -131,7 +131,7 @@ export const ModalPrinter = forwardRef<
   const [args, setArgs] = useState<ModalPrinterArgs | null>(null);
   const [loading, setIsLoading] = useState(true);
   const [relatedOrder, setRelatedOrder] = useState<OrderEntity>();
-  const [customer, setCustomer] = useState<CustomerDataFragment>();
+  const [customer, setCustomer] = useState<CustomerFragment>();
 
   const contentRef = useRef<HTMLDivElement>(null);
   const handlePrint = useReactToPrint({
@@ -243,8 +243,8 @@ export const ModalPrinter = forwardRef<
                     printSettings.size === PrintSize.SMALL
                       ? 200
                       : printSettings.size === PrintSize.MEDIUM
-                      ? 300
-                      : 800,
+                        ? 300
+                        : 800,
                   maxWidth: "100%",
                 }}
               >
@@ -492,7 +492,7 @@ export const ModalPrinter = forwardRef<
                         const prescription = args.prescription;
                         const totalDays = prescription.items.reduce(
                           (a, b) => Math.max(a, b.days),
-                          0
+                          0,
                         );
 
                         return (

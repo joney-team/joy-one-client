@@ -9,12 +9,14 @@ import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
-export type CustomerSelectorValue = Pick<CustomerDataFragment, "_id" | "name" | "phone" | "avatar">;
+export type CustomerSelectorValue = Pick<CustomerFragment, "_id" | "name" | "phone" | "avatar">;
 
-interface CustomerSelectorProps
-  extends Omit<SelectorProps<CustomerSelectorValue>, "onSearch" | "renderOption"> {}
+interface CustomerSelectorProps extends Omit<
+  SelectorProps<CustomerSelectorValue>,
+  "onSearch" | "renderOption"
+> {}
 
 export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
   return (

@@ -12,7 +12,7 @@ import { ActionIcon, Center, ColorInput, Stack, TextInput } from "@mantine/core"
 import { useForm } from "@mantine/form";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
-import { TagDataFragment } from "../graphql/fragmentTag.graphql";
+import { TagFragment } from "../graphql/fragmentTag.graphql";
 import BULK_UPDATE_TAGS_MUTATION, {
   type BulkUpdateTagsMutation,
   type BulkUpdateTagsMutationVariables,
@@ -26,11 +26,11 @@ import { tagTypes } from "../tags-constants";
 
 type ModalTagFormProps =
   | {
-      tag: TagDataFragment;
+      tag: TagFragment;
       onClose?: () => void;
     }
   | {
-      onCreated?: (tag: TagDataFragment) => void | Promise<void>;
+      onCreated?: (tag: TagFragment) => void | Promise<void>;
       onClose?: () => void;
       type: TagType;
     };
@@ -55,14 +55,14 @@ export const ModalTagForm = forwardRef<
   const tagType = initalTag?.type ?? (args && "type" in args ? args.type : TagType.Task);
 
   const [createTag] = useMutation<CreateTagMutation, CreateTagMutationVariables>(
-    CREATE_TAG_MUTATION
+    CREATE_TAG_MUTATION,
   );
 
   const [bulkUpdateTags] = useMutation<BulkUpdateTagsMutation, BulkUpdateTagsMutationVariables>(
-    BULK_UPDATE_TAGS_MUTATION
+    BULK_UPDATE_TAGS_MUTATION,
   );
 
-  const form = useForm<Partial<TagDataFragment>>({
+  const form = useForm<Partial<TagFragment>>({
     initialValues: {},
     validate: {
       name: (value?: string) => {

@@ -4,7 +4,7 @@ import type { Icon } from "@tabler/icons-react";
 import type { Dispatch, SetStateAction } from "react";
 import type { LocationEntity } from "../locations/locations-types";
 import type { WorkspaceBranchDataFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import type { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import type { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import type { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
 import type { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 
@@ -51,8 +51,8 @@ export interface WorkspaceContext {
   isInitialized: boolean;
   isAvailable: boolean;
   isHasAccessAllBranches: boolean;
-  member: WorkspaceMemberDataFragment;
-  userMembers: WorkspaceMemberDataFragment[];
+  member: WorkspaceMemberFragment;
+  userMembers: WorkspaceMemberFragment[];
   select: (workspaceId: string) => void;
   create: (dto: WorkspaceDto) => Promise<void>;
   leave: () => void;

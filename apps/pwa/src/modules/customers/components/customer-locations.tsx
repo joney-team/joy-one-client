@@ -2,11 +2,11 @@ import { useLocations } from "@/modules/locations/locations-context";
 import { Anchor, Group, Text, ThemeIcon } from "@mantine/core";
 import { IconMapPin } from "@tabler/icons-react";
 import { Fragment, type FC } from "react";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface CustomerLocationsProps {
   customer: Pick<
-    CustomerDataFragment,
+    CustomerFragment,
     | "location"
     | "secondaryLocation"
     | "vnLocation"

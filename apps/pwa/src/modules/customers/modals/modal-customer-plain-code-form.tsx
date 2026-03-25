@@ -10,11 +10,11 @@ import { FC, useState } from "react";
 
 import { useRouter } from "@/hooks/use-router";
 import { Trans } from "@lingui/react/macro";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface ModalCustomerPlainCodeFormProps {
-  customer: CustomerDataFragment;
-  onDone?: (customer: CustomerDataFragment) => any;
+  customer: CustomerFragment;
+  onDone?: (customer: CustomerFragment) => any;
 }
 
 export const ModalCustomerPlainCodeForm: FC<ModalCustomerPlainCodeFormProps> = (props) => {

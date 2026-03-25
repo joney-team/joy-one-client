@@ -1,5 +1,5 @@
 import type { TagEntity } from "@/modules/tags/tags-types";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
 
@@ -27,7 +27,7 @@ export enum TaskPriority {
 export interface TaskTimeTracking {
   id: string;
   userId: string;
-  user: WorkspaceMemberDataFragment;
+  user: WorkspaceMemberFragment;
   startAt: number;
   endAt?: number;
   note?: string;

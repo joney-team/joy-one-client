@@ -2,7 +2,7 @@
 
 import { Card, Portal, Text } from "@mantine/core";
 import { FC, Fragment, ReactNode, RefObject, useEffect, useRef, useState } from "react";
-import { TaskDataFragment } from "../../../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../../../graphql/fragmentTask.graphql";
 
 import { UpdateTaskContext, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import { type TasksQueryVariables } from "../../../../graphql/queryTasks.graphql";
@@ -92,7 +92,7 @@ export const GanttTaskDraggable: FC<{
       dropTargetForElements({
         element: droppableTopSiblingRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask || !isAllowTopDroppable) return false;
 
           return (
@@ -109,7 +109,7 @@ export const GanttTaskDraggable: FC<{
           droppableIndicatorTopRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -130,7 +130,7 @@ export const GanttTaskDraggable: FC<{
       dropTargetForElements({
         element: droppableBottomSiblingRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return false;
 
           if (isLastChild && !sourceTask.parentId && sourceTask._id !== task.parentId) {
@@ -151,7 +151,7 @@ export const GanttTaskDraggable: FC<{
           droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -184,7 +184,7 @@ export const GanttTaskDraggable: FC<{
       dropTargetForElements({
         element: droppableBottomChildrenRef.current,
         canDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return false;
 
           return (
@@ -200,7 +200,7 @@ export const GanttTaskDraggable: FC<{
           droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
         },
         onDrop({ source }) {
-          const sourceTask = source.data.task as TaskDataFragment;
+          const sourceTask = source.data.task as TaskFragment;
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
@@ -238,7 +238,7 @@ export const GanttTaskDraggable: FC<{
           droppableIndicatorBottomRef.current?.style.setProperty("display", "none");
           droppableIndicatorBottomIndentRef.current?.style.setProperty("display", "none");
         },
-      })
+      }),
     );
   }, [task, nextTask, nextParentTask, groupVariables, subTasksGroupVariables, gantt.isGrabbing]);
 

@@ -3,12 +3,12 @@
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
 import { ApolloClientType } from "@/modules/apollo/apollo-client";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { loanPackageTypes } from "@/modules/loans/loans-constants";
 import { LoanReceiptData } from "@/modules/loans/loans-types";
 import { isPartialPayment } from "@/modules/receipts/utils/is-partial-payment";
-import { WorkspaceMemberDataFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
@@ -35,8 +35,8 @@ interface CreditReportItem {
   time: number;
   type: LoanPackageType;
   loan: LoanDataFragment;
-  cashier?: WorkspaceMemberDataFragment;
-  customer?: CustomerDataFragment;
+  cashier?: WorkspaceMemberFragment;
+  customer?: CustomerFragment;
   receipt: ReceiptDataFragment;
   fee: {
     total: number;
@@ -90,14 +90,14 @@ const chunkingSize = 300;
 
 const exportReport = async (
   receipts: ReceiptDataFragment[],
-  client: ApolloClientType
+  client: ApolloClientType,
 ): Promise<CreditReport> => {
   const reports: CreditReportItem[] = [];
-  const customers: CustomerDataFragment[] = [];
+  const customers: CustomerFragment[] = [];
   const loans: LoanDataFragment[] = [];
 
   const loanCodes = [...new Set([...receipts.map((v) => v.relatedLoanCode)])].filter(
-    (v) => !!v
+    (v) => !!v,
   ) as string[];
 
   for (const loanCode of loanCodes) {
@@ -118,7 +118,7 @@ const exportReport = async (
 
   const customerIds = [
     ...new Set(
-      [...(receipts.map((v) => v.relatedCustomerId).filter(Boolean) || [])].filter(Boolean)
+      [...(receipts.map((v) => v.relatedCustomerId).filter(Boolean) || [])].filter(Boolean),
     ),
   ].filter(Boolean) as string[];
 
@@ -167,7 +167,7 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        }
+        },
       );
 
       const fee = Object.values(LoanPackageType).reduce(
@@ -182,7 +182,7 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        }
+        },
       );
 
       const expense = Object.values(LoanPackageType).reduce(
@@ -197,7 +197,7 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        }
+        },
       );
 
       const report: CreditReportItem = {
@@ -240,7 +240,7 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        } as { [key in LoanPackageType]: number }
+        } as { [key in LoanPackageType]: number },
       ),
     },
     capital: {
@@ -254,7 +254,7 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        } as { [key in LoanPackageType]: number }
+        } as { [key in LoanPackageType]: number },
       ),
     },
     expense: {
@@ -268,12 +268,12 @@ const exportReport = async (
           FIXED_CAPITAL: 0,
           UNFIXED_CAPITAL: 0,
           INSTALLMENT: 0,
-        } as { [key in LoanPackageType]: number }
+        } as { [key in LoanPackageType]: number },
       ),
     },
     advancePayment: reports.reduce(
       (acc, item) => acc + (item.isAvancedPayment ? item.receipt.amount : 0),
-      0
+      0,
     ),
     amount: reports.reduce((acc, item) => acc + item.total, 0),
   };
@@ -340,7 +340,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             receipts = [
               ...receipts,
               ...(result.data?.list.results ?? []).filter((r) =>
-                receipts.every((e) => e.id !== r.id)
+                receipts.every((e) => e.id !== r.id),
               ),
             ];
 
@@ -352,7 +352,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
           const report = await exportReport(receipts, client);
 
           const userMemberInfos = await getWorkspaceMemberByIds(
-            [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(Boolean)
+            [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(Boolean),
           );
 
           const borderColor = "#dee2e6";
@@ -438,8 +438,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                   receipt.amount > 0
                     ? parsedPrimaryColor.value
                     : receipt.amount < 0
-                    ? parsedRedColor.value
-                    : undefined,
+                      ? parsedRedColor.value
+                      : undefined,
               },
             ];
           });
@@ -553,8 +553,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                   _total > 0
                     ? parsedPrimaryColor.value
                     : _total < 0
-                    ? parsedRedColor.value
-                    : parsedPrimaryColor.value,
+                      ? parsedRedColor.value
+                      : parsedPrimaryColor.value,
               };
             }),
             ...packageTypes.map((type) => {
@@ -569,8 +569,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                   _total > 0
                     ? parsedPrimaryColor.value
                     : _total < 0
-                    ? parsedRedColor.value
-                    : parsedPrimaryColor.value,
+                      ? parsedRedColor.value
+                      : parsedPrimaryColor.value,
               };
             }),
             ...packageTypes.map((type) => {
@@ -585,8 +585,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                   _total > 0
                     ? parsedPrimaryColor.value
                     : _total < 0
-                    ? parsedRedColor.value
-                    : parsedPrimaryColor.value,
+                      ? parsedRedColor.value
+                      : parsedPrimaryColor.value,
               };
             }),
             {
@@ -598,8 +598,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                 report.total.advancePayment > 0
                   ? parsedPrimaryColor.value
                   : report.total.advancePayment < 0
-                  ? parsedRedColor.value
-                  : parsedPrimaryColor.value,
+                    ? parsedRedColor.value
+                    : parsedPrimaryColor.value,
             },
             {
               ...headStyle,
@@ -610,8 +610,8 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                 report.total.amount > 0
                   ? parsedPrimaryColor.value
                   : report.total.amount < 0
-                  ? parsedRedColor.value
-                  : parsedPrimaryColor.value,
+                    ? parsedRedColor.value
+                    : parsedPrimaryColor.value,
             },
           ];
 
@@ -641,7 +641,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             }).replace(/\//g, "-")} ${t`To`} ${DateTime.format(endAt, {
               locale: getClientLocale(),
               dateStyle: "short",
-            }).replace(/\//g, "-")}`
+            }).replace(/\//g, "-")}`,
           );
           const blob = new Blob([buffer], {
             type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

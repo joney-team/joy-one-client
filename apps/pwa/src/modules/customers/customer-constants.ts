@@ -2,7 +2,7 @@ import { Gender } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
-import { CustomerDataFragment } from "./graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "./graphql/fragmentCustomer.graphql";
 
 export const customerGenders: {
   [key in Gender]: {
@@ -16,7 +16,7 @@ export const customerGenders: {
   [Gender.Other]: { color: "orange", icon: IconGenderBigender, label: defineMessage`Other` },
 };
 
-export function normalizeCustomerInput(customer: CustomerDataFragment): CustomerInput {
+export function normalizeCustomerInput(customer: CustomerFragment): CustomerInput {
   return {
     name: customer.name,
     phone: customer.phone,

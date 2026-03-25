@@ -3,16 +3,16 @@
 import { useApolloClient } from "@apollo/client/react";
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect, useMemo, useRef } from "react";
-import { WorkspaceMemberDataFragment } from "./graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 import QUERY_WORKSPACE_MEMBERS_BY_IDS from "./graphql/queryWorkspaceMembersByIds.graphql";
 
 export const useWorkspaceMembers = (
-  userIds?: string[]
-): [WorkspaceMemberDataFragment[], boolean, (user: WorkspaceMemberDataFragment) => void] => {
+  userIds?: string[],
+): [WorkspaceMemberFragment[], boolean, (user: WorkspaceMemberFragment) => void] => {
   const client = useApolloClient();
 
   const _userIds = userIds || [];
-  const workspaceMembers = useRef<WorkspaceMemberDataFragment[]>([]);
+  const workspaceMembers = useRef<WorkspaceMemberFragment[]>([]);
   const isInitialized = useRef(false);
   const forceUpdate = useForceUpdate();
 
@@ -20,11 +20,11 @@ export const useWorkspaceMembers = (
     () => [
       ...new Set(
         _userIds.filter(
-          (id) => !workspaceMembers.current.find((assignee) => assignee.userId === id)
-        )
+          (id) => !workspaceMembers.current.find((assignee) => assignee.userId === id),
+        ),
       ),
     ],
-    [JSON.stringify(_userIds)]
+    [JSON.stringify(_userIds)],
   );
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export const useWorkspaceMembers = (
   return [
     workspaceMembers.current,
     isInitialized.current,
-    (user: WorkspaceMemberDataFragment) => {
+    (user: WorkspaceMemberFragment) => {
       workspaceMembers.current = [
         ...workspaceMembers.current.filter((assignee) => assignee.userId !== user.userId),
         user,

@@ -6,7 +6,7 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { ReceiptType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanDataFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
@@ -30,7 +30,7 @@ interface ReceiptFormValues {
   type: ReceiptType;
   note?: string;
   data?: any;
-  relatedCustomer?: Pick<CustomerDataFragment, "_id" | "name" | "avatar" | "phone"> | undefined;
+  relatedCustomer?: Pick<CustomerFragment, "_id" | "name" | "avatar" | "phone"> | undefined;
   relatedLoan?: LoanDataFragment | undefined;
   expireAt?: number | null;
 }
@@ -38,7 +38,7 @@ interface ReceiptFormValues {
 interface ModalReceiptFormProps {
   type?: ReceiptType;
   data?: any;
-  relatedCustomer?: Pick<CustomerDataFragment, "_id" | "name" | "avatar" | "phone">;
+  relatedCustomer?: Pick<CustomerFragment, "_id" | "name" | "avatar" | "phone">;
   relatedLoan?: LoanDataFragment;
   onDone?: (receipt: ReceiptDataFragment) => Promise<any> | any;
 }
@@ -95,8 +95,8 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
           receiptFiles.map((file) =>
             uploadFile(file, {
               refs: [`${AppEntity.RECEIPTS}:${receipt.data?.createReceipt.id}`],
-            })
-          )
+            }),
+          ),
         );
 
         await props.onDone?.(receipt.data?.createReceipt);

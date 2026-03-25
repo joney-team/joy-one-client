@@ -6,7 +6,7 @@ import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { TaskStatusIcon } from "../task-status-icon";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import styles from "./task-menu.module.css";
 
@@ -19,7 +19,7 @@ export const TaskMenuStatus: TaskMenuComponent = ({
   const { statuses } = useTaskStatuses({
     status: task.status ?? DefaultTaskStatusId.TODO,
     statuses: task.statuses ?? [],
-  } as Pick<TaskDataFragment, "status" | "statuses">);
+  } as Pick<TaskFragment, "status" | "statuses">);
 
   return (
     <Stack gap={3} py={4}>

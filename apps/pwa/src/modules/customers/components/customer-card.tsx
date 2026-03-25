@@ -13,11 +13,11 @@ import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { customerGenders } from "../customer-constants";
-import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
 interface CustomerCardProps extends CardProps {
   customer: Pick<
-    CustomerDataFragment,
+    CustomerFragment,
     | "_id"
     | "code"
     | "plainCode"

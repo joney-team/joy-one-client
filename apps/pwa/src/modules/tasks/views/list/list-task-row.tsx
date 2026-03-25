@@ -49,7 +49,7 @@ import { useTaskMenu } from "../../components/task-menu/task-menu";
 import { TaskMenuAction } from "../../components/task-menu/task-menu-types";
 import { TaskRowDraggable } from "../../components/task-row-draggable/task-row-draggable";
 import { TaskSelectionBox } from "../../components/task-selections/task-selection-box";
-import type { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import type { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
@@ -64,22 +64,22 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const ListTaskRow: FC<
   {
-    task: TaskDataFragment;
-    prevTask: TaskDataFragment | null;
-    nextTask: TaskDataFragment | null;
-    nextParentTask: TaskDataFragment | null;
+    task: TaskFragment;
+    prevTask: TaskFragment | null;
+    nextTask: TaskFragment | null;
+    nextParentTask: TaskFragment | null;
     allowEditName?: boolean;
     lastRow?: boolean;
     groupVariables: TasksQueryVariables | null;
     isMarkAsChild?: boolean;
     hideSelection?: boolean;
     droppableOptions?: {
-      inherits?: (keyof TaskDataFragment)[];
+      inherits?: (keyof TaskFragment)[];
     };
   } & ListTaskRowHeadProps
 > = ({
@@ -451,7 +451,7 @@ export const ListTaskRow: FC<
                                 task.status !== DefaultTaskStatusId.CLOSED
                                 ? "red"
                                 : "primary.3"
-                              : "gray.4"
+                              : "gray.4",
                           )}
                         />
                         {task.dueDate && (

@@ -1,6 +1,6 @@
 import { CustomField } from "./modules/custom-fields/custom-field-types";
 import { WorkspaceBranchDataFragment } from "./modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { WorkspaceMemberDataFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
 export interface RelatedEntity {
   entity: AppEntity;
@@ -13,10 +13,10 @@ export interface BaseEntity {
   workspaceId?: string;
   lastInteractionAt?: number;
   isArchived?: boolean;
-  createdByUser?: WorkspaceMemberDataFragment;
+  createdByUser?: WorkspaceMemberFragment;
   createdByUserId?: string;
   assigneeUserIds?: string[];
-  assigneeUsers?: WorkspaceMemberDataFragment[];
+  assigneeUsers?: WorkspaceMemberFragment[];
   workspaceBranchId?: string;
   workspaceBranch?: Pick<WorkspaceBranchDataFragment, "_id" | "name" | "hotline">;
   relatedEntities?: RelatedEntity[];

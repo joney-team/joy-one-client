@@ -3,10 +3,10 @@
 import { Trans } from "@lingui/react/macro";
 import { Group, Text } from "@mantine/core";
 import { FC } from "react";
-import { TaskDataFragment } from "../../graphql/fragmentTask.graphql";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 
 export interface ListTaskRowHeadProps {
-  hidden?: (keyof TaskDataFragment)[];
+  hidden?: (keyof TaskFragment)[];
 }
 
 export const ListTaskRowHead: FC<ListTaskRowHeadProps> = ({ hidden = [] }) => {

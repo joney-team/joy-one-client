@@ -1,5 +1,5 @@
 import { ProductEntity } from "../products/products-types";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { OrderEntity } from "./order-entity";
 
 export enum OrderType {
@@ -22,7 +22,7 @@ export interface OrderItem extends OrderDtoItem {
   price: number;
   revenue: number;
   product: ProductEntity;
-  assigneeUsers: WorkspaceMemberDataFragment[];
+  assigneeUsers: WorkspaceMemberFragment[];
 }
 
 export enum OrderDiscountType {

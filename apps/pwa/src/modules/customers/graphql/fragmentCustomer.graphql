@@ -2,7 +2,7 @@
 #import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
 #import "../../workspace-branches/graphql/fragmentWorkspaceBranch.graphql"
 
-fragment CustomerData on Customer {
+fragment Customer on Customer {
   _id
   refs
   createdAt
@@ -47,7 +47,7 @@ fragment CustomerData on Customer {
     type
   }
   assigneeUsers {
-    ...WorkspaceMemberData
+    ...WorkspaceMember
   }
   socialFacebookUrl
   presenterCustomerId

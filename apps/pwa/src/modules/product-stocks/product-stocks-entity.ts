@@ -1,6 +1,6 @@
 import { BasePostgresEntity } from "@/types";
 import { ProductEntity } from "../products/products-types";
-import { WorkspaceMemberDataFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { ProductStockRecordType } from "./product-stocks-types";
 
 export interface ProductStockEntity extends BasePostgresEntity {
@@ -25,7 +25,7 @@ export interface ProductStockRecordEntity extends BasePostgresEntity {
   productStock: ProductStockEntity;
   stockCode?: string;
   product: Pick<ProductEntity, "_id" | "name" | "image" | "displayName">;
-  createdByUser: WorkspaceMemberDataFragment;
+  createdByUser: WorkspaceMemberFragment;
 
   relatedOrderId?: string;
   relatedProductId?: string;

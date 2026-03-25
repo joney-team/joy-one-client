@@ -7,7 +7,7 @@ import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
 import { CustomerKycDataFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
-import { CustomerDataFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -32,7 +32,7 @@ import { FC, Fragment } from "react";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanCustomerKycProps {
-  customer: CustomerDataFragment;
+  customer: CustomerFragment;
   kyc: CustomerKycDataFragment;
 }
 
