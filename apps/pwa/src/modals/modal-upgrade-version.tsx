@@ -10,7 +10,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { FC, useEffect } from "react";
 
 export const ModalUpgradeVersion: FC = () => {
-  const [opened, { open, close }] = useDisclosure(false);
+  const [opened, { open, close }] = useDisclosure(true);
   const app = useApp();
 
   const detectChangeVersion = async (currentVersion: string) => {
@@ -50,7 +50,7 @@ export const ModalUpgradeVersion: FC = () => {
         </Text>
 
         <Group justify="center">
-          <Button color="joyone" onClick={() => window.location.reload()}>
+          <Button onClick={() => window.location.reload()}>
             <Trans>Update now</Trans>
           </Button>
         </Group>
