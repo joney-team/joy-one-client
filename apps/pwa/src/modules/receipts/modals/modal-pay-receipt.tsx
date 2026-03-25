@@ -80,7 +80,7 @@ const ModalReceiptDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export interface ModalPayReceiptArgs {
@@ -113,6 +113,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     variables: {
       id: props.receipt.id,
     },
+    fetchPolicy: "cache-and-network",
   });
 
   const receipt = receiptData?.receipt;
@@ -122,19 +123,17 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const [payReceipt] = useMutation(MUTATION_PAY_RECEIPT);
 
   const [paymentMethod, setPaymentMethod] = useState(
-    (workspaceSetting?.receiptPaymentMethodDefault ??
-      ReceiptPaymentMethod.Cash) as ReceiptPaymentMethod
+    workspaceSetting?.receiptPaymentMethodDefault ?? ReceiptPaymentMethod.Cash,
   );
-  const paymentMethods = (
-    workspaceSetting?.receiptPaymentMethodDefault
-      ? [
-          workspaceSetting?.receiptPaymentMethodDefault,
-          ...Object.values(ReceiptPaymentMethod).filter(
-            (v) => v !== workspaceSetting?.receiptPaymentMethodDefault
-          ),
-        ]
-      : Object.values(ReceiptPaymentMethod)
-  ) as ReceiptPaymentMethod[];
+
+  const paymentMethods: ReceiptPaymentMethod[] = workspaceSetting?.receiptPaymentMethodDefault
+    ? [
+        workspaceSetting?.receiptPaymentMethodDefault,
+        ...Object.values(ReceiptPaymentMethod).filter(
+          (v) => v !== workspaceSetting?.receiptPaymentMethodDefault,
+        ),
+      ]
+    : Object.values(ReceiptPaymentMethod);
 
   const getDefaultTransactionDesc = async (receipt: ReceiptDataFragment) => {
     if (receipt.type === ReceiptType.Income && receipt.relatedLoanId && receipt.relatedCustomer) {
@@ -154,6 +153,13 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   };
 
   const [transactionDesc, setTransactionDesc] = useState<string>("");
+
+  useEffect(() => {
+    if (receiptData?.receipt && !transactionDesc) {
+      getDefaultTransactionDesc(receiptData.receipt).then((desc) => setTransactionDesc(desc));
+    }
+  }, [transactionDesc, receiptData]);
+
   const [giveAmount, setGiveAmount] = useState<number>();
   const [workspaceBranch, setWorkspaceBranch] = useState<Pick<
     WorkspaceBranchDataFragment,
@@ -193,10 +199,10 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
         {
           amount: totalAmount,
           description: transactionDesc,
-        }
+        },
       ),
     };
-  }, [workspaceBranchData, banks, transactionDesc]);
+  }, [workspaceBranchData, banks, transactionDesc, workspaceSetting, paymentMethod, totalAmount]);
 
   const onClose = async () => {
     if (!receipt) return;
@@ -268,7 +274,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   }, [bankInformation]);
 
   return (
-    <Stack gap={16}>
+    <Stack gap="md">
       {(function () {
         if (loadingReceipt) return <Skeleton h={200} />;
         if (!receipt) return null;
