@@ -29,6 +29,7 @@ import {
   Card,
   Center,
   Group,
+  noop,
   SimpleGrid,
   Skeleton,
   Stack,
@@ -255,7 +256,11 @@ export const LoanDetail: NextPage = () => {
       </Stack>
     );
 
-  if ((loanLoading && !loanData) || customerKycLoading || customerLoading)
+  if (
+    (loanLoading && !loanData) ||
+    (customerKycLoading && !customerKyc) ||
+    (customerLoading && !customer)
+  )
     return (
       <Stack p={16}>
         <Skeleton height={250} />
@@ -330,6 +335,7 @@ export const LoanDetail: NextPage = () => {
                             e.stopPropagation();
                             modalCustomer.open({
                               customer: customer,
+                              onDone: noop,
                             });
                           }}
                         >

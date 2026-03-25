@@ -30,6 +30,7 @@ import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-bra
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Gender } from "@/types";
 import { useMutation } from "@apollo/client/react";
+import { normalizeObject } from "@joy-one-client/utils/object";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { LocationForm } from "../../../components/location-form";
 import { Renderer } from "../../../components/renderer";
@@ -37,6 +38,7 @@ import { CustomerRelationshipContactInput } from "../customer-detail/customer-re
 import { CustomerDataFragment } from "../graphql/fragmentCustomer.graphql";
 import CREATE_CUSTOMER_MUTATION from "../graphql/mutationCreateCustomer.graphql";
 import UPDATE_CUSTOMER_MUTATION from "../graphql/mutationUpdateCustomer.graphql";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 
 export interface CustomerFormProps {
   onDone?: (customer: CustomerDataFragment) => void | Promise<void>;
@@ -82,7 +84,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   const [updateCustomer] = useMutation(UPDATE_CUSTOMER_MUTATION);
 
   const form = useForm<Partial<CustomerDataFragment>>({
-    initialValues: {
+    initialValues: normalizeObject({
       name: props.customer?.name || "",
       ...(props.customer
         ? {
@@ -91,7 +93,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
         : { assigneeUsers: [] }),
       vnLocation: props.customer?.vnLocation || null,
       vnSecondaryLocation: props.customer?.vnSecondaryLocation || null,
-    },
+    }),
     validate: {
       name: (value) => {
         if (!value) return t`Must be provided`;
@@ -100,7 +102,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
   });
 
   const onSubmit = form.onSubmit(async ({ _id, ...values }) => {
-    const payload: CustomerInput = {
+    const input: CustomerInput = removeTypeName({
       name: values.name || "",
       phone: values.phone,
       email: values.email,
@@ -122,20 +124,20 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
       createdAt: values.createdAt,
       plainCode: values.plainCode,
       socialFacebookUrl: values.socialFacebookUrl,
-    };
+    });
 
     const action = props.customer
       ? () =>
           updateCustomer({
             variables: {
               id: props.customer!._id,
-              input: payload,
+              input,
             },
           })
       : () =>
           createCustomer({
             variables: {
-              input: payload,
+              input,
             },
           });
 
@@ -150,14 +152,16 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
 
   useEffect(() => {
     form.reset();
-    form.setValues({
-      ...(props.customer || {
-        assigneeUsers: [workspace.member],
+    form.setValues(
+      normalizeObject({
+        ...(props.customer || {
+          assigneeUsers: [workspace.member],
+        }),
+        name: props.customer?.name || "",
+        vnLocation: props.customer?.vnLocation || null,
+        secondaryLocation: props.customer?.secondaryLocation || null,
       }),
-      name: props.customer?.name || "",
-      vnLocation: props.customer?.vnLocation || null,
-      secondaryLocation: props.customer?.secondaryLocation || null,
-    });
+    );
   }, [props.customer]);
 
   return (
