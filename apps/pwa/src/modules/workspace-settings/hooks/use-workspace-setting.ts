@@ -2,12 +2,10 @@
 
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 
-import UPDATE_WORKSPACE_SETTING_MUTATION, {
-  UpdateWorkspaceSettingMutationVariables,
-} from "../graphql/mutationUpdateWorkspaceSetting.graphql";
+import UPDATE_WORKSPACE_SETTING_MUTATION from "../graphql/mutationUpdateWorkspaceSetting.graphql";
 import QUERY_WORKSPACE_SETTING from "../graphql/queryWorkspaceSetting.graphql";
 
-import { WorkspaceView } from "@/graphql/types.graphql";
+import { UpdateWorkspaceSettingInput, WorkspaceView } from "@/graphql/types.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Currency } from "@joy-one-client/utils/currency";
 import { normalizeObject } from "@joy-one-client/utils/object";
@@ -33,11 +31,6 @@ export const useWorkspaceSetting = () => {
     const prevWorkspaceSetting = { ...data.workspaceSetting };
 
     try {
-      const variables: UpdateWorkspaceSettingMutationVariables = removeTypeName({
-        ...data.workspaceSetting,
-        ...partial,
-      });
-
       client.cache.updateQuery(
         {
           query: QUERY_WORKSPACE_SETTING,
@@ -54,7 +47,37 @@ export const useWorkspaceSetting = () => {
         },
       );
 
-      const result = await handleUpdate({ variables });
+      const values: UpdateWorkspaceSettingInput = removeTypeName({
+        ...data.workspaceSetting,
+        ...partial,
+      });
+
+      const result = await handleUpdate({
+        variables: {
+          input: {
+            allowDuplicateBookings: values.allowDuplicateBookings,
+            currencyCode: values.currencyCode,
+            view: values.view,
+            allowPayTicketMultipleTimes: values.allowPayTicketMultipleTimes,
+            allowTip: values.allowTip,
+            bankAccount: values.bankAccount,
+            bookingsAutoRemindCustomerBookingBeforeDays:
+              values.bookingsAutoRemindCustomerBookingBeforeDays,
+            bookingsAutoRemindCustomerBookingTime: values.bookingsAutoRemindCustomerBookingTime,
+            isAuthSessionRestricted: values.isAuthSessionRestricted,
+            loanSettings: values.loanSettings,
+            mailer: values.mailer,
+            memberPermissions: values.memberPermissions,
+            privacyPolicy: values.privacyPolicy,
+            receiptImagesRequired: values.receiptImagesRequired,
+            receiptPaymentMethodDefault: values.receiptPaymentMethodDefault,
+            schedule: values.schedule,
+            searchSettings: values.searchSettings,
+            termsOfService: values.termsOfService,
+            zaloOaGmfGroupSettings: values.zaloOaGmfGroupSettings,
+          },
+        },
+      });
 
       if (result.data?.updateWorkspaceSetting) {
         client.cache.updateQuery(

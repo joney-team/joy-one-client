@@ -1,6 +1,7 @@
 "use client";
 
 import { nonLoading } from "@/utils/non-loading";
+import { type MantineSpacing } from "@mantine/core";
 import dynamic, { DynamicOptionsLoadingProps } from "next/dynamic";
 import type { FC, JSX } from "react";
 
@@ -15,15 +16,15 @@ const Stack = dynamic(() => import("@mantine/core").then((mod) => mod.Stack), {
 });
 
 interface LazyLoadProps {
-  p?: number;
+  p?: MantineSpacing;
 }
 
 export const PageLazyLoad: FC = () => {
-  return <LazyLoad p={16} />;
+  return <LazyLoad p="md" />;
 };
 
 export const PageLoading: (loadingProps: DynamicOptionsLoadingProps) => JSX.Element = () => {
-  return <LazyLoad p={16} />;
+  return <LazyLoad p="md" />;
 };
 
 export const LazyLoad: FC<LazyLoadProps> = ({ p }) => {

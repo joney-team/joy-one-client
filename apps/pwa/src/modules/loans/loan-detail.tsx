@@ -251,7 +251,7 @@ export const LoanDetail: NextPage = () => {
 
   if (loanError)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Errored error={loanError} centered />
       </Stack>
     );
@@ -262,14 +262,14 @@ export const LoanDetail: NextPage = () => {
     (customerLoading && !customer)
   )
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={250} />
       </Stack>
     );
 
   if (!loan || !customer || customerError || customerKycError)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Errored error={loanError ?? customerError ?? customerKycError} centered />
       </Stack>
     );

@@ -328,21 +328,6 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
-export type CheckInLocation = {
-  __typename: 'CheckInLocation';
-  coordinates: Coordinates;
-  disabled: Maybe<Scalars['Boolean']['output']>;
-  name: Scalars['String']['output'];
-  radius: Scalars['Float']['output'];
-};
-
-export type CheckInLocationInput = {
-  coordinates: CoordinatesInput;
-  disabled?: InputMaybe<Scalars['Boolean']['input']>;
-  name: Scalars['String']['input'];
-  radius: Scalars['Float']['input'];
-};
-
 export type ConfigTaskStatuses = {
   __typename: 'ConfigTaskStatuses';
   isInherited: Scalars['Boolean']['output'];
@@ -761,9 +746,56 @@ export type Device = {
   notificationToken: Maybe<Scalars['String']['output']>;
   refs: Maybe<Array<Scalars['String']['output']>>;
   source: Maybe<EntitySource>;
+  ua: Maybe<DeviceUserAgent>;
   updatedAt: Maybe<Scalars['Float']['output']>;
   userAgent: Scalars['String']['output'];
   userId: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceBrowser = {
+  __typename: 'DeviceBrowser';
+  name: Maybe<Scalars['String']['output']>;
+  version: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceCpu = {
+  __typename: 'DeviceCPU';
+  architecture: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceEngine = {
+  __typename: 'DeviceEngine';
+  name: Maybe<Scalars['String']['output']>;
+  version: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceIos = {
+  __typename: 'DeviceIOS';
+  name: Maybe<Scalars['String']['output']>;
+  version: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceInformation = {
+  __typename: 'DeviceInformation';
+  model: Maybe<Scalars['String']['output']>;
+  type: Maybe<Scalars['String']['output']>;
+  vendor: Maybe<Scalars['String']['output']>;
+};
+
+export type DeviceUserAgent = {
+  __typename: 'DeviceUserAgent';
+  browser: DeviceBrowser;
+  cpu: DeviceCpu;
+  device: DeviceInformation;
+  engine: DeviceEngine;
+  os: DeviceIos;
+  ua: Scalars['String']['output'];
+};
+
+export type DevicesPaginated = {
+  __typename: 'DevicesPaginated';
+  results: Array<Device>;
+  total: Scalars['Float']['output'];
 };
 
 export type DisburseReceiptInput = {
@@ -905,11 +937,6 @@ export const EventType = {
   EInvoiceRemoved: 'E_INVOICE_REMOVED',
   FileNew: 'FILE_NEW',
   FileRemoved: 'FILE_REMOVED',
-  HrmTimekeepingManualApproval: 'HRM_TIMEKEEPING_MANUAL_APPROVAL',
-  HrmTimekeepingMemberCheckIn: 'HRM_TIMEKEEPING_MEMBER_CHECK_IN',
-  HrmTimekeepingMemberCheckOut: 'HRM_TIMEKEEPING_MEMBER_CHECK_OUT',
-  HrmTimekeepingRejected: 'HRM_TIMEKEEPING_REJECTED',
-  HrmTimekeepingRemoved: 'HRM_TIMEKEEPING_REMOVED',
   LoansApproved: 'LOANS_APPROVED',
   LoansApprovedReverted: 'LOANS_APPROVED_REVERTED',
   LoansArchived: 'LOANS_ARCHIVED',
@@ -1126,21 +1153,6 @@ export const GetTaskStatusesMode = {
 } as const;
 
 export type GetTaskStatusesMode = typeof GetTaskStatusesMode[keyof typeof GetTaskStatusesMode];
-export type HrmTimekeepingsRules = {
-  __typename: 'HrmTimekeepingsRules';
-  acceptLatenessUpToMins: Maybe<Scalars['Float']['output']>;
-  acceptLocations: Maybe<Array<CheckInLocation>>;
-  acceptOverTimeAtLeastMins: Maybe<Scalars['Float']['output']>;
-  requirePhoto: Maybe<Scalars['Boolean']['output']>;
-};
-
-export type HrmTimekeepingsRulesInput = {
-  acceptLatenessUpToMins?: InputMaybe<Scalars['Float']['input']>;
-  acceptLocations?: InputMaybe<Array<CheckInLocationInput>>;
-  acceptOverTimeAtLeastMins?: InputMaybe<Scalars['Float']['input']>;
-  requirePhoto?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
 export type LateInterestRate = {
   __typename: 'LateInterestRate';
   lateDays: Scalars['Float']['output'];
@@ -1438,6 +1450,7 @@ export type Mutation = {
   revertLiquidationLoan: Loan;
   revertPaymentReceipt: Receipt;
   setDeviceLocale: Device;
+  setDeviceNotificationToken: Device;
   setPluginExternalStorage: PluginExternalStorage;
   signInWithEmailPassword: AuthTokenResult;
   signInWithFirebase: AuthTokenResult;
@@ -1854,6 +1867,11 @@ export type MutationSetDeviceLocaleArgs = {
 };
 
 
+export type MutationSetDeviceNotificationTokenArgs = {
+  input: SetDeviceNotificationTokenInput;
+};
+
+
 export type MutationSetPluginExternalStorageArgs = {
   accessKeyId?: InputMaybe<Scalars['String']['input']>;
   bucketName?: InputMaybe<Scalars['String']['input']>;
@@ -2019,26 +2037,7 @@ export type MutationUpdateWorkspaceRoleArgs = {
 
 
 export type MutationUpdateWorkspaceSettingArgs = {
-  allowDuplicateBookings?: InputMaybe<Scalars['Boolean']['input']>;
-  allowPayTicketMultipleTimes?: InputMaybe<Scalars['Boolean']['input']>;
-  allowTip?: InputMaybe<Scalars['Boolean']['input']>;
-  bankAccount?: InputMaybe<PluginBankAccountInput>;
-  bookingsAutoRemindCustomerBookingBeforeDays?: InputMaybe<Scalars['Float']['input']>;
-  bookingsAutoRemindCustomerBookingTime?: InputMaybe<Scalars['String']['input']>;
-  currencyCode?: InputMaybe<Scalars['String']['input']>;
-  hrmTimeKeepingsRules?: InputMaybe<HrmTimekeepingsRulesInput>;
-  isAuthSessionRestricted?: InputMaybe<Scalars['Boolean']['input']>;
-  loanSettings?: InputMaybe<LoanSettingsInput>;
-  mailer?: InputMaybe<PluginMailerAccountInput>;
-  memberPermissions?: InputMaybe<Array<Scalars['String']['input']>>;
-  privacyPolicy?: InputMaybe<Scalars['String']['input']>;
-  receiptImagesRequired?: InputMaybe<Scalars['Boolean']['input']>;
-  receiptPaymentMethodDefault?: InputMaybe<ReceiptPaymentMethod>;
-  schedule?: InputMaybe<WorkspaceScheduleInput>;
-  searchSettings?: InputMaybe<WorkspaceSearchSettingsInput>;
-  termsOfService?: InputMaybe<Scalars['String']['input']>;
-  view?: InputMaybe<WorkspaceViewInput>;
-  zaloOaGmfGroupSettings?: InputMaybe<Scalars['JSONObject']['input']>;
+  input: UpdateWorkspaceSettingInput;
 };
 
 
@@ -2551,13 +2550,14 @@ export type Query = {
   customerKycs: CustomerKycsPaginated;
   customers: CustomersPaginated;
   customersByIds: Array<Customer>;
+  devices: DevicesPaginated;
   eInvoices: PluginEInvoicesPaginated;
   event: Event;
   events: EventsPaginated;
   files: FilesPaginated;
   getCategoriesByIds: Array<Category>;
   getCategoryBySlug: Category;
-  getDeviceByIdentifyId: Device;
+  getDeviceByIdentifyId: Maybe<Device>;
   getFileInfo: File;
   getProductByIds: Array<Product>;
   isCustomerPhoneExisted: Scalars['Boolean']['output'];
@@ -2582,6 +2582,7 @@ export type Query = {
   receipt: Receipt;
   receiptByCode: Receipt;
   receipts: ReceiptsPaginated;
+  registerDevice: Array<Device>;
   search: Array<SearchResult>;
   siblingTasks: SiblingTasks;
   tagBySlug: Tag;
@@ -2742,6 +2743,14 @@ export type QueryCustomersArgs = {
 
 export type QueryCustomersByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryDevicesArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
 };
 
 
@@ -2946,6 +2955,11 @@ export type QueryReceiptsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryRegisterDeviceArgs = {
+  input: RegisterDeviceInput;
 };
 
 
@@ -3356,6 +3370,10 @@ export type SetDeviceLocaleInput = {
   locale: AppLocale;
 };
 
+export type SetDeviceNotificationTokenInput = {
+  notificationToken: Scalars['String']['input'];
+};
+
 export type SiblingTasks = {
   __typename: 'SiblingTasks';
   next: Maybe<Task>;
@@ -3624,6 +3642,28 @@ export type UpdateUserProfileInput = {
   settings?: InputMaybe<UserSettingsInput>;
 };
 
+export type UpdateWorkspaceSettingInput = {
+  allowDuplicateBookings?: InputMaybe<Scalars['Boolean']['input']>;
+  allowPayTicketMultipleTimes?: InputMaybe<Scalars['Boolean']['input']>;
+  allowTip?: InputMaybe<Scalars['Boolean']['input']>;
+  bankAccount?: InputMaybe<PluginBankAccountInput>;
+  bookingsAutoRemindCustomerBookingBeforeDays?: InputMaybe<Scalars['Float']['input']>;
+  bookingsAutoRemindCustomerBookingTime?: InputMaybe<Scalars['String']['input']>;
+  currencyCode?: InputMaybe<Scalars['String']['input']>;
+  isAuthSessionRestricted?: InputMaybe<Scalars['Boolean']['input']>;
+  loanSettings?: InputMaybe<LoanSettingsInput>;
+  mailer?: InputMaybe<PluginMailerAccountInput>;
+  memberPermissions?: InputMaybe<Array<Scalars['String']['input']>>;
+  privacyPolicy?: InputMaybe<Scalars['String']['input']>;
+  receiptImagesRequired?: InputMaybe<Scalars['Boolean']['input']>;
+  receiptPaymentMethodDefault?: InputMaybe<ReceiptPaymentMethod>;
+  schedule?: InputMaybe<WorkspaceScheduleInput>;
+  searchSettings?: InputMaybe<WorkspaceSearchSettingsInput>;
+  termsOfService?: InputMaybe<Scalars['String']['input']>;
+  view?: InputMaybe<WorkspaceViewInput>;
+  zaloOaGmfGroupSettings?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
 export type UserAuthProvider = {
   __typename: 'UserAuthProvider';
   providerId: Scalars['String']['output'];
@@ -3879,7 +3919,6 @@ export type WorkspaceSetting = {
   createdAt: Maybe<Scalars['Float']['output']>;
   currencyCode: Maybe<Scalars['String']['output']>;
   customFieldValues: Maybe<Array<CustomFieldValue>>;
-  hrmTimeKeepingsRules: Maybe<HrmTimekeepingsRules>;
   isArchived: Maybe<Scalars['Boolean']['output']>;
   isAuthSessionRestricted: Maybe<Scalars['Boolean']['output']>;
   loanSettings: Maybe<LoanSettings>;

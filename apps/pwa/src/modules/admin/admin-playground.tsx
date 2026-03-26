@@ -16,7 +16,7 @@ import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
 import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useMemo, useRef, useState, type FC } from "react";
-import { apolloClient } from "../apollo/apollo-client";
+import { graphqlClient } from "../../graphql/graphql-client";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useLang } from "../lang/lang-context";
 import { useWorkspace } from "../workspaces/workspace-context";
@@ -28,7 +28,7 @@ const GraphQLPlayground: FC = () => {
     <Group>
       <Button
         onClick={() =>
-          apolloClient
+          graphqlClient
             .query({
               query: QUERY_APP_CONFIG,
             })
@@ -42,7 +42,7 @@ const GraphQLPlayground: FC = () => {
 
       <Button
         onClick={() =>
-          apolloClient
+          graphqlClient
             .query({
               query: QUERY_AUTH_USER,
               fetchPolicy: "network-only",
@@ -57,7 +57,7 @@ const GraphQLPlayground: FC = () => {
 
       <Button
         onClick={() =>
-          apolloClient.query({
+          graphqlClient.query({
             query: QUERY_TEST_ERROR_NOT_FOUND,
             fetchPolicy: "network-only",
           })

@@ -1,5 +1,4 @@
 fragment WorkspaceSetting on WorkspaceSetting {
-  _id
   schedule {
     timezone
     workingDays {
@@ -18,20 +17,6 @@ fragment WorkspaceSetting on WorkspaceSetting {
   mailer {
     user
     pass
-  }
-  hrmTimeKeepingsRules {
-    requirePhoto
-    acceptLatenessUpToMins
-    acceptOverTimeAtLeastMins
-    acceptLocations {
-      name
-      radius
-      coordinates {
-        lat
-        lng
-      }
-      disabled
-    }
   }
   bookingsAutoRemindCustomerBookingBeforeDays
   allowTip
@@ -91,5 +76,4 @@ fragment WorkspaceSetting on WorkspaceSetting {
   isAuthSessionRestricted
   zaloOaGmfGroupSettings
   allowPayTicketMultipleTimes
-  updatedAt
 }

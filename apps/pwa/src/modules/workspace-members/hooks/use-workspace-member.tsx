@@ -1,6 +1,6 @@
 "use client";
 
-import { useVariablesQuery } from "@/modules/apollo/use-query";
+import { useVariablesQuery } from "@/graphql/use-query";
 import QUERY_WORKSPACE_MEMBER from "../graphql/queryWorkspaceMember.graphql";
 
 export const useWorkspaceMember = (userId: string) => {

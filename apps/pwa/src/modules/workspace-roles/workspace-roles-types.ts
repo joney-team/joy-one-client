@@ -41,8 +41,6 @@ export enum WorkspacePermission {
 
   PARTNERS_WRITE = "PW",
 
-  HRM_TIMEKEEPINGS_CENSORSHIP = "HTC",
-
   HRM_SALARIES_MANAGER = "HSM",
 
   WORKSPACE_MEMBERS_VIEW = "WMV",

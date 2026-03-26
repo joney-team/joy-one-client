@@ -13,7 +13,7 @@ import { defaultMetadata } from "@/configs/metadata.config";
 import type { AppMetadata } from "@/types";
 
 import { isExtendedApp } from "@/service";
-import { ApolloProvider } from "@/modules/apollo/apollo-provider";
+import { GraphqlProvider } from "@/graphql/graphql-provider";
 
 export async function generateMetadata(): Promise<Metadata> {
   let metadata: AppMetadata = defaultMetadata;
@@ -80,9 +80,9 @@ export default async function RootLayout(props: Readonly<{ children: React.React
       </head>
 
       <body suppressHydrationWarning tabIndex={-1}>
-        <ApolloProvider>
+        <GraphqlProvider>
           <App metadata={metadata}>{props.children}</App>
-        </ApolloProvider>
+        </GraphqlProvider>
 
         <script
           async

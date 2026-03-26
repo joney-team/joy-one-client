@@ -61,3 +61,9 @@ export const serverSignUpWithEmailPassword = async (input: AuthSignUpWithEmailPa
 export const serverRefreshToken = async (input: AuthRefreshTokenInput) => {
   return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", input);
 };
+
+export const serverSignOutOtherDevices = async () => {
+  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-out-other-devices");
+  await saveServerTokens(result);
+  return result;
+};

@@ -1,0 +1,7 @@
+#import "./fragmentDevice.graphql"
+
+mutation SetDeviceNotificationToken($input: SetDeviceNotificationTokenInput!) {
+  setDeviceNotificationToken(input: $input) {
+    ...Device
+  }
+}

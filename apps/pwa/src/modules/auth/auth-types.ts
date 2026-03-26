@@ -1,5 +1,5 @@
 import { UpdateUserProfileInput } from "@/graphql/types.graphql";
-import { DeviceEntity } from "@/modules/devices/devices-types";
+import { DeviceFragment } from "../devices/graphql/fragmentDevice.graphql";
 import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
 
 export interface AuthSignInWithFirebaseDto {
@@ -29,7 +29,7 @@ export interface AuthRefreshTokenInput {
 
 export interface AuthContext {
   user: AuthUserFragment;
-  device: DeviceEntity;
+  device: DeviceFragment;
   isInitialized: boolean;
   signOut: () => void;
   signInWithGoogle: () => Promise<void>;

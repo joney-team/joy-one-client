@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
-import { ApolloClientType } from "@/modules/apollo/apollo-client";
+import { GraphqlClientType } from "@/graphql/graphql-client";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { loanPackageTypes } from "@/modules/loans/loans-constants";
@@ -90,7 +90,7 @@ const chunkingSize = 300;
 
 const exportReport = async (
   receipts: ReceiptFragment[],
-  client: ApolloClientType,
+  client: GraphqlClientType,
 ): Promise<CreditReport> => {
   const reports: CreditReportItem[] = [];
   const customers: CustomerFragment[] = [];

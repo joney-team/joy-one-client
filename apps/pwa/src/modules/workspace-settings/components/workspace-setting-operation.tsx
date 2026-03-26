@@ -73,7 +73,7 @@ export const WorkspaceOperationSettings: FC = () => {
   );
 
   return (
-    <Stack py={16}>
+    <Stack>
       <FormSession
         title={<Trans>Work schedule</Trans>}
         description={
@@ -86,7 +86,7 @@ export const WorkspaceOperationSettings: FC = () => {
               <Card withBorder shadow="none" key={day} p="xs">
                 <Stack gap={8}>
                   <Stack gap={0}>
-                    <Text fz={14} fw={600} tt="capitalize">
+                    <Text fz="sm" fw={600} tt="capitalize">
                       {renderWeekdayFromISO(+day, locale)}
                     </Text>
                   </Stack>

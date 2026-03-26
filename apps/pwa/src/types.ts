@@ -112,7 +112,6 @@ export enum AppEntity {
   POSTS = "PS",
   CATEGORIES = "CT",
   PROMOTIONS = "PR",
-  HRM_TIMEKEEPINGS = "HTK",
   ACTIVITIES = "AC",
 }
 

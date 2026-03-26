@@ -3,14 +3,14 @@
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";
-import { getUserDevices } from "@/modules/devices/devices-service";
+import QUERY_DEVICES from "@/modules/devices/graphql/queryDevices.graphql";
 import { useUserEventsListner } from "@/modules/events/event-service";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, SimpleGrid, Skeleton } from "@mantine/core";
 import { IconDevices, IconLogout, IconRefresh } from "@tabler/icons-react";
 import { Fragment } from "react";
@@ -19,29 +19,27 @@ import { UserDeviceCard } from "./user-device-card";
 export const UserDeviceList = () => {
   const auth = useAuth();
 
-  const devices = useList({
-    fetch: () =>
-      getUserDevices({
-        sortLastActiveAt: -1,
-      }),
+  const devices = useGraphqlList({
+    query: QUERY_DEVICES,
+    id: "d",
   });
 
   useUserEventsListner((e) => {
     if (["SIGN_OUT", "SIGN_IN"].includes(e.eventName)) {
-      devices.fetch(true, { isSilient: true });
+      devices.refetch();
     }
   });
 
   const onSignOutOtherDevices = async () => {
     await auth
       .signOutOtherDevices()
-      .then(() => devices.fetch(true))
+      .then(() => devices.refetch())
       .catch(onError);
   };
 
   return (
     <Fragment>
-      <SectionTitle name={t`Devices`} icon={IconDevices}>
+      <SectionTitle name={<Trans>Devices</Trans>} icon={IconDevices}>
         <Renderer visible={devices.count > 1}>
           <Group gap={8}>
             <Button
@@ -53,13 +51,13 @@ export const UserDeviceList = () => {
               leftIcon={IconLogout}
               onClick={onSignOutOtherDevices}
             >
-              {t`Sign out another device`}
+              <Trans>Sign out another device</Trans>
             </Button>
 
             <ActionIcon
               w={30}
               h={30}
-              onClick={() => devices.fetch(true, { isSilient: true })}
+              onClick={() => devices.refetch()}
               color="gray"
               variant="light"
             >

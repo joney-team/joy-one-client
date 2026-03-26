@@ -12,12 +12,7 @@ import {
 } from "@/graphql/types.graphql";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useRouter } from "@/hooks/use-router";
-import {
-  initializeDevice,
-  setDeviceLocale,
-  setDeviceNotificationToken,
-} from "@/modules/devices/devices-service";
-import { type DeviceEntity } from "@/modules/devices/devices-types";
+import { prepareDevice } from "@/modules/devices/devices-service";
 import {
   onReconnected,
   useEventsListener,
@@ -39,12 +34,16 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
 import { restClient } from "../apis/rest-client";
+import { DeviceFragment } from "../devices/graphql/fragmentDevice.graphql";
+import MUTATION_SET_DEVICE_LOCALE from "../devices/graphql/mutationSetDeviceLocale.graphql";
+import MUTATION_SET_DEVICE_NOTIFICATION_TOKEN from "../devices/graphql/mutationSetDeviceNotificationToken.graphql";
 import { reducePhotoSize } from "../files/file-service";
 import { Context } from "./auth-context";
 import {
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
+  serverSignOutOtherDevices,
   serverSignUpWithEmailPassword,
 } from "./auth-server";
 import {
@@ -72,8 +71,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [user, setUser] = useState<AuthUserFragment>();
-  const [device, setDevice] = useState<DeviceEntity>();
+  const [device, setDevice] = useState<DeviceFragment>();
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
+
+  const [setDeviceNotificationToken] = useMutation(MUTATION_SET_DEVICE_NOTIFICATION_TOKEN);
 
   const syncLocaleDeviceToUser = async (_user: AuthUserFragment) => {
     try {
@@ -130,7 +131,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
     try {
       // Device
-      const device = await initializeDevice();
+      const device = await prepareDevice();
       setDevice(device);
 
       // User information
@@ -293,8 +294,15 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           });
       }
 
-      const _device = await setDeviceNotificationToken({ notificationToken });
-      setDevice(_device);
+      const updatedDevice = await setDeviceNotificationToken({
+        variables: {
+          input: {
+            notificationToken,
+          },
+        },
+      });
+
+      setDevice(updatedDevice.data?.setDeviceNotificationToken);
     } else {
       throw Error(t`Device does not support notifications.`);
     }
@@ -314,7 +322,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signOutOtherDevices = async () => {
-    const tokens = await restClient.post(`/auth/sign-out/other-devices`);
+    const tokens = await serverSignOutOtherDevices();
     await saveClientTokens(tokens);
   };
 
@@ -371,9 +379,13 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     if (user?._id) app.joinSocket();
   }, [user?._id]);
 
+  const [setDeviceLocale] = useMutation(MUTATION_SET_DEVICE_LOCALE);
+
   useEffect(() => {
     if (isInitialized && device && lang.locale !== device.locale) {
-      setDeviceLocale({ locale: lang.locale }).catch(onErrorLog);
+      setDeviceLocale({ variables: { input: { locale: lang.locale } } })
+        .then((result) => setDevice(result.data?.setDeviceLocale))
+        .catch(onErrorLog);
     }
   }, [isInitialized, lang]);
 

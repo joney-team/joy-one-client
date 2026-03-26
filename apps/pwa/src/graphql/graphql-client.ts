@@ -13,7 +13,7 @@ import {
 import { SetContextLink } from "@apollo/client/link/context";
 import { ErrorLink } from "@apollo/client/link/error";
 import axios from "axios";
-import { getClientLocale } from "../lang/lang-service";
+import { getClientLocale } from "../modules/lang/lang-service";
 
 let isRefreshing = false;
 let pendingRequests: (() => Promise<void>)[] = [];
@@ -89,18 +89,21 @@ const authMiddleware = new SetContextLink(async ({ headers }) => {
   return {
     headers: {
       ...headers,
-      ...Object.keys(extendHeaders).reduce((output, key) => {
-        const headerKey = key as keyof typeof extendHeaders;
-        if (extendHeaders[headerKey]) {
-          output[headerKey] = extendHeaders[headerKey];
-        }
-        return output;
-      }, {} as Record<string, string>),
+      ...Object.keys(extendHeaders).reduce(
+        (output, key) => {
+          const headerKey = key as keyof typeof extendHeaders;
+          if (extendHeaders[headerKey]) {
+            output[headerKey] = extendHeaders[headerKey];
+          }
+          return output;
+        },
+        {} as Record<string, string>,
+      ),
     },
   };
 });
 
-export const apolloClient = new ApolloClient({
+export const graphqlClient = new ApolloClient({
   link: authMiddleware.concat(errorLink, httpLink),
   cache: new InMemoryCache({
     typePolicies: {
@@ -129,4 +132,4 @@ export const apolloClient = new ApolloClient({
   }),
 });
 
-export type ApolloClientType = typeof apolloClient;
+export type GraphqlClientType = typeof graphqlClient;

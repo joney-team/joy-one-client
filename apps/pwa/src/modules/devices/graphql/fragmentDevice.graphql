@@ -6,4 +6,27 @@ fragment Device on Device {
   locale
   userAgent
   lastActiveAt
+  ua {
+    ua
+    browser {
+      name
+      version
+    }
+    device {
+      model
+      type
+      vendor
+    }
+    engine {
+      name
+      version
+    }
+    os {
+      name
+      version
+    }
+    cpu {
+      architecture
+    }
+  }
 }

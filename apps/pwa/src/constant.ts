@@ -27,7 +27,6 @@ export const appEntities: Record<AppEntity, { name: MacroMessageDescriptor }> = 
   [AppEntity.POSTS]: { name: defineMessage`Posts` },
   [AppEntity.CATEGORIES]: { name: defineMessage`Categories` },
   [AppEntity.PROMOTIONS]: { name: defineMessage`Promotions` },
-  [AppEntity.HRM_TIMEKEEPINGS]: { name: defineMessage`Timekeepings` },
   [AppEntity.ACTIVITIES]: { name: defineMessage`Activities` },
 };
 

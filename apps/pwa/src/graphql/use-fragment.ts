@@ -1,3 +1,5 @@
+"use client";
+
 import { useApolloClient } from "@apollo/client/react";
 import { DocumentNode } from "graphql";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -86,7 +88,7 @@ export function useFragment<T = any>({
         console.error(`Failed to write fragment for id ${id}:`, error);
       }
     },
-    [client, id, readFragment, skip]
+    [client, id, readFragment, skip],
   );
 
   useEffect(() => {

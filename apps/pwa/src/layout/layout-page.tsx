@@ -5,7 +5,7 @@ import { useRouteRule } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
-import dynamic, { DynamicOptions, Loader } from "next/dynamic";
+import dynamic, { DynamicOptions, DynamicOptionsLoadingProps, Loader } from "next/dynamic";
 import { ComponentType, PropsWithChildren, Suspense, type FC } from "react";
 import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { LayoutAdmin } from "./layout-admin";
@@ -82,9 +82,12 @@ export function Layout<P>({
   );
 }
 
-export function renderPage<P>(dynamicOptions: DynamicOptions<P> | Loader<P>) {
+export function renderPage<P>(
+  dynamicOptions: DynamicOptions<P> | Loader<P>,
+  loading?: ((loadingProps: DynamicOptionsLoadingProps) => React.ReactNode) | undefined,
+) {
   return dynamic<P>(dynamicOptions, {
     ssr: false,
-    loading: PageLoading,
+    loading: loading ?? PageLoading,
   });
 }

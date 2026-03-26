@@ -7,7 +7,7 @@ import { DateInput } from "@/components/inputs/date-input";
 import { Modal } from "@/components/modal/modal";
 import { EventType } from "@/graphql/enums.graphql";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import { useVariablesQuery } from "@/modules/apollo/use-query";
+import { useVariablesQuery } from "@/graphql/use-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useWorkspaceMember } from "@/modules/workspace-members/hooks/use-workspace-member";

@@ -80,9 +80,6 @@ export const workspacePermissions: Record<WorkspacePermission, { name: MacroMess
   [WorkspacePermission.PARTNERS_WRITE]: {
     name: defineMessage`Manage partners`,
   },
-  [WorkspacePermission.HRM_TIMEKEEPINGS_CENSORSHIP]: {
-    name: defineMessage`Censor timekeeping`,
-  },
   [WorkspacePermission.HRM_SALARIES_MANAGER]: {
     name: defineMessage`Manage salaries`,
   },

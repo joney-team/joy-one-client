@@ -1,51 +1,12 @@
 import { StorageKey } from "@/constants/storage-key";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import type { ResponseList } from "@/types";
 import { isServer } from "@/utils/common.utils";
 import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { v4 as uuid } from "uuid";
-import { restClient } from "../apis/rest-client";
-import type {
-  DeviceEntity,
-  RegisterDeviceDto,
-  SetDeviceLocaleDto,
-  SetDeviceNotificationTokenDto,
-} from "./devices-types";
-
-export async function registerDevice() {
-  const identifyId = await getDeviceIdentifyId();
-
-  return restClient.post<DeviceEntity, RegisterDeviceDto>("/devices", {
-    identifyId,
-    locale: getClientLocale(),
-  });
-}
-
-export async function getUserDevices(query?: any): Promise<ResponseList<DeviceEntity>> {
-  return restClient.get("/devices", { params: query });
-}
-
-export async function getDevice(): Promise<DeviceEntity | undefined> {
-  const identifyId = await getDeviceIdentifyId();
-  if (!identifyId) return undefined;
-
-  return new Promise((resolve) => {
-    const action = () => {
-      restClient
-        .get(`/devices/${identifyId}`)
-        .then((res) => resolve(res))
-        .catch((err) => {
-          if (typeof err === "object" && err.status === 404) {
-            resolve(undefined);
-          } else {
-            setTimeout(action, 3000);
-          }
-        });
-    };
-
-    action();
-  });
-}
+import { graphqlClient } from "../../graphql/graphql-client";
+import { DeviceFragment } from "./graphql/fragmentDevice.graphql";
+import MUTATION_REGISTER_DEVICE from "./graphql/mutationRegisterDevice.graphql";
+import QUERY_DEVICE_BY_IDENTIFY_ID from "./graphql/queryDeviceByIdentifyId.graphql";
 
 export const getDeviceIdentifyId = async (): Promise<string> => {
   const deviceIdentifyId = localStorage.getItem(StorageKey.DEVICE_IDENTIFY_ID);
@@ -64,7 +25,30 @@ export const getDeviceIdentifyId = async (): Promise<string> => {
   }
 };
 
-export async function initializeDevice() {
+export async function getDevice(): Promise<DeviceFragment | undefined | null> {
+  const identifyId = await getDeviceIdentifyId();
+  if (!identifyId) return undefined;
+
+  return new Promise((resolve) => {
+    const action = async () => {
+      try {
+        const result = await graphqlClient.query({
+          query: QUERY_DEVICE_BY_IDENTIFY_ID,
+          variables: { identifyId },
+          fetchPolicy: "network-only",
+        });
+
+        resolve(result.data?.getDeviceByIdentifyId);
+      } catch (error) {
+        setTimeout(action, 1000);
+      }
+    };
+
+    action();
+  });
+}
+
+export async function prepareDevice(): Promise<DeviceFragment> {
   // Current Device
   const device = await getDevice();
   if (device) {
@@ -73,19 +57,23 @@ export async function initializeDevice() {
   }
 
   // Register new device
-  const newDevice = await registerDevice();
-  localStorage.setItem(StorageKey.DEVICE_ID, newDevice._id);
-  return newDevice;
-}
+  const newDevice = await graphqlClient.mutate({
+    mutation: MUTATION_REGISTER_DEVICE,
+    variables: {
+      input: {
+        identifyId: await getDeviceIdentifyId(),
+        locale: getClientLocale(),
+      },
+    },
+  });
 
-export async function setDeviceNotificationToken(
-  dto: SetDeviceNotificationTokenDto,
-): Promise<DeviceEntity> {
-  return restClient.post(`/devices/notification-token`, dto);
-}
+  if (!newDevice.data) {
+    throw new Error("Failed to register device");
+  }
 
-export async function setDeviceLocale(dto: SetDeviceLocaleDto): Promise<DeviceEntity> {
-  return restClient.post(`/devices/locale`, dto);
+  localStorage.setItem(StorageKey.DEVICE_ID, newDevice.data.registerDevice._id);
+
+  return newDevice.data.registerDevice;
 }
 
 export function isNotificationAvailable() {
