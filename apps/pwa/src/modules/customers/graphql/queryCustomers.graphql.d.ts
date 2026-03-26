@@ -4,6 +4,7 @@ export type CustomersQueryVariables = Types.Exact<{
   ids?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
   limit?: Types.InputMaybe<Types.Scalars['Float']['input']>;
   offset?: Types.InputMaybe<Types.Scalars['Float']['input']>;
+  query?: Types.InputMaybe<Types.Scalars['JSONObject']['input']>;
 }>;
 
 
