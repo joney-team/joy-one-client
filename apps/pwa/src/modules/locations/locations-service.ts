@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckInLocation } from "@/graphql/types.graphql";
 import { isDevelopment } from "@/service";
 import { Coordinates } from "@/types";
 import { isServer } from "@/utils/common.utils";
@@ -73,16 +72,6 @@ export function calculateDistance(coords: Coordinates, compareCoords: Coordinate
 
 export function degreesToRadians(degrees: number): number {
   return degrees * (Math.PI / 180);
-}
-
-export function findAvailableLocationToCheckIn(
-  coords: Coordinates,
-  checkInLocations: CheckInLocation[],
-) {
-  return checkInLocations.find((location) => {
-    const distance = calculateDistance(coords, location.coordinates);
-    return distance <= location.radius && !location.disabled;
-  });
 }
 
 export const getGoogleMapLinkCoord = (coord: Coordinates) => {
