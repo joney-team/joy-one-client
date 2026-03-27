@@ -41,7 +41,7 @@ export const WorkspaceInformation: FC = () => {
     async (values: UpdateWorkspaceMutationVariables) => {
       await updateWorkspace({ variables: values }).catch(onError);
     },
-    300
+    300,
   );
 
   const form = useForm({
@@ -73,8 +73,8 @@ export const WorkspaceInformation: FC = () => {
         >
           <Group style={{ position: "relative" }} wrap="nowrap">
             <LoadingOverlay visible={avatarUploading} loaderProps={{ size: "xs" }} />
-            <Avatar src={workspace.member?.workspace?.logo} size={80}>
-              {workspace.member?.name?.slice(0, 2)}
+            <Avatar workspace={workspace.member?.workspace} size={80}>
+              {workspace.member?.workspace.name?.slice(0, 2)}
             </Avatar>
 
             <Group gap={5}>
