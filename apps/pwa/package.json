@@ -5,7 +5,7 @@
   "scripts": {
     "start": "next start",
     "dev": "pnpm run codegen:clean && pnpm run codegen:compile && rm -rf .next && next dev",
-    "build": "pnpm translate:compile && pnpm run codegen:clean && pnpm run codegen:compile && next build",
+    "build": "pnpm translate:compile && pnpm run codegen:compile && next build",
     "typecheck": "tsc",
     "prestart": "node scripts/prepare.js",
     "translate": "lingui extract --clean",
@@ -13,7 +13,7 @@
     "sourcemaps:upload": "sentry-cli sourcemaps upload --release $(node -p 'require(\"./package.json\").version') .next && pnpm sourcemaps:clean",
     "sourcemaps:clean": "find .next -type f -name '*.map' -delete",
     "ws:apps:dev": "NEXT_PUBLIC_EXTENDED_APP=true next dev",
-    "ws:apps:build": "pnpm translate:compile && NODE_OPTIONS=\"--max-old-space-size=8192\" NEXT_PUBLIC_EXTENDED_APP=true next build",
+    "ws:apps:build": "pnpm translate:compile && pnpm run codegen:compile && NODE_OPTIONS=\"--max-old-space-size=8192\" NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",
     "codegen:clean": "find src -type f -name '*graphql.d.ts' -delete",
     "codegen:compile": "pnpm run codegen:schema && pnpm run codegen",
