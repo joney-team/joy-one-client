@@ -5,8 +5,6 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { LocationForm } from "@/components/location-form";
 import QUERY_WORKSPACE_BRANCH from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
-import { getWorkspaceById } from "@/modules/workspaces/workspaces-service";
-import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import { Card, Center, Group, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
@@ -15,6 +13,8 @@ import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import { WorkspaceFragment } from "../workspaces/graphql/fragmentWorkspace.graphql";
+import QUERY_WORKSPACE_BY_ID from "../workspaces/graphql/queryWorkspaceById.graphql";
 import { CustomerFormFragment } from "./graphql/fragmentCustomerForm.graphql";
 import CREATE_CUSTOMER_FORM_MUTATION from "./graphql/mutationCreateCustomerForm.graphql";
 
@@ -28,7 +28,7 @@ export const CustomerFormRegister: FC = () => {
       ? (params.workspaceBranchId as string)
       : null;
   const state = useRef<{
-    workspace: WorkspaceEntity | null;
+    workspace: WorkspaceFragment | null;
     workspaceBranch: WorkspaceBranchFragment | null;
   }>({
     workspace: null,
@@ -80,7 +80,13 @@ export const CustomerFormRegister: FC = () => {
 
   const initialize = async () => {
     try {
-      state.current.workspace = await getWorkspaceById(workspaceId);
+      state.current.workspace = await client
+        .query({
+          query: QUERY_WORKSPACE_BY_ID,
+          variables: { workspaceByIdId: workspaceId },
+        })
+        .then((result) => result.data?.workspaceById ?? null);
+
       if (workspaceBranchId) {
         const results = await client.query({
           query: QUERY_WORKSPACE_BRANCH,

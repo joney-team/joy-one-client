@@ -2604,6 +2604,7 @@ export type Query = {
   productVouchers: ProductVouchersPaginated;
   products: ProductsPaginated;
   promotions: PromotionsPaginated;
+  randomWorkspaceCode: Scalars['String']['output'];
   reactions: ReactionsPaginated;
   reactionsCount: ReactionsCount;
   receipt: Receipt;
@@ -2627,6 +2628,7 @@ export type Query = {
   workspaceBranch: WorkspaceBranch;
   workspaceBranches: WorkspaceBranchesPaginated;
   workspaceBranchesByIds: Array<WorkspaceBranch>;
+  workspaceById: Workspace;
   workspaceInviteInformation: WorkspaceInviteInformation;
   workspaceMember: WorkspaceMember;
   workspaceMembers: WorkspaceMembersPaginated;
@@ -2950,6 +2952,11 @@ export type QueryPromotionsArgs = {
 };
 
 
+export type QueryRandomWorkspaceCodeArgs = {
+  name: Scalars['String']['input'];
+};
+
+
 export type QueryReactionsArgs = {
   entity: Scalars['String']['input'];
   entityId: Scalars['String']['input'];
@@ -3096,6 +3103,11 @@ export type QueryWorkspaceBranchesArgs = {
 
 export type QueryWorkspaceBranchesByIdsArgs = {
   ids: Array<Scalars['String']['input']>;
+};
+
+
+export type QueryWorkspaceByIdArgs = {
+  id: Scalars['String']['input'];
 };
 
 

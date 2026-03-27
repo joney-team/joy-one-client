@@ -2,7 +2,7 @@
 
 import { StorageKey } from "@/constants/storage-key";
 import type { AuthTokenResult } from "@/graphql/types.graphql";
-import { apiServerSide } from "@/modules/apis/server";
+import { restServerClient } from "@/modules/apis/server";
 import { cookies } from "next/headers";
 
 export async function POST() {
@@ -17,7 +17,7 @@ export async function POST() {
       });
     }
 
-    const authTokenResult = await apiServerSide
+    const authTokenResult = await restServerClient
       .post<AuthTokenResult>("/auth/refresh-token", {
         refreshToken,
       })

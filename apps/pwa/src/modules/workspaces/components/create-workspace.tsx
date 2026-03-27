@@ -10,6 +10,7 @@ import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-typ
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
@@ -26,10 +27,11 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useState } from "react";
-import { restClient } from "../../apis/rest-client";
+import QUERY_RANDOM_WORKSPACE_CODE from "../graphql/queryRandomWorkspaceCode.graphql";
 import { workspaceTypes } from "../workspace-constants";
 
 export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
+  const client = useApolloClient();
   const workspace = useWorkspace();
   const lang = useLang();
   const layout = useLayout();
@@ -74,9 +76,14 @@ export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
   const onAutoFillCode = useDebouncedCallback((name: string) => {
     if (name.length === 0) return;
 
-    restClient
-      .post(`/workspaces/random-code`, { name })
-      .then((res) => form.setFieldValue("code", res.result))
+    client
+      .query({
+        query: QUERY_RANDOM_WORKSPACE_CODE,
+        variables: {
+          name,
+        },
+      })
+      .then((res) => form.setFieldValue("code", res.data?.randomWorkspaceCode ?? ""))
       .catch(() => false);
   }, 300);
 

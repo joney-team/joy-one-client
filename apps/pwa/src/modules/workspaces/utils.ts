@@ -1,7 +1,7 @@
 import type { AppMetadata } from "@/types";
 
 import { defaultMetadata } from "@/configs/metadata.config";
-import { apiServerSide } from "../apis/server";
+import { restServerClient } from "../apis/server";
 import { renderFileUrl } from "../files/files-utils";
 import type { WorkspaceEntity } from "./workspaces-types";
 
@@ -55,10 +55,10 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
     ? `/workspaces/ids/${args.workspaceId}`
     : `/workspaces/domains/${args.host}`;
 
-  const workspace = await apiServerSide.get<WorkspaceEntity>(url).catch((error) => {
+  const workspace = await restServerClient.get<WorkspaceEntity>(url).catch((error) => {
     console.error(
       `[${new Date().toLocaleTimeString("vi")}] getWorkspaceMetadata error`,
-      error.message
+      error.message,
     );
     return null;
   });
@@ -76,7 +76,7 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
       workspaceId: workspace._id,
       isExtended: true,
       thumbnailURL: renderFileUrl(
-        workspace.cover || workspace.appIcon || defaultMetadata.thumbnailURL
+        workspace.cover || workspace.appIcon || defaultMetadata.thumbnailURL,
       ),
       appIcon: renderFileUrl(workspace.appIcon || defaultMetadata.appIcon),
     };

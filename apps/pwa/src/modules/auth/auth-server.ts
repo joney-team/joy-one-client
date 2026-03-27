@@ -8,7 +8,7 @@ import type {
 } from "@/graphql/types.graphql";
 import { withServerAction } from "@/utils/server.utils";
 import { cookies } from "next/headers";
-import { apiServerSide } from "../apis/server";
+import { restServerClient } from "../apis/server";
 import type { AuthRefreshTokenInput } from "./auth-types";
 
 export async function saveServerTokens(tokens: AuthTokenResult) {
@@ -32,14 +32,17 @@ export async function saveServerTokens(tokens: AuthTokenResult) {
 
 export const serverSignInWithEmailPassword = withServerAction(
   async (input: AuthSignInWithEmailPasswordInput) => {
-    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", input);
+    const result = await restServerClient.post<AuthTokenResult>(
+      "/auth/sign-in/email-password",
+      input,
+    );
     await saveServerTokens(result);
     return result;
   },
 );
 
 export const serverSignInWithFacebook = withServerAction(async (accessToken: string) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/facebook", {
+  const result = await restServerClient.post<AuthTokenResult>("/auth/sign-in/facebook", {
     accessToken,
   });
   await saveServerTokens(result);
@@ -48,7 +51,7 @@ export const serverSignInWithFacebook = withServerAction(async (accessToken: str
 
 export const serverSignInWithFirebase = withServerAction(
   async (idToken: string, username?: string) => {
-    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/firebase", {
+    const result = await restServerClient.post<AuthTokenResult>("/auth/sign-in/firebase", {
       idToken,
       username,
     });
@@ -60,18 +63,21 @@ export const serverSignInWithFirebase = withServerAction(
 
 export const serverSignUpWithEmailPassword = withServerAction(
   async (input: AuthSignUpWithEmailPasswordInput) => {
-    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", input);
+    const result = await restServerClient.post<AuthTokenResult>(
+      "/auth/sign-up/email-password",
+      input,
+    );
     await saveServerTokens(result);
     return result;
   },
 );
 
 export const serverRefreshToken = async (input: AuthRefreshTokenInput) => {
-  return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", input);
+  return restServerClient.post<AuthTokenResult>("/auth/refresh-token", input);
 };
 
 export const serverSignOutOtherDevices = withServerAction(async () => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-out-other-devices");
+  const result = await restServerClient.post<AuthTokenResult>("/auth/sign-out-other-devices");
   await saveServerTokens(result);
   return result;
 });

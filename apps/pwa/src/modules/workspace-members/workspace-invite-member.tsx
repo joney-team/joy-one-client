@@ -4,7 +4,6 @@ import { MembersIllustration } from "@/components/illustrations/members";
 import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { regenerateWorkspaceInviteCode } from "@/modules/workspaces/workspaces-service";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";

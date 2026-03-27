@@ -1,0 +1,3 @@
+query RandomWorkspaceCode($name: String!) {
+  randomWorkspaceCode(name: $name)
+}

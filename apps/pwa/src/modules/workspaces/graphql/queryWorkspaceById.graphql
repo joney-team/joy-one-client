@@ -1,0 +1,7 @@
+#import "./fragmentWorkspace.graphql"
+
+query WorkspaceById($workspaceByIdId: String!) {
+  workspaceById(id: $workspaceByIdId) {
+    ...Workspace
+  }
+}

@@ -1,5 +1,5 @@
 import { restClient } from "../apis/rest-client";
-import { TransferOwnerDto, WorkspaceRoleDto, WorkspaceRoleEntity } from "./workspace-roles-types";
+import { WorkspaceRoleDto, WorkspaceRoleEntity } from "./workspace-roles-types";
 
 export async function createWorkspaceRole(dto: WorkspaceRoleDto) {
   return restClient.post<WorkspaceRoleEntity>("/workspace-roles", dto);

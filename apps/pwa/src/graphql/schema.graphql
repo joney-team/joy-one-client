@@ -2668,6 +2668,7 @@ type Query {
     """
     query: JSONObject
   ): PromotionsPaginated!
+  randomWorkspaceCode(name: String!): String!
   reactions(
     entity: String!
     entityId: String!
@@ -2935,6 +2936,7 @@ type Query {
     query: JSONObject
   ): WorkspaceBranchesPaginated!
   workspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
+  workspaceById(id: String!): Workspace!
   workspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
   workspaceMember(userId: String!): WorkspaceMember!
   workspaceMembers(

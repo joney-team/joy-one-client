@@ -1,11 +1,11 @@
-import { apiServerSide } from "@/modules/apis/server";
+import { restServerClient } from "@/modules/apis/server";
 import { AppPageMetadata } from "@/types";
 import { Metadata, NextPage, ResolvingMetadata } from "next";
 import Content from "./page-content";
 
 export async function generateMetadata(props: any, _: ResolvingMetadata): Promise<Metadata> {
   const { code } = await props.params;
-  const metadata = await apiServerSide
+  const metadata = await restServerClient
     .get<AppPageMetadata>(`/loans/metadata/${code}`)
     .catch(() => null);
   if (!metadata) return {};
