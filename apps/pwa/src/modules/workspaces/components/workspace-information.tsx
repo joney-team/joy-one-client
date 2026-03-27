@@ -29,8 +29,9 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { type UpdateWorkspaceMutationVariables } from "../graphql/mutationUpdateWorkspace.graphql";
 import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 import { normalizeWorkspaceInput } from "../workspaces-service";
+import { toSlug } from "@joy-one-client/utils/string";
 
-export const WorkspaceInformation: FC = () => {
+export const WorkspaceInformationForm: FC = () => {
   const { t } = useLingui();
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
@@ -74,7 +75,7 @@ export const WorkspaceInformation: FC = () => {
           <Group style={{ position: "relative" }} wrap="nowrap">
             <LoadingOverlay visible={avatarUploading} loaderProps={{ size: "xs" }} />
             <Avatar workspace={workspace.member?.workspace} size={80}>
-              {workspace.member?.workspace.name?.slice(0, 2)}
+              {workspace.member?.workspace.code?.slice(0, 2)}
             </Avatar>
 
             <Group gap={5}>
@@ -149,4 +150,10 @@ export const WorkspaceInformation: FC = () => {
       </Group>
     </Stack>
   );
+};
+
+export const WorkspaceInformation: FC = () => {
+  const workspace = useWorkspace();
+
+  return <WorkspaceInformationForm key={workspace.member.workspaceId} />;
 };
