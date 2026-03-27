@@ -1,0 +1,3 @@
+mutation SetLocale($input: SetUserLocaleInput!) {
+  setLocale(input: $input)
+}

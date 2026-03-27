@@ -1,0 +1,3 @@
+mutation JoinWorkspaceWithInviteCode($inviteCode: String!) {
+  joinWorkspaceWithInviteCode(inviteCode: $inviteCode)
+}

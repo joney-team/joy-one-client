@@ -7,17 +7,22 @@ import { Hovered } from "../../components/hovered";
 import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchesSelector } from "./workspace-branches-selector";
 
-interface WorkspaceBranchesInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
-  value: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[];
+interface WorkspaceBranchesInputProps extends Omit<
+  InputWrapperProps,
+  "value" | "onChange" | "defaultValue"
+> {
+  value?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[];
+  defaultValue?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[];
   onChange: (value: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[]) => void;
   disabled?: boolean;
   autoHide?: boolean;
 }
 
 export const WorkspaceBranchesInput: FC<WorkspaceBranchesInputProps> = (props) => {
-  const { value, onChange, disabled, autoHide, ...rest } = props;
-  const [branches, setBranches] =
-    useState<Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[]>(value);
+  const { value, defaultValue, onChange, disabled, autoHide, ...rest } = props;
+  const [branches, setBranches] = useState<
+    Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">[]
+  >(value || defaultValue || []);
 
   const onAdd = (branch: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">) => {
     const isSelected = branches.some((v) => branch?._id === v._id);

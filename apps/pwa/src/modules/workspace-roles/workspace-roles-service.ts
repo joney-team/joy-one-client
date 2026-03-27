@@ -16,7 +16,3 @@ export async function getWorkspaceRoles() {
 export async function removeWorkspaceRole(roleId: string) {
   return restClient.delete(`/workspace-roles/${roleId}`);
 }
-
-export async function transferOwner(dto: TransferOwnerDto) {
-  return restClient.post(`/workspace-members/transfer-owner`, dto);
-}

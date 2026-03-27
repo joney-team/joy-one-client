@@ -1427,6 +1427,7 @@ export type Mutation = {
   healthCheckLoan: Loan;
   healthcheckPluginExternalStorage: Scalars['Boolean']['output'];
   interactCategory: Scalars['Boolean']['output'];
+  joinWorkspaceWithInviteCode: Scalars['String']['output'];
   liquidateLoan: Scalars['String']['output'];
   partialPaymentReceipt: Array<Receipt>;
   payReceipt: Receipt;
@@ -1438,6 +1439,7 @@ export type Mutation = {
   rejectCustomerKyc: CustomerKyc;
   rejectLoan: Array<Loan>;
   removeFile: Scalars['Boolean']['output'];
+  removeMember: Scalars['Boolean']['output'];
   removePluginExternalStorage: Scalars['Boolean']['output'];
   removeReaction: Scalars['Boolean']['output'];
   removeTag: Scalars['Boolean']['output'];
@@ -1451,16 +1453,19 @@ export type Mutation = {
   revertPaymentReceipt: Receipt;
   setDeviceLocale: Device;
   setDeviceNotificationToken: Device;
+  setLocale: Scalars['Boolean']['output'];
   setPluginExternalStorage: PluginExternalStorage;
   signInWithEmailPassword: AuthTokenResult;
   signInWithFirebase: AuthTokenResult;
   signLoan: Loan;
   signOut: Scalars['Boolean']['output'];
   signOutOtherDevices: AuthTokenResult;
+  signPersonalUpload: FileUploadSigned;
   signUpWithEmailPassword: AuthTokenResult;
   signUpload: FileUploadSigned;
   syncTask: SyncTaskResult;
   toggleDisablePluginExternalStorage: Scalars['Boolean']['output'];
+  transferWorkspaceOwner: Scalars['Boolean']['output'];
   updateActivity: Activity;
   updateAttendanceSetting: AttendanceSetting;
   updateBooking: Booking;
@@ -1735,6 +1740,11 @@ export type MutationInteractCategoryArgs = {
 };
 
 
+export type MutationJoinWorkspaceWithInviteCodeArgs = {
+  inviteCode: Scalars['String']['input'];
+};
+
+
 export type MutationLiquidateLoanArgs = {
   id: Scalars['String']['input'];
 };
@@ -1795,6 +1805,11 @@ export type MutationRejectLoanArgs = {
 
 export type MutationRemoveFileArgs = {
   id: Scalars['String']['input'];
+};
+
+
+export type MutationRemoveMemberArgs = {
+  memberId: Scalars['String']['input'];
 };
 
 
@@ -1872,6 +1887,11 @@ export type MutationSetDeviceNotificationTokenArgs = {
 };
 
 
+export type MutationSetLocaleArgs = {
+  input: SetUserLocaleInput;
+};
+
+
 export type MutationSetPluginExternalStorageArgs = {
   accessKeyId?: InputMaybe<Scalars['String']['input']>;
   bucketName?: InputMaybe<Scalars['String']['input']>;
@@ -1898,6 +1918,11 @@ export type MutationSignLoanArgs = {
 };
 
 
+export type MutationSignPersonalUploadArgs = {
+  input: SignUploadInput;
+};
+
+
 export type MutationSignUpWithEmailPasswordArgs = {
   input: AuthSignUpWithEmailPasswordInput;
 };
@@ -1910,6 +1935,11 @@ export type MutationSignUploadArgs = {
 
 export type MutationSyncTaskArgs = {
   _id: Scalars['String']['input'];
+};
+
+
+export type MutationTransferWorkspaceOwnerArgs = {
+  input: TransferOwnerInput;
 };
 
 
@@ -2019,11 +2049,8 @@ export type MutationUpdateWorkspaceBranchArgs = {
 
 
 export type MutationUpdateWorkspaceMemberArgs = {
-  color?: InputMaybe<Scalars['String']['input']>;
-  displayName?: InputMaybe<Scalars['String']['input']>;
+  input: UpdateWorkspaceMemberInput;
   memberId: Scalars['String']['input'];
-  workingTimeType?: InputMaybe<WorkspaceMemberWorkingTimeType>;
-  workspaceBranchIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
@@ -2582,7 +2609,6 @@ export type Query = {
   receipt: Receipt;
   receiptByCode: Receipt;
   receipts: ReceiptsPaginated;
-  registerDevice: Array<Device>;
   search: Array<SearchResult>;
   siblingTasks: SiblingTasks;
   tagBySlug: Tag;
@@ -2955,11 +2981,6 @@ export type QueryReceiptsArgs = {
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
   query?: InputMaybe<Scalars['JSONObject']['input']>;
-};
-
-
-export type QueryRegisterDeviceArgs = {
-  input: RegisterDeviceInput;
 };
 
 
@@ -3374,6 +3395,10 @@ export type SetDeviceNotificationTokenInput = {
   notificationToken: Scalars['String']['input'];
 };
 
+export type SetUserLocaleInput = {
+  locale?: InputMaybe<AppLocale>;
+};
+
 export type SiblingTasks = {
   __typename: 'SiblingTasks';
   next: Maybe<Task>;
@@ -3571,6 +3596,10 @@ export type TasksPaginated = {
   total: Scalars['Float']['output'];
 };
 
+export type TransferOwnerInput = {
+  userId: Scalars['String']['input'];
+};
+
 export type UpdateAttendanceSettingInput = {
   allowedDistanceInMeters?: InputMaybe<Scalars['Float']['input']>;
   locations?: InputMaybe<Array<AttendanceSettingLocationInput>>;
@@ -3640,6 +3669,13 @@ export type UpdateUserProfileInput = {
   name: Scalars['String']['input'];
   phone?: InputMaybe<Scalars['String']['input']>;
   settings?: InputMaybe<UserSettingsInput>;
+};
+
+export type UpdateWorkspaceMemberInput = {
+  color?: InputMaybe<Scalars['String']['input']>;
+  displayName?: InputMaybe<Scalars['String']['input']>;
+  workingTimeType?: InputMaybe<WorkspaceMemberWorkingTimeType>;
+  workspaceBranchIds?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 export type UpdateWorkspaceSettingInput = {

@@ -1,19 +1,10 @@
 #import "./fragmentWorkspaceMember.graphql"
 
 mutation UpdateWorkspaceMember(
+  $input: UpdateWorkspaceMemberInput!
   $memberId: String!
-  $displayName: String
-  $color: String
-  $workingTimeType: WorkspaceMemberWorkingTimeType
-  $workspaceBranchIds: [String!]
 ) {
-  updateWorkspaceMember(
-    memberId: $memberId
-    displayName: $displayName
-    color: $color
-    workingTimeType: $workingTimeType
-    workspaceBranchIds: $workspaceBranchIds
-  ) {
+  updateWorkspaceMember(input: $input, memberId: $memberId) {
     ...WorkspaceMember
   }
 }

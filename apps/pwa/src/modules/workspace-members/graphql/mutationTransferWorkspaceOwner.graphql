@@ -1,0 +1,3 @@
+mutation TransferWorkspaceOwner($input: TransferOwnerInput!) {
+  transferWorkspaceOwner(input: $input)
+}

@@ -1,11 +1,8 @@
 import type * as Types from '../../../graphql/types.graphql.d';
 
 export type UpdateWorkspaceMemberMutationVariables = Types.Exact<{
+  input: Types.UpdateWorkspaceMemberInput;
   memberId: Types.Scalars['String']['input'];
-  displayName?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  color?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  workingTimeType?: Types.InputMaybe<Types.WorkspaceMemberWorkingTimeType>;
-  workspaceBranchIds?: Types.InputMaybe<Array<Types.Scalars['String']['input']>>;
 }>;
 
 

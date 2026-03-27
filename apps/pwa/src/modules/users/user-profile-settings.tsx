@@ -17,6 +17,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale, localeNames } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
+import { normalizeObject } from "@joy-one-client/utils/object";
 import { Trans } from "@lingui/react/macro";
 import {
   Card,
@@ -58,7 +59,7 @@ export const UserProfileSettings: FC = () => {
   }, []);
 
   const form = useForm({
-    initialValues: auth.user!,
+    initialValues: normalizeObject(auth.user),
     onValuesChange: onUpdate,
   });
 
@@ -70,7 +71,7 @@ export const UserProfileSettings: FC = () => {
         form.setValues(event.data);
       }
     },
-    []
+    [],
   );
 
   return (

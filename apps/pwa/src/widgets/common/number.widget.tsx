@@ -6,6 +6,7 @@ import { Renderer } from "@/components/renderer";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { resizeArrayForSparkline } from "@/utils/chart.utils";
+import { nonLoading } from "@/utils/non-loading";
 import { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import {
   ActionIcon,
@@ -26,6 +27,7 @@ import dynamic from "next/dynamic";
 
 const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), {
   ssr: false,
+  loading: nonLoading,
 });
 
 export const numberWidgetlayoutConfig: WidgetLayoutConfig = {
@@ -94,7 +96,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
                   to: color(colorScheme === "light" ? `${boxColor}.8` : `${boxColor}.9`),
                   deg: 90,
                 },
-                theme
+                theme,
               )
             : undefined,
         }}

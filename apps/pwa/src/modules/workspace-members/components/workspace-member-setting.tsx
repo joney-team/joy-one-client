@@ -4,16 +4,12 @@ import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { configs } from "@/configs/layout.config";
 import { WorkspaceMemberWorkingTimeType } from "@/graphql/enums.graphql";
+import { UpdateWorkspaceMemberInput } from "@/graphql/types.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import {
-  removeWorkspaceMember,
-  updateWorkspaceMember,
-} from "@/modules/workspace-members/workspace-members-service";
-import { UpdateWorkspaceMemberDto } from "@/modules/workspace-members/workspace-members-types";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import { workspaceDefaultRoles } from "@/modules/workspace-roles/workspace-roles-constants";
@@ -33,6 +29,8 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { IconArchive, IconLock } from "@tabler/icons-react";
 import { FC } from "react";
 import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "../graphql/mutationAssignWorkspaceMemberRoles.graphql";
+import MUTATION_REMOVE_WORKSPACE_MEMBER from "../graphql/mutationRemoveMember.graphql";
+import MUTATION_UPDATE_WORKSPACE_MEMBER from "../graphql/mutationUpdateWorkspaceMember.graphql";
 
 interface WorkspaceMemberSettingProps {
   userId: string;
@@ -58,21 +56,28 @@ const WorkspaceMemberSettingContent: FC<
   );
   const isOwner = userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
 
-  const onUpdate = useDebouncedCallback((values: UpdateWorkspaceMemberDto) => {
-    if (userMember && isAbleToUpdate) {
-      updateWorkspaceMember(userMember.memberId!, values).catch(onError);
+  const [removeWorkspaceMember] = useMutation(MUTATION_REMOVE_WORKSPACE_MEMBER);
+  const [updateWorkspaceMember] = useMutation(MUTATION_UPDATE_WORKSPACE_MEMBER);
+
+  const onUpdate = useDebouncedCallback((input: Omit<UpdateWorkspaceMemberInput, "memberId">) => {
+    if (userMember.memberId && isAbleToUpdate) {
+      updateWorkspaceMember({
+        variables: {
+          memberId: userMember.memberId,
+          input,
+        },
+      }).catch(onError);
     }
   }, 500);
 
   const [assignRoles] = useMutation(MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES);
 
-  const form = useForm<UpdateWorkspaceMemberDto>({
+  const form = useForm<UpdateWorkspaceMemberInput>({
     initialValues: {
-      ...userMember,
-      roleIds: userMember.roles.map((v) => v._id) || [],
       displayName: userMember?.memberDisplayName || "",
       color: userMember?.color || "",
       workingTimeType: userMember?.workingTimeType ?? WorkspaceMemberWorkingTimeType.Fulltime,
+      workspaceBranchIds: userMember.workspaceBranches.map((v) => v._id) || [],
     },
     onValuesChange: (values) => {
       onUpdate(values);
@@ -152,13 +157,13 @@ const WorkspaceMemberSettingContent: FC<
             <WorkspaceBranchesInput
               key={userMember.userId}
               disabled={!workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER)}
-              value={userMember.workspaceBranches}
+              defaultValue={userMember.workspaceBranches}
               onChange={(branches) => {
                 if (!userMember.memberId) return;
-                return updateWorkspaceMember(userMember.memberId, {
-                  ...userMember,
-                  workspaceBranchIds: branches.map((v) => v._id),
-                } as any);
+                form.setFieldValue(
+                  "workspaceBranchIds",
+                  branches.map((v) => v._id),
+                );
               }}
             />
           )}
@@ -179,7 +184,7 @@ const WorkspaceMemberSettingContent: FC<
                 onArchive({
                   name: userMember.memberDisplayName ?? userMember.name,
                   process: async () => {
-                    await removeWorkspaceMember(userMember.memberId!);
+                    await removeWorkspaceMember({ variables: { memberId: userMember.memberId! } });
                     props.onClose?.();
                   },
                 })

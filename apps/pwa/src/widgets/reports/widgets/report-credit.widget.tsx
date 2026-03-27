@@ -9,7 +9,6 @@ import { loanPackageTypes } from "@/modules/loans/loans-constants";
 import { LoanReceiptData } from "@/modules/loans/loans-types";
 import { isPartialPayment } from "@/modules/receipts/utils/is-partial-payment";
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { getWorkspaceMemberByIds } from "@/modules/workspace-members/workspace-members-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -29,6 +28,7 @@ import { LoanFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
 import QUERY_LOAN_BY_CODE from "@/modules/loans/graphql/queryLoanByCode.graphql";
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
+import QUERY_WORKSPACE_MEMBER_BY_IDS from "@/modules/workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
 import { useApolloClient } from "@apollo/client/react";
 
 interface CreditReportItem {
@@ -351,9 +351,16 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
           const report = await exportReport(receipts, client);
 
-          const userMemberInfos = await getWorkspaceMemberByIds(
-            [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(Boolean),
-          );
+          const userMemberInfos = await client
+            .query({
+              query: QUERY_WORKSPACE_MEMBER_BY_IDS,
+              variables: {
+                ids: [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(
+                  Boolean,
+                ),
+              },
+            })
+            .then((result) => result.data?.workspaceMembersByIds ?? []);
 
           const borderColor = "#dee2e6";
           const numberFormat = "#,##0";

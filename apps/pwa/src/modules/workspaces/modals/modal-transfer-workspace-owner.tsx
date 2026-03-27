@@ -5,8 +5,9 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { transferOwner } from "@/modules/workspace-roles/workspace-roles-service";
+import MUTATION_TRANSFER_OWNER from "@/modules/workspace-members/graphql/mutationTransferWorkspaceOwner.graphql";
 import { onError } from "@/utils/exceptions.utils";
+import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -17,9 +18,11 @@ export const ModalTransferWorkspaceOwner: FC = () => {
   const auth = useAuth();
   const [newOwner, setNewOwner] = useState<WorkspaceMemberFragment>();
 
+  const [transferOwner] = useMutation(MUTATION_TRANSFER_OWNER);
+
   const onSubmit = async () => {
     if (!newOwner) return;
-    await transferOwner({ userId: newOwner.userId })
+    await transferOwner({ variables: { input: { userId: newOwner.userId } } })
       .then(() => modals.close("ModalWorkspaceMember"))
       .catch(onError);
   };

@@ -31,6 +31,7 @@ export interface UploadFileOptions {
   compressSize?: number;
   maxWidthOrHeight?: number;
   refs?: string[];
+  isPersonal?: boolean;
 }
 
 export interface UploadFile extends UploadFileOptions {

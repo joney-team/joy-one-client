@@ -1339,6 +1339,7 @@ type Mutation {
   healthCheckLoan(id: String!): Loan!
   healthcheckPluginExternalStorage: Boolean!
   interactCategory(id: String!): Boolean!
+  joinWorkspaceWithInviteCode(inviteCode: String!): String!
   liquidateLoan(id: String!): String!
   partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
   payReceipt(id: String!, input: PayReceiptInput!): Receipt!
@@ -1350,6 +1351,7 @@ type Mutation {
   rejectCustomerKyc(customerId: String!, input: RejectCustomerKycInput!): CustomerKyc!
   rejectLoan(id: String!, input: RejectLoanInput!): [Loan!]!
   removeFile(id: String!): Boolean!
+  removeMember(memberId: String!): Boolean!
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
@@ -1363,16 +1365,19 @@ type Mutation {
   revertPaymentReceipt(id: String!): Receipt!
   setDeviceLocale(input: SetDeviceLocaleInput!): Device!
   setDeviceNotificationToken(input: SetDeviceNotificationTokenInput!): Device!
+  setLocale(input: SetUserLocaleInput!): Boolean!
   setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
   signInWithEmailPassword(input: AuthSignInWithEmailPasswordInput!): AuthTokenResult!
   signInWithFirebase(input: AuthSignInWithFirebaseInput!): AuthTokenResult!
   signLoan(id: String!, input: SignLoanInput!): Loan!
   signOut: Boolean!
   signOutOtherDevices: AuthTokenResult!
+  signPersonalUpload(input: SignUploadInput!): FileUploadSigned!
   signUpWithEmailPassword(input: AuthSignUpWithEmailPasswordInput!): AuthTokenResult!
   signUpload(input: SignUploadInput!): FileUploadSigned!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
+  transferWorkspaceOwner(input: TransferOwnerInput!): Boolean!
   updateActivity(content: String, id: String!): Activity!
   updateAttendanceSetting(input: UpdateAttendanceSettingInput!): AttendanceSetting!
   updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
@@ -1387,7 +1392,7 @@ type Mutation {
   updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
-  updateWorkspaceMember(color: String, displayName: String, memberId: String!, workingTimeType: WorkspaceMemberWorkingTimeType, workspaceBranchIds: [String!]): WorkspaceMember!
+  updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   updateWorkspaceSetting(input: UpdateWorkspaceSettingInput!): WorkspaceSetting!
   verifyExternalStorageDna(input: VerifyExternalStorageDnaInput!): File!
@@ -2732,7 +2737,6 @@ type Query {
     """
     query: JSONObject
   ): ReceiptsPaginated!
-  registerDevice(input: RegisterDeviceInput!): [Device!]!
   search(entities: [String!], limit: Int, query: String!): [SearchResult!]!
   siblingTasks(_id: String!): SiblingTasks!
   tagBySlug(slug: String!): Tag!
@@ -3246,6 +3250,10 @@ input SetDeviceNotificationTokenInput {
   notificationToken: String!
 }
 
+input SetUserLocaleInput {
+  locale: AppLocale
+}
+
 type SiblingTasks {
   next: Task
   previous: Task
@@ -3428,6 +3436,10 @@ type TasksPaginated {
   total: Float!
 }
 
+input TransferOwnerInput {
+  userId: String!
+}
+
 input UpdateAttendanceSettingInput {
   allowedDistanceInMeters: Float
   locations: [AttendanceSettingLocationInput!]
@@ -3497,6 +3509,13 @@ input UpdateUserProfileInput {
   name: String!
   phone: String
   settings: UserSettingsInput
+}
+
+input UpdateWorkspaceMemberInput {
+  color: String
+  displayName: String
+  workingTimeType: WorkspaceMemberWorkingTimeType
+  workspaceBranchIds: [String!]
 }
 
 input UpdateWorkspaceSettingInput {

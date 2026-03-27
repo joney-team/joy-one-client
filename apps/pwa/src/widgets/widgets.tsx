@@ -18,7 +18,6 @@ import { ContextMenuDropdownComponentProps } from "@/components/context-menu/con
 import { Empty } from "@/components/empty";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { useColor } from "@/modules/theme/use-color";
 import { isDiff } from "@/utils/object.utils";
 import { getId } from "@joy-one-client/utils/base-data";
 import { Trans } from "@lingui/react/macro";
@@ -34,7 +33,7 @@ const gridLayoutConfig = {
 };
 
 export function Widgets<ContextType = object, WidgetType = string>(
-  props: WidgetsProps<ContextType, WidgetType>
+  props: WidgetsProps<ContextType, WidgetType>,
 ) {
   const [state, setState] = useLocalStorage<WidgetStorage>({
     key: `wids:v1:${props.id}`,
@@ -147,7 +146,7 @@ export function Widgets<ContextType = object, WidgetType = string>(
 
   const updateState = (id: string, key: string, value: any) => {
     props.onChange?.(
-      widgets.map((v) => (v.id === id ? { ...v, state: { ...v.state, [key]: value } } : v))
+      widgets.map((v) => (v.id === id ? { ...v, state: { ...v.state, [key]: value } } : v)),
     );
   };
 
@@ -165,9 +164,12 @@ export function Widgets<ContextType = object, WidgetType = string>(
   };
 
   const width = useMemo(() => {
-    return layout.view === "mobile"
-      ? layout.width - 16 * 2
-      : layout.width - workspaceLayout.navigationWidth - 16 * 2;
+    return Math.max(
+      layout.view === "mobile"
+        ? layout.width - 16 * 2
+        : layout.width - workspaceLayout.navigationWidth - 16 * 2,
+      100,
+    );
   }, [layout.view, layout.width, workspaceLayout.navigationWidth]);
 
   const layoutItems = useMemo(() => {

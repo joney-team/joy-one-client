@@ -13,7 +13,6 @@ import {
   type ModalUserInformationRef,
 } from "@/modules/users/modals/modal-user-information";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
-import { updateWorkspaceMember } from "@/modules/workspace-members/workspace-members-service";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
   WorkspaceDefaultRoleId,
@@ -22,8 +21,7 @@ import {
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { useMutation } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
@@ -33,15 +31,19 @@ import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graph
 import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "./graphql/mutationAssignWorkspaceMemberRoles.graphql";
+import MUTATION_UPDATE_WORKSPACE_MEMBER from "./graphql/mutationUpdateWorkspaceMember.graphql";
 import QUERY_WORKSPACE_MEMBERS from "./graphql/queryWorkspaceMembers.graphql";
+import { normalizeUpdateWorkspaceMemberInput } from "./workspace-members-utils";
 
 export const WorkspaceMemberList: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const color = useColor();
   const { normalizeRole } = useNormalizeRoles();
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 
   const [assignRoles] = useMutation(MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES);
+  const [updateWorkspaceMember] = useMutation(MUTATION_UPDATE_WORKSPACE_MEMBER);
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
@@ -172,10 +174,16 @@ export const WorkspaceMemberList: FC = () => {
                   value={data.workspaceBranches}
                   onChange={(branches) => {
                     if (!data.memberId) return;
-                    return updateWorkspaceMember(data.memberId, {
-                      ...data,
-                      workspaceBranchIds: branches.map((v) => v._id),
-                    } as any);
+
+                    return updateWorkspaceMember({
+                      variables: {
+                        memberId: data.memberId,
+                        input: {
+                          ...normalizeUpdateWorkspaceMemberInput(data),
+                          workspaceBranchIds: branches.map((v) => v._id),
+                        },
+                      },
+                    });
                   }}
                 />
               );

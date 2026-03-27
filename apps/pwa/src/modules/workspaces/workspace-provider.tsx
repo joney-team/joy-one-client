@@ -3,15 +3,16 @@
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
+import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
+import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import { joinWorkspaceMember } from "@/modules/workspace-members/workspace-members-service";
+import MUTATION_JOIN_WORKSPACE_WITH_INVITE_CODE from "@/modules/workspace-members/graphql/mutationJoinWorkspaceWithInviteCode.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { isExtendedApp } from "@/service";
-import { StorageKey } from "@/constants/storage-key";
-import { useApolloClient, useLazyQuery } from "@apollo/client/react";
+import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client/react";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useRouter } from "next/navigation";
@@ -26,7 +27,6 @@ import {
   WorkspaceEntity,
   WorkspaceMemberInvitationState,
 } from "./workspaces-types";
-import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -93,9 +93,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     leave();
   };
 
+  const [joinWorkspaceWithInviteCode] = useMutation(MUTATION_JOIN_WORKSPACE_WITH_INVITE_CODE);
   const join = async (code: string) => {
-    const result = await joinWorkspaceMember(code);
-    await initialize(result.workspaceId);
+    const result = await joinWorkspaceWithInviteCode({
+      variables: { inviteCode: code },
+    });
+    await initialize(result.data?.joinWorkspaceWithInviteCode || "");
   };
 
   const leaveInvitation = () => {

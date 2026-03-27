@@ -243,8 +243,8 @@ importers:
         specifier: 19.2.3
         version: 19.2.3(react@19.2.3)
       react-grid-layout:
-        specifier: ^2.2.2
-        version: 2.2.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+        specifier: ^2.2.3
+        version: 2.2.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       react-infinite-scroller:
         specifier: ^1.2.6
         version: 1.2.6(react@19.2.3)
@@ -6392,8 +6392,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-grid-layout@2.2.2:
-    resolution: {integrity: sha512-yNo9pxQWoxHWRAwHGSVT4DEGELYPyQ7+q9lFclb5jcqeFzva63/2F72CryS/jiTIr/SBIlTaDdyjqH+ODg8oBw==}
+  react-grid-layout@2.2.3:
+    resolution: {integrity: sha512-OAEJHBxmfuxQfVtZwRzmsokijGlBgzYIJ7MUlLk/VSa43SaGzu15w5D0P2RDrfX5EvP9POMbL6bFrai/huDzbQ==}
     peerDependencies:
       react: '>= 16.3.0'
       react-dom: '>= 16.3.0'
@@ -6476,6 +6476,12 @@ packages:
     resolution: {integrity: sha512-vKpeHhI5OZvYn82kXOs1bC8aOXktGU5AmKAgaZS4F5JPburCtbmDPqE7Pzp+1kN4+Wb81LlF33VpGwWwtXem+w==}
     peerDependencies:
       react: '>= 16.3'
+
+  react-resizable@3.1.3:
+    resolution: {integrity: sha512-liJBNayhX7qA4tBJiBD321FDhJxgGTJ07uzH5zSORXoE8h7PyEZ8mLqmosST7ppf6C4zUsbd2gzDMmBCfFp9Lw==}
+    peerDependencies:
+      react: '>= 16.3'
+      react-dom: '>= 16.3'
 
   react-signature-pad-wrapper@4.3.2:
     resolution: {integrity: sha512-hs1xyRSzzdhX0p3YTSOjPt91ORM9VHLP75aZCp4V1CfO7+3J8l6q4OdLirD+WY2xT/q2aglNmSdtap1K4hTlDw==}
@@ -11631,7 +11637,7 @@ snapshots:
 
   browserslist@4.28.1:
     dependencies:
-      baseline-browser-mapping: 2.9.11
+      baseline-browser-mapping: 2.10.10
       caniuse-lite: 1.0.30001762
       electron-to-chromium: 1.5.267
       node-releases: 2.0.27
@@ -14596,7 +14602,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.2.7
 
-  react-grid-layout@2.2.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+  react-grid-layout@2.2.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:
       clsx: 2.1.1
       fast-equals: 4.0.3
@@ -14604,7 +14610,7 @@ snapshots:
       react: 19.2.3
       react-dom: 19.2.3(react@19.2.3)
       react-draggable: 4.5.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
-      react-resizable: 3.0.5(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
+      react-resizable: 3.1.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
       resize-observer-polyfill: 1.5.1
 
   react-infinite-scroller@1.2.6(react@19.2.3):
@@ -14706,6 +14712,13 @@ snapshots:
       react-draggable: 4.5.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
     transitivePeerDependencies:
       - react-dom
+
+  react-resizable@3.1.3(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.2.3
+      react-dom: 19.2.3(react@19.2.3)
+      react-draggable: 4.5.0(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
 
   react-signature-pad-wrapper@4.3.2(react-dom@19.2.3(react@19.2.3))(react@19.2.3):
     dependencies:

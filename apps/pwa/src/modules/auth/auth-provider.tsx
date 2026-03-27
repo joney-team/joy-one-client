@@ -19,25 +19,23 @@ import {
   useUserEventsListner,
 } from "@/modules/events/event-service";
 import { useLang } from "@/modules/lang/lang-context";
-import { getClientLocale } from "@/modules/lang/lang-service";
 import { getTimeZones } from "@/modules/times/times-service";
-import { setUserLocale } from "@/modules/users/users-service";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { useLingui } from "@lingui/react/macro";
 import * as Sentry from "@sentry/react";
 import axios from "axios";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken } from "firebase/messaging";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
-import { restClient } from "../apis/rest-client";
 import { DeviceFragment } from "../devices/graphql/fragmentDevice.graphql";
 import MUTATION_SET_DEVICE_LOCALE from "../devices/graphql/mutationSetDeviceLocale.graphql";
 import MUTATION_SET_DEVICE_NOTIFICATION_TOKEN from "../devices/graphql/mutationSetDeviceNotificationToken.graphql";
-import { reducePhotoSize } from "../files/file-service";
+import { useUploadFile } from "../files/hooks/use-upload-file";
 import { Context } from "./auth-context";
 import {
   serverSignInWithEmailPassword,
@@ -58,6 +56,7 @@ import {
 } from "./auth-service";
 import type { AuthContext } from "./auth-types";
 import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
+import MUTATION_SET_USER_LOCALE from "./graphql/mutationSetLocale.graphql";
 import MUTATION_SIGN_OUT from "./graphql/mutationSignOut.graphql";
 import MUTATION_UPDATE_USER_PROFILE from "./graphql/mutationUpdateUserProfile.graphql";
 import QUERY_AUTH_USER from "./graphql/queryAuthUser.graphql";
@@ -75,17 +74,9 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const [setDeviceNotificationToken] = useMutation(MUTATION_SET_DEVICE_NOTIFICATION_TOKEN);
+  const [setUserLocale] = useMutation(MUTATION_SET_USER_LOCALE);
 
-  const syncLocaleDeviceToUser = async (_user: AuthUserFragment) => {
-    try {
-      const currentLocale = getClientLocale();
-      if (_user.locale !== currentLocale) {
-        await setUserLocale(_user.locale);
-      }
-    } catch (error) {
-      console.log(`Error when sync locale device to user`, error);
-    }
-  };
+  const uploadFile = useUploadFile();
 
   const initializeMetaPages = async () => {
     await new Promise((resolve, reject) => {
@@ -151,11 +142,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           })
           .then((res) => res.data!.authUser);
         setUser(authResult);
-      }
-
-      // Sync locale device to user
-      if (authResult && !authResult.locale) {
-        syncLocaleDeviceToUser(authResult!);
       }
 
       if (type === "auth") {
@@ -247,19 +233,30 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const [updateUserProfile] = useMutation(MUTATION_UPDATE_USER_PROFILE);
-  const updateProfile = async (values: UpdateUserProfileInput) => {
-    return updateUserProfile({ variables: { input: values } }).then((res) =>
-      setUser(res.data?.updateUserProfile),
-    );
-  };
+  const updateProfile = useCallback(
+    async (values: UpdateUserProfileInput) => {
+      return updateUserProfile({
+        variables: {
+          input: {
+            name: values.name,
+            email: values.email,
+            avatar: values.avatar,
+            settings: values.settings ? removeTypeName(values.settings) : undefined,
+          },
+        },
+      }).then((res) => setUser(res.data?.updateUserProfile));
+    },
+    [updateUserProfile],
+  );
 
-  const uploadAvatar = async (file: File) => {
-    const _file = await reducePhotoSize(file, { maxWidthOrHeight: 300 });
-    const form = new FormData();
-    form.append("file", _file);
-    const _user = await restClient.formData(`/users/avatar`, form);
-    return setUser(_user);
-  };
+  const uploadAvatar = useCallback(
+    async (file: File) => {
+      if (!user) return;
+      const avatarFile = await uploadFile(file, { isPersonal: true, maxWidthOrHeight: 300 });
+      return updateProfile({ ...user, avatar: avatarFile.url });
+    },
+    [uploadFile, updateProfile, user],
+  );
 
   const registerNotification = async () => {
     if ("Notification" in window) {
@@ -329,7 +326,13 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const syncUserLocale = async () => {
     if (!user || !lang.isInitialized) return;
     if (user.locale !== lang.locale) {
-      await restClient.put(`/users/locale`, { locale: lang.locale }).catch(onErrorLog);
+      await setUserLocale({
+        variables: {
+          input: {
+            locale: lang.locale ?? null,
+          },
+        },
+      });
     }
   };
 
