@@ -23,7 +23,7 @@ export const saveRefrehToken = async (refreshToken: string) => {
   localStorage.setItem(StorageKey.REFRESH_TOKEN_IV, encrypt.iv);
 };
 
-export const clearTokens = () => {
+export const clearClientTokens = () => {
   localStorage.removeItem(StorageKey.ACCESS_TOKEN);
   localStorage.removeItem(StorageKey.ACCESS_TOKEN_IV);
   localStorage.removeItem(StorageKey.REFRESH_TOKEN);

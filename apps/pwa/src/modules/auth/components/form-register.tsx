@@ -55,7 +55,7 @@ export const FormRegister: FC = () => {
     <form onSubmit={onSubmit}>
       <Stack>
         <TextInput
-          label={t`Name`}
+          label={<Trans>Name</Trans>}
           autoFocus
           size="md"
           leftSection={<IconUser strokeWidth={1.5} size={18} />}
@@ -64,7 +64,7 @@ export const FormRegister: FC = () => {
         />
 
         <TextInput
-          label={t`Email`}
+          label={<Trans>Email</Trans>}
           size="md"
           leftSection={<IconMail strokeWidth={1.5} size={18} />}
           placeholder="example@gmail.com"
@@ -72,7 +72,7 @@ export const FormRegister: FC = () => {
         />
 
         <PasswordInput
-          label={t`Password`}
+          label={<Trans>Password</Trans>}
           size="md"
           placeholder={t`Password must contain at least ${6} characters`}
           leftSection={<IconLock strokeWidth={1.5} size={18} />}

@@ -6,12 +6,14 @@ import type {
   AuthSignUpWithEmailPasswordInput,
   AuthTokenResult,
 } from "@/graphql/types.graphql";
+import { withServerAction } from "@/utils/server.utils";
 import { cookies } from "next/headers";
 import { apiServerSide } from "../apis/server";
 import type { AuthRefreshTokenInput } from "./auth-types";
 
 export async function saveServerTokens(tokens: AuthTokenResult) {
   const cookieStore = await cookies();
+
   await Promise.all([
     cookieStore.set(StorageKey.ACCESS_TOKEN, tokens.accessToken, {
       httpOnly: true,
@@ -28,42 +30,56 @@ export async function saveServerTokens(tokens: AuthTokenResult) {
   ]);
 }
 
-export const serverSignInWithEmailPassword = async (input: AuthSignInWithEmailPasswordInput) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", input);
-  await saveServerTokens(result);
-  return result;
-};
+export const serverSignInWithEmailPassword = withServerAction(
+  async (input: AuthSignInWithEmailPasswordInput) => {
+    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/email-password", input);
+    await saveServerTokens(result);
+    return result;
+  },
+);
 
-export const serverSignInWithFacebook = async (accessToken: string) => {
+export const serverSignInWithFacebook = withServerAction(async (accessToken: string) => {
   const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/facebook", {
     accessToken,
   });
   await saveServerTokens(result);
   return result;
-};
+});
 
-export const serverSignInWithFirebase = async (idToken: string, username?: string) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/firebase", {
-    idToken,
-    username,
-  });
+export const serverSignInWithFirebase = withServerAction(
+  async (idToken: string, username?: string) => {
+    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-in/firebase", {
+      idToken,
+      username,
+    });
 
-  await saveServerTokens(result);
-  return result;
-};
+    await saveServerTokens(result);
+    return result;
+  },
+);
 
-export const serverSignUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
-  const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", input);
-  await saveServerTokens(result);
-  return result;
-};
+export const serverSignUpWithEmailPassword = withServerAction(
+  async (input: AuthSignUpWithEmailPasswordInput) => {
+    const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-up/email-password", input);
+    await saveServerTokens(result);
+    return result;
+  },
+);
 
 export const serverRefreshToken = async (input: AuthRefreshTokenInput) => {
   return apiServerSide.post<AuthTokenResult>("/auth/refresh-token", input);
 };
 
-export const serverSignOutOtherDevices = async () => {
+export const serverSignOutOtherDevices = withServerAction(async () => {
   const result = await apiServerSide.post<AuthTokenResult>("/auth/sign-out-other-devices");
   await saveServerTokens(result);
   return result;
-};
+});
+
+export const serverSignOut = withServerAction(async () => {
+  const cookieStore = await cookies();
+  await Promise.all([
+    cookieStore.delete(StorageKey.ACCESS_TOKEN),
+    cookieStore.delete(StorageKey.REFRESH_TOKEN),
+  ]);
+});

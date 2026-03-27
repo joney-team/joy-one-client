@@ -26,7 +26,7 @@ export const WorkspaceRequireBranches: FC = () => {
     <Stack gap={30} align="center" justify="center" mih="100dvh">
       <GoWorkIllustration width={150} />
       <Stack gap={10}>
-        <Title c={color("primary")} tt="capitalize" order={4} ta="center">
+        <Title c={color("primary")} order={4} ta="center">
           <Trans>Assigning a working branch</Trans>
         </Title>
         <Text c="gray" fz={16} ta="center">

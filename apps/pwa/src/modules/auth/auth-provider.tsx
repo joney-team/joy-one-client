@@ -41,11 +41,12 @@ import {
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
+  serverSignOut,
   serverSignOutOtherDevices,
   serverSignUpWithEmailPassword,
 } from "./auth-server";
 import {
-  clearTokens,
+  clearClientTokens,
   getAccessToken,
   getRefreshToken,
   getSessionId,
@@ -166,9 +167,10 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const handleSignOut = async () => {
     try {
       await Promise.all([signOut(), firebaseAuth.signOut()]);
-      clearTokens();
-      onReset();
+      serverSignOut();
+      clearClientTokens();
       client.cache.reset();
+      onReset();
       postAppChannelMessage("SIGN_OUT");
     } catch (error) {
       onError(error);
@@ -176,7 +178,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const handleSignInWithFirebase = async (idToken: string, username?: string) => {
-    const tokens = await serverSignInWithFirebase(idToken, username);
+    const { result: tokens, error } = await serverSignInWithFirebase(idToken, username);
+    if (error || !tokens) throw Error(error ?? t`Failed to sign in with Firebase.`);
     await saveClientTokens(tokens);
     await initialize("auth");
   };
@@ -197,7 +200,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const signInWithFacebook = async () => {
     try {
       const authResponse = await onFacebookLogin();
-      const tokens = await serverSignInWithFacebook(authResponse.accessToken);
+      const { result: tokens, error } = await serverSignInWithFacebook(authResponse.accessToken);
+      if (error || !tokens) throw Error(error ?? t`Failed to sign in with Facebook.`);
       await saveClientTokens(tokens);
       await initialize("auth");
       localStorage.setItem(StorageKey.META_ACCESS_TOKEN, authResponse.accessToken);
@@ -221,13 +225,16 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordInput) => {
-    const result = await serverSignInWithEmailPassword(dto);
+    const { result, error } = await serverSignInWithEmailPassword(dto);
+    if (error || !result) throw Error(error ?? t`Failed to sign in.`);
     await saveClientTokens(result);
     await initialize("auth");
   };
 
   const signUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
-    const result = await serverSignUpWithEmailPassword(input);
+    const { result, error } = await serverSignUpWithEmailPassword(input);
+    if (error || !result) throw Error(error ?? t`Failed to sign up.`);
+
     await saveClientTokens(result);
     await initialize("auth");
   };
@@ -319,7 +326,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const signOutOtherDevices = async () => {
-    const tokens = await serverSignOutOtherDevices();
+    const { result: tokens, error } = await serverSignOutOtherDevices();
+    if (error || !tokens) throw Error(error ?? t`Failed to sign out other devices.`);
     await saveClientTokens(tokens);
   };
 
