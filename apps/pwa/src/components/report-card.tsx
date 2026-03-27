@@ -1,14 +1,15 @@
 "use client";
 
 import { useGradient } from "@/modules/theme/use-color";
-import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
+import { nonLoading } from "@/utils/non-loading";
+import { Card, Group, Stack, Text } from "@mantine/core";
 import { Icon, IconReportAnalytics } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 
 const Sparkline = dynamic(() => import("@mantine/charts").then((mod) => mod.Sparkline), {
   ssr: false,
-  loading: () => <Skeleton height={200} />,
+  loading: nonLoading,
 });
 
 interface ReportCardProps {

@@ -1401,9 +1401,12 @@ export type Mutation = {
   bulkArchiveLoans: Array<Scalars['String']['output']>;
   bulkRejectLoans: Array<Loan>;
   bulkUpdateCustomerFormWorkspaceBranch: CustomerForm;
+  bulkUpdateCustomerWorkspaceBranch: Array<Customer>;
+  bulkUpdateLoanWorkspaceBranch: Array<Loan>;
   bulkUpdateTags: Array<Tag>;
   bulkUpdateTasks: Array<Task>;
   cancelBooking: Booking;
+  cleanNotifications: Scalars['Boolean']['output'];
   createBooking: Booking;
   createCategory: Category;
   createCustomer: Customer;
@@ -1429,6 +1432,8 @@ export type Mutation = {
   interactCategory: Scalars['Boolean']['output'];
   joinWorkspaceWithInviteCode: Scalars['String']['output'];
   liquidateLoan: Scalars['String']['output'];
+  markAllNotificationsAsReaded: Scalars['Boolean']['output'];
+  markNotificationAsReaded: Notification;
   partialPaymentReceipt: Array<Receipt>;
   payReceipt: Receipt;
   pluginExternalStorageSignUploadUrl: SignUploadUrlResponse;
@@ -1572,6 +1577,16 @@ export type MutationBulkRejectLoansArgs = {
 
 
 export type MutationBulkUpdateCustomerFormWorkspaceBranchArgs = {
+  input: BulkUpdateWorkspaceBranchInput;
+};
+
+
+export type MutationBulkUpdateCustomerWorkspaceBranchArgs = {
+  input: BulkUpdateWorkspaceBranchInput;
+};
+
+
+export type MutationBulkUpdateLoanWorkspaceBranchArgs = {
   input: BulkUpdateWorkspaceBranchInput;
 };
 
@@ -1746,6 +1761,11 @@ export type MutationJoinWorkspaceWithInviteCodeArgs = {
 
 
 export type MutationLiquidateLoanArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationMarkNotificationAsReadedArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -2075,6 +2095,55 @@ export type MutationVerifyExternalStorageDnaArgs = {
 
 export type MutationVerifyRenewPasswordCodeArgs = {
   input: AuthVerifyRenewPasswordCodeInput;
+};
+
+export type Notification = {
+  __typename: 'Notification';
+  _id: Scalars['String']['output'];
+  body: Scalars['String']['output'];
+  bodyParams: Maybe<Scalars['JSONObject']['output']>;
+  createdAt: Maybe<Scalars['Float']['output']>;
+  customFieldValues: Maybe<Array<CustomFieldValue>>;
+  icon: Maybe<NotificationIcon>;
+  image: Maybe<Scalars['String']['output']>;
+  isArchived: Maybe<Scalars['Boolean']['output']>;
+  refs: Maybe<Array<Scalars['String']['output']>>;
+  route: Maybe<Scalars['String']['output']>;
+  source: Maybe<EntitySource>;
+  status: NotificationStatus;
+  title: Scalars['String']['output'];
+  titleParams: Maybe<Scalars['JSONObject']['output']>;
+  type: NotificationType;
+  updatedAt: Maybe<Scalars['Float']['output']>;
+};
+
+/** Icon of the notification */
+export const NotificationIcon = {
+  Message: 'MESSAGE'
+} as const;
+
+export type NotificationIcon = typeof NotificationIcon[keyof typeof NotificationIcon];
+/** Status of the notification */
+export const NotificationStatus = {
+  JustCreated: 'JUST_CREATED',
+  ListViewed: 'LIST_VIEWED',
+  Readed: 'READED'
+} as const;
+
+export type NotificationStatus = typeof NotificationStatus[keyof typeof NotificationStatus];
+/** Type of the notification */
+export const NotificationType = {
+  Error: 'ERROR',
+  Info: 'INFO',
+  Success: 'SUCCESS',
+  Warning: 'WARNING'
+} as const;
+
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
+export type NotificationsPaginated = {
+  __typename: 'NotificationsPaginated';
+  results: Array<Notification>;
+  total: Scalars['Float']['output'];
 };
 
 export type Order = {
@@ -2592,6 +2661,8 @@ export type Query = {
   loan: Loan;
   loanByCode: Loan;
   loans: LoansPaginated;
+  notificationStat: UserNotificationStat;
+  notifications: NotificationsPaginated;
   orders: OrdersPaginated;
   partners: PartnersPaginated;
   pluginExternalStorage: Maybe<PluginExternalStorage>;
@@ -2860,6 +2931,14 @@ export type QueryLoanByCodeArgs = {
 
 
 export type QueryLoansArgs = {
+  ids?: InputMaybe<Array<Scalars['String']['input']>>;
+  limit?: InputMaybe<Scalars['Float']['input']>;
+  offset?: InputMaybe<Scalars['Float']['input']>;
+  query?: InputMaybe<Scalars['JSONObject']['input']>;
+};
+
+
+export type QueryNotificationsArgs = {
   ids?: InputMaybe<Array<Scalars['String']['input']>>;
   limit?: InputMaybe<Scalars['Float']['input']>;
   offset?: InputMaybe<Scalars['Float']['input']>;
@@ -3717,6 +3796,12 @@ export type UserAuthProvider = {
   providerId: Scalars['String']['output'];
   uid: Scalars['String']['output'];
   username: Scalars['String']['output'];
+};
+
+export type UserNotificationStat = {
+  __typename: 'UserNotificationStat';
+  count: Scalars['Float']['output'];
+  unListViewed: Scalars['Float']['output'];
 };
 
 /** Available roles of a user */

@@ -1,0 +1,7 @@
+#import "./fragmentNotification.graphql"
+
+mutation MarkNotificationAsReaded($markNotificationAsReadedId: String!) {
+  markNotificationAsReaded(id: $markNotificationAsReadedId) {
+    ...Notification
+  }
+}

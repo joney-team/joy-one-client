@@ -1,0 +1,3 @@
+mutation MarkAllNotificationsAsReaded {
+  markAllNotificationsAsReaded
+}

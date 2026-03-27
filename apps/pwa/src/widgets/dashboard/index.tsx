@@ -75,7 +75,7 @@ export const DashboardWidgets: FC = () => {
         return output;
       },
     },
-    [workspace.member.workspaceId]
+    [workspace.member.workspaceId],
   );
 
   useEventsListener(
@@ -88,12 +88,12 @@ export const DashboardWidgets: FC = () => {
           ...rangeReports.data,
           period: rangeReports.data.period.map((v) => (v._id === _report._id ? { ..._report } : v)),
           prevPeriod: rangeReports.data.prevPeriod.map((v) =>
-            v._id === _report._id ? { ..._report } : v
+            v._id === _report._id ? { ..._report } : v,
           ),
         });
       }
     },
-    [rangeReports.data]
+    [rangeReports.data],
   );
 
   const context: DashboardWidgetsContext = {
@@ -106,7 +106,7 @@ export const DashboardWidgets: FC = () => {
 
   const defaultWidgets = useMemo(
     () => getDefaultWorkspaceView(workspace.type).dashboardWidgets,
-    [workspace.type]
+    [workspace.type],
   );
 
   return (

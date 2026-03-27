@@ -373,6 +373,29 @@ export const LoanStatus = {
 } as const;
 
 export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
+/** Icon of the notification */
+export const NotificationIcon = {
+  Message: 'MESSAGE'
+} as const;
+
+export type NotificationIcon = typeof NotificationIcon[keyof typeof NotificationIcon];
+/** Status of the notification */
+export const NotificationStatus = {
+  JustCreated: 'JUST_CREATED',
+  ListViewed: 'LIST_VIEWED',
+  Readed: 'READED'
+} as const;
+
+export type NotificationStatus = typeof NotificationStatus[keyof typeof NotificationStatus];
+/** Type of the notification */
+export const NotificationType = {
+  Error: 'ERROR',
+  Info: 'INFO',
+  Success: 'SUCCESS',
+  Warning: 'WARNING'
+} as const;
+
+export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
 /** Order discount type */
 export const OrderDiscountType = {
   Combo: 'COMBO',

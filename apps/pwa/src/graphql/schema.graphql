@@ -1313,9 +1313,12 @@ type Mutation {
   bulkArchiveLoans(input: BulkArchiveLoansInput!): [String!]!
   bulkRejectLoans(input: BulkRejectLoanInput!): [Loan!]!
   bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): CustomerForm!
+  bulkUpdateCustomerWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Customer!]!
+  bulkUpdateLoanWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Loan!]!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   cancelBooking(id: String!, reason: String!): Booking!
+  cleanNotifications: Boolean!
   createBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
   createCustomer(input: CustomerInput!): Customer!
@@ -1341,6 +1344,8 @@ type Mutation {
   interactCategory(id: String!): Boolean!
   joinWorkspaceWithInviteCode(inviteCode: String!): String!
   liquidateLoan(id: String!): String!
+  markAllNotificationsAsReaded: Boolean!
+  markNotificationAsReaded(id: String!): Notification!
   partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
   payReceipt(id: String!, input: PayReceiptInput!): Receipt!
   pluginExternalStorageSignUploadUrl(fileName: String!, id: String, refs: [String!]): SignUploadUrlResponse!
@@ -1397,6 +1402,50 @@ type Mutation {
   updateWorkspaceSetting(input: UpdateWorkspaceSettingInput!): WorkspaceSetting!
   verifyExternalStorageDna(input: VerifyExternalStorageDnaInput!): File!
   verifyRenewPasswordCode(input: AuthVerifyRenewPasswordCodeInput!): VerifyRenewPasswordResult!
+}
+
+type Notification {
+  _id: String!
+  body: String!
+  bodyParams: JSONObject
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  icon: NotificationIcon
+  image: String
+  isArchived: Boolean
+  refs: [String!]
+  route: String
+  source: EntitySource
+  status: NotificationStatus!
+  title: String!
+  titleParams: JSONObject
+  type: NotificationType!
+  updatedAt: Float
+}
+
+"""Icon of the notification"""
+enum NotificationIcon {
+  MESSAGE
+}
+
+"""Status of the notification"""
+enum NotificationStatus {
+  JUST_CREATED
+  LIST_VIEWED
+  READED
+}
+
+"""Type of the notification"""
+enum NotificationType {
+  ERROR
+  INFO
+  SUCCESS
+  WARNING
+}
+
+type NotificationsPaginated {
+  results: [Notification!]!
+  total: Float!
 }
 
 type Order {
@@ -2346,6 +2395,39 @@ type Query {
     """
     query: JSONObject
   ): LoansPaginated!
+  notificationStat: UserNotificationStat!
+  notifications(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): NotificationsPaginated!
   orders(
     ids: [String!]
     limit: Float = 30
@@ -3546,6 +3628,11 @@ type UserAuthProvider {
   providerId: String!
   uid: String!
   username: String!
+}
+
+type UserNotificationStat {
+  count: Float!
+  unListViewed: Float!
 }
 
 """Available roles of a user"""

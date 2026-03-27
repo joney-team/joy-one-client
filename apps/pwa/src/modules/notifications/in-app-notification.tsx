@@ -10,8 +10,8 @@ import { useAuth } from "../auth/auth-context";
 import { addEventsListener, removeEventsListner } from "../events/event-service";
 import { EventFragment } from "../events/graphql/fragmentEvent.graphql";
 import { useLang } from "../lang/lang-context";
-import { showInAppNotification } from "./notification-service";
-import { NotificationEntity } from "./notification-types";
+import { NotificationFragment } from "./graphql/fragmentNotification.graphql";
+import { showInAppNotification } from "./notifications-constants";
 
 export const InAppNotification: FC = () => {
   const router = useRouter();
@@ -25,7 +25,7 @@ export const InAppNotification: FC = () => {
 
     onMessage(firebaseMessaging, (payload) => {
       try {
-        const notification = JSON.parse(payload.data?.raw!) as NotificationEntity;
+        const notification = JSON.parse(payload.data?.raw!) as NotificationFragment;
         showInAppNotification(notification, router, theme);
       } catch (error) {
         console.warn("Error when handling notification >", error);

@@ -1,0 +1,13 @@
+fragment Notification on Notification {
+  _id
+  icon
+  title
+  titleParams
+  body
+  bodyParams
+  route
+  image
+  type
+  status
+  createdAt
+}

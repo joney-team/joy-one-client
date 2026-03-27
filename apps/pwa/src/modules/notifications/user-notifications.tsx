@@ -1,25 +1,16 @@
 "use client";
 
 import { ChillIllustration } from "@/components/illustrations/chill";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { WayPoint } from "@/components/way-point";
 import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import {
-  cleanNotifications,
-  getNotificationStat,
-  getNotifications,
-} from "@/modules/notifications/notification-service";
-import {
-  NotificationEntity,
-  UserNotificationStat,
-} from "@/modules/notifications/notification-types";
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -27,11 +18,14 @@ import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconBell, IconBrush } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useRef } from "react";
 import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
+import MUTATION_CLEAN_NOTIFICATIONS from "./graphql/mutationCleanNotifications.graphql";
+import QUERY_NOTIFICATIONS from "./graphql/queryNotifications.graphql";
+import QUERY_NOTIFICATION_STAT from "./graphql/queryNotificationStat.graphql";
 import { NotificationCard } from "./notification-card";
 
 const ModalConfirm = dynamic(
@@ -39,7 +33,7 @@ const ModalConfirm = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
@@ -60,29 +54,27 @@ const EmptyNotification: FC<{ visible: boolean }> = ({ visible }) => {
 };
 
 export const UserNotifications: FC = () => {
-  const auth = useAuth();
   const lang = useLang();
   const [opened, { open, close }] = useDisclosure(false);
-  const [stat, setStat] = useState<UserNotificationStat>();
   const layout = useLayout();
   const color = useColor();
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
-  const fetchStat = async () => {
-    getNotificationStat().then(setStat).catch(console.error);
-  };
+  const [cleanNotifications] = useMutation(MUTATION_CLEAN_NOTIFICATIONS);
+
+  const { data: notificationStatData, refetch } = useQuery(QUERY_NOTIFICATION_STAT, {
+    fetchPolicy: "cache-and-network",
+  });
+
+  const notificationStat = notificationStatData?.notificationStat;
 
   const onOpen = async () => {
     open();
   };
 
-  useEffect(() => {
-    if (auth.user?._id) fetchStat();
-  }, [auth.user?._id]);
-
-  const notifications = useList<NotificationEntity>({
+  const notifications = useGraphqlList({
     id: `user-notifications-${lang.locale}`,
-    fetch: (q) => getNotifications(q),
+    query: QUERY_NOTIFICATIONS,
   });
 
   const onClean = () => {
@@ -106,9 +98,9 @@ export const UserNotifications: FC = () => {
       EventType.NotificationCleaned,
     ],
     () => {
-      notifications.fetch(true, { isSilient: true });
-      fetchStat();
-    }
+      notifications.refetch();
+      refetch();
+    },
   );
 
   return (
@@ -122,7 +114,7 @@ export const UserNotifications: FC = () => {
         style={{ overflow: "visible" }}
       >
         <Indicator
-          disabled={!stat || stat.unListViewed === 0}
+          disabled={!notificationStat || notificationStat.unListViewed === 0}
           offset={layout.view === "mobile" ? 0 : 2}
           color="red"
           size={8}
@@ -131,7 +123,7 @@ export const UserNotifications: FC = () => {
             size={21}
             strokeWidth={1.5}
             className={classNames({
-              animTada: !!stat && stat.unListViewed > 0,
+              animTada: !!notificationStat && notificationStat.unListViewed > 0,
             })}
           />
         </Indicator>

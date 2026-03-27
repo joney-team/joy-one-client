@@ -2,8 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { restClient } from "@/modules/apis/rest-client";
 import BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION from "@/modules/customer-forms/graphql/mutationBulkUpdateCustomerFormWorkspaceBranch.graphql";
+import MUTATION_BULK_UPDATE_CUSTOMER_WORKSPACE_BRANCH from "@/modules/customers/graphql/mutationBulkUpdateCustomerWorkspaceBranch.graphql";
+import MUTATION_BULK_UPDATE_LOAN_WORKSPACE_BRANCH from "@/modules/loans/graphql/mutationBulkUpdateLoanWorkspaceBranch.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -14,6 +15,7 @@ import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
 import { WorkspaceBranchFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchInput } from "../workspace-branch-input";
+
 export interface ModalUpdateWorkspaceBranchRef {
   open: (p: ModalUpdateWorkspaceBranchProps) => void;
   close: () => void;
@@ -51,12 +53,22 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
     BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION,
   );
 
+  const [bulkUpdateLoanWorkspaceBranch] = useMutation(MUTATION_BULK_UPDATE_LOAN_WORKSPACE_BRANCH);
+
+  const [bulkUpdateCustomerWorkspaceBranch] = useMutation(
+    MUTATION_BULK_UPDATE_CUSTOMER_WORKSPACE_BRANCH,
+  );
+
   const onSubmit = async () => {
     try {
       if (entity === AppEntity.LOANS) {
-        await restClient.post(`/loans/bulk-update-workspace-branch`, {
-          ids,
-          workspaceBranchId: branch?._id || null,
+        await bulkUpdateLoanWorkspaceBranch({
+          variables: {
+            input: {
+              ids,
+              workspaceBranchId: branch?._id || null,
+            },
+          },
         });
       }
 
@@ -72,9 +84,13 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
       }
 
       if (entity === AppEntity.CUSTOMERS) {
-        await restClient.post(`/customers/bulk-update-workspace-branch`, {
-          ids,
-          workspaceBranchId: branch?._id || null,
+        await bulkUpdateCustomerWorkspaceBranch({
+          variables: {
+            input: {
+              ids,
+              workspaceBranchId: branch?._id || null,
+            },
+          },
         });
       }
 

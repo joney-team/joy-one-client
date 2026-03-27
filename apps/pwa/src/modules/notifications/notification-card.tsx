@@ -1,27 +1,28 @@
 "use client";
 
 import { RelativeTimeFormat } from "@/components/format/date-format";
-import {
-  markNotificationAsReaded,
-  renderNotificationColor,
-  renderNotificationIcon,
-} from "@/modules/notifications/notification-service";
-import { NotificationEntity, NotificationStatus } from "@/modules/notifications/notification-types";
+import { NotificationStatus, NotificationType } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
+import { useMutation } from "@apollo/client/react";
 import { ActionIcon, Anchor, Card, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useState } from "react";
+import { NotificationFragment } from "./graphql/fragmentNotification.graphql";
+import MUTATION_MARK_NOTIFICATION_AS_READED from "./graphql/mutationMarkNotificationAsReaded.graphql";
+import { notificationTypes } from "./notifications-constants";
 
 export const NotificationCard: FC<{
-  notification: NotificationEntity;
+  notification: NotificationFragment;
 }> = (props) => {
   const { notification } = props;
   const color = useColor();
-  const [readed, setReaded] = useState(notification.status === NotificationStatus.READED);
+  const [readed, setReaded] = useState(notification.status === NotificationStatus.Readed);
 
-  const Icon = renderNotificationIcon(notification);
-  const notificationColor = renderNotificationColor(notification);
+  const { color: notificationColor, icon: Icon } =
+    notificationTypes[notification.type] || notificationTypes[NotificationType.Info];
+
+  const [markNotificationAsReaded] = useMutation(MUTATION_MARK_NOTIFICATION_AS_READED);
 
   return (
     <Anchor
@@ -29,7 +30,11 @@ export const NotificationCard: FC<{
       href={notification.route || "/"}
       onClick={() => {
         setReaded(true);
-        markNotificationAsReaded(notification._id).catch(console.error);
+        markNotificationAsReaded({
+          variables: {
+            markNotificationAsReadedId: notification._id,
+          },
+        }).catch(console.error);
       }}
       td="none"
     >
@@ -57,9 +62,11 @@ export const NotificationCard: FC<{
 
               {notification.body && <Text fz={em(12)}>{notification.body}</Text>}
 
-              <Text fz={em(10)} c="gray">
-                <RelativeTimeFormat value={notification.createdAt} />
-              </Text>
+              {notification.createdAt && (
+                <Text fz={em(10)} c="gray">
+                  <RelativeTimeFormat value={notification.createdAt} />
+                </Text>
+              )}
             </Stack>
           </Group>
 
