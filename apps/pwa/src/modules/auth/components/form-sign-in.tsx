@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/modules/auth/auth-context";
-import { onError, onFormError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, PasswordInput, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -41,9 +41,6 @@ export const FormSignIn: FC<{ onForgotPassword: () => void }> = (props) => {
       .signInWithEmailAndPassword({
         email: values.email,
         password: values.plainPassword,
-      })
-      .catch(() => {
-        throw new Error(t`Incorrect login information`);
       })
       .catch((error) => onError(error));
     setIsSubmitting(false);
