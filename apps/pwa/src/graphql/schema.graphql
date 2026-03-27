@@ -181,7 +181,7 @@ type AuthUser {
   email: String!
   isEmailVerified: Boolean
   isPasswordProvided: Boolean!
-  locale: AppLocale!
+  locale: AppLocale
   name: String!
   phone: String
   role: UserRole!

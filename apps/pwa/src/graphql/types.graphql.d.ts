@@ -213,7 +213,7 @@ export type AuthUser = {
   email: Scalars['String']['output'];
   isEmailVerified: Maybe<Scalars['Boolean']['output']>;
   isPasswordProvided: Scalars['Boolean']['output'];
-  locale: AppLocale;
+  locale: Maybe<AppLocale>;
   name: Scalars['String']['output'];
   phone: Maybe<Scalars['String']['output']>;
   role: UserRole;
