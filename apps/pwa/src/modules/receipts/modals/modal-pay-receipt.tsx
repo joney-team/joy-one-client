@@ -173,6 +173,12 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     fetchPolicy: "cache-and-network",
   });
 
+  useEffect(() => {
+    if (receipt?.workspaceBranch?._id && !workspaceBranch) {
+      setWorkspaceBranch(receipt?.workspaceBranch);
+    }
+  }, [receipt?.workspaceBranch?._id]);
+
   const bankInformation = useMemo(() => {
     const bankAccount =
       workspaceBranchData?.workspaceBranch?.settings?.bankAccount || workspaceSetting?.bankAccount;
