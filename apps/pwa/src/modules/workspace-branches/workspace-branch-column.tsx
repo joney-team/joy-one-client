@@ -39,7 +39,7 @@ export const workspaceBranchColumn = (): Column => {
     },
     disabled: !workspace.isShouldEnableBranches,
     filter:
-      workspace.member.workspaceBranches.length > 0 &&
+      workspace.member.workspaceBranches.length > 0 ||
       workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)
         ? {
             dynamicSelector: {
@@ -60,14 +60,14 @@ export const workspaceBranchColumn = (): Column => {
             },
           }
         : workspace.member.workspaceBranches.length > 1
-        ? {
-            staticSelector: {
-              options: workspace.member.workspaceBranches.map((v) => ({
-                label: v.name,
-                value: v._id,
-              })),
-            },
-          }
-        : undefined,
+          ? {
+              staticSelector: {
+                options: workspace.member.workspaceBranches.map((v) => ({
+                  label: v.name,
+                  value: v._id,
+                })),
+              },
+            }
+          : undefined,
   };
 };

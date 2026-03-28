@@ -170,6 +170,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   const { data: workspaceBranchData } = useQuery(WORKSPACE_BRANCH_QUERY, {
     variables: { id: workspaceBranch?._id ?? "" },
     skip: !receipt?.workspaceBranch?._id,
+    fetchPolicy: "cache-and-network",
   });
 
   const bankInformation = useMemo(() => {
