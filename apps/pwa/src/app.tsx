@@ -15,8 +15,6 @@ import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { usePageTitle } from "./hooks/use-page-title";
 import { socket } from "./modules/apis/rest-client";
-import { RestQueryProvider } from "./modules/apis/query";
-import { getAccessToken } from "./modules/auth/auth-service";
 import { eventsEmitter } from "./modules/events/event-service";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
@@ -31,11 +29,12 @@ import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@xyflow/react/dist/style.css";
 
+import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
+import { serverGetAccessToken } from "./modules/auth/auth-server";
 import { EventFragment } from "./modules/events/graphql/fragmentEvent.graphql";
 import "./styles/app.style.css";
 import "./styles/react-big-calendar.css";
 import { nonLoading } from "./utils/non-loading";
-import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
 
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
@@ -105,7 +104,9 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   };
 
   const joinWorkspaceRoom = async (workspaceId: string) => {
-    const token = await getAccessToken();
+    const { result: token } = await serverGetAccessToken();
+    if (!token) return;
+
     const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
 
     socket.io.once("reconnect", () => {
@@ -120,10 +121,11 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   };
 
   const joinSocket = async () => {
-    const token = await getAccessToken();
+    const { result: token } = await serverGetAccessToken();
+    if (!token) return;
     const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
     socket.io.once("reconnect", joinSocket);
-    socket.emit("AUTH", { token, deviceId });
+    socket.emit("AUTH", { token: token, deviceId });
   };
 
   useEffect(() => {
@@ -174,25 +176,23 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
   return (
     <AppContext.Provider value={context}>
       <LangProvider>
-        <RestQueryProvider>
-          <LocationsProvider>
-            <LayoutProvider>
-              <AuthProvider>
-                <WorkspaceProvider>
-                  <ModuleProviders>
-                    {props.children}
+        <LocationsProvider>
+          <LayoutProvider>
+            <AuthProvider>
+              <WorkspaceProvider>
+                <ModuleProviders>
+                  {props.children}
 
-                    <NavigationProgress />
-                    <EscapeHandler />
-                    <EventsHandler />
-                    <AppLoading />
-                    <GeneralAnalytics />
-                  </ModuleProviders>
-                </WorkspaceProvider>
-              </AuthProvider>
-            </LayoutProvider>
-          </LocationsProvider>
-        </RestQueryProvider>
+                  <NavigationProgress />
+                  <EscapeHandler />
+                  <EventsHandler />
+                  <AppLoading />
+                  <GeneralAnalytics />
+                </ModuleProviders>
+              </WorkspaceProvider>
+            </AuthProvider>
+          </LayoutProvider>
+        </LocationsProvider>
       </LangProvider>
     </AppContext.Provider>
   );

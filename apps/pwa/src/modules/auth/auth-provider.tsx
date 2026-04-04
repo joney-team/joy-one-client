@@ -25,7 +25,6 @@ import { useApolloClient, useMutation } from "@apollo/client/react";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { useLingui } from "@lingui/react/macro";
 import * as Sentry from "@sentry/react";
-import axios from "axios";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken } from "firebase/messaging";
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
@@ -38,6 +37,7 @@ import { useUploadFile } from "../files/hooks/use-upload-file";
 import GetTimeZonesDocument from "../times/graphql/getTimeZones.graphql";
 import { Context } from "./auth-context";
 import {
+  serverCheckAuthStatus,
   serverSignInWithEmailPassword,
   serverSignInWithFacebook,
   serverSignInWithFirebase,
@@ -46,12 +46,8 @@ import {
   serverSignUpWithEmailPassword,
 } from "./auth-server";
 import {
-  clearClientTokens,
-  getAccessToken,
-  getRefreshToken,
   getSessionId,
   onFacebookLogin,
-  saveClientTokens,
   setSessionId,
   setWorkspaceAuthSessionId,
 } from "./auth-service";
@@ -115,7 +111,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     initializeMetaPages();
     setSessionId(uuid());
 
-    const isAuthMigratedResult = await axios.get<{ isMigrated: boolean }>(`/api/auth-migrate`);
+    const authStatusResult = await serverCheckAuthStatus();
 
     if (type === "auth") {
       setWorkspaceAuthSessionId(uuid());
@@ -126,17 +122,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const device = await prepareDevice();
       setDevice(device);
 
-      // User information
-      const accessToken = await getAccessToken();
-
-      if (!isAuthMigratedResult.data.isMigrated && accessToken) {
-        await axios.post(`/api/auth-migrate`, {
-          accessToken: accessToken,
-          refreshToken: await getRefreshToken(),
-        });
-      }
-
-      if (accessToken) {
+      if (authStatusResult?.result) {
         authResult = await client
           .query({
             query: AuthUserDocument,
@@ -168,7 +154,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     try {
       await Promise.all([signOut(), firebaseAuth.signOut()]);
       serverSignOut();
-      clearClientTokens();
       client.cache.reset();
       onReset();
       postAppChannelMessage("SIGN_OUT");
@@ -180,7 +165,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const handleSignInWithFirebase = async (idToken: string, username?: string) => {
     const { result: tokens, error } = await serverSignInWithFirebase(idToken, username);
     if (error || !tokens) throw Error(error ?? t`Failed to sign in with Firebase.`);
-    await saveClientTokens(tokens);
     await initialize("auth");
   };
 
@@ -202,7 +186,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const authResponse = await onFacebookLogin();
       const { result: tokens, error } = await serverSignInWithFacebook(authResponse.accessToken);
       if (error || !tokens) throw Error(error ?? t`Failed to sign in with Facebook.`);
-      await saveClientTokens(tokens);
       await initialize("auth");
       localStorage.setItem(StorageKey.META_ACCESS_TOKEN, authResponse.accessToken);
     } catch (error) {
@@ -227,15 +210,12 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const signInWithEmailAndPassword = async (dto: AuthSignInWithEmailPasswordInput) => {
     const { result, error } = await serverSignInWithEmailPassword(dto);
     if (error || !result) throw Error(error ?? t`Failed to sign in.`);
-    await saveClientTokens(result);
     await initialize("auth");
   };
 
   const signUpWithEmailPassword = async (input: AuthSignUpWithEmailPasswordInput) => {
     const { result, error } = await serverSignUpWithEmailPassword(input);
     if (error || !result) throw Error(error ?? t`Failed to sign up.`);
-
-    await saveClientTokens(result);
     await initialize("auth");
   };
 
@@ -319,8 +299,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
         query: GetTimeZonesDocument,
       });
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const _timezone = timeZones.data?.timeZones.find((tz) => tz.utc.includes(timezone));
-      await updateProfile({ ...user, settings: { ...user.settings, timezoneId: _timezone?.id } });
+      const currentUserTimeZone = timeZones.data?.timeZones.find((tz) => tz.utc.includes(timezone));
+      await updateProfile({
+        ...user,
+        settings: { ...user.settings, timezoneId: currentUserTimeZone?.id },
+      });
       return null;
     } catch (error) {
       console.error("Error when detecting timezone", error);
@@ -330,7 +313,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const signOutOtherDevices = async () => {
     const { result: tokens, error } = await serverSignOutOtherDevices();
     if (error || !tokens) throw Error(error ?? t`Failed to sign out other devices.`);
-    await saveClientTokens(tokens);
   };
 
   const syncUserLocale = async () => {

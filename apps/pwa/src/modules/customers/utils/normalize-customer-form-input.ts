@@ -1,8 +1,9 @@
 import { CustomerFormInput } from "@/graphql/types.graphql";
 import { CustomerFormFragment } from "@/modules/customer-forms/graphql/fragmentCustomerForm.graphql";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 
 export function normalizeCustomerFormInput(input: CustomerFormFragment): CustomerFormInput {
-  return {
+  return removeTypeName({
     name: input.name,
     phone: input.phone,
     workspaceId: input.workspaceId,
@@ -13,5 +14,5 @@ export function normalizeCustomerFormInput(input: CustomerFormFragment): Custome
     location: input.location,
     vnLocation: input.vnLocation,
     status: input.status,
-  };
+  });
 }

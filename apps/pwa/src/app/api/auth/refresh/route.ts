@@ -2,7 +2,7 @@
 
 import { StorageKey } from "@/constants/storage-key";
 import type { AuthTokenResult } from "@/graphql/types.graphql";
-import { restServerClient } from "@/modules/apis/server";
+import { restServerClient } from "@/modules/apis/rest-server";
 import { cookies } from "next/headers";
 
 export async function POST() {

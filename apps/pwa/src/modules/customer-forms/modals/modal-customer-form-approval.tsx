@@ -67,16 +67,13 @@ const CustomerFormApproval: FC<CustomerFormModalProps> = (props) => {
     },
   });
 
-  useEventsListener(
-    [EventType.CustomerFormNew, EventType.CustomerFormUpdated, EventType.CustomerFormArchived],
-    (event) => {
-      if (event.ref === props._id) {
-        customerFormRefetch();
-      }
-    },
-  );
+  useEventsListener([EventType.CustomerFormUpdated, EventType.CustomerFormArchived], (event) => {
+    if (event.ref === props._id) {
+      customerFormRefetch();
+    }
+  });
 
-  if (customerFormLoading) return <Skeleton height={150} />;
+  if (customerFormLoading && !customerFormData) return <Skeleton height={150} />;
   if (customerFormError || !customerFormData) return <Errored error={customerFormError} />;
 
   const customerForm = customerFormData.customerForm;

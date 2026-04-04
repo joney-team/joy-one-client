@@ -1,7 +1,7 @@
 import type { AppMetadata } from "@/types";
 
 import { defaultMetadata } from "@/configs/metadata.config";
-import { restServerClient } from "../apis/server";
+import { restServerClient } from "../apis/rest-server";
 import { renderFileUrl } from "../files/files-utils";
 import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
 

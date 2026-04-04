@@ -8,7 +8,7 @@ import type {
 } from "@/graphql/types.graphql";
 import { withServerAction } from "@/utils/server.utils";
 import { cookies } from "next/headers";
-import { restServerClient } from "../apis/server";
+import { restServerClient } from "../apis/rest-server";
 import type { AuthRefreshTokenInput } from "./auth-types";
 
 export async function saveServerTokens(tokens: AuthTokenResult) {
@@ -88,4 +88,24 @@ export const serverSignOut = withServerAction(async () => {
     cookieStore.delete(StorageKey.ACCESS_TOKEN),
     cookieStore.delete(StorageKey.REFRESH_TOKEN),
   ]);
+});
+
+export const serverGetAccessToken = withServerAction(async () => {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get(StorageKey.REFRESH_TOKEN)?.value;
+  if (!refreshToken) return null;
+
+  try {
+    const result = await serverRefreshToken({ refreshToken });
+    await saveServerTokens(result);
+    return result.accessToken;
+  } catch (error) {
+    return null;
+  }
+});
+
+export const serverCheckAuthStatus = withServerAction(async () => {
+  const cookieStore = await cookies();
+  const refreshToken = cookieStore.get(StorageKey.REFRESH_TOKEN)?.value;
+  return Boolean(refreshToken);
 });

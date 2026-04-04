@@ -1,16 +1,8 @@
 import environment from "@joy-one-client/config";
 import axios, { AxiosRequestConfig, type AxiosInstance } from "axios";
 
-type RetrieveToken = () => string | null | Promise<string | null>;
-type RefreshToken = () => string | null | Promise<string | null>;
-
 interface ApiInstanceOptions {
   isServerSide?: boolean;
-  getToken?: RetrieveToken;
-  retrieveToken?: RefreshToken;
-  getWorkspaceId?: () => string | null;
-  getDeviceId?: () => string | null;
-  getSessionId?: () => string | null;
   getLocale?: () => string | null;
   baseURL?: string;
 }
@@ -35,57 +27,11 @@ export class ApiInstance {
       timeout: 1000 * 60 * 30,
     });
 
-    instance.interceptors.response.use(
-      (res) => res,
-      async (error) => {
-        let originalRequest = error.config;
-        const isRequestRefreshToken = originalRequest.url.includes("refresh-token");
-        const currentAccessToken = await this.options.getToken?.();
-
-        // Auto renew access token
-        if (
-          error.response?.status === 401 &&
-          !originalRequest._retried &&
-          !isRequestRefreshToken &&
-          currentAccessToken
-        ) {
-          originalRequest._retried = true;
-
-          try {
-            const accessToken = await this.options.retrieveToken?.();
-            originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-            return this.instance(originalRequest);
-          } catch (error) {
-            throw error;
-          }
-        }
-
-        if (error.response?.status === 429) {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-          return this.instance(originalRequest);
-        }
-
-        throw error;
-      },
-    );
-
     this.instance = instance;
   }
 
   async bindConfig(config: AxiosRequestConfig) {
     let headers = { ...(config?.headers || {}) } as Record<string, string>;
-
-    const token = await this.options.getToken?.();
-    if (token) headers["Authorization"] = `Bearer ${token}`;
-
-    const workspaceId = this.options.getWorkspaceId?.();
-    if (workspaceId) headers["X-Workspace-Id"] = workspaceId;
-
-    const sessionId = this.options.getSessionId?.();
-    if (sessionId) headers["X-Session-Id"] = sessionId;
-
-    const deviceId = this.options.getDeviceId?.();
-    if (deviceId) headers["X-Device-Id"] = deviceId;
 
     const locale = this.options.getLocale?.();
     if (locale) headers["Accept-Language"] = locale;

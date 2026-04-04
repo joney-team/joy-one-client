@@ -1,4 +1,4 @@
-import { restServerClient } from "@/modules/apis/server";
+import { restServerClient } from "@/modules/apis/rest-server";
 
 export async function GET(_: Request, { params }: { params: { id: string } }) {
   const { id } = await params;

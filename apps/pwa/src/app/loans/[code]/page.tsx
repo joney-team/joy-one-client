@@ -1,4 +1,4 @@
-import { restServerClient } from "@/modules/apis/server";
+import { restServerClient } from "@/modules/apis/rest-server";
 import { AppPageMetadata } from "@/types";
 import { Metadata, NextPage, ResolvingMetadata } from "next";
 import Content from "./page-content";
