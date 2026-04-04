@@ -131,7 +131,7 @@ export const OrderSaleTabs: FC = () => {
           <SaleTab
             key={order.id}
             id={order.id + "-tab"}
-            name={order.code ?? `#${index + 1} ${orderFeatureName.singular}`}
+            name={order.code || `#${index + 1} ${orderFeatureName.singular}`}
             active={order.id === orderSale.activeOrderId}
             onClose={() => orderSale.closeOrder(order.id)}
             onClick={() => orderSale.setActiveOrderId(order.id)}

@@ -29,11 +29,15 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   const workspace = useWorkspace();
   const client = useApolloClient();
 
+  const params = useMemo(() => {
+    return {
+      receiptId: receipt.id,
+    };
+  }, [receipt.id]);
+
   const { data, isFetching, refetch, isInitialized, count } = useGraphqlList<EInvoiceFragment>({
     query: GetEInvoicesDocument,
-    params: {
-      receiptId: receipt.id,
-    },
+    params,
     events: [EventType.EInvoiceCreated, EventType.EInvoiceRemoved, EventType.ReceiptPaid],
   });
 

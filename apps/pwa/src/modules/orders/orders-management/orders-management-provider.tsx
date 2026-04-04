@@ -11,7 +11,12 @@ import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { readLocalStorageValue, useLocalStorage, UseStorageOptions } from "@mantine/hooks";
+import {
+  readLocalStorageValue,
+  useLocalStorage,
+  UseStorageOptions,
+  useThrottledCallback,
+} from "@mantine/hooks";
 import { useSearchParams } from "next/navigation";
 import { Fragment, PropsWithChildren, useEffect, useMemo, useState, type FC } from "react";
 import { v4 as uuid } from "uuid";
@@ -96,11 +101,9 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
       query: GetOrdersByIdsDocument,
       variables: { ids: currentState.orders.map((o) => o.id) },
     });
-    currentState.orders = currentState.orders
-      .map((o) => {
-        return serverOrders.data?.orders.find((v) => v.id === o.id) ?? null;
-      })
-      .filter((v) => v !== null);
+    currentState.orders = currentState.orders.map((o) => {
+      return serverOrders.data?.orders.find((v) => v.id === o.id) ?? o;
+    });
 
     // Order by code
     if (orderCode) {
@@ -152,9 +155,11 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     },
   );
 
+  const throttledCalculate = useThrottledCallback((value) => calculate(value), 300);
+
   useEffect(() => {
     if (activeOrder) {
-      calculate({ variables: { input: normalizeOrderToInput(activeOrder) } });
+      throttledCalculate({ variables: { input: normalizeOrderToInput(activeOrder) } });
     }
   }, [activeOrder]);
 

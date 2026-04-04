@@ -254,7 +254,7 @@ export const OrderSaleItems: FC = () => {
       {orderSale.activeOrder.items.map((item, index) => {
         return (
           <OrderSaleItemComponent
-            key={item.product._id}
+            key={item.product._id + index}
             index={index}
             item={item}
             onUpdate={(item) => {

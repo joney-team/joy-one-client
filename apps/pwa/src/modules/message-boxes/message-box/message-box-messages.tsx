@@ -37,7 +37,7 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { IconAnalyze, IconUserFilled, IconX } from "@tabler/icons-react";
-import { FC, Fragment, useEffect, useRef } from "react";
+import { FC, Fragment, useEffect, useMemo, useRef } from "react";
 import { MessageFragment } from "../graphql/fragmentMessage.graphql";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import GetMessagesDocument from "../graphql/getMessages.graphql";
@@ -47,12 +47,16 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);
 
-  const messages = useGraphqlList<MessageFragment>({
-    query: GetMessagesDocument,
-    params: {
+  const params = useMemo(() => {
+    return {
       boxId: props.box._id,
       getAll: true,
-    },
+    };
+  }, [props.box._id]);
+
+  const messages = useGraphqlList<MessageFragment>({
+    query: GetMessagesDocument,
+    params,
     events: [EventType.MessageNew, EventType.MessageUpdated],
     autoFetch: false,
   });

@@ -20,6 +20,10 @@ import { userOrdersManagement } from "../../orders-management/orders-management-
 
 const searchBoxWidth = 400;
 
+const latestProductsParams = {
+  sortLastInteractionAt: -1,
+};
+
 export const OrderSaleSearchBox: FC = () => {
   const color = useColor();
   const orderSale = userOrdersManagement();
@@ -46,11 +50,8 @@ export const OrderSaleSearchBox: FC = () => {
   }, [throttledSearchText]);
 
   const latestProducts = useGraphqlList<ProductFragment>({
-    id: "latest-products",
     query: GetProductsDocument,
-    params: {
-      sortLastInteractionAt: -1,
-    },
+    params: latestProductsParams,
   });
 
   const searchResultCount = useMemo(() => {
