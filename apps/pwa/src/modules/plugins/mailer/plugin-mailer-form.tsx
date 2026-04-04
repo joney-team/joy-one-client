@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { restClient } from "@/modules/apis/rest-client";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -22,12 +21,15 @@ import {
 import { useForm } from "@mantine/form";
 import { IconArrowLeft, IconCircleCheck, IconSend } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import PluginMailerSendTestMailDocument from "./graphql/pluginMailerSendTestMail.graphql";
 
 interface MailerFormProps {
   onDone?: () => void;
 }
 
 export const PluginMailerForm: FC<MailerFormProps> = (props) => {
+  const { t } = useLingui();
+  const client = useApolloClient();
   const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,14 +59,20 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
     }
 
     if (active === 1) {
-      if (!payload.testEmail) form.setFieldError("testEmail", t`Please enter the email to receive`);
-      else {
+      if (!payload.testEmail) {
+        form.setFieldError("testEmail", t`Please enter the email to receive`);
+      } else {
         setIsSubmitting(true);
         try {
-          await restClient.post("/plugins/mailer/workspace/test", {
-            to: payload.testEmail,
-            accountUser: payload.user,
-            accountPass: payload.pass,
+          await client.mutate({
+            mutation: PluginMailerSendTestMailDocument,
+            variables: {
+              input: {
+                to: payload.testEmail,
+                accountUser: payload.user,
+                accountPass: payload.pass,
+              },
+            },
           });
           setActive(2);
         } catch (error) {
@@ -79,7 +87,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
       try {
         await updateWorkspaceSetting({
           mailer: {
-            __typename: "PluginMailerAccount",
+            __typename: "MailerAccount",
             user: payload.user,
             pass: payload.pass,
           },
@@ -94,12 +102,15 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
 
   return (
     <Stepper active={active} onStepClick={setActive} size="xs">
-      <Stepper.Step label={t`Gmail account`}>
+      <Stepper.Step label={<Trans>Gmail account</Trans>}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)">
           <Stack>
-            <TextInput label={t`Gmail address`} {...form.getInputProps("user")} />
+            <TextInput label={<Trans>Gmail address</Trans>} {...form.getInputProps("user")} />
 
-            <PasswordInput label={t`Application password`} {...form.getInputProps("pass")} />
+            <PasswordInput
+              label={<Trans>Application password</Trans>}
+              {...form.getInputProps("pass")}
+            />
 
             <Button type="submit" loading={isSubmitting} onClick={() => onSubmit()}>
               <Trans>Continue</Trans>
@@ -111,10 +122,13 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
           </Stack>
         </Card>
       </Stepper.Step>
-      <Stepper.Step label={t`Send test email`}>
+      <Stepper.Step label={<Trans>Send test email</Trans>}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)">
           <Stack>
-            <TextInput label={t`Email to receive`} {...form.getInputProps("testEmail")} />
+            <TextInput
+              label={<Trans>Email to receive</Trans>}
+              {...form.getInputProps("testEmail")}
+            />
 
             {isSubmitting && (
               <Text ta="center" fw={300} fz={em(14)}>
@@ -150,7 +164,7 @@ export const PluginMailerForm: FC<MailerFormProps> = (props) => {
           </Stack>
         </Card>
       </Stepper.Step>
-      <Stepper.Step label={t`Complete`}>
+      <Stepper.Step label={<Trans>Complete</Trans>}>
         <Card shadow="none" withBorder bg="var(--mantine-color-body)" pb={20}>
           <Stack align="center">
             <ThemeIcon variant="transparent" size="xl">

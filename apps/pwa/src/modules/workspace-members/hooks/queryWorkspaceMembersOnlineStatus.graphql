@@ -1,6 +1,0 @@
-query WorkspaceMembersOnlineStatus {
-  workspaceMembersOnlineStatus {
-    userId
-    isOnline
-  }
-}

@@ -30,9 +30,9 @@ export const OrderSaleCheckout: FC = () => {
 
   if (!orderSale.activeOrder) return null;
 
-  const subTotalAmount = (orderSale.calculating.data?.items ?? []).reduce(
+  const subTotalAmount = (orderSale.calculated?.items ?? []).reduce(
     (acc, item) => acc + item.price * item.quantity,
-    0
+    0,
   );
 
   const paidAmount = orderSale.activeOrder?.paidAmount ?? 0;
@@ -56,14 +56,15 @@ export const OrderSaleCheckout: FC = () => {
         <Text tt="uppercase" fw={700}>
           <Trans>Total</Trans>
         </Text>
-        {orderSale.calculating.isLoading ? (
-          <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
+        {orderSale.isCalculating ? (
+          <Skeleton h={20} w={80} visible={orderSale.isCalculating} />
         ) : (
           <Text fw={700}>
             <CurrencyFormat
               value={
-                (orderSale.calculating.data?.totalAmount ||
-                  0 + (orderSale.activeOrder.tipAmount ?? 0)) - paidAmount
+                (orderSale.calculated?.totalAmount || 0) +
+                (orderSale.activeOrder?.tipAmount || 0) -
+                paidAmount
               }
             />
           </Text>
@@ -193,7 +194,7 @@ export const OrderSaleCheckout: FC = () => {
               <Text>
                 <Trans>Subtotal</Trans>
               </Text>
-              {orderSale.calculating.isLoading ? (
+              {orderSale.isCalculating ? (
                 <Skeleton h={20} w={80} visible />
               ) : (
                 <Text>

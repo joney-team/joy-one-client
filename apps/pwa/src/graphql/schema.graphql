@@ -29,6 +29,15 @@ enum ActivityType {
   COMMON
 }
 
+"""Available admin actions"""
+enum AdminAction {
+  PURE_REPORTS
+  RESET_CACHE
+  SEARCH_REINDEX
+  SYNC_LOANS
+  SYNC_RECEIPTS
+}
+
 """The `AnyType` scalar type represents any value without restrictions."""
 scalar AnyType
 
@@ -192,9 +201,24 @@ input AuthVerifyRenewPasswordCodeInput {
   code: String!
 }
 
-type BaseCustomFieldValue {
-  customFieldId: String!
-  value: AnyType
+type BankInforationsResult {
+  results: [BankInformation!]!
+  total: Float!
+}
+
+type BankInformation {
+  bin: String!
+  code: String!
+  id: Float!
+  isTransfer: Float!
+  logo: String!
+  lookupSupported: Float!
+  name: String!
+  shortName: String!
+  short_name: String!
+  support: Float!
+  swift_code: String
+  transferSupported: Float!
 }
 
 type Booking {
@@ -229,9 +253,22 @@ enum BookingStatus {
   RESCHEDULED
 }
 
+type BookingsMetricsReport {
+  todayCount: Float!
+  userBookingsCount: Float!
+}
+
 type BookingsPaginated {
   results: [Booking!]!
   total: Float!
+}
+
+type BookingsTimeSeriesReport {
+  canceled: Float!
+  completed: Float!
+  inProgress: Float!
+  total: Float!
+  transferred: Float!
 }
 
 input BulkArchiveInput {
@@ -240,6 +277,10 @@ input BulkArchiveInput {
 
 input BulkArchiveLoansInput {
   loanIds: [String!]!
+}
+
+input BulkProductsStockInInput {
+  stocks: [ProductStockInInput!]!
 }
 
 input BulkRejectLoanInput {
@@ -266,8 +307,8 @@ type CategoriesPaginated {
 type Category {
   _id: String!
   createdAt: Float
-  customFieldValues: [CustomFieldValue!]
-  customFields: [CustomField!]!
+  customFieldValues: [CustomFieldValue!]!
+  customFields: [CustomField!]
   description: String
   icon: String
   isArchived: Boolean
@@ -282,6 +323,18 @@ type Category {
   updatedAt: Float
 }
 
+input CategoryInput {
+  customFieldValues: [CustomFieldValueInput!]
+  description: String
+  icon: String
+  name: String!
+  order: Float
+  parentId: String
+  slug: String
+  thumbnail: String
+  type: CategoryType
+}
+
 """Available category types"""
 enum CategoryType {
   COMMON
@@ -289,10 +342,54 @@ enum CategoryType {
   PRODUCTS
 }
 
+input ChannelWidgetSettingsInput {
+  brandLogo: String
+  brandName: String
+  chatIcon: String
+  color: String
+  locale: String
+  position: MessageHubWidgetPosition
+  welcomMessage: String
+  welcomSubMessage: String
+  welcomeInputs: [MessageHubWidgetWelcomeInput!]
+}
+
+"""Type of welcome input in channel widget"""
+enum ChannelWidgetWelcomeInputType {
+  EMAIL
+  NAME
+  NUMBER
+  PHONE
+  TEXT
+}
+
+type CombineMetricsReport {
+  bookings: BookingsMetricsReport!
+  customers: CustomersMetricsReport!
+  loans: LoansMetricsReport!
+  orders: OrdersMetricsReport!
+  receipts: ReceiptsMetricsReport!
+  tasks: TasksMetricsReport!
+}
+
+type CombineTimeSeriesReport {
+  bookings: BookingsTimeSeriesReport!
+  customers: CustomersTimeSeriesReport!
+  fromTime: Float!
+  loans: LoansTimeSeriesReport!
+  receipts: ReceiptsTimeSeriesReport!
+  tasks: TasksTimeSeriesReport!
+  toTime: Float!
+}
+
 type ConfigTaskStatuses {
   isInherited: Boolean!
   statuses: [TaskStatus!]!
   workspaceStatuses: [TaskStatus!]!
+}
+
+type ConnectZaloOaResponse {
+  url: String!
 }
 
 type Coordinates {
@@ -303,75 +400,6 @@ type Coordinates {
 input CoordinatesInput {
   lat: Float!
   lng: Float!
-}
-
-type Coupon {
-  _id: String!
-  code: String
-  createdAt: Float
-  customFieldValues: [CustomFieldValue!]
-  customerId: String
-  expiredAt: Float
-  isArchived: Boolean
-  isExpired: Boolean
-  quantity: Float!
-  receiptId: String
-  refs: [String!]
-  rule: CouponRule!
-  ruleId: String!
-  source: EntitySource
-  ticketId: String
-  updatedAt: Float
-}
-
-type CouponRule {
-  _id: String!
-  benefits: [CouponRuleBenefit!]!
-  createdAt: Float
-  customFieldValues: [CustomFieldValue!]
-  description: String
-  image: String
-  isActive: Boolean!
-  isArchived: Boolean
-  isCumulative: Boolean!
-  name: String!
-  refs: [String!]
-  source: EntitySource
-  terms: [CouponRuleTerm!]!
-  updatedAt: Float
-}
-
-type CouponRuleBenefit {
-  data: AnyType!
-  type: CouponRuleBenefitType!
-}
-
-"""Available coupon rule benefit types"""
-enum CouponRuleBenefitType {
-  DISCOUNT_ON_PRODUCT
-  DISCOUNT_ON_TOTAL
-  FREE_ON_PRODUCT
-}
-
-type CouponRuleTerm {
-  data: AnyType!
-  type: CouponRuleTermType!
-}
-
-"""Available coupon rule term types"""
-enum CouponRuleTermType {
-  LIMIT_PRODUCTS
-  MINIMUM_TOTAL
-}
-
-type CouponRulesPaginated {
-  results: [CouponRule!]!
-  total: Float!
-}
-
-type CouponsPaginated {
-  results: [Coupon!]!
-  total: Float!
 }
 
 input CreateLoanInput {
@@ -385,6 +413,18 @@ input CreateLoanInput {
   payment: LoanPaymentInput
   source: EntitySource
   workspaceBranchId: String
+}
+
+input CreatePluginAiAssistantInput {
+  apiKey: String!
+  provider: PluginAiAssistantProvider!
+}
+
+input CreatePluginEInvoiceProviderInput {
+  apiUrl: String
+  auth: JSONObject!
+  templates: JSONObject!
+  type: PluginEInvoicesProviderType!
 }
 
 input CreateReceiptInput {
@@ -427,6 +467,10 @@ input CreateTaskInput {
   workspaceBranchId: String
 }
 
+input CreateWorkspaceInput {
+  code: String!
+}
+
 type CustomField {
   _id: String!
   config: JSONObject
@@ -443,6 +487,17 @@ type CustomField {
   source: EntitySource
   type: CustomFieldType!
   updatedAt: Float
+}
+
+input CustomFieldInput {
+  config: JSONObject
+  description: String
+  entities: [String!]!
+  key: String
+  label: String!
+  order: Float
+  placeholder: String
+  type: CustomFieldType!
 }
 
 """Available custom field types"""
@@ -473,6 +528,12 @@ input CustomFieldValueInput {
 type CustomFieldsPaginated {
   results: [CustomField!]!
   total: Float!
+}
+
+input CustomFieldsQuery {
+  entities: [String!]
+  key: String
+  label: String
 }
 
 type Customer {
@@ -515,6 +576,28 @@ type Customer {
   vnSecondaryLocationFullAddress: String
   workspaceBranch: WorkspaceBranch
   workspaceBranchId: String
+}
+
+type CustomerContact {
+  _id: String!
+  contacts: [CustomerContactInformation!]!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  customerId: String!
+  isArchived: Boolean
+  refs: [String!]
+  source: EntitySource
+  updatedAt: Float
+}
+
+type CustomerContactInformation {
+  name: String!
+  phones: [String!]!
+}
+
+input CustomerContactInput {
+  name: String!
+  phones: [String!]!
 }
 
 type CustomerForm {
@@ -660,8 +743,17 @@ input CustomerRelationshipContactInput {
   type: String!
 }
 
+type CustomersMetricsReport {
+  newCustomersToday: Float!
+}
+
 type CustomersPaginated {
   results: [Customer!]!
+  total: Float!
+}
+
+type CustomersTimeSeriesReport {
+  newIds: [String!]!
   total: Float!
 }
 
@@ -745,6 +837,24 @@ input DisplayWidgetInput {
   type: String!
 }
 
+type DynamicSelection {
+  entity: String
+  operator: DynamicSelectionOperator!
+  value: [AnyType!]!
+}
+
+input DynamicSelectionInput {
+  entity: String
+  operator: DynamicSelectionOperator!
+  value: [AnyType!]!
+}
+
+"""DynamicSelectionOperator"""
+enum DynamicSelectionOperator {
+  EXCLUDES
+  INCLUDES
+}
+
 type EInvoice {
   _id: String!
   createdAt: Float
@@ -756,6 +866,7 @@ type EInvoice {
   provider: PluginEInvoicesProviderType!
   providerData: JSONObject
   providerId: String!
+  providerInformation: PluginEInvoiceProviderInformation!
   receiptCode: String!
   receiptId: String!
   refs: [String!]
@@ -835,11 +946,6 @@ enum EventType {
   COMMENT_REMOVED
   COMMENT_UNPINNED
   COMMENT_UPDATED
-  COUPONS_CREATED
-  COUPONS_USED
-  COUPON_RULES_ARCHIVED
-  COUPON_RULES_CREATED
-  COUPON_RULES_UPDATED
   CUSTOMER_ARCHIVED
   CUSTOMER_ASSIGN_TO_USER
   CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH
@@ -940,8 +1046,8 @@ enum EventType {
   RECEIPT_SYNCED
   RECEIPT_UNARCHIVED
   RECEIPT_UPDATED
-  REPORT_RANGE_SYNCED
-  REPORT_REALTIME_SYNCED
+  REPORT_METRICS_SYNCED
+  REPORT_TIME_SERIES_SYNCED
   TABLE_SLOT_ARCHIVED
   TABLE_SLOT_NEW
   TABLE_SLOT_UPDATED
@@ -1005,6 +1111,15 @@ type EventsPaginated {
   total: Float!
 }
 
+input ExportTimeSeriesReportInput {
+  forceUpdate: Boolean
+  fromTime: Float!
+  period: Period!
+  toTime: Float!
+  userId: String
+  workspaceBranchIds: [String!]
+}
+
 type File {
   _id: String!
   createdAt: Float
@@ -1061,6 +1176,27 @@ enum Gender {
   OTHER
 }
 
+input GenerateCategorySlugInput {
+  name: String!
+}
+
+input GenerateEInvoiceDataInput {
+  receiptId: String!
+}
+
+input GenerateSlugInput {
+  title: String!
+}
+
+input GetBankAccountInformationInput {
+  accountNumber: String!
+  bin: String!
+}
+
+type GetBankAccountInformationResult {
+  accountName: String!
+}
+
 """Available task statuses modes"""
 enum GetTaskStatusesMode {
   EDIT
@@ -1083,15 +1219,12 @@ input LateInterestRateInput {
 }
 
 type Loan {
-  _count: Float!
-  _id: String
   amount: Float!
   assetData: AnyType
   assetType: LoanAssetType!
   code: String!
   coord: Coordinates
   createdAt: Float
-  customFieldValues: [BaseCustomFieldValue!]
   customer: Customer!
   customerCidNumber: String
   customerId: String!
@@ -1242,6 +1375,13 @@ type LoanPaymentProgress {
   time: Float
 }
 
+type LoanReceiptReport {
+  capital: Float!
+  expense: Float!
+  fee: Float!
+  period: Float
+}
+
 type LoanSettings {
   assetEstimationPriceSpreadRate: Float
   contractLiquidationPdfUrl: String
@@ -1275,9 +1415,44 @@ enum LoanStatus {
   REJECTED
 }
 
+type LoansMetricsReport {
+  contracts: LoansMetricsReportContracts!
+  debt: LoansMetricsReportDebt!
+}
+
+type LoansMetricsReportContracts {
+  activated: Float!
+  overdue: Float!
+  pending: Float!
+}
+
+type LoansMetricsReportDebt {
+  notDueYet: Float!
+  overdue: Float!
+  total: Float!
+}
+
 type LoansPaginated {
   results: [Loan!]!
   total: Float!
+}
+
+type LoansTimeSeriesReport {
+  contracts: LoansTimeSeriesReportContracts!
+  fulfilledLoans: [LoansTimeSeriesReportInformation!]!
+  newLoans: [LoansTimeSeriesReportInformation!]!
+}
+
+type LoansTimeSeriesReportContracts {
+  fulfilled: Float!
+  fulfilledAmount: Float!
+  new: Float!
+}
+
+type LoansTimeSeriesReportInformation {
+  amount: Float!
+  customerId: String!
+  id: String!
 }
 
 type Location {
@@ -1296,82 +1471,363 @@ input LocationInput {
   wardId: String
 }
 
+"""The type of location (province, district, ward)"""
+enum LocationType {
+  district
+  province
+  ward
+}
+
+type MailerAccount {
+  pass: String!
+  user: String!
+}
+
+input MailerAccountInput {
+  pass: String!
+  user: String!
+}
+
+type Message {
+  _id: String!
+  attachments: [MessageAttachment!]!
+  boxId: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  failedReason: String
+  id: String
+  isArchived: Boolean
+  refs: [String!]
+  resouceId: String
+  resource: MessageResource
+  senderId: String
+  source: EntitySource
+  status: MessageStatus
+  text: String
+  type: MessageType!
+  updatedAt: Float
+  user: WorkspaceMember
+  userId: String
+}
+
+type MessageAttachment {
+  raw: AnyType
+  type: MessageAttachmentType!
+  url: String
+}
+
+"""Type of the message attachment"""
+enum MessageAttachmentType {
+  AUDIO
+  FILE
+  IMAGE
+  STICKER
+  UNKNOWN
+  VIDEO
+}
+
+type MessageBox {
+  _id: String!
+  aiAssistantDisabled: Boolean
+  aiAssistantconversationId: String
+  assigneeUser: WorkspaceMember
+  assigneeUserId: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  customer: Customer
+  customerId: String
+  expireAt: Float
+  isArchived: Boolean
+  lastInteractionAt: Float
+  lastMessage: Message
+  phone: String
+  platformId: String
+  platformType: MessageBoxPlatformType!
+  ref: String!
+  refs: [String!]
+  senderAvatar: String
+  senderId: String!
+  senderName: String
+  source: EntitySource
+  status: MessageBoxStatus
+  updatedAt: Float
+}
+
+"""Platform type of the message box"""
+enum MessageBoxPlatformType {
+  MESSAGE_HUB
+  META_PAGE
+  ZALO
+}
+
+"""Status of the message box"""
+enum MessageBoxStatus {
+  CLOSED
+  EXPIRED
+  IN_PROGRESS
+  WAITING
+}
+
+type MessageBoxesPaginated {
+  results: [MessageBox!]!
+  total: Float!
+}
+
+"""Position of the widget on the client screen"""
+enum MessageHubWidgetPosition {
+  LEFT
+  RIGHT
+}
+
+type MessageHubWidgetSettings {
+  brandLogo: String
+  brandName: String
+  chatIcon: String
+  color: String
+  locale: String
+  position: MessageHubWidgetPosition
+  welcomMessage: String
+  welcomSubMessage: String
+  welcomeInputs: [MessageHubWidgetWelcome!]
+}
+
+type MessageHubWidgetWelcome {
+  description: String
+  fieldName: String!
+  id: String!
+  isRequired: Boolean
+  label: String!
+  placeholder: String
+  type: ChannelWidgetWelcomeInputType!
+}
+
+input MessageHubWidgetWelcomeInput {
+  description: String
+  fieldName: String!
+  id: String!
+  isRequired: Boolean
+  label: String!
+  placeholder: String
+  type: ChannelWidgetWelcomeInputType!
+}
+
+"""The resource from which the message is sent"""
+enum MessageResource {
+  AI_ASSISTANT
+  INTERNAL
+  WEBHOOK
+}
+
+"""Status of the message"""
+enum MessageStatus {
+  PENDING
+  READED
+  SENT
+  SENT_FAILED
+}
+
+"""Type of the message"""
+enum MessageType {
+  RECEIVE
+  SEND
+}
+
+type MessagesPaginated {
+  results: [Message!]!
+  total: Float!
+}
+
+type MetaPage {
+  _id: String!
+  categories: [MetaPageCategory!]!
+  category: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  id: String!
+  isArchived: Boolean
+  isDisabled: Boolean
+  logo: String
+  name: String!
+  refs: [String!]
+  source: EntitySource
+  status: MetaPageStatus!
+  tasks: [String!]!
+  updatedAt: Float
+}
+
+type MetaPageCategory {
+  id: String!
+  name: String!
+}
+
+type MetaPageInfo {
+  avatar: String
+  categories: [MetaPageCategory!]!
+  name: String!
+  pageId: String!
+  status: MetaPageInfoStatus!
+}
+
+"""Connection status of the Meta Page"""
+enum MetaPageInfoStatus {
+  CONNECTED
+  CONNECTED_WITH_OTHER_WORKSPACE
+  NOT_CONNECTED
+}
+
+"""Status of the Meta Page connection"""
+enum MetaPageStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type MetricsReport {
+  _id: String!
+  data: CombineMetricsReport!
+  dto: AnyType
+  fromTime: Float!
+  ref: String!
+  status: ReportStatus!
+  toTime: Float!
+  type: ReportType!
+  updatedAt: Float
+  userId: String
+  workspaceBranchIds: [String!]
+}
+
 type Mutation {
   addActivity(content: String, contextId: String!, contextType: String!, parentId: String, type: ActivityType!): Activity!
   addReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
+  adminAction(action: AdminAction!): Boolean!
   approveAttendanceRecord(id: String!): AttendanceRecord!
   approveCustomerKyc(customerId: String!): CustomerKyc!
   approveLoan(id: String!): Loan!
   archiveActivity(id: String!): Activity!
   archiveCustomer(id: String!): Boolean!
   archiveCustomerForm(id: String!): CustomerForm!
+  archiveEInvoiceProvider(providerId: String!): Boolean!
   archiveLoan(id: String!): Loan!
+  archiveOrder(id: String!): Order!
+  archivePartner(id: String!): Boolean!
+  archivePost(id: String!): Boolean!
+  archiveProduct(id: String!): Boolean!
   archiveReceipt(id: String!): Receipt!
+  archiveWorkspace: Boolean!
+  archiveWorkspaceApiApp(id: String!): Boolean!
   assignCustomer(id: String!, input: AssignCustomerInput!): Customer!
+  assignUserToMessageBox(boxId: String!, userId: String): MessageBox!
   assignWorkspaceMemberRoles(memberId: String!, roleIds: [String!]!): WorkspaceMember!
   bulkArchiveCustomerForms(input: BulkArchiveInput!): [CustomerForm!]!
   bulkArchiveLoans(input: BulkArchiveLoansInput!): [String!]!
+  bulkArchivePosts(ids: [String!]!): Boolean!
+  bulkProductsStockIn(input: BulkProductsStockInInput!): Boolean!
   bulkRejectLoans(input: BulkRejectLoanInput!): [Loan!]!
-  bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): CustomerForm!
+  bulkRevertRejectedLoans(loanIds: [String!]!): [Loan!]!
+  bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [CustomerForm!]!
   bulkUpdateCustomerWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Customer!]!
   bulkUpdateLoanWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Loan!]!
   bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
   bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
   cancelBooking(id: String!, reason: String!): Booking!
+  cancelEInvoice(invoiceId: String!): EInvoice!
   cleanNotifications: Boolean!
+  closeMessageBox(boxId: String!): MessageBox!
+  connectMetaPages(accessToken: String!): [MetaPage!]!
+  connectZaloOa: ConnectZaloOaResponse!
+  connectZaloOaCallback(code: String!): PluginZaloOa!
   createBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
-  createCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+  createCategory(input: CategoryInput!): Category!
+  createCustomField(input: CustomFieldInput!): CustomField!
   createCustomer(input: CustomerInput!): Customer!
   createCustomerForm(input: CustomerFormInput!): CustomerForm!
+  createEInvoice(input: GenerateEInvoiceDataInput!): EInvoice!
+  createEInvoiceProvider(input: CreatePluginEInvoiceProviderInput!): PluginEInvoiceProvider!
   createLoan(input: CreateLoanInput!): Loan!
-  createProduct(categoryId: String, code: String, combos: [ProductComboInput!], combosExpireInDays: Float, content: String, customFieldValues: [CustomFieldValueInput!], defaultQtyPerUse: Float, displayName: String, image: String, isHiddenInReceiptWhenNoPrice: Boolean, isStockCheck: Boolean, maxPrice: Float, minPrice: Float, name: String!, price: Float!, productCode: String, supplies: [ProductSupplyInput!], tags: [String!], type: ProductType!, unit: String!, voucherAmount: Float, voucherExcludeProductIds: [String!], voucherExpireInDays: Float, voucherIncludeProductIds: [String!], warningOutOfDateBeforeDays: Float, warningOutOfStockQty: Float): Product!
+  createOrder(input: OrderInput!): Order!
+  createPartner(input: PartnerInput!): Partner!
+  createPluginAiAssistant(input: CreatePluginAiAssistantInput!): PluginAiAssistant!
+  createPluginMessageHub(input: PluginMessageHubInput!): PluginMessageHub!
+  createPost(input: PostInput!): Post!
+  createPrescription(input: PrescriptionInput!): Prescription!
+  createProduct(input: ProductInput!): Product!
+  createPromotion(input: PromotionInput!): Promotion!
   createReceipt(input: CreateReceiptInput!): Receipt!
   createTag(input: TagInput!): Tag!
   createTask(input: CreateTaskInput!): Task!
+  createWorkspace(input: CreateWorkspaceInput!): Workspace!
+  createWorkspaceApiApp(input: WorkspaceApiAppInput!): WorkspaceApiApp!
   createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
   createWorkspaceRole(color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   defaultAttendanceCaptureRecord(input: DefaultRecordAttendanceInput!): AttendanceRecord!
   deleteCategory(id: String!): Boolean!
+  deleteCustomField(id: String!): Boolean!
+  deleteMessageBox(boxId: String!): Boolean!
+  deletePluginAiAssistant(id: String!): Boolean!
+  deletePluginMessageHub(id: String!): Boolean!
+  deletePrescription(id: String!): Boolean!
   deleteWorkspaceRole(_id: String!): Boolean!
   disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
+  disconnectMetaPage(id: String!): Boolean!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
   fetchExternalStorageSize: Float!
   fulfillLoan(id: String!, input: FulfillLoanInput!): Loan!
-  generateCategorySlug(name: String!): String!
+  generateCategorySlug(input: GenerateCategorySlugInput!): String!
+  generateEInvoiceData(input: GenerateEInvoiceDataInput!): EInvoice!
   generateWorkspaceInviteCode: String!
   healthCheckLoan(id: String!): Loan!
+  healthcheckEInvoicesProvider(providerId: String!): PluginEInvoiceProvider!
   healthcheckPluginExternalStorage: Boolean!
   interactCategory(id: String!): Boolean!
+  interactPrescription(id: String!): Boolean!
+  interactProduct(id: String!): Boolean!
+  interactTag(id: String!): Boolean!
   joinWorkspaceWithInviteCode(inviteCode: String!): String!
   liquidateLoan(id: String!): String!
   markAllNotificationsAsReaded: Boolean!
   markNotificationAsReaded(id: String!): Notification!
   partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
+  payOrder(amount: Float!, id: String!, tipAmount: Float): String!
   payReceipt(id: String!, input: PayReceiptInput!): Receipt!
-  pluginExternalStorageSignUploadUrl(fileName: String!, id: String, refs: [String!]): SignUploadUrlResponse!
+  pluginExternalStorageSignUploadUrl(input: PluginExternalStorageSignUploadUrlInput!): SignUploadUrlResponse!
+  pluginMailerSendTestMail(input: TestSendMailInput!): Boolean!
+  productStockIn(input: ProductStockInInput!): Boolean!
+  productStockOut(input: ProductStockOutInput!): Boolean!
+  reconnectZaloOa(id: String!): PluginZaloOa!
   refreshToken(input: AuthRefreshTokenInput!): AuthTokenResult!
+  regenerateWorkspaceApiAppSecret(id: String!): WorkspaceApiApp!
   registerCustomerKyc(customerId: String!, input: CustomerKycInput!): CustomerKyc!
   registerDevice(input: RegisterDeviceInput!): Device!
   rejectAttendanceRecord(id: String!, input: RejectAttendanceRecordInput!): AttendanceRecord!
   rejectCustomerKyc(customerId: String!, input: RejectCustomerKycInput!): CustomerKyc!
   rejectLoan(id: String!, input: RejectLoanInput!): [Loan!]!
   removeFile(id: String!): Boolean!
-  removeMember(memberId: String!): Boolean!
   removePluginExternalStorage: Boolean!
   removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
   removeTag(id: String!): Boolean!
+  removeWorkspaceMember(memberId: String!): Boolean!
+  removeZaloOa(id: String!): Boolean!
   renewPassword(input: AuthRenewPasswordByCodeInput!): Boolean!
   requestAttendanceCaptureRecord(input: RecordAttendanceInput!, time: Float!, type: AttendanceRecordType!): AttendanceRecord!
   requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
+  resetEInvoicesProviderTemplates(providerId: String!): PluginEInvoiceProvider!
   revertApproveLoan(id: String!): Loan!
   revertFulfilledLoan(id: String!): Loan!
   revertLiquidationLoan(id: String!): Loan!
   revertPaymentReceipt(id: String!): Receipt!
+  revertProductComboHistory(historyId: String!): Boolean!
+  sendFileToMessageBox(boxId: String!, text: String, url: String!): Boolean!
+  sendImageToMessageBox(boxId: String!, text: String, url: String!): Boolean!
+  sendTextToMessageBox(boxId: String!, text: String!): Boolean!
+  sendZNS(input: PluginZaloOaSendZnsInput!): Boolean!
+  setCustomerContacts(customerId: String!, input: SetCustomerContactsInput!): CustomerContact!
   setDeviceLocale(input: SetDeviceLocaleInput!): Device!
   setDeviceNotificationToken(input: SetDeviceNotificationTokenInput!): Device!
+  setLoanAssetEstimations(input: JSONObject!): JSONObject!
   setLocale(input: SetUserLocaleInput!): Boolean!
-  setPluginExternalStorage(accessKeyId: String, bucketName: String, endpointUrl: String, provider: PluginExternalStorageProvider!, region: String, secretAccessKey: String): PluginExternalStorage!
+  setMessageBoxCustomer(boxId: String!, customerId: String): MessageBox!
+  setPluginExternalStorage(input: SetPluginExternalStorageInput!): PluginExternalStorage!
+  setZaloOaDefault(id: String!): PluginZaloOa!
   signInWithEmailPassword(input: AuthSignInWithEmailPasswordInput!): AuthTokenResult!
   signInWithFirebase(input: AuthSignInWithFirebaseInput!): AuthTokenResult!
   signLoan(id: String!, input: SignLoanInput!): Loan!
@@ -1380,26 +1836,44 @@ type Mutation {
   signPersonalUpload(input: SignUploadInput!): FileUploadSigned!
   signUpWithEmailPassword(input: AuthSignUpWithEmailPasswordInput!): AuthTokenResult!
   signUpload(input: SignUploadInput!): FileUploadSigned!
+  switchMessageBoxAiAssistant(boxId: String!, disabled: Boolean!): MessageBox!
+  syncOrder(id: String!): Order!
   syncTask(_id: String!): SyncTaskResult!
   toggleDisablePluginExternalStorage: Boolean!
+  toggleEnableZaloOa(id: String!): PluginZaloOa!
   transferWorkspaceOwner(input: TransferOwnerInput!): Boolean!
   updateActivity(content: String, id: String!): Activity!
   updateAttendanceSetting(input: UpdateAttendanceSettingInput!): AttendanceSetting!
   updateBooking(assigneeUserIds: [String!], customerId: String, id: String!, note: String, title: String): Booking!
-  updateCategory(customFieldValues: [CustomFieldValueInput!], description: String, icon: String, id: String!, name: String!, order: Float, parentId: String, slug: String, thumbnail: String, type: CategoryType): Category!
+  updateCategory(id: String!, input: CategoryInput!): Category!
+  updateCustomField(id: String!, input: CustomFieldInput!): CustomField!
   updateCustomer(id: String!, input: CustomerInput!): Customer!
   updateCustomerForm(id: String!, input: CustomerFormInput!): CustomerForm!
+  updateEInvoiceProvider(input: UpdatePluginEInvoiceProviderInput!, providerId: String!): PluginEInvoiceProvider!
   updateLoanAmount(id: String!, input: UpdateLoanAmountInput!): Loan!
   updateLoanAssetData(id: String!, input: UpdateLoanAssetDataInput!): Loan!
   updateLoanPackage(id: String!, input: UpdateLoanPackageInput!): Loan!
+  updateOrder(id: String!, input: OrderInput!): Order!
+  updatePartner(id: String!, input: PartnerInput!): Partner!
+  updatePluginAiAssistant(id: String!, input: UpdatePluginAiAssistantInput!): PluginAiAssistant!
+  updatePluginMessageHub(id: String!, input: PluginMessageHubInput!): PluginMessageHub!
+  updatePost(id: String!, input: PostInput!): Post!
+  updatePrescription(id: String!, input: PrescriptionInput!): Prescription!
+  updateProduct(id: String!, input: ProductInput!): Product!
+  updatePromotion(input: PromotionInput!, promotionId: String!): Promotion!
+  updatePromotionStatus(promotionId: String!, status: PromotionStatus!): Promotion!
   updateReceipt(id: String!, input: UpdateReceiptInput!): Receipt!
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  updateUserPassword(input: UpdateUserPasswordInput!): Boolean!
   updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
   updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
+  updateWorkspaceApiApp(id: String!, input: WorkspaceApiAppInput!): WorkspaceApiApp!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
   updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
   updateWorkspaceSetting(input: UpdateWorkspaceSettingInput!): WorkspaceSetting!
+  updateZaloOa(id: String!, input: UpdatePluginZaloOaInput!): PluginZaloOa!
+  useProductCombo(id: String!, input: UseProductComboInput!): ProductCombo!
   verifyExternalStorageDna(input: VerifyExternalStorageDnaInput!): File!
   verifyRenewPasswordCode(input: AuthVerifyRenewPasswordCodeInput!): VerifyRenewPasswordResult!
 }
@@ -1449,45 +1923,42 @@ type NotificationsPaginated {
 }
 
 type Order {
-  _count: Float!
-  _id: String
   assigneeUserIds: [String!]
   assigneeUsers: [WorkspaceMember!]!
   code: String!
   comboIds: [String!]
-  couponIds: [String!]
+  combos: [ProductCombo!]!
   createdAt: Float
   createdByUser: WorkspaceMember
-  customFieldValues: [BaseCustomFieldValue!]
+  directDiscount: Float
   discounts: [OrderDiscount!]!
   id: String!
   isArchived: Boolean
   isFulfilled: Boolean
-  items: AnyType!
+  items: [OrderItem!]!
   note: String
   paidAmount: Float!
   paymentStatus: OrderPaymentStatus!
   promotionIds: [String!]
+  promotions: [Promotion!]!
   refs: [String!]
   relatedCustomer: Customer
   relatedCustomerId: String
   relatedEntities: [RelatedEntity!]
   relatedUserIds: [String!]
   source: EntitySource
+  tipAmount: Float
   totalAmount: Float!
   type: OrderType
   updatedAt: Float
-  voucherIds: [String!]
+  workspaceBranchId: String
 }
 
 type OrderDiscount {
   amount: Float!
   productComboId: String
-  productCouponId: String
   productId: String
   productQuantity: Float
-  productVoucherAmount: Float
-  productVoucherId: String
   promotionId: String
   type: OrderDiscountType!
 }
@@ -1495,10 +1966,57 @@ type OrderDiscount {
 """Order discount type"""
 enum OrderDiscountType {
   COMBO
-  COUPON
   DIRECT
   PROMOTION
-  VOUCHER
+}
+
+input OrderInput {
+  assigneeUserIds: [String!]
+  comboIds: [String!]
+  directDiscount: Float
+  id: String
+  items: [OrderItemInput!]!
+  note: String
+  promotionIds: [String!]
+  relatedCustomerId: String
+  relatedUserIds: [String!]
+  type: OrderType!
+  workspaceBranchId: String
+}
+
+type OrderItem {
+  assigneeUserIds: [String!]
+  assigneeUsers: [WorkspaceMember!]!
+  note: String
+  price: Float!
+  product: OrderItemProduct!
+  productId: String!
+  quantity: Float!
+  revenue: Float!
+  revenueRate: Float!
+}
+
+input OrderItemInput {
+  assigneeUserIds: [String!]
+  note: String
+  price: Float
+  productId: String!
+  quantity: Float!
+}
+
+type OrderItemProduct {
+  _id: String!
+  code: String
+  defaultQtyPerUse: Float
+  displayName: String
+  image: String
+  isHiddenInReceiptWhenNoPrice: Boolean
+  maxPrice: Float
+  minPrice: Float
+  name: String!
+  price: Float!
+  type: ProductType!
+  unit: String
 }
 
 """Order payment status"""
@@ -1510,6 +2028,10 @@ enum OrderPaymentStatus {
 """Order type"""
 enum OrderType {
   COMMON
+}
+
+type OrdersMetricsReport {
+  todayOrders: Float!
 }
 
 type OrdersPaginated {
@@ -1536,6 +2058,13 @@ type Partner {
   updatedAt: Float
 }
 
+input PartnerInput {
+  email: String
+  logo: String
+  name: String!
+  phone: String
+}
+
 type PartnersPaginated {
   results: [Partner!]!
   total: Float!
@@ -1544,6 +2073,46 @@ type PartnersPaginated {
 input PayReceiptInput {
   giveAmount: Float
   paymentMethod: ReceiptPaymentMethod
+}
+
+"""Available periods for reports"""
+enum Period {
+  DATE
+  MONTH
+  WEEK
+  YEAR
+}
+
+type PluginAiAssistant {
+  _id: String!
+  apiKey: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  enabled: Boolean!
+  isArchived: Boolean
+  provider: PluginAiAssistantProvider!
+  providerName: String
+  refs: [String!]
+  source: EntitySource
+  status: PluginAiAssistantStatus!
+  updatedAt: Float
+}
+
+"""Provider of the AI assistant plugin"""
+enum PluginAiAssistantProvider {
+  DIFY
+  VONIC_DIFY
+}
+
+"""Status of the AI assistant plugin"""
+enum PluginAiAssistantStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type PluginAiAssistantsPaginated {
+  results: [PluginAiAssistant!]!
+  total: Float!
 }
 
 type PluginBankAccount {
@@ -1558,9 +2127,41 @@ input PluginBankAccountInput {
   bankId: Float!
 }
 
+type PluginEInvoiceProvider {
+  _id: String!
+  apiUrl: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  isArchived: Boolean
+  logo: String!
+  name: String!
+  refs: [String!]
+  source: EntitySource
+  status: PluginEInvoicesProviderStatus!
+  templates: JSONObject!
+  type: PluginEInvoicesProviderType!
+  updatedAt: Float
+}
+
+type PluginEInvoiceProviderInformation {
+  apiUrl: String!
+  defaultTemplates: JSONObject
+  isDemo: Boolean
+  logo: String!
+  name: String!
+  type: String!
+}
+
 type PluginEInvoicesPaginated {
   results: [EInvoice!]!
   total: Float!
+}
+
+"""Status of the plugin e-invoices provider"""
+enum PluginEInvoicesProviderStatus {
+  ACTIVE
+  AUTH_FAILED
+  INACTIVE
 }
 
 """Available plugin e-invoices provider types"""
@@ -1583,23 +2184,86 @@ enum PluginExternalStorageProvider {
   AWS_S3
 }
 
-type PluginMailerAccount {
-  pass: String!
-  user: String!
+input PluginExternalStorageSignUploadUrlInput {
+  fileName: String!
+  id: String
+  refs: [String!]
 }
 
-input PluginMailerAccountInput {
-  pass: String!
-  user: String!
-}
-
-type Posts {
+type PluginMessageHub {
   _id: String!
+  direct: PluginMessageHubDirect!
+  name: String!
+  ref: String
+  script: PluginMessageHubScript!
+  webhookUrl: String!
+  widgetSettings: MessageHubWidgetSettings!
+}
+
+type PluginMessageHubDirect {
+  src: String!
+}
+
+input PluginMessageHubInput {
+  name: String!
+  widgetSettings: ChannelWidgetSettingsInput!
+}
+
+type PluginMessageHubScript {
+  html: String!
+  src: String!
+}
+
+type PluginZaloOa {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  id: String!
+  info: ZaloOaInfo!
+  isArchived: Boolean
+  isDefault: Boolean!
+  isDisabled: Boolean
+  refs: [String!]
+  source: EntitySource
+  status: PluginZaloOaStatus!
+  updatedAt: Float
+  znsTemplateIds: JSONObject
+  znsTemplateStatues: JSONObject
+}
+
+input PluginZaloOaSendZnsInput {
+  code: String
+  data: JSONObject!
+  isTesting: Boolean
+  phoneNumber: String!
+  templateId: PluginZaloOaZNSTemplateId!
+}
+
+"""Status of Zalo OA connection"""
+enum PluginZaloOaStatus {
+  ACTIVE
+  INACTIVE
+}
+
+"""Template IDs for Zalo OA ZNS messages"""
+enum PluginZaloOaZNSTemplateId {
+  BOOKING
+  CUSTOMER_BIRTHDAY
+  LOAN_FULFILLED
+  LOAN_RECEIPT_PAID
+  LOAN_RECEIPT_PARTIAL_PAY
+  LOAN_RECEIPT_REMIND
+  OTP
+}
+
+type Post {
+  _id: String!
+  category: Category
   categoryId: String
   content: JSONObject
   contentHtml: String
   createdAt: Float
-  customFieldValues: [CustomFieldValue!]
+  customFieldValues: [CustomFieldValue!]!
   excerpt: String
   isArchived: Boolean
   meta: JSONObject
@@ -1613,8 +2277,21 @@ type Posts {
   updatedAt: Float
 }
 
+input PostInput {
+  categoryId: String
+  content: JSONObject
+  contentHtml: String
+  customFieldValues: [CustomFieldValueInput!]
+  excerpt: String
+  meta: AnyType
+  productId: String
+  slug: String
+  thumbnail: String
+  title: String!
+}
+
 type PostsPaginated {
-  results: [Posts!]!
+  results: [Post!]!
   total: Float!
 }
 
@@ -1623,12 +2300,48 @@ type Prescription {
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   isArchived: Boolean
-  items: AnyType!
+  items: [PrescriptionItem!]!
   name: String!
   note: String
   refs: [String!]
   source: EntitySource
   updatedAt: Float
+}
+
+input PrescriptionInput {
+  items: [PrescriptionItemInput!]!
+  name: String!
+  note: String
+}
+
+type PrescriptionItem {
+  days: Float!
+  name: String!
+  note: String
+  productId: String
+  qty: PrescriptionItemQty!
+  unit: String!
+}
+
+input PrescriptionItemInput {
+  days: Float!
+  name: String!
+  note: String
+  productId: String
+  qty: PrescriptionItemQtyInput!
+  unit: String!
+}
+
+type PrescriptionItemQty {
+  afternoon: Float
+  morning: Float
+  noon: Float
+}
+
+input PrescriptionItemQtyInput {
+  afternoon: Float
+  morning: Float
+  noon: Float
 }
 
 type PrescriptionsPaginated {
@@ -1641,11 +2354,11 @@ type Product {
   category: Category
   categoryId: String
   code: String
-  combos: [ProductComboValue!]
+  combos: [ProductComboResult!]!
   combosExpireInDays: Float
   content: String
   createdAt: Float
-  customFieldValues: [CustomFieldValue!]
+  customFieldValues: [CustomFieldValue!]!
   defaultQtyPerUse: Float
   displayName: String
   image: String
@@ -1660,37 +2373,66 @@ type Product {
   productCode: String
   refs: [String!]
   source: EntitySource
-  supplies: [ProductSupply!]
+  stock: ProductStockResult!
+  supplies: [ProductSupplyResult!]!
   tags: [String!]!
   type: ProductType!
   unit: String!
   updatedAt: Float
   voucherAmount: Float
   voucherExcludeProductIds: [String!]
+  voucherExcludeProducts: [Product!]!
   voucherExpireInDays: Float
   voucherIncludeProductIds: [String!]
+  voucherIncludeProducts: [Product!]!
   warningOutOfDateBeforeDays: Float
   warningOutOfStockQty: Float
-  workspaceId: String!
 }
 
 type ProductCombo {
-  _count: Float!
-  _id: String
   createdAt: Float
-  customFieldValues: [BaseCustomFieldValue!]
+  customer: Customer!
   customerId: String!
   expireAt: Float
+  history: [ProductComboHistory!]!
   id: String!
   isArchived: Boolean
+  product: Product!
   productId: String!
-  productRefs: [ProductComboRef!]!
+  productRefs: [ProductComboRefResult!]!
   refs: [String!]
   relatedEntities: [RelatedEntity!]
   source: EntitySource
   sourceId: String!
+  sourceType: ProductComboSourceType!
   status: ProductComboStatus!
   updatedAt: Float
+}
+
+type ProductComboHistory {
+  createdAt: Float
+  id: String!
+  isArchived: Boolean
+  note: String
+  orderId: String
+  productComboId: String!
+  records: [ProductComboHistoryRecord!]
+  ref: String!
+  refs: [String!]
+  relatedEntities: [RelatedEntity!]
+  source: EntitySource
+  updatedAt: Float
+  used: [ProductComboHistoryRecord!]
+}
+
+type ProductComboHistoryRecord {
+  productRefId: String!
+  quantity: Float!
+}
+
+input ProductComboHistoryRecordInput {
+  productRefId: String!
+  quantity: Float!
 }
 
 input ProductComboInput {
@@ -1698,11 +2440,24 @@ input ProductComboInput {
   quantity: Float!
 }
 
-type ProductComboRef {
+type ProductComboRefResult {
+  product: Product!
   productRefId: String!
   productRefRevenue: Float!
   quantity: Float!
   quantityUsed: Float!
+}
+
+type ProductComboResult {
+  product: Product!
+  productId: String!
+  quantity: Float!
+}
+
+"""Product combo source type"""
+enum ProductComboSourceType {
+  MANUAL
+  ORDER
 }
 
 """Product combo status"""
@@ -1714,24 +2469,45 @@ enum ProductComboStatus {
   SOURCE_UNAVAILABLE
 }
 
-type ProductComboValue {
-  productId: String!
-  quantity: Float!
-}
-
 type ProductCombosPaginated {
   results: [ProductCombo!]!
   total: Float!
 }
 
+input ProductInput {
+  categoryId: String
+  code: String
+  combos: [ProductComboInput!]
+  combosExpireInDays: Float
+  content: String
+  customFieldValues: [CustomFieldValueInput!]
+  defaultQtyPerUse: Float
+  displayName: String
+  image: String
+  isHiddenInReceiptWhenNoPrice: Boolean
+  isStockCheck: Boolean
+  maxPrice: Float
+  minPrice: Float
+  name: String!
+  price: Float!
+  productCode: String
+  supplies: [ProductSupplyInput!]
+  tags: [String!]
+  type: ProductType!
+  unit: String!
+  voucherAmount: Float
+  voucherExcludeProductIds: [String!]
+  voucherExpireInDays: Float
+  voucherIncludeProductIds: [String!]
+  warningOutOfDateBeforeDays: Float
+  warningOutOfStockQty: Float
+}
+
 type ProductStock {
-  _count: Float!
-  _id: String
   code: String
   costPrice: Float!
   createdAt: Float
   createdByUser: WorkspaceMember!
-  customFieldValues: [BaseCustomFieldValue!]
   expireAt: Float!
   id: String!
   isArchived: Boolean
@@ -1747,12 +2523,31 @@ type ProductStock {
   updatedAt: Float
 }
 
+input ProductStockInInput {
+  code: String
+  costPrice: Float
+  expireAt: Float
+  note: String
+  productId: String!
+  quantity: Float!
+  ref: String
+  relatedOrderId: String
+  relatedProductId: String
+}
+
+input ProductStockOutInput {
+  note: String
+  productId: String!
+  quantity: Float!
+  ref: String
+  relatedOrderId: String
+  relatedProductId: String
+  stockId: String
+}
+
 type ProductStockRecord {
-  _count: Float!
-  _id: String
   createdAt: Float
   createdByUser: WorkspaceMember
-  customFieldValues: [BaseCustomFieldValue!]
   id: String!
   isArchived: Boolean
   note: String
@@ -1783,6 +2578,10 @@ enum ProductStockRecordType {
   STOCK_OUT
 }
 
+type ProductStockResult {
+  quantity: Float!
+}
+
 type ProductStocksPaginated {
   results: [ProductStock!]!
   total: Float!
@@ -1798,6 +2597,12 @@ input ProductSupplyInput {
   quantity: Float!
 }
 
+type ProductSupplyResult {
+  product: Product!
+  productId: String!
+  quantity: Float!
+}
+
 """Available product types"""
 enum ProductType {
   COMBO
@@ -1806,47 +2611,15 @@ enum ProductType {
   VOUCHER
 }
 
-type ProductVoucher {
-  _id: String!
-  amount: Float!
-  createdAt: Float
-  customFieldValues: [CustomFieldValue!]
-  customerId: String!
-  expireAt: Float
-  isArchived: Boolean
-  productVoucherId: String!
-  ref: String!
-  refs: [String!]
-  relatedTicketId: String!
-  source: EntitySource
-  status: ProductVoucherStatus!
-  updatedAt: Float
-}
-
-"""Product voucher status"""
-enum ProductVoucherStatus {
-  ACTIVE
-  EXPIRED
-  INACTIVE
-  OUT_OF_AMOUNT
-}
-
-type ProductVouchersPaginated {
-  results: [ProductVoucher!]!
-  total: Float!
-}
-
 type ProductsPaginated {
   results: [Product!]!
   total: Float!
 }
 
 type Promotion {
-  _count: Float!
-  _id: String
   createdAt: Float
-  customFieldValues: [BaseCustomFieldValue!]
-  customersSelection: JSONObject
+  customFieldValues: [CustomFieldValue!]
+  customersSelection: DynamicSelection
   description: String
   expireAt: Float
   id: String!
@@ -1854,13 +2627,27 @@ type Promotion {
   isArchived: Boolean
   limitPerCustomer: Float
   name: String!
-  productsSelection: JSONObject
+  productsSelection: DynamicSelection
   refs: [String!]
   relatedEntities: [RelatedEntity!]
   source: EntitySource
   status: PromotionStatus!
   type: PromotionType!
   updatedAt: Float
+  value: Float!
+}
+
+input PromotionInput {
+  customFieldValues: [CustomFieldValueInput!]
+  customersSelection: DynamicSelectionInput
+  description: String
+  expireAt: Float
+  image: String
+  limitPerCustomer: Float
+  name: String!
+  productsSelection: DynamicSelectionInput
+  status: PromotionStatus
+  type: PromotionType!
   value: Float!
 }
 
@@ -1883,7 +2670,14 @@ type PromotionsPaginated {
 }
 
 type Query {
-  activities(
+  attendanceRecord(id: String!): AttendanceRecord!
+  attendanceRecordsForToday: [AttendanceRecord!]!
+  authUser: AuthUser!
+  availableSearchEntities: [String!]!
+  calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
+  calculateOrder(input: OrderInput!): Order!
+  generatePostSlug(input: GenerateSlugInput!): String!
+  getActivities(
     contextId: String!
     contextType: String!
     ids: [String!]
@@ -1919,10 +2713,9 @@ type Query {
     query: JSONObject
     type: ActivityType
   ): ActivitiesPaginated!
-  activity(id: String!): Activity!
-  appConfig: AppConfig!
-  attendanceRecord(id: String!): AttendanceRecord!
-  attendanceRecords(
+  getActivityById(id: String!): Activity!
+  getAppConfig: AppConfig!
+  getAttendanceRecords(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -1954,12 +2747,13 @@ type Query {
     """
     query: JSONObject
   ): AttendanceRecordsPaginated!
-  attendanceRecordsForToday: [AttendanceRecord!]!
-  attendanceSetting: AttendanceSetting!
-  authUser: AuthUser!
-  availableEntities: [String!]!
-  booking(id: String!): Booking!
-  bookings(
+  getAttendanceSetting: AttendanceSetting!
+  getAvailableCustomerPromotions(customerId: String!): [Promotion!]!
+  getBankAccountInformation(input: GetBankAccountInformationInput!): GetBankAccountInformationResult!
+  getBankInformation(bankId: Float!): BankInformation
+  getBankInformations: BankInforationsResult!
+  getBooking(id: String!): Booking!
+  getBookings(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -1991,8 +2785,7 @@ type Query {
     """
     query: JSONObject
   ): BookingsPaginated!
-  calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
-  categories(
+  getCategories(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2024,107 +2817,16 @@ type Query {
     """
     query: JSONObject
   ): CategoriesPaginated!
-  category(id: String!): Category!
-  couponRules(
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-  ): CouponRulesPaginated!
-  coupons(
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-  ): CouponsPaginated!
-  customFields(
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-  ): CustomFieldsPaginated!
-  customer(id: String!): Customer!
-  customerByCode(code: String!): Customer!
-  customerForm(id: String!): CustomerForm!
-  customerForms(
+  getCategoriesByIds(ids: [String!]!): [Category!]!
+  getCategoryById(id: String!): Category!
+  getCategoryBySlug(slug: String!): Category!
+  getCustomFieldById(id: String!): CustomField!
+  getCustomFields(ids: [String!], limit: Float = 30, offset: Float, query: CustomFieldsQuery): CustomFieldsPaginated!
+  getCustomerByCode(code: String!): Customer!
+  getCustomerById(id: String!): Customer!
+  getCustomerContacts(customerId: String!): CustomerContact!
+  getCustomerFormById(id: String!): CustomerForm!
+  getCustomerForms(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2156,8 +2858,8 @@ type Query {
     """
     query: JSONObject
   ): CustomerFormsPaginated!
-  customerKyc(customerId: String!): CustomerKyc
-  customerKycs(
+  getCustomerKyc(customerId: String!): CustomerKyc
+  getCustomerKycs(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2189,7 +2891,8 @@ type Query {
     """
     query: JSONObject
   ): CustomerKycsPaginated!
-  customers(
+  getCustomerProductCombos(customerId: String!): [ProductCombo!]!
+  getCustomers(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2221,8 +2924,9 @@ type Query {
     """
     query: JSONObject
   ): CustomersPaginated!
-  customersByIds(ids: [String!]!): [Customer!]!
-  devices(
+  getCustomersByIds(ids: [String!]!): [Customer!]!
+  getDeviceByIdentifyId(identifyId: String!): Device
+  getDevices(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2254,7 +2958,9 @@ type Query {
     """
     query: JSONObject
   ): DevicesPaginated!
-  eInvoices(
+  getEInvoiceProviders: [PluginEInvoiceProvider!]!
+  getEInvoiceTemplateVariables: JSONObject!
+  getEInvoices(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2286,8 +2992,9 @@ type Query {
     """
     query: JSONObject
   ): PluginEInvoicesPaginated!
-  event(id: String!): Event!
-  events(
+  getEInvoicesProviderInformations: [PluginEInvoiceProviderInformation!]!
+  getEventById(id: String!): Event!
+  getEvents(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2322,7 +3029,8 @@ type Query {
     type: EventType
     userId: String
   ): EventsPaginated!
-  files(
+  getFileById(fileId: String!): File!
+  getFiles(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2354,16 +3062,10 @@ type Query {
     """
     query: JSONObject
   ): FilesPaginated!
-  getCategoriesByIds(ids: [String!]!): [Category!]!
-  getCategoryBySlug(slug: String!): Category!
-  getDeviceByIdentifyId(identifyId: String!): Device
-  getFileInfo(fileId: String!): File!
-  getProductByIds(ids: [String!]!): [Product!]!
-  isCustomerPhoneExisted(phone: String!): Boolean!
-  liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
-  loan(id: String!): Loan!
-  loanByCode(code: String!): Loan!
-  loans(
+  getLoanAssetEstimations: JSONObject!
+  getLoanByCode(code: String!): Loan!
+  getLoanById(id: String!): Loan!
+  getLoans(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2395,8 +3097,77 @@ type Query {
     """
     query: JSONObject
   ): LoansPaginated!
-  notificationStat: UserNotificationStat!
-  notifications(
+  getMessageBox(id: String!): MessageBox!
+  getMessageBoxes(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): MessageBoxesPaginated!
+  getMessageBoxesByIds(ids: [String!]!): [MessageBox!]!
+  getMessages(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): MessagesPaginated!
+  getMetaPages: [MetaPage!]!
+  getMetaPagesInfos(accessToken: String!): [MetaPageInfo!]!
+  getMetricsReport: MetricsReport!
+  getNotificationStat: UserNotificationStat!
+  getNotifications(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2428,7 +3199,10 @@ type Query {
     """
     query: JSONObject
   ): NotificationsPaginated!
-  orders(
+  getOaGmfGroups: [ZaloOaGmfGroup!]!
+  getOrderByCode(code: String!): Order!
+  getOrderById(id: String!): Order!
+  getOrders(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2460,7 +3234,9 @@ type Query {
     """
     query: JSONObject
   ): OrdersPaginated!
-  partners(
+  getOrdersByIds(ids: [String!]!): [Order!]!
+  getPartner(id: String!): Partner!
+  getPartners(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2492,9 +3268,42 @@ type Query {
     """
     query: JSONObject
   ): PartnersPaginated!
-  pluginExternalStorage: PluginExternalStorage
-  post(id: String!): Posts!
-  posts(
+  getPluginAiAssistants(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): PluginAiAssistantsPaginated!
+  getPluginExternalStorage: PluginExternalStorage
+  getPluginMessageHubs: [PluginMessageHub!]!
+  getPostById(id: String!): Post!
+  getPosts(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2526,7 +3335,7 @@ type Query {
     """
     query: JSONObject
   ): PostsPaginated!
-  prescriptions(
+  getPrescriptions(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2558,7 +3367,10 @@ type Query {
     """
     query: JSONObject
   ): PrescriptionsPaginated!
-  productCombos(
+  getProduct(id: String!): Product!
+  getProductById(id: String!): Product!
+  getProductCombo(id: String!): ProductCombo!
+  getProductCombos(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2590,7 +3402,8 @@ type Query {
     """
     query: JSONObject
   ): ProductCombosPaginated!
-  productStockRecords(
+  getProductCombosByIds(ids: [String!]!): [ProductCombo!]!
+  getProductStockRecords(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2622,7 +3435,7 @@ type Query {
     """
     query: JSONObject
   ): ProductStockRecordPaginated!
-  productStocks(
+  getProductStocks(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2654,39 +3467,7 @@ type Query {
     """
     query: JSONObject
   ): ProductStocksPaginated!
-  productVouchers(
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-  ): ProductVouchersPaginated!
-  products(
+  getProducts(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2718,7 +3499,8 @@ type Query {
     """
     query: JSONObject
   ): ProductsPaginated!
-  promotions(
+  getProductsByIds(ids: [String!]!): [Product!]!
+  getPromotions(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2750,45 +3532,11 @@ type Query {
     """
     query: JSONObject
   ): PromotionsPaginated!
-  randomWorkspaceCode(name: String!): String!
-  reactions(
-    entity: String!
-    entityId: String!
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-  ): ReactionsPaginated!
-  reactionsCount(entity: String!, entityId: String!): ReactionsCount!
-  receipt(id: String!): Receipt!
-  receiptByCode(code: String!): Receipt!
-  receipts(
+  getPromotionsByIds(ids: [String!]!): [Promotion!]!
+  getRandomWorkspaceCode(name: String!): String!
+  getReceiptByCode(code: String!): Receipt!
+  getReceiptById(id: String!): Receipt!
+  getReceipts(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2820,10 +3568,9 @@ type Query {
     """
     query: JSONObject
   ): ReceiptsPaginated!
-  search(entities: [String!], limit: Int, query: String!): [SearchResult!]!
-  siblingTasks(_id: String!): SiblingTasks!
-  tagBySlug(slug: String!): Tag!
-  tags(
+  getSiblingTasks(_id: String!): SiblingTasks!
+  getTagBySlug(slug: String!): Tag!
+  getTags(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2856,11 +3603,11 @@ type Query {
     query: JSONObject
     type: String
   ): TagsPaginated!
-  task(_id: String!): Task!
-  taskByCode(code: String!): Task!
-  taskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
-  taskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
-  tasks(
+  getTaskByCode(code: String!): Task!
+  getTaskById(_id: String!): Task!
+  getTaskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
+  getTaskStatuses(contextId: String, contextType: TaskContextType, mode: GetTaskStatusesMode): ConfigTaskStatuses!
+  getTasks(
     all: Boolean
     assigneeUserIds: [String!]
     folderId: String
@@ -2904,7 +3651,7 @@ type Query {
     tagIds: [String!]
     toTrackingTime: Float
   ): TasksPaginated!
-  tasksCount(
+  getTasksCount(
     all: Boolean
     assigneeUserIds: [String!]
     folderId: String
@@ -2948,11 +3695,14 @@ type Query {
     tagIds: [String!]
     toTrackingTime: Float
   ): Float!
-  testErrorNotFound: String!
-  userWorkspaceMember: WorkspaceMember!
-  userWorkspaceMembers: [WorkspaceMember!]!
-  workspace: Workspace!
-  workspaceApiApps(
+  getTimeSeriesReport(id: String!): TimeSeriesReport!
+  getTimeSeriesReports(input: ExportTimeSeriesReportInput!): TimeSeriesReports!
+  getTimeZones: [TimeZone!]!
+  getUserPublicInformation(userId: String!): UserPublicInformation!
+  getUserWorkspaceMember: WorkspaceMember!
+  getUserWorkspaceMembers: [WorkspaceMember!]!
+  getVnLocations: [VnLocation!]!
+  getWorkspaceApiApps(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -2984,8 +3734,8 @@ type Query {
     """
     query: JSONObject
   ): WorkspaceApiAppsPaginated!
-  workspaceBranch(id: String!): WorkspaceBranch!
-  workspaceBranches(
+  getWorkspaceBranchById(id: String!): WorkspaceBranch!
+  getWorkspaceBranches(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -3017,11 +3767,11 @@ type Query {
     """
     query: JSONObject
   ): WorkspaceBranchesPaginated!
-  workspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
-  workspaceById(id: String!): Workspace!
-  workspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
-  workspaceMember(userId: String!): WorkspaceMember!
-  workspaceMembers(
+  getWorkspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
+  getWorkspaceById(id: String!): Workspace!
+  getWorkspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
+  getWorkspaceMemberByUserId(userId: String!): WorkspaceMember!
+  getWorkspaceMembers(
     ids: [String!]
     ignoreSelf: Boolean
     limit: Float = 30
@@ -3055,11 +3805,11 @@ type Query {
     query: JSONObject
     userId: [String!]
   ): WorkspaceMembersPaginated!
-  workspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
-  workspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
-  workspaceRoles: [WorkspaceRole!]!
-  workspaceSetting: WorkspaceSetting!
-  workspaceStats(
+  getWorkspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
+  getWorkspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
+  getWorkspaceRoles: [WorkspaceRole!]!
+  getWorkspaceSetting: WorkspaceSetting!
+  getWorkspaceStats(
     ids: [String!]
     limit: Float = 30
     offset: Float
@@ -3091,6 +3841,49 @@ type Query {
     """
     query: JSONObject
   ): WorkspaceStatsPaginated!
+  getZaloOaById(oaId: String!): PluginZaloOa!
+  getZaloOas: [PluginZaloOa!]!
+  getZaloZnsTemplateConfigs: JSONObject!
+  isCustomerPhoneExisted(phone: String!): Boolean!
+  liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
+  reactions(
+    entity: String!
+    entityId: String!
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): ReactionsPaginated!
+  reactionsCount(entity: String!, entityId: String!): ReactionsCount!
+  search(entities: [String!], filter: JSONObject, limit: Int, query: String!): [SearchResult!]!
+  testErrorNotFound: String!
+  workspace: Workspace!
 }
 
 type Reaction {
@@ -3128,15 +3921,12 @@ type ReactionsPaginated {
 }
 
 type Receipt {
-  _count: Float!
-  _id: String
   amount: Float!
   assigneeUserIds: [String!]
   cashierUser: WorkspaceMember
   cashierUserId: String
   code: String!
   createdAt: Float
-  customFieldValues: [BaseCustomFieldValue!]
   data: AnyType
   dataChanged: JSONObject
   disbursementUser: WorkspaceMember
@@ -3174,6 +3964,21 @@ enum ReceiptPaymentMethod {
   CASH
 }
 
+type ReceiptReportItem {
+  loan: LoanReceiptReport
+  profit: Float!
+  ref: String!
+  relatedEntities: [ReceiptReportRelatedEntity!]!
+  revenue: Float!
+  time: Float!
+  userId: String
+}
+
+type ReceiptReportRelatedEntity {
+  data: AnyType!
+  type: String!
+}
+
 """Receipt status"""
 enum ReceiptStatus {
   PAID
@@ -3186,9 +3991,24 @@ enum ReceiptType {
   INCOME
 }
 
+type ReceiptsMetricsReport {
+  revenueToday: Float!
+}
+
 type ReceiptsPaginated {
   results: [Receipt!]!
   total: Float!
+}
+
+type ReceiptsTimeSeriesReport {
+  items: [ReceiptReportItem!]!
+  loanCapital: Float!
+  loanExpense: Float!
+  loanFee: Float!
+  revenue: Float!
+  totalProfit: Float!
+  totalReceipts: Float!
+  totalRevenue: Float!
 }
 
 input RecordAttendanceInput {
@@ -3227,6 +4047,38 @@ input RelatedEntityInput {
   entity: String!
   id: String
   index: Boolean
+}
+
+type Report {
+  _id: String!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  data: AnyType
+  dto: AnyType
+  fromTime: Float!
+  isArchived: Boolean
+  ref: String!
+  refs: [String!]
+  source: EntitySource
+  status: ReportStatus!
+  toTime: Float!
+  type: ReportType!
+  updatedAt: Float
+  userId: String
+  workspaceBranchIds: [String!]
+}
+
+"""Report status values"""
+enum ReportStatus {
+  JUST_CREATED
+  SYNCED
+  SYNCING
+}
+
+"""Report types"""
+enum ReportType {
+  METRICS
+  TIME_SERIES
 }
 
 interface SearchResult {
@@ -3286,11 +4138,18 @@ type SearchResultPrescriptions implements SearchResult {
 
 type SearchResultProduct implements SearchResult {
   code: String
+  defaultQtyPerUse: Float
+  displayName: String
   entity: String!
   id: String!
   image: String
+  isHiddenInReceiptWhenNoPrice: Boolean
+  maxPrice: Float
+  minPrice: Float
   name: String!
-  type: String!
+  price: Float!
+  type: ProductType!
+  unit: String
 }
 
 type SearchResultReceipt implements SearchResult {
@@ -3326,12 +4185,25 @@ type SearchResultWorkspaceMember implements SearchResult {
   userId: String!
 }
 
+input SetCustomerContactsInput {
+  contacts: [CustomerContactInput!]!
+}
+
 input SetDeviceLocaleInput {
   locale: AppLocale!
 }
 
 input SetDeviceNotificationTokenInput {
   notificationToken: String!
+}
+
+input SetPluginExternalStorageInput {
+  accessKeyId: String
+  bucketName: String
+  endpointUrl: String
+  provider: PluginExternalStorageProvider!
+  region: String
+  secretAccessKey: String
 }
 
 input SetUserLocaleInput {
@@ -3515,9 +4387,56 @@ input TaskTimeTrackingInput {
   workspaceId: String!
 }
 
+type TasksMetricsReport {
+  inProgress: Float!
+  overdue: Float!
+  todo: Float!
+}
+
 type TasksPaginated {
   results: [Task!]!
   total: Float!
+}
+
+type TasksTimeSeriesReport {
+  completed: Float!
+  hasDueDate: Float!
+  overdue: Float!
+  total: Float!
+}
+
+input TestSendMailInput {
+  accountPass: String!
+  accountUser: String!
+  to: String!
+}
+
+type TimeSeriesReport {
+  _id: String!
+  data: CombineTimeSeriesReport!
+  dto: AnyType
+  fromTime: Float!
+  ref: String!
+  status: ReportStatus!
+  toTime: Float!
+  type: ReportType!
+  updatedAt: Float
+  userId: String
+  workspaceBranchIds: [String!]
+}
+
+type TimeSeriesReports {
+  results: [TimeSeriesReport!]!
+  total: Float!
+}
+
+type TimeZone {
+  abbr: String!
+  id: String!
+  offset: Float!
+  text: String!
+  utc: [String!]!
+  value: String!
 }
 
 input TransferOwnerInput {
@@ -3540,6 +4459,24 @@ input UpdateLoanAssetDataInput {
 input UpdateLoanPackageInput {
   packageId: String!
   packagePeriodDays: Float
+}
+
+input UpdatePluginAiAssistantInput {
+  apiKey: String
+  enabled: Boolean!
+  provider: PluginAiAssistantProvider
+}
+
+input UpdatePluginEInvoiceProviderInput {
+  apiUrl: String
+  auth: JSONObject
+  templates: JSONObject
+  type: PluginEInvoicesProviderType
+}
+
+input UpdatePluginZaloOaInput {
+  znsTemplateIds: JSONObject
+  znsTemplateStatues: JSONObject
 }
 
 input UpdateReceiptInput {
@@ -3585,6 +4522,11 @@ input UpdateTaskInput {
   workspaceBranchId: String
 }
 
+input UpdateUserPasswordInput {
+  password: String!
+  plainPassword: String!
+}
+
 input UpdateUserProfileInput {
   avatar: String
   birthday: Float
@@ -3612,7 +4554,7 @@ input UpdateWorkspaceSettingInput {
   currencyCode: String
   isAuthSessionRestricted: Boolean
   loanSettings: LoanSettingsInput
-  mailer: PluginMailerAccountInput
+  mailer: MailerAccountInput
   memberPermissions: [String!]
   privacyPolicy: String
   receiptImagesRequired: Boolean
@@ -3624,15 +4566,47 @@ input UpdateWorkspaceSettingInput {
   zaloOaGmfGroupSettings: JSONObject
 }
 
+input UseProductComboInput {
+  note: String
+  orderId: String
+  records: [ProductComboHistoryRecordInput!]!
+  ref: String!
+}
+
 type UserAuthProvider {
-  providerId: String!
+  providerId: String
   uid: String!
-  username: String!
+  username: String
+}
+
+type UserMutualWorkspace {
+  _id: String!
+  color: String
+  displayName: String
+  logo: String
+  memberColor: String
+  memberId: String!
+  name: String!
+  roles: [WorkspaceRole!]!
+  type: WorkspaceType!
 }
 
 type UserNotificationStat {
   count: Float!
   unListViewed: Float!
+}
+
+type UserPublicInformation {
+  _id: String!
+  avatar: String
+  birthday: Float
+  color: String
+  email: String
+  lastSignInAt: Float
+  mutualWorkspaces: [UserMutualWorkspace!]!
+  name: String!
+  phone: String
+  providers: [UserAuthProvider!]!
 }
 
 """Available roles of a user"""
@@ -3666,6 +4640,15 @@ input VerifyExternalStorageDnaInput {
 
 type VerifyRenewPasswordResult {
   email: String!
+}
+
+type VnLocation {
+  externalId: String
+  fullName: String!
+  id: String!
+  name: String!
+  parentId: String
+  type: LocationType!
 }
 
 type WorkingDayInterval {
@@ -3707,6 +4690,7 @@ type Workspace {
   appName: String
   branches: Float!
   code: String!
+  cover: String
   hotline: String
   inviteCode: String
   isArchived: Boolean
@@ -3732,6 +4716,13 @@ type WorkspaceApiApp {
   source: EntitySource
   updatedAt: Float
   userId: String!
+}
+
+input WorkspaceApiAppInput {
+  enabled: Boolean!
+  name: String!
+  roleIds: [String!]!
+  workspaceBranchIds: [String!]
 }
 
 type WorkspaceApiAppsPaginated {
@@ -3795,6 +4786,7 @@ type WorkspaceMember {
   name: String!
   permissions: [String!]!
   phone: String
+  roleIds: [String!]!
   roles: [WorkspaceMemberRole!]!
   userDisplayName: String
   userId: String!
@@ -3873,7 +4865,7 @@ type WorkspaceSetting {
   isArchived: Boolean
   isAuthSessionRestricted: Boolean
   loanSettings: LoanSettings
-  mailer: PluginMailerAccount
+  mailer: MailerAccount
   memberPermissions: [String!]
   privacyPolicy: String
   receiptImagesRequired: Boolean
@@ -3900,12 +4892,14 @@ type WorkspaceStat {
   refs: [String!]
   source: EntitySource
   storageUsage: Float
+  type: WorkspaceType!
   updatedAt: Float
   workspace: WorkspaceStatWorkspaceInformation!
 }
 
 type WorkspaceStatWorkspaceInformation {
   _id: String!
+  appColor: String
   logo: String
   name: String!
   type: WorkspaceType!
@@ -3952,4 +4946,32 @@ input WorkspaceViewInput {
   dashboardWidgets: [DisplayWidgetInput!]
   menu: [WorkspaceViewComponentInput!]
   reportWidgets: [DisplayWidgetInput!]
+}
+
+type ZaloOaGmfGroup {
+  avatar: String!
+  group_description: String!
+  group_id: String!
+  group_link: String!
+  isAdminNotificationEnabled: Boolean
+  name: String!
+  status: ZaloOaGmfGroupStatus!
+  total_member: Float!
+}
+
+"""Status of Zalo OA GMF Group"""
+enum ZaloOaGmfGroupStatus {
+  disabled
+  enabled
+}
+
+type ZaloOaInfo {
+  avatar: String!
+  cate_name: String!
+  description: String
+  is_verified: Boolean!
+  name: String!
+  oa_id: String!
+  package_name: String!
+  package_valid_through_date: String!
 }

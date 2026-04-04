@@ -1,0 +1,10 @@
+#import "./fragmentProductCombo.graphql"
+
+mutation UseProductCombo(
+  $useProductComboId: String!
+  $input: UseProductComboInput!
+) {
+  useProductCombo(id: $useProductComboId, input: $input) {
+    ...ProductCombo
+  }
+}

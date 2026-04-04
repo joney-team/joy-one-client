@@ -10,7 +10,7 @@ import { WorkspaceSettingCreditOperation } from "./components/workspace-setting-
 
 export const WorkspaceSettingCredit: FC = () => {
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack gap={30}>
         <Stack gap={8}>
           <SectionTitle name={t`Credit`} icon={IconReportMoney} />

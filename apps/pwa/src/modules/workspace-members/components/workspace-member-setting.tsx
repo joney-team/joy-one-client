@@ -12,6 +12,7 @@ import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fra
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
+import { isMemberHasPermission } from "@/modules/workspace-roles/workspace-role-utils";
 import { workspaceDefaultRoles } from "@/modules/workspace-roles/workspace-roles-constants";
 import {
   WorkspaceDefaultRoleId,
@@ -28,9 +29,9 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconArchive, IconLock } from "@tabler/icons-react";
 import { FC } from "react";
-import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "../graphql/mutationAssignWorkspaceMemberRoles.graphql";
-import MUTATION_REMOVE_WORKSPACE_MEMBER from "../graphql/mutationRemoveMember.graphql";
-import MUTATION_UPDATE_WORKSPACE_MEMBER from "../graphql/mutationUpdateWorkspaceMember.graphql";
+import AssignWorkspaceMemberRolesDocument from "../graphql/assignWorkspaceMemberRoles.graphql";
+import RemoveWorkspaceMemberDocument from "../graphql/removeWorkspaceMember.graphql";
+import UpdateWorkspaceMemberDocument from "../graphql/updateWorkspaceMember.graphql";
 
 interface WorkspaceMemberSettingProps {
   userId: string;
@@ -51,13 +52,14 @@ const WorkspaceMemberSettingContent: FC<
 
   const isHasPermission = workspace.hasPermission(WorkspacePermission.WORKSPACE_MEMBERS_MANAGER);
   const isAbleToUpdate = isHasPermission || isMe;
-  const isMainWorkspaceAccessable = userMember.permissions.includes(
-    WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS,
-  );
+  const isMainWorkspaceAccessable = isMemberHasPermission({
+    permission: WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS,
+    member: userMember,
+  });
   const isOwner = userMember.roles.some((v) => v._id === WorkspaceDefaultRoleId.OWNER);
 
-  const [removeWorkspaceMember] = useMutation(MUTATION_REMOVE_WORKSPACE_MEMBER);
-  const [updateWorkspaceMember] = useMutation(MUTATION_UPDATE_WORKSPACE_MEMBER);
+  const [removeWorkspaceMember] = useMutation(RemoveWorkspaceMemberDocument);
+  const [updateWorkspaceMember] = useMutation(UpdateWorkspaceMemberDocument);
 
   const onUpdate = useDebouncedCallback((input: Omit<UpdateWorkspaceMemberInput, "memberId">) => {
     if (userMember.memberId && isAbleToUpdate) {
@@ -70,7 +72,7 @@ const WorkspaceMemberSettingContent: FC<
     }
   }, 500);
 
-  const [assignRoles] = useMutation(MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES);
+  const [assignRoles] = useMutation(AssignWorkspaceMemberRolesDocument);
 
   const form = useForm<UpdateWorkspaceMemberInput>({
     initialValues: {
@@ -86,7 +88,7 @@ const WorkspaceMemberSettingContent: FC<
   });
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <FormSession
         title={<Trans>Display name in Workspace</Trans>}
         description={

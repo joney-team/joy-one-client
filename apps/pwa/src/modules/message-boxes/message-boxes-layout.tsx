@@ -5,45 +5,41 @@ import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { MessageBox } from "@/modules/message-boxes/message-box";
+import { MessageBox } from "@/modules/message-boxes/message-box/message-box";
 import { ContainerMessageBox } from "@/modules/message-boxes/message-box/message-box-container";
 import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-head";
 import { MessageBoxList } from "@/modules/message-boxes/message-boxes";
 import { MessageBoxesContext } from "@/modules/message-boxes/message-boxes-context";
 import { MessageBoxesIntegrate } from "@/modules/message-boxes/message-boxes-integrate";
-import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC, type PropsWithChildren } from "react";
-import { useRestQuery } from "../apis/use-rest-query";
+import GetMessageBoxDocument from "./graphql/getMessageBox.graphql";
 
 export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
-  const workspaceLayout = useWorkspaceLayout();
-
   const layout = useLayout();
   const router = useRouter();
-  const params = useParams();
+  const params = useParams<{ boxId: string }>();
   const plugins = usePlugins();
+  const workspaceLayout = useWorkspaceLayout();
 
-  const messageBoxId = params.boxId as string;
-
-  const messageBox = useRestQuery<MessageBoxEntity>({
-    isSkip: !messageBoxId,
-    route: `/message-boxes/${messageBoxId}`,
+  const { data, loading, error } = useQuery(GetMessageBoxDocument, {
+    variables: { messageBoxId: params.boxId! },
   });
 
   if (!plugins.isInitialized)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={250} />
       </Stack>
     );
 
   if (!plugins.isHasPlugin) {
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <MessageBoxesIntegrate />
       </Stack>
     );
@@ -52,9 +48,9 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   return (
     <MessageBoxesContext.Provider
       value={{
-        messageBox: messageBox.data ?? null,
-        messageBoxId,
-        open: (box: MessageBoxEntity) => {
+        messageBox: data?.getMessageBox ?? null,
+        messageBoxId: params.boxId!,
+        open: (box) => {
           router.push(`/message-boxes/${box._id}`);
         },
         close: () => {
@@ -64,9 +60,9 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
     >
       {(function () {
         if (layout.view === "mobile") {
-          if (messageBoxId) {
-            if (messageBox.isLoading) return <Skeleton height="50dvh" />;
-            if (messageBox.error) return <Errored error={messageBox.error} />;
+          if (params.boxId) {
+            if (loading && !data) return <Skeleton height="50dvh" />;
+            if (error) return <Errored error={error} />;
 
             return (
               <Stack style={{ height: workspaceLayout.bodyHeight }}>
@@ -86,7 +82,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
         const contentWidth = workspaceLayout.bodyWidth - 16 * 2;
 
         return (
-          <Stack p={16}>
+          <Stack p="md">
             <Group
               style={{
                 width: contentWidth,
@@ -98,14 +94,14 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
               </Card>
 
               <Card style={{ height: contentHeight }} shadow="xs" flex={1} p={0}>
-                {messageBox.data ? (
+                {data?.getMessageBox ? (
                   <Stack
                     gap={0}
                     style={{ height: contentHeight, overflow: "hidden" }}
                     align="stretch"
                   >
                     <Group style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}>
-                      <MessageBoxHead key={messageBox.data._id} />
+                      <MessageBoxHead key={data.getMessageBox._id} />
                     </Group>
 
                     <ContainerMessageBox />

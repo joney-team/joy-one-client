@@ -5,7 +5,7 @@ import { Image } from "@/components/image";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { LocationEntity } from "@/modules/locations/locations-types";
+import { LocationFragment } from "@/modules/locations/graphql/fragmentLocation.graphql";
 import { WorkspaceTypeItem } from "@/modules/workspaces/components/workpsace-type-item";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
@@ -27,7 +27,7 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCheck, IconInfoCircle } from "@tabler/icons-react";
 import { ChangeEventHandler, FC, useState } from "react";
-import QUERY_RANDOM_WORKSPACE_CODE from "../graphql/queryRandomWorkspaceCode.graphql";
+import GetRandomWorkspaceCodeDocument from "../graphql/getRandomWorkspaceCode.graphql";
 import { workspaceTypes } from "../workspace-constants";
 
 export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
@@ -43,7 +43,7 @@ export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
     initialValues: {
       logo: "",
       name: "",
-      location: {} as LocationEntity,
+      location: {} as LocationFragment,
       hotline: "",
       phone: "",
       code: "",
@@ -78,12 +78,12 @@ export const CreateWorkspace: FC<{ onDone: () => void }> = (props) => {
 
     client
       .query({
-        query: QUERY_RANDOM_WORKSPACE_CODE,
+        query: GetRandomWorkspaceCodeDocument,
         variables: {
           name,
         },
       })
-      .then((res) => form.setFieldValue("code", res.data?.randomWorkspaceCode ?? ""))
+      .then((res) => form.setFieldValue("code", res.data?.code ?? ""))
       .catch(() => false);
   }, 300);
 

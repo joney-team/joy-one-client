@@ -11,7 +11,7 @@ import { BookingFragment } from "../graphql/fragmentBooking.graphql";
 
 import { Modal } from "@/components/modal/modal";
 import { useMutation } from "@apollo/client/react";
-import MUTATION_CANCEL_BOOKING from "../graphql/mutationCancelBooking.graphql";
+import CancelBookingDocument from "../graphql/cancelBooking.graphql";
 
 interface ModalCancelBookingProps {
   booking: Pick<BookingFragment, "_id">;
@@ -23,7 +23,7 @@ const CancelBookingForm: FC<ModalCancelBookingProps> = (props) => {
   const { t } = useLingui();
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [cancelBooking] = useMutation(MUTATION_CANCEL_BOOKING);
+  const [cancelBooking] = useMutation(CancelBookingDocument);
 
   const form = useForm({
     validate: {

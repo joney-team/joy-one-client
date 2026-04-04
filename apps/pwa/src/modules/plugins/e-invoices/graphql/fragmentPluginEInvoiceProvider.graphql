@@ -1,0 +1,10 @@
+fragment PluginEInvoiceProvider on PluginEInvoiceProvider {
+  _id
+  name
+  logo
+  type
+  apiUrl
+  status
+  templates
+  updatedAt
+}

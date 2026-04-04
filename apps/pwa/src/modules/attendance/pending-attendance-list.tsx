@@ -2,6 +2,7 @@ import { useQuery } from "@apollo/client/react";
 import { FC, Fragment } from "react";
 
 import { Button } from "@/components/buttons/button";
+import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
 import { AttendanceRecordStatus, EventType } from "@/graphql/enums.graphql";
 import { Trans } from "@lingui/react/macro";
@@ -10,13 +11,12 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCalendarPause, IconClockCheck } from "@tabler/icons-react";
 import { useEventsListener } from "../events/event-service";
 import { AttendanceRecordCard } from "./attendance-record-card";
-import QUERY_ATTENDANCE_RECORDS from "./graphql/queryAttendanceRecords.graphql";
-import { NumberFormat } from "@/components/format/number-format";
+import GetAttendanceRecordsDocument from "./graphql/getAttendanceRecords.graphql";
 
 export const PendingAttendanceList: FC = () => {
   const [opened, { open, close }] = useDisclosure(false);
 
-  const { data, refetch } = useQuery(QUERY_ATTENDANCE_RECORDS, {
+  const { data, refetch } = useQuery(GetAttendanceRecordsDocument, {
     variables: {
       query: {
         status: AttendanceRecordStatus.Pending,

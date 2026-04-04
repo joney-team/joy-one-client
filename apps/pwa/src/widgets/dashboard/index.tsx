@@ -1,25 +1,24 @@
 "use client";
 
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, Period } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
+import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
+import GetTimeSeriesReportsDocument from "@/modules/reports/graphql/getTimeSeriesReports.graphql";
 import { useReports } from "@/modules/reports/reports-context";
-import { ReportEntity } from "@/modules/reports/reports-entity";
-import { exportPeriodReport } from "@/modules/reports/reports-services";
-import { RangeReport } from "@/modules/reports/reports-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Period } from "@/types";
 import { useFetch } from "@/utils/use-fetch.util";
+import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Stack } from "@mantine/core";
 import { FC, useMemo } from "react";
 import { Widgets } from "../widgets";
 import { dashboardWidgetModules } from "./modules";
-import { DashboardWidgetsContext, RangeReports } from "./types";
+import { DashboardWidgetsContext, TimeSeriesReports } from "./types";
 
 export const DashboardWidgets: FC = () => {
   const workspace = useWorkspace();
@@ -27,8 +26,9 @@ export const DashboardWidgets: FC = () => {
   const router = useRouter();
   const auth = useAuth();
   const reports = useReports();
+  const client = useApolloClient();
 
-  const rangeReports = useFetch<RangeReports>(
+  const rangeReports = useFetch<TimeSeriesReports>(
     {
       id: `range-reports-${auth.user?._id}`,
       fetch: async () => {
@@ -54,22 +54,33 @@ export const DashboardWidgets: FC = () => {
         };
 
         const rangeResults = await Promise.all([
-          exportPeriodReport({
-            period: Period.DATE,
-            fromTime: DateTime.toSeconds(ranges.current.start),
-            toTime: DateTime.toSeconds(ranges.current.end),
+          client.query({
+            query: GetTimeSeriesReportsDocument,
+            variables: {
+              input: {
+                period: Period.Date,
+                fromTime: DateTime.toSeconds(ranges.current.start),
+                toTime: DateTime.toSeconds(ranges.current.end),
+              },
+            },
           }),
-          exportPeriodReport({
-            period: Period.DATE,
-            fromTime: DateTime.toSeconds(ranges.prev.start),
-            toTime: DateTime.toSeconds(ranges.prev.end),
+          client.query({
+            query: GetTimeSeriesReportsDocument,
+            variables: {
+              input: {
+                period: Period.Date,
+                fromTime: DateTime.toSeconds(ranges.prev.start),
+                toTime: DateTime.toSeconds(ranges.prev.end),
+              },
+            },
           }),
         ]);
 
-        const output: RangeReports = {
-          lastSyncedAt: rangeResults[0].data[0]?.lastInteractionAt,
-          prevPeriod: rangeResults[1].data,
-          period: rangeResults[0].data,
+        const output: TimeSeriesReports = {
+          lastSyncedAt:
+            rangeResults[0].data?.list.results[0]?.updatedAt ?? DateTime.getNowInSeconds(),
+          prevPeriod: rangeResults[1].data?.list.results ?? [],
+          period: rangeResults[0].data?.list.results ?? [],
         };
 
         return output;
@@ -79,9 +90,9 @@ export const DashboardWidgets: FC = () => {
   );
 
   useEventsListener(
-    [EventType.ReportRangeSynced],
+    [EventType.ReportTimeSeriesSynced],
     (e) => {
-      const _report = e.data as ReportEntity<RangeReport>;
+      const _report = e.data as TimeSeriesReportFragment;
 
       if (rangeReports.data) {
         rangeReports.setData({
@@ -98,8 +109,9 @@ export const DashboardWidgets: FC = () => {
 
   const context: DashboardWidgetsContext = {
     router,
-    realtimeReport: reports.realtimeReport,
-    rangeReports,
+    metrics: reports.metrics,
+    timeSeries: rangeReports,
+    isMetricsLoading: reports.isMetricsLoading,
     workspace,
     currency,
   };

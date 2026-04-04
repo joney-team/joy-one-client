@@ -34,12 +34,12 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { MouseEventHandler, useRef, type FC } from "react";
-import FETCH_EXTERNAL_STORAGE_SIZE from "./mutationFetchExternalStorageSize.graphql";
-import TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE from "./mutationToggleDisablePluginExternalStorage.graphql";
+import FetchExternalStorageSizeDocument from "./graphql/fetchExternalStorageSize.graphql";
+import GetPluginExternalStorageDocument from "./graphql/getPluginExternalStorage.graphql";
+import HealthcheckPluginExternalStorageDocument from "./graphql/healthcheckPluginExternalStorage.graphql";
+import ToggleDisablePluginExternalStorageDocument from "./graphql/toggleDisablePluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
 import { PluginStorageModalRef } from "./plugin-storage-modal";
-import HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE from "./queryHealthcheckPluginExternalStorage.graphql";
-import GET_PLUGIN_EXTERNAL_STORAGE from "./queryPluginExternalStorage.graphql";
 
 const PluginStorageModal = dynamic(
   () => import("./plugin-storage-modal").then((mod) => mod.PluginStorageModal),
@@ -51,17 +51,16 @@ const PluginStorageModal = dynamic(
 export const PluginStorage: FC = () => {
   const pluginStorageModalRef = useRef<PluginStorageModalRef>(null);
   const color = useColor();
-  const storage = useQuery(GET_PLUGIN_EXTERNAL_STORAGE, {
+  const storage = useQuery(GetPluginExternalStorageDocument, {
     fetchPolicy: "cache-and-network",
   });
 
   const [healthCheck, { loading: healthCheckLoading }] = useMutation(
-    HEALTHCHECK_PLUGIN_EXTERNAL_STORAGE,
+    HealthcheckPluginExternalStorageDocument,
   );
 
-  const [fetchExternalStorageSize] = useMutation(FETCH_EXTERNAL_STORAGE_SIZE);
-
-  const [toggleDisable] = useMutation(TOGGLE_DISABLE_PLUGIN_EXTERNAL_STORAGE);
+  const [fetchExternalStorageSize] = useMutation(FetchExternalStorageSizeDocument);
+  const [toggleDisable] = useMutation(ToggleDisablePluginExternalStorageDocument);
 
   const onHealthCheck: MouseEventHandler = async (e) => {
     try {

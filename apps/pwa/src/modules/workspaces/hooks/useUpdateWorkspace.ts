@@ -1,15 +1,15 @@
 import { useMutation } from "@apollo/client/react";
 
 import WORKSPACE_DATE_FRAGMENT from "../graphql/fragmentWorkspace.graphql";
-import UPDATE_WORKSPACE_MUTATION from "../graphql/mutationUpdateWorkspace.graphql";
+import UpdateWorkspaceDocument from "../graphql/updateWorkspace.graphql";
 
 export const useUpdateWorkspace = () => {
-  const [updateWorkspace, { loading }] = useMutation(UPDATE_WORKSPACE_MUTATION, {
+  const [updateWorkspace, { loading }] = useMutation(UpdateWorkspaceDocument, {
     update: (cache, result) => {
       if (!result.data) return;
       cache.updateFragment(
         {
-          id: `Workspace:${result.data.updateWorkspace._id}`,
+          id: `Workspace:${result.data.workspace._id}`,
           fragment: WORKSPACE_DATE_FRAGMENT,
           fragmentName: "Workspace",
         },
@@ -18,7 +18,7 @@ export const useUpdateWorkspace = () => {
 
           return {
             ...data,
-            ...result.data?.updateWorkspace,
+            ...result.data?.workspace,
           };
         },
       );

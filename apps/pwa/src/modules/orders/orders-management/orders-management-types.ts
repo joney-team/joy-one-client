@@ -1,80 +1,39 @@
-import { UseRestQuery } from "@/modules/apis/use-rest-query";
-import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
-import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
-import { ProductEntity } from "@/modules/products/products-types";
-import { PromotionEntity } from "@/modules/promotions/promotions-types";
-import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import { ResponseList } from "@/types";
-import { OrderEntity } from "../order-entity";
-import { OrderDiscount, OrderEntityCalculated, OrderPaymentStatus } from "../orders-types";
+import { ProductComboFragment } from "@/modules/product-combos/graphql/fragmentProductCombo.graphql";
+import { PromotionFragment } from "@/modules/promotions/graphql/fragmentPromotion.graphql";
+import { OrderFragment } from "../graphql/fragmentOrder.graphql";
 
-export type OrderProduct = Pick<
-  ProductEntity,
-  | "_id"
-  | "name"
-  | "image"
-  | "price"
-  | "minPrice"
-  | "maxPrice"
-  | "unit"
-  | "displayName"
-  | "defaultQtyPerUse"
-  | "type"
-  | "isHiddenInReceiptWhenNoPrice"
->;
-
-export interface OrderItem {
-  product: OrderProduct;
-  quantity: number;
-  price: number;
-  assigneeUsers: WorkspaceMemberFragment[];
-  note?: string;
-}
-
-export interface Order {
-  id: string;
-  isSaved: boolean;
+export interface OrderState extends OrderFragment {
+  isSaved?: boolean;
   isDirty?: boolean;
-  code?: string;
-  items: OrderItem[];
-  relatedCustomer?: CustomerFragment | null;
-  directDiscount?: number;
-  note?: string;
-  assigneeUsers: WorkspaceMemberFragment[];
-  createdAt: number;
-  paymentStatus?: OrderPaymentStatus;
-  paidAmount?: number;
-  tipAmount?: number;
-  combos?: ProductComboEntity[];
-  prevCombos?: ProductComboEntity[];
-  promotions?: PromotionEntity[];
-  prevPromotions?: PromotionEntity[];
-}
-
-export interface OrderCalculated extends Order {
-  totalAmount: number;
-  discounts: OrderDiscount[];
 }
 
 export interface OrdersManagementState {
-  orders: Order[];
+  orders: OrderState[];
   activeOrderId: string;
 }
 
+export type OrderItem = OrderFragment["items"][number];
+
 export interface OrdersManagementContext extends OrdersManagementState {
   isInitialized: boolean;
-  activeOrder: Order | null;
-  availableCombos: UseRestQuery<ProductComboEntity[]>;
-  availablePromotions: UseRestQuery<ResponseList<PromotionEntity>>;
+  activeOrder: OrderState | null;
+  availableCombos: ProductComboFragment[];
+  availableCombosLoading: boolean;
+  availablePromotions: PromotionFragment[];
+  availablePromotionsLoading: boolean;
   setActiveOrderId: (orderId: string) => void;
-  addOrder: (order?: OrderEntity) => void;
-  addProduct: (product: OrderProduct) => void;
+  addOrder: (order?: OrderFragment) => void;
+  addProduct: (product: OrderItem["product"]) => void;
   removeProduct: (productId: string) => void;
-  updateProductItem: (productId: string, item: Partial<Omit<OrderItem, "product">>) => void;
+  updateProductItem: (
+    productId: string,
+    item: Pick<OrderItem, "quantity" | "price" | "note" | "assigneeUsers">,
+  ) => void;
   closeOrder: (id?: string | null) => void;
   removeOrder: () => void;
-  calculating: UseRestQuery<OrderEntityCalculated>;
-  updateOrder: (values: Partial<Order>) => void;
+  calculated: OrderFragment | null;
+  isCalculating: boolean;
+  updateOrder: (values: Partial<OrderState>) => void;
   payOrder: () => Promise<void>;
   saveOrder: () => Promise<void>;
 }

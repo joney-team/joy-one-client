@@ -1,0 +1,7 @@
+#import "../graphql/fragmentReceipt.graphql"
+
+mutation UpdateReceipt($updateReceiptId: String!, $input: UpdateReceiptInput!) {
+  receipt: updateReceipt(id: $updateReceiptId, input: $input) {
+    ...Receipt
+  }
+}

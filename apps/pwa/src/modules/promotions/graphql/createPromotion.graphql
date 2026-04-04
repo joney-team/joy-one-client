@@ -1,0 +1,7 @@
+#import "./fragmentPromotion.graphql"
+
+mutation CreatePromotion($input: PromotionInput!) {
+  promotion: createPromotion(input: $input) {
+    ...Promotion
+  }
+}

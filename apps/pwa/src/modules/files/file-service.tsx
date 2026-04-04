@@ -8,7 +8,6 @@ import {
   MS_WORD_MIME_TYPE,
   PDF_MIME_TYPE,
 } from "@mantine/dropzone";
-import { Icon, IconFile, IconMusic, IconPdf, IconPhoto, IconVideo } from "@tabler/icons-react";
 import imageCompression, { Options } from "browser-image-compression";
 import { parseFile } from "./files-utils";
 
@@ -39,21 +38,6 @@ export async function reducePhotoSize(file: File, option: Options) {
 
   const reducedFile = new File([await imageCompression(file, option)], file.name);
   return reducedFile;
-}
-
-export const fileTypeIcons: Record<FileType, Icon> = {
-  [FileType.Photo]: IconPhoto,
-  [FileType.Video]: IconVideo,
-  [FileType.Audio]: IconMusic,
-  [FileType.Pdf]: IconPdf,
-  [FileType.MsWord]: IconFile,
-  [FileType.MsExcel]: IconFile,
-  [FileType.MsPowerpoint]: IconFile,
-  [FileType.Unknown]: IconFile,
-};
-
-export function getFileTypeIcon(fileType: FileType) {
-  return fileTypeIcons[fileType];
 }
 
 export async function downloadFileFromURL(url: string, filename: string) {

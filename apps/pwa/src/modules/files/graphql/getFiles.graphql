@@ -1,0 +1,10 @@
+#import "./fragmentFile.graphql"
+
+query GetFiles($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getFiles(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...File
+    }
+  }
+}

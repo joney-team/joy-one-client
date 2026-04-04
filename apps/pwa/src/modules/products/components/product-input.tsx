@@ -4,10 +4,10 @@ import { t } from "@lingui/core/macro";
 import { ActionIcon, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { type FC } from "react";
-import { ProductEntity } from "../products-types";
+import { ProductFragment } from "../graphql/fragmentProduct.graphql";
 import { ProductSelector } from "./product-selector";
 
-export type ProductValue = Pick<ProductEntity, "_id" | "name" | "price" | "unit" | "image">;
+export type ProductValue = Pick<ProductFragment, "_id" | "name" | "price" | "unit" | "image">;
 
 interface ProductInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   value?: ProductValue | null;

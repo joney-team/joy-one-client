@@ -1,25 +1,25 @@
-import { t } from "@lingui/core/macro";
-import { PromotionStatus, PromotionType } from "./promotions-types";
+import { PromotionStatus, PromotionType } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 
 export const promotionTypes: Record<
   PromotionType,
-  { label: () => string; color: MantineColor; min?: number; max?: number }
+  { label: MacroMessageDescriptor; color: MantineColor; min?: number; max?: number }
 > = {
-  [PromotionType.DISCOUNT_RATE]: {
-    label: () => t`Discount rate`,
+  [PromotionType.DiscountRate]: {
+    label: defineMessage`Discount rate`,
     color: "indigo",
     min: 0,
     max: 100,
   },
-  [PromotionType.DISCOUNT_AMOUNT]: { label: () => t`Discount amount`, color: "green", min: 0 },
+  [PromotionType.DiscountAmount]: { label: defineMessage`Discount amount`, color: "green", min: 0 },
 };
 
 export const promotionStatuses: Record<
   PromotionStatus,
-  { label: () => string; color: MantineColor }
+  { label: MacroMessageDescriptor; color: MantineColor }
 > = {
-  [PromotionStatus.ACTIVE]: { label: () => t`Active`, color: "green" },
-  [PromotionStatus.CLOSED]: { label: () => t`Closed`, color: "red" },
-  [PromotionStatus.EXPIRED]: { label: () => t`Expired`, color: "gray" },
+  [PromotionStatus.Active]: { label: defineMessage`Active`, color: "green" },
+  [PromotionStatus.Closed]: { label: defineMessage`Closed`, color: "red" },
+  [PromotionStatus.Expired]: { label: defineMessage`Expired`, color: "gray" },
 };

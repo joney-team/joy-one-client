@@ -35,7 +35,7 @@ export const WorkspaceRequire: FC = () => {
   useEffect(() => {
     if (app.metadata.isExtended) {
       const relatedMember = workspace.userMembers.find(
-        (m) => m.workspaceId === app.metadata.workspaceId
+        (m) => m.workspaceId === app.metadata.workspaceId,
       );
       if (relatedMember?.workspaceId) workspace.select(relatedMember.workspaceId);
     }
@@ -60,13 +60,13 @@ export const WorkspaceRequire: FC = () => {
               h={80}
               workspace={{
                 name: app.metadata.appName || app.metadata.title,
-                logo: app.metadata.isExtended ? app.metadata.appIcon ?? "" : "/brandname.png",
+                logo: app.metadata.isExtended ? (app.metadata.appIcon ?? "") : "/brandname.png",
                 appColor: app.metadata.appColor ?? "",
               }}
               radius={10}
             />
 
-            <Text c={app.metadata.appColor} ta="center" fz={em(25)} fw={500}>
+            <Text c={app.metadata.appColor ?? undefined} ta="center" fz={em(25)} fw={500}>
               {app.metadata.appName}
             </Text>
           </Stack>
@@ -93,7 +93,7 @@ export const WorkspaceRequire: FC = () => {
   }
 
   const availabelUserMembers = workspace.userMembers.filter(
-    (m) => m.workspace?.isArchived !== true
+    (m) => m.workspace?.isArchived !== true,
   );
 
   if (availabelUserMembers.length === 0) {

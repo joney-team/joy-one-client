@@ -1,7 +1,0 @@
-#import "./fragmentWorkspaceSetting.graphql"
-
-mutation UpdateWorkspaceSetting($input: UpdateWorkspaceSettingInput!) {
-  updateWorkspaceSetting(input: $input) {
-    ...WorkspaceSetting
-  }
-}

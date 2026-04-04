@@ -3,18 +3,18 @@
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor/editor";
+import { DateFormat } from "@/components/format/date-format";
 import { ImageInput } from "@/components/inputs/image-input";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
-import { CategoryEntity } from "@/modules/categories/category-types";
+import { CustomFieldValue, PostInput } from "@/graphql/types.graphql";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
 import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
-import { CustomField } from "@/modules/custom-fields/custom-field-types";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -34,16 +34,20 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
-import { restClient } from "../../apis/rest-client";
-import { PostEntity } from "../posts-types";
-import { DateFormat } from "@/components/format/date-format";
+import { PostFragment } from "../graphql/fragmentPost.graphql";
+import GeneratePostSlugDocument from "../graphql/generatePostSlug.graphql";
+import UpdatePostDocument from "../graphql/updatePost.graphql";
+import CreatePostDocument from "../graphql/createPost.graphql";
 
 interface FormPostProps {
-  post?: PostEntity;
-  onSuccess?: (post: PostEntity) => void;
+  post?: PostFragment;
+  onSuccess?: (post: PostFragment) => void;
 }
 
 export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
+  const { t } = useLingui();
+  const client = useApolloClient();
+
   const form = useForm<{
     title: string;
     slug: string;
@@ -51,8 +55,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     content?: JSONContent | null;
     contentHtml?: string;
     thumbnail?: string;
-    category?: CategoryEntity | null;
-    customFields?: CustomField[];
+    category?: PostFragment["category"];
+    customFieldValues?: CustomFieldValue[];
   }>({
     initialValues: {
       title: post?.title || "",
@@ -61,15 +65,18 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       content: post?.content || null,
       contentHtml: post?.contentHtml || "",
       category: post?.category,
-      customFields: post?.customFields || [],
+      customFieldValues: post?.customFieldValues || [],
     },
   });
 
   const autoGenerateSlug = useDebouncedCallback(async (title: string) => {
     try {
       if (!title) return;
-      const response = await restClient.post<{ slug: string }>("/posts/slug", { title });
-      form.setFieldValue("slug", response.slug);
+      const response = await client.query({
+        query: GeneratePostSlugDocument,
+        variables: { input: { title } },
+      });
+      form.setFieldValue("slug", response.data?.slug ?? "");
     } catch (error) {
       onError(error);
     }
@@ -77,20 +84,30 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { category, customFields, ...dto } = values;
+      const { category, customFieldValues, ...dto } = values;
 
-      let _post: PostEntity | undefined = post;
+      let _post: PostFragment | undefined = post;
 
-      const payload = {
+      const input: PostInput = {
         ...dto,
-        customFieldValues: getCustomFieldValue(customFields),
+        customFieldValues: getCustomFieldValue(customFieldValues),
         categoryId: category?._id || null,
       };
 
       if (post) {
-        _post = await restClient.put<PostEntity>(`/posts/${post._id}`, payload);
+        _post = await client
+          .mutate({
+            mutation: UpdatePostDocument,
+            variables: { postId: post._id, input },
+          })
+          .then((result) => result.data?.post);
       } else {
-        _post = await restClient.post<PostEntity>("/posts", payload);
+        _post = await client
+          .mutate({
+            mutation: CreatePostDocument,
+            variables: { input },
+          })
+          .then((result) => result.data?.post);
       }
 
       form.setInitialValues({
@@ -100,11 +117,11 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         content: _post?.content || null,
         contentHtml: _post?.contentHtml || "",
         category: _post?.category || null,
-        customFields: _post?.customFields || [],
+        customFieldValues: _post?.customFieldValues || [],
       });
 
       form.reset();
-      onSuccess?.(_post);
+      if (_post) onSuccess?.(_post);
     } catch (error) {
       onFormError(form, error);
     }
@@ -219,9 +236,9 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
             <Stack>
               <TextInput label="Slug" {...form.getInputProps("slug")} />
 
-              <InputWrapper label={t`Thumbnail`}>
+              <InputWrapper label={<Trans>Thumbnail</Trans>}>
                 <ImageInput
-                  value={form.values.thumbnail || post?.thumbnail}
+                  value={(form.values.thumbnail || post?.thumbnail) ?? ""}
                   onChange={(value) => form.setFieldValue("thumbnail", value)}
                   w="100%"
                   h={200}
@@ -229,7 +246,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
               </InputWrapper>
 
               <Textarea
-                label={t`Excerpt`}
+                label={<Trans>Excerpt</Trans>}
                 placeholder={t`Enter excerpt`}
                 value={form.values.excerpt}
                 onChange={(e) => form.setFieldValue("excerpt", e.target.value)}
@@ -239,8 +256,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
               <BuilderCustomFields
                 entity={AppEntity.POSTS}
-                value={form.values.customFields}
-                onChange={(value) => form.setFieldValue("customFields", value)}
+                value={form.values.customFieldValues}
+                onChange={(value) => form.setFieldValue("customFieldValues", value)}
               />
             </Stack>
           </Card>

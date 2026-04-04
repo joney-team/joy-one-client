@@ -1,7 +1,10 @@
+"use client";
+
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
 import { ModalHead } from "@/components/modal/modal-head";
 import { PluginExternalStorageProvider } from "@/graphql/enums.graphql";
+import { SetPluginExternalStorageInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
@@ -10,13 +13,11 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCloudDataConnection } from "@tabler/icons-react";
 import { forwardRef, Fragment, type ReactNode, useImperativeHandle, useState } from "react";
-import SET_PLUGIN_EXTERNAL_STORAGE, {
-  type SetPluginExternalStorageMutationVariables,
-} from "./mutationSetPluginExternalStorage.graphql";
+import GetPluginExternalStorageDocument, {
+  GetPluginExternalStorageQuery,
+} from "./graphql/getPluginExternalStorage.graphql";
+import SetPluginExternalStorageDocument from "./graphql/setPluginExternalStorage.graphql";
 import { pluginStorageProviders } from "./plugin-storage-constants";
-import GET_PLUGIN_EXTERNAL_STORAGE, {
-  type PluginExternalStorageQuery,
-} from "./queryPluginExternalStorage.graphql";
 
 const PluginStorageModalContent = ({
   isOpened,
@@ -25,21 +26,21 @@ const PluginStorageModalContent = ({
 }: {
   isOpened: boolean;
   onClose: () => void;
-  storage?: PluginExternalStorageQuery["pluginExternalStorage"];
+  storage?: GetPluginExternalStorageQuery["pluginExternalStorage"];
 }) => {
-  const [setPluginExternalStorage] = useMutation(SET_PLUGIN_EXTERNAL_STORAGE);
+  const [setPluginExternalStorage] = useMutation(SetPluginExternalStorageDocument);
 
-  const form = useForm<SetPluginExternalStorageMutationVariables>({
+  const form = useForm<SetPluginExternalStorageInput>({
     initialValues: {
       provider: PluginExternalStorageProvider.AwsS3,
     },
   });
 
-  const onSubmit = form.onSubmit(async (values) => {
+  const onSubmit = form.onSubmit(async (input) => {
     try {
       await setPluginExternalStorage({
-        variables: values,
-        refetchQueries: [GET_PLUGIN_EXTERNAL_STORAGE],
+        variables: { input },
+        refetchQueries: [GetPluginExternalStorageDocument],
       });
       onClose();
     } catch (error) {
@@ -111,7 +112,7 @@ const PluginStorageModalContent = ({
 };
 
 export type PluginStorageModalRef = {
-  open: (storage?: PluginExternalStorageQuery["pluginExternalStorage"]) => void;
+  open: (storage?: GetPluginExternalStorageQuery["pluginExternalStorage"]) => void;
   close: () => void;
 };
 
@@ -123,7 +124,7 @@ export const PluginStorageModal = forwardRef<
 >(({ children }, ref) => {
   const [opened, { open, close }] = useDisclosure(false);
   const [storage, setStorage] = useState<
-    PluginExternalStorageQuery["pluginExternalStorage"] | null
+    GetPluginExternalStorageQuery["pluginExternalStorage"] | null
   >(null);
 
   useImperativeHandle(ref, () => ({

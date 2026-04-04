@@ -9,17 +9,17 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { Stack } from "@mantine/core";
 import { IconEdit, IconTopologyStar3 } from "@tabler/icons-react";
 import { FC } from "react";
-import { PartnerEntity } from "./partners-types";
 
 import { Trans } from "@lingui/react/macro";
-import QUERY_PARTNERS from "./graphql/queryPartners.graphql";
+import GetPartnersDocument from "./graphql/getPartners.graphql";
+import { PartnerFragment } from "./graphql/fragmentPartner.graphql";
 
 export const PartnerList: FC = () => {
   return (
     <ModalParnterForm>
       {(open) => (
-        <Stack p={16}>
-          <List<PartnerEntity>
+        <Stack p="md">
+          <List<PartnerFragment>
             columns={{
               logo: {
                 defaultWidth: 80,
@@ -31,9 +31,9 @@ export const PartnerList: FC = () => {
               phone: { name: <Trans>Phone</Trans>, defaultWidth: 200 },
               email: { name: <Trans>Email</Trans>, defaultWidth: 200 },
             }}
-            id="pas"
+            id="partners"
             name={<Trans>Partners</Trans>}
-            query={QUERY_PARTNERS}
+            query={GetPartnersDocument}
             icon={IconTopologyStar3}
             card={(props) => <PartnerCard partner={props.data} />}
             creatable={{

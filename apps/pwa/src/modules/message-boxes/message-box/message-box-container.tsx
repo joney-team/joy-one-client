@@ -7,9 +7,9 @@ import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { FC, useState } from "react";
-import { MessageBox } from ".";
-import { MetadataMessageBox } from "../message-box-metadata";
+import { MetadataMessageBox } from "../message-box-metadata/message-box-metadata";
 import { useMessageBoxes } from "../message-boxes-context";
+import { MessageBox } from "./message-box";
 
 export const ContainerMessageBox: FC = () => {
   const workspaceLayout = useWorkspaceLayout();

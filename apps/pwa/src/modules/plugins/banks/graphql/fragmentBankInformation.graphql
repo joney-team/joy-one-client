@@ -1,0 +1,14 @@
+fragment BankInformation on BankInformation {
+  id
+  name
+  code
+  bin
+  shortName
+  logo
+  transferSupported
+  lookupSupported
+  short_name
+  support
+  isTransfer
+  swift_code
+}

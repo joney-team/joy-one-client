@@ -1,0 +1,10 @@
+#import "./fragmentBooking.graphql"
+
+query GetBookings($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getBookings(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Booking
+    }
+  }
+}

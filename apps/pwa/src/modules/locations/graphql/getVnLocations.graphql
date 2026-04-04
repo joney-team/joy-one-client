@@ -1,0 +1,10 @@
+query GetVnLocations {
+  vnLocations: getVnLocations {
+    id
+    type
+    name
+    fullName
+    parentId
+    externalId
+  }
+}

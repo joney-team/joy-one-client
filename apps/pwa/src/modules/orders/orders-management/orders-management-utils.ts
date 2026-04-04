@@ -1,52 +1,27 @@
 "use client";
 
-import { OrderEntity } from "../order-entity";
-import { OrderCalculateDto } from "../orders-dtos";
-import { OrderType } from "../orders-types";
-import { Order } from "./orders-management-types";
+import { OrderType } from "@/graphql/enums.graphql";
+import { OrderInput } from "@/graphql/types.graphql";
+import { OrderFragment } from "../graphql/fragmentOrder.graphql";
 
-export const normalizeEntityToOrder = (order: OrderEntity): Order => {
+export const normalizeOrderToInput = (order: OrderFragment): OrderInput => {
   return {
     id: order.id,
-    isSaved: true,
-    isDirty: false,
-    code: order.code,
     items: order.items.map((item) => ({
-      product: item.product,
-      quantity: item.quantity,
-      price: item.price,
-      assigneeUsers: item.assigneeUsers,
-      note: item.note,
-    })),
-    assigneeUsers: order.assigneeUsers ?? [],
-    createdAt: order.createdAt,
-    paymentStatus: order.paymentStatus,
-    paidAmount: order.paidAmount,
-    tipAmount: 0,
-    relatedCustomer: order.relatedCustomer,
-    combos: order.combos,
-    prevCombos: order.combos,
-    promotions: order.promotions,
-    prevPromotions: order.promotions,
-  };
-};
-
-export const normalizeOrderForSubmission = (orderSale: Order): OrderCalculateDto => {
-  return {
-    id: orderSale.id,
-    type: OrderType.COMMON,
-    items: orderSale.items.map((item) => ({
-      price: item.price,
       productId: item.product._id,
       quantity: item.quantity,
+      price: item.price,
+      note: item.note ?? null,
       assigneeUserIds: item.assigneeUsers.map((u) => u.userId),
-      note: item.note,
     })),
-    assigneeUserIds: orderSale.assigneeUsers.map((u) => u.userId),
-    note: orderSale.note,
-    directDiscount: orderSale.directDiscount,
-    relatedCustomerId: orderSale.relatedCustomer?._id,
-    comboIds: orderSale.combos?.map((c) => c.id),
-    promotionIds: orderSale.promotions?.map((p) => p.id),
+    type: order.type ?? OrderType.Common,
+    note: order.note ?? null,
+    relatedCustomerId: order.relatedCustomer?._id ?? null,
+    comboIds: order.comboIds ?? [],
+    promotionIds: order.promotionIds ?? [],
+    assigneeUserIds: order.assigneeUserIds ?? [],
+    workspaceBranchId: order.workspaceBranchId ?? null,
+    directDiscount: order.directDiscount ?? null,
+    relatedUserIds: order.relatedUserIds ?? [],
   };
 };

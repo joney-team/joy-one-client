@@ -1,15 +1,15 @@
 "use client";
 
 import { useVariablesQuery } from "@/graphql/use-query";
-import QUERY_WORKSPACE_MEMBER from "../graphql/queryWorkspaceMember.graphql";
+import GetWorkspaceMemberByUserIdDocument from "../graphql/getWorkspaceMemberByUserId.graphql";
 
 export const useWorkspaceMember = (userId: string) => {
-  const { data, loading, error } = useVariablesQuery(QUERY_WORKSPACE_MEMBER, {
+  const { data, loading, error } = useVariablesQuery(GetWorkspaceMemberByUserIdDocument, {
     userId,
   });
 
   return {
-    member: data?.workspaceMember,
+    member: data?.member,
     loading,
     error,
   };

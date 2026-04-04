@@ -2,32 +2,32 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { restClient } from "@/modules/apis/rest-client";
-import {
-  PluginZaloOaZNSTemplateId,
-  ZnsTemplateConfig,
-} from "@/modules/plugins/zalo-oas/zalo-oas-types";
+import { PluginZaloOaZnsTemplateId } from "@/graphql/enums.graphql";
+import { ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { isPhoneNumber } from "@/utils/phone.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Checkbox, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { IconPuzzle, IconSend } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import SendZNSDocument from "../graphql/sendZNS.graphql";
 
 interface ModalZaloOaSendZnsProps {
   config: ZnsTemplateConfig;
-  templateId: PluginZaloOaZNSTemplateId;
+  templateId: PluginZaloOaZnsTemplateId;
 }
 
 export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
+  const { t } = useLingui();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isTesting, setIsTesting] = useState(true);
   const color = useColor();
+  const client = useApolloClient();
 
   const form = useForm({
     initialValues: props.config.fields.reduce((acc, item) => {
@@ -51,20 +51,28 @@ export const ModalZaloOaSendZns: FC<ModalZaloOaSendZnsProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     setIsSubmitting(true);
     try {
-      await restClient.post(`/plugins/zalo-oas/zns`, {
-        data: props.config.fields.reduce((acc, item) => {
-          acc[item.fieldName] = values[item.fieldName];
-          return acc;
-        }, {} as any),
-        phoneNumber: values.phoneNumber,
-        templateId: props.templateId,
-        isTesting,
+      await client.mutate({
+        mutation: SendZNSDocument,
+        variables: {
+          input: {
+            data: props.config.fields.reduce(
+              (acc, item) => {
+                acc[item.fieldName] = values[item.fieldName];
+                return acc;
+              },
+              {} as Record<string, any>,
+            ),
+            phoneNumber: values.phoneNumber,
+            templateId: props.templateId,
+            isTesting,
+          },
+        },
       });
 
       notifications.show({
         icon: <IconPuzzle size={18} strokeWidth={1.5} />,
-        title: t`Success`,
-        message: t`ZNS sent`,
+        title: <Trans>Success</Trans>,
+        message: <Trans>ZNS sent</Trans>,
         color: color("primary"),
       });
     } catch (error) {

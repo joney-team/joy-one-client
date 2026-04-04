@@ -28,7 +28,7 @@ export const WorkspaceInviteMember: FC = () => {
 
   if (isReachMemberLimit) {
     return (
-      <Stack align="center" justify="center" p={16}>
+      <Stack align="center" justify="center" p="md">
         <Center>
           <Image src="/images/upgrade.png" w={100} />
         </Center>

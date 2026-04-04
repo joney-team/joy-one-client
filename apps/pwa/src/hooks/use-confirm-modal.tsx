@@ -63,7 +63,7 @@ const Content = ({
 
   return (
     <Stack gap={0}>
-      <Group wrap="nowrap" align="start" p={16}>
+      <Group wrap="nowrap" align="start" p="md">
         <ThemeIcon
           color={modalColor}
           variant={colorScheme === "light" ? "light" : "filled"}

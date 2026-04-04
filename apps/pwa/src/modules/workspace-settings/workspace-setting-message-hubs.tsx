@@ -30,7 +30,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
 
   if (plugins.messageHubs.length === 0) {
     return (
-      <Container p={16}>
+      <Container p="md">
         <Card shadow="xs">
           <Stack align="center" py={20}>
             <Group gap={30} mb={20}>
@@ -79,7 +79,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
   }
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack>
         <SectionTitle icon={IconMessage} name="Message Hubs" iconColor="primary">
           <ModalInput>

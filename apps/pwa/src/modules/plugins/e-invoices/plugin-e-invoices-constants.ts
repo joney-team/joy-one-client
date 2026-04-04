@@ -1,28 +1,28 @@
-import { t } from "@lingui/core/macro";
+import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import {
-  PluginEInvoicesProviderStatus,
   PluginEInvoiceTemplateAutoCreateMode,
   PluginEInvoiceTemplateCreateCriteria,
   PluginEInvoiceTemplateType,
 } from "./plugin-e-invoices.types";
+import { PluginEInvoicesProviderStatus } from "@/graphql/enums.graphql";
 
 export const eInvoicesProviderStatuses: Record<
   PluginEInvoicesProviderStatus,
   {
-    name: () => string;
+    name: MacroMessageDescriptor;
     color: string;
   }
 > = {
-  [PluginEInvoicesProviderStatus.ACTIVE]: {
-    name: () => t`Active`,
+  [PluginEInvoicesProviderStatus.Active]: {
+    name: defineMessage`Active`,
     color: "green",
   },
-  [PluginEInvoicesProviderStatus.AUTH_FAILED]: {
-    name: () => t`Auth failed`,
+  [PluginEInvoicesProviderStatus.AuthFailed]: {
+    name: defineMessage`Auth failed`,
     color: "red",
   },
-  [PluginEInvoicesProviderStatus.INACTIVE]: {
-    name: () => t`Inactive`,
+  [PluginEInvoicesProviderStatus.Inactive]: {
+    name: defineMessage`Inactive`,
     color: "gray",
   },
 };
@@ -35,21 +35,21 @@ export const eInvoicesTemplateTypes: Record<PluginEInvoiceTemplateType, string> 
 export const eInvoicesTemplateAutoCreateModes: Record<
   PluginEInvoiceTemplateAutoCreateMode,
   {
-    name: () => string;
+    name: MacroMessageDescriptor;
   }
 > = {
-  [PluginEInvoiceTemplateAutoCreateMode.NONE]: { name: () => t`None` },
+  [PluginEInvoiceTemplateAutoCreateMode.NONE]: { name: defineMessage`None` },
   [PluginEInvoiceTemplateAutoCreateMode.EXPIRE_TIME]: {
-    name: () => t`For expired time of receipt`,
+    name: defineMessage`For expired time of receipt`,
   },
 };
 
 export const eInvoicesTemplateCreateCriteria: Record<
   PluginEInvoiceTemplateCreateCriteria,
-  { name: () => string }
+  { name: MacroMessageDescriptor }
 > = {
-  [PluginEInvoiceTemplateCreateCriteria.NONE]: { name: () => t`None` },
+  [PluginEInvoiceTemplateCreateCriteria.NONE]: { name: defineMessage`None` },
   [PluginEInvoiceTemplateCreateCriteria.PROFIT_MORE_THAN_ZERO]: {
-    name: () => t`Loan profit more than 0`,
+    name: defineMessage`Loan profit more than 0`,
   },
 };

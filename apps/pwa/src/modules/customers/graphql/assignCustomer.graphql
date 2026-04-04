@@ -1,0 +1,10 @@
+#import "../graphql/fragmentCustomer.graphql"
+
+mutation AssignCustomer(
+  $id: String!
+  $input: AssignCustomerInput!
+) {
+  customer: assignCustomer(id: $id, input: $input) {
+    ...Customer
+  }
+}

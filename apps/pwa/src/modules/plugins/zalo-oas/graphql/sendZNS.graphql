@@ -1,0 +1,3 @@
+mutation SendZNS($input: PluginZaloOaSendZnsInput!) {
+  sendZNS(input: $input)
+}

@@ -3,11 +3,6 @@
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
 import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
-import REMOVE_TAG_MUTATION, {
-  type RemoveTagMutation,
-  type RemoveTagMutationVariables,
-} from "@/modules/tags/graphql/mutationRemoveTag.graphql";
-import GET_TAGS_QUERY from "@/modules/tags/graphql/queryTags.graphql";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
 import { useColor } from "@/modules/theme/use-color";
@@ -38,6 +33,8 @@ import { FC, Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 import { AppColorInput, useParsedAppColor } from "@/components/inputs/app-color-input";
 import { TaskContextType } from "@/graphql/enums.graphql";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
+import RemoveTagDocument from "@/modules/tags/graphql/removeTag.graphql";
 import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
@@ -79,12 +76,9 @@ const TaskFolderNavigationItem: FC<{
     transition: sortable.transition,
   };
 
-  const [removeTag] = useMutation<RemoveTagMutation, RemoveTagMutationVariables>(
-    REMOVE_TAG_MUTATION,
-    {
-      refetchQueries: [GET_TAGS_QUERY],
-    },
-  );
+  const [removeTag] = useMutation(RemoveTagDocument, {
+    refetchQueries: [GetTagsDocument],
+  });
 
   const onRemoveTag = () => {
     modalConfirmRef.current?.open({

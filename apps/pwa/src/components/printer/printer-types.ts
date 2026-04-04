@@ -1,4 +1,4 @@
-import { OrderCalculated } from "@/modules/orders/orders-management/orders-management-types";
+import { OrderFragment } from "@/modules/orders/graphql/fragmentOrder.graphql";
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 
 export enum PrintSize {
@@ -21,7 +21,7 @@ export interface PrinterSettings {
 
 export type PrinterEntity =
   | {
-      order: OrderCalculated;
+      order: OrderFragment;
     }
   | {
       receipt: ReceiptFragment;

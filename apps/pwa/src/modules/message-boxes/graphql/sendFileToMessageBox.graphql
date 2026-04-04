@@ -1,0 +1,3 @@
+mutation SendFileToMessageBox($boxId: String!, $url: String!, $text: String) {
+  sendFileToMessageBox(boxId: $boxId, url: $url, text: $text)
+}

@@ -28,7 +28,7 @@ export const LoanListTabs: FC = () => {
         isShowCount: true,
         components: renderLoanList({
           strictStatus: [LoanStatus.Fulfilled],
-          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.activated || 0,
+          count: (reports) => reports.metrics?.data.loans.contracts.activated || 0,
         }),
       },
       {
@@ -39,7 +39,7 @@ export const LoanListTabs: FC = () => {
         components: renderLoanList({
           strictStatus: [LoanStatus.PendingSign, LoanStatus.Pending, LoanStatus.Approved],
           counterColor: "orange.7",
-          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.pending || 0,
+          count: (reports) => reports.metrics?.data.loans.contracts.pending || 0,
         }),
       },
       {
@@ -50,7 +50,7 @@ export const LoanListTabs: FC = () => {
         components: renderLoanList({
           strictStatus: [LoanStatus.Overdue],
           counterColor: "red.8",
-          count: (reports) => reports.realtimeReport.data?.data.loans.contracts.overdue || 0,
+          count: (reports) => reports.metrics?.data.loans.contracts.overdue || 0,
         }),
       },
       {
@@ -60,7 +60,7 @@ export const LoanListTabs: FC = () => {
         components: renderLoanList(),
       },
     ],
-    []
+    [],
   );
 
   const activeTabId = searchs.get("ltab") || "active";

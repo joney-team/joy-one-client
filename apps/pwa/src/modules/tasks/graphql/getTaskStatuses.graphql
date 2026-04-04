@@ -1,0 +1,21 @@
+#import "./fragmentTaskStatus.graphql"
+
+query GetTaskStatuses(
+  $contextType: TaskContextType
+  $contextId: String
+  $mode: GetTaskStatusesMode
+) {
+  taskStatuses: getTaskStatuses(
+    contextType: $contextType
+    contextId: $contextId
+    mode: $mode
+  ) {
+    isInherited
+    statuses {
+      ...TaskStatus
+    }
+    workspaceStatuses {
+      ...TaskStatus
+    }
+  }
+}

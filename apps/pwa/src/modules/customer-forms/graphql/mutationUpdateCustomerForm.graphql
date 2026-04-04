@@ -1,7 +1,0 @@
-#import "./fragmentCustomerForm.graphql"
-
-mutation UpdateCustomerForm($formId: String!, $input: CustomerFormInput!) {
-  updateCustomerForm(id: $formId, input: $input) {
-    ...CustomerForm
-  }
-}

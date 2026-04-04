@@ -1,0 +1,10 @@
+#import "./fragmentEInvoice.graphql"
+
+query GetEInvoices($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getEInvoices(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...EInvoice
+    }
+  }
+}

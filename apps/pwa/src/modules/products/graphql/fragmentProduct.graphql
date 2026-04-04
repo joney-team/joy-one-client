@@ -1,35 +1,64 @@
 fragment Product on Product {
   _id
-  refs
-  createdAt
-  updatedAt
   name
-  code
-  content
   displayName
   image
-  productCode
+  type
   tags
-  supplies {
-    productId
+  code
+  productCode
+  content
+  defaultQtyPerUse
+  voucherExpireInDays
+  warningOutOfDateBeforeDays
+  warningOutOfStockQty
+  categoryId
+  category {
+    _id
+    name
+    type
+  }
+  stock {
     quantity
   }
   unit
   price
-  minPrice
   maxPrice
-  defaultQtyPerUse
-  isStockCheck
-  warningOutOfDateBeforeDays
-  warningOutOfStockQty
-  workspaceId
-  categoryId
-  inStock
-  isHiddenInReceiptWhenNoPrice
-  type
+  minPrice
+  combos {
+    quantity
+    productId
+    product {
+      _id
+      name
+    }
+  }
   combosExpireInDays
+  supplies {
+    productId
+    quantity
+    product {
+      _id
+      name
+      unit
+    }
+  }
+  voucherIncludeProducts {
+    _id
+    name
+  }
+  voucherExcludeProducts {
+    _id
+    name
+  }
+  isStockCheck
   voucherAmount
-  voucherExpireInDays
-  voucherExcludeProductIds
-  voucherIncludeProductIds
+  isHiddenInReceiptWhenNoPrice
+  customFieldValues {
+    type
+    key
+    config
+    customFieldId
+    value
+  }
 }

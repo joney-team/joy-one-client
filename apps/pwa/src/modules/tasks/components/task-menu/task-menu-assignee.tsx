@@ -9,9 +9,8 @@ import { WayPoint } from "@/components/way-point";
 import { useAuth } from "@/modules/auth/auth-context";
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
-import QUERY_WORKSPACE_MEMBERS, {
-  type WorkspaceMembersQuery,
-} from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
+import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
+import GetWorkspaceMembersDocument from "@/modules/workspace-members/graphql/getWorkspaceMembers.graphql";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
@@ -28,7 +27,7 @@ const MenuItem = ({
   isSelected,
   onClick,
 }: {
-  member: WorkspaceMembersQuery["list"]["results"][number];
+  member: WorkspaceMemberFragment;
   isSelected: boolean;
   onClick: () => void;
 }) => {
@@ -85,7 +84,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
-  const [getMembers, { data, loading, fetchMore }] = useLazyQuery(QUERY_WORKSPACE_MEMBERS, {
+  const [getMembers, { data, loading, fetchMore }] = useLazyQuery(GetWorkspaceMembersDocument, {
     fetchPolicy: "cache-and-network",
   });
 

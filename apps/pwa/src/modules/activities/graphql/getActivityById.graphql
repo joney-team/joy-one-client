@@ -1,0 +1,7 @@
+#import "./fragmentActivity.graphql"
+
+query GetActivityById($id: String!) {
+  activity: getActivityById(id: $id) {
+    ...Activity
+  }
+}

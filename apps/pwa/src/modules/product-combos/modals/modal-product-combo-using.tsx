@@ -2,10 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { ProductComboEntity } from "@/modules/product-combos/product-combos-entity";
-import { useProductCombo } from "@/modules/product-combos/product-combos-service";
-import { UseProductComboDto } from "@/modules/product-combos/product-combos-types";
+import { UseProductComboInput } from "@/graphql/types.graphql";
 import { onFormError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Center, Modal, NumberInput, Stack, Table, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
@@ -13,33 +12,42 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconPackage } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
 import { v4 as uuid } from "uuid";
+import { ProductComboFragment } from "../graphql/fragmentProductCombo.graphql";
+import UseProductComboDocument from "../graphql/useProductCombo.graphql";
 
 export interface ProductComboUsingModalArgs {
-  combo: ProductComboEntity;
+  combo: ProductComboFragment;
 }
 
 export const ModalProductComboUsing: FC<{
   children: (open: (args: ProductComboUsingModalArgs) => void) => ReactNode;
 }> = ({ children }) => {
+  const client = useApolloClient();
   const [opened, { open, close }] = useDisclosure(false);
   const propsRef = useRef<ProductComboUsingModalArgs | null>(null);
 
-  const form = useForm<UseProductComboDto>({
+  const form = useForm<UseProductComboInput>({
     initialValues: {
       ref: "",
       records: [],
     },
   });
 
-  const onSubmit = form.onSubmit(async (dto) => {
+  const onSubmit = form.onSubmit(async (values) => {
     try {
-      const availableRecords = dto.records.filter((record) => record.quantity !== 0);
-      if (availableRecords.length === 0) return close();
+      const availableRecords = values.records.filter((record) => record.quantity !== 0);
+      if (availableRecords.length === 0 || !propsRef.current?.combo.id) return close();
 
-      await useProductCombo(propsRef.current!.combo.id, {
-        ...dto,
-        ref: dto.ref || uuid(),
-        records: availableRecords,
+      await client.mutate({
+        mutation: UseProductComboDocument,
+        variables: {
+          useProductComboId: propsRef.current.combo.id,
+          input: {
+            ...values,
+            ref: values.ref || uuid(),
+            records: availableRecords,
+          },
+        },
       });
       close();
     } catch (error) {
@@ -87,8 +95,8 @@ export const ModalProductComboUsing: FC<{
             <Table.Tbody>
               {form.values.records.map((record, index) => {
                 const product = propsRef.current!.combo.productRefs.find(
-                  (ref) => ref.productRefId === record.productRefId
-                )?.productRef;
+                  (ref) => ref.productRefId === record.productRefId,
+                )?.product;
 
                 return (
                   <Table.Tr key={record.productRefId}>

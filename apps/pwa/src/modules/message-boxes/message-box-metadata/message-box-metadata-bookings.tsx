@@ -2,14 +2,13 @@
 
 import { Empty } from "@/components/empty";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
+import GetBookingsDocument from "@/modules/bookings/graphql/getBookings.graphql";
 import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
-import QUERY_BOOKINGS from "@/modules/bookings/graphql/queryBookings.graphql";
-
 export const MessageBoxMetadataBookings: AccordionItemComponent = ({ customer }) => {
-  const { data } = useQuery(QUERY_BOOKINGS, {
+  const { data } = useQuery(GetBookingsDocument, {
     variables: {
       query: {
         customerId: customer._id,

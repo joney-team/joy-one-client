@@ -2,22 +2,19 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { WorkspaceType } from "@/graphql/enums.graphql";
-import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
+import { TagType, WorkspaceType } from "@/graphql/enums.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { useTags } from "@/modules/tags/tags-context";
-import { TagType } from "@/modules/tags/tags-types";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
-import { useFetch } from "@/utils/use-fetch.util";
-import { useMutation } from "@apollo/client/react";
+import { useMutation, useQuery } from "@apollo/client/react";
 import config from "@joy-one-client/config";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -53,13 +50,14 @@ import { Renderer } from "../../../components/renderer";
 import { customerGenders, normalizeCustomerInput } from "../customer-constants";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
-import ASSIGN_CUSTOMER from "../graphql/mutationAssignCustomer.graphql";
-import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
-import type { ModalCustomerRelationshipContactsRef } from "../modals/modal-customer-relationship-contacts";
+import GetCustomerContactsDocument from "@/modules/customer-contacts/graphql/getCustomerContacts.graphql";
 import type { ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
+import { nonLoading } from "@/utils/non-loading";
+import dynamic from "next/dynamic";
 import type { ModalCustomerRef } from "../customer-modal";
+import AssignCustomerDocument from "../graphql/assignCustomer.graphql";
+import UpdateCustomerDocument from "../graphql/updateCustomer.graphql";
+import type { ModalCustomerRelationshipContactsRef } from "../modals/modal-customer-relationship-contacts";
 
 const ModalCustomerRelationshipContacts = dynamic(
   () =>
@@ -95,15 +93,16 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
   const { customer } = props;
   const customerGener = customer.gender ? customerGenders[customer.gender] : null;
 
-  const [updateCustomer] = useMutation(UPDATE_CUSTOMER);
-  const [assignCustomer] = useMutation(ASSIGN_CUSTOMER);
+  const [updateCustomer] = useMutation(UpdateCustomerDocument);
+  const [assignCustomer] = useMutation(AssignCustomerDocument);
 
   const [tagListOpened, setTagListOpened] = useState(false);
   const ref = useClickOutside(() => setTagListOpened(false));
 
-  const contacts = useFetch({
-    id: `customer-contacts-${customer._id}`,
-    fetch: () => getCustomerContacts(customer._id),
+  const { data: customerContacts } = useQuery(GetCustomerContactsDocument, {
+    variables: {
+      customerId: customer._id,
+    },
   });
 
   const uploadAvatar = async (file: File) => {
@@ -200,7 +199,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                   {customer.name}
                 </Text>
 
-                <Group gap={16}>
+                <Group gap="md">
                   {customer.birthday && (
                     <Group gap={1} wrap="nowrap">
                       <ThemeIcon color="dark" variant="transparent">
@@ -246,7 +245,8 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       c="dark"
                       onClick={(e) => {
                         e.stopPropagation();
-                        OnModalCustomerContacts({ contacts: contacts.data! });
+                        if (!customerContacts?.customerContact) return;
+                        OnModalCustomerContacts({ contacts: customerContacts?.customerContact });
                       }}
                     >
                       <Group gap={1} wrap="nowrap">
@@ -256,7 +256,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         <Text fz={em(15)}>
                           <Trans>Contacts</Trans>
                           {": "}
-                          <NumberFormat value={contacts.data?.contacts.length ?? 0} />
+                          <NumberFormat
+                            value={customerContacts?.customerContact.contacts.length ?? 0}
+                          />
                         </Text>
                       </Group>
                     </Anchor>
@@ -311,7 +313,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         (v) =>
                           v._id &&
                           customer.tagIds?.includes(v._id) === true &&
-                          v.type === TagType.CUSTOMER,
+                          v.type === TagType.Customer,
                       )
                       .map((tag) => (
                         <Badge
@@ -342,9 +344,9 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                         </Group>
                       </Popover.Target>
                       <Popover.Dropdown p={8} ref={ref}>
-                        <Stack gap={16}>
+                        <Stack gap="md">
                           {tags.list
-                            .filter((v) => v._id && v.type === TagType.CUSTOMER)
+                            .filter((v) => v._id && v.type === TagType.Customer)
                             .map((tag) => {
                               const isTagged = customer.tagIds?.includes(tag._id);
 
@@ -377,7 +379,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                             onClick={() => {
                               modalTagFormRef.current?.open({
                                 onCreated: (tag) => toggleTag(tag),
-                                type: TagType.CUSTOMER,
+                                type: TagType.Customer,
                               });
                               setTagListOpened(false);
                             }}
@@ -403,7 +405,7 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                     onClick={() =>
                       modalTagFormRef.current?.open({
                         onCreated: (tag) => toggleTag(tag),
-                        type: TagType.CUSTOMER,
+                        type: TagType.Customer,
                       })
                     }
                     style={{ cursor: "pointer" }}

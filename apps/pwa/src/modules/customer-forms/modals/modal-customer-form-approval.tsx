@@ -6,7 +6,6 @@ import { Errored } from "@/components/errored";
 import { ModalHead } from "@/components/modal/modal-head";
 import { CustomerFormStatus, EventType } from "@/graphql/enums.graphql";
 import { customerFormStatuses } from "@/modules/customer-forms/customer-form-constants";
-import CUSTOMER_FORM_QUERY from "@/modules/customer-forms/graphql/queryCustomerForm.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { useLocations } from "@/modules/locations/locations-context";
 import { useColor } from "@/modules/theme/use-color";
@@ -19,8 +18,9 @@ import { IconCheck, IconMessageUser } from "@tabler/icons-react";
 import { FC } from "react";
 import { InputModalType, ModalInput } from "../../../modals/modal-input";
 
-import UPDATE_CUSTOMER_FORM_MUTATION from "@/modules/customer-forms/graphql/mutationUpdateCustomerForm.graphql";
 import { normalizeCustomerFormInput } from "../../customers/utils/normalize-customer-form-input";
+import GetCustomerFormByIdDocument from "../graphql/getCustomerFormById.graphql";
+import UpdateCustomerFormDocument from "../graphql/updateCustomerForm.graphql";
 
 interface CustomerFormModalProps {
   _id: string;
@@ -54,14 +54,14 @@ const CustomerFormApproval: FC<CustomerFormModalProps> = (props) => {
   const color = useColor();
   const { renderVnLocation } = useLocations();
 
-  const [updateCustomerForm] = useMutation(UPDATE_CUSTOMER_FORM_MUTATION);
+  const [updateCustomerForm] = useMutation(UpdateCustomerFormDocument);
 
   const {
     data: customerFormData,
     loading: customerFormLoading,
     error: customerFormError,
     refetch: customerFormRefetch,
-  } = useQuery(CUSTOMER_FORM_QUERY, {
+  } = useQuery(GetCustomerFormByIdDocument, {
     variables: {
       id: props._id,
     },
@@ -73,7 +73,7 @@ const CustomerFormApproval: FC<CustomerFormModalProps> = (props) => {
       if (event.ref === props._id) {
         customerFormRefetch();
       }
-    }
+    },
   );
 
   if (customerFormLoading) return <Skeleton height={150} />;

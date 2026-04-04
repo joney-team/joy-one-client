@@ -9,11 +9,11 @@ const Content = dynamic(
   {
     ssr: false,
     loading: () => (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={500} />
       </Stack>
     ),
-  }
+  },
 );
 
 const Page: NextPage = () => {

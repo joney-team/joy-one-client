@@ -4,24 +4,30 @@ import { Button } from "@/components/buttons/button";
 import { DateTimeInput } from "@/components/inputs/date-time-input";
 import { DynamicSelectionInput } from "@/components/inputs/dynamic-selection-input";
 import { ImageInput } from "@/components/inputs/image-input";
-import { restClient } from "@/modules/apis/rest-client";
+import { DynamicSelectionOperator, PromotionStatus, PromotionType } from "@/graphql/enums.graphql";
+import { CustomFieldValue, DynamicSelection, PromotionInput } from "@/graphql/types.graphql";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
-import { CustomField, CustomFieldValue } from "@/modules/custom-fields/custom-field-types";
-import { AppEntity, DynamicSelection, DynamicSelectionOperator } from "@/types";
+import { AppEntity } from "@/types";
 import { onFormError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Center, NumberInput, Select, SimpleGrid, Stack, Textarea, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { type FC } from "react";
+import CreatePromotionDocument from "../graphql/createPromotion.graphql";
+import { PromotionFragment } from "../graphql/fragmentPromotion.graphql";
+import UpdatePromotionDocument from "../graphql/updatePromotion.graphql";
 import { promotionTypes } from "../promotions-constants";
-import { PromotionDto, PromotionEntity, PromotionStatus, PromotionType } from "../promotions-types";
 
 export interface FormPromotionProps {
-  promotion?: PromotionEntity;
+  promotion?: PromotionFragment;
   onSuccess?: () => void;
 }
 
 export const FormPromotion: FC<FormPromotionProps> = (props) => {
+  const client = useApolloClient();
+  const { t } = useLingui();
+
   const form = useForm<{
     name: string;
     description: string;
@@ -29,32 +35,34 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
     expireAt: number;
     type: PromotionType;
     value: number | null;
-    limitPerCustomer?: number;
+    limitPerCustomer?: number | null;
     productsSelection: DynamicSelection;
     customersSelection: DynamicSelection;
     status: PromotionStatus;
-    customFields?: CustomField[];
+    customFieldValues?: CustomFieldValue[];
   }>({
     initialValues: {
       name: props.promotion?.name || "",
       description: props.promotion?.description || "",
       image: props.promotion?.image || "",
       expireAt: props.promotion?.expireAt || 0,
-      type: props.promotion?.type || PromotionType.DISCOUNT_RATE,
+      type: props.promotion?.type || PromotionType.DiscountRate,
       value: props.promotion?.value || null,
       limitPerCustomer: props.promotion?.limitPerCustomer,
       productsSelection: props.promotion?.productsSelection || {
+        __typename: "DynamicSelection",
         entity: AppEntity.PRODUCTS,
-        operator: DynamicSelectionOperator.INCLUDES,
+        operator: DynamicSelectionOperator.Includes,
         value: [],
       },
       customersSelection: props.promotion?.customersSelection || {
+        __typename: "DynamicSelection",
         entity: AppEntity.CUSTOMERS,
-        operator: DynamicSelectionOperator.INCLUDES,
+        operator: DynamicSelectionOperator.Includes,
         value: [],
       },
-      status: props.promotion?.status || PromotionStatus.ACTIVE,
-      customFields: props.promotion?.customFields || [],
+      status: props.promotion?.status || PromotionStatus.Active,
+      customFieldValues: props.promotion?.customFieldValues || [],
     },
     validate: {
       name: (value) => {
@@ -69,12 +77,16 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
   const onSubmit = form.onSubmit(async (values) => {
     try {
       const customFieldValues: CustomFieldValue[] =
-        values.customFields?.map((customField) => ({
+        values.customFieldValues?.map((customField) => ({
+          __typename: "CustomFieldValue",
+          config: customField.config,
+          key: customField.key,
+          type: customField.type,
           customFieldId: customField.customFieldId,
           value: customField.value,
         })) || [];
 
-      const dto: PromotionDto = {
+      const input: PromotionInput = {
         name: values.name,
         description: values.description,
         image: values.image,
@@ -93,12 +105,27 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         customFieldValues,
       };
 
-      let promotion: PromotionEntity | null = null;
+      let promotion: PromotionFragment | null = null;
 
       if (props.promotion) {
-        promotion = await restClient.put<PromotionEntity>(`/promotions/${props.promotion.id}`, dto);
+        promotion = await client
+          .mutate({
+            mutation: UpdatePromotionDocument,
+            variables: {
+              promotionId: props.promotion.id,
+              input,
+            },
+          })
+          .then((result) => result.data?.promotion!);
       } else {
-        promotion = await restClient.post<PromotionEntity>("/promotions", dto);
+        promotion = await client
+          .mutate({
+            mutation: CreatePromotionDocument,
+            variables: {
+              input,
+            },
+          })
+          .then((result) => result.data?.promotion!);
       }
 
       if (promotion) {
@@ -114,18 +141,18 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
   return (
     <form onSubmit={onSubmit}>
       <Stack>
-        <TextInput label={t`Name`} {...form.getInputProps("name")} />
-        <Textarea label={t`Description`} {...form.getInputProps("description")} />
-        <ImageInput label={t`Image`} {...form.getInputProps("image")} h={150} />
+        <TextInput label={<Trans>Name</Trans>} {...form.getInputProps("name")} />
+        <Textarea label={<Trans>Description</Trans>} {...form.getInputProps("description")} />
+        <ImageInput label={<Trans>Image</Trans>} {...form.getInputProps("image")} h={150} />
 
         <SimpleGrid cols={2}>
           <Select
-            label={t`Type`}
+            label={<Trans>Type</Trans>}
             {...form.getInputProps("type")}
             data={Object.values(PromotionType).map((type) => {
               return {
                 value: type,
-                label: promotionTypes[type].label(),
+                label: t(promotionTypes[type].label),
               };
             })}
             onChange={(value) => {
@@ -135,7 +162,7 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
           />
 
           <NumberInput
-            label={ruleValueConfig.label()}
+            label={t(ruleValueConfig.label)}
             {...form.getInputProps("value")}
             min={ruleValueConfig.min}
             max={ruleValueConfig.max}
@@ -143,36 +170,29 @@ export const FormPromotion: FC<FormPromotionProps> = (props) => {
         </SimpleGrid>
 
         <NumberInput
-          label={t`Limit per customer`}
+          label={<Trans>Limit per customer</Trans>}
           {...form.getInputProps("limitPerCustomer")}
           placeholder={t`Leave empty if no limit`}
         />
 
-        {/* <DynamicSelectionInput
-          label={t("products_limit_rule")}
-          description={t("leave_empty_if_no_limit")}
-          fixedEntity={AppEntity.PRODUCTS}
-          {...form.getInputProps("productsSelection")}
-        /> */}
-
         <DynamicSelectionInput
-          label={t`Customers limit rule`}
+          label={<Trans>Customers limit rule</Trans>}
           description={t`Leave empty if no limit`}
           fixedEntity={AppEntity.CUSTOMERS}
           {...form.getInputProps("customersSelection")}
         />
 
-        <DateTimeInput label={t`Expire at`} {...form.getInputProps("expireAt")} />
+        <DateTimeInput label={<Trans>Expire at</Trans>} {...form.getInputProps("expireAt")} />
 
         <BuilderCustomFields
           entity={AppEntity.PROMOTIONS}
-          value={form.values.customFields}
-          onChange={(value) => form.setFieldValue("customFields", value)}
+          value={form.values.customFieldValues}
+          onChange={(value) => form.setFieldValue("customFieldValues", value)}
         />
 
         <Center>
           <Button type="submit" loading={form.submitting}>
-            {props.promotion ? t`Save` : t`Create`}
+            {props.promotion ? <Trans>Save</Trans> : <Trans>Create</Trans>}
           </Button>
         </Center>
       </Stack>

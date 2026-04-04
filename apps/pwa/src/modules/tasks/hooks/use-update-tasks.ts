@@ -1,26 +1,23 @@
 "use client";
 
 import { useApolloClient } from "@apollo/client/react";
-import MUTATION_BULK_UPDATE_TASKS, {
-  type BulkUpdateTasksMutation,
-  type BulkUpdateTasksMutationVariables,
-} from "../graphql/mutationBulkUpdateTasks.graphql";
 
 import type { UpdateTaskInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useCallback } from "react";
+import BulkUpdateTasksDocument from "../graphql/bulkUpdateTasks.graphql";
 import TASK_FRAGMENT, { type TaskFragment } from "../graphql/fragmentTask.graphql";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../graphql/queryTasks.graphql";
+import GetTasksDocument, {
+  GetTasksQuery,
+  GetTasksQueryVariables,
+} from "../graphql/getTasks.graphql";
 
 export interface UpdateTaskContext {
-  fromGroupVariables?: TasksQueryVariables | null;
-  toGroupVariables?: TasksQueryVariables | null;
+  fromGroupVariables?: GetTasksQueryVariables | null;
+  toGroupVariables?: GetTasksQueryVariables | null;
 }
 
-export type UpdateTask = Partial<TasksQuery["tasks"]["results"][number]> & {
+export type UpdateTask = Partial<GetTasksQuery["list"]["results"][number]> & {
   _id: string;
   context?: UpdateTaskContext;
 };
@@ -138,9 +135,9 @@ export const useUpdateTasks = () => {
           // Change status
           if (updatedTask.status && updatedTask.context?.fromGroupVariables?.status) {
             // Remove from current status group
-            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+            client.cache.updateQuery(
               {
-                query: QUERY_TASKS,
+                query: GetTasksDocument,
                 variables: updatedTask.context.fromGroupVariables,
                 overwrite: true,
               },
@@ -148,19 +145,19 @@ export const useUpdateTasks = () => {
                 if (!prev) return prev;
                 return {
                   ...prev,
-                  tasks: {
-                    ...prev.tasks,
-                    total: prev.tasks.total - 1,
-                    results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
+                  list: {
+                    ...prev.list,
+                    total: prev.list.total - 1,
+                    results: [...prev.list.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
               },
             );
 
             // Add to target status group
-            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+            client.cache.updateQuery(
               {
-                query: QUERY_TASKS,
+                query: GetTasksDocument,
                 variables: {
                   ...updatedTask.context.fromGroupVariables,
                   status: updatedData.status,
@@ -171,11 +168,11 @@ export const useUpdateTasks = () => {
                 if (!prev) return prev;
                 return {
                   ...prev,
-                  tasks: {
-                    ...prev.tasks,
-                    total: prev.tasks.total + 1,
+                  list: {
+                    ...prev.list,
+                    total: prev.list.total + 1,
                     results: [
-                      ...prev.tasks.results.filter((t) => t._id !== updatedData._id),
+                      ...prev.list.results.filter((t) => t._id !== updatedData._id),
                       updatedData,
                     ],
                   },
@@ -191,9 +188,9 @@ export const useUpdateTasks = () => {
             updatedTask.context?.fromGroupVariables &&
             updatedTask.context?.toGroupVariables
           ) {
-            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+            client.cache.updateQuery(
               {
-                query: QUERY_TASKS,
+                query: GetTasksDocument,
                 variables: updatedTask.context?.fromGroupVariables,
                 overwrite: true,
               },
@@ -201,17 +198,17 @@ export const useUpdateTasks = () => {
                 if (!prev) return prev;
                 return {
                   ...prev,
-                  tasks: {
-                    ...prev.tasks,
-                    results: [...prev.tasks.results.filter((t) => t._id !== currentData._id)],
+                  list: {
+                    ...prev.list,
+                    results: [...prev.list.results.filter((t) => t._id !== currentData._id)],
                   },
                 };
               },
             );
 
-            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+            client.cache.updateQuery(
               {
-                query: QUERY_TASKS,
+                query: GetTasksDocument,
                 variables: updatedTask.context?.toGroupVariables,
                 overwrite: true,
               },
@@ -219,10 +216,10 @@ export const useUpdateTasks = () => {
                 if (!prev) return prev;
                 return {
                   ...prev,
-                  tasks: {
-                    ...prev.tasks,
+                  list: {
+                    ...prev.list,
                     results: [
-                      ...prev.tasks.results.filter((t) => t._id !== updatedTask._id),
+                      ...prev.list.results.filter((t) => t._id !== updatedTask._id),
                       updatedData,
                     ],
                   },
@@ -233,9 +230,9 @@ export const useUpdateTasks = () => {
 
           // Archive
           if (updatedTask.isArchived && updatedTask.context?.fromGroupVariables) {
-            client.cache.updateQuery<TasksQuery, TasksQueryVariables>(
+            client.cache.updateQuery(
               {
-                query: QUERY_TASKS,
+                query: GetTasksDocument,
                 variables: updatedTask.context.fromGroupVariables,
                 overwrite: true,
               },
@@ -243,10 +240,10 @@ export const useUpdateTasks = () => {
                 if (!prev) return prev;
                 return {
                   ...prev,
-                  tasks: {
-                    ...prev.tasks,
-                    total: prev.tasks.total - 1,
-                    results: [...prev.tasks.results.filter((t) => t._id !== updatedTask._id)],
+                  list: {
+                    ...prev.list,
+                    total: prev.list.total - 1,
+                    results: [...prev.list.results.filter((t) => t._id !== updatedTask._id)],
                   },
                 };
               },
@@ -254,8 +251,8 @@ export const useUpdateTasks = () => {
           }
         });
 
-        await client.mutate<BulkUpdateTasksMutation, BulkUpdateTasksMutationVariables>({
-          mutation: MUTATION_BULK_UPDATE_TASKS,
+        await client.mutate({
+          mutation: BulkUpdateTasksDocument,
           variables: {
             items: updateTasks.map(normalizeTaskForSubmit),
           },

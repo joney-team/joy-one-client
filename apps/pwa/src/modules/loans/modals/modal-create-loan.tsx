@@ -15,8 +15,6 @@ import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-ky
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
-import MUTATION_CREATE_LOAN from "@/modules/loans/graphql/mutationCreateLoan.graphql";
-import QUERY_LOANS from "@/modules/loans/graphql/queryLoans.graphql";
 import { prepareLoanAssetData, renderLoanPeriod } from "@/modules/loans/loans-service";
 import { getGeolocation } from "@/modules/locations/locations-service";
 import { useBanks } from "@/modules/plugins/banks/banks.services";
@@ -62,6 +60,8 @@ import {
   useImperativeHandle,
   useState,
 } from "react";
+import CreateLoanDocument from "../graphql/createLoan.graphql";
+import GetLoansDocument from "../graphql/getLoans.graphql";
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalCreateLoanProps {
@@ -83,7 +83,7 @@ export const ModalCreateLoan = forwardRef<
   const { children } = props;
   const [args, setArgs] = useState<ModalCreateLoanProps | null>(null);
 
-  const [createLoan] = useMutation(MUTATION_CREATE_LOAN);
+  const [createLoan] = useMutation(CreateLoanDocument);
 
   const onClose = () => setArgs(null);
 
@@ -165,7 +165,7 @@ export const ModalCreateLoan = forwardRef<
 
     const [previousLoan] = await Promise.all([
       client.query({
-        query: QUERY_LOANS,
+        query: GetLoansDocument,
         variables: {
           query: {
             customerId: p.customer._id,
@@ -244,7 +244,7 @@ export const ModalCreateLoan = forwardRef<
         },
       });
 
-      await router.push(`/loans/${loan.data?.createLoan.code}`);
+      await router.push(`/loans/${loan.data?.loan.code}`);
       onClose();
     },
     onError,
@@ -270,7 +270,7 @@ export const ModalCreateLoan = forwardRef<
         size={1000}
         closeOnEscape={false}
       >
-        <Stack gap={16}>
+        <Stack gap="md">
           {(function () {
             if (!isInitialized) return <Skeleton height={150} />;
 
@@ -365,7 +365,7 @@ export const ModalCreateLoan = forwardRef<
                     if (!customer || !customerKyc)
                       return <Empty hideBorder message={t`Need customer information and KYC`} />;
                     return (
-                      <Card withBorder p={16} shadow="xs">
+                      <Card withBorder p="md" shadow="xs">
                         <Stack>
                           <SimpleGrid cols={{ md: 3 }}>
                             <Select
@@ -444,7 +444,7 @@ export const ModalCreateLoan = forwardRef<
 
                 {form.values.assetType && !!customerKyc && (
                   <Session name={t`Loan asset data`} icon={IconFileDots}>
-                    <Card withBorder p={16} shadow="xs">
+                    <Card withBorder p="md" shadow="xs">
                       <LoanAssetDataInput
                         assetType={form.values.assetType}
                         value={form.values.assetData}

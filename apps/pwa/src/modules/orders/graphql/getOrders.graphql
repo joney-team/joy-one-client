@@ -1,0 +1,10 @@
+#import "./fragmentOrder.graphql"
+
+query GetOrders($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getOrders(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Order
+    }
+  }
+}

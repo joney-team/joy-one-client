@@ -1,0 +1,7 @@
+#import "./fragmentAuthUser.graphql"
+
+mutation UpdateUserProfile($input: UpdateUserProfileInput!) {
+  user: updateUserProfile(input: $input) {
+    ...AuthUser
+  }
+}

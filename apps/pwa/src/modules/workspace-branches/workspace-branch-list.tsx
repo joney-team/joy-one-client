@@ -15,7 +15,7 @@ import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
 import { useLocations } from "../locations/locations-context";
 import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
-import QUERY_WORKSPACE_BRANCHES from "./graphql/queryWorkspaceBranches.graphql";
+import GetWorkspaceBranchesDocument from "./graphql/getWorkspaceBranches.graphql";
 
 export const WorkspaceBranchList: FC = () => {
   const color = useColor();
@@ -23,13 +23,13 @@ export const WorkspaceBranchList: FC = () => {
   const { renderVnLocation: renderLocation } = useLocations();
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <List<WorkspaceBranchFragment>
         creatable={{
           onCreate: () => OnWorkspaceBranchModal(),
           permission: WorkspacePermission.WORKSPACE_SETTINGS,
         }}
-        query={QUERY_WORKSPACE_BRANCHES}
+        query={GetWorkspaceBranchesDocument}
         id="workspace-branches"
         columns={{
           name: {

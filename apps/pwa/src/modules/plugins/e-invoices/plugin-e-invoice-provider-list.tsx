@@ -3,23 +3,22 @@
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
-import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useColor } from "@/modules/theme/use-color";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Skeleton, Stack, Text, Title } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
+import GetEInvoiceProvidersDocument from "./graphql/getEInvoicesProviders.graphql";
+import { OnModalEInvoiceProvider } from "./components/modal-e-invoice-provider";
 import { PluginEInvoiceProviderItem } from "./plugin-e-invoice-provider-item";
-import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 
 export const PluginEInvoiceProviderList: FC = () => {
   const color = useColor();
-  const { data, isLoading, error, refetch } = useRestQuery<PluginEInvoicesProviderEntity[]>({
-    route: "/plugins/e-invoices/providers",
-  });
 
-  if (isLoading) {
+  const { data, loading, error, refetch } = useQuery(GetEInvoiceProvidersDocument);
+
+  if (loading && !data) {
     return (
       <Stack p={20}>
         <Skeleton height={200} />
@@ -31,12 +30,12 @@ export const PluginEInvoiceProviderList: FC = () => {
     return <Errored error={error} />;
   }
 
-  if (data && data.length > 0) {
+  if (data && data.getEInvoiceProviders.length > 0) {
     return (
       <Container py={20} size={800}>
         <PluginEInvoiceProviderItem
-          key={data[0].updatedAt}
-          provider={data[0]}
+          key={data.getEInvoiceProviders[0].updatedAt}
+          provider={data.getEInvoiceProviders[0]}
           onRefetch={() => refetch()}
         />
       </Container>

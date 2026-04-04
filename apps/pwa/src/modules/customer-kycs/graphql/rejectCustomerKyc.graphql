@@ -1,0 +1,7 @@
+#import "./fragmentCustomerKyc.graphql"
+
+mutation RejectCustomerKyc($customerId: String!, $input: RejectCustomerKycInput!) {
+  customerKyc: rejectCustomerKyc(customerId: $customerId, input: $input) {
+    ...CustomerKyc
+  }
+}

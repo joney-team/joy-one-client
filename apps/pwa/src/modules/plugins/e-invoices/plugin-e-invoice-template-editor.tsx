@@ -1,10 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { Empty } from "@/components/empty";
 import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -24,7 +24,6 @@ import {
   PluginEInvoiceTemplateType,
   PluginEInvoiceTemplateVariables,
 } from "./plugin-e-invoices.types";
-import { Empty } from "@/components/empty";
 
 const getInitField = (): PluginEInvoiceTemplateField => ({
   id: uuidv4(),
@@ -41,6 +40,7 @@ const TemplateField: FC<{
   variables: PluginEInvoiceTemplateVariables | null;
   onRemove: () => void;
 }> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const fieldType = props.field.type;
 
@@ -60,7 +60,7 @@ const TemplateField: FC<{
       if (value.isSelectable) return { ...acc, selectable: { ...acc.selectable, [key]: value } };
       return { ...acc, formula: { ...acc.formula, [key]: value } };
     },
-    { selectable: {}, formula: {} }
+    { selectable: {}, formula: {} },
   );
 
   const selectedVariable = availableVariables["selectable"][props.field.variable ?? ""];
@@ -102,11 +102,11 @@ const TemplateField: FC<{
               data={[
                 {
                   value: "input",
-                  label: t`Manual input`,
+                  label: <Trans>Manual input</Trans>,
                 },
                 {
                   value: "variable",
-                  label: t`Variable`,
+                  label: <Trans>Variable</Trans>,
                   disabled: Object.keys(availableVariables.selectable).length === 0,
                 },
               ]}

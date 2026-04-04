@@ -1,0 +1,24 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment Message on Message {
+  _id
+  type
+  boxId
+  id
+  userId
+  senderId
+  text
+  resource
+  resouceId
+  attachments {
+    type
+    url
+    raw
+  }
+  status
+  failedReason
+  user {
+    ...WorkspaceMember
+  }
+  createdAt
+}

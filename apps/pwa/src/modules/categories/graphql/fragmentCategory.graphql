@@ -11,4 +11,11 @@ fragment Category on Category {
   order
   createdAt
   updatedAt
+  customFieldValues {
+    type
+    key
+    config
+    customFieldId
+    value
+  }
 }

@@ -5,7 +5,6 @@ import { NumberFormat } from "@/components/format/number-format";
 import { ProductType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
@@ -34,11 +33,12 @@ import {
 import { FC, Fragment } from "react";
 import { EntityImage } from "../../../components/entity-image";
 import { Renderer } from "../../../components/renderer";
+import { ProductFragment } from "../graphql/fragmentProduct.graphql";
 import { productTypes } from "../products-constants";
 
 export const ProductCard: FC<
   {
-    product: ProductEntity;
+    product: ProductFragment;
     preventLink?: boolean;
     onClick?: () => void;
     isHideEdit?: boolean;

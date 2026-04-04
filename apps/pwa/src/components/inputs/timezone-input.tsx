@@ -1,23 +1,20 @@
 "use client";
 
-import { getTimeZones } from "@/modules/times/times-service";
-import { useFetch } from "@/utils/use-fetch.util";
+import GetTimeZonesDocument from "@/modules/times/graphql/getTimeZones.graphql";
+import { useQuery } from "@apollo/client/react";
 import { useLingui } from "@lingui/react/macro";
 import { Select, SelectProps } from "@mantine/core";
 import { FC } from "react";
 
 export const TimeZoneInput: FC<SelectProps> = (props) => {
   const { t } = useLingui();
-  const timeZones = useFetch({
-    id: "time-zones",
-    fetch: async () => getTimeZones(),
-  });
+
+  const { data } = useQuery(GetTimeZonesDocument);
 
   return (
     <Select
       {...props}
-      data={(timeZones.data || []).map((tz) => ({ label: tz.text, value: tz.id }))}
-      onDropdownOpen={() => timeZones.fetch()}
+      data={(data?.timeZones || []).map((tz) => ({ label: tz.text, value: tz.id }))}
       searchable
       placeholder={t`Select timezone`}
     />

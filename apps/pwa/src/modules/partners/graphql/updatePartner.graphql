@@ -1,0 +1,7 @@
+#import "./fragmentPartner.graphql"
+
+mutation UpdatePartner($partnerId: String!, $input: PartnerInput!) {
+  partner: updatePartner(id: $partnerId, input: $input) {
+    ...Partner
+  }
+}

@@ -1,0 +1,7 @@
+#import "./fragmentPluginEInvoiceProvider.graphql"
+
+mutation ResetEInvoicesProviderTemplates($providerId: String!) {
+  resetEInvoicesProviderTemplates(providerId: $providerId) {
+    ...PluginEInvoiceProvider
+  }
+}

@@ -1,10 +1,10 @@
 "use client";
 
 import { ModalHead } from "@/components/modal/modal-head";
+import { Trans } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconEdit, IconPlus } from "@tabler/icons-react";
 import { FormPromotion, FormPromotionProps } from "../components/form-promotion";
-import { t } from "@lingui/core/macro";
 
 const Content = (props: FormPromotionProps) => {
   return <FormPromotion {...props} />;
@@ -16,7 +16,7 @@ export const OnPromotionModal = (props?: FormPromotionProps) => {
     size: "xl",
     title: (
       <ModalHead
-        name={`${props?.promotion ? t`Edit promotion` : t`Create promotion`}`}
+        name={props?.promotion ? <Trans>Edit promotion</Trans> : <Trans>Create promotion</Trans>}
         icon={props?.promotion ? IconEdit : IconPlus}
       />
     ),

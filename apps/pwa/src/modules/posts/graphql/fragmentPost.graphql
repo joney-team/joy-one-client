@@ -1,0 +1,28 @@
+fragment Post on Post {
+  _id
+  title
+  slug
+  excerpt
+  content
+  contentHtml
+  thumbnail
+  meta
+  publishedAt
+  categoryId
+  category {
+    _id
+    name
+    description
+    thumbnail
+  }
+  productId
+  customFieldValues {
+    type
+    key
+    config
+    customFieldId
+    value
+  }
+  updatedAt
+  isArchived
+}

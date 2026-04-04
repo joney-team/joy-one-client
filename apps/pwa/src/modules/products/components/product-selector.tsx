@@ -4,35 +4,38 @@ import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
 import { ProductType } from "@/graphql/enums.graphql";
-import { ProductEntity } from "@/modules/products/products-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import { ProductFragment } from "../graphql/fragmentProduct.graphql";
+import GetProductsDocument from "../graphql/getProducts.graphql";
 import { productTypes } from "../products-constants";
 
-interface ProductSelectorProps
-  extends Omit<SelectorProps<ProductEntity>, "onSelect" | "onSearch" | "renderOption" | "target"> {
+interface ProductSelectorProps extends Omit<
+  SelectorProps<ProductFragment>,
+  "onSelect" | "onSearch" | "renderOption" | "target"
+> {
   type?: ProductType | ProductType[];
   isStockCheck?: boolean;
-  onSelect: (value: ProductEntity) => void;
-  target?: (ctx: SelectorContext<ProductEntity>) => ReactNode;
+  onSelect: (value: ProductFragment) => void;
+  target?: (ctx: SelectorContext<ProductFragment>) => ReactNode;
 }
 
 export const ProductSelector: FC<ProductSelectorProps> = (props) => {
   const { type, isStockCheck, excludeIds, onSelect, target, ...rest } = props;
   const strictType = props.type ? (Array.isArray(props.type) ? props.type : [props.type]) : [];
-  const funcStrictType = (v: ProductEntity) => strictType.includes(v.type);
+  const funcStrictType = (v: ProductFragment) => strictType.includes(v.type);
 
   return (
     <Selector
       {...rest}
-      listRoute="/products"
+      listQuery={GetProductsDocument}
       listParams={type ? { type } : undefined}
       onSearch={(q) =>
-        searchEntity<ProductEntity>(AppEntity.PRODUCTS, q, {
+        searchEntity<ProductFragment>(AppEntity.PRODUCTS, q, {
           isStockCheck,
           type,
         }).then((res) => {

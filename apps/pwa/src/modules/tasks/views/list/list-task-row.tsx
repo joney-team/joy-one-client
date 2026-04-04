@@ -35,7 +35,6 @@ import { taskPriorities } from "../../tasks-constants";
 
 import { Button } from "@/components/buttons/button";
 import Link from "next/link";
-import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
 
 import { Avatar } from "@/components/avatar";
 import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
@@ -57,6 +56,7 @@ import { updateTaskPath } from "../../tasks-route-helpers";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import { ListTaskRowHeadProps } from "./list-task-row-head";
 
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import styles from "./list-tasks.module.css";
 
 const ModalCreateTask = dynamic(
@@ -75,7 +75,7 @@ export const ListTaskRow: FC<
     nextParentTask: TaskFragment | null;
     allowEditName?: boolean;
     lastRow?: boolean;
-    groupVariables: TasksQueryVariables | null;
+    groupVariables: GetTasksQueryVariables | null;
     isMarkAsChild?: boolean;
     hideSelection?: boolean;
     droppableOptions?: {
@@ -111,7 +111,7 @@ export const ListTaskRow: FC<
     updateTasks({ _id: task._id, name });
   }, 500);
 
-  const subTasksGroupVariables = useMemo<TasksQueryVariables>(() => {
+  const subTasksGroupVariables = useMemo<GetTasksQueryVariables>(() => {
     return {
       parentId: task._id,
       all: true,

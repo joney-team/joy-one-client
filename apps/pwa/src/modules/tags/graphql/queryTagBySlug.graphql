@@ -1,7 +1,0 @@
-#import "./fragmentTag.graphql"
-
-query TagBySlug($slug: String!) {
-  tagBySlug(slug: $slug) {
-    ...Tag
-  }
-}

@@ -1,7 +1,0 @@
-#import "./fragmentDevice.graphql"
-
-query GetDeviceByIdentifyId($identifyId: String!) {
-  getDeviceByIdentifyId(identifyId: $identifyId) {
-    ...Device
-  }
-}

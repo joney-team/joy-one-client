@@ -1,0 +1,7 @@
+#import "./fragmentFile.graphql"
+
+query GetFileById($fileId: String!) {
+  file: getFileById(fileId: $fileId) {
+    ...File
+  }
+}

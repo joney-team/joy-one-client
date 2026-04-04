@@ -1,5 +1,0 @@
-query PluginExternalStorage {
-  pluginExternalStorage {
-    isDisabled
-  }
-}

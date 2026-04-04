@@ -19,7 +19,6 @@ import {
   useUserEventsListner,
 } from "@/modules/events/event-service";
 import { useLang } from "@/modules/lang/lang-context";
-import { getTimeZones } from "@/modules/times/times-service";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
@@ -33,9 +32,10 @@ import { FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
 import { DeviceFragment } from "../devices/graphql/fragmentDevice.graphql";
-import MUTATION_SET_DEVICE_LOCALE from "../devices/graphql/mutationSetDeviceLocale.graphql";
-import MUTATION_SET_DEVICE_NOTIFICATION_TOKEN from "../devices/graphql/mutationSetDeviceNotificationToken.graphql";
+import SetDeviceLocaleDocument from "../devices/graphql/setDeviceLocale.graphql";
+import SetDeviceNotificationTokenDocument from "../devices/graphql/setDeviceNotificationToken.graphql";
 import { useUploadFile } from "../files/hooks/use-upload-file";
+import GetTimeZonesDocument from "../times/graphql/getTimeZones.graphql";
 import { Context } from "./auth-context";
 import {
   serverSignInWithEmailPassword,
@@ -56,11 +56,11 @@ import {
   setWorkspaceAuthSessionId,
 } from "./auth-service";
 import type { AuthContext } from "./auth-types";
+import AuthUserDocument from "./graphql/authUser.graphql";
 import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
-import MUTATION_SET_USER_LOCALE from "./graphql/mutationSetLocale.graphql";
-import MUTATION_SIGN_OUT from "./graphql/mutationSignOut.graphql";
-import MUTATION_UPDATE_USER_PROFILE from "./graphql/mutationUpdateUserProfile.graphql";
-import QUERY_AUTH_USER from "./graphql/queryAuthUser.graphql";
+import SetLocaleDocument from "./graphql/setLocale.graphql";
+import SignOutDocument from "./graphql/signOut.graphql";
+import UpdateUserProfileDocument from "./graphql/updateUserProfile.graphql";
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -74,8 +74,8 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const [device, setDevice] = useState<DeviceFragment>();
   const [, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
-  const [setDeviceNotificationToken] = useMutation(MUTATION_SET_DEVICE_NOTIFICATION_TOKEN);
-  const [setUserLocale] = useMutation(MUTATION_SET_USER_LOCALE);
+  const [setDeviceNotificationToken] = useMutation(SetDeviceNotificationTokenDocument);
+  const [setUserLocale] = useMutation(SetLocaleDocument);
 
   const uploadFile = useUploadFile();
 
@@ -139,9 +139,9 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       if (accessToken) {
         authResult = await client
           .query({
-            query: QUERY_AUTH_USER,
+            query: AuthUserDocument,
           })
-          .then((res) => res.data!.authUser);
+          .then((res) => res.data!.user);
         setUser(authResult);
       }
 
@@ -162,7 +162,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     router.replace("/");
   };
 
-  const [signOut] = useMutation(MUTATION_SIGN_OUT);
+  const [signOut] = useMutation(SignOutDocument);
 
   const handleSignOut = async () => {
     try {
@@ -239,7 +239,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     await initialize("auth");
   };
 
-  const [updateUserProfile] = useMutation(MUTATION_UPDATE_USER_PROFILE);
+  const [updateUserProfile] = useMutation(UpdateUserProfileDocument);
   const updateProfile = useCallback(
     async (values: UpdateUserProfileInput) => {
       return updateUserProfile({
@@ -251,7 +251,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
             settings: values.settings ? removeTypeName(values.settings) : undefined,
           },
         },
-      }).then((res) => setUser(res.data?.updateUserProfile));
+      }).then((res) => setUser(res.data?.user));
     },
     [updateUserProfile],
   );
@@ -306,7 +306,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
         },
       });
 
-      setDevice(updatedDevice.data?.setDeviceNotificationToken);
+      setDevice(updatedDevice.data?.device);
     } else {
       throw Error(t`Device does not support notifications.`);
     }
@@ -315,9 +315,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const detectTimeZone = async () => {
     try {
       if (!user) return;
-      const timeZones = await getTimeZones();
+      const timeZones = await client.query({
+        query: GetTimeZonesDocument,
+      });
       const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      const _timezone = timeZones.find((tz) => tz.utc.includes(timezone));
+      const _timezone = timeZones.data?.timeZones.find((tz) => tz.utc.includes(timezone));
       await updateProfile({ ...user, settings: { ...user.settings, timezoneId: _timezone?.id } });
       return null;
     } catch (error) {
@@ -390,12 +392,12 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     if (user?._id) app.joinSocket();
   }, [user?._id]);
 
-  const [setDeviceLocale] = useMutation(MUTATION_SET_DEVICE_LOCALE);
+  const [setDeviceLocale] = useMutation(SetDeviceLocaleDocument);
 
   useEffect(() => {
     if (isInitialized && device && lang.locale !== device.locale) {
       setDeviceLocale({ variables: { input: { locale: lang.locale } } })
-        .then((result) => setDevice(result.data?.setDeviceLocale))
+        .then((result) => setDevice(result.data?.device))
         .catch(onErrorLog);
     }
   }, [isInitialized, lang]);

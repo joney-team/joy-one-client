@@ -1,0 +1,6 @@
+query GetWorkspaceMembersOnlineStatus {
+  workspaceMembersOnlineStatus: getWorkspaceMembersOnlineStatus {
+    userId
+    isOnline
+  }
+}

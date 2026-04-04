@@ -31,14 +31,14 @@ const EventsList = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const Workspace: FC = () => {
   const workspace = useWorkspace();
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack gap={30}>
         <Card shadow="xs">
           <WorkspaceInformation />

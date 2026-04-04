@@ -1,0 +1,15 @@
+#import "./fragmentPartner.graphql"
+
+query GetPartners(
+  $query: JSONObject
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  getPartners(query: $query, ids: $ids, limit: $limit, offset: $offset) {
+    total
+    results {
+      ...Partner
+    }
+  }
+}

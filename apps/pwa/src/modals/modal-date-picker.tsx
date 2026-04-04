@@ -14,7 +14,7 @@ import { IconCalendar } from "@tabler/icons-react";
 import { FC, useState } from "react";
 
 interface ModalDatePickerProps {
-  period?: Period;
+  period?: string;
   onSelected?: (date: Date) => void | Promise<void>;
   onRangeSelected?: (range?: DatesRangeValue) => void | Promise<void>;
   range?: DatesRangeValue;
@@ -43,7 +43,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
     if (props.period === Period.WEEK) {
       return (
         <Stack align="center" justify="center">
-          <Card p={16} withBorder>
+          <Card p="md" withBorder>
             <DatePicker
               type="range"
               size="md"
@@ -54,7 +54,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
                 if (range[0]) {
                   const _range = DateTime.getRange(
                     new Date(range[0]).getTime() + 1000 * 60,
-                    "week"
+                    "week",
                   );
                   setRange([new Date(_range.start), new Date(_range.end)]);
                 }
@@ -97,7 +97,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
     if (props.period === Period.MONTH) {
       return (
         <Stack align="center" justify="center">
-          <Card p={16} withBorder>
+          <Card p="md" withBorder>
             <DatePicker
               size="lg"
               level="year"
@@ -201,7 +201,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
 
     return (
       <Stack align="center" justify="center">
-        <Card p={16} withBorder>
+        <Card p="md" withBorder>
           <DatePicker
             type="range"
             size="lg"
@@ -252,7 +252,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
 
   return (
     <Center>
-      <Card withBorder p={16}>
+      <Card withBorder p="md">
         <DatePicker
           value={props.date}
           renderDay={dayRenderer}

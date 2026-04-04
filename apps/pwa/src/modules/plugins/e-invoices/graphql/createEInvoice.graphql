@@ -1,0 +1,7 @@
+#import "./fragmentEInvoice.graphql"
+
+mutation CreateEInvoice($input: GenerateEInvoiceDataInput!) {
+  createEInvoice(input: $input) {
+    ...EInvoice
+  }
+}

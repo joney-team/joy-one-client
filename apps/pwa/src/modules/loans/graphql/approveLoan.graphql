@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation ApproveLoan($approveLoanId: String!) {
+  loan: approveLoan(id: $approveLoanId) {
+    ...Loan
+  }
+}

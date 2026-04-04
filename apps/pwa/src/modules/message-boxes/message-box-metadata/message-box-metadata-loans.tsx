@@ -4,13 +4,13 @@ import { Empty } from "@/components/empty";
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { LoanCard } from "@/modules/loans/components/loan-card";
-import QUERY_LOANS from "@/modules/loans/graphql/queryLoans.graphql";
+import GetLoansDocument from "@/modules/loans/graphql/getLoans.graphql";
 import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
 export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) => {
-  const { data: loansData, refetch: refetchLoans } = useQuery(QUERY_LOANS, {
+  const { data: loansData, refetch: refetchLoans } = useQuery(GetLoansDocument, {
     variables: {
       query: {
         customerId: customer._id,
@@ -33,7 +33,7 @@ export const MessageBoxMetadataLoans: AccordionItemComponent = ({ customer }) =>
     ],
     () => {
       refetchLoans();
-    }
+    },
   );
 
   const isEmpty = loansData && loansData?.list.results.length === 0;

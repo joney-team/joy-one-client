@@ -6,29 +6,28 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { List } from "@/components/list";
 import { codeColumn } from "@/components/list/columns/code-column";
-import { EventType, ProductType } from "@/graphql/enums.graphql";
+import { CategoryType, EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
-import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 
-import QUERY_PRODUCTS from "./graphql/queryProducts.graphql";
+import { ProductFragment } from "./graphql/fragmentProduct.graphql";
+import GetProductsDocument from "./graphql/getProducts.graphql";
 import { productTypes } from "./products-constants";
 
 export const ProductList: FC = () => {
   return (
-    <Stack p={16}>
-      <List<ProductEntity>
+    <Stack p="md">
+      <List<ProductFragment>
         id="prods"
         name={<Trans>Products</Trans>}
         icon={IconBox}
-        query={QUERY_PRODUCTS}
+        query={GetProductsDocument}
         fixedParams={{ type: ProductType.Product }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.Product }),
@@ -65,7 +64,7 @@ export const ProductList: FC = () => {
             },
           },
           code: codeColumn({ defaultHidden: true }),
-          categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
+          category: CategoryColumn({ type: CategoryType.Products }),
           stock: {
             defaultWidth: 200,
             name: <Trans>Product stocks</Trans>,

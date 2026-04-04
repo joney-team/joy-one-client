@@ -1,0 +1,3 @@
+mutation DeletePluginMessageHub($messageHubId: String!) {
+  deletePluginMessageHub(id: $messageHubId)
+}

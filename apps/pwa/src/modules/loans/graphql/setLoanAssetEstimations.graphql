@@ -1,0 +1,3 @@
+mutation SetLoanAssetEstimations($input: JSONObject!) {
+  assetEstimations: setLoanAssetEstimations(input: $input)
+}

@@ -10,11 +10,11 @@ export const WorkspaceSettings: FC = () => {
   const workspace = useWorkspace();
   const { availableModules } = useAvailableWorkspaceModules();
   const workspaceSettingModules = availableModules.filter(
-    (m) => m.id.startsWith("workspaceSettings") && m.id !== "workspaceSettings"
+    (m) => m.id.startsWith("workspaceSettings") && m.id !== "workspaceSettings",
   );
 
   return (
-    <SimpleGrid cols={{ md: 4 }} p={16}>
+    <SimpleGrid cols={{ md: 4 }} p="md">
       {workspaceSettingModules
         .filter((v) => !v.workspaceTypes || v.workspaceTypes.includes(workspace.type))
         .map((mod) => (

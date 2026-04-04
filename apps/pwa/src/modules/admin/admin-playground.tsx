@@ -7,9 +7,8 @@ import { FormulaInput } from "@/components/inputs/formual-input/formula-input";
 import { SectionTitle } from "@/components/session-title";
 import { TimeSlots } from "@/components/time-slots/time-slots";
 import { TimeEvent } from "@/components/time-slots/time-slots.types";
-import QUERY_APP_CONFIG from "@/configs/queryAppConfig.graphql";
+import GetAppConfigDocument from "@/configs/getAppConfig.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import QUERY_AUTH_USER from "@/modules/auth/graphql/queryAuthUser.graphql";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
@@ -17,11 +16,12 @@ import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { useMemo, useRef, useState, type FC } from "react";
 import { graphqlClient } from "../../graphql/graphql-client";
+import AuthUserDocument from "../auth/graphql/authUser.graphql";
 import { useUploadFile } from "../files/hooks/use-upload-file";
+import { ModalFiles, ModalFilesRef } from "../files/modals/modal-files";
 import { useLang } from "../lang/lang-context";
 import { useWorkspace } from "../workspaces/workspace-context";
-import QUERY_TEST_ERROR_NOT_FOUND from "./graphql/queryTestErrorNotFound.graphql";
-import { ModalFiles, ModalFilesRef } from "../files/modals/modal-files";
+import TestErrorNotFoundDocument from "./graphql/testErrorNotFound.graphql";
 
 const GraphQLPlayground: FC = () => {
   return (
@@ -30,7 +30,7 @@ const GraphQLPlayground: FC = () => {
         onClick={() =>
           graphqlClient
             .query({
-              query: QUERY_APP_CONFIG,
+              query: GetAppConfigDocument,
             })
             .then((result) => {
               console.log("result", result.data?.appConfig);
@@ -44,11 +44,11 @@ const GraphQLPlayground: FC = () => {
         onClick={() =>
           graphqlClient
             .query({
-              query: QUERY_AUTH_USER,
+              query: AuthUserDocument,
               fetchPolicy: "network-only",
             })
             .then((result) => {
-              console.log("result", result.data?.authUser);
+              console.log("result", result.data?.user);
             })
         }
       >
@@ -58,7 +58,7 @@ const GraphQLPlayground: FC = () => {
       <Button
         onClick={() =>
           graphqlClient.query({
-            query: QUERY_TEST_ERROR_NOT_FOUND,
+            query: TestErrorNotFoundDocument,
             fetchPolicy: "network-only",
           })
         }
@@ -360,7 +360,7 @@ export const AdminPlayground: FC = () => {
             ]}
           />
 
-          <Paper p={16} withBorder>
+          <Paper p="md" withBorder>
             <Text size="sm" fw={600} mb={8}>
               Output String Value:
             </Text>
@@ -368,7 +368,7 @@ export const AdminPlayground: FC = () => {
             <TextInput value={value} readOnly />
           </Paper>
 
-          <Paper p={16} withBorder>
+          <Paper p="md" withBorder>
             <Text size="sm" fw={600} mb={8}>
               Tips:
             </Text>

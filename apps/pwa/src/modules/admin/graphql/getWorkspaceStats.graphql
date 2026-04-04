@@ -1,0 +1,24 @@
+query GetWorkspaceStats($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getWorkspaceStats(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      refs
+      createdAt
+      updatedAt
+      _id
+      storageUsage
+      memberCount
+      bookingCount
+      customerCount
+      orderCount
+      type
+      workspace {
+        _id
+        logo
+        name
+        type
+        appColor
+      }
+    }
+  }
+}

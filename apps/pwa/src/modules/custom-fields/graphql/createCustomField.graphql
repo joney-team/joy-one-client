@@ -1,0 +1,7 @@
+#import "./fragmentCustomField.graphql"
+
+mutation CreateCustomField($input: CustomFieldInput!) {
+  customField: createCustomField(input: $input) {
+    ...CustomField
+  }
+}

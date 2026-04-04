@@ -20,7 +20,7 @@ import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-br
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
-import { useMutation } from "@apollo/client/react";
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
@@ -41,13 +41,14 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
-import { restClient } from "../apis/rest-client";
 import { useLocations } from "../locations/locations-context";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import BulkArchiveLoansDocument from "./graphql/bulkArchiveLoans.graphql";
+import BulkRejectLoansDocument from "./graphql/bulkRejectLoans.graphql";
+import BulkRevertRejectedLoansDocument from "./graphql/bulkRevertRejectedLoans.graphql";
 import { LoanFragment } from "./graphql/fragmentLoan.graphql";
-import MUTATION_BULK_ARCHIVE_LOANS from "./graphql/mutationBulkArchiveLoans.graphql";
-import QUERY_LOANS from "./graphql/queryLoans.graphql";
+import GetLoansDocument from "./graphql/getLoans.graphql";
 import { loanAssetTypes, loanPackageTypes, loanStatuses } from "./loans-constants";
 import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
 
@@ -78,12 +79,13 @@ interface LoanListProps {
 
 export const LoanList: FC<LoanListProps> = (props) => {
   const { t } = useLingui();
+  const client = useApolloClient();
   const { workspaceSetting } = useWorkspaceSetting();
   const color = useColor();
   const location = useLocations();
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const modalUpdateWorkspaceBranchRef = useRef<ModalUpdateWorkspaceBranchRef>(null);
-  const [archiveLoans] = useMutation(MUTATION_BULK_ARCHIVE_LOANS);
+  const [archiveLoans] = useMutation(BulkArchiveLoansDocument);
 
   return (
     <Fragment>
@@ -92,7 +94,7 @@ export const LoanList: FC<LoanListProps> = (props) => {
         name={<Trans>Loans</Trans>}
         limit={16}
         icon={IconCreditCardPay}
-        query={QUERY_LOANS}
+        query={GetLoansDocument}
         fixedParams={
           props.strictStatus
             ? {
@@ -394,9 +396,14 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 title: <Trans>Reject</Trans>,
                 message: <Trans>Enter reject reason</Trans>,
                 onSubmit: async (reason) => {
-                  await restClient.post(`/loans/bulk-reject`, {
-                    loanIds: data.map((v) => v.id),
-                    reason,
+                  await client.mutate({
+                    mutation: BulkRejectLoansDocument,
+                    variables: {
+                      input: {
+                        loanIds: data.map((v) => v.id),
+                        reason,
+                      },
+                    },
                   });
                   ctx.unSelect();
                 },
@@ -412,8 +419,11 @@ export const LoanList: FC<LoanListProps> = (props) => {
             available: (data) =>
               data.every((v) => ([LoanStatus.Rejected] as LoanStatus[]).includes(v.status)),
             handler: async (data, ctx) => {
-              await restClient.post(`/loans/bulk-revert-rejected`, {
-                loanIds: data.map((v) => v.id),
+              await client.mutate({
+                mutation: BulkRevertRejectedLoansDocument,
+                variables: {
+                  loanIds: data.map((v) => v.id),
+                },
               });
               ctx.unSelect();
             },

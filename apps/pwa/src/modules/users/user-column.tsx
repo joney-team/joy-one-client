@@ -7,7 +7,8 @@ import { Group, Stack, Text } from "@mantine/core";
 import { IconUser } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import QUERY_WORKSPACE_MEMBERS_BY_IDS from "../workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
+import GetWorkspaceMembersDocument from "../workspace-members/graphql/getWorkspaceMembers.graphql";
+import GetWorkspaceMembersByIdsDocument from "../workspace-members/graphql/getWorkspaceMembersByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
 import { ModalUserInformation } from "./modals/modal-user-information";
 
@@ -50,19 +51,19 @@ export const userColumn = (args?: UserColumnArgs): Column => {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        listRoute: "/workspace-members",
+        listQuery: GetWorkspaceMembersDocument,
         getOptionId: (item) => item.userId,
         getSelectedOptions: async (ids: string[], client) => {
           return client
             .query({
-              query: QUERY_WORKSPACE_MEMBERS_BY_IDS,
+              query: GetWorkspaceMembersByIdsDocument,
               variables: {
                 ids,
               },
               fetchPolicy: "network-only",
             })
             .then((res) => {
-              return (res.data?.workspaceMembersByIds ?? []).map((v) => ({
+              return (res.data?.members ?? []).map((v) => ({
                 label: v.name,
                 value: v.userId,
                 data: v,

@@ -1,0 +1,7 @@
+#import "./fragmentCustomer.graphql"
+
+query GetCustomersByIds($ids: [String!]!) {
+  customers: getCustomersByIds(ids: $ids) {
+    ...Customer   
+  }
+}

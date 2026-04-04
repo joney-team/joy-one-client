@@ -1,4 +1,3 @@
-import QUERY_WORKSPACE_MEMBER from "@/modules/workspace-members/graphql/queryWorkspaceMember.graphql";
 import { useQuery } from "@apollo/client/react";
 import { NodeViewWrapper, ReactNodeViewProps } from "@tiptap/react";
 import { FC, Fragment, useRef } from "react";
@@ -9,6 +8,7 @@ import { loanStatuses } from "@/modules/loans/loans-constants";
 import { getTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
 import { useColor } from "@/modules/theme/use-color";
 import { type ModalUserInformationRef } from "@/modules/users/modals/modal-user-information";
+import GetWorkspaceMemberByUserIdDocument from "@/modules/workspace-members/graphql/getWorkspaceMemberByUserId.graphql";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -18,18 +18,9 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { MentionAttributes } from "./editor-mention-types";
 import styles from "./editor-mention.module.css";
-import QUERY_CUSTOMER_MENTION, {
-  type CustomerMentionQuery,
-  type CustomerMentionQueryVariables,
-} from "./queryCustomerMention.graphql";
-import QUERY_LOAN_MENTION, {
-  type LoanMentionQuery,
-  type LoanMentionQueryVariables,
-} from "./queryLoanMention.graphql";
-import QUERY_TASK_MENTION, {
-  type TaskMentionQuery,
-  type TaskMentionQueryVariables,
-} from "./queryTaskMention.graphql";
+import GetCustomerMentionDocument from "./getCustomerMention.graphql";
+import GetLoanMentionDocument from "./getLoanMention.graphql";
+import GetTaskMentionDocument from "./getTaskMention.graphql";
 
 const ModalUserInformation = dynamic(
   () =>
@@ -42,11 +33,11 @@ const ModalUserInformation = dynamic(
 
 const UserMention: FC<{ userId: string }> = ({ userId }) => {
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
-  const { data } = useQuery(QUERY_WORKSPACE_MEMBER, {
+  const { data } = useQuery(GetWorkspaceMemberByUserIdDocument, {
     variables: { userId },
   });
 
-  const user = data?.workspaceMember;
+  const member = data?.member;
 
   return (
     <NodeViewWrapper as="span" key={userId}>
@@ -59,9 +50,11 @@ const UserMention: FC<{ userId: string }> = ({ userId }) => {
         c="dark"
         pr={6}
         radius={15}
-        leftSection={<Avatar user={user} size={14} hideOnlineStatus style={{ marginRight: -4 }} />}
+        leftSection={
+          <Avatar user={member} size={14} hideOnlineStatus style={{ marginRight: -4 }} />
+        }
       >
-        {user?.name}
+        {member?.name}
       </Button>
 
       <ModalUserInformation ref={modalUserInformationRef} />
@@ -72,7 +65,7 @@ const UserMention: FC<{ userId: string }> = ({ userId }) => {
 const LoanMention: FC<{ loanId: string }> = ({ loanId }) => {
   const color = useColor();
   const { t } = useLingui();
-  const { data } = useQuery<LoanMentionQuery, LoanMentionQueryVariables>(QUERY_LOAN_MENTION, {
+  const { data } = useQuery(GetLoanMentionDocument, {
     variables: { loanId },
     fetchPolicy: "cache-and-network",
   });
@@ -115,13 +108,10 @@ const LoanMention: FC<{ loanId: string }> = ({ loanId }) => {
 };
 
 const CustomerMention: FC<{ customerId: string }> = ({ customerId }) => {
-  const { data } = useQuery<CustomerMentionQuery, CustomerMentionQueryVariables>(
-    QUERY_CUSTOMER_MENTION,
-    {
-      variables: { customerId },
-      fetchPolicy: "cache-and-network",
-    },
-  );
+  const { data } = useQuery(GetCustomerMentionDocument, {
+    variables: { customerId },
+    fetchPolicy: "cache-and-network",
+  });
 
   const customer = data?.customer;
 
@@ -147,7 +137,7 @@ const CustomerMention: FC<{ customerId: string }> = ({ customerId }) => {
 
 const TaskMention: FC<{ taskId: string }> = ({ taskId }) => {
   const color = useColor();
-  const { data } = useQuery<TaskMentionQuery, TaskMentionQueryVariables>(QUERY_TASK_MENTION, {
+  const { data } = useQuery(GetTaskMentionDocument, {
     variables: { id: taskId },
     fetchPolicy: "cache-and-network",
   });

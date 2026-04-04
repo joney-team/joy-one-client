@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+query GetZaloOaById($oaId: String!) {
+  getZaloOaById(oaId: $oaId) {
+    ...ZaloOa
+  }
+}

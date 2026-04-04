@@ -1,13 +1,11 @@
 "use client";
 
-import { useLocalStorage } from "@/hooks/use-local-storage";
 import { useLayout } from "@/layout/layout-context";
-import { restClient } from "@/modules/apis/rest-client";
 import { useColor } from "@/modules/theme/use-color";
-import { StorageKey } from "@/constants/storage-key";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { getId } from "@joy-one-client/utils/base-data";
+import { gql, TypedDocumentNode } from "@apollo/client";
+import { BaseData, getId } from "@joy-one-client/utils/base-data";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,
@@ -31,7 +29,7 @@ import {
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconBackground, IconPlus } from "@tabler/icons-react";
 import { Fragment, type ReactNode, useMemo, useRef, useState } from "react";
-import { useList } from "./list/use-rest-list";
+import { emptyDocument, useGraphqlList } from "./list/use-graphql-list";
 
 type WithGroup = { _group?: string };
 type WithDisabled = { disabled?: boolean };
@@ -55,7 +53,7 @@ export interface SelectorBaseProps<T extends SelectOption> extends Omit<
   InputWrapperProps,
   "value" | "onSelect" | "onChange"
 > {
-  listRoute?: string;
+  listQuery?: TypedDocumentNode;
   listParams?: Record<string, any>;
   value?: T | null | undefined;
   onSelect?: (value: T | null | undefined, ctx: ComboboxStore) => Promise<any> | any;
@@ -103,35 +101,28 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     autoCloseOnChange = true,
     comboboxProps,
     searchProps,
-    listRoute,
     listParams,
     getOptionId: propsGetOptionId,
+    listQuery: query,
     ...rest
   } = props;
 
   const getOptionId = propsGetOptionId ?? getId;
 
-  const [workspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
   const { t } = useLingui();
 
-  const isListable = listRoute && listRoute.length > 0;
-  const list = useList<T>({
-    autoFetch: false,
-    isSkip: !isListable,
-    id: `sopts${listRoute}${JSON.stringify(listParams)}${workspaceId}`,
-    fetch: async (p) => {
-      if (!listRoute || listRoute.length === 0) {
-        return { data: [], count: 0 };
-      }
+  const queryParams = useMemo(() => {
+    return {
+      ...listParams,
+      sortLastInteractionAt: -1,
+    };
+  }, [listParams]);
 
-      return restClient.get(listRoute!, {
-        params: {
-          sortLastInteractionAt: -1,
-          ...listParams,
-          ...p,
-        },
-      });
-    },
+  const isListable = !!query;
+  const list = useGraphqlList<any>({
+    query: query ?? emptyDocument,
+    params: queryParams,
+    isSkip: !query,
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -224,7 +215,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
 
     props.onOpen?.();
     combobox.openDropdown();
-    list.fetch(true, { isSilient: true });
+    list.refetch();
 
     await wait(200);
     searchRef.current?.focus();
@@ -340,7 +331,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
                         key={group + groupIndex}
                         styles={{ groupLabel: { fontSize: 12 } }}
                       >
-                        {groupOptions[group].map((item, itemIndex) =>
+                        {groupOptions[group].map((item: any, itemIndex: number) =>
                           props.renderOption(item, `group-${groupIndex}-option-${itemIndex}`),
                         )}
                       </Combobox.Group>

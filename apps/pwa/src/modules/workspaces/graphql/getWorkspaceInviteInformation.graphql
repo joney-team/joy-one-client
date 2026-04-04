@@ -1,0 +1,14 @@
+query GetWorkspaceInviteInformation($inviteCode: String!) {
+  workspaceInviteInformation: getWorkspaceInviteInformation(
+    inviteCode: $inviteCode
+  ) {
+    workspaceId
+    type
+    name
+    logo
+    hotline
+    phone
+    appColor
+    appColorShape
+  }
+}

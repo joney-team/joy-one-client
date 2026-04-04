@@ -1,0 +1,12 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment WorkspaceApiApp on WorkspaceApiApp {
+  _id
+  member {
+    ...WorkspaceMember
+  }
+  enabled
+  secretKey
+  isArchived
+  updatedAt
+}

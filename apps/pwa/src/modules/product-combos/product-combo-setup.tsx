@@ -6,23 +6,23 @@ import { numberColumn } from "@/components/list/columns/number-column";
 import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Badge, em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
 import { type FC } from "react";
 
 import { Trans } from "@lingui/react/macro";
-import QUERY_PRODUCT_COMBOS from "./graphql/queryProductCombos.graphql";
+import { ProductFragment } from "../products/graphql/fragmentProduct.graphql";
+import GetProductsDocument from "../products/graphql/getProducts.graphql";
 
 export const ProductComboSetup: FC = () => {
   return (
-    <Stack p={16}>
-      <List<ProductEntity>
+    <Stack p="md">
+      <List<ProductFragment>
         id="cbsetup"
         icon={IconSettings}
         name={<Trans>List combos</Trans>}
-        query={QUERY_PRODUCT_COMBOS}
+        query={GetProductsDocument}
         fixedParams={{ type: ProductType.Combo }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.Combo }),

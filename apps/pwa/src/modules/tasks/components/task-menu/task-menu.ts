@@ -10,7 +10,7 @@ import {
 } from "@/hooks/use-internal-event";
 import { useEffect, useState } from "react";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
-import type { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import type { UpdateTask } from "../../hooks/use-update-tasks";
 import {
   TaskMenuAction,
@@ -25,7 +25,7 @@ export function setTaskMenuRoot(root: HTMLElement | null) {
 
 export const useTaskMenu: (
   args: {
-    groupVariables: TasksQueryVariables | null;
+    groupVariables: GetTasksQueryVariables | null;
     task?: TaskMenuData;
     options?: PlaceDropdownMenuOptions;
     updateTask?: (task: UpdateTask) => Promise<void>;

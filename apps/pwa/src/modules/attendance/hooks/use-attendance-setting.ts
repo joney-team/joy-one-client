@@ -1,8 +1,8 @@
 import { useQuery } from "@apollo/client/react";
-import QUERY_ATTENDANCE_SETTING from "../graphql/queryAttendanceSetting.graphql";
+import GetAttendanceSettingDocument from "../graphql/getAttendanceSetting.graphql";
 
 export const useAttendanceSetting = () => {
-  const { data, loading, error } = useQuery(QUERY_ATTENDANCE_SETTING);
+  const { data, loading, error } = useQuery(GetAttendanceSettingDocument);
 
   return {
     attendanceSetting: data?.attendanceSetting,

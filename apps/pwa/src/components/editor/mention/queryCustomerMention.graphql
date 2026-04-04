@@ -1,7 +1,0 @@
-query CustomerMention($customerId: String!) {
-  customer(id: $customerId) {
-    _id
-    code
-    name
-  }
-}

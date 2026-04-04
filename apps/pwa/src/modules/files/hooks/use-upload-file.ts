@@ -3,17 +3,17 @@
 import { useMutation } from "@apollo/client/react";
 import { IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import imageCompression from "browser-image-compression";
-import { UploadFileOptions } from "../file-types";
 
 import { FileType } from "@/graphql/enums.graphql";
 import axios from "axios";
 
-import { useLingui } from "@lingui/react/macro";
-import { FileFragment } from "../graphql/fragmentFile.graphql";
-import MUTATION_SIGN_UPLOAD from "../graphql/mutationSignUpload.graphql";
-import MUTATION_SIGN_PERSONAL_UPLOAD from "../graphql/mutationSignPersonalUpload.graphql";
-import MUTATION_VERIFY_EXTERNAL_STORAGE_DNA from "../graphql/mutationVerifyExternalStorageDna.graphql";
 import { SignUploadInput } from "@/graphql/types.graphql";
+import { useLingui } from "@lingui/react/macro";
+import { UploadFileOptions } from "../file-types";
+import { FileFragment } from "../graphql/fragmentFile.graphql";
+import SignPersonalUploadDocument from "../graphql/signPersonalUpload.graphql";
+import SignUploadDocument from "../graphql/signUpload.graphql";
+import VerifyExternalStorageDnaDocument from "../graphql/verifyExternalStorageDna.graphql";
 
 export const reduceFileSize = async (
   file: File,
@@ -34,9 +34,9 @@ export const reduceFileSize = async (
 
 export const useUploadFile = () => {
   const { t } = useLingui();
-  const [signUploadUrl] = useMutation(MUTATION_SIGN_UPLOAD);
-  const [signPersonalUploadUrl] = useMutation(MUTATION_SIGN_PERSONAL_UPLOAD);
-  const [verifyExternalStorageDna] = useMutation(MUTATION_VERIFY_EXTERNAL_STORAGE_DNA);
+  const [signUploadUrl] = useMutation(SignUploadDocument);
+  const [signPersonalUploadUrl] = useMutation(SignPersonalUploadDocument);
+  const [verifyExternalStorageDna] = useMutation(VerifyExternalStorageDnaDocument);
 
   return async (
     file: File,
@@ -80,11 +80,11 @@ export const useUploadFile = () => {
         variables: { input: { dna } },
       });
 
-      if (!result.data?.verifyExternalStorageDna) {
+      if (!result.data?.file) {
         throw Error(t`Failed to verify DNA`);
       }
 
-      return result.data?.verifyExternalStorageDna;
+      return result.data?.file;
     }
 
     // Internal storage

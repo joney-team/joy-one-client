@@ -8,14 +8,14 @@ import { Card, Divider, Group, Progress, Stack, Text, ThemeIcon } from "@mantine
 import { IconPlus, IconSubtask } from "@tabler/icons-react";
 import { useEffect, useMemo, type FC } from "react";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { ModalCreateTask } from "../../modals/modal-create-task";
 import { ListTaskRow } from "../../views/list/list-task-row";
 import { ListTaskRowHead } from "../../views/list/list-task-row-head";
 
 export const TaskDetailSubtasks: FC<{ task: TaskFragment }> = ({ task }) => {
-  const groupVariables: TasksQueryVariables = useMemo(
+  const groupVariables: GetTasksQueryVariables = useMemo(
     () => ({
       parentId: task._id,
       all: true,

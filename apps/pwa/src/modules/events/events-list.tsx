@@ -14,7 +14,6 @@ import {
   ModalUserInformationRef,
 } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -22,10 +21,8 @@ import { Avatar } from "../../components/avatar";
 import { ButtonViewMore } from "../../components/buttons/button-view-more";
 import { Errored } from "../../components/errored";
 import { DateFormat, RelativeTimeFormat } from "../../components/format/date-format";
-import EVENTS_QUERY, {
-  type EventsQuery,
-  type EventsQueryVariables,
-} from "./graphql/queryEvents.graphql";
+import { EventFragment } from "./graphql/fragmentEvent.graphql";
+import GetEventsDocument, { GetEventsQueryVariables } from "./graphql/getEvents.graphql";
 
 interface EventListProps extends StackProps {
   ref?: string;
@@ -35,8 +32,6 @@ interface EventListProps extends StackProps {
   empty?: ReactNode;
   fetching?: ReactNode;
 }
-
-type Event = EventsQuery["events"]["results"][number];
 
 export const EventsList: FC<EventListProps> = ({
   ref,
@@ -49,7 +44,7 @@ export const EventsList: FC<EventListProps> = ({
 }) => {
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 
-  const variables = useMemo<EventsQueryVariables>(() => {
+  const variables = useMemo<GetEventsQueryVariables>(() => {
     return {
       offset: 0,
       ref,
@@ -59,13 +54,10 @@ export const EventsList: FC<EventListProps> = ({
     };
   }, [ref, userId]);
 
-  const { data, loading, error, fetchMore } = useQuery<EventsQuery, EventsQueryVariables>(
-    EVENTS_QUERY,
-    {
-      variables,
-      fetchPolicy: "cache-and-network",
-    }
-  );
+  const { data, loading, error, fetchMore } = useQuery(GetEventsDocument, {
+    variables,
+    fetchPolicy: "cache-and-network",
+  });
 
   const isAbleToFetchMore = useMemo(() => {
     return data && data.events.total > 0 && data.events.results.length < data.events.total;
@@ -136,7 +128,9 @@ export const EventsList: FC<EventListProps> = ({
   );
 };
 
-export const EventItem: FC<{ event: Event; openUser: (userId: string) => void }> = (props) => {
+export const EventItem: FC<{ event: EventFragment; openUser: (userId: string) => void }> = (
+  props,
+) => {
   const { event } = props;
   const isToday = DateTime.isSame(event.time, new Date(), "day");
 
@@ -174,7 +168,7 @@ export const EventItem: FC<{ event: Event; openUser: (userId: string) => void }>
   );
 };
 
-function renderBullet(ev: Event) {
+function renderBullet(ev: EventFragment) {
   const color = useColor();
   const colorScheme = useColorScheme();
 
@@ -219,10 +213,9 @@ function renderBullet(ev: Event) {
   );
 }
 
-function EventItemTitle(props: { event: Event }) {
+function EventItemTitle(props: { event: EventFragment }) {
   const { t } = useLingui();
   const { event } = props;
-  const workspace = useWorkspace();
 
   const workspaceMembersIds = [
     ...new Set(
@@ -230,7 +223,7 @@ function EventItemTitle(props: { event: Event }) {
         event.userId,
         ...(event.data?.fromAssigneeUserIds || []),
         ...(event.data?.toAssigneeUserIds || []),
-      ].filter(Boolean) as string[]
+      ].filter(Boolean) as string[],
     ),
   ];
 
@@ -246,10 +239,10 @@ function EventItemTitle(props: { event: Event }) {
     const toAssigneeUserIds = event.data.toAssigneeUserIds;
 
     const newAssigneeUserIds = toAssigneeUserIds.filter(
-      (id: string) => !fromAssigneeUserIds.includes(id)
+      (id: string) => !fromAssigneeUserIds.includes(id),
     );
     const removedAssigneeUserIds = fromAssigneeUserIds.filter(
-      (id: string) => !toAssigneeUserIds.includes(id)
+      (id: string) => !toAssigneeUserIds.includes(id),
     );
 
     if (newAssigneeUserIds.length > 0) {

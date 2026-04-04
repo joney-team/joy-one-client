@@ -1,0 +1,7 @@
+#import "./fragmentMetaPage.graphql"
+
+mutation ConnectMetaPages($accessToken: String!) {
+  connectMetaPages(accessToken: $accessToken) {
+    ...MetaPage
+  }
+}

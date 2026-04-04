@@ -1,29 +1,38 @@
 "use client";
 
-import { EventType } from "@/graphql/enums.graphql";
+import {
+  ChannelWidgetWelcomeInputType,
+  EventType,
+  MessageHubWidgetPosition,
+} from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useEventsListener } from "@/modules/events/event-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onErrorLog } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { parseThemeColor, useMantineTheme } from "@mantine/core";
 import { type FC, type PropsWithChildren, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
-import { getPluginAiAssistants } from "./ai-assistants/plugin-ai-assistants-service";
-import { PluginAiAssistantEntity } from "./ai-assistants/plugin-ai-assistants-types";
-import { createPluginMessageHub, getPluginMessageHubs } from "./message-hubs/message-hubs-service";
-import { PluginMessageHubEntity } from "./message-hubs/message-hubs-types";
-import { getPluginMetaPages } from "./meta-pages/meta-pages-service";
-import { PluginMetaPageEntity } from "./meta-pages/meta-pages-types";
+import { PluginAiAssistantFragment } from "./ai-assistants/graphql/fragmentPluginAiAssistant.graphql";
+import GetPluginAiAssistantsDocument from "./ai-assistants/graphql/getPluginAiAssistants.graphql";
+import CreatePluginMessageHubDocument from "./message-hubs/graphql/createPluginMessageHub.graphql";
+import { PluginMessageHubFragment } from "./message-hubs/graphql/fragmentPluginMessageHub.graphql";
+import GetPluginMessageHubsDocument from "./message-hubs/graphql/getPluginMessageHubs.graphql";
+import { MetaPageFragment } from "./meta-pages/graphql/fragmentMetaPage.graphql";
+import GetMetaPagesDocument from "./meta-pages/graphql/getMetaPages.graphql";
 import { Context } from "./plugins-context";
 import { Plugin } from "./plugins-types";
-import { getPluginZaloOas, getZnsTemplateConfigs } from "./zalo-oas/zalo-oas-service";
-import { PluginZaloOaEntity, ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
+import { ZaloOaFragment } from "./zalo-oas/graphql/fragmentZaloOa.graphql";
+import GetZaloOasDocument from "./zalo-oas/graphql/getZaloOas.graphql";
+import GetZaloZnsTemplateConfigsDocument from "./zalo-oas/graphql/getZaloZnsTemplateConfigs.graphql";
+import { ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
 
 const PluginsProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
   const theme = useMantineTheme();
+  const client = useApolloClient();
   const router = useRouter();
   const parsedPrimaryColor = parseThemeColor({
     color: workspace.member?.workspace.appColor || "primary",
@@ -31,39 +40,58 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
   });
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [messageHubs, setMessageHubs] = useState<PluginMessageHubEntity[]>([]);
-  const [zaloOas, setZaloOas] = useState<PluginZaloOaEntity[]>([]);
-  const [metaPages, setMetaPages] = useState<PluginMetaPageEntity[]>([]);
+  const [messageHubs, setMessageHubs] = useState<PluginMessageHubFragment[]>([]);
+  const [zaloOas, setZaloOas] = useState<ZaloOaFragment[]>([]);
+  const [metaPages, setMetaPages] = useState<MetaPageFragment[]>([]);
   const [znsTemplateConfigs, setZnsTemplateConfigs] = useState<ZnsTemplateConfigs>(
-    {} as ZnsTemplateConfigs
+    {} as ZnsTemplateConfigs,
   );
-  const [aiAssistants, setAiAssistants] = useState<PluginAiAssistantEntity[]>([]);
+  const [aiAssistants, setAiAssistants] = useState<PluginAiAssistantFragment[]>([]);
 
   const fetchMessageHubs = async () => {
-    await getPluginMessageHubs()
-      .then((r) => setMessageHubs(r.data))
-      .catch(onErrorLog);
+    await client
+      .query({
+        query: GetPluginMessageHubsDocument,
+      })
+      .then((result) => setMessageHubs(result.data?.getPluginMessageHubs ?? []));
   };
 
   const fetchZaloOas = async () => {
-    await getPluginZaloOas()
-      .then((res) => setZaloOas(res.data))
+    return client
+      .query({
+        query: GetZaloOasDocument,
+      })
+      .then((result) => setZaloOas(result.data?.getZaloOas ?? []))
       .catch(onErrorLog);
   };
 
   const fetchMetaPages = async () => {
-    return getPluginMetaPages()
-      .then((res) => setMetaPages(res.data))
+    return client
+      .query({
+        query: GetMetaPagesDocument,
+      })
+      .then((res) => setMetaPages(res.data?.getMetaPages ?? []))
       .catch(onErrorLog);
   };
 
   const fetchZnsTemplateConfigs = async () => {
-    return getZnsTemplateConfigs().then(setZnsTemplateConfigs).catch(onErrorLog);
+    return client
+      .query({
+        query: GetZaloZnsTemplateConfigsDocument,
+      })
+      .then((result) => setZnsTemplateConfigs(result.data?.getZaloZnsTemplateConfigs ?? {}))
+      .catch(onErrorLog);
   };
 
   const fetchAiAssistants = async () => {
-    return getPluginAiAssistants({ getAll: true })
-      .then((res) => setAiAssistants(res.data))
+    return client
+      .query({
+        query: GetPluginAiAssistantsDocument,
+        variables: {
+          query: { getAll: true },
+        },
+      })
+      .then((result) => setAiAssistants(result.data?.getPluginAiAssistants.results ?? []))
       .catch(onErrorLog);
   };
 
@@ -81,25 +109,32 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
 
   const onCreateMessageHub = async (name: string) => {
     if (!name || name.length === 0) return;
-    await createPluginMessageHub({
-      name,
-      widgetSettings: {
-        color: parsedPrimaryColor.value,
-        brandName: workspace.member.workspace.name,
-        brandLogo: workspace.member.workspace.logo ?? "",
-        locale: getClientLocale(),
-        position: "right",
-        welcomMessage: t`Welcome to ${workspace.member.workspace.name}`,
-        welcomSubMessage: t`You need advice! Start chatting with us now.`,
-        welcomeInputs: [
-          {
-            id: uuid(),
-            type: "name",
-            label: t`Your name`,
-            description: `Let us call you by your most affectionate name!`,
-            isRequired: true,
+
+    await client.mutate({
+      mutation: CreatePluginMessageHubDocument,
+      variables: {
+        input: {
+          name,
+          widgetSettings: {
+            color: parsedPrimaryColor.value,
+            brandName: workspace.member?.workspace.name ?? "",
+            brandLogo: workspace.member?.workspace.logo ?? "",
+            locale: getClientLocale(),
+            position: MessageHubWidgetPosition.Right,
+            welcomMessage: t`Welcome to ${workspace.member?.workspace.name ?? ""}`,
+            welcomSubMessage: t`You need advice! Start chatting with us now.`,
+            welcomeInputs: [
+              {
+                id: uuid(),
+                type: ChannelWidgetWelcomeInputType.Name,
+                fieldName: "name",
+                label: t`Your name`,
+                description: `Let us call you by your most affectionate name!`,
+                isRequired: true,
+              },
+            ],
           },
-        ],
+        },
       },
     });
 
@@ -113,7 +148,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginMessageHubsRemoved,
     ],
     () => fetchMessageHubs(),
-    [workspace.member?.workspaceId]
+    [workspace.member?.workspaceId],
   );
 
   useEventsListener(
@@ -123,7 +158,7 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginAiAssistantsRemoved,
     ],
     () => fetchAiAssistants(),
-    [workspace.member?.workspaceId]
+    [workspace.member?.workspaceId],
   );
 
   useEventsListener(
@@ -135,13 +170,13 @@ const PluginsProvider: FC<PropsWithChildren> = (props) => {
       EventType.PluginZaloOaDisabled,
     ],
     () => fetchZaloOas(),
-    [workspace.member?.workspaceId]
+    [workspace.member?.workspaceId],
   );
 
   useEventsListener(
     [EventType.PluginMetaPagesUpdated, EventType.PluginMetaPagesDisconnected],
     () => fetchMetaPages(),
-    [workspace.member?.workspaceId]
+    [workspace.member?.workspaceId],
   );
 
   useEffect(() => {

@@ -1,62 +1,18 @@
-import type { AppLocale, WorkspaceType } from "@/graphql/types.graphql";
-import type { BaseMongoEntity } from "@/types";
+import type { CreateWorkspaceInput, WorkspaceType } from "@/graphql/types.graphql";
 import type { Icon } from "@tabler/icons-react";
 import type { Dispatch, SetStateAction } from "react";
-import type { LocationEntity } from "../locations/locations-types";
 import type { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import type { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import type { VerifyInvitaionTokenResponse } from "../workspace-members/workspace-members-types";
 import type { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-
-export interface PluginMailerAccount {
-  user: string;
-  pass: string;
-}
-
-export interface WorkspaceEntity extends BaseMongoEntity {
-  code: string;
-  name: string;
-  type: WorkspaceType;
-  logo?: string | null;
-  location?: LocationEntity | null;
-  hotline?: string | null;
-  phone?: string | null;
-  appIcon?: string | null;
-  appDomain?: string | null;
-  appName?: string | null;
-  appColor?: string | null;
-  appColorShape?: number;
-  locale?: AppLocale;
-  inviteCode: string;
-  cover?: string;
-  branches: number;
-}
-
-export interface WorkspaceDto {
-  name: string;
-  logo?: string;
-  location?: LocationEntity;
-  type?: WorkspaceType;
-  hotline?: string;
-  phone?: string;
-  appIcon?: string;
-  appDomain?: string;
-  appName?: string;
-  appColor?: string;
-  appColorShape?: number;
-  locale?: string;
-}
 
 export interface WorkspaceContext {
   isInitialized: boolean;
   isAvailable: boolean;
-  isHasAccessAllBranches: boolean;
   member: WorkspaceMemberFragment;
   userMembers: WorkspaceMemberFragment[];
   select: (workspaceId: string) => void;
-  create: (dto: WorkspaceDto) => Promise<void>;
+  create: (input: CreateWorkspaceInput) => Promise<void>;
   leave: () => void;
-  invitationState: WorkspaceMemberInvitationState | undefined;
   leaveInvitation: () => void;
   hasPermission: (permission: WorkspacePermission) => boolean;
   type: WorkspaceType;
@@ -84,11 +40,6 @@ export interface WorkspaceMemberInvitation {
     phone?: string;
   };
   expireAt: number;
-}
-
-export interface WorkspaceMemberInvitationState {
-  invitation?: VerifyInvitaionTokenResponse;
-  error?: string;
 }
 
 export interface CreateWorkspaceInviteMemberDto {

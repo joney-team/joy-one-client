@@ -5,6 +5,16 @@ export const ActivityType = {
 } as const;
 
 export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
+/** Available admin actions */
+export const AdminAction = {
+  PureReports: 'PURE_REPORTS',
+  ResetCache: 'RESET_CACHE',
+  SearchReindex: 'SEARCH_REINDEX',
+  SyncLoans: 'SYNC_LOANS',
+  SyncReceipts: 'SYNC_RECEIPTS'
+} as const;
+
+export type AdminAction = typeof AdminAction[keyof typeof AdminAction];
 /** Available locales */
 export const AppLocale = {
   En: 'en',
@@ -53,21 +63,16 @@ export const CategoryType = {
 } as const;
 
 export type CategoryType = typeof CategoryType[keyof typeof CategoryType];
-/** Available coupon rule benefit types */
-export const CouponRuleBenefitType = {
-  DiscountOnProduct: 'DISCOUNT_ON_PRODUCT',
-  DiscountOnTotal: 'DISCOUNT_ON_TOTAL',
-  FreeOnProduct: 'FREE_ON_PRODUCT'
+/** Type of welcome input in channel widget */
+export const ChannelWidgetWelcomeInputType = {
+  Email: 'EMAIL',
+  Name: 'NAME',
+  Number: 'NUMBER',
+  Phone: 'PHONE',
+  Text: 'TEXT'
 } as const;
 
-export type CouponRuleBenefitType = typeof CouponRuleBenefitType[keyof typeof CouponRuleBenefitType];
-/** Available coupon rule term types */
-export const CouponRuleTermType = {
-  LimitProducts: 'LIMIT_PRODUCTS',
-  MinimumTotal: 'MINIMUM_TOTAL'
-} as const;
-
-export type CouponRuleTermType = typeof CouponRuleTermType[keyof typeof CouponRuleTermType];
+export type ChannelWidgetWelcomeInputType = typeof ChannelWidgetWelcomeInputType[keyof typeof ChannelWidgetWelcomeInputType];
 /** Available custom field types */
 export const CustomFieldType = {
   Date: 'DATE',
@@ -97,6 +102,13 @@ export const CustomerKycStatus = {
 } as const;
 
 export type CustomerKycStatus = typeof CustomerKycStatus[keyof typeof CustomerKycStatus];
+/** DynamicSelectionOperator */
+export const DynamicSelectionOperator = {
+  Excludes: 'EXCLUDES',
+  Includes: 'INCLUDES'
+} as const;
+
+export type DynamicSelectionOperator = typeof DynamicSelectionOperator[keyof typeof DynamicSelectionOperator];
 /** Available entity sources */
 export const EntitySource = {
   Import: 'IMPORT',
@@ -149,11 +161,6 @@ export const EventType = {
   CommentRemoved: 'COMMENT_REMOVED',
   CommentUnpinned: 'COMMENT_UNPINNED',
   CommentUpdated: 'COMMENT_UPDATED',
-  CouponsCreated: 'COUPONS_CREATED',
-  CouponsUsed: 'COUPONS_USED',
-  CouponRulesArchived: 'COUPON_RULES_ARCHIVED',
-  CouponRulesCreated: 'COUPON_RULES_CREATED',
-  CouponRulesUpdated: 'COUPON_RULES_UPDATED',
   CustomerArchived: 'CUSTOMER_ARCHIVED',
   CustomerAssignToUser: 'CUSTOMER_ASSIGN_TO_USER',
   CustomerBulkUpdateWorkspaceBranch: 'CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH',
@@ -254,8 +261,8 @@ export const EventType = {
   ReceiptSynced: 'RECEIPT_SYNCED',
   ReceiptUnarchived: 'RECEIPT_UNARCHIVED',
   ReceiptUpdated: 'RECEIPT_UPDATED',
-  ReportRangeSynced: 'REPORT_RANGE_SYNCED',
-  ReportRealtimeSynced: 'REPORT_REALTIME_SYNCED',
+  ReportMetricsSynced: 'REPORT_METRICS_SYNCED',
+  ReportTimeSeriesSynced: 'REPORT_TIME_SERIES_SYNCED',
   TableSlotArchived: 'TABLE_SLOT_ARCHIVED',
   TableSlotNew: 'TABLE_SLOT_NEW',
   TableSlotUpdated: 'TABLE_SLOT_UPDATED',
@@ -373,6 +380,88 @@ export const LoanStatus = {
 } as const;
 
 export type LoanStatus = typeof LoanStatus[keyof typeof LoanStatus];
+/** The type of location (province, district, ward) */
+export const LocationType = {
+  District: 'district',
+  Province: 'province',
+  Ward: 'ward'
+} as const;
+
+export type LocationType = typeof LocationType[keyof typeof LocationType];
+/** Type of the message attachment */
+export const MessageAttachmentType = {
+  Audio: 'AUDIO',
+  File: 'FILE',
+  Image: 'IMAGE',
+  Sticker: 'STICKER',
+  Unknown: 'UNKNOWN',
+  Video: 'VIDEO'
+} as const;
+
+export type MessageAttachmentType = typeof MessageAttachmentType[keyof typeof MessageAttachmentType];
+/** Platform type of the message box */
+export const MessageBoxPlatformType = {
+  MessageHub: 'MESSAGE_HUB',
+  MetaPage: 'META_PAGE',
+  Zalo: 'ZALO'
+} as const;
+
+export type MessageBoxPlatformType = typeof MessageBoxPlatformType[keyof typeof MessageBoxPlatformType];
+/** Status of the message box */
+export const MessageBoxStatus = {
+  Closed: 'CLOSED',
+  Expired: 'EXPIRED',
+  InProgress: 'IN_PROGRESS',
+  Waiting: 'WAITING'
+} as const;
+
+export type MessageBoxStatus = typeof MessageBoxStatus[keyof typeof MessageBoxStatus];
+/** Position of the widget on the client screen */
+export const MessageHubWidgetPosition = {
+  Left: 'LEFT',
+  Right: 'RIGHT'
+} as const;
+
+export type MessageHubWidgetPosition = typeof MessageHubWidgetPosition[keyof typeof MessageHubWidgetPosition];
+/** The resource from which the message is sent */
+export const MessageResource = {
+  AiAssistant: 'AI_ASSISTANT',
+  Internal: 'INTERNAL',
+  Webhook: 'WEBHOOK'
+} as const;
+
+export type MessageResource = typeof MessageResource[keyof typeof MessageResource];
+/** Status of the message */
+export const MessageStatus = {
+  Pending: 'PENDING',
+  Readed: 'READED',
+  Sent: 'SENT',
+  SentFailed: 'SENT_FAILED'
+} as const;
+
+export type MessageStatus = typeof MessageStatus[keyof typeof MessageStatus];
+/** Type of the message */
+export const MessageType = {
+  Receive: 'RECEIVE',
+  Send: 'SEND'
+} as const;
+
+export type MessageType = typeof MessageType[keyof typeof MessageType];
+/** Connection status of the Meta Page */
+export const MetaPageInfoStatus = {
+  Connected: 'CONNECTED',
+  ConnectedWithOtherWorkspace: 'CONNECTED_WITH_OTHER_WORKSPACE',
+  NotConnected: 'NOT_CONNECTED'
+} as const;
+
+export type MetaPageInfoStatus = typeof MetaPageInfoStatus[keyof typeof MetaPageInfoStatus];
+/** Status of the Meta Page connection */
+export const MetaPageStatus = {
+  Active: 'ACTIVE',
+  Inactive: 'INACTIVE'
+} as const;
+
+export type MetaPageStatus = typeof MetaPageStatus[keyof typeof MetaPageStatus];
 /** Icon of the notification */
 export const NotificationIcon = {
   Message: 'MESSAGE'
@@ -399,10 +488,8 @@ export type NotificationType = typeof NotificationType[keyof typeof Notification
 /** Order discount type */
 export const OrderDiscountType = {
   Combo: 'COMBO',
-  Coupon: 'COUPON',
   Direct: 'DIRECT',
-  Promotion: 'PROMOTION',
-  Voucher: 'VOUCHER'
+  Promotion: 'PROMOTION'
 } as const;
 
 export type OrderDiscountType = typeof OrderDiscountType[keyof typeof OrderDiscountType];
@@ -419,6 +506,37 @@ export const OrderType = {
 } as const;
 
 export type OrderType = typeof OrderType[keyof typeof OrderType];
+/** Available periods for reports */
+export const Period = {
+  Date: 'DATE',
+  Month: 'MONTH',
+  Week: 'WEEK',
+  Year: 'YEAR'
+} as const;
+
+export type Period = typeof Period[keyof typeof Period];
+/** Provider of the AI assistant plugin */
+export const PluginAiAssistantProvider = {
+  Dify: 'DIFY',
+  VonicDify: 'VONIC_DIFY'
+} as const;
+
+export type PluginAiAssistantProvider = typeof PluginAiAssistantProvider[keyof typeof PluginAiAssistantProvider];
+/** Status of the AI assistant plugin */
+export const PluginAiAssistantStatus = {
+  Active: 'ACTIVE',
+  Inactive: 'INACTIVE'
+} as const;
+
+export type PluginAiAssistantStatus = typeof PluginAiAssistantStatus[keyof typeof PluginAiAssistantStatus];
+/** Status of the plugin e-invoices provider */
+export const PluginEInvoicesProviderStatus = {
+  Active: 'ACTIVE',
+  AuthFailed: 'AUTH_FAILED',
+  Inactive: 'INACTIVE'
+} as const;
+
+export type PluginEInvoicesProviderStatus = typeof PluginEInvoicesProviderStatus[keyof typeof PluginEInvoicesProviderStatus];
 /** Available plugin e-invoices provider types */
 export const PluginEInvoicesProviderType = {
   Matbao: 'MATBAO',
@@ -432,6 +550,32 @@ export const PluginExternalStorageProvider = {
 } as const;
 
 export type PluginExternalStorageProvider = typeof PluginExternalStorageProvider[keyof typeof PluginExternalStorageProvider];
+/** Status of Zalo OA connection */
+export const PluginZaloOaStatus = {
+  Active: 'ACTIVE',
+  Inactive: 'INACTIVE'
+} as const;
+
+export type PluginZaloOaStatus = typeof PluginZaloOaStatus[keyof typeof PluginZaloOaStatus];
+/** Template IDs for Zalo OA ZNS messages */
+export const PluginZaloOaZnsTemplateId = {
+  Booking: 'BOOKING',
+  CustomerBirthday: 'CUSTOMER_BIRTHDAY',
+  LoanFulfilled: 'LOAN_FULFILLED',
+  LoanReceiptPaid: 'LOAN_RECEIPT_PAID',
+  LoanReceiptPartialPay: 'LOAN_RECEIPT_PARTIAL_PAY',
+  LoanReceiptRemind: 'LOAN_RECEIPT_REMIND',
+  Otp: 'OTP'
+} as const;
+
+export type PluginZaloOaZnsTemplateId = typeof PluginZaloOaZnsTemplateId[keyof typeof PluginZaloOaZnsTemplateId];
+/** Product combo source type */
+export const ProductComboSourceType = {
+  Manual: 'MANUAL',
+  Order: 'ORDER'
+} as const;
+
+export type ProductComboSourceType = typeof ProductComboSourceType[keyof typeof ProductComboSourceType];
 /** Product combo status */
 export const ProductComboStatus = {
   Active: 'ACTIVE',
@@ -458,15 +602,6 @@ export const ProductType = {
 } as const;
 
 export type ProductType = typeof ProductType[keyof typeof ProductType];
-/** Product voucher status */
-export const ProductVoucherStatus = {
-  Active: 'ACTIVE',
-  Expired: 'EXPIRED',
-  Inactive: 'INACTIVE',
-  OutOfAmount: 'OUT_OF_AMOUNT'
-} as const;
-
-export type ProductVoucherStatus = typeof ProductVoucherStatus[keyof typeof ProductVoucherStatus];
 /** Promotion status */
 export const PromotionStatus = {
   Active: 'ACTIVE',
@@ -517,6 +652,21 @@ export const ReceiptType = {
 } as const;
 
 export type ReceiptType = typeof ReceiptType[keyof typeof ReceiptType];
+/** Report status values */
+export const ReportStatus = {
+  JustCreated: 'JUST_CREATED',
+  Synced: 'SYNCED',
+  Syncing: 'SYNCING'
+} as const;
+
+export type ReportStatus = typeof ReportStatus[keyof typeof ReportStatus];
+/** Report types */
+export const ReportType = {
+  Metrics: 'METRICS',
+  TimeSeries: 'TIME_SERIES'
+} as const;
+
+export type ReportType = typeof ReportType[keyof typeof ReportType];
 /** Available tag types */
 export const TagType = {
   Customer: 'CUSTOMER',
@@ -571,3 +721,10 @@ export const WorkspaceType = {
 } as const;
 
 export type WorkspaceType = typeof WorkspaceType[keyof typeof WorkspaceType];
+/** Status of Zalo OA GMF Group */
+export const ZaloOaGmfGroupStatus = {
+  Disabled: 'disabled',
+  Enabled: 'enabled'
+} as const;
+
+export type ZaloOaGmfGroupStatus = typeof ZaloOaGmfGroupStatus[keyof typeof ZaloOaGmfGroupStatus];

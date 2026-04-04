@@ -6,17 +6,17 @@ import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { FileType } from "@/graphql/enums.graphql";
 import { formatBytes } from "@joy-one-client/utils/files";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 import { useRef, type FC } from "react";
-import { FileEntity } from "./file-types";
 import { fileTypes } from "./files-constants";
 import { type ModalFileGalleryRef } from "./modals/modal-file-gallery";
 
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
-import QUERY_FILES from "./graphql/queryFiles.graphql";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
+import GetFilesDocument from "./graphql/getFiles.graphql";
 
 const ModalFileGallery = dynamic(
   () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
@@ -28,10 +28,11 @@ const ModalFileGallery = dynamic(
 
 export const FilesManager: FC = () => {
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const { t } = useLingui();
 
   return (
-    <Stack p={16}>
-      <List<FileEntity>
+    <Stack p="md">
+      <List<FileFragment>
         columns={{
           url: {
             name: <Trans>Preview</Trans>,
@@ -87,7 +88,7 @@ export const FilesManager: FC = () => {
             defaultWidth: 160,
             options: Object.values(FileType).map((type) => ({
               icon: fileTypes[type].icon,
-              label: fileTypes[type].label(),
+              label: t(fileTypes[type].label),
               value: type,
             })),
           }),
@@ -100,7 +101,7 @@ export const FilesManager: FC = () => {
           },
         }}
         id="fs"
-        query={QUERY_FILES}
+        query={GetFilesDocument}
       />
 
       <ModalFileGallery ref={modalFileGalleryRef} />

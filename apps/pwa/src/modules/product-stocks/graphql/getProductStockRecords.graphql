@@ -1,0 +1,14 @@
+#import "./fragmentProductStockRecord.graphql"
+
+query GetProductStockRecords(
+  $query: JSONObject
+  $offset: Float
+  $limit: Float
+) {
+  list: getProductStockRecords(query: $query, offset: $offset, limit: $limit) {
+    total
+    results {
+      ...ProductStockRecord
+    }
+  }
+}

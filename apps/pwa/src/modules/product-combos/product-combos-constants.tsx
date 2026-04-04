@@ -1,14 +1,17 @@
-import { t } from "@lingui/core/macro";
-import { ProductComboStatus } from "./product-combos-types";
+import { ProductComboStatus } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 
 export const productComboStatuses: Record<
   ProductComboStatus,
-  { label: () => string; color: MantineColor }
+  { label: MacroMessageDescriptor; color: MantineColor }
 > = {
-  [ProductComboStatus.ACTIVE]: { label: () => t`Active`, color: "green" },
-  [ProductComboStatus.INACTIVE]: { label: () => t`Inactive`, color: "gray" },
-  [ProductComboStatus.EXPIRED]: { label: () => t`Expired`, color: "red" },
-  [ProductComboStatus.OUT_OF_STOCK]: { label: () => t`Out of stock`, color: "gray" },
-  [ProductComboStatus.SOURCE_UNAVAILABLE]: { label: () => t`Source unavailable`, color: "red" },
+  [ProductComboStatus.Active]: { label: defineMessage`Active`, color: "green" },
+  [ProductComboStatus.Inactive]: { label: defineMessage`Inactive`, color: "gray" },
+  [ProductComboStatus.Expired]: { label: defineMessage`Expired`, color: "red" },
+  [ProductComboStatus.OutOfStock]: { label: defineMessage`Out of stock`, color: "gray" },
+  [ProductComboStatus.SourceUnavailable]: {
+    label: defineMessage`Source unavailable`,
+    color: "red",
+  },
 };

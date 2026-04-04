@@ -7,9 +7,9 @@ import {
   detectFileType,
   getFileSizeFromUrl,
 } from "@/modules/files/file-service";
-import { FileEntity } from "@/modules/files/file-types";
 import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { formatBytes, getFileName } from "@/utils/file.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import {
   ActionIcon,
@@ -35,8 +35,9 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
-import { restClient } from "../apis/rest-client";
 import { renderFileUrl } from "./files-utils";
+import { FileFragment } from "./graphql/fragmentFile.graphql";
+import GetFileByIdDocument from "./graphql/getFileById.graphql";
 
 interface FileCardProps extends CardProps {
   src: File | string;
@@ -61,8 +62,9 @@ export const FileCard: FC<FileCardProps> = ({
         ? URL.createObjectURL(src)
         : "";
 
+  const client = useApolloClient();
   const [calculatedFileSize, setCalculatedFileSize] = useState<number | null>(null);
-  const [file, setFile] = useState<FileEntity | null>();
+  const [file, setFile] = useState<FileFragment | null>();
 
   const fileSize = file?.size ?? calculatedFileSize;
   const filename = file?.fileName ?? getFileName(fileUri);
@@ -72,7 +74,9 @@ export const FileCard: FC<FileCardProps> = ({
       if (typeof src === "string") {
         const fileId = detectFileIdFromUrl(src);
         if (fileId) {
-          const _file = await restClient.get(`/files/${fileId}/info`);
+          const _file = await client
+            .query({ query: GetFileByIdDocument, variables: { fileId } })
+            .then((result) => result.data!.file);
           setFile(_file);
         } else {
           const size = await getFileSizeFromUrl(fileUri);

@@ -49,7 +49,7 @@ const OverlayLoading: FC<OverlayLoadingProps> = (props) => {
             }}
           >
             <img
-              src={app.metadata.appIcon}
+              src={app.metadata.appIcon ?? ""}
               style={{
                 width: 100,
                 height: 100,

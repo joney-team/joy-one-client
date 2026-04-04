@@ -1,16 +1,13 @@
 "use client";
 
 import { TagType } from "@/graphql/enums.graphql";
-import QUERY_TAGS, {
-  type TagsQuery,
-  type TagsQueryVariables,
-} from "@/modules/tags/graphql/queryTags.graphql";
 import { useLazyQuery } from "@apollo/client/react";
 import { alpha, FocusTrap, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
 
 import { WayPoint } from "@/components/way-point";
 import { searchEntity } from "@/modules/search/search-service";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -30,12 +27,9 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
-  const [getFolders, { data, fetchMore, loading }] = useLazyQuery<TagsQuery, TagsQueryVariables>(
-    QUERY_TAGS,
-    {
-      fetchPolicy: "cache-and-network",
-    },
-  );
+  const [getFolders, { data, fetchMore, loading }] = useLazyQuery(GetTagsDocument, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const onGetFolders = useCallback(
     async (q: string) => {
@@ -60,14 +54,14 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
     if (!data || isFetchingMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { type: TagType.TaskFolder, offset: data.tags.results.length },
+      variables: { type: TagType.TaskFolder, offset: data.list.results.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          tags: {
-            ...prev.tags,
-            data: [...prev.tags.results, ...fetchMoreResult.tags.results],
+          list: {
+            ...prev.list,
+            data: [...prev.list.results, ...fetchMoreResult.list.results],
           },
         };
       },
@@ -79,7 +73,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
     !isFetchingMore &&
     !loading &&
     data &&
-    data.tags.results.length < data.tags.total &&
+    data.list.results.length < data.list.total &&
     textSearch.length === 0;
 
   useEffect(() => {
@@ -112,7 +106,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
 
       <Stack p={4} gap={0} mah={220} style={{ overflow: "auto" }} ref={scrollRef}>
         {!isSearchEmpty &&
-          data?.tags.results.map((folder) => {
+          data?.list.results.map((folder) => {
             const isSelected = selected?._id === folder._id;
 
             return (

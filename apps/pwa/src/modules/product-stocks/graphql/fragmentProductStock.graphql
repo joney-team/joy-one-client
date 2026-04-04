@@ -1,0 +1,27 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment ProductStock on ProductStock {
+  id
+  code
+  productId
+  product {
+    _id
+    name
+    image
+    type
+    price
+    minPrice
+    maxPrice
+  }
+  quantity
+  remainQuantity
+  expireAt
+  costPrice
+  note
+  records
+  createdByUser {
+    ...WorkspaceMember
+  }
+  createdAt
+  updatedAt
+}

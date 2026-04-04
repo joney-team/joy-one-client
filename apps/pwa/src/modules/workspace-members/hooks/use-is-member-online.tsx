@@ -3,49 +3,45 @@
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { useApolloClient, useQuery } from "@apollo/client/react";
-import QUERY_WORKSPACE_MEMBERS_ONLINE_STATUS, {
-  type WorkspaceMembersOnlineStatusQuery,
-  type WorkspaceMembersOnlineStatusQueryVariables,
-} from "./queryWorkspaceMembersOnlineStatus.graphql";
+import GetWorkspaceMembersOnlineStatusDocument, {
+  GetWorkspaceMembersOnlineStatusQuery,
+} from "./getWorkspaceMembersOnlineStatus.graphql";
 
 export const useMemberOnlineEventHandler = () => {
   const client = useApolloClient();
 
   useEventsListener(EventType.WorkspaceMemberOnline, (event) => {
     if (!event.userId) return;
-    client.cache.updateQuery<
-      WorkspaceMembersOnlineStatusQuery,
-      WorkspaceMembersOnlineStatusQueryVariables
-    >(
+    client.cache.updateQuery(
       {
-        query: QUERY_WORKSPACE_MEMBERS_ONLINE_STATUS,
+        query: GetWorkspaceMembersOnlineStatusDocument,
       },
       (prev) => {
         if (!prev) return prev;
+
+        const memberOnlineStatus: GetWorkspaceMembersOnlineStatusQuery["workspaceMembersOnlineStatus"][number] =
+          {
+            __typename: "WorkspaceMemberOnlineStatus",
+            userId: event.userId!,
+            isOnline: true,
+          };
 
         return {
           ...prev,
           workspaceMembersOnlineStatus: [
             ...prev.workspaceMembersOnlineStatus.filter((v) => v.userId !== event.userId),
-            {
-              __typename: "WorkspaceMemberOnlineStatus",
-              userId: event.userId!,
-              isOnline: true,
-            },
+            memberOnlineStatus,
           ],
         };
-      }
+      },
     );
   });
 
   useEventsListener(EventType.WorkspaceMemberOffline, (event) => {
     if (!event.userId) return;
-    client.cache.updateQuery<
-      WorkspaceMembersOnlineStatusQuery,
-      WorkspaceMembersOnlineStatusQueryVariables
-    >(
+    client.cache.updateQuery(
       {
-        query: QUERY_WORKSPACE_MEMBERS_ONLINE_STATUS,
+        query: GetWorkspaceMembersOnlineStatusDocument,
       },
       (prev) => {
         if (!prev) return prev;
@@ -53,19 +49,16 @@ export const useMemberOnlineEventHandler = () => {
         return {
           ...prev,
           workspaceMembersOnlineStatus: prev.workspaceMembersOnlineStatus.filter(
-            (v) => v.userId !== event.userId
+            (v) => v.userId !== event.userId,
           ),
         };
-      }
+      },
     );
   });
 };
 
 export const useIsOnline = (userId: string): boolean => {
-  const { data } = useQuery<
-    WorkspaceMembersOnlineStatusQuery,
-    WorkspaceMembersOnlineStatusQueryVariables
-  >(QUERY_WORKSPACE_MEMBERS_ONLINE_STATUS, {
+  const { data } = useQuery(GetWorkspaceMembersOnlineStatusDocument, {
     skip: !userId || userId.length === 0,
   });
 

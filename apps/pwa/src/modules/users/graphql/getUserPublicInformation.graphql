@@ -1,0 +1,7 @@
+#import "./fragmentUserPublicINformation.graphql"
+
+query GetUserPublicInformation($userId: String!) {
+  user: getUserPublicInformation(userId: $userId) {
+    ...UserPublicInformation
+  }
+}

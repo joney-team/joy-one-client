@@ -1,0 +1,3 @@
+mutation RemoveZaloOa($zaloOaId: String!) {
+  removeZaloOa(id: $zaloOaId)
+}

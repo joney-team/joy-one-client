@@ -6,26 +6,20 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { wait } from "@/utils/common.utils";
 import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import QUERY_TASKS, { TasksQueryVariables } from "../graphql/queryTasks.graphql";
-import QUERY_TASKS_COUNT, {
-  type TasksCountQuery,
-  type TasksCountQueryVariables,
-} from "../graphql/queryTasksCount.graphql";
+import GetTasksDocument, { GetTasksQueryVariables } from "../graphql/getTasks.graphql";
+import GetTasksCountDocument from "../graphql/getTasksCount.graphql";
 
 export const useTasksQuery = ({
   variables,
   isSkipLoadCount = false,
 }: {
-  variables: TasksQueryVariables;
+  variables: GetTasksQueryVariables;
   isSkipLoadCount?: boolean;
 }) => {
   const client = useApolloClient();
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  const [fetchTasksCount, { data: dataCount }] = useLazyQuery<
-    TasksCountQuery,
-    TasksCountQueryVariables
-  >(QUERY_TASKS_COUNT, {
+  const [fetchTasksCount, { data: dataCount }] = useLazyQuery(GetTasksCountDocument, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -34,28 +28,28 @@ export const useTasksQuery = ({
     fetchTasksCount({ variables });
   }, [variables, isSkipLoadCount]);
 
-  const [fetchTasks, { data, loading, fetchMore, error }] = useLazyQuery(QUERY_TASKS, {
+  const [fetchTasks, { data, loading, fetchMore, error }] = useLazyQuery(GetTasksDocument, {
     fetchPolicy: "cache-and-network",
   });
 
   const tasks = useMemo(() => {
-    return Array.from(data?.tasks.results ?? []).sort((a, b) => a.order - b.order);
+    return Array.from(data?.list.results ?? []).sort((a, b) => a.order - b.order);
   }, [data]);
 
   const getTasks = useCallback(async () => {
     try {
       const result = await fetchTasks({ variables });
-      if (result.data?.tasks.total !== dataCount?.tasksCount) {
+      if (result.data?.list.total !== dataCount?.tasksCount) {
         client.cache.updateQuery(
           {
-            query: QUERY_TASKS_COUNT,
+            query: GetTasksCountDocument,
             variables,
           },
           (prev) => {
             if (!prev) return prev;
             return {
               ...prev,
-              tasksCount: result.data?.tasks.total ?? 0,
+              tasksCount: result.data?.list.total ?? 0,
             };
           },
         );
@@ -70,23 +64,23 @@ export const useTasksQuery = ({
     await fetchMore({
       variables: {
         ...variables,
-        offset: data.tasks.results.length,
+        offset: data.list.results.length,
       },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult || !prev) return prev;
 
         // Sync tasks count
-        if (dataCount && fetchMoreResult.tasks.total !== dataCount.tasksCount) {
+        if (dataCount && fetchMoreResult.list.total !== dataCount.tasksCount) {
           client.cache.updateQuery(
             {
-              query: QUERY_TASKS_COUNT,
+              query: GetTasksCountDocument,
               variables,
             },
             (dataCountPrev) => {
               if (!dataCountPrev) return dataCountPrev;
               return {
                 ...dataCountPrev,
-                tasksCount: fetchMoreResult.tasks.total,
+                tasksCount: fetchMoreResult.list.total,
               };
             },
           );
@@ -94,12 +88,12 @@ export const useTasksQuery = ({
 
         return {
           ...fetchMoreResult,
-          tasks: {
-            ...fetchMoreResult.tasks,
+          list: {
+            ...fetchMoreResult.list,
             results: [
-              ...(prev.tasks.results ?? []),
-              ...(fetchMoreResult.tasks.results ?? []).filter(
-                (task) => !(prev.tasks.results ?? []).some((t) => t._id === task._id),
+              ...(prev.list.results ?? []),
+              ...(fetchMoreResult.list.results ?? []).filter(
+                (task) => !(prev.list.results ?? []).some((t) => t._id === task._id),
               ),
             ],
           },
@@ -114,7 +108,7 @@ export const useTasksQuery = ({
   }, [variables, data, fetchMore, dataCount, client]);
 
   const isCanLoadMore = useMemo(() => {
-    return !!data && data.tasks.results.length < data.tasks.total && !loading;
+    return !!data && data.list.results.length < data.list.total && !loading;
   }, [data, loading]);
 
   useEffect(() => {
@@ -125,7 +119,7 @@ export const useTasksQuery = ({
         variables: {
           ...variables,
           offset: 0,
-          limit: variables.all ? undefined : data.tasks.results.length + 5,
+          limit: variables.all ? undefined : data.list.results.length + 5,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;
@@ -140,30 +134,30 @@ export const useTasksQuery = ({
   useEventsListener(
     [EventType.TaskArchived],
     (e) => {
-      const task = data?.tasks.results.find((t) => t._id === e.ref);
+      const task = data?.list.results.find((t) => t._id === e.ref);
       if (!task) return;
 
       client.cache.updateQuery(
         {
-          query: QUERY_TASKS,
+          query: GetTasksDocument,
           variables,
         },
         (prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            tasks: {
-              ...prev.tasks,
-              total: prev.tasks.total - 1,
-              results: [...prev.tasks.results.filter((t) => t._id !== task._id)],
+            list: {
+              ...prev.list,
+              total: prev.list.total - 1,
+              results: [...prev.list.results.filter((t) => t._id !== task._id)],
             },
           };
         },
       );
 
-      client.cache.updateQuery<TasksCountQuery, TasksCountQueryVariables>(
+      client.cache.updateQuery(
         {
-          query: QUERY_TASKS_COUNT,
+          query: GetTasksCountDocument,
           variables,
         },
         (prev) => {
@@ -179,7 +173,7 @@ export const useTasksQuery = ({
     variables,
     getTasks,
     tasks,
-    count: data?.tasks?.total ?? dataCount?.tasksCount,
+    count: data?.list?.total ?? dataCount?.tasksCount,
     loading: loading && !data,
     loadMore: handleLoadMore,
     isCanLoadMore,

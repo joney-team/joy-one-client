@@ -1,0 +1,3 @@
+mutation DeletePluginAiAssistant($deletePluginAiAssistantId: String!) {
+  deletePluginAiAssistant(id: $deletePluginAiAssistantId)
+}

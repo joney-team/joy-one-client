@@ -44,7 +44,7 @@ import { useUploadFile } from "../../files/hooks/use-upload-file";
 import { useLang } from "../../lang/lang-context";
 import { useLocations } from "../../locations/locations-context";
 import { decodeCid } from "../customer-kycs-service";
-import MUTATION_REGISTER_CUSTOMER_KYC from "../graphql/mutationRegisterCustomerKyc.graphql";
+import RegisterCustomerKycDocument from "../graphql/registerCustomerKyc.graphql";
 
 interface ModalRegisterCustomerKycArgs {
   customer: CustomerFragment;
@@ -80,7 +80,7 @@ export const WithModalRegisterCustomerKyc: FC<{
   const [opened, { open, close }] = useDisclosure(false);
   const [props, setProps] = useState<ModalRegisterCustomerKycArgs>();
 
-  const [registerCustomerKyc] = useMutation(MUTATION_REGISTER_CUSTOMER_KYC);
+  const [registerCustomerKyc] = useMutation(RegisterCustomerKycDocument);
 
   const onClose = async () => close();
 
@@ -179,7 +179,7 @@ export const WithModalRegisterCustomerKyc: FC<{
               yOffset={20}
               size="xl"
             >
-              <Stack gap={16}>
+              <Stack gap="md">
                 <Session name={<Trans>ID images</Trans>} icon={IconCards}>
                   <Stack gap={10}>
                     <SimpleGrid cols={{ md: 2 }}>

@@ -1,0 +1,24 @@
+#import "./fragmentWorkspaceMember.graphql"
+
+query GetWorkspaceMembers(
+  $ignoreSelf: Boolean
+  $ids: [String!]
+  $userId: [String!]
+  $limit: Float
+  $offset: Float
+  $query: JSONObject
+) {
+  list: getWorkspaceMembers(
+    ignoreSelf: $ignoreSelf
+    ids: $ids
+    userId: $userId
+    limit: $limit
+    offset: $offset
+    query: $query
+  ) {
+    results {
+      ...WorkspaceMember
+    }
+    total
+  }
+}

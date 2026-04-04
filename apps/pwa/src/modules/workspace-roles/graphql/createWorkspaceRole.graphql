@@ -1,0 +1,7 @@
+#import "./fragmentWorkspaceRole.graphql"
+
+mutation CreateWorkspaceRole($name: String!, $permissions: [String!]!, $description: String, $color: String) {
+  workspaceRole: createWorkspaceRole(name: $name, permissions: $permissions, description: $description, color: $color) {
+    ...WorkspaceRole
+  }
+}

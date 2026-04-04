@@ -7,6 +7,7 @@ import { Anchor, Button, Stack, Text, Title, em } from "@mantine/core";
 import { IconArrowRight } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { PluginMailerForm } from "./plugin-mailer-form";
+import { Trans } from "@lingui/react/macro";
 
 export const PluginMailer: FC = () => {
   const { workspaceSetting } = useWorkspaceSetting();
@@ -23,17 +24,18 @@ export const PluginMailer: FC = () => {
 
         <Stack gap={8}>
           <Title ta="center" order={2} fw={300} c={color("primary")}>
-            Đã đăng ký tài khoản Email
+            <Trans>Email Account Registered</Trans>
           </Title>
-
           <Text ta="center">
-            Hệ thống đang dùng email <strong>{workspaceSetting.mailer.user}</strong> để gửi Mail cho
-            khách hàng hoặc các thông báo hệ thống cho thành viên.
+            <Trans>
+              The system is using email <strong>{workspaceSetting.mailer.user}</strong> to send mail
+              to customers or system notifications to members.
+            </Trans>
           </Text>
         </Stack>
 
         <Anchor c="gray" mt={10} fw={300} fz={em(14)} onClick={() => setIsShowForm(true)}>
-          Dùng tài khoản khác
+          <Trans>Use another account</Trans>
         </Anchor>
       </Stack>
     );
@@ -44,12 +46,11 @@ export const PluginMailer: FC = () => {
 
       <Stack gap={8}>
         <Title ta="center" order={2} fw={300} c={color("primary")}>
-          Tuỳ biến tài khoản gửi Mail
+          <Trans>Customize Mail Account</Trans>
         </Title>
 
         <Text ta="center">
-          Thiết lập tài khoản gửi Mail riêng nhằm giúp khách hàng dễ dàng nhận diện thương hiệu của
-          bạn.
+          <Trans>Set up a custom mail account to help customers easily recognize your brand.</Trans>
         </Text>
       </Stack>
 
@@ -59,7 +60,7 @@ export const PluginMailer: FC = () => {
         onClick={() => setIsShowForm(true)}
         rightSection={<IconArrowRight strokeWidth={1.5} />}
       >
-        Bắt đầu ngay
+        <Trans>Get Started</Trans>
       </Button>
     </Stack>
   );

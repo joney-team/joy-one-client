@@ -18,14 +18,11 @@ import {
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, useMemo } from "react";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
-import QUERY_SIBLING_TASKS, {
-  type SiblingTasksQuery,
-  type SiblingTasksQueryVariables,
-} from "../../graphql/querySiblingTasks.graphql";
 import { updateTaskPath } from "../../tasks-route-helpers";
 
 import { useColor } from "@/modules/theme/use-color";
 import { useClipboard, useHover } from "@mantine/hooks";
+import GetSiblingTasksDocument from "../../graphql/getSiblingTasks.graphql";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskMenuAction } from "../task-menu/task-menu-types";
 import styles from "./task-detail.module.css";
@@ -85,14 +82,11 @@ export const TaskDetailHead: FC<TaskDetailHeadProps> = ({ task, close }) => {
   const pathname = usePathname();
   const taskMenu = useTaskMenu({ task, groupVariables: null });
 
-  const siblingTasks = useQuery<SiblingTasksQuery, SiblingTasksQueryVariables>(
-    QUERY_SIBLING_TASKS,
-    {
-      variables: {
-        id: task._id,
-      },
+  const siblingTasks = useQuery(GetSiblingTasksDocument, {
+    variables: {
+      id: task._id,
     },
-  );
+  });
 
   const isCanNext = siblingTasks.data?.siblingTasks.next !== null;
   const isCanPrev = siblingTasks.data?.siblingTasks.previous !== null;

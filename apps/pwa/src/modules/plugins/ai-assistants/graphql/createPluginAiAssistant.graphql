@@ -1,0 +1,7 @@
+#import "./fragmentPluginAiAssistant.graphql"
+
+mutation CreatePluginAiAssistant($input: CreatePluginAiAssistantInput!) {
+  createPluginAiAssistant(input: $input) {
+    ...PluginAiAssistant
+  }
+}

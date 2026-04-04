@@ -1,18 +1,14 @@
 "use client";
 
 import { Container } from "@/components/container";
+import { PluginZaloOaStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { usePlugins } from "@/modules/plugins/plugins-context";
-import {
-  disconnectPluginZalo,
-  reconnectPluginZalo,
-  setDefaultPluginZalo,
-} from "@/modules/plugins/zalo-oas/zalo-oas-service";
-import { PluginZaloOaStatus, ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
+import { ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import {
@@ -29,17 +25,21 @@ import { SectionTitle } from "../../../components/session-title";
 import { ZaloOaGmfGroups } from "./components/zalo-oa-gmf-groups";
 import { ZaloOaZnsTemplateConfig } from "./components/zalo-oa-zns-template-config";
 import { ZaloOasOnboarding } from "./components/zalo-oas-onboarding";
+import ReconnectZaloOaDocument from "./graphql/reconnectZaloOa.graphql";
+import RemoveZaloOaDocument from "./graphql/removeZaloOa.graphql";
+import SetZaloOaDefaultDocument from "./graphql/setZaloOaDefault.graphql";
 
 export const PluginZaloOAs: FC = () => {
   const workspace = useWorkspace();
   const plugins = usePlugins();
+  const client = useApolloClient();
 
   if (plugins.zaloOas.length === 0) return <ZaloOasOnboarding />;
 
   const defaultZaloOa = plugins.zaloOas.find((oa) => oa.isDefault);
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack gap={30}>
         <Card>
           {plugins.zaloOas.map((oa) => {
@@ -51,13 +51,13 @@ export const PluginZaloOAs: FC = () => {
                     <Group justify="space-between">
                       <Text fw={500}>{oa.info.name}</Text>
 
-                      {oa.status === PluginZaloOaStatus.ACTIVE ? (
+                      {oa.status === PluginZaloOaStatus.Active ? (
                         <Badge size="xs" color="green">
-                          {t`Active`}
+                          <Trans>Active</Trans>
                         </Badge>
                       ) : (
                         <Badge size="xs" color="red">
-                          {t`Inactive`}
+                          <Trans>Inactive</Trans>
                         </Badge>
                       )}
                     </Group>
@@ -71,24 +71,28 @@ export const PluginZaloOAs: FC = () => {
                     <Group gap={5}>
                       {oa.info.package_name && (
                         <Badge variant="light" size="xs" color="blue">
-                          {t`Package`}: {oa.info.package_name}
+                          <Trans>Package</Trans>: {oa.info.package_name}
                         </Badge>
                       )}
                       {oa.isDefault && (
                         <Badge variant="light" size="xs" color="green">
-                          {t`Default`}
+                          <Trans>Default</Trans>
                         </Badge>
                       )}
                     </Group>
 
                     <Group gap={8} mt={8}>
-                      <Tooltip label={t`Set default`}>
+                      <Tooltip label={<Trans>Set default</Trans>}>
                         <ActionIcon
                           onClick={() =>
                             onActionLoad({
                               icon: IconStackFront,
-                              name: `${t`Set default`} ${oa.info.name}`,
-                              process: () => setDefaultPluginZalo(oa._id),
+                              name: <Trans>Set default {oa.info.name}</Trans>,
+                              process: () =>
+                                client.mutate({
+                                  mutation: SetZaloOaDefaultDocument,
+                                  variables: { zaloOaId: oa._id },
+                                }),
                             })
                           }
                           variant="light"
@@ -99,13 +103,19 @@ export const PluginZaloOAs: FC = () => {
                         </ActionIcon>
                       </Tooltip>
 
-                      <Tooltip label={t`Reconnect`}>
+                      <Tooltip label={<Trans>Reconnect</Trans>}>
                         <ActionIcon
                           onClick={() =>
                             onActionLoad({
                               icon: IconRefresh,
-                              name: `${t`Reconnect`} ${oa.info.name}`,
-                              process: () => reconnectPluginZalo(oa._id),
+                              name: <Trans>Reconnect {oa.info.name}</Trans>,
+                              process: () =>
+                                client.mutate({
+                                  mutation: ReconnectZaloOaDocument,
+                                  variables: {
+                                    zaloOaId: oa._id,
+                                  },
+                                }),
                             })
                           }
                           variant="light"
@@ -115,15 +125,21 @@ export const PluginZaloOAs: FC = () => {
                         </ActionIcon>
                       </Tooltip>
 
-                      <Tooltip label={`${t`Disconect`} ${oa.info.name}`}>
+                      <Tooltip label={<Trans>Disconnect {oa.info.name}</Trans>}>
                         <ActionIcon
                           onClick={() =>
                             onConfirmModal({
                               type: "danger",
                               icon: IconPuzzle,
-                              title: `${t`Disconect`} ${oa.info.name}`,
+                              title: <Trans>Disconnect {oa.info.name}</Trans>,
                               content: <Trans>Are you sure you want to disconnect?</Trans>,
-                              onConfirm: () => disconnectPluginZalo(oa._id),
+                              onConfirm: () =>
+                                client.mutate({
+                                  mutation: RemoveZaloOaDocument,
+                                  variables: {
+                                    zaloOaId: oa._id,
+                                  },
+                                }),
                             })
                           }
                           variant="light"
@@ -143,14 +159,14 @@ export const PluginZaloOAs: FC = () => {
         {defaultZaloOa && (
           <Fragment>
             <Stack gap={5}>
-              <SectionTitle name={t`GMF groups`} icon={IconUsersGroup} />
+              <SectionTitle name={<Trans>GMF groups</Trans>} icon={IconUsersGroup} />
               <Card>
                 <ZaloOaGmfGroups />
               </Card>
             </Stack>
 
             <Stack gap={5}>
-              <SectionTitle name={t`ZNS templates`} icon={IconTemplate} />
+              <SectionTitle name={<Trans>ZNS templates</Trans>} icon={IconTemplate} />
               <Card>
                 <SimpleGrid cols={{ md: 2 }}>
                   {Object.keys(plugins.znsTemplateConfigs).map((key) => {

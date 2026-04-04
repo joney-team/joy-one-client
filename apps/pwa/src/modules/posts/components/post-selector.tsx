@@ -7,22 +7,22 @@ import { AppEntity } from "@/types";
 import { ActionIcon, Combobox, Group, Input, Text } from "@mantine/core";
 import { IconNews, IconX } from "@tabler/icons-react";
 import { FC } from "react";
-import { PostEntity } from "../posts-types";
+import { PostFragment } from "../graphql/fragmentPost.graphql";
+import GetPostsDocument from "../graphql/getPosts.graphql";
 
-export interface PostSelectorProps
-  extends Omit<
-    SelectorProps<PostEntity>,
-    "renderOption" | "searchPlaceholder" | "onSearch" | "target"
-  > {
-  onChange?: (post?: PostEntity | null) => void;
+export interface PostSelectorProps extends Omit<
+  SelectorProps<PostFragment>,
+  "renderOption" | "searchPlaceholder" | "onSearch" | "target"
+> {
+  onChange?: (post?: PostFragment | null) => void;
 }
 
 export const PostSelector: FC<PostSelectorProps> = (props) => {
   return (
     <Selector
       {...props}
-      listRoute="/posts"
-      onSearch={(q) => searchEntity<PostEntity>(AppEntity.POSTS, q)}
+      listQuery={GetPostsDocument}
+      onSearch={(q) => searchEntity<PostFragment>(AppEntity.POSTS, q)}
       renderOption={(post) => {
         return (
           <Combobox.Option value={post._id} key={post._id}>

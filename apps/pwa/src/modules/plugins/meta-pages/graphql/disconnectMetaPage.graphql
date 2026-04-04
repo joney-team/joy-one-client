@@ -1,0 +1,3 @@
+mutation DisconnectMetaPage($metaPageId: String!) {
+  disconnectMetaPage(id: $metaPageId)
+}

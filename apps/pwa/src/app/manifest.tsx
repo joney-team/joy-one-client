@@ -13,8 +13,8 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     });
 
     const _manifest: MetadataRoute.Manifest = {
-      name: metadata.appName,
-      short_name: metadata.appName,
+      name: metadata.appName || metadata.siteName,
+      short_name: metadata.appName || metadata.siteName,
       display: "standalone",
       start_url: "/",
       background_color: "#ffffff",

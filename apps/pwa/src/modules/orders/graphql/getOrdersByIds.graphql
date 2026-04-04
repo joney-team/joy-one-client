@@ -1,0 +1,7 @@
+#import "./fragmentOrder.graphql"
+
+query GetOrdersByIds($ids: [String!]!) {
+  orders: getOrdersByIds(ids: $ids) {
+    ...Order
+  }
+}

@@ -1,0 +1,10 @@
+#import "../graphql/fragmentReceipt.graphql"
+
+mutation PartialPaymentReceipt(
+  $partialPaymentReceiptId: String!
+  $input: PartialPaymentInput!
+) {
+  receipt: partialPaymentReceipt(id: $partialPaymentReceiptId, input: $input) {
+    ...Receipt
+  }
+}

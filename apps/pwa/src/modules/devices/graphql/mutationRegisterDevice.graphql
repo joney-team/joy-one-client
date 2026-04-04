@@ -1,7 +1,0 @@
-#import "./fragmentDevice.graphql"
-
-mutation RegisterDevice($input: RegisterDeviceInput!) {
-  registerDevice(input: $input) {
-    ...Device
-  }
-}

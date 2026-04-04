@@ -5,6 +5,7 @@ fragment Workspace on Workspace {
   inviteCode
   name
   logo
+  cover
   hotline
   phone
   locale

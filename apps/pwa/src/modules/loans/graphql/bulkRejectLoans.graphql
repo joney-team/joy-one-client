@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation BulkRejectLoans($input: BulkRejectLoanInput!) {
+  loans: bulkRejectLoans(input: $input) {
+    ...Loan
+  }
+}

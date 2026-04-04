@@ -1,7 +1,0 @@
-#import "./fragmentReceipt.graphql"
-
-query Receipt($id: String!) {
-  receipt(id: $id) {
-    ...Receipt
-  }
-}

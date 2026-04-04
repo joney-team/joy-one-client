@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { WithClearable } from "@/components/with-clearable/with-clearable";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
-import QUERY_WORKSPACE_MEMBERS from "@/modules/workspace-members/graphql/queryWorkspaceMembers.graphql";
+import GetWorkspaceMembersDocument from "@/modules/workspace-members/graphql/getWorkspaceMembers.graphql";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -13,17 +13,17 @@ import { IconChecks, IconEdit, IconFlag, IconFlagFilled, IconUsers } from "@tabl
 import dynamic from "next/dynamic";
 import { useEffect, useRef, type FC } from "react";
 import { useFolderStatuses } from "../hooks/use-task-statuses";
-import { useTaskMenu } from "./task-menu/task-menu";
-import { TaskMenuAction } from "./task-menu/task-menu-types";
 import { taskPriorities } from "../tasks-constants";
 import { useTasks } from "../tasks-context";
+import { useTaskMenu } from "./task-menu/task-menu";
+import { TaskMenuAction } from "./task-menu/task-menu-types";
 
 const ModalCreateTask = dynamic(
   () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const TaskTabActions: FC = () => {
@@ -32,7 +32,7 @@ export const TaskTabActions: FC = () => {
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
   const { statuses } = useFolderStatuses(activatedFolder?._id);
 
-  const workspaceMembers = useQuery(QUERY_WORKSPACE_MEMBERS, {
+  const workspaceMembers = useQuery(GetWorkspaceMembersDocument, {
     skip: !state.variables?.assigneeUserIds || state.variables?.assigneeUserIds.length === 0,
     variables: {
       userId: state.variables?.assigneeUserIds ?? [],

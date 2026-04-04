@@ -13,15 +13,15 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconBuilding, IconCheck, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import CreateWorkspaceBranchDocument from "../graphql/createWorkspaceBranch.graphql";
 import { WorkspaceBranchFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
-import CREATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationCreateWorkspaceBranch.graphql";
-import UPDATE_WORKSPACE_BRANCH_MUTATION from "../graphql/mutationUpdateWorkspaceBranch.graphql";
+import UpdateWorkspaceBranchDocument from "../graphql/updateWorkspaceBranch.graphql";
 
 export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchFragment }> = ({ branch }) => {
   const [loading, setLoading] = useState(false);
 
-  const [updateWorkspaceBranch] = useMutation(UPDATE_WORKSPACE_BRANCH_MUTATION);
-  const [createWorkspaceBranch] = useMutation(CREATE_WORKSPACE_BRANCH_MUTATION);
+  const [updateWorkspaceBranch] = useMutation(UpdateWorkspaceBranchDocument);
+  const [createWorkspaceBranch] = useMutation(CreateWorkspaceBranchDocument);
 
   const form = useForm<WorkspaceBranchInput>({
     initialValues: {

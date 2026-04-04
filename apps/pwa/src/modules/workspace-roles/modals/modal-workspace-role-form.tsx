@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { ModalHead } from "@/components/modal/modal-head";
 import { permissionGroups } from "@/modules/workspace-roles/workspace-roles-config";
-import { removeWorkspaceRole } from "@/modules/workspace-roles/workspace-roles-service";
 import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
@@ -40,9 +39,9 @@ interface ModalWorkspaceRoleFormProps {
 export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) => {
   const workspace = useWorkspace();
   const { updateWorkspaceSetting } = useWorkspaceSetting();
-  const { roles, create, update } = useWorkspaceRoles();
+  const { workspaceRoles, createRole, updateRole, deleteRole } = useWorkspaceRoles();
   const { t } = useLingui();
-  const role = roles.find((role) => role._id === props.roleId);
+  const role = workspaceRoles.find((role) => role._id === props.roleId);
 
   const close = () => modals.close("ModalRoleForm");
 
@@ -75,8 +74,8 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       };
 
       const action = role
-        ? () => update({ variables: { ...payload, id: role._id } })
-        : () => create({ variables: payload });
+        ? () => updateRole({ variables: { ...payload, id: role._id } })
+        : () => createRole({ variables: payload });
 
       await action()
         .then(async () => close())
@@ -84,9 +83,12 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
     }
   });
 
-  const allPermissions = Object.values(permissionGroups).reduce((acc, group) => {
-    return [...acc, ...group.permissions];
-  }, [] as { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[]);
+  const allPermissions = Object.values(permissionGroups).reduce(
+    (acc, group) => {
+      return [...acc, ...group.permissions];
+    },
+    [] as { value: WorkspacePermission; dependentPermissions?: WorkspacePermission[] }[],
+  );
 
   return (
     <Stack>
@@ -109,12 +111,13 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
         <Stack mt={10}>
           {Object.entries(permissionGroups)
             .filter(
-              ([_, group]) => !group.workspaceTypes || group.workspaceTypes.includes(workspace.type)
+              ([_, group]) =>
+                !group.workspaceTypes || group.workspaceTypes.includes(workspace.type),
             )
             .map(([groupKey, group]) => {
               const addPermission = (
                 permission: WorkspacePermission,
-                dependentPermissions: WorkspacePermission[] = []
+                dependentPermissions: WorkspacePermission[] = [],
               ) => {
                 const perrmissions = [
                   ...form.values.permissions,
@@ -142,7 +145,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
                           p.value !== permission.value &&
                           form.values.permissions.includes(p.value) &&
                           p.dependentPermissions &&
-                          p.dependentPermissions.includes(permission.value)
+                          p.dependentPermissions.includes(permission.value),
                       );
 
                       const isHasDependentPermissions = dependentPermissions.length > 0;
@@ -208,7 +211,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
       <ButtonArchive
         enabled={!!role?._id}
-        process={() => removeWorkspaceRole(role!._id)}
+        process={() => deleteRole({ variables: { id: role?._id ?? "" } })}
         onArchived={() => close()}
         goBackWhenArchived={false}
       />

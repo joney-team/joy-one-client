@@ -5,12 +5,14 @@ import { Layout, renderPage } from "@/layout/layout-page";
 import { Card } from "@mantine/core";
 
 const WorkspaceAppSettings = renderPage(() =>
-  import("@/modules/workspace-settings/components/workspace-setting-app").then((mod) => mod.WorkspaceAppSettings)
+  import("@/modules/workspace-settings/components/workspace-setting-app").then(
+    (mod) => mod.WorkspaceAppSettings,
+  ),
 );
 
 const Content = () => {
   return (
-    <Container p={16}>
+    <Container p="md">
       <Card shadow="xs">
         <WorkspaceAppSettings />
       </Card>

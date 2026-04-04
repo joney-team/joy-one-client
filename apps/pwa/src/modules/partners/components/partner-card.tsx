@@ -1,14 +1,16 @@
-import { PartnerEntity } from "@/modules/partners/partners-types";
+"use client";
+
+import { Avatar } from "@/components/avatar";
 import { ActionIcon, Anchor, Card, Group, Stack, Text, useMantineTheme } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
-import { Avatar } from "@/components/avatar";
+import { PartnerFragment } from "../graphql/fragmentPartner.graphql";
 
-type OnRemove = (partner: PartnerEntity) => void;
+type OnRemove = (partner: PartnerFragment) => void;
 
 export const PartnerCard: FC<{
-  partner: PartnerEntity;
+  partner: PartnerFragment;
   collapsed?: boolean;
   onRemove?: OnRemove | undefined;
 }> = (props) => {
@@ -16,7 +18,12 @@ export const PartnerCard: FC<{
   const theme = useMantineTheme();
 
   return (
-    <Anchor component={Link} href={`/partners?id=${partner._id}`} onClick={(e) => e.stopPropagation()} td="none">
+    <Anchor
+      component={Link}
+      href={`/partners?id=${partner._id}`}
+      onClick={(e) => e.stopPropagation()}
+      td="none"
+    >
       <Card
         key={partner._id}
         p={2}

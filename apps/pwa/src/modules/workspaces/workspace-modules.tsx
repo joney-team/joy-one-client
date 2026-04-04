@@ -272,7 +272,7 @@ export const workspaceModuleConfigs = {
     restrictDisplay: ["spotlight"],
     color: "grape",
     name: defineMessage`Operation settings`,
-    description: defineMessage`Working time, invoice, service voucher, payment method, search settings, ...`,
+    description: defineMessage`Working time, invoice, payment method, search settings, ...`,
   }),
   workspaceSettingsApp: combineModule({
     href: "/workspace-settings/app",
@@ -492,19 +492,17 @@ export const useWorkspaceModules = () => {
 };
 
 export const useAvailableWorkspaceModules = () => {
-  const { member } = useWorkspace();
+  const { member, hasPermission } = useWorkspace();
   const { workspaceModules, ...rest } = useWorkspaceModules();
 
   const availableModules = useMemo(() => {
     return workspaceModules.filter((m) => {
-      const userMemberPermissions = member?.permissions || [];
-
       const isAbleToAccess =
         !m.permissions ||
         m.permissions
           .toString()
           .split(",")
-          .every((p) => userMemberPermissions.includes(p as WorkspacePermission));
+          .every((p) => hasPermission(p as WorkspacePermission));
 
       const isAvailableType =
         !m.workspaceTypes ||
@@ -512,7 +510,7 @@ export const useAvailableWorkspaceModules = () => {
 
       return isAbleToAccess && isAvailableType;
     });
-  }, [member?.permissions, member?.workspace?.type]);
+  }, [hasPermission, member?.workspace?.type]);
 
   return {
     availableModules,

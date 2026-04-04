@@ -2,29 +2,27 @@
 
 import { Errored } from "@/components/errored";
 import { PageLazyLoad } from "@/components/lazy-load";
+import { useQuery } from "@apollo/client/react";
 import { Stack } from "@mantine/core";
 import { useParams } from "next/navigation";
 import { type FC } from "react";
-import { useRestQuery } from "../apis/use-rest-query";
 import { FormPost } from "./components/form-post";
-import { PostEntity } from "./posts-types";
-import { EventType } from "@/graphql/enums.graphql";
+import GetPostByIdDocument from "./graphql/getPostById.graphql";
 
 export const PostDetail: FC = () => {
-  const params = useParams();
-  const id = params.id as string;
+  const params = useParams<{ id: string }>();
 
-  const post = useRestQuery<PostEntity>({
-    route: `/posts/${id}`,
-    refetchEvents: [EventType.PostUpdated],
+  const { data, loading, error } = useQuery(GetPostByIdDocument, {
+    variables: { postId: params.id },
+    fetchPolicy: "cache-and-network",
   });
 
-  if (post.isLoading) return <PageLazyLoad />;
-  if (post.error || !post.data) return <Errored error={post.error} />;
+  if (loading && !data) return <PageLazyLoad />;
+  if (error || !data) return <Errored error={error} />;
 
   return (
-    <Stack p={16}>
-      <FormPost post={post.data} />
+    <Stack p="md">
+      <FormPost post={data.post} />
     </Stack>
   );
 };

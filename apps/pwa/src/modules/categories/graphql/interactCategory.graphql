@@ -1,0 +1,3 @@
+mutation InteractCategory($categoryId: String!) {
+  interactCategory(id: $categoryId)
+}

@@ -1,0 +1,3 @@
+mutation GenerateCategorySlug($input: GenerateCategorySlugInput!) {
+  slug: generateCategorySlug(input: $input)
+}

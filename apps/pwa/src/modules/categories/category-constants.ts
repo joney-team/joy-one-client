@@ -1,9 +1,12 @@
-import { t } from "@lingui/core/macro";
+import { CategoryType } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
-import { CategoryType } from "./category-types";
 
-export const categoryTypes: Record<CategoryType, { color: MantineColor; label: () => string }> = {
-  [CategoryType.COMMON]: { color: "blue", label: () => t`General` },
-  [CategoryType.PRODUCTS]: { color: "green", label: () => t`Products` },
-  [CategoryType.POSTS]: { color: "yellow", label: () => t`Posts` },
+export const categoryTypes: Record<
+  CategoryType,
+  { color: MantineColor; label: MacroMessageDescriptor }
+> = {
+  [CategoryType.Common]: { color: "blue", label: defineMessage`General` },
+  [CategoryType.Products]: { color: "green", label: defineMessage`Products` },
+  [CategoryType.Posts]: { color: "yellow", label: defineMessage`Posts` },
 };

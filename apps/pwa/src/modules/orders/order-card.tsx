@@ -3,16 +3,14 @@
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { OrderEntity } from "@/modules/orders/order-entity";
-import { payOrder, updateOrder } from "@/modules/orders/orders-service";
-import { OrderPaymentStatus } from "@/modules/orders/orders-types";
+import { OrderPaymentStatus } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Card, CardProps, Group, Stack, Table, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconCashRegister, IconEdit, IconPrinter } from "@tabler/icons-react";
@@ -26,18 +24,18 @@ import { CustomerInput } from "../customers/components/customer-input";
 import { type ModalPayReceiptRef } from "../receipts/modals/modal-pay-receipt";
 import { WorkspaceMemberInput } from "../workspace-members/components/workspace-member-input";
 import { WorkspaceMembersInput } from "../workspace-members/components/workspace-members-input";
+import { OrderFragment } from "./graphql/fragmentOrder.graphql";
+import { PayOrderDocument } from "./graphql/payOrder.graphql";
+import UpdateOrderDocument from "./graphql/updateOrder.graphql";
 import { orderPaymentStatuses } from "./orders-constants";
-import {
-  normalizeEntityToOrder,
-  normalizeOrderForSubmission,
-} from "./orders-management/orders-management-utils";
+import { normalizeOrderToInput } from "./orders-management/orders-management-utils";
 
 const ModalPayReceipt = dynamic(
   () => import("../receipts/modals/modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalPrinter = dynamic(
@@ -45,11 +43,11 @@ const ModalPrinter = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface OrderCardProps {
-  data: OrderEntity;
+  data: OrderFragment;
   hideCustomer?: boolean;
   cardProps?: CardProps;
 }
@@ -57,21 +55,28 @@ interface OrderCardProps {
 export const OrderCard: FC<OrderCardProps> = (props) => {
   const workspace = useWorkspace();
   const color = useColor();
-  const [order, setOrder] = useState<OrderEntity>();
+  const client = useApolloClient();
+  const { t } = useLingui();
+  const [order, setOrder] = useState<OrderFragment>();
   const isAbleToEdit = workspace.hasPermission(WorkspacePermission.ORDERS_UPDATE);
   const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
 
-  const updateOrderDebounced = useDebouncedCallback(async (newOrder: OrderEntity) => {
+  const updateOrderDebounced = useDebouncedCallback(async (newOrder: OrderFragment) => {
     if (!order) return;
-    const _order = normalizeEntityToOrder(newOrder);
-
     onActionLoad({
       name: <Trans>Update order</Trans>,
-      process: async () => updateOrder(order.id, normalizeOrderForSubmission(_order)),
+      process: async () =>
+        client.mutate({
+          mutation: UpdateOrderDocument,
+          variables: {
+            orderId: order.id,
+            input: normalizeOrderToInput(newOrder),
+          },
+        }),
     });
   }, 1000);
 
-  const onUpdateOrder = (newOrder: OrderEntity) => {
+  const onUpdateOrder = (newOrder: OrderFragment) => {
     setOrder(newOrder);
     updateOrderDebounced(newOrder);
   };
@@ -83,10 +88,15 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
   const onPayOrder = async () => {
     if (!order) return;
-    const receipt = await payOrder(order.id, {
-      amount: order.totalAmount - order.paidAmount,
+    const receipt = await client.mutate({
+      mutation: PayOrderDocument,
+      variables: {
+        orderId: order.id,
+        amount: order.totalAmount - order.paidAmount,
+      },
     });
-    modalPayReceiptRef.current?.open({ receipt });
+    if (!receipt.data?.payOrder) throw new Error("Payment failed");
+    modalPayReceiptRef.current?.open({ receipt: { id: receipt.data?.payOrder } });
   };
 
   if (!order) return null;
@@ -113,7 +123,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                       />
 
                       <Text fz={14} fw={500}>
-                        {orderPaymentStatuses[order.paymentStatus].label()}
+                        {t(orderPaymentStatuses[order.paymentStatus].label)}
                       </Text>
                     </Group>
                   </Card>
@@ -122,7 +132,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                 <Group align="start">
                   <Renderer visible={!props.hideCustomer}>
                     <CustomerInput
-                      label={t`Customer`}
+                      label={<Trans>Customer</Trans>}
                       disabled={!isAbleToEdit}
                       value={order.relatedCustomer}
                       clearable
@@ -153,11 +163,13 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
                 </Group>
               </Stack>
 
-              <Stack gap={0}>
-                <Text ta="right" fz={13} c="gray">
-                  <DateFormat value={order.createdAt} type="date-time" />
-                </Text>
-              </Stack>
+              {order.createdAt && (
+                <Stack gap={0}>
+                  <Text ta="right" fz={13} c="gray">
+                    <DateFormat value={order.createdAt} type="date-time" />
+                  </Text>
+                </Stack>
+              )}
             </Group>
 
             <Table horizontalSpacing={0}>
@@ -237,7 +249,7 @@ export const OrderCard: FC<OrderCardProps> = (props) => {
 
           <Stack align="center">
             <Group>
-              {order.paymentStatus === OrderPaymentStatus.PROCESSING && (
+              {order.paymentStatus === OrderPaymentStatus.Processing && (
                 <Button leftIcon={IconCashRegister} onClick={onPayOrder}>
                   <Trans>Pay</Trans>
                 </Button>

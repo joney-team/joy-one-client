@@ -6,48 +6,51 @@ import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { Selector } from "@/components/selector";
+import { EventType, PromotionStatus, PromotionType } from "@/graphql/enums.graphql";
 import { DynamicSelectionOperator } from "@/types";
 import { onActionLoad } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEdit } from "@tabler/icons-react";
 import { Fragment } from "react";
-import { restClient } from "../apis/rest-client";
-import { EventType } from "@/graphql/enums.graphql";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { PromotionDescription } from "./components/promotion-description";
 import { OnPromotionModal } from "./modals/modal-promotion";
 import { promotionStatuses, promotionTypes } from "./promotions-constants";
-import { PromotionEntity, PromotionStatus, PromotionType } from "./promotions-types";
 
-import QUERY_PROMOTIONS from "./graphql/queryPromotions.graphql";
+import { useApolloClient } from "@apollo/client/react";
+import { PromotionFragment } from "./graphql/fragmentPromotion.graphql";
+import GetPromotionsDocument from "./graphql/getPromotions.graphql";
+import UpdatePromotionStatusDocument from "./graphql/updatePromotionStatus.graphql";
 
 export const PromotionsList = () => {
+  const client = useApolloClient();
+  const { t } = useLingui();
+
   return (
-    <Stack p={16}>
-      <List<PromotionEntity>
+    <Stack p="md">
+      <List<PromotionFragment>
         id="prs"
-        query={QUERY_PROMOTIONS}
+        query={GetPromotionsDocument}
         name={<Trans>Promotions</Trans>}
         columns={{
           name: {
-            name: t`Name`,
+            name: <Trans>Name</Trans>,
             defaultWidth: 350,
           },
           type: enumColumn<PromotionType>({
             defaultWidth: 400,
-            name: t`Type`,
+            name: <Trans>Type</Trans>,
             options: Object.values(PromotionType).map((type) => ({
               value: type,
-              label: promotionTypes[type].label(),
+              label: t(promotionTypes[type].label),
             })),
             render: ({ data: promotion }) => {
               const promotionType = promotionTypes[promotion.type as PromotionType];
               if (!promotionType)
                 return (
                   <Badge color="gray" variant="light">
-                    {t`Unknown`}
+                    <Trans>Unknown</Trans>
                   </Badge>
                 );
 
@@ -63,7 +66,7 @@ export const PromotionsList = () => {
           }),
           value: {
             defaultWidth: 400,
-            name: t`Terms of use`,
+            name: <Trans>Terms of use</Trans>,
             render: ({ data: promotion }) => {
               return (
                 <Stack gap={5}>
@@ -111,16 +114,16 @@ export const PromotionsList = () => {
             },
           },
           expireAt: dateTimeColumn({
-            name: t`Expire at`,
+            name: <Trans>Expire at</Trans>,
             defaultHidden: true,
             sortable: true,
           }),
           status: enumColumn<PromotionStatus>({
-            name: t`Status`,
+            name: <Trans>Status</Trans>,
             defaultWidth: 200,
             options: Object.values(PromotionStatus).map((status) => ({
               value: status,
-              label: promotionStatuses[status].label(),
+              label: t(promotionStatuses[status].label),
               color: promotionStatuses[status].color,
             })),
             render: ({ data: promotion }) => {
@@ -128,15 +131,21 @@ export const PromotionsList = () => {
 
               return (
                 <Tooltip
-                  label={isEditable ? t`Click to change status` : t`Promotion status not editable`}
+                  label={
+                    isEditable ? (
+                      <Trans>Click to change status</Trans>
+                    ) : (
+                      <Trans>Promotion status not editable</Trans>
+                    )
+                  }
                 >
                   <Selector
-                    disabled={isEditable}
+                    disabled={!isEditable}
                     staticSearch
-                    pinnedOptions={[PromotionStatus.ACTIVE, PromotionStatus.CLOSED].map(
+                    pinnedOptions={[PromotionStatus.Active, PromotionStatus.Closed].map(
                       (status) => ({
                         id: status,
-                        label: promotionStatuses[status].label(),
+                        label: t(promotionStatuses[status].label),
                       }),
                     )}
                     onSelect={(value) => {
@@ -144,8 +153,12 @@ export const PromotionsList = () => {
                         name: <Trans>Update promotion status</Trans>,
                         icon: IconCheck,
                         process: () =>
-                          restClient.patch(`/promotions/${promotion.id}/status`, {
-                            status: value?.id as PromotionStatus,
+                          client.mutate({
+                            mutation: UpdatePromotionStatusDocument,
+                            variables: {
+                              promotionId: promotion.id,
+                              status: value?.id as PromotionStatus,
+                            },
                           }),
                       });
                     }}
@@ -156,7 +169,9 @@ export const PromotionsList = () => {
                           <Combobox.Option value={option.id} key={option.id}>
                             <Group gap={8}>
                               <Circle color="gray" size={12} />
-                              <Text>{t`Unknown`}</Text>
+                              <Text>
+                                <Trans>Unknown</Trans>
+                              </Text>
                             </Group>
                           </Combobox.Option>
                         );
@@ -165,7 +180,7 @@ export const PromotionsList = () => {
                         <Combobox.Option value={option.id} key={option.id}>
                           <Group gap={8}>
                             <Circle color={status.color} size={12} />
-                            <Text>{status.label()}</Text>
+                            <Text>{t(status.label)}</Text>
                           </Group>
                         </Combobox.Option>
                       );
@@ -179,7 +194,7 @@ export const PromotionsList = () => {
                             color="gray"
                             className={isEditable ? "clickable" : "unclickable"}
                           >
-                            {t`Unknown`}
+                            <Trans>Unknown</Trans>
                           </Badge>
                         );
 
@@ -189,7 +204,7 @@ export const PromotionsList = () => {
                           color={status.color}
                           className={isEditable ? "clickable" : "unclickable"}
                         >
-                          {status.label()}
+                          {t(status.label)}
                         </Badge>
                       );
                     }}
@@ -206,7 +221,7 @@ export const PromotionsList = () => {
         events={[EventType.PromotionNew, EventType.PromotionUpdated, EventType.PromotionArchived]}
         actions={[
           {
-            label: t`Edit`,
+            label: <Trans>Edit</Trans>,
             icon: IconEdit,
             onClick: (promotion) => OnPromotionModal({ promotion }),
           },

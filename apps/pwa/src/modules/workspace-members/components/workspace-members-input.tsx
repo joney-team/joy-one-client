@@ -9,17 +9,19 @@ import {
 } from "@/modules/workspace-members/components/workspace-member-selector";
 import { ActionIcon, em, Group, ThemeIcon, Tooltip } from "@mantine/core";
 import { IconFlagFilled, IconUserPlus } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { Renderer } from "../../../components/renderer";
 
-interface WorkspaceMembersInputProps
-  extends Omit<WorkspaceMemberSelectorProps, "value" | "onChange" | "target"> {
+interface WorkspaceMembersInputProps extends Omit<
+  WorkspaceMemberSelectorProps,
+  "value" | "onChange" | "target"
+> {
   value?: WorkspaceMemberSelectorValue[];
   onChange?: (value: WorkspaceMemberSelectorValue[]) => void;
   collapsed?: boolean;
   showMainResponsible?: boolean;
   disabled?: boolean;
-  tooltipLabel?: string;
+  tooltipLabel?: ReactNode;
 }
 
 export const WorkspaceMembersInput: FC<WorkspaceMembersInputProps> = (props) => {

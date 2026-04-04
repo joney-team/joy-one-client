@@ -1,15 +1,12 @@
-import { ResponseList } from "@/types";
+import { useQuery } from "@apollo/client/react";
 import { PropsWithChildren, type FC } from "react";
-import { useRestQuery } from "../apis/use-rest-query";
+import GetVnLocationsDocument from "./graphql/getVnLocations.graphql";
 import { GetGoogleMapLink, LocationsContext, RenderVnLocation } from "./locations-context";
-import { RawLocation } from "./locations-types";
 
 export const LocationsProvider: FC<PropsWithChildren> = (props) => {
-  const vnLocationsQuery = useRestQuery<ResponseList<RawLocation>>({
-    route: "/locations/vn",
-  });
+  const { data: vnLocationsData } = useQuery(GetVnLocationsDocument);
 
-  const vnLocations = vnLocationsQuery.data?.data ?? [];
+  const vnLocations = vnLocationsData?.vnLocations ?? [];
 
   const renderVnLocation: RenderVnLocation = (location, args) => {
     if (!location) return "";
@@ -38,7 +35,7 @@ export const LocationsProvider: FC<PropsWithChildren> = (props) => {
   const getGoogleMapLink: GetGoogleMapLink = (location) => {
     if (!location) return "";
     return `https://www.google.com/maps?q=${encodeURIComponent(
-      typeof location === "object" ? renderVnLocation(location) : location
+      typeof location === "object" ? renderVnLocation(location) : location,
     )}`;
   };
 

@@ -1,0 +1,22 @@
+#import "./fragmentEvent.graphql"
+
+query GetEvents(
+  $limit: Float
+  $offset: Float
+  $ref: String
+  $userId: String
+  $type: EventType
+) {
+  events: getEvents(
+    limit: $limit
+    offset: $offset
+    ref: $ref
+    userId: $userId
+    type: $type
+  ) {
+    total
+    results {
+      ...Event
+    }
+  }
+}

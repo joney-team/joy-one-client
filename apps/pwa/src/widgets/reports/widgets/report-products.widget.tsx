@@ -10,7 +10,7 @@ import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { ProductType } from "@/graphql/enums.graphql";
 import { productTypes } from "@/modules/products/products-constants";
-import { ReceiptReportItem } from "@/modules/receipts/receipts-types";
+import { ReceiptReportItemFragment } from "@/modules/reports/graphql/fragmentReceiptReportItem.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -59,13 +59,13 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
       productId: string;
       productName: string;
       productType: ProductType;
-      items: ReceiptReportItem[];
+      items: ReceiptReportItemFragment[];
       revenue: number;
       profit: number;
       qtySold: number;
     };
   }>((acc, report) => {
-    report.receipts.items.forEach((item) => {
+    report.data.receipts.items.forEach((item) => {
       const productEntity = item.relatedEntities.find((v) => v.type === "PRODUCT");
       if (productEntity) {
         if (!acc[productEntity.data._id]) {
@@ -246,7 +246,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
   );
 };
 
-const RelatedItems: FC<{ items: ReceiptReportItem[] }> = ({ items }) => {
+const RelatedItems: FC<{ items: ReceiptReportItemFragment[] }> = ({ items }) => {
   const [isShow, setIsShow] = useState(false);
   const { getAvailableModule } = useAvailableWorkspaceModules();
   const { t } = useLingui();

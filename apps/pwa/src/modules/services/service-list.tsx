@@ -4,30 +4,28 @@ import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { List } from "@/components/list";
-import { EventType, ProductType } from "@/graphql/enums.graphql";
+import { CategoryType, EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
-import { ProductEntity } from "@/modules/products/products-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { t } from "@lingui/core/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconCategory2, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
-import { CategoryType } from "../categories/category-types";
 import { CategoryColumn } from "../categories/components/category-column";
 
 import { Trans } from "@lingui/react/macro";
-import QUERY_PRODUCTS from "../products/graphql/queryProducts.graphql";
+import { ProductFragment } from "../products/graphql/fragmentProduct.graphql";
+import GetProductsDocument from "../products/graphql/getProducts.graphql";
 import { productTypes } from "../products/products-constants";
 
 export const ServiceList: FC = () => {
   return (
-    <Stack p={16}>
-      <List<ProductEntity>
+    <Stack p="md">
+      <List<ProductFragment>
         id="sers"
         name={<Trans>Services</Trans>}
         icon={IconCategory2}
-        query={QUERY_PRODUCTS}
+        query={GetProductsDocument}
         fixedParams={{ type: ProductType.Service }}
         creatable={{
           onCreate: () => OnProductModal({ type: ProductType.Service }),
@@ -36,7 +34,7 @@ export const ServiceList: FC = () => {
         columns={{
           image: {
             defaultWidth: 100,
-            name: t`Image`,
+            name: <Trans>Image</Trans>,
             align: "center",
             render: ({ data }) => {
               return (
@@ -50,7 +48,7 @@ export const ServiceList: FC = () => {
             },
           },
           name: {
-            name: t`Name`,
+            name: <Trans>Name</Trans>,
             defaultWidth: 350,
             render: ({ data }) => {
               return (
@@ -63,16 +61,16 @@ export const ServiceList: FC = () => {
               );
             },
           },
-          categoryId: CategoryColumn({ type: CategoryType.PRODUCTS }),
+          categoryId: CategoryColumn({ type: CategoryType.Products }),
           unit: {
             defaultWidth: 150,
-            name: t`Unit`,
+            name: <Trans>Unit</Trans>,
           },
           price: {
             defaultWidth: 250,
             align: "right",
             sortable: true,
-            name: t`Price`,
+            name: <Trans>Price</Trans>,
             render: ({ data }) => {
               if (data.minPrice && data.maxPrice) {
                 return (
@@ -95,7 +93,7 @@ export const ServiceList: FC = () => {
         events={[EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived]}
         actions={[
           {
-            label: t`Edit`,
+            label: <Trans>Edit</Trans>,
             icon: IconEdit,
             onClick: (data) => OnProductModal({ product: data }),
           },

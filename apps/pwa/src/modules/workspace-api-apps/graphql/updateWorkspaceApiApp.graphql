@@ -1,0 +1,10 @@
+#import "./fragmentWorkspaceApiApp.graphql"
+
+mutation UpdateWorkspaceApiApp(
+  $appId: String!
+  $input: WorkspaceApiAppInput!
+) {
+  apiApp: updateWorkspaceApiApp(id: $appId, input: $input) {
+    ...WorkspaceApiApp
+  }
+}

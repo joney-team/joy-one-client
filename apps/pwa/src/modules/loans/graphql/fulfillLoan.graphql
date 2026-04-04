@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation FulfillLoan($input: FulfillLoanInput!, $fulfillLoanId: String!) {
+  loan: fulfillLoan(input: $input, id: $fulfillLoanId) {
+    ...Loan
+  }
+}

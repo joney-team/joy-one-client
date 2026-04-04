@@ -5,6 +5,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { t } from "@lingui/core/macro";
+import { Trans } from "@lingui/react/macro";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -30,7 +31,7 @@ export const OrderSaleTip: FC = () => {
               orderSale.updateOrder({ tipAmount: value });
             },
             onClear: () => {
-              orderSale.updateOrder({ tipAmount: 0 });
+              orderSale.updateOrder({ tipAmount: null });
             },
           });
         };
@@ -38,7 +39,9 @@ export const OrderSaleTip: FC = () => {
         return (
           <Group justify="space-between" onClick={onTip} className="clickable">
             <Group gap={5}>
-              <Text>{t`Tip`}</Text>
+              <Text>
+                <Trans>Tip</Trans>
+              </Text>
 
               <Button
                 component="div"
@@ -51,11 +54,11 @@ export const OrderSaleTip: FC = () => {
             </Group>
 
             <Group gap={8}>
-              {orderSale.calculating.isLoading ? (
-                <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
+              {orderSale.isCalculating ? (
+                <Skeleton h={20} w={80} visible />
               ) : (
                 <Text>
-                  <CurrencyFormat value={orderSale.activeOrder?.tipAmount ?? 0} />
+                  <CurrencyFormat value={orderSale.calculated?.tipAmount ?? 0} />
                 </Text>
               )}
             </Group>

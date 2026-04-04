@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import MUTATION_SIGN_LOAN from "@/modules/loans/graphql/mutationSignLoan.graphql";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
@@ -15,6 +14,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCreditCardPay } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
+import SignLoanDocument from "../graphql/signLoan.graphql";
 
 interface ModalSignLoanProps {
   loan: Pick<LoanFragment, "id" | "code">;
@@ -28,7 +28,7 @@ export const ModalSignLoan: FC<{
   const [signature, setSignature] = useState<File>();
   const uploadFile = useUploadFile();
 
-  const [signLoan] = useMutation(MUTATION_SIGN_LOAN);
+  const [signLoan] = useMutation(SignLoanDocument);
 
   const onClose = async () => close();
 
@@ -66,7 +66,7 @@ export const ModalSignLoan: FC<{
         opened={opened}
         size={1000}
       >
-        <Stack gap={16}>
+        <Stack gap="md">
           <SignatureInput onChange={setSignature} />
 
           <Center>

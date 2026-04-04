@@ -1,0 +1,3 @@
+mutation InteractTag($tagId: String!) {
+  interactTag(id: $tagId)
+}

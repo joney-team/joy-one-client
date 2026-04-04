@@ -1,0 +1,3 @@
+mutation ArchiveProduct($productId: String!) {
+  archiveProduct(id: $productId)
+}

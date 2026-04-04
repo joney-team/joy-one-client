@@ -1,0 +1,26 @@
+#import "./fragmentActivity.graphql"
+
+query GetActivities(
+  $contextType: String!
+  $contextId: String!
+  $type: ActivityType
+  $offset: Float
+  $limit: Float
+  $ids: [String!]
+  $parentId: String
+) {
+  list: getActivities(
+    contextType: $contextType
+    contextId: $contextId
+    type: $type
+    offset: $offset
+    limit: $limit
+    ids: $ids
+    parentId: $parentId
+  ) {
+    total
+    results {
+      ...Activity
+    }
+  }
+}

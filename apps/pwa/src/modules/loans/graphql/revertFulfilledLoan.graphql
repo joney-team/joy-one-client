@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation RevertFulfilledLoan($loanId: String!) {
+  loan: revertFulfilledLoan(id: $loanId) {
+    ...Loan
+  }
+}

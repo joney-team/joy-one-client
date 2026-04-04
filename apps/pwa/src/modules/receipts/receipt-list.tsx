@@ -37,7 +37,7 @@ import { Fragment, useRef, type FC } from "react";
 import { workspaceBranchColumn } from "../workspace-branches/workspace-branch-column";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
-import QUERY_RECEIPTS from "./graphql/queryReceipts.graphql";
+import GetReceiptsDocument from "./graphql/getReceipts.graphql";
 import { type ModalPayReceiptRef } from "./modals/modal-pay-receipt";
 import { ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
@@ -78,13 +78,13 @@ export const ReceiptList: FC = () => {
 
   return (
     <Fragment>
-      <Stack p={16}>
+      <Stack p="md">
         <List<ReceiptFragment>
           id="rps"
           name={<Trans>Receipts</Trans>}
           limit={18}
           icon={IconCashRegister}
-          query={QUERY_RECEIPTS}
+          query={GetReceiptsDocument}
           columns={{
             code: codeColumn({
               onClick: (_, data) => modalReceiptDetailRef.current?.open(data.id),

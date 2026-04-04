@@ -33,7 +33,7 @@ export type ExportToExcelOutput = ExportToExcelItem | (ExportToExcelItem & { col
 
 export type ExportToExcel<Data, FieldType> = (
   value: FieldType,
-  data: Data
+  data: Data,
 ) => ExportToExcelOutput | Promise<ExportToExcelOutput>;
 
 export type Column<Data = any, FieldType = any> = {
@@ -90,7 +90,7 @@ export interface ListBulkAction<Data> {
 
 export type ListFetch<Data = any> = (
   params: any,
-  controller?: AbortController
+  controller?: AbortController,
 ) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
 export type ListProps<Data extends BaseData = any> = {

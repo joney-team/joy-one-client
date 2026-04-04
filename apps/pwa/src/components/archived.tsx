@@ -25,7 +25,7 @@ export const Archived: FC<ArchivedProps> = (props) => {
       justify="center"
       align="center"
       gap={0}
-      p={16}
+      p="md"
       style={{
         borderRadius: 8,
         border: `1px dashed ${alpha(_color || "", 0.5)}`,

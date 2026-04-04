@@ -4,7 +4,7 @@ import { useApolloClient } from "@apollo/client/react";
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect, useMemo, useRef } from "react";
 import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
-import QUERY_WORKSPACE_MEMBERS_BY_IDS from "./graphql/queryWorkspaceMembersByIds.graphql";
+import GetWorkspaceMembersByIdsDocument from "./graphql/getWorkspaceMembersByIds.graphql";
 
 export const useWorkspaceMembers = (
   userIds?: string[],
@@ -30,7 +30,7 @@ export const useWorkspaceMembers = (
   useEffect(() => {
     client
       .query({
-        query: QUERY_WORKSPACE_MEMBERS_BY_IDS,
+        query: GetWorkspaceMembersByIdsDocument,
         variables: {
           ids: missingIds,
         },
@@ -38,7 +38,7 @@ export const useWorkspaceMembers = (
       .then((data) => {
         workspaceMembers.current = [
           ...workspaceMembers.current.filter((assignee) => !missingIds.includes(assignee.userId)),
-          ...(data.data?.workspaceMembersByIds ?? []),
+          ...(data.data?.members ?? []),
         ];
       })
       .catch((error) => {

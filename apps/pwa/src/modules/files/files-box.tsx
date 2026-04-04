@@ -3,7 +3,6 @@
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { detectFileType } from "@/modules/files/file-service";
-import { FileEntity } from "@/modules/files/file-types";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
@@ -19,8 +18,8 @@ import { FileBoxCard } from "./files-box-card";
 import { useUploadFile } from "./hooks/use-upload-file";
 
 import { FileFragment } from "./graphql/fragmentFile.graphql";
-import MUTATAION_REMOVE_FILE from "./graphql/mutationRemoveFile.graphql";
-import QUERY_FILES from "./graphql/queryFiles.graphql";
+import GetFilesDocument from "./graphql/getFiles.graphql";
+import RemoveFileDocument from "./graphql/removeFile.graphql";
 
 const ModalFileGallery = dynamic(
   () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
@@ -65,9 +64,9 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
     setRawFiles(files);
   };
 
-  const [removeFile] = useMutation(MUTATAION_REMOVE_FILE);
+  const [removeFile] = useMutation(RemoveFileDocument);
 
-  const { data: filesData, refetch } = useQuery(QUERY_FILES, {
+  const { data: filesData, refetch } = useQuery(GetFilesDocument, {
     variables: {
       query: {
         refs: props.refs,
@@ -184,7 +183,8 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                     onRemove={() => onRemove(file)}
                     cardProps={props.itemCardProps}
                     onGallery={() => {
-                      const rawFileEntity: FileEntity = {
+                      const rawFileEntity: FileFragment = {
+                        __typename: "File",
                         _id: "",
                         fileName: file.name,
                         type: detectFileType(file.name),
@@ -193,6 +193,11 @@ export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
                         relativePath: "",
                         size: file.size,
                         path: "",
+                        ref: "",
+                        refs: [],
+                        thumbnail: null,
+                        updatedAt: null,
+                        uploadByUserId: null,
                       };
 
                       modalFileGalleryRef.current?.open({

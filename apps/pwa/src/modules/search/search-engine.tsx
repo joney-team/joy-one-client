@@ -33,20 +33,21 @@ import {
   useWorkspaceModules,
   WorkspaceModule,
 } from "../workspaces/workspace-modules";
-import QUERY_SEARCH from "./graphql/querySearch.graphql";
+import SearchDocument from "./graphql/search.graphql";
 
 export const SearchEngine: FC = () => {
   const { i18n, t } = useLingui();
   const workspace = useWorkspace();
+  const router = useRouter();
+
   const { workspaceSetting } = useWorkspaceSetting();
   const { getModule } = useWorkspaceModules();
   const { isModuleAvailable, availableModules } = useAvailableWorkspaceModules();
-  const router = useRouter();
 
   const [query, setQuery] = useState("");
 
   const [searchQuery, { data: searchResult, loading: isSearchLoading }] = useLazyQuery(
-    QUERY_SEARCH,
+    SearchDocument,
     {
       fetchPolicy: "cache-and-network",
     },
@@ -95,7 +96,7 @@ export const SearchEngine: FC = () => {
             description: [result.phone].filter((v) => !!v).join(" - "),
             leftSection: <Avatar customer={result} radius={8} />,
             onClick: async () => {
-              return router.push(`/customers/${result.code}`);
+              return router.push(`/customers/${result.customerCode}`);
             },
           });
         }
@@ -110,7 +111,7 @@ export const SearchEngine: FC = () => {
         }
 
         if (result.__typename === "SearchResultProduct") {
-          const productType = productTypes[result.type as keyof typeof productTypes];
+          const productType = productTypes[result.productType];
           if (!productType) return;
           groups[result.entity].push({
             id: result.id,
@@ -125,7 +126,7 @@ export const SearchEngine: FC = () => {
         if (result.__typename === "SearchResultReceipt") {
           groups[result.entity].push({
             id: result.id,
-            label: renderEntityCode(result.code),
+            label: renderEntityCode(result.receiptCode),
             description: [t`Receipt`, result.note].filter((v) => !!v).join(" - "),
             leftSection: <ActionIcon icon={IconCashRegister} />,
             onClick: async () => {
@@ -138,10 +139,10 @@ export const SearchEngine: FC = () => {
           groups[result.entity].push({
             id: result.id,
             label: result.name,
-            description: [renderEntityCode(result.code)].filter((v) => !!v).join(" - "),
+            description: [renderEntityCode(result.taskCode)].filter((v) => !!v).join(" - "),
             leftSection: <ActionIcon icon={IconStack2} />,
             onClick: async () => {
-              return router.push(updateTaskPath({ code: result.code }));
+              return router.push(updateTaskPath({ code: result.taskCode }));
             },
           });
         }
@@ -152,11 +153,11 @@ export const SearchEngine: FC = () => {
 
           groups[result.entity].push({
             id: result.id,
-            label: renderEntityCode(result.code),
+            label: renderEntityCode(result.loanCode),
             description: [result.customerName, result.customerPhone].filter((v) => !!v).join(" - "),
             leftSection: <ActionIcon icon={IconCreditCardPay} />,
             onClick: async () => {
-              return router.push(`/loans/${result.code}`);
+              return router.push(`/loans/${result.loanCode}`);
             },
             rightSection: (
               <Badge size="xs" color={loanStatus.color}>

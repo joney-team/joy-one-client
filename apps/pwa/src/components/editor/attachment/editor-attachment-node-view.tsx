@@ -24,12 +24,9 @@ import {
   removeRefFile,
 } from "@/modules/files/file-service";
 import { fileTypes } from "@/modules/files/files-constants";
+import GetFileByIdDocument from "@/modules/files/graphql/getFileById.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
-import GET_FILE_INFO, {
-  type GetFileInfoQuery,
-  type GetFileInfoQueryVariables,
-} from "@/modules/files/graphql/queryFileInfo.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
@@ -49,15 +46,15 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
   const audioRef = useRef<SpectrumVisualizerRef>(null);
   const [audioStatus, setAudioStatus] = useState<SpectrumVisualizerStatus>("none");
 
-  const file = useQuery<GetFileInfoQuery, GetFileInfoQueryVariables>(GET_FILE_INFO, {
+  const file = useQuery(GetFileByIdDocument, {
     variables: { fileId },
     fetchPolicy: "cache-first",
   });
 
   const onDownload = async (event: MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    if (!file.data || !file.data?.getFileInfo?.url) return;
-    await downloadFileFromURL(file.data?.getFileInfo?.url, file.data?.getFileInfo?.fileName || "");
+    if (!file.data || !file.data?.file?.url) return;
+    await downloadFileFromURL(file.data?.file?.url, file.data?.file?.fileName || "");
   };
 
   const content = useMemo(() => {
@@ -87,7 +84,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
       );
     }
 
-    const type = detectFileType(file.data?.getFileInfo?.url);
+    const type = detectFileType(file.data?.file?.url);
     const fileType = fileTypes[type];
 
     if (type === FileType.Audio) {
@@ -106,7 +103,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
           >
             <Group gap="xs" w="100%">
               <Text fz="xs" fw={500} truncate maw={200} style={{ marginBottom: 0 }} flex={1}>
-                {file.data?.getFileInfo?.fileName}
+                {file.data?.file?.fileName}
               </Text>
 
               <Group gap={3}>
@@ -137,7 +134,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
 
             <SpectrumVisualizer
               maxWave={30}
-              audioUrl={file.data.getFileInfo?.url}
+              audioUrl={file.data.file?.url}
               ref={audioRef}
               onChangeStatus={setAudioStatus}
             />
@@ -154,7 +151,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
 
         <Group gap="xs">
           <Text fz="xs" fw={500} truncate maw={200} style={{ marginBottom: 0 }}>
-            {file.data?.getFileInfo?.fileName}
+            {file.data?.file?.fileName}
           </Text>
 
           <Group gap={0}>
@@ -183,7 +180,7 @@ const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
         onClick={() => {
           if (!file.data) return;
           modalFileGalleryRef.current?.open({
-            files: [file.data?.getFileInfo],
+            files: [file.data?.file],
           });
         }}
       >

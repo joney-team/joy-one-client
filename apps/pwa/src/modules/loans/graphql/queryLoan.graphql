@@ -1,7 +1,0 @@
-#import "./fragmentLoan.graphql"
-
-query Loan($id: String!) {
-  loan(id: $id) {
-    ...Loan
-  }
-}

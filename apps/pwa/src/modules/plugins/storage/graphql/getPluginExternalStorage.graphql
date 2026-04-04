@@ -1,0 +1,10 @@
+query GetPluginExternalStorage {
+  pluginExternalStorage: getPluginExternalStorage {
+    provider
+    region
+    bucketName
+    endpointUrl
+    size
+    isDisabled
+  }
+}

@@ -10,10 +10,6 @@ import { ActionIcon, Card, Group, Stack } from "@mantine/core";
 import { IconMicrophone, IconPaperclip, IconPhoto, IconSend } from "@tabler/icons-react";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { ActivitiesProps } from "./activities-types";
-import ADD_ACTIVITY_MUTATION, {
-  type AddActivityMutation,
-  type AddActivityMutationVariables,
-} from "./graphql/mutationAddActivity.graphql";
 
 import { Avatar } from "@/components/avatar";
 import { isEmptyContent } from "@/components/editor/editor-utils";
@@ -24,7 +20,8 @@ import { setRefFile } from "../files/file-service";
 import { renderFileUrl } from "../files/files-utils";
 import { useUploadFile } from "../files/hooks/use-upload-file";
 import { useWorkspace } from "../workspaces/workspace-context";
-import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
+import AddActivityDocument from "./graphql/addActivity.graphql";
+import GetActivitiesDocument from "./graphql/getActivities.graphql";
 
 export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?: boolean }> = ({
   contextType,
@@ -49,9 +46,7 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addActivity] = useMutation<AddActivityMutation, AddActivityMutationVariables>(
-    ADD_ACTIVITY_MUTATION
-  );
+  const [addActivity] = useMutation(AddActivityDocument);
 
   const onSubmit = async () => {
     try {
@@ -70,7 +65,7 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
           content: JSON.stringify(contentJSON),
           parentId,
         },
-        refetchQueries: [QUERY_ACTIVITIES],
+        refetchQueries: [GetActivitiesDocument],
       });
 
       editorRef.current?.clear();
@@ -89,9 +84,12 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
           const id = createObjectId();
           setRefFile(id, file);
           // Defer the addAttachment call to avoid flushSync warning
-          setTimeout(() => {
-            editorRef.current?.editor?.commands.addAttachment(id);
-          }, 100 + index * 100);
+          setTimeout(
+            () => {
+              editorRef.current?.editor?.commands.addAttachment(id);
+            },
+            100 + index * 100,
+          );
         } catch (error) {
           console.trace(error);
         }
@@ -105,15 +103,18 @@ export const ActivityInput: FC<ActivitiesProps & { parentId?: string; autoFocus?
       try {
         const fileMetadata = await uploadFile(file, { maxWidthOrHeight: 1024 });
 
-        setTimeout(() => {
-          editorRef.current?.editor?.commands.insertContent({
-            type: "image",
-            attrs: {
-              src: renderFileUrl(fileMetadata.url),
-              style: "width: 500px; height: auto;",
-            },
-          });
-        }, 100 + index * 100);
+        setTimeout(
+          () => {
+            editorRef.current?.editor?.commands.insertContent({
+              type: "image",
+              attrs: {
+                src: renderFileUrl(fileMetadata.url),
+                style: "width: 500px; height: auto;",
+              },
+            });
+          },
+          100 + index * 100,
+        );
       } catch (error) {
         console.trace(error);
       }

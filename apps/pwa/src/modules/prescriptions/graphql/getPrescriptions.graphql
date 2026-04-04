@@ -1,0 +1,10 @@
+#import "./fragmentPrescription.graphql"
+
+query GetPrescriptions($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getPrescriptions(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Prescription
+    }
+  }
+}

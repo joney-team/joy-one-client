@@ -48,9 +48,9 @@ import { type FC, Fragment, useMemo, useRef } from "react";
 import { bookingActiveStatus, bookingStatuses } from "./booking-constants";
 import type { ModalCreateBookingRef } from "./modals/modal-create-booking";
 
-import { getBookingTitle } from "./booking-utils";
-import QUERY_BOOKINGS, { type BookingsQuery } from "./graphql/queryBookings.graphql";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import { getBookingTitle } from "./booking-utils";
+import GetBookingsDocument, { GetBookingsQuery } from "./graphql/getBookings.graphql";
 import type { ModalBookingDetailRef } from "./modals/modal-booking-detail";
 
 const ModalCreateBooking = dynamic(
@@ -95,8 +95,8 @@ export const BookingList: FC = () => {
   const modalBookingDetailRef = useRef<ModalBookingDetailRef>(null);
   const { workspaceSetting } = useWorkspaceSetting();
 
-  const bookings = useGraphqlList<BookingsQuery["list"]["results"][number]>({
-    query: QUERY_BOOKINGS,
+  const bookings = useGraphqlList<GetBookingsQuery["list"]["results"][number]>({
+    query: GetBookingsDocument,
     id: "bk",
     normalizeParams: (params) => {
       const query = normalizeQuery(params);
@@ -292,7 +292,7 @@ export const BookingList: FC = () => {
   }, [dates]);
 
   const events = useMemo<TimeEvent[]>(() => {
-    return bookings.data.reduce((acc, booking) => {
+    return bookings.data.reduce<TimeEvent[]>((acc, booking) => {
       const dateIndex = dates.findIndex((date) => DateTime.isSame(date, booking.startTime, "day"));
 
       if (dateIndex < 0) return acc;
@@ -310,7 +310,7 @@ export const BookingList: FC = () => {
   }, [bookings.data, dates]);
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <Card shadow="xs" p={0}>
         <Stack>
           <Group p="sm" pb={0} justify="space-between">

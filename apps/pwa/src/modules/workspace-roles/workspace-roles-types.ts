@@ -1,5 +1,4 @@
 import { WorkspaceType } from "@/graphql/types.graphql";
-import type { BaseMongoEntity } from "@/types";
 
 export enum WorkspacePermission {
   CUSTOM_FIELDS_MANAGER = "CFSM",
@@ -103,18 +102,6 @@ export enum WorkspaceDefaultRoleId {
   OWNER = "OWNER",
   ADMIN = "ADMIN",
   MEMBER = "MEMBER",
-}
-
-export interface WorkspaceRoleEntity extends BaseMongoEntity {
-  workspaceId: string;
-  name: string;
-  description?: string | null;
-  color?: string | null;
-  permissions: WorkspacePermission[];
-}
-
-export interface TransferOwnerDto {
-  userId: string;
 }
 
 export enum PermissionGroupKey {

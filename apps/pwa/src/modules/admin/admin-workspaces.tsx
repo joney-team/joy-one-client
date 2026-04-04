@@ -8,19 +8,20 @@ import { formatBytes } from "@joy-one-client/utils/files";
 import { useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";
-import { WorkspaceStatsEntity } from "../workspace-stats/workspace-stats.types";
 import { workspaceTypes } from "../workspaces/workspace-constants";
 
-import QUERY_WORKSPACE_STATS from "./graphql/queryWorkspaceStats.graphql";
+import GetWorkspaceStatsDocument, {
+  GetWorkspaceStatsQuery,
+} from "./graphql/getWorkspaceStats.graphql";
 
 export const AdminWorkspaces: FC = () => {
   const { t } = useLingui();
 
   return (
-    <Stack p={16}>
-      <List<WorkspaceStatsEntity & { type: WorkspaceType }>
+    <Stack p="md">
+      <List<GetWorkspaceStatsQuery["list"]["results"][number]>
         id="wss"
-        query={QUERY_WORKSPACE_STATS}
+        query={GetWorkspaceStatsDocument}
         columns={{
           workspace: {
             name: "Information",

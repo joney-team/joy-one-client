@@ -6,13 +6,13 @@ import { Card } from "@mantine/core";
 
 const WorkspaceTermsAndPolicies = renderPage(() =>
   import("@/modules/workspace-settings/components/workspace-setting-terms-and-policies").then(
-    (mod) => mod.WorkspaceTermsAndPolicies
-  )
+    (mod) => mod.WorkspaceTermsAndPolicies,
+  ),
 );
 
 const Content = () => {
   return (
-    <Container p={16}>
+    <Container p="md">
       <Card shadow="xs">
         <WorkspaceTermsAndPolicies />
       </Card>

@@ -1,0 +1,7 @@
+fragment Partner on Partner {
+  _id
+  name
+  phone
+  logo
+  email
+}

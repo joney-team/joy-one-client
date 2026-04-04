@@ -1,0 +1,7 @@
+#import "./fragmentMessageBox.graphql"
+
+mutation CloseMessageBox($boxId: String!) {
+  closeMessageBox(boxId: $boxId) {
+    ...MessageBox
+  }
+}

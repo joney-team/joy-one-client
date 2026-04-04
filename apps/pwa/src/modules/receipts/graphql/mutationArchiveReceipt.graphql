@@ -1,7 +1,0 @@
-#import "../graphql/fragmentReceipt.graphql"
-
-mutation ArchiveReceipt($archiveReceiptId: String!) {
-  archiveReceipt(id: $archiveReceiptId) {
-    ...Receipt
-  }
-}

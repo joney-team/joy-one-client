@@ -1,0 +1,12 @@
+fragment CustomField on CustomField {
+  _id
+  refs
+  type
+  key
+  label
+  order
+  config
+  description
+  placeholder
+  entities
+}

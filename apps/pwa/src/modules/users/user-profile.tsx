@@ -44,7 +44,7 @@ export const Profile: FC = () => {
   }, []);
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack>
         <Group justify="space-between" style={{ cursor: "pointer" }}>
           <Group gap={10} onClick={() => router.push("/profile/settings")}>

@@ -5,16 +5,13 @@ import { Skeleton, Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { ComponentType, ReactNode, useEffect, useMemo, type FC } from "react";
-import QUERY_TASK_BY_CODE, {
-  type TaskByCodeQuery,
-  type TaskByCodeQueryVariables,
-} from "../graphql/queryTaskByCode.graphql";
+import GetTaskByCodeDocument from "../graphql/getTaskByCode.graphql";
 import { useTasks } from "../tasks-context";
 import { updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
 
 const viewLoader = () => (
-  <Stack p={16}>
+  <Stack p="md">
     <Skeleton mih={500} w="100%" />
   </Stack>
 );
@@ -43,7 +40,7 @@ const getTimeTrackingsTasks = () =>
     {
       ssr: false,
       loading: viewLoader,
-    }
+    },
   );
 
 const allTaskViews: {
@@ -71,18 +68,18 @@ export const TaskViewsGateway: FC<{ view: TaskView }> = ({ view }) => {
     } else if (params.view) {
       if (!Object.values(TaskView).includes(params.view as TaskView)) {
         client
-          .query<TaskByCodeQuery, TaskByCodeQueryVariables>({
-            query: QUERY_TASK_BY_CODE,
+          .query({
+            query: GetTaskByCodeDocument,
             variables: {
               code: params.view,
             },
           })
           .then(({ data }) => {
-            if (data && data.taskByCode) {
+            if (data && data.task) {
               router.replace(
                 updateTaskPath({
-                  code: data.taskByCode.code,
-                })
+                  code: data.task.code,
+                }),
               );
             }
           })

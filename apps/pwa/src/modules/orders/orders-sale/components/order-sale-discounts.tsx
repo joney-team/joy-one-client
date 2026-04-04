@@ -64,8 +64,8 @@ export const OrderSaleDiscounts: FC = () => {
             </Group>
 
             <Group gap={8}>
-              {orderSale.calculating.isLoading ? (
-                <Skeleton h={20} w={80} visible={orderSale.calculating.isLoading} />
+              {orderSale.isCalculating ? (
+                <Skeleton h={20} w={80} visible />
               ) : (
                 <Text>
                   <CurrencyFormat value={orderSale.activeOrder?.directDiscount ?? 0} />

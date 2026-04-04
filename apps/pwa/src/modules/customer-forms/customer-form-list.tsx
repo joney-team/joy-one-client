@@ -12,28 +12,28 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconBuildingSkyscraper, IconLink, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
-import { OnCustomerFormApprovalModal } from "./modals/modal-customer-form-approval";
 import { useLocations } from "../locations/locations-context";
 import { customerFormStatuses } from "./customer-form-constants";
+import { OnCustomerFormApprovalModal } from "./modals/modal-customer-form-approval";
 import { OnModalCustomerFormLink } from "./modals/modal-customer-form-link";
 
 import { useMutation } from "@apollo/client/react";
+import BulkArchiveCustomerFormsDocument from "./graphql/bulkArchiveCustomerForms.graphql";
 import { CustomerFormFragment } from "./graphql/fragmentCustomerForm.graphql";
-import BULK_ARCHIVE_CUSTOMER_FORMS_MUTATION from "./graphql/mutationBulkArchiveCustomerForms.graphql";
-import QUERY_CUSTOMER_FORMS from "./graphql/queryCustomerForms.graphql";
+import GetCustomerFormsDocument from "./graphql/getCustomerForms.graphql";
 
 export const CustomerFormList: FC = () => {
   const { t } = useLingui();
   const { renderVnLocation: renderLocation } = useLocations();
-  const [bulkArchiveCustomerForms] = useMutation(BULK_ARCHIVE_CUSTOMER_FORMS_MUTATION);
+  const [bulkArchiveCustomerForms] = useMutation(BulkArchiveCustomerFormsDocument);
 
   return (
     <ModalUpdateWorkspaceBranch>
       {(modalUpdateWorkspaceBranch) => (
-        <Stack p={16}>
+        <Stack p="md">
           <List<CustomerFormFragment>
             id="cfms"
-            query={QUERY_CUSTOMER_FORMS}
+            query={GetCustomerFormsDocument}
             creatable={{
               onCreate: () => OnModalCustomerFormLink(),
               label: t`Link form`,

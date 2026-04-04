@@ -23,12 +23,12 @@ import writeXlsxFile from "write-excel-file";
 import { ReportWidgetsContext } from "../types";
 
 import { LoanPackageType, ReceiptStatus } from "@/graphql/enums.graphql";
-import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
+import GetCustomerByIdDocument from "@/modules/customers/graphql/getCustomerById.graphql";
 import { LoanFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
-import QUERY_LOAN_BY_CODE from "@/modules/loans/graphql/queryLoanByCode.graphql";
+import GetLoanByCodeDocument from "@/modules/loans/graphql/getLoanByCode.graphql";
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
-import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
-import QUERY_WORKSPACE_MEMBER_BY_IDS from "@/modules/workspace-members/graphql/queryWorkspaceMembersByIds.graphql";
+import GetReceiptsDocument from "@/modules/receipts/graphql/getReceipts.graphql";
+import GetWorkspaceMembersByIdsDocument from "@/modules/workspace-members/graphql/getWorkspaceMembersByIds.graphql";
 import { useApolloClient } from "@apollo/client/react";
 
 interface CreditReportItem {
@@ -103,12 +103,12 @@ const exportReport = async (
   for (const loanCode of loanCodes) {
     try {
       const loan = await client.query({
-        query: QUERY_LOAN_BY_CODE,
+        query: GetLoanByCodeDocument,
         variables: {
           code: loanCode,
         },
       });
-      loans.push(loan.data?.loanByCode!);
+      loans.push(loan.data?.loan!);
     } catch (error) {
       const relatedreceipts = receipts.filter((v) => v.relatedLoanCode === loanCode);
       console.error(`Failed to load loan with code ${loanCode}`, relatedreceipts);
@@ -124,7 +124,7 @@ const exportReport = async (
 
   for (const customerId of customerIds) {
     const customer = await client.query({
-      query: QUERY_CUSTOMER,
+      query: GetCustomerByIdDocument,
       variables: {
         id: customerId,
       },
@@ -313,7 +313,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
           // Fetch count
           const receiptsResult = await client.query({
-            query: QUERY_RECEIPTS,
+            query: GetReceiptsDocument,
             variables: {
               query,
               offset: 0,
@@ -329,7 +329,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
             if (receipts.length === count) return;
 
             const result = await client.query({
-              query: QUERY_RECEIPTS,
+              query: GetReceiptsDocument,
               variables: {
                 query,
                 offset: receipts.length,
@@ -353,14 +353,14 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
 
           const userMemberInfos = await client
             .query({
-              query: QUERY_WORKSPACE_MEMBER_BY_IDS,
+              query: GetWorkspaceMembersByIdsDocument,
               variables: {
                 ids: [...(report.items.map((v) => v.cashier!.userId).filter(Boolean) || [])].filter(
                   Boolean,
                 ),
               },
             })
-            .then((result) => result.data?.workspaceMembersByIds ?? []);
+            .then((result) => result.data?.members ?? []);
 
           const borderColor = "#dee2e6";
           const numberFormat = "#,##0";
@@ -670,7 +670,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
   };
 
   return (
-    <Card withBorder={false} shadow="xs" p={16} w="100%" h="100%">
+    <Card withBorder={false} shadow="xs" p="md" w="100%" h="100%">
       <Stack justify="center" h="100%">
         <SectionTitle
           name={<Trans>Report income and expenditure</Trans>}

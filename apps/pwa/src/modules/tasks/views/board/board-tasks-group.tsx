@@ -20,7 +20,7 @@ import { ActionIcon, Center, Group, Skeleton, Stack, Text, alpha } from "@mantin
 import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 
@@ -34,7 +34,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface BoardTasksGroupProps {
@@ -58,7 +58,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
 
   const isClosedTasks = props.status.id === DefaultTaskStatusId.CLOSED;
 
-  const groupVariables: TasksQueryVariables = useMemo(() => {
+  const groupVariables: GetTasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
       status: props.status.id,
@@ -69,7 +69,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
   }, [props.status.id, activatedFolder?._id, state.variables]);
 
   const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
-    { variables: groupVariables }
+    { variables: groupVariables },
   );
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
             const sourceTask = source.data.task as Task;
 
             const context: UpdateTaskContext = {
-              fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+              fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
               toGroupVariables: groupVariables,
             };
 
@@ -105,7 +105,7 @@ export const BoardTasksGroup: FC<BoardTasksGroupProps> = (props) => {
       }),
       autoScrollForElements({
         element: scrollAreaRef.current,
-      })
+      }),
     );
   }, [props.status.id, groupVariables]);
 

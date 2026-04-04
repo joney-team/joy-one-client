@@ -1,0 +1,7 @@
+#import "./fragmentMetricsReport.graphql"
+
+query GetMetricsReport {
+  metricsReport: getMetricsReport {
+    ...MetricsReport
+  }
+}

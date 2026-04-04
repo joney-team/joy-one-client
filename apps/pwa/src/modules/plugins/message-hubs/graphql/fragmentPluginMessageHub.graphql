@@ -1,0 +1,32 @@
+fragment PluginMessageHub on PluginMessageHub {
+  _id
+  name
+  ref
+  webhookUrl
+  widgetSettings {
+    color
+    position
+    chatIcon
+    locale
+    brandName
+    brandLogo
+    welcomMessage
+    welcomSubMessage
+    welcomeInputs {
+      id
+      type
+      isRequired
+      label
+      fieldName
+      description
+      placeholder
+    }
+  }
+  script {
+    src
+    html
+  }
+  direct {
+    src
+  }
+}

@@ -1,0 +1,17 @@
+fragment ReceiptReportItem on ReceiptReportItem {
+  ref
+  time
+  userId
+  relatedEntities {
+    type
+    data
+  }
+  revenue
+  profit
+  loan {
+    period
+    capital
+    fee
+    expense
+  }
+}

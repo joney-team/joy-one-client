@@ -1,0 +1,64 @@
+#import "./fragmentReceiptReportItem.graphql"
+
+fragment TimeSeriesReport on TimeSeriesReport {
+  _id
+  type
+  ref
+  fromTime
+  toTime
+  workspaceBranchIds
+  userId
+  data {
+    fromTime
+    toTime
+    customers {
+      total
+      newIds
+    }
+    bookings {
+      total
+      completed
+      canceled
+      transferred
+      inProgress
+    }
+    receipts {
+      revenue
+      totalRevenue
+      totalProfit
+      totalReceipts
+      items {
+        ...ReceiptReportItem
+      }
+      loanCapital
+      loanFee
+      loanExpense
+    }
+    loans {
+      newLoans {
+        id
+        amount
+        customerId
+      }
+      fulfilledLoans {
+        id
+        amount
+        customerId
+      }
+      contracts {
+        new
+        fulfilled
+        fulfilledAmount
+      }
+    }
+    tasks {
+      total
+      hasDueDate
+      completed
+      overdue
+    }
+  }
+  dto
+  status
+  updatedAt
+}

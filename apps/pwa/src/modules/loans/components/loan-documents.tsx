@@ -10,7 +10,6 @@ import { FileType, LoanStatus } from "@/graphql/enums.graphql";
 import { OnModalPrompt } from "@/modals/modal-prompt";
 import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
-import MUTATION_UPDATE_LOAN_AMOUNT from "@/modules/loans/graphql/mutationUpdateLoanAmount.graphql";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { getGoogleMapLinkCoord } from "@/modules/locations/locations-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -42,10 +41,11 @@ import {
   IconNotes,
 } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
+import ApproveLoanDocument from "../graphql/approveLoan.graphql";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
-import MUTATION_APPROVE_LOAN from "../graphql/mutationApproveLoan.graphql";
-import MUTATION_UPDATE_LOAN_PACKAGE from "../graphql/mutationUpdateLoanPackage.graphql";
-import MUTATION_REJECT_LOAN from "../graphql/mutationRejectLoan.graphql";
+import RejectLoanDocument from "../graphql/rejectLoan.graphql";
+import UpdateLoanAmountDocument from "../graphql/updateLoanAmount.graphql";
+import UpdateLoanPackageDocument from "../graphql/updateLoanPackage.graphql";
 import { loanAssetTypes } from "../loans-constants";
 import { LoanRowInfo } from "./loan-row-info";
 
@@ -64,10 +64,10 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
     loan.status === LoanStatus.Pending &&
     workspace.hasPermission(WorkspacePermission.LOANS_CREATOR);
 
-  const [updateLoanAmount] = useMutation(MUTATION_UPDATE_LOAN_AMOUNT);
-  const [updateLoanPackage] = useMutation(MUTATION_UPDATE_LOAN_PACKAGE);
-  const [approveLoan] = useMutation(MUTATION_APPROVE_LOAN);
-  const [rejectLoan] = useMutation(MUTATION_REJECT_LOAN);
+  const [updateLoanAmount] = useMutation(UpdateLoanAmountDocument);
+  const [updateLoanPackage] = useMutation(UpdateLoanPackageDocument);
+  const [approveLoan] = useMutation(ApproveLoanDocument);
+  const [rejectLoan] = useMutation(RejectLoanDocument);
 
   const onUpdateAmount = useDebouncedCallback(async (value: any) => {
     onActionLoad({

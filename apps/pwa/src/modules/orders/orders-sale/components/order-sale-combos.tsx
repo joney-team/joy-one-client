@@ -5,8 +5,9 @@ import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
+import GetProductCombosByIdsDocument from "@/modules/product-combos/graphql/getProductCombosByIds.graphql";
 import { useColor } from "@/modules/theme/use-color";
-import { t } from "@lingui/core/macro";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import {
   Badge,
@@ -27,17 +28,17 @@ import { userOrdersManagement } from "../../orders-management/orders-management-
 export const OrderSaleCombos: FC = () => {
   const color = useColor();
   const [opened, { open, close }] = useDisclosure(false);
-  const { availableCombos, activeOrder, updateOrder } = userOrdersManagement();
+  const { availableCombos, availableCombosLoading, activeOrder, updateOrder } =
+    userOrdersManagement();
 
-  const combos = [
-    ...(availableCombos.data ?? []),
-    ...(activeOrder?.prevCombos ?? []).filter(
-      (c) => !availableCombos.data || !availableCombos.data.some((c2) => c2.id === c.id)
-    ),
-  ];
+  const { data: productCombosData } = useQuery(GetProductCombosByIdsDocument, {
+    variables: {
+      ids: activeOrder?.comboIds ?? [],
+    },
+  });
 
-  const orderCombos = activeOrder?.combos ?? [];
-  const unUsedCombos = combos.filter((c) => !orderCombos.some((c2) => c2.id === c.id));
+  const usedCombos = productCombosData?.combos ?? [];
+  const unUsedCombos = availableCombos.filter((c) => !usedCombos.some((c2) => c2.id === c.id));
 
   if (!activeOrder) return null;
 
@@ -48,9 +49,9 @@ export const OrderSaleCombos: FC = () => {
       </Text>
 
       <Group flex={1} justify="end">
-        {availableCombos.isLoading ? (
+        {availableCombosLoading ? (
           <Skeleton h={25} w={80} visible />
-        ) : combos.length > 0 ? (
+        ) : usedCombos.length > 0 ? (
           <Indicator
             inline
             disabled={unUsedCombos.length === 0}
@@ -61,12 +62,12 @@ export const OrderSaleCombos: FC = () => {
               size="xs"
               h={25}
               variant="outline"
-              color={color(orderCombos.length > 0 ? "primary" : "gray")}
+              color={color(usedCombos.length > 0 ? "primary" : "gray")}
               fw={400}
               onClick={open}
             >
-              <Trans>Apply</Trans> <NumberFormat value={orderCombos.length} />/
-              <NumberFormat value={combos.length} />
+              <Trans>Apply</Trans> <NumberFormat value={usedCombos.length} />/
+              <NumberFormat value={availableCombos.length} />
             </Button>
           </Indicator>
         ) : (
@@ -77,11 +78,11 @@ export const OrderSaleCombos: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalHead name={t`Combos`} icon={IconPackage} />}
+        title={<ModalHead name={<Trans>Combos</Trans>} icon={IconPackage} />}
       >
         <Stack>
-          {combos.map((combo) => {
-            const isActive = orderCombos.some((c) => c.id === combo.id);
+          {availableCombos.map((combo) => {
+            const isActive = usedCombos.some((c) => c.id === combo.id);
 
             return (
               <ItemCard
@@ -91,7 +92,7 @@ export const OrderSaleCombos: FC = () => {
                   return (
                     <Group key={ref.productRefId} gap={8}>
                       <Text fz={16} c="dark" fw={400}>
-                        • {ref.productRef.name}
+                        • {ref.product.name}
                       </Text>
 
                       <Badge variant="light" color="dark">
@@ -106,11 +107,11 @@ export const OrderSaleCombos: FC = () => {
                 onClick={() => {
                   if (isActive) {
                     updateOrder({
-                      combos: orderCombos.filter((c) => c.id !== combo.id),
+                      comboIds: activeOrder.comboIds?.filter((id) => id !== combo.id) ?? [],
                     });
                   } else {
                     updateOrder({
-                      combos: [...orderCombos, combo],
+                      comboIds: [...(activeOrder.comboIds ?? []), combo.id],
                     });
                   }
                 }}
@@ -118,7 +119,7 @@ export const OrderSaleCombos: FC = () => {
             );
           })}
 
-          <Empty visible={combos.length === 0} />
+          <Empty visible={availableCombos.length === 0} />
         </Stack>
       </Modal>
     </Group>

@@ -31,7 +31,7 @@ import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
 import { FileFragment } from "../graphql/fragmentFile.graphql";
-import QUERY_FILES from "../graphql/queryFiles.graphql";
+import GetFilesDocument from "../graphql/getFiles.graphql";
 
 const ModalFileGallery = dynamic(
   () => import("./modal-file-gallery").then((mod) => mod.ModalFileGallery),
@@ -70,8 +70,8 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
     };
   }, []);
 
-  const files = useGraphqlList({
-    query: QUERY_FILES,
+  const files = useGraphqlList<FileFragment>({
+    query: GetFilesDocument,
     id: "fs",
     params,
   });
@@ -79,7 +79,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
   const [_selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const selectedFiles = _selectedFiles
     .map((v) => files.data.find((f) => f._id === v))
-    .filter((v) => !!v) as FileFragment[];
+    .filter((v) => !!v);
 
   const onClose = () => setArgs(null);
 
@@ -141,7 +141,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
             bg={configs.backgroundColors[colorScheme]}
             id="files-list"
           >
-            <Stack gap={0} p={16}>
+            <Stack gap={0} p="md">
               <SimpleGrid cols={layout.view === "mobile" ? 2 : layout.view === "tablet" ? 4 : 6}>
                 {files.data.map((file, index) => {
                   return (

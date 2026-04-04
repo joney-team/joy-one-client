@@ -1,0 +1,3 @@
+mutation PluginMailerSendTestMail($input: TestSendMailInput!) {
+  pluginMailerSendTestMail(input: $input)
+}

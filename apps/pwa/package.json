@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "next start",
-    "dev": "pnpm run codegen:clean && pnpm run codegen:compile && rm -rf .next && next dev",
+    "dev": "pnpm run codegen:compile && rm -rf .next && next dev",
     "build": "pnpm translate:compile && pnpm run codegen:compile && next build",
     "typecheck": "tsc",
     "prestart": "node scripts/prepare.js",
@@ -16,7 +16,7 @@
     "ws:apps:build": "pnpm translate:compile && pnpm run codegen:compile && NODE_OPTIONS=\"--max-old-space-size=8192\" NEXT_PUBLIC_EXTENDED_APP=true next build",
     "ws:apps:start": "NEXT_PUBLIC_EXTENDED_APP=true next start",
     "codegen:clean": "find src -type f -name '*graphql.d.ts' -delete",
-    "codegen:compile": "pnpm run codegen:schema && pnpm run codegen",
+    "codegen:compile": "pnpm run codegen:clean && pnpm run codegen:schema && pnpm run codegen",
     "codegen:schema": "graphql-codegen --config ./codegen-schema.ts",
     "codegen": "graphql-codegen --config ./codegen.ts",
     "compile": "pnpm run codegen:compile && pnpm run translate && pnpm run translate:compile",

@@ -1,7 +1,0 @@
-#import "../graphql/fragmentWorkspaceBranch.graphql"
-
-mutation CreateWorkspaceBranch($input: WorkspaceBranchInput!) {
-  createWorkspaceBranch(input: $input) {
-    ...WorkspaceBranch
-  }
-}

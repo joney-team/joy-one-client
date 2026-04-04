@@ -1,0 +1,44 @@
+fragment MetricsReport on MetricsReport {
+  _id
+  type
+  ref
+  fromTime
+  toTime
+  workspaceBranchIds
+  userId
+  data {
+    loans {
+      contracts {
+        activated
+        overdue
+        pending
+      }
+      debt {
+        notDueYet
+        overdue
+        total
+      }
+    }
+    tasks {
+      inProgress
+      overdue
+      todo
+    }
+    receipts {
+      revenueToday
+    }
+    customers {
+      newCustomersToday
+    }
+    bookings {
+      todayCount
+      userBookingsCount
+    }
+    orders {
+      todayOrders
+    }
+  }
+  dto
+  status
+  updatedAt
+}

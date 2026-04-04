@@ -1,9 +1,8 @@
-import { WorkspaceType } from "@/graphql/enums.graphql";
+import { Period, WorkspaceType } from "@/graphql/enums.graphql";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
-import { Period } from "@/types";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
 import { EWidgetModules } from "@/widgets/widgets-types";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -44,10 +43,14 @@ export const useReportWidgetModules = (): {
         component: numberWidget({
           type: "money",
           isLoading: (ctx) => ctx.isFetching,
-          renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0),
-          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.receipts.revenue),
+          renderValue: (ctx) =>
+            ctx.rangeReports.reduce((acc, v) => acc + v.data.receipts.revenue, 0),
+          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.data.receipts.revenue),
           boxColor: (ctx) => {
-            const totalRevenue = ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0);
+            const totalRevenue = ctx.rangeReports.reduce(
+              (acc, v) => acc + v.data.receipts.revenue,
+              0,
+            );
             return totalRevenue >= 0 ? "primary" : "red";
           },
         }),
@@ -62,11 +65,11 @@ export const useReportWidgetModules = (): {
           type: "money",
           isLoading: (ctx) => ctx.isFetching,
           renderValue: (ctx) =>
-            ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0) /
+            ctx.rangeReports.reduce((acc, v) => acc + v.data.receipts.revenue, 0) /
             ctx.rangeReports.length,
           boxColor: (ctx) => {
             const averageRevenue =
-              ctx.rangeReports.reduce((acc, v) => acc + v.receipts.revenue, 0) /
+              ctx.rangeReports.reduce((acc, v) => acc + v.data.receipts.revenue, 0) /
               ctx.rangeReports.length;
             return averageRevenue >= 0 ? "primary" : "red";
           },
@@ -85,11 +88,11 @@ export const useReportWidgetModules = (): {
               const date = DateTime.normalizeDate(v.fromTime);
               return {
                 date: date
-                  ? ctx.period === Period.MONTH
+                  ? ctx.period === Period.Month
                     ? date.getDate()
                     : `${date.getDate()}/${date.getMonth() + 1}`
                   : "-",
-                value: reportConvertMoneyAmount(v.receipts.revenue, ctx.currency),
+                value: reportConvertMoneyAmount(v.data.receipts.revenue, ctx.currency),
               };
             }),
           unit: (ctx) => reportConvertMoneyAmountUnit(ctx.currency),
@@ -109,11 +112,11 @@ export const useReportWidgetModules = (): {
               const date = DateTime.normalizeDate(v.fromTime);
               return {
                 date: date
-                  ? ctx.period === Period.MONTH
+                  ? ctx.period === Period.Month
                     ? date.getDate()
                     : `${date.getDate()}/${date.getMonth() + 1}`
                   : "-",
-                value: v.customers.total,
+                value: v.data.customers.total,
               };
             }),
           renderSeries: () => [{ name: "value", label: t`New customers`, color: "primary.6" }],
@@ -127,8 +130,9 @@ export const useReportWidgetModules = (): {
         },
         component: numberWidget({
           isLoading: (ctx) => ctx.isFetching,
-          renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => acc + v.customers.total, 0),
-          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.customers.total),
+          renderValue: (ctx) =>
+            ctx.rangeReports.reduce((acc, v) => acc + v.data.customers.total, 0),
+          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.data.customers.total),
         }),
       },
       [ReportWidgetType.TASKS]: {
@@ -139,8 +143,8 @@ export const useReportWidgetModules = (): {
         },
         component: numberWidget({
           isLoading: (ctx) => ctx.isFetching,
-          renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => acc + v.tasks.total, 0),
-          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.tasks.total),
+          renderValue: (ctx) => ctx.rangeReports.reduce((acc, v) => acc + v.data.tasks.total, 0),
+          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.data.tasks.total),
         }),
       },
       [ReportWidgetType.TASKS_COMPLETED_RATES]: {
@@ -153,17 +157,17 @@ export const useReportWidgetModules = (): {
           unit: "%",
           isLoading: (ctx) => ctx.isFetching,
           renderValue: (ctx) => {
-            const totalTasks = ctx.rangeReports.reduce((acc, v) => acc + v.tasks.total, 0);
+            const totalTasks = ctx.rangeReports.reduce((acc, v) => acc + v.data.tasks.total, 0);
             const totalCompletedTasks = ctx.rangeReports.reduce(
-              (acc, v) => acc + v.tasks.completed,
-              0
+              (acc, v) => acc + v.data.tasks.completed,
+              0,
             );
             const tasksCompletedPercent =
               totalTasks > 0 ? (totalCompletedTasks / totalTasks) * 100 : 0;
             return tasksCompletedPercent;
           },
           renderSparkline: (ctx) => {
-            return ctx.rangeReports.map((v) => v.tasks.completed);
+            return ctx.rangeReports.map((v) => v.data.tasks.completed);
           },
         }),
       },
@@ -208,12 +212,12 @@ export const useReportWidgetModules = (): {
               const date = DateTime.normalizeDate(v.fromTime);
               return {
                 date: date
-                  ? ctx.period === Period.MONTH
+                  ? ctx.period === Period.Month
                     ? date.getDate()
                     : `${date.getDate()}/${date.getMonth() + 1}`
                   : "-",
-                value: v.loans.contracts.new,
-                fulfilled: v.loans.contracts.fulfilled,
+                value: v.data.loans.contracts.new,
+                fulfilled: v.data.loans.contracts.fulfilled,
               };
             }),
           renderSeries: () => [
@@ -237,13 +241,13 @@ export const useReportWidgetModules = (): {
               const date = DateTime.normalizeDate(v.fromTime);
               return {
                 date: date
-                  ? ctx.period === Period.MONTH
+                  ? ctx.period === Period.Month
                     ? date.getDate()
                     : `${date.getDate()}/${date.getMonth() + 1}`
                   : "-",
                 value: reportConvertMoneyAmount(
-                  v.loans.contracts.fulfilledAmount || 0,
-                  ctx.currency
+                  v.data.loans.contracts.fulfilledAmount || 0,
+                  ctx.currency,
                 ),
               };
             }),
@@ -261,8 +265,8 @@ export const useReportWidgetModules = (): {
         component: numberWidget({
           isLoading: (ctx) => ctx.isFetching,
           renderValue: (ctx) =>
-            ctx.rangeReports.reduce((acc, v) => acc + v.loans.contracts.fulfilled, 0),
-          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.loans.contracts.fulfilled),
+            ctx.rangeReports.reduce((acc, v) => acc + v.data.loans.contracts.fulfilled, 0),
+          renderSparkline: (ctx) => ctx.rangeReports.map((v) => v.data.loans.contracts.fulfilled),
         }),
       },
       [ReportWidgetType.LOANS_FEE]: {
@@ -276,7 +280,7 @@ export const useReportWidgetModules = (): {
           isLoading: (ctx) => ctx.isFetching,
           type: "money",
           renderValue: (ctx) =>
-            ctx.rangeReports.reduce((acc, v) => acc + (v.receipts.loanFee ?? 0), 0),
+            ctx.rangeReports.reduce((acc, v) => acc + (v.data.receipts.loanFee ?? 0), 0),
         }),
       },
       [ReportWidgetType.LOANS_CAPITAL]: {
@@ -290,7 +294,7 @@ export const useReportWidgetModules = (): {
           isLoading: (ctx) => ctx.isFetching,
           type: "money",
           renderValue: (ctx) =>
-            ctx.rangeReports.reduce((acc, v) => acc + (v.receipts.loanCapital ?? 0), 0),
+            ctx.rangeReports.reduce((acc, v) => acc + (v.data.receipts.loanCapital ?? 0), 0),
         }),
       },
       [ReportWidgetType.LOANS_EXPENSE]: {
@@ -304,7 +308,7 @@ export const useReportWidgetModules = (): {
           isLoading: (ctx) => ctx.isFetching,
           type: "money",
           renderValue: (ctx) =>
-            -ctx.rangeReports.reduce((acc, v) => acc + (v.receipts.loanExpense ?? 0), 0),
+            -ctx.rangeReports.reduce((acc, v) => acc + (v.data.receipts.loanExpense ?? 0), 0),
         }),
       },
       [ReportWidgetType.LOANS_NEW_CUSTOMERS_AND_FULFILLED]: {
@@ -318,8 +322,8 @@ export const useReportWidgetModules = (): {
           isLoading: (ctx) => ctx.isFetching,
           renderValue: (ctx) =>
             ctx.rangeReports.reduce((acc, v) => {
-              const newCustomers = v.customers.newIds.filter((id) =>
-                v.loans.fulfilledLoans.some((loan) => loan.customerId === id)
+              const newCustomers = v.data.customers.newIds.filter((id) =>
+                v.data.loans.fulfilledLoans.some((loan) => loan.customerId === id),
               );
               return acc + newCustomers.length;
             }, 0),
@@ -336,8 +340,8 @@ export const useReportWidgetModules = (): {
           isLoading: (ctx) => ctx.isFetching,
           renderValue: (ctx) =>
             ctx.rangeReports.reduce((acc, v) => {
-              const newLoans = v.loans.fulfilledLoans.filter((loan) =>
-                v.customers.newIds.includes(loan.customerId)
+              const newLoans = v.data.loans.fulfilledLoans.filter((loan) =>
+                v.data.customers.newIds.includes(loan.customerId),
               );
               return acc + newLoans.length;
             }, 0),

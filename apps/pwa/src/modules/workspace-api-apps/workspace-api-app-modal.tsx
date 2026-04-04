@@ -4,14 +4,7 @@ import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { FormSession } from "@/components/form-session";
 import { ModalHead } from "@/components/modal/modal-head";
-import { WorkspaceApiAppDto } from "@/modules/workspace-api-apps/workspace-api-apps-dtos";
-import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
-import {
-  archiveWorkspaceApiApp,
-  createWorkspaceApiApp,
-  resetWorkspaceApiAppSecretKey,
-  updateWorkspaceApiApp,
-} from "@/modules/workspace-api-apps/workspace-api-apps-service";
+import { WorkspaceApiAppInput } from "@/graphql/types.graphql";
 import { WorkspaceBranchesInput } from "@/modules/workspace-branches/workspace-branches-input";
 import { WorkspaceRolesInput } from "@/modules/workspace-roles/components/workspace-roles-input";
 import {
@@ -20,6 +13,7 @@ import {
 } from "@/modules/workspace-roles/workspace-roles-types";
 import { onActionLoad } from "@/utils/actions";
 import { onFormError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -49,19 +43,25 @@ import { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentW
 import { WorkspaceRoleFragment } from "../workspace-roles/graphql/fragmentWorkspaceRole.graphql";
 import { useWorkspaceRoles } from "../workspace-roles/hooks/use-workspace-roles";
 import { workspaceDefaultRoles } from "../workspace-roles/workspace-roles-constants";
+import ArchiveWorkspaceApiAppDocument from "./graphql/archiveWorkspaceApiApp.graphql";
+import CreateWorkspaceApiAppDocument from "./graphql/createWorkspaceApiApp.graphql";
+import { WorkspaceApiAppFragment } from "./graphql/fragmentWorkspaceApiApp.graphql";
+import RegenerateWorkspaceApiAppSecretDocument from "./graphql/regenerateWorkspaceApiAppSecret.graphql";
+import UpdateWorkspaceApiAppDocument from "./graphql/updateWorkspaceApiApp.graphql";
 
 interface ModalWorkspaceApiAppProps {
-  app?: IWorkspaceApiApp;
+  app?: WorkspaceApiAppFragment;
 }
 
 const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   const { t } = useLingui();
+  const client = useApolloClient();
 
   const secretKeyVisible = useDisclosure(false);
-  const [app, setApp] = useState<IWorkspaceApiApp | null>(props.app || null);
+  const [app, setApp] = useState<WorkspaceApiAppFragment | null>(props.app || null);
   const [secretKey, setSecretKey] = useState(app?.secretKey || "");
 
-  const getInitialValues = (_app?: IWorkspaceApiApp) => {
+  const getInitialValues = (_app?: WorkspaceApiAppFragment) => {
     return {
       name: _app?.member.name || "",
       roles: _app?.member.roles || [
@@ -86,7 +86,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
     },
   });
 
-  const { roles: workspaceRoles } = useWorkspaceRoles();
+  const { workspaceRoles } = useWorkspaceRoles();
   const roles = workspaceRoles.filter((v) => form.values.roles.some((v2) => v2._id === v._id));
   const isMainWorkspaceAccessable = roles.some((v) =>
     v.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
@@ -97,16 +97,22 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 
     onActionLoad({
       name: <Trans>Reset secret key</Trans>,
-      process: () => resetWorkspaceApiAppSecretKey(app._id),
+      process: () =>
+        client.mutate({
+          mutation: RegenerateWorkspaceApiAppSecretDocument,
+          variables: {
+            appId: app._id,
+          },
+        }),
       onFinished: (result) => {
-        setSecretKey(result.secretKey);
+        setSecretKey(result.data?.apiApp.secretKey!);
       },
     });
   };
 
   const onSubmit = form.onSubmit(async (data) => {
     try {
-      const payload: WorkspaceApiAppDto = {
+      const input: WorkspaceApiAppInput = {
         name: data.name,
         enabled: app ? app.enabled : true,
         roleIds: data.roles.map((v) => v._id),
@@ -114,21 +120,34 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
       };
 
       if (app) {
-        const _app = await updateWorkspaceApiApp(app._id, payload);
-        form.setInitialValues(getInitialValues(_app));
+        const result = await client.mutate({
+          mutation: UpdateWorkspaceApiAppDocument,
+          variables: {
+            appId: app._id,
+            input,
+          },
+        });
+        if (!result.data?.apiApp) throw new Error(t`Action failed`);
+        form.setInitialValues(getInitialValues(result.data?.apiApp));
         form.reset();
-        setApp(_app);
+        setApp(result.data?.apiApp);
       } else {
         const entity = `API App`;
-        const _app = await createWorkspaceApiApp(payload);
-        form.setInitialValues(getInitialValues(_app));
+        const result = await client.mutate({
+          mutation: CreateWorkspaceApiAppDocument,
+          variables: {
+            input,
+          },
+        });
+        if (!result.data?.apiApp) throw new Error(t`Action failed`);
+        form.setInitialValues(getInitialValues(result.data?.apiApp));
         form.reset();
-        setSecretKey(_app.secretKey);
+        setSecretKey(result.data?.apiApp.secretKey);
         modals.updateModal({
           modalId: "ModalWorkspaceApiApp",
           title: <ModalHead name={t`Update ${entity}`} icon={IconApiApp} />,
         });
-        setApp(_app);
+        setApp(result.data?.apiApp);
       }
     } catch (error) {
       onFormError(form, error);
@@ -230,7 +249,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
           )}
         </FormSession>
 
-        <Stack gap={16} mt={16}>
+        <Stack gap="md" mt={16}>
           <Center>
             <Button loading={form.submitting} type="submit" disabled={!form.isDirty()}>
               {app ? <Trans>Save changes</Trans> : <Trans>Create new</Trans>}
@@ -239,11 +258,16 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
 
           {!!app && (
             <ButtonArchive
-              process={() => archiveWorkspaceApiApp(app._id)}
+              process={() =>
+                client.mutate({
+                  mutation: ArchiveWorkspaceApiAppDocument,
+                  variables: {
+                    appId: app._id,
+                  },
+                })
+              }
               goBackWhenArchived={false}
-              onArchived={() => {
-                modals.close("ModalWorkspaceApiApp");
-              }}
+              onArchived={() => modals.close("ModalWorkspaceApiApp")}
             />
           )}
         </Stack>
@@ -252,7 +276,7 @@ const ModalWorkspaceApiApp: FC<ModalWorkspaceApiAppProps> = (props) => {
   );
 };
 
-export const OnModalWorkspaceApiApp = (app?: IWorkspaceApiApp) => {
+export const OnModalWorkspaceApiApp = (app?: WorkspaceApiAppFragment) => {
   const entity = `API App`;
 
   return modals.open({

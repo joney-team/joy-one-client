@@ -1,7 +1,0 @@
-#import "./fragmentWorkspaceSetting.graphql"
-
-query WorkspaceSetting {
-  workspaceSetting {
-    ...WorkspaceSetting
-  }
-}

@@ -1,0 +1,3 @@
+mutation BulkProductsStockIn($input: BulkProductsStockInInput!) {
+  bulkProductsStockIn(input: $input)
+}

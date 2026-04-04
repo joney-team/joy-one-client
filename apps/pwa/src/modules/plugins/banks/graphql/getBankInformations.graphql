@@ -1,0 +1,10 @@
+#import "./fragmentBankInformation.graphql"
+
+query GetBankInformations {
+  getBankInformations {
+    total
+    results {
+      ...BankInformation
+    }
+  }
+}

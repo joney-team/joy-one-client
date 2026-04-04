@@ -8,7 +8,8 @@ import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { searchEntity } from "../search/search-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
-import QUERY_WORKSPACE_BRANCHES_BY_IDS from "./graphql/queryWorkspaceBranchsByIds.graphql";
+import GetWorkspaceBranchesDocument from "./graphql/getWorkspaceBranches.graphql";
+import GetWorkspaceBranchesByIdsDocument from "./graphql/getWorkspaceBranchesByIds.graphql";
 
 export const workspaceBranchColumn = (): Column => {
   const workspace = useWorkspace();
@@ -46,7 +47,7 @@ export const workspaceBranchColumn = (): Column => {
               pinnedOptions: [rootOption],
               getSelectedOptions: async (ids, client) => {
                 const results = await client.query({
-                  query: QUERY_WORKSPACE_BRANCHES_BY_IDS,
+                  query: GetWorkspaceBranchesByIdsDocument,
                   variables: { ids: ids.filter((v) => v !== "root") },
                 });
                 const options = results.data?.branches ?? [];
@@ -56,7 +57,7 @@ export const workspaceBranchColumn = (): Column => {
                 const options = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
                 return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
               },
-              listRoute: "/workspace-branches",
+              listQuery: GetWorkspaceBranchesDocument,
             },
           }
         : workspace.member.workspaceBranches.length > 1

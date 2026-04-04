@@ -12,11 +12,11 @@ interface ButtonArchiveProps {
   process: () => Promise<any> | any;
   enabled?: boolean;
   mt?: number;
-  name?: string | ReactNode;
+  name?: ReactNode;
   onClick?: () => void;
   onArchived?: () => void;
   goBackWhenArchived?: boolean;
-  label?: string;
+  label?: ReactNode;
 }
 
 export const ButtonArchive: FC<ButtonArchiveProps> = (props) => {

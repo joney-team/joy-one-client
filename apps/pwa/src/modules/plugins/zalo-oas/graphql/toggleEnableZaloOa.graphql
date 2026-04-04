@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+mutation ToggleEnableZaloOa($zaloOaId: String!) {
+  toggleEnableZaloOa(id: $zaloOaId) {
+    ...ZaloOa
+  }
+}

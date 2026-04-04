@@ -1,20 +1,23 @@
-import { restClient } from "@/modules/apis/rest-client";
-import { ResponseList } from "@/types";
+import { graphqlClient } from "@/graphql/graphql-client";
+import { BankInformation, PluginBankAccount } from "@/graphql/types.graphql";
 import { useForceUpdate } from "@mantine/hooks";
 import { useEffect } from "react";
-import { BankInformation, BankQrCode } from "./banks.types";
-import { PluginBankAccount } from "@/graphql/types.graphql";
+import { BankQrCode } from "./banks.types";
+import GetBankInformationsDocument from "./graphql/getBankInformations.graphql";
 
 let banks: BankInformation[] = [];
 
 export async function getBanks() {
-  if (banks.length) return { data: banks, count: banks.length };
+  if (banks.length) return banks;
   try {
-    const data = await restClient.get<ResponseList<BankInformation>>(`/plugins/banks`);
-    banks = data.data;
-    return data;
+    const result = await graphqlClient.query({
+      query: GetBankInformationsDocument,
+    });
+
+    banks = result.data?.getBankInformations.results ?? [];
+    return banks;
   } catch (error) {
-    return { data: banks, count: banks.length };
+    return banks;
   }
 }
 
@@ -33,7 +36,7 @@ export async function getQrCodePaymentUrl(
   payload: { amount: number; description?: string },
 ) {
   const banks = await getBanks();
-  const bank = banks.data.find((v) => v.id === bankAccount.bankId);
+  const bank = banks.find((v) => v.id === bankAccount.bankId);
   let url = `https://img.vietqr.io/image/${bank?.bin}-${bankAccount.accountNumber}-compact.jpg`;
   const query = new URLSearchParams();
   if (payload.description) query.set("addInfo", payload.description);
@@ -47,7 +50,7 @@ export async function getQrCode(
   payload: { amount: number; description?: string },
 ): Promise<BankQrCode> {
   const banks = await getBanks();
-  const bank = banks.data.find((v) => v.id === bankAccount.bankId);
+  const bank = banks.find((v) => v.id === bankAccount.bankId);
   if (!bank) throw Error("Không tìm thấy thông tin ngân hàng");
   return getStaticQrCode(bank, bankAccount, payload);
 }

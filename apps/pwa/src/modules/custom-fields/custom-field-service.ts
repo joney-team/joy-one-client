@@ -1,12 +1,17 @@
-import { CustomField, CustomFieldValue } from "./custom-field-types";
+import { CustomFieldValue } from "@/graphql/types.graphql";
 
-export const getCustomFieldValue = (customFields?: CustomField[] | null): CustomFieldValue[] => {
+export const getCustomFieldValue = (
+  customFields?: CustomFieldValue[] | null,
+): CustomFieldValue[] => {
   if (!customFields) return [];
-  
-  return customFields.map((customField) => ({
-    customFieldId: customField.customFieldId,
-    value: Array.isArray(customField.value)
-      ? customField.value.map((v) => v.id || v._id)
-      : customField.value,
-  })) || [];
+
+  return (
+    customFields.map((customField) => ({
+      ...customField,
+      customFieldId: customField.customFieldId,
+      value: Array.isArray(customField.value)
+        ? customField.value.map((v) => v.id || v._id)
+        : customField.value,
+    })) || []
+  );
 };

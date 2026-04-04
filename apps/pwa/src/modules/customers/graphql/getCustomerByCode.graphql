@@ -1,0 +1,7 @@
+#import "./fragmentCustomer.graphql"
+
+query GetCustomerByCode($code: String!) {
+  customer: getCustomerByCode(code: $code) {
+    ...Customer
+  }
+}

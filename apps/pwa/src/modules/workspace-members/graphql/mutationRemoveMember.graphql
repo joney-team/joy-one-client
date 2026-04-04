@@ -1,3 +1,0 @@
-mutation RemoveMember($memberId: String!) {
-  removeMember(memberId: $memberId)
-}

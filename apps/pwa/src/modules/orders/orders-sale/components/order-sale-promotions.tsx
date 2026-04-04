@@ -6,8 +6,10 @@ import { EntityImage } from "@/components/entity-image";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
 import { PromotionDescription } from "@/modules/promotions/components/promotion-description";
+import GetPromotionsByIdsDocument from "@/modules/promotions/graphql/getPromotionsByIds.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -20,19 +22,19 @@ export const OrderSalePromotions: FC = () => {
   const workspaceModule = getAvailableModule("promotions");
   const color = useColor();
   const [opened, { open, close }] = useDisclosure(false);
-  const { availablePromotions, activeOrder, updateOrder } = userOrdersManagement();
+  const { availablePromotions, availablePromotionsLoading, activeOrder, updateOrder } =
+    userOrdersManagement();
 
-  const promotions = [
-    ...(availablePromotions.data?.data ?? []),
-    ...(activeOrder?.prevPromotions ?? []).filter(
-      (c) =>
-        !availablePromotions.data?.data ||
-        !availablePromotions.data?.data.some((c2) => c2.id === c.id)
-    ),
-  ];
+  const { data: promotionsData } = useQuery(GetPromotionsByIdsDocument, {
+    variables: {
+      ids: activeOrder?.promotionIds ?? [],
+    },
+  });
 
-  const orderPromotions = activeOrder?.promotions ?? [];
-  const unUsedPromotions = promotions.filter((c) => !orderPromotions.some((c2) => c2.id === c.id));
+  const usedPromotions = promotionsData?.promotions ?? [];
+  const unUsedPromotions = availablePromotions.filter(
+    (c) => !usedPromotions.some((c2) => c2.id === c.id),
+  );
 
   if (!activeOrder || !workspaceModule) return null;
 
@@ -43,9 +45,9 @@ export const OrderSalePromotions: FC = () => {
       </Text>
 
       <Group flex={1} justify="end">
-        {availablePromotions.isLoading ? (
+        {availablePromotionsLoading ? (
           <Skeleton h={25} w={80} visible />
-        ) : promotions.length > 0 ? (
+        ) : usedPromotions.length > 0 ? (
           <Indicator
             inline
             disabled={unUsedPromotions.length === 0}
@@ -56,12 +58,12 @@ export const OrderSalePromotions: FC = () => {
               size="xs"
               h={25}
               variant="outline"
-              color={color(orderPromotions.length > 0 ? "primary" : "gray")}
+              color={color(usedPromotions.length > 0 ? "primary" : "gray")}
               fw={400}
               onClick={open}
             >
-              <Trans>Apply</Trans> <NumberFormat value={orderPromotions.length} />/
-              <NumberFormat value={promotions.length} />
+              <Trans>Apply</Trans> <NumberFormat value={usedPromotions.length} />/
+              <NumberFormat value={availablePromotions.length} />
             </Button>
           </Indicator>
         ) : (
@@ -76,8 +78,8 @@ export const OrderSalePromotions: FC = () => {
         size={500}
       >
         <Stack>
-          {promotions.map((promotion) => {
-            const isActive = orderPromotions.some((c) => c.id === promotion.id);
+          {availablePromotions.map((promotion) => {
+            const isActive = usedPromotions.some((c) => c.id === promotion.id);
 
             return (
               <PromotionCard
@@ -89,11 +91,11 @@ export const OrderSalePromotions: FC = () => {
                 onClick={() => {
                   if (isActive) {
                     updateOrder({
-                      promotions: orderPromotions.filter((c) => c.id !== promotion.id),
+                      promotionIds: activeOrder.promotionIds?.filter((c) => c !== promotion.id),
                     });
                   } else {
                     updateOrder({
-                      promotions: [...orderPromotions, promotion],
+                      promotionIds: [...(activeOrder.promotionIds ?? []), promotion.id],
                     });
                   }
                 }}
@@ -101,7 +103,7 @@ export const OrderSalePromotions: FC = () => {
             );
           })}
 
-          <Empty visible={promotions.length === 0} />
+          <Empty visible={availablePromotions.length === 0} />
         </Stack>
       </Modal>
     </Group>

@@ -2,40 +2,45 @@
 
 import { Button } from "@/components/buttons/button";
 import { Selector, SelectorContext, SelectorProps } from "@/components/selector";
-import { restClient } from "@/modules/apis/rest-client";
-import { useRestQuery } from "@/modules/apis/use-rest-query";
+import { CategoryType } from "@/graphql/enums.graphql";
 import { searchEntity } from "@/modules/search/search-service";
-import { AppEntity, ResponseList } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
-import { Combobox, em, Group, Text } from "@mantine/core";
+import { AppEntity } from "@/types";
+import { useApolloClient, useQuery } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
+import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
-import { CategoryEntity, CategoryType } from "../category-types";
+import { CategoryFragment } from "../graphql/fragmentCategory.graphql";
+import GetCategoriesDocument from "../graphql/getCategories.graphql";
+import InteractCategoryDocument from "../graphql/interactCategory.graphql";
 import { OnModalCategory } from "../modals/modal-category";
 
 interface CategorySelectorProps extends Omit<
-  SelectorProps<CategoryEntity>,
+  SelectorProps<CategoryFragment>,
   "onSelect" | "onSearch" | "renderOption"
 > {
   type?: CategoryType;
   excludeIds?: string[];
-  onSelect?: (value?: CategoryEntity) => void;
-  render?: (ctx: SelectorContext<CategoryEntity>) => ReactNode;
+  onSelect?: (value?: CategoryFragment) => void;
+  render?: (ctx: SelectorContext<CategoryFragment>) => ReactNode;
   createable?: boolean;
   onClose?: () => void;
   onOpen?: () => void;
 }
 
 export const CategorySelector: FC<CategorySelectorProps> = (props) => {
+  const client = useApolloClient();
+  const { t } = useLingui();
+
   const { type, excludeIds, onSelect, render, createable = true, onClose, onOpen, ...rest } = props;
 
-  const initOptions = useRestQuery<ResponseList<CategoryEntity>>({
-    route: "/categories",
-    params: {
+  const { data: initOptions } = useQuery(GetCategoriesDocument, {
+    variables: {
       limit: 9,
-      sortLastInteractionAt: -1,
-      type: props.type,
+      query: {
+        type: props.type,
+        sortLastInteractionAt: -1,
+      },
     },
   });
 
@@ -45,9 +50,11 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       onOpen={props.onOpen}
       onClose={props.onClose}
       excludeIds={props.excludeIds}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t`Recently` }))}
+      pinnedOptions={initOptions?.list.results.map((item) => ({ ...item, _group: t`Recently` }))}
       autoCloseOnChange={false}
-      onSearch={(q) => searchEntity<CategoryEntity>(AppEntity.CATEGORIES, q, { type: props.type })}
+      onSearch={(q) =>
+        searchEntity<CategoryFragment>(AppEntity.CATEGORIES, q, { type: props.type })
+      }
       renderOption={(category) => {
         return (
           <Combobox.Option value={category._id} key={category._id}>
@@ -76,7 +83,14 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       }}
       onSelect={(e) => {
         if (!e) return;
-        restClient.patch(`/categories/${e._id}/interact`).catch(() => false);
+        client
+          .mutate({
+            mutation: InteractCategoryDocument,
+            variables: {
+              categoryId: e._id,
+            },
+          })
+          .catch(() => {});
         return props.onSelect?.(e);
       }}
       onCreate={createable ? () => OnModalCategory({ onSuccess: props.onSelect, type }) : undefined}

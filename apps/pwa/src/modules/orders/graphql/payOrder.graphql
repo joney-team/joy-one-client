@@ -1,0 +1,3 @@
+mutation PayOrder($orderId: String!, $amount: Float!, $tipAmount: Float) {
+  payOrder(id: $orderId, amount: $amount, tipAmount: $tipAmount)
+}

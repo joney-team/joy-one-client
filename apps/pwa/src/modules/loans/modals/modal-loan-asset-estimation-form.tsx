@@ -126,7 +126,7 @@ export const ModalLoanAssetEstimationForm: FC<{
             opened={opened}
             size="xl"
           >
-            <Stack gap={16}>
+            <Stack gap="md">
               <SimpleGrid cols={{ md: 2 }}>
                 <Select
                   label={<Trans>Asset</Trans>}
@@ -135,7 +135,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                     (type) => ({
                       value: type,
                       label: t(loanAssetTypes[type].label),
-                    })
+                    }),
                   )}
                   {...form.getInputProps("assetType")}
                   withAsterisk
@@ -166,7 +166,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                           type: InputModalType.TEXT,
                           label: t`Brand name`,
                           value: loans.assetEstimations.brands.find(
-                            (v) => v.id === form.values.brandId
+                            (v) => v.id === form.values.brandId,
                           )?.name,
                           onDone: (value: string) => {
                             loans.setAssetEstimations({
@@ -238,7 +238,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                           type: InputModalType.TEXT,
                           label: t`Model name`,
                           value: loans.assetEstimations.models.find(
-                            (v) => v.id === form.values.modelId
+                            (v) => v.id === form.values.modelId,
                           )?.name,
                           onDone: (value: string) => {
                             loans.setAssetEstimations({
@@ -309,7 +309,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                         type: InputModalType.TEXT,
                         label: t`Color name`,
                         value: loans.assetEstimations.colors.find(
-                          (v) => v.id === form.values.colorId
+                          (v) => v.id === form.values.colorId,
                         )?.name,
                         onDone: (value: string) => {
                           loans.setAssetEstimations({
@@ -367,7 +367,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                     if (!date) return null;
                     form.setFieldValue(
                       "productManufacturingDate",
-                      DateTime.toSeconds(new Date(new Date(date).getFullYear(), 0, 1))
+                      DateTime.toSeconds(new Date(new Date(date).getFullYear(), 0, 1)),
                     );
                   }}
                   valueFormat="YYYY"

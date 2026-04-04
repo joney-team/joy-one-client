@@ -5,18 +5,16 @@ import { Empty } from "@/components/empty";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
+import { useEventsListener } from "@/modules/events/event-service";
 import { useColor } from "@/modules/theme/use-color";
-import { getUserPublicInformation } from "@/modules/users/users-service";
-import { UserPublicInformation } from "@/modules/users/users-types";
 import { WorkspaceMemberSetting } from "@/modules/workspace-members/components/workspace-member-setting";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { getAvatarInitials } from "@/utils/string.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useLazyQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
@@ -34,6 +32,7 @@ import {
   Text,
   Title,
 } from "@mantine/core";
+import { setUser } from "@sentry/react";
 import {
   Icon,
   IconAccessible,
@@ -46,16 +45,20 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
+import { UserPublicInformationFragment } from "../graphql/fragmentUserPublicINformation.graphql";
+import GetUserPublicInformationDocument from "../graphql/getUserPublicInformation.graphql";
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
-const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> = (props) => {
+const UserInformation: FC<{ user: UserPublicInformationFragment; onClose: () => void }> = (
+  props,
+) => {
   const { user } = props;
   const [tab, setTab] = useState<string>("activity");
 
@@ -75,7 +78,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
       <Group align="start">
         <Avatar
           onlineIndicatorProps={{ size: 15, offset: 12 }}
-          color={mutualWorkspace?.memberColor || mutualWorkspace?.color || user.color}
+          color={mutualWorkspace?.memberColor || mutualWorkspace?.color || user.color || "primary"}
           src={user.avatar}
           size={80}
         >
@@ -207,7 +210,7 @@ const UserInformation: FC<{ user: UserPublicInformation; onClose: () => void }> 
   );
 };
 
-const UserMutualWorkspaces: FC<{ user: UserPublicInformation }> = (props) => {
+const UserMutualWorkspaces: FC<{ user: UserPublicInformationFragment }> = (props) => {
   const { user } = props;
 
   return (
@@ -223,7 +226,17 @@ const UserMutualWorkspaces: FC<{ user: UserPublicInformation }> = (props) => {
               <Stack gap={0}>
                 <Text fz={16}>{data.name}</Text>
                 <Text fz={12} c="gray">
-                  <WorkspaceMemberRoleName member={data} />
+                  <WorkspaceMemberRoleName
+                    member={{
+                      memberId: data.memberId,
+                      roles: data.roles.map((r) => ({
+                        __typename: "WorkspaceMemberRole",
+                        _id: r._id,
+                        name: r.name,
+                        color: r.color,
+                      })),
+                    }}
+                  />
                 </Text>
               </Stack>
             </Group>
@@ -234,7 +247,7 @@ const UserMutualWorkspaces: FC<{ user: UserPublicInformation }> = (props) => {
   );
 };
 
-const UserActivity: FC<{ user: UserPublicInformation }> = (props) => {
+const UserActivity: FC<{ user: UserPublicInformationFragment }> = (props) => {
   const { user } = props;
 
   return (
@@ -280,7 +293,7 @@ const ShortInfoSession: FC<{
           <Text fz={14} c="gray" truncate="end">
             {value}
           </Text>
-        </Group>
+        </Group>,
       )}
     </Stack>
   );
@@ -300,29 +313,31 @@ export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUse
     const { children } = props;
     const [userId, setUserId] = useState<string | null>(null);
 
-    const userInformation = useFetch({
-      autoFetch: false,
-      fetch: async (query: { userId: string }) => {
-        if (!query.userId) throw Error("Unaccessable");
-        return getUserPublicInformation(query.userId).catch((error) => {
-          onError(error);
-          setUserId(null);
-        });
+    const [fetchUserInformation, { data: userInformation, loading, refetch }] = useLazyQuery(
+      GetUserPublicInformationDocument,
+      {
+        fetchPolicy: "cache-and-network",
       },
-      refetchEvents: {
-        types: [
-          EventType.WorkspaceMemberUpdated,
-          EventType.WorkspaceMemberLeaved,
-          EventType.WorkspaceMemberTransferOwner,
-        ],
-        condition: () => !!userId,
+    );
+
+    useEventsListener(
+      [
+        EventType.WorkspaceMemberUpdated,
+        EventType.WorkspaceMemberLeaved,
+        EventType.WorkspaceMemberTransferOwner,
+      ],
+      () => {
+        if (!userId) return;
+        refetch();
       },
-    });
+    );
 
     useImperativeHandle(ref, () => ({
       open: (userId) => {
         setUserId(userId);
-        userInformation.fetch({ query: { userId } });
+        fetchUserInformation({ variables: { userId } }).catch(() => {
+          setUser(null);
+        });
       },
       close: () => {
         setUserId(null);
@@ -330,7 +345,6 @@ export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUse
     }));
 
     const onClose = () => {
-      userInformation.reset();
       setUserId(null);
     };
 
@@ -340,7 +354,9 @@ export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUse
           children({
             open: (id) => {
               setUserId(id);
-              userInformation.fetch({ query: { userId: id } });
+              fetchUserInformation({ variables: { userId: id } }).catch(() => {
+                setUser(null);
+              });
             },
             close: () => {
               setUserId(null);
@@ -355,12 +371,12 @@ export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUse
           zIndex={zIndexes.commonModals}
         >
           <Stack>
-            {!!userInformation.data && userInformation.data._id === userId && (
-              <UserInformation user={userInformation.data} onClose={onClose} />
+            {!!userInformation?.user && userInformation?.user._id === userId && (
+              <UserInformation user={userInformation?.user} onClose={onClose} />
             )}
 
-            {userInformation.isFetching && (
-              <Stack p={16}>
+            {loading && !userInformation && (
+              <Stack p="md">
                 <Skeleton height={200} />
               </Stack>
             )}
@@ -368,5 +384,5 @@ export const ModalUserInformation = forwardRef<ModalUserInformationRef, ModalUse
         </Modal>
       </Fragment>
     );
-  }
+  },
 );

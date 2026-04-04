@@ -1,22 +1,20 @@
-import { OrderDiscountType, OrderPaymentStatus } from "./orders-types";
-import { t } from "@lingui/core/macro";
+import { OrderDiscountType, OrderPaymentStatus } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 
 export const orderPaymentStatuses: Record<
   OrderPaymentStatus,
-  { label: () => string; color: MantineColor }
+  { label: MacroMessageDescriptor; color: MantineColor }
 > = {
-  [OrderPaymentStatus.PROCESSING]: { label: () => t`Processing`, color: "gray" },
-  [OrderPaymentStatus.COMPLETED]: { label: () => t`Completed`, color: "green" },
+  [OrderPaymentStatus.Processing]: { label: defineMessage`Processing`, color: "gray" },
+  [OrderPaymentStatus.Completed]: { label: defineMessage`Completed`, color: "green" },
 };
 
 export const orderDiscountTypes: Record<
   OrderDiscountType,
-  { label: () => string; color: MantineColor }
+  { label: MacroMessageDescriptor; color: MantineColor }
 > = {
-  [OrderDiscountType.DIRECT]: { label: () => t`Direct`, color: "gray" },
-  [OrderDiscountType.USE_EXISTED_COMBO]: { label: () => t`Use existed combo`, color: "gray" },
-  [OrderDiscountType.USE_DIRECT_COMBO]: { label: () => t`Use direct combo`, color: "gray" },
-  [OrderDiscountType.COUPON]: { label: () => t`Coupon`, color: "gray" },
-  [OrderDiscountType.VOUCHER]: { label: () => t`Voucher`, color: "gray" },
+  [OrderDiscountType.Direct]: { label: defineMessage`Direct`, color: "gray" },
+  [OrderDiscountType.Combo]: { label: defineMessage`Use combo`, color: "gray" },
+  [OrderDiscountType.Promotion]: { label: defineMessage`Use promotion`, color: "gray" },
 };

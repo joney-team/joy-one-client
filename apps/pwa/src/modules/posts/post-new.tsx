@@ -8,7 +8,7 @@ import { useRouter } from "@/hooks/use-router";
 export const PostNew: FC = () => {
   const router = useRouter();
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <FormPost onSuccess={(post) => router.replace(`/posts/${post._id}/edit`)} />
     </Stack>
   );

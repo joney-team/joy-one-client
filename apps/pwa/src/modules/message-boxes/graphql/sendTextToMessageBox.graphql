@@ -1,0 +1,3 @@
+mutation SendTextToMessageBox($boxId: String!, $text: String!) {
+  sendTextToMessageBox(boxId: $boxId, text: $text)
+}

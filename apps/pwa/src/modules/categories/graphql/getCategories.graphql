@@ -1,0 +1,15 @@
+#import "./fragmentCategory.graphql"
+
+query GetCategories(
+  $limit: Float
+  $offset: Float
+  $query: JSONObject
+  $ids: [String!]
+) {
+  list: getCategories(limit: $limit, offset: $offset, query: $query, ids: $ids) {
+    total
+    results {
+      ...Category
+    }
+  }
+}

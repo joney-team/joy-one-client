@@ -1,0 +1,7 @@
+#import "./fragmentPluginEInvoiceProvider.graphql"
+
+query GetEInvoiceProviders {
+  getEInvoiceProviders {
+    ...PluginEInvoiceProvider
+  }
+}

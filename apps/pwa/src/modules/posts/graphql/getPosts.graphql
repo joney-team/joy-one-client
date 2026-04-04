@@ -1,0 +1,15 @@
+#import "./fragmentPost.graphql"
+
+query GetPosts(
+  $limit: Float
+  $offset: Float
+  $ids: [String!]
+  $query: JSONObject
+) {
+  list: getPosts(limit: $limit, offset: $offset, ids: $ids, query: $query) {
+    total
+    results {
+      ...Post
+    }
+  }
+}

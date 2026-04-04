@@ -1,10 +1,10 @@
 "use client";
 
 import { DateFormat } from "@/components/format/date-format";
+import { TagType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { TagType } from "@/modules/tags/tags-types";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -145,7 +145,7 @@ export const SidebarHead: FC = () => {
                 size="sm"
                 color="gray"
                 component="div"
-                onClick={() => modalTagForm.open({ type: TagType.TASK_FOLDER })}
+                onClick={() => modalTagForm.open({ type: TagType.TaskFolder })}
               >
                 <IconFolderPlus size={16} />
               </ActionIcon>
@@ -307,7 +307,7 @@ export const GridColumns: FC = () => {
               width: ganttConfig.columnSize,
               background: alpha("var(--app-divider-color)", 0.3),
             }}
-          />
+          />,
         );
       }
 
@@ -327,7 +327,7 @@ export const GridColumns: FC = () => {
               width: 2,
               background: alpha(color("primary"), 0.2),
             }}
-          />
+          />,
         );
       }
 
@@ -380,10 +380,10 @@ export const SidebarRowSticky: FC<PropsWithChildren & { visible?: boolean }> = (
         right: 0,
         background: `linear-gradient(to right, ${rgba("var(--mantine-color-body)", 0)}, ${rgba(
           "var(--mantine-color-body)",
-          1
+          1,
         )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba(
           "var(--mantine-color-body)",
-          1
+          1,
         )}, ${rgba("var(--mantine-color-body)", 1)}, ${rgba("var(--mantine-color-body)", 1)})`,
       }}
     >

@@ -1,12 +1,11 @@
-import { UseFetch } from "@/utils/use-fetch.util";
 import { createContext, useContext } from "react";
-import { ReportEntity } from "./reports-entity";
-import { RealtimeReport } from "./reports-types";
+import { MetricsReportFragment } from "./graphql/fragmentMetricsReport.graphql";
 
 export interface ReportsContext {
-  realtimeReport: UseFetch<ReportEntity<RealtimeReport>>
+  metrics: MetricsReportFragment | null | undefined;
+  isMetricsLoading: boolean;
+  refetch: () => void;
 }
 
 export const Context = createContext({} as ReportsContext);
 export const useReports = () => useContext(Context);
-

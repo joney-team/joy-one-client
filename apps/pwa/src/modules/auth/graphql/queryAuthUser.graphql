@@ -1,7 +1,0 @@
-#import "./fragmentAuthUser.graphql"
-
-query AuthUser {
-  authUser {
-    ...AuthUser
-  }
-}

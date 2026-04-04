@@ -1,0 +1,7 @@
+#import "./fragmentTimeSeriesReport.graphql"
+
+query GetTimeSeriesReport($reportId: String!) {
+  timeSeriesReport: getTimeSeriesReport(id: $reportId) {
+    ...TimeSeriesReport
+  }
+}

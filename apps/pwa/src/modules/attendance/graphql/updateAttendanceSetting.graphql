@@ -1,0 +1,7 @@
+#import "./fragmentAttendanceSetting.graphql"
+
+mutation UpdateAttendanceSetting($input: UpdateAttendanceSettingInput!) {
+  attendanceSetting: updateAttendanceSetting(input: $input) {
+    ...AttendanceSetting
+  }
+}

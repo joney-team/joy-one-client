@@ -4,44 +4,52 @@ import { Errored } from "@/components/errored";
 import { NavigationTabs } from "@/components/navigation-tabs";
 import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
+import { useQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Skeleton, Stack } from "@mantine/core";
 import { IconPackage, IconSettings } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren } from "react";
-import { useRestQuery } from "../apis/use-rest-query";
+import { useEventsListener } from "../events/event-service";
+import GetProductsDocument from "../products/graphql/getProducts.graphql";
 import { ProductCombosOnboarding } from "./product-combos-onboarding";
 
 export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
   const router = useRouter();
 
-  const checkCombos = useRestQuery({
-    route: "/products",
-    params: {
+  const { data, loading, error, refetch } = useQuery(GetProductsDocument, {
+    variables: {
       limit: 1,
-      type: ProductType.Combo,
+      query: {
+        type: ProductType.Combo,
+      },
     },
-    refetchEvents: [EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived],
+    fetchPolicy: "cache-and-network",
   });
 
-  if (checkCombos.isFetching)
+  useEventsListener(
+    [EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived],
+    () => refetch(),
+  );
+
+  if (loading && !data)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={150} />
       </Stack>
     );
 
-  if (checkCombos.error || !checkCombos.data)
+  if (error || !data)
     return (
-      <Stack p={16}>
-        <Errored error={checkCombos.error} centered />
+      <Stack p="md">
+        <Errored error={error} centered />
       </Stack>
     );
 
-  const isHasCombos = checkCombos.data.count > 0;
+  const isHasCombos = data.list.total > 0;
 
   if (!isHasCombos) {
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <ProductCombosOnboarding />
       </Stack>
     );

@@ -8,11 +8,11 @@ export const WorkspaceSettingPlugins: FC = () => {
   const { availableModules } = useAvailableWorkspaceModules();
 
   const workspacePluginModules = availableModules.filter(
-    (m) => m.id.startsWith("workspacePlugins") && m.id !== "workspacePlugins"
+    (m) => m.id.startsWith("workspacePlugins") && m.id !== "workspacePlugins",
   );
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <SimpleGrid cols={{ md: 4 }}>
         {workspacePluginModules.map((mod) => (
           <WorkspaceSettingCard key={mod.id} moduleId={mod.id} />

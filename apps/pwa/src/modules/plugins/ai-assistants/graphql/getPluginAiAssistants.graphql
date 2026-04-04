@@ -1,0 +1,20 @@
+#import "./fragmentPluginAiAssistant.graphql"
+
+query GetPluginAiAssistants(
+  $query: JSONObject
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  getPluginAiAssistants(
+    query: $query
+    ids: $ids
+    limit: $limit
+    offset: $offset
+  ) {
+    total
+    results {
+      ...PluginAiAssistant
+    }
+  }
+}

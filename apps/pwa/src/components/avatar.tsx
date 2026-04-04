@@ -2,13 +2,13 @@
 
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
-import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
-import { PartnerEntity } from "@/modules/partners/partners-types";
-import { PluginMetaPageEntity } from "@/modules/plugins/meta-pages/meta-pages-types";
-import { PluginZaloOaEntity } from "@/modules/plugins/zalo-oas/zalo-oas-types";
+import { MessageBoxFragment } from "@/modules/message-boxes/graphql/fragmentMessageBox.graphql";
+import { PartnerFragment } from "@/modules/partners/graphql/fragmentPartner.graphql";
+import { MetaPageFragment } from "@/modules/plugins/meta-pages/graphql/fragmentMetaPage.graphql";
+import { ZaloOaFragment } from "@/modules/plugins/zalo-oas/graphql/fragmentZaloOa.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
-import { WorkspaceEntity } from "@/modules/workspaces/workspaces-types";
+import { WorkspaceFragment } from "@/modules/workspaces/graphql/fragmentWorkspace.graphql";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { primaryColors } from "@joy-one-client/config/colors";
 import {
@@ -33,13 +33,13 @@ export interface AvatarProps extends MantineAvatarProps {
   onClick?: () => void;
   color?: string;
   user?: AvatarUser;
-  workspace?: Pick<WorkspaceEntity, "appColor" | "logo" | "name" | "appIcon">;
+  workspace?: Pick<WorkspaceFragment, "appColor" | "logo" | "name"> & { appIcon?: string | null };
   customer?: Pick<CustomerFragment, "name" | "avatar"> | null | undefined;
-  partner?: PartnerEntity;
-  pluginMetaPage?: PluginMetaPageEntity;
+  partner?: Pick<PartnerFragment, "name" | "logo"> | null;
+  pluginMetaPage?: Pick<MetaPageFragment, "name" | "logo">;
   hideOnlineStatus?: boolean;
-  messageBox?: MessageBoxEntity;
-  pluginZaloOa?: PluginZaloOaEntity;
+  messageBox?: Pick<MessageBoxFragment, "senderName" | "senderAvatar">;
+  pluginZaloOa?: Pick<ZaloOaFragment, "info">;
   onlineIndicatorProps?: IndicatorProps;
   icon?: Icon;
   withBorder?: boolean | string;
@@ -138,10 +138,10 @@ export const Avatar: FC<AvatarProps> = (props) => {
         {...rest}
         src={src}
         style={{
-          backgroundColor: src ? "var(--mantine-color-body)" : undefined,
+          backgroundColor: src ? "var(--mantine-color-default-hover)" : undefined,
           border: withBorder
             ? `1px solid ${
-                typeof withBorder === "string" ? withBorder : "var(--mantine-color-body)"
+                typeof withBorder === "string" ? withBorder : "var(--mantine-color-default-hover)"
               }`
             : undefined,
           ...props.style,

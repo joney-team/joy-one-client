@@ -5,20 +5,14 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { DateInput } from "@/components/inputs/date-input";
 import { ModalHead } from "@/components/modal/modal-head";
-import { ProductType } from "@/graphql/enums.graphql";
-import {
-  multipleProductsStockIn,
-  productStockRecordTypeOptions,
-} from "@/modules/product-stocks/product-stocks-service";
-import {
-  MultipleProductsStockInDto,
-  ProductStockRecordType,
-} from "@/modules/product-stocks/product-stocks-types";
+import { ProductStockRecordType, ProductType } from "@/graphql/enums.graphql";
+import { BulkProductsStockInInput } from "@/graphql/types.graphql";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductEntity } from "@/modules/products/products-types";
+import { ProductFragment } from "@/modules/products/graphql/fragmentProduct.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { required } from "@/utils/form.validate";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -35,12 +29,14 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconBuildingWarehouse, IconChevronDown, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
+import BulkProductsStockInDocument from "../graphql/bulkProductsStockIn.graphql";
+import { productStockRecordTypes } from "../product-stocks-constants";
 interface ProductStockInModalProps {
-  product?: ProductEntity;
+  product?: ProductFragment;
 }
 
 export interface ProductStockInRecordItem {
-  product?: ProductEntity;
+  product?: ProductFragment;
   quantity?: number;
   costPrice?: number;
   expireAt?: number;
@@ -54,8 +50,9 @@ export const ModalProductStockIn: FC<{
   const { t } = useLingui();
   const [opened, { open, close }] = useDisclosure(false);
   const color = useColor();
-  const _product = useRef<ProductEntity | null>(null);
-  const isMultiple = !!!_product.current;
+  const _product = useRef<ProductFragment | null>(null);
+  const isBulk = !!!_product.current;
+  const client = useApolloClient();
 
   const form = useForm<{
     items: ProductStockInRecordItem[];
@@ -84,7 +81,7 @@ export const ModalProductStockIn: FC<{
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const dto: MultipleProductsStockInDto = {
+      const input: BulkProductsStockInInput = {
         stocks: values.items.map((item) => ({
           productId: item.product?._id || "",
           quantity: item.quantity || 0,
@@ -94,7 +91,10 @@ export const ModalProductStockIn: FC<{
           note: item.note || undefined,
         })),
       };
-      await multipleProductsStockIn(dto);
+      await client.mutate({
+        mutation: BulkProductsStockInDocument,
+        variables: { input },
+      });
 
       onClose();
     } catch (error) {
@@ -150,7 +150,7 @@ export const ModalProductStockIn: FC<{
                     <Trans>Cost price</Trans>
                   </Table.Th>
                   <Table.Th fz={12} fw={500}>
-                    {isMultiple && (
+                    {isBulk && (
                       <ActionIcon variant="subtle" color="gray.6" onClick={onAddItem}>
                         <IconPlus size={16} />
                       </ActionIcon>
@@ -178,9 +178,9 @@ export const ModalProductStockIn: FC<{
                             return (
                               <InputWrapper flex={1} {...form.getInputProps(`items.${i}.product`)}>
                                 <Group
-                                  className={isMultiple ? "clickable" : "unselectable"}
+                                  className={isBulk ? "clickable" : "unselectable"}
                                   justify="space-between"
-                                  onClick={isMultiple ? ctx.toggle : undefined}
+                                  onClick={isBulk ? ctx.toggle : undefined}
                                   flex={1}
                                 >
                                   <Text
@@ -191,7 +191,7 @@ export const ModalProductStockIn: FC<{
                                     {item.product?.name || t`Select product`}
                                   </Text>
 
-                                  {isMultiple && (
+                                  {isBulk && (
                                     <ActionIcon variant="subtle" color="gray.6" size="sm">
                                       <IconChevronDown size={16} />
                                     </ActionIcon>
@@ -246,7 +246,7 @@ export const ModalProductStockIn: FC<{
                           onClick={() =>
                             form.setFieldValue(
                               `items`,
-                              form.values.items.filter((_, j) => j !== i)
+                              form.values.items.filter((_, j) => j !== i),
                             )
                           }
                         >
@@ -272,13 +272,13 @@ export const ModalProductStockIn: FC<{
                     <CurrencyFormat
                       value={form.values.items.reduce(
                         (acc, item) => acc + (item.quantity || 0) * (item.costPrice || 0),
-                        0
+                        0,
                       )}
                     />
                   </Table.Td>
 
                   <Table.Td>
-                    {isMultiple && (
+                    {isBulk && (
                       <ActionIcon variant="subtle" color="gray.6" onClick={onAddItem}>
                         <IconPlus size={16} />
                       </ActionIcon>
@@ -291,8 +291,8 @@ export const ModalProductStockIn: FC<{
 
           <Stack align="center" mt={16}>
             <Button
-              leftIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].icon}
-              color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_IN].color)}
+              leftIcon={productStockRecordTypes[ProductStockRecordType.StockIn].icon}
+              color={color(productStockRecordTypes[ProductStockRecordType.StockIn].color)}
               loading={form.submitting}
               onClick={() => onSubmit()}
             >

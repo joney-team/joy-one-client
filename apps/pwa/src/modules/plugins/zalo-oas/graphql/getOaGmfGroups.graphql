@@ -1,0 +1,12 @@
+query GetOaGmfGroups {
+  getOaGmfGroups {
+    isAdminNotificationEnabled
+    name
+    avatar
+    group_id
+    group_link
+    group_description
+    total_member
+    status
+  }
+}

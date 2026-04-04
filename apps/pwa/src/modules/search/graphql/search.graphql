@@ -1,0 +1,72 @@
+query Search(
+  $query: String!
+  $entities: [String!]
+  $limit: Int
+  $filter: JSONObject
+) {
+  search(query: $query, entities: $entities, limit: $limit, filter: $filter) {
+    id
+    entity
+    ... on SearchResultOrders {
+      orderCode: code
+    }
+    ... on SearchResultTags {
+      name
+      type
+    }
+    ... on SearchResultPrescriptions {
+      name
+      note
+    }
+    ... on SearchResultReceipt {
+      receiptCode: code
+      note
+    }
+    ... on SearchResultTask {
+      name
+      taskCode: code
+    }
+    ... on SearchResultWorkspaceMember {
+      name
+      email
+      avatar
+      phone
+      color
+      userId
+      memberId
+    }
+    ... on SearchResultCustomer {
+      name
+      customerCode: code
+      phone
+      avatar
+    }
+    ... on SearchResultProduct {
+      name
+      unit
+      productType: type
+      productCode: code
+      displayName
+      image
+      isHiddenInReceiptWhenNoPrice
+      defaultQtyPerUse
+      price
+      minPrice
+      maxPrice
+    }
+    ... on SearchResultPartner {
+      name
+      phone
+    }
+    ... on SearchResultCategory {
+      name
+    }
+    ... on SearchResultLoan {
+      loanCode: code
+      customerName
+      customerPhone
+      imeil
+      status
+    }
+  }
+}

@@ -1,0 +1,7 @@
+#import "./fragmentMetaPage.graphql"
+
+query GetMetaPages {
+  getMetaPages {
+    ...MetaPage
+  }
+}

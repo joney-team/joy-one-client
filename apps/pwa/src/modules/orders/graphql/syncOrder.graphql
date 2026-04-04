@@ -1,0 +1,7 @@
+#import "./fragmentOrder.graphql"
+
+mutation SyncOrder($orderId: String!) {
+  order: syncOrder(id: $orderId) {
+    ...Order
+  }
+}

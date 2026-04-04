@@ -4,15 +4,17 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Group, Image, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCirclesRelation, IconLinkPlus } from "@tabler/icons-react";
 import { type FC } from "react";
-import { connectPluginZalo } from "../zalo-oas-service";
+import ConnectZaloOaDocument from "../graphql/connectZaloOa.graphql";
 
 export const ZaloOasOnboarding: FC = () => {
   const workspace = useWorkspace();
   const color = useColor();
+  const client = useApolloClient();
 
   return (
     <Stack align="center" py={20}>
@@ -34,7 +36,16 @@ export const ZaloOasOnboarding: FC = () => {
         <Trans>Send reminder messages to customers</Trans>
       </Text>
 
-      <Button mt={10} type="submit" onClick={() => connectPluginZalo()} leftIcon={IconLinkPlus}>
+      <Button
+        mt={10}
+        type="submit"
+        onClick={() =>
+          client
+            .mutate({ mutation: ConnectZaloOaDocument })
+            .then((result) => window.open(result.data?.connectZaloOa?.url, "_blank"))
+        }
+        leftIcon={IconLinkPlus}
+      >
         <Trans>Connect</Trans>
       </Button>
     </Stack>

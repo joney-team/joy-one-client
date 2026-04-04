@@ -9,7 +9,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
 import { EventType } from "@/graphql/enums.graphql";
 import { useCustomerKyc } from "@/modules/customer-kycs/hooks/use-customer-kyc";
-import QUERY_CUSTOMER from "@/modules/customers/graphql/queryCustomer.graphql";
+import GetCustomerByIdDocument from "@/modules/customers/graphql/getCustomerById.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { LoanRowInfo } from "@/modules/loans/components/loan-row-info";
@@ -22,8 +22,8 @@ import { modals } from "@mantine/modals";
 import { IconBrandSpeedtest } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
-import MUTATION_LIQUIDATE_LOAN from "../graphql/mutationLiquidateLoan.graphql";
-import QUERY_LIQUIDATE_LOAN_CALCULATE from "../graphql/queryLiquidateLoanCalculate.graphql";
+import LiquidateLoanDocument from "../graphql/liquidateLoan.graphql";
+import LiquidateLoanCalculateDocument from "../graphql/liquidateLoanCalculate.graphql";
 import { loanAssetTypes } from "../loans-constants";
 
 interface ModalLoanLiquidationProps {
@@ -35,13 +35,13 @@ export const ModalLoanLiquidation: FC<ModalLoanLiquidationProps> = ({ loan, onLi
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { t } = useLingui();
 
-  const [liquidateLoan] = useMutation(MUTATION_LIQUIDATE_LOAN);
+  const [liquidateLoan] = useMutation(LiquidateLoanDocument);
 
   const {
     data: customerData,
     refetch: customerRefetch,
     error: customerError,
-  } = useQuery(QUERY_CUSTOMER, {
+  } = useQuery(GetCustomerByIdDocument, {
     variables: {
       id: loan.customerId ?? "",
     },
@@ -62,7 +62,7 @@ export const ModalLoanLiquidation: FC<ModalLoanLiquidationProps> = ({ loan, onLi
     data: calculatedData,
     loading: calculatedLoading,
     error: calculatedError,
-  } = useQuery(QUERY_LIQUIDATE_LOAN_CALCULATE, {
+  } = useQuery(LiquidateLoanCalculateDocument, {
     variables: {
       loanId: loan.id,
     },
@@ -113,7 +113,7 @@ export const ModalLoanLiquidation: FC<ModalLoanLiquidationProps> = ({ loan, onLi
     <Stack>
       <Card withBorder p={10}>
         <Stack>
-          <Group gap={16} align="start">
+          <Group gap="md" align="start">
             <Avatar customer={customerData.customer} mt={5} size={50} />
             <Stack gap={0}>
               <Text fw={700}>{kyc.cidFullName}</Text>

@@ -4,18 +4,19 @@ import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
 import { DateFormat } from "@/components/format/date-format";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { EventType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { ResponseList } from "@/types";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
-import { restClient } from "../apis/rest-client";
-import { useRestQuery } from "../apis/use-rest-query";
-import { PluginEInvoicesEntity } from "../plugins/e-invoices/plugin-e-invoices.entities";
+import CancelEInvoiceDocument from "../plugins/e-invoices/graphql/cancelEInvoice.graphql";
+import CreateEInvoiceDocument from "../plugins/e-invoices/graphql/createEInvoice.graphql";
+import { EInvoiceFragment } from "../plugins/e-invoices/graphql/fragmentEInvoice.graphql";
+import GetEInvoicesDocument from "../plugins/e-invoices/graphql/getEInvoices.graphql";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
@@ -26,16 +27,17 @@ interface ReceiptEInvoicesProps {
 
 export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   const workspace = useWorkspace();
+  const client = useApolloClient();
 
-  const { data, isLoading, refetch } = useRestQuery<ResponseList<PluginEInvoicesEntity>>({
-    route: `/plugins/e-invoices`,
+  const { data, isFetching, refetch, isInitialized, count } = useGraphqlList<EInvoiceFragment>({
+    query: GetEInvoicesDocument,
     params: {
       receiptId: receipt.id,
     },
-    refetchEvents: [EventType.EInvoiceCreated, EventType.EInvoiceRemoved, EventType.ReceiptPaid],
+    events: [EventType.EInvoiceCreated, EventType.EInvoiceRemoved, EventType.ReceiptPaid],
   });
 
-  const handleArchiveEInvoice = (invoice: PluginEInvoicesEntity) => {
+  const handleArchiveEInvoice = (invoice: EInvoiceFragment) => {
     onConfirmModal({
       title: <Trans>Cancel E-Invoice</Trans>,
       type: "danger",
@@ -46,7 +48,12 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         </Trans>
       ),
       onConfirm: async () => {
-        await restClient.delete(`/plugins/e-invoices/${invoice._id}/cancel`);
+        await client.mutate({
+          mutation: CancelEInvoiceDocument,
+          variables: {
+            invoiceId: invoice._id,
+          },
+        });
         await refetch();
       },
       cancelLabel: <Trans>Keep</Trans>,
@@ -55,8 +62,8 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   };
 
   const isCanExportEInvoice = useMemo(() => {
-    return !isLoading && workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE);
-  }, [isLoading, workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)]);
+    return !isFetching && workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE);
+  }, [isFetching, workspace.hasPermission(WorkspacePermission.RECEIPTS_EXPORT_E_INVOICE)]);
 
   const cta = useMemo(() => {
     return (
@@ -65,9 +72,18 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
           mt={16}
           size="xs"
           leftIcon={IconFileInvoice}
-          onClick={() => restClient.post(`/plugins/e-invoices`, { receiptId: receipt.id })}
+          onClick={() =>
+            client.mutate({
+              mutation: CreateEInvoiceDocument,
+              variables: {
+                input: {
+                  receiptId: receipt.id,
+                },
+              },
+            })
+          }
         >
-          {t`Export E-Invoice`}
+          <Trans>Export E-Invoice</Trans>
         </Button>
       </Center>
     );
@@ -78,35 +94,37 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
   return (
     <Stack gap={8}>
       <Text fw={600} fz={14}>
-        {t`E-Invoices`}
+        <Trans>E-Invoices</Trans>
       </Text>
 
-      {isLoading && <Skeleton height={100} />}
+      {!isInitialized && <Skeleton height={100} />}
 
-      {data?.data.map((invoice) => {
+      {data.map((invoice) => {
         return (
           <Card withBorder shadow="none" key={invoice._id}>
             <Group justify="space-between">
               <Group wrap="nowrap">
-                <Image src={invoice.provider.logo} h={40} w={80} fit="contain" />
+                <Image src={invoice.providerInformation.logo} h={40} w={80} fit="contain" />
                 <Stack gap={6}>
                   <Text fz={14} fw={600}>
-                    {invoice.provider.name}
+                    {invoice.providerInformation.name}
                   </Text>
 
                   <CopyText text={invoice.invoiceId} fz={14} truncate maw={200}>
                     ID: {String.limitCharacters(invoice.invoiceId, 10)}
                   </CopyText>
 
-                  <Text fz={12} truncate maw={200}>
-                    <DateFormat value={invoice.createdAt} type="date-time" />
-                  </Text>
+                  {invoice.createdAt && (
+                    <Text fz={12} truncate maw={200}>
+                      <DateFormat value={invoice.createdAt} type="date-time" />
+                    </Text>
+                  )}
                 </Stack>
               </Group>
 
               {invoice.isCancelled ? (
                 <Badge color="red" variant="light">
-                  {t`Cancelled`}
+                  <Trans>Cancelled</Trans>
                 </Badge>
               ) : (
                 <Group>
@@ -117,16 +135,16 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
                     leftIcon={IconArchive}
                     onClick={() => handleArchiveEInvoice(invoice)}
                   >
-                    {t`Cancel`}
+                    <Trans>Cancel</Trans>
                   </Button>
 
                   <Button
                     size="xs"
                     leftIcon={IconEye}
                     variant="light"
-                    onClick={() => window.open(invoice.url, "_blank")}
+                    onClick={() => window.open(invoice.url ?? "#", "_blank")}
                   >
-                    {t`View Invoice`}
+                    <Trans>View Invoice</Trans>
                   </Button>
                 </Group>
               )}
@@ -135,7 +153,7 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
         );
       })}
 
-      {data?.count === 0 ? <Empty>{cta}</Empty> : cta}
+      {count === 0 ? <Empty>{cta}</Empty> : cta}
     </Stack>
   );
 };

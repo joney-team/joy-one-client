@@ -33,7 +33,7 @@ import { useForm } from "@mantine/form";
 import { IconCheck, IconExternalLink, IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 
-import UPDATE_WORKSPACE_MUTATION from "@/modules/workspaces/graphql/mutationUpdateWorkspace.graphql";
+import UpdateWorkspaceDocument from "@/modules/workspaces/graphql/updateWorkspace.graphql";
 import { normalizeWorkspaceInput } from "@/modules/workspaces/workspaces-service";
 
 export const WorkspaceAppSettings: FC = () => {
@@ -59,12 +59,12 @@ export const WorkspaceAppSettings: FC = () => {
     },
   });
 
-  const [updateWorkspace] = useMutation(UPDATE_WORKSPACE_MUTATION, {
+  const [updateWorkspace] = useMutation(UpdateWorkspaceDocument, {
     update: (cache, result) => {
       if (!result.data) return;
       cache.updateFragment(
         {
-          id: `Workspace:${result.data.updateWorkspace._id}`,
+          id: `Workspace:${result.data.workspace._id}`,
           fragment: WORKSPACE_DATE_FRAGMENT,
           fragmentName: "Workspace",
         },
@@ -73,7 +73,7 @@ export const WorkspaceAppSettings: FC = () => {
 
           return {
             ...data,
-            ...result.data?.updateWorkspace,
+            ...result.data?.workspace,
           };
         },
       );

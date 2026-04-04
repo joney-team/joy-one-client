@@ -23,7 +23,7 @@ import {
 } from "react";
 import { normalizeCustomerInput } from "../customer-constants";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
-import UPDATE_CUSTOMER from "../graphql/mutationUpdateCustomer.graphql";
+import UpdateCustomerDocument from "../graphql/updateCustomer.graphql";
 
 interface ModalCustomerRelationshipContactsArgs {
   customer: CustomerFragment;
@@ -39,7 +39,7 @@ export const ModalCustomerRelationshipContactsContent: FC<ModalCustomerRelations
   const workspace = useWorkspace();
   const isEditable = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
 
-  const [updateCustomer] = useMutation(UPDATE_CUSTOMER);
+  const [updateCustomer] = useMutation(UpdateCustomerDocument);
 
   const isUpdateAble = useRef(false);
 

@@ -3,7 +3,6 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
-import { PartnerEntity } from "@/modules/partners/partners-types";
 import { searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -13,15 +12,16 @@ import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext, SelectorProps } from "../../../components/selector";
+import { PartnerFragment } from "../graphql/fragmentPartner.graphql";
+import GetPartnersDocument from "../graphql/getPartners.graphql";
 
-interface PartnerSelectorProps
-  extends Omit<
-    SelectorProps<PartnerEntity>,
-    "renderTarget" | "onSearch" | "searchPlaceholder" | "renderOption" | "onCreate" | "target"
-  > {
-  target?: (ctx: SelectorContext<PartnerEntity>) => ReactNode;
+interface PartnerSelectorProps extends Omit<
+  SelectorProps<PartnerFragment>,
+  "renderTarget" | "onSearch" | "searchPlaceholder" | "renderOption" | "onCreate" | "target"
+> {
+  target?: (ctx: SelectorContext<PartnerFragment>) => ReactNode;
   createable?: boolean;
-  optionRightSection?: (value: PartnerEntity) => ReactNode;
+  optionRightSection?: (value: PartnerFragment) => ReactNode;
 }
 
 export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
@@ -33,10 +33,10 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
   return (
     <ModalParnterForm>
       {(open) => (
-        <Selector<PartnerEntity>
+        <Selector<PartnerFragment>
           {...rest}
-          onSearch={(q) => searchEntity<PartnerEntity>(AppEntity.PARTNERS, q)}
-          listRoute="/partners"
+          onSearch={(q) => searchEntity<PartnerFragment>(AppEntity.PARTNERS, q)}
+          listQuery={GetPartnersDocument}
           renderOption={(item) => {
             return (
               <Combobox.Option value={item._id} key={item._id}>

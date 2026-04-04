@@ -1,0 +1,7 @@
+#import "./fragmentBankInformation.graphql"
+
+query GetBankInformation($bankId: Float!) {
+  getBankInformation(bankId: $bankId) {
+    ...BankInformation
+  }
+}

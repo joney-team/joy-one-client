@@ -23,9 +23,10 @@ import { Button } from "../../components/buttons/button";
 import { Errored } from "../../components/errored";
 import { Renderer } from "../../components/renderer";
 import { useLang } from "../lang/lang-context";
-import MUTATION_CLEAN_NOTIFICATIONS from "./graphql/mutationCleanNotifications.graphql";
-import QUERY_NOTIFICATIONS from "./graphql/queryNotifications.graphql";
-import QUERY_NOTIFICATION_STAT from "./graphql/queryNotificationStat.graphql";
+import CleanNotificationsDocument from "./graphql/cleanNotifications.graphql";
+import { NotificationFragment } from "./graphql/fragmentNotification.graphql";
+import GetNotificationStatDocument from "./graphql/getNotificationStat.graphql";
+import GetNotificationsDocument from "./graphql/getNotifications.graphql";
 import { NotificationCard } from "./notification-card";
 
 const ModalConfirm = dynamic(
@@ -60,9 +61,9 @@ export const UserNotifications: FC = () => {
   const color = useColor();
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
-  const [cleanNotifications] = useMutation(MUTATION_CLEAN_NOTIFICATIONS);
+  const [cleanNotifications] = useMutation(CleanNotificationsDocument);
 
-  const { data: notificationStatData, refetch } = useQuery(QUERY_NOTIFICATION_STAT, {
+  const { data: notificationStatData, refetch } = useQuery(GetNotificationStatDocument, {
     fetchPolicy: "cache-and-network",
   });
 
@@ -72,9 +73,9 @@ export const UserNotifications: FC = () => {
     open();
   };
 
-  const notifications = useGraphqlList({
+  const notifications = useGraphqlList<NotificationFragment>({
     id: `user-notifications-${lang.locale}`,
-    query: QUERY_NOTIFICATIONS,
+    query: GetNotificationsDocument,
   });
 
   const onClean = () => {

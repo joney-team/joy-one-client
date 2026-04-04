@@ -13,10 +13,7 @@ import { Badge, Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/c
 import { IconCreditCardPay } from "@tabler/icons-react";
 import Link from "next/link";
 import { useMemo, useState, type FC } from "react";
-import LOANS_QUERY, {
-  type LoansQuery,
-  type LoansQueryVariables,
-} from "../graphql/queryLoans.graphql";
+import GetLoansDocument, { GetLoansQueryVariables } from "../graphql/getLoans.graphql";
 import { loanAssetTypes, loanStatuses } from "../loans-constants";
 
 export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }> = ({
@@ -27,7 +24,7 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
   const color = useColor();
   const [isFetchingMore, setIsFetchingMore] = useState(false);
 
-  const variables = useMemo<LoansQueryVariables>(() => {
+  const variables = useMemo<GetLoansQueryVariables>(() => {
     return {
       query: {
         customerCidNumber,
@@ -36,7 +33,7 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
     };
   }, [customerCidNumber]);
 
-  const { data, loading, fetchMore } = useQuery<LoansQuery, LoansQueryVariables>(LOANS_QUERY, {
+  const { data, loading, fetchMore } = useQuery(GetLoansDocument, {
     fetchPolicy: "cache-and-network",
     variables,
   });

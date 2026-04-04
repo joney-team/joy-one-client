@@ -1,0 +1,10 @@
+#import "./fragmentPluginMessageHub.graphql"
+
+mutation UpdatePluginMessageHub(
+  $messageHubId: String!
+  $input: PluginMessageHubInput!
+) {
+  updatePluginMessageHub(id: $messageHubId, input: $input) {
+    ...PluginMessageHub
+  }
+}

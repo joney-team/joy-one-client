@@ -1,25 +1,26 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { PluginZaloOaZnsTemplateId } from "@/graphql/types.graphql";
 import { OnModalZaloOaSendZns } from "@/modules/plugins/zalo-oas/modals/modal-zalo-oa-send-zns";
-import { updatePluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
-import {
-  PluginZaloOaEntity,
-  PluginZaloOaZNSTemplateId,
-  ZnsTemplateConfig,
-} from "@/modules/plugins/zalo-oas/zalo-oas-types";
-import { t } from "@lingui/core/macro";
+import { ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, em, Group, Stack, Switch, Table, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { IconTemplate } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import { ZaloOaFragment } from "../graphql/fragmentZaloOa.graphql";
+import UpdateZaloOaDocument from "../graphql/updateZaloOa.graphql";
 import { pluginZaloOaZNSTemplateIds } from "../zalo-oas-constants";
 
 export const ZaloOaZnsTemplateConfig: FC<{
-  templateId: PluginZaloOaZNSTemplateId;
+  templateId: PluginZaloOaZnsTemplateId;
   config: ZnsTemplateConfig;
-  oa: PluginZaloOaEntity;
+  oa: ZaloOaFragment;
 }> = (props) => {
   const { oa } = props;
+  const { t } = useLingui();
+  const client = useApolloClient();
 
   const defaultActive =
     typeof oa.znsTemplateStatues?.[props.templateId] === "undefined" ||
@@ -36,7 +37,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
               <IconTemplate size={18} />
             </ThemeIcon>
             <Text fz={em(15)} fw={500}>
-              {pluginZaloOaZNSTemplateIds[props.templateId].name()}
+              {t(pluginZaloOaZNSTemplateIds[props.templateId].name)}
             </Text>
           </Group>
 
@@ -44,11 +45,16 @@ export const ZaloOaZnsTemplateConfig: FC<{
             checked={isActive}
             onChange={(e) => {
               setIsActive(e.target.checked);
-              updatePluginZalo(oa._id, {
-                ...oa,
-                znsTemplateStatues: {
-                  ...oa.znsTemplateStatues,
-                  [props.templateId]: e.target.checked,
+              client.mutate({
+                mutation: UpdateZaloOaDocument,
+                variables: {
+                  updateZaloOaId: oa._id,
+                  input: {
+                    znsTemplateStatues: {
+                      ...oa.znsTemplateStatues,
+                      [props.templateId]: e.target.checked,
+                    },
+                  },
                 },
               });
             }}
@@ -57,7 +63,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
 
         <Stack gap={5}>
           <Text fz={em(13)} fw={500}>
-            {t`Params`}
+            <Trans>Params</Trans>
           </Text>
           <Table withTableBorder>
             <Table.Tbody>
@@ -69,7 +75,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
                       <Stack gap={2}>
                         <Text fz={em(15)}>{item.description}</Text>
                         <Text fz={em(11)}>
-                          {t`Example`}: {item.default}
+                          <Trans>Example</Trans>: {item.default}
                         </Text>
                       </Stack>
                     </Table.Td>
@@ -86,11 +92,17 @@ export const ZaloOaZnsTemplateConfig: FC<{
             placeholder={t`Template ID`}
             defaultValue={oa.znsTemplateIds?.[props.templateId]}
             onChange={(e) =>
-              updatePluginZalo(oa._id, {
-                ...oa,
-                znsTemplateIds: {
-                  ...oa.znsTemplateIds,
-                  [props.templateId]: e.target.value,
+              client.mutate({
+                mutation: UpdateZaloOaDocument,
+                variables: {
+                  updateZaloOaId: oa._id,
+                  input: {
+                    znsTemplateStatues: oa.znsTemplateStatues,
+                    znsTemplateIds: {
+                      ...oa.znsTemplateIds,
+                      [props.templateId]: e.target.value,
+                    },
+                  },
                 },
               })
             }
@@ -100,7 +112,7 @@ export const ZaloOaZnsTemplateConfig: FC<{
             onClick={() => OnModalZaloOaSendZns(props)}
             disabled={!oa.znsTemplateIds?.[props.templateId] || !isActive}
           >
-            {t`Send ZNS`}
+            <Trans>Send ZNS</Trans>
           </Button>
         </Group>
       </Stack>

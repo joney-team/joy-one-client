@@ -11,7 +11,8 @@ import { IconUserSquareRounded } from "@tabler/icons-react";
 import { searchEntity } from "../../search/search-service";
 import { WorkspacePermission } from "../../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../../workspaces/workspace-context";
-import QUERY_CUSTOMERS_BY_IDS from "../graphql/queryCustomersByIds.graphql";
+import GetCustomersDocument from "../graphql/getCustomers.graphql";
+import GetCustomersByIdsDocument from "../graphql/getCustomersByIds.graphql";
 
 export interface CustomerColumnArgs<Data = any> extends Omit<Column<Data>, "render"> {}
 
@@ -55,16 +56,16 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
     filter: {
       dynamicSelector: {
         ...args?.filter,
-        listRoute: "/customers",
+        listQuery: GetCustomersDocument,
         multiple: true,
         getSelectedOptions: async (ids: string[], client) => {
           const results = await client.query({
-            query: QUERY_CUSTOMERS_BY_IDS,
+            query: GetCustomersByIdsDocument,
             variables: {
               ids,
             },
           });
-          return (results.data?.customersByIds ?? []).map((v) => ({
+          return (results.data?.customers ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,
@@ -73,12 +74,12 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
         search: async (query, client) => {
           const result = await searchEntity(AppEntity.CUSTOMERS, query);
           const results = await client.query({
-            query: QUERY_CUSTOMERS_BY_IDS,
+            query: GetCustomersByIdsDocument,
             variables: {
               ids: result.map((v) => v._id),
             },
           });
-          return (results.data?.customersByIds ?? []).map((v) => ({
+          return (results.data?.customers ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,

@@ -7,8 +7,6 @@ fragment Receipt on Receipt {
   createdAt
   updatedAt
   id
-  _count
-  _id
   code
   ref
   type

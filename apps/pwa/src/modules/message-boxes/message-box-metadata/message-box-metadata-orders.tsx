@@ -1,14 +1,18 @@
 import { Empty } from "@/components/empty";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { EventType } from "@/graphql/enums.graphql";
+import { OrderFragment } from "@/modules/orders/graphql/fragmentOrder.graphql";
+import GetOrdersDocument from "@/modules/orders/graphql/getOrders.graphql";
 import { OrderCard } from "@/modules/orders/order-card";
-import { getOrders } from "@/modules/orders/orders-service";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
 
 export const MessageBoxMetadataOrders: AccordionItemComponent = ({ customer }) => {
-  const orders = useList({
-    fetch: async () => getOrders({ relatedCustomerId: customer._id }),
+  const orders = useGraphqlList<OrderFragment>({
+    query: GetOrdersDocument,
+    params: {
+      relatedCustomerId: customer._id,
+    },
     events: [
       EventType.OrderNew,
       EventType.OrderUpdated,

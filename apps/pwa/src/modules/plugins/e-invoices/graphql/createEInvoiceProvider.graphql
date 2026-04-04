@@ -1,0 +1,7 @@
+#import "./fragmentPluginEInvoiceProvider.graphql"
+
+mutation CreateEInvoiceProvider($input: CreatePluginEInvoiceProviderInput!) {
+  provider: createEInvoiceProvider(input: $input) {
+    ...PluginEInvoiceProvider
+  }
+}

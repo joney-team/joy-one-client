@@ -2,7 +2,7 @@ import { StorageKey } from "@/constants/storage-key";
 import { getLocalStorage } from "@/hooks/use-local-storage";
 import { isServer } from "@/utils/common.utils";
 import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
-import { UpdateWorkspaceMutationVariables } from "./graphql/mutationUpdateWorkspace.graphql";
+import { UpdateWorkspaceMutationVariables } from "./graphql/updateWorkspace.graphql";
 
 export const getWorkspaceId = () => {
   if (isServer()) return;

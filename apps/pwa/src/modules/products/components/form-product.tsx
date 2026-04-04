@@ -6,18 +6,16 @@ import { Editor } from "@/components/editor/editor";
 import { ImageInput } from "@/components/inputs/image-input";
 import { LaunchingSoon } from "@/components/launching-soon";
 import { Renderer } from "@/components/renderer";
-import { ProductType } from "@/graphql/enums.graphql";
-import { CategoryType } from "@/modules/categories/category-types";
+import { CategoryType, ProductType } from "@/graphql/enums.graphql";
+import { ProductInput } from "@/graphql/types.graphql";
 import { CategoryInput } from "@/modules/categories/components/category-input";
 import { BuilderCustomFields } from "@/modules/custom-fields/components/builder-custom-fields";
-import { getCustomFieldValue } from "@/modules/custom-fields/custom-field-service";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { archiveProduct, createProduct, updateProduct } from "@/modules/products/products-service";
-import { ProductCombo, ProductEntity, ProductSupply } from "@/modules/products/products-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -44,28 +42,30 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import ArchiveProductDocument from "../graphql/archiveProduct.graphql";
+import CreateProductDocument from "../graphql/createProduct.graphql";
+import { ProductFragment } from "../graphql/fragmentProduct.graphql";
+import UpdateProductDocument from "../graphql/updateProduct.graphql";
+import { productTypes } from "../products-constants";
 
 export type FormProductProps = {
-  onDone?: (product: ProductEntity) => void | Promise<void>;
+  onDone?: (product: ProductFragment) => void | Promise<void>;
 } & (
   | {
       type: ProductType;
     }
   | {
-      product: ProductEntity;
+      product: ProductFragment;
     }
 );
-
-const defaultUnitPerType: { [key in ProductType]?: () => string } = {
-  [ProductType.Combo]: () => t`Combo`,
-  [ProductType.Voucher]: () => t`Voucher`,
-};
 
 enum FormProductTab {
   SETTING = "SETTING",
   POST = "POST",
   ANALYTICS = "ANALYTICS",
 }
+
+type ProductCombo = ProductFragment["combos"][number];
 
 const FormProductCombo: FC<{
   combo: ProductCombo;
@@ -108,35 +108,59 @@ export const FormProduct: FC<
     onClose: () => void;
   }
 > = (props) => {
+  const client = useApolloClient();
+  const { t } = useLingui();
   const [tab, setTab] = useState<FormProductTab>(FormProductTab.SETTING);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const product = "product" in props ? props.product : undefined;
   const type = ("type" in props ? props.type : product?.type) as ProductType;
 
-  const [supplies, handlers] = useListState<ProductSupply>(product?.supplies || []);
+  const [supplies, handlers] = useListState(product?.supplies || []);
   const [combos, combosHandler] = useListState(product?.combos || []);
   const [voucherIncludeProducts, voucherIncludeProductsHandler] = useListState(
-    product?.voucherIncludeProducts || []
+    product?.voucherIncludeProducts || [],
   );
   const [voucherExcludeProducts, voucherExcludeProductsHandler] = useListState(
-    product?.voucherExcludeProducts || []
+    product?.voucherExcludeProducts || [],
   );
 
   const form = useForm({
     initialValues: {
-      ...product,
       type,
-      unit: product?.unit || defaultUnitPerType[type]?.() || "",
+      name: product?.name || undefined,
+      displayName: product?.displayName || undefined,
+      unit:
+        product?.unit ||
+        (productTypes[type]?.defaultUnit ? t(productTypes[type].defaultUnit) : "") ||
+        "",
+      price: product?.price || undefined,
+      minPrice: product?.minPrice || undefined,
+      maxPrice: product?.maxPrice || undefined,
+      code: product?.code || undefined,
+      content: product?.content || undefined,
       isRangePrice: typeof product?.minPrice === "number",
-    } as any,
+      voucherAmount: product?.voucherAmount || undefined,
+      image: product?.image || undefined,
+      defaultQtyPerUse: product?.defaultQtyPerUse || undefined,
+      category: product?.category || null,
+      combosExpireInDays: product?.combosExpireInDays || undefined,
+      isStockCheck: product?.isStockCheck || false,
+      customFieldValues: product?.customFieldValues || [],
+      isHiddenInReceiptWhenNoPrice: product?.isHiddenInReceiptWhenNoPrice || false,
+      productCode: product?.productCode || undefined,
+      tags: product?.tags || [],
+      voucherExpireInDays: product?.voucherExpireInDays || undefined,
+      warningOutOfDateBeforeDays: product?.warningOutOfDateBeforeDays || undefined,
+      warningOutOfStockQty: product?.warningOutOfStockQty || undefined,
+    },
     validate: {
-      name: (value: string) => {
+      name: (value) => {
         if (!value) return t`Must be provided`;
       },
-      unit: (value: string) => {
+      unit: (value) => {
         if (!value) return t`Must be provided`;
       },
-      price: (value: number, values: any) => {
+      price: (value, values) => {
         if (typeof value !== "number") return t`Must be provided`;
         if (value < 0) return t`Minimum amount is ${0}`;
 
@@ -147,21 +171,21 @@ export const FormProduct: FC<
             return t`Default price must be in the price range`;
         }
       },
-      minPrice: (value: number, values: any) => {
+      minPrice: (value, values) => {
         if (values.isRangePrice) {
           if (typeof value !== "number") return t`Must be provided`;
           if (values.maxPrice && values.maxPrice < value)
             return t`Minimum price must be less than maximum price`;
         }
       },
-      maxPrice: (value: number, values: any) => {
+      maxPrice: (value, values) => {
         if (values.isRangePrice) {
           if (typeof value !== "number") return t`Must be provided`;
           if (values.minPrice && values.minPrice > value)
             return t`Maximum price must be greater than minimum price`;
         }
       },
-      voucherAmount: (value: number) => {
+      voucherAmount: (value) => {
         if (type === ProductType.Voucher) {
           if (typeof value !== "number") return t`Must be provided`;
           if (value < 0) return t`Minimum amount is ${0}`;
@@ -179,26 +203,53 @@ export const FormProduct: FC<
           throw new Error(`${t`Must be provided`} ${t`Products`}/${t`Services`}`);
       }
 
-      const { customFields, ...rest } = values;
-
-      let payload = {
-        ...rest,
+      const input: ProductInput = {
+        name: values.name!,
+        price: values.price!,
+        unit: values.unit,
+        code: values.code,
+        image: values.image,
+        displayName: values.displayName,
+        defaultQtyPerUse: values.defaultQtyPerUse,
+        type: values.type,
         categoryId: values.category?._id,
         supplies,
         combos: combos.map((c) => ({ productId: c.productId, quantity: c.quantity })),
+        combosExpireInDays: values.combosExpireInDays,
+        content: values.content,
+        isStockCheck: values.isStockCheck,
+        customFieldValues: values.customFieldValues,
+        isHiddenInReceiptWhenNoPrice: values.isHiddenInReceiptWhenNoPrice,
+        maxPrice: values.maxPrice,
+        minPrice: values.minPrice,
+        productCode: values.productCode,
+        tags: values.tags,
+        voucherAmount: values.voucherAmount,
         voucherExcludeProductIds: voucherExcludeProducts.map((p) => p._id),
         voucherIncludeProductIds: voucherIncludeProducts.map((p) => p._id),
-        customFieldValues: getCustomFieldValue(customFields),
+        voucherExpireInDays: values.voucherExpireInDays,
+        warningOutOfDateBeforeDays: values.warningOutOfDateBeforeDays,
+        warningOutOfStockQty: values.warningOutOfStockQty,
       };
 
-      if (!values.isRangePrice) delete payload.minPrice;
+      if (!values.isRangePrice) delete input.minPrice;
 
       const action = product
-        ? () => updateProduct(product!._id, payload)
-        : () => createProduct(payload);
+        ? () =>
+            client.mutate({
+              mutation: UpdateProductDocument,
+              variables: { productId: product._id, input },
+            })
+        : () =>
+            client.mutate({
+              mutation: CreateProductDocument,
+              variables: { input },
+            });
 
       const res = await action();
-      await props.onDone?.(res);
+      if (res.data) {
+        await props.onDone?.(res.data.product);
+      }
       props.onClose?.();
     } catch (error) {
       onError(error);
@@ -237,22 +288,30 @@ export const FormProduct: FC<
               <Stack>
                 <ImageInput {...form.getInputProps("image")} w={150} h={150} />
 
-                <TextInput withAsterisk label={t`Name`} {...form.getInputProps("name")} />
-                <TextInput withAsterisk label={t`Unit`} {...form.getInputProps("unit")} />
+                <TextInput
+                  withAsterisk
+                  label={<Trans>Name</Trans>}
+                  {...form.getInputProps("name")}
+                />
+                <TextInput
+                  withAsterisk
+                  label={<Trans>Unit</Trans>}
+                  {...form.getInputProps("unit")}
+                />
 
-                <TextInput label={t`Code`} {...form.getInputProps("code")} />
+                <TextInput label={<Trans>Code</Trans>} {...form.getInputProps("code")} />
 
                 <Renderer visible={type === ProductType.Product}>
                   <NumberInput
-                    label={t`Min per use`}
-                    description={t`Default is ${1}`}
+                    label={<Trans>Min per use</Trans>}
+                    description={<Trans>Default is ${1}</Trans>}
                     {...form.getInputProps("defaultQtyPerUse")}
                     hideControls
                   />
                 </Renderer>
 
                 <Switch
-                  label={t`Range price`}
+                  label={<Trans>Range price</Trans>}
                   checked={form.values.isRangePrice}
                   onChange={(e) => form.setFieldValue("isRangePrice", e.target.checked)}
                 />
@@ -261,14 +320,14 @@ export const FormProduct: FC<
                   <Group wrap="nowrap" align="start">
                     <NumberInput
                       withAsterisk
-                      label={t`Min price`}
+                      label={<Trans>Min price</Trans>}
                       flex={1}
                       hideControls
                       {...form.getInputProps("minPrice")}
                     />
                     <NumberInput
                       withAsterisk
-                      label={t`Max price`}
+                      label={<Trans>Max price</Trans>}
                       onBlur={() => {
                         if (
                           typeof form.values.maxPrice === "number" &&
@@ -287,7 +346,7 @@ export const FormProduct: FC<
                 </Renderer>
 
                 <NumberInput
-                  label={t`Default price`}
+                  label={<Trans>Default price</Trans>}
                   withAsterisk
                   hideControls
                   {...form.getInputProps("price")}
@@ -296,31 +355,36 @@ export const FormProduct: FC<
                 <Renderer visible={type === ProductType.Voucher}>
                   <NumberInput
                     withAsterisk
-                    label={t`Voucher amount`}
+                    label={<Trans>Voucher amount</Trans>}
                     hideControls
                     {...form.getInputProps("voucherAmount")}
                   />
                 </Renderer>
 
                 <CategoryInput
-                  label={t`Categories`}
+                  label={<Trans>Categories</Trans>}
                   {...form.getInputProps("category")}
-                  type={CategoryType.PRODUCTS}
+                  type={CategoryType.Products}
                 />
               </Stack>
 
               <Stack>
                 <Stack>
-                  <Divider mb={-10} label={t`Settings`} labelPosition="left" fw={700} />
+                  <Divider mb={-10} label={<Trans>Settings</Trans>} labelPosition="left" fw={700} />
 
                   <TextInput
-                    label={t`Display name`}
-                    description={t`Another name displayed on the ticket, invoice sent to customers. Not required`}
+                    label={<Trans>Display name</Trans>}
+                    description={
+                      <Trans>
+                        Another name displayed on the ticket, invoice sent to customers. Not
+                        required
+                      </Trans>
+                    }
                     {...form.getInputProps("displayName")}
                   />
 
                   <Switch
-                    label={t`Hidden in receipt when no price`}
+                    label={<Trans>Hidden in receipt when no price</Trans>}
                     checked={form.values.isHiddenInReceiptWhenNoPrice}
                     styles={{ label: { fontSize: 14 } }}
                     {...form.getInputProps("isHiddenInReceiptWhenNoPrice")}
@@ -328,7 +392,7 @@ export const FormProduct: FC<
 
                   <Renderer visible={type === ProductType.Product}>
                     <Switch
-                      label={t`Stock check`}
+                      label={<Trans>Stock check</Trans>}
                       checked={form.values.isStockCheck}
                       styles={{ label: { fontSize: 14 } }}
                       {...form.getInputProps("isStockCheck")}
@@ -336,15 +400,25 @@ export const FormProduct: FC<
 
                     <Renderer visible={form.values.isStockCheck}>
                       <NumberInput
-                        label={t`Warning out of date`}
-                        description={t`Ex: Enter 7 -> Warn 7 days before expiration, leave blank or fill in 0 to turn off the warning`}
+                        label={<Trans>Warning out of date</Trans>}
+                        description={
+                          <Trans>
+                            Ex: Enter 7 - Warn 7 days before expiration, leave blank or fill in 0 to
+                            turn off the warning
+                          </Trans>
+                        }
                         hideControls
                         {...form.getInputProps("warningOutOfDateBeforeDays")}
                       />
 
                       <NumberInput
-                        label={t`Warning out of stock`}
-                        description={t`Ex: Enter 10 -> Warn when stock is below 10, leave blank or fill in 0 to turn off the warning`}
+                        label={<Trans>Warning out of stock</Trans>}
+                        description={
+                          <Trans>
+                            Ex: Enter 10 - Warn when stock is below 10, leave blank or fill in 0 to
+                            turn off the warning
+                          </Trans>
+                        }
                         {...form.getInputProps("warningOutOfStockQty")}
                         hideControls
                       />
@@ -354,13 +428,13 @@ export const FormProduct: FC<
 
                 <Renderer
                   visible={([ProductType.Product, ProductType.Service] as ProductType[]).includes(
-                    type
+                    type,
                   )}
                 >
                   <Stack>
                     <Divider mb={-10} label={t`Product supplies`} labelPosition="left" fw={700} />
                     <Text fz={em(10)} c="gray">
-                      {t`Enter product supplies`}
+                      <Trans>Enter product supplies</Trans>
                     </Text>
 
                     <Stack gap={10}>
@@ -408,8 +482,14 @@ export const FormProduct: FC<
                           excludeIds={[...supplies.map((s) => s.productId), product?._id || ""]}
                           onSelect={(product) => {
                             handlers.append({
+                              __typename: "ProductSupplyResult",
                               productId: product._id,
-                              product,
+                              product: {
+                                __typename: "Product",
+                                _id: product._id,
+                                name: product.name,
+                                unit: product.unit,
+                              },
                               quantity: product.defaultQtyPerUse || 1,
                             });
                           }}
@@ -437,7 +517,7 @@ export const FormProduct: FC<
                   <Stack>
                     <Divider
                       mb={-10}
-                      label={`${t`Products`} / ${t`Services`}`}
+                      label={<Trans>Products/Services</Trans>}
                       labelPosition="left"
                       fw={700}
                     />
@@ -475,6 +555,7 @@ export const FormProduct: FC<
                           onSelect={(product) => {
                             if (combos.some((c) => c.productId === product._id)) return;
                             combosHandler.append({
+                              __typename: "ProductComboResult",
                               product,
                               productId: product._id,
                               quantity: 1,
@@ -504,20 +585,24 @@ export const FormProduct: FC<
                   <Stack>
                     <Divider
                       mb={-10}
-                      label={`${t`Voucher config`}`}
+                      label={<Trans>Voucher config</Trans>}
                       labelPosition="left"
                       fw={700}
                     />
 
                     <NumberInput
-                      label={t`Expire in days`}
-                      description={t`Enter the expiration date, leave blank or fill in 0 if not applicable`}
+                      label={<Trans>Expire in days</Trans>}
+                      description={
+                        <Trans>
+                          Enter the expiration date, leave blank or fill in 0 if not applicable
+                        </Trans>
+                      }
                       {...form.getInputProps("voucherExpireInDays")}
                     />
 
                     <Divider
                       mb={-10}
-                      label={t`Include products / services`}
+                      label={<Trans>Include products / services</Trans>}
                       labelPosition="left"
                       fw={700}
                     />
@@ -549,7 +634,12 @@ export const FormProduct: FC<
                       />
                     </Group>
 
-                    <Divider mb={-10} label={t`Exclude products`} labelPosition="left" fw={700} />
+                    <Divider
+                      mb={-10}
+                      label={<Trans>Exclude products</Trans>}
+                      labelPosition="left"
+                      fw={700}
+                    />
 
                     {voucherExcludeProducts.map((product, i) => (
                       <Card key={product._id} withBorder shadow="none" p={8}>
@@ -582,11 +672,16 @@ export const FormProduct: FC<
 
                 <BuilderCustomFields
                   before={
-                    <Divider mb={-10} label={t`Custom fields`} labelPosition="left" fw={700} />
+                    <Divider
+                      mb={-10}
+                      label={<Trans>Custom fields</Trans>}
+                      labelPosition="left"
+                      fw={700}
+                    />
                   }
                   entity={AppEntity.PRODUCTS}
-                  value={form.values.customFields}
-                  onChange={(value) => form.setFieldValue("customFields", value)}
+                  value={form.values.customFieldValues}
+                  onChange={(value) => form.setFieldValue("customFieldValues", value)}
                 />
               </Stack>
             </SimpleGrid>
@@ -620,7 +715,12 @@ export const FormProduct: FC<
 
           {product?._id && (
             <ButtonArchive
-              process={() => archiveProduct(product!._id)}
+              process={() =>
+                client.mutate({
+                  mutation: ArchiveProductDocument,
+                  variables: { productId: product._id },
+                })
+              }
               onArchived={() => props.onClose()}
               goBackWhenArchived={false}
             />

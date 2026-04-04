@@ -39,30 +39,6 @@ export type PluginEInvoiceTemplates = Partial<
   Record<PluginEInvoiceTemplateType, PluginEInvoiceTemplate>
 >;
 
-export enum PluginEInvoicesProviderStatus {
-  ACTIVE = "ACTIVE",
-  AUTH_FAILED = "AUTH_FAILED",
-  INACTIVE = "INACTIVE",
-}
-
-export type MatBaoAuth = {
-  MST: string;
-  TDNhap: string;
-  MKhau: string;
-};
-
-export type PluginEInvoicesProviderAuth = Partial<MatBaoAuth>;
-
-export interface CreatePluginEInvoicesProviderDto {
-  type: PluginEInvoicesProviderType;
-  apiUrl: string;
-  auth: PluginEInvoicesProviderAuth;
-  templates: Partial<PluginEInvoiceTemplates>;
-  status: PluginEInvoicesProviderStatus;
-}
-
-export type UpdatePluginEInvoicesProviderDto = Partial<CreatePluginEInvoicesProviderDto>;
-
 export interface PluginEInvoiceTemplateVariable {
   description?: string;
   isNumerical?: true;

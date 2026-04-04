@@ -1,0 +1,3 @@
+mutation BulkArchivePosts($ids: [String!]!) {
+  bulkArchivePosts(ids: $ids)
+}

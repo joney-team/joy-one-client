@@ -118,7 +118,7 @@ const InputForm: FC<InputModalState & { onClose: () => void }> = (state) => {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Stack gap={16}>
+      <Stack gap="md">
         {(function () {
           if (state?.type === InputModalType.DATE_TIME) {
             return (

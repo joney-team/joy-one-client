@@ -7,18 +7,10 @@ import { ActionIcon, Group, Menu } from "@mantine/core";
 import { IconCirclePlus, IconDots, IconPrinter, IconTrash } from "@tabler/icons-react";
 import { Fragment, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
-import { OrderCalculated } from "../../orders-management/orders-management-types";
 
 export const OrderSaleActions: FC = () => {
   const orderSale = userOrdersManagement();
   const { view } = useLayout();
-  const orderCalculated: OrderCalculated | undefined =
-    orderSale.activeOrder && orderSale.calculating.data
-      ? {
-          ...orderSale.calculating.data,
-          ...orderSale.activeOrder,
-        }
-      : undefined;
 
   if (view === "mobile") {
     return (
@@ -59,18 +51,12 @@ export const OrderSaleActions: FC = () => {
         <IconCirclePlus size={20} strokeWidth={1.5} />
       </ActionIcon>
 
-      {orderSale.activeOrder && (
+      {orderSale.activeOrder && orderSale.calculated && (
         <Fragment>
-          <Printer order={orderCalculated!}>
+          <Printer order={orderSale.calculated}>
             {({ open }) => {
               return (
-                <ActionIcon
-                  component="div"
-                  onClick={() => {
-                    if (!orderCalculated) return;
-                    open();
-                  }}
-                >
+                <ActionIcon component="div" onClick={open}>
                   <IconPrinter size={20} strokeWidth={1.5} />
                 </ActionIcon>
               );

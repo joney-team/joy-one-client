@@ -1,0 +1,3 @@
+mutation ProductStockOut($input: ProductStockOutInput!) {
+  productStockOut(input: $input)
+}

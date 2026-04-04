@@ -1,4 +1,4 @@
-import { CustomField } from "./modules/custom-fields/custom-field-types";
+import { CustomFieldValue } from "./graphql/types.graphql";
 import { WorkspaceBranchFragment } from "./modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceMemberFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
 
@@ -20,7 +20,7 @@ export interface BaseEntity {
   workspaceBranchId?: string;
   workspaceBranch?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
   relatedEntities?: RelatedEntity[];
-  customFields?: CustomField[];
+  customFields?: CustomFieldValue[];
 }
 
 export interface BaseMongoEntity extends BaseEntity {
@@ -145,9 +145,9 @@ export interface AppMetadata {
   siteName: string;
   type: string;
   favicon: string;
-  appName?: string;
-  appIcon?: string;
-  appColor?: string;
+  appName?: string | null;
+  appIcon?: string | null;
+  appColor?: string | null;
   appColorShape?: number;
   workspaceId?: string;
   isExtended: boolean;

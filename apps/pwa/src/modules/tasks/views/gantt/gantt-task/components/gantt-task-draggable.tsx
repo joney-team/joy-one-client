@@ -5,7 +5,6 @@ import { FC, Fragment, ReactNode, RefObject, useEffect, useRef, useState } from 
 import { TaskFragment } from "../../../../graphql/fragmentTask.graphql";
 
 import { UpdateTaskContext, useUpdateTasks } from "../../../../hooks/use-update-tasks";
-import { type TasksQueryVariables } from "../../../../graphql/queryTasks.graphql";
 import { useGantt } from "../../gantt-tasks-context";
 
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -16,6 +15,7 @@ import {
 } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/element/set-custom-native-drag-preview";
 
+import { GetTasksQueryVariables } from "@/modules/tasks/graphql/getTasks.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGanttTaskRow } from "../gantt-task-provider";
@@ -113,7 +113,7 @@ export const GanttTaskDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: groupVariables,
           };
 
@@ -155,7 +155,7 @@ export const GanttTaskDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: groupVariables,
           };
 
@@ -204,7 +204,7 @@ export const GanttTaskDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: task.parent ? groupVariables : subTasksGroupVariables,
           };
 

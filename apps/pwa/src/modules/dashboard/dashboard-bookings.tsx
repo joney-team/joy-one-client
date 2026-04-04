@@ -3,10 +3,10 @@
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { SectionTitle } from "@/components/session-title";
+import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { Period } from "@/types";
-import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -17,7 +17,7 @@ import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useRef } from "react";
 import { bookingActiveStatus } from "../bookings/booking-constants";
-import QUERY_BOOKINGS from "../bookings/graphql/queryBookings.graphql";
+import GetBookingsDocument from "../bookings/graphql/getBookings.graphql";
 import type { ModalCancelBookingRef } from "../bookings/modals/modal-cancel-booking";
 import type { ModalRescheduleBookingRef } from "../bookings/modals/modal-reschedule-booking";
 import { useEventsListener } from "../events/event-service";
@@ -27,7 +27,7 @@ const ModalCancelBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalRescheduleBooking = dynamic(
@@ -36,7 +36,7 @@ const ModalRescheduleBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const DashboardBookings: FC = () => {
@@ -48,7 +48,7 @@ export const DashboardBookings: FC = () => {
     defaultValue: { status: "in_progress", assigneeUserIds: [] as string[] },
   });
 
-  const { data: todayBookings, refetch } = useQuery(QUERY_BOOKINGS, {
+  const { data: todayBookings, refetch } = useQuery(GetBookingsDocument, {
     variables: {
       query: {
         timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
@@ -68,7 +68,7 @@ export const DashboardBookings: FC = () => {
     ],
     () => {
       refetch();
-    }
+    },
   );
 
   const bookingData = (todayBookings?.list.results || [])

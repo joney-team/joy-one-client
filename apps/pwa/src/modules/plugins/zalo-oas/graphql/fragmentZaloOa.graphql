@@ -1,0 +1,19 @@
+fragment ZaloOa on PluginZaloOa {
+  _id
+  id
+  isDefault
+  znsTemplateIds
+  znsTemplateStatues
+  status
+  info {
+    name
+    description
+    avatar
+    oa_id
+    is_verified
+    package_name
+    package_valid_through_date
+    cate_name
+  }
+  isDisabled
+}

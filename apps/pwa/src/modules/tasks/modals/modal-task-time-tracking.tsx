@@ -39,41 +39,7 @@ import {
   useState,
 } from "react";
 import { v4 as uuId } from "uuid";
-import CREATE_TASK_MUTATION, {
-  type CreateTaskMutation,
-  type CreateTaskMutationVariables,
-} from "../graphql/mutationCreateTask.graphql";
-
-export function findNearestTimeSlot(now = new Date()) {
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-  // Các mốc thời gian trong ngày (15 phút mỗi mốc)
-  const timeSlots = [];
-  for (let i = 0; i < 24 * 60; i += 15) {
-    timeSlots.push(i); // Lưu trữ số phút từ đầu ngày
-  }
-
-  // Tìm mốc thời gian gần nhất
-  let nearestSlot = timeSlots[0];
-  let minDifference = Math.abs(currentMinutes - timeSlots[0]);
-
-  for (let i = 1; i < timeSlots.length; i++) {
-    const difference = Math.abs(currentMinutes - timeSlots[i]);
-    if (difference < minDifference) {
-      nearestSlot = timeSlots[i];
-      minDifference = difference;
-    }
-  }
-
-  // Chuyển đổi mốc thời gian từ phút thành định dạng hh:mm
-  const hours = Math.floor(nearestSlot / 60);
-  const minutes = nearestSlot % 60;
-  const formattedTime = `${hours.toString().padStart(2, "0")}:${minutes
-    .toString()
-    .padStart(2, "0")}`;
-
-  return formattedTime;
-}
+import CreateTaskDocument from "../graphql/createTask.graphql";
 
 export interface TaskTimeTrackingModalArgs {
   date: Date;
@@ -100,9 +66,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
   const [slot, setSlot] = useState<{ startAt: number; endAt: number }>();
   const color = useColor();
 
-  const [createTask] = useMutation<CreateTaskMutation, CreateTaskMutationVariables>(
-    CREATE_TASK_MUTATION,
-  );
+  const [createTask] = useMutation(CreateTaskDocument);
 
   const onSubmit = async () => {
     try {
@@ -150,7 +114,7 @@ const ModalTaskTimeTrackingContent: FC<TaskTimeTrackingModalArgs & { close: () =
 
       if (!result.data) throw new Error(t`Failed to create task`);
 
-      args.onSubmit?.(result.data.createTask._id);
+      args.onSubmit?.(result.data.task._id);
       args.close();
     } catch (error) {
       onError(error);

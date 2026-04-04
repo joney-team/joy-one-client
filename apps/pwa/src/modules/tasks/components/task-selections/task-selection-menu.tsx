@@ -5,7 +5,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { ModalConfirm, type ModalConfirmRef } from "@/modals/modal-confirm";
-import type { TagEntity } from "@/modules/tags/tags-types";
+import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { isDiff } from "@joy-one-client/utils/object";
 import { Trans } from "@lingui/react/macro";
@@ -42,7 +42,7 @@ export const TaskSelectionMenu: FC = () => {
     });
   };
 
-  const changeFolder = async (folder?: TagEntity) => {
+  const changeFolder = async (folder?: TagFragment) => {
     if (!folder) return;
     await updateTasks(selections.selected.map(({ _id }) => ({ _id, folder: folder })));
   };
@@ -53,7 +53,7 @@ export const TaskSelectionMenu: FC = () => {
     const firstTaskStatuses = selections.selected[0].statuses;
 
     const isAllSameStatuses = selections.selected.every(
-      (task) => !isDiff(task.statuses, firstTaskStatuses)
+      (task) => !isDiff(task.statuses, firstTaskStatuses),
     );
 
     if (isAllSameStatuses) return selections.selected[0].statuses;
@@ -72,7 +72,7 @@ export const TaskSelectionMenu: FC = () => {
           selections.selected.map(({ _id }) => ({
             _id,
             status: task.status,
-          }))
+          })),
         );
       }
 
@@ -81,7 +81,7 @@ export const TaskSelectionMenu: FC = () => {
           selections.selected.map(({ _id }) => ({
             _id,
             priority: task.priority,
-          }))
+          })),
         );
       }
 
@@ -90,7 +90,7 @@ export const TaskSelectionMenu: FC = () => {
           selections.selected.map(({ _id }) => ({
             _id,
             tags: task.tags,
-          }))
+          })),
         );
       }
 
@@ -99,7 +99,7 @@ export const TaskSelectionMenu: FC = () => {
           selections.selected.map(({ _id }) => ({
             _id,
             folder: task.folder ?? null,
-          }))
+          })),
         );
         taskMenu.close();
         selections.unselect(...selections.selected.map((v) => v._id));
@@ -110,7 +110,7 @@ export const TaskSelectionMenu: FC = () => {
           selections.selected.map(({ _id }) => ({
             _id,
             assigneeUsers: task.assigneeUsers,
-          }))
+          })),
         );
       }
 

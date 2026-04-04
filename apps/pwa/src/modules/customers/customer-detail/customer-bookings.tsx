@@ -1,6 +1,6 @@
 import { Empty } from "@/components/empty";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import QUERY_BOOKINGS from "@/modules/bookings/graphql/queryBookings.graphql";
+import GetBookingsDocument from "@/modules/bookings/graphql/getBookings.graphql";
 import type { ModalCancelBookingRef } from "@/modules/bookings/modals/modal-cancel-booking";
 import type { ModalRescheduleBookingRef } from "@/modules/bookings/modals/modal-reschedule-booking";
 import { nonLoading } from "@/utils/non-loading";
@@ -15,25 +15,25 @@ const ModalCancelBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalRescheduleBooking = dynamic(
   () =>
     import("@/modules/bookings/modals/modal-reschedule-booking").then(
-      (mod) => mod.ModalRescheduleBooking
+      (mod) => mod.ModalRescheduleBooking,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const CustomerBookings = ({ customerId }: { customerId: string }) => {
   const modalCancelBookingRef = useRef<ModalCancelBookingRef>(null);
   const modalRescheduleBookingRef = useRef<ModalRescheduleBookingRef>(null);
 
-  const { data, loading, refetch } = useQuery(QUERY_BOOKINGS, {
+  const { data, loading, refetch } = useQuery(GetBookingsDocument, {
     variables: {
       query: {
         customerId,

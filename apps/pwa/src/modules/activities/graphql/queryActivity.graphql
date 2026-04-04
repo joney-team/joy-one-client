@@ -1,7 +1,0 @@
-#import "./fragmentActivity.graphql"
-
-query Activity($id: String!) {
-  activity(id: $id) {
-    ...Activity
-  }
-}

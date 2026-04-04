@@ -15,7 +15,7 @@ interface WorkspaceSettingTermsPoliciesEditorProps {
 }
 
 export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPoliciesEditorProps> = (
-  props
+  props,
 ) => {
   const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
   const router = useRouter();
@@ -27,7 +27,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
 
   const key = props.doc === "privacy-policy" ? "privacyPolicy" : "termsOfService";
   const [value, setValue] = useState<string | undefined>(
-    (workspaceSetting ?? {})[key] ?? undefined
+    (workspaceSetting ?? {})[key] ?? undefined,
   );
   const [debounced] = useDebouncedValue(value, 300);
 
@@ -40,7 +40,7 @@ export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPolici
   }, [debounced]);
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <Card withBorder className="WorkspaceTermsPoliciesEditor">
         <Stack>
           <Group justify="space-between">

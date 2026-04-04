@@ -3,11 +3,13 @@
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
-import { setCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
-import { CustomerContactEntity } from "@/modules/customer-contacts/customer-contacts.types";
+import { CustomerContactFragment } from "@/modules/customer-contacts/graphql/fragmentCustomerContact.graphql";
+import SetCustomerContactsDocument from "@/modules/customer-contacts/graphql/setCustomerContacts.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -33,12 +35,13 @@ import {
 import { FC, useEffect, useRef } from "react";
 
 interface ModalCustomerContactsProps {
-  contacts: CustomerContactEntity;
+  contacts: CustomerContactFragment;
 }
 
 export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => {
   const [contacts, handlers] = useListState(props.contacts.contacts);
   const workspace = useWorkspace();
+  const client = useApolloClient();
   const isEditable = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
 
   const isUpdateAble = useRef(false);
@@ -46,9 +49,19 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
     setTimeout(() => (isUpdateAble.current = true), 200);
   }, []);
 
-  const onSave = () => {
+  const onSave = async () => {
     const availabelContacts = contacts.filter((c) => c.name.trim() !== "" && c.phones.length > 0);
-    setCustomerContacts(props.contacts.customerId, { contacts: availabelContacts }).catch(onError);
+    client
+      .mutate({
+        mutation: SetCustomerContactsDocument,
+        variables: {
+          customerId: props.contacts.customerId,
+          input: {
+            contacts: removeTypeName(availabelContacts),
+          },
+        },
+      })
+      .catch(onError);
   };
 
   return (
@@ -156,7 +169,7 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
             leftIcon={IconPlus}
             radius={200}
             onClick={() => {
-              handlers.append({ name: "", phones: [] });
+              handlers.append({ name: "", phones: [], __typename: "CustomerContactInformation" });
             }}
           >
             <Trans>Add contact</Trans>
@@ -174,7 +187,7 @@ export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => 
 export const OnModalCustomerContacts = (props: ModalCustomerContactsProps) => {
   return modals.open({
     modalId: "ModalCustomerContacts",
-    title: <ModalHead name={t`Contacts`} icon={IconAddressBook} />,
+    title: <ModalHead name={<Trans>Contacts</Trans>} icon={IconAddressBook} />,
     children: <ModalCustomerContacts {...props} />,
   });
 };

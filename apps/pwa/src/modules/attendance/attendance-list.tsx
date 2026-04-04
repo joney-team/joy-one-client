@@ -25,9 +25,9 @@ import {
   groupAttendanceRecordsByUsers,
   summaryAttendanceRecords,
 } from "./attendance-utils";
-import QUERY_ATTENDANCE_RECORDS, {
-  type AttendanceRecordsQueryVariables,
-} from "./graphql/queryAttendanceRecords.graphql";
+import GetAttendanceRecordsDocument, {
+  GetAttendanceRecordsQueryVariables,
+} from "./graphql/getAttendanceRecords.graphql";
 import { ModalAttendanceRecordsRef } from "./modals/modal-attendance-records";
 import { PendingAttendanceList } from "./pending-attendance-list";
 
@@ -64,7 +64,7 @@ export const AttendanceList: FC<AttendanceListProps> = ({ date: queryDate, view:
     }
   };
 
-  const variables = useMemo<AttendanceRecordsQueryVariables>(() => {
+  const variables = useMemo<GetAttendanceRecordsQueryVariables>(() => {
     return {
       query: {
         timeRangeTime: `${view}-${DateTime.toSeconds(queryDate ?? new Date())}`,
@@ -73,7 +73,7 @@ export const AttendanceList: FC<AttendanceListProps> = ({ date: queryDate, view:
     };
   }, [queryDate, view]);
 
-  const { data, refetch } = useQuery(QUERY_ATTENDANCE_RECORDS, {
+  const { data, refetch } = useQuery(GetAttendanceRecordsDocument, {
     variables,
     fetchPolicy: "cache-and-network",
   });

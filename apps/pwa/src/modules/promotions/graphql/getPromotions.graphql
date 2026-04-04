@@ -1,0 +1,10 @@
+#import "./fragmentPromotion.graphql"
+
+query GetPromotions($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getPromotions(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Promotion
+    }
+  }
+}

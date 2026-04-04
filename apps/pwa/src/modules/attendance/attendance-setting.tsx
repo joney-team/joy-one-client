@@ -12,7 +12,7 @@ import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useRef, useState } from "react";
 import { AttendanceSettingFragment } from "./graphql/fragmentAttendanceSetting.graphql";
-import UPLOAD_ATTENDANCE_SETTING_MUTATION from "./graphql/mutationUpdateAttendanceSetting.graphql";
+import UpdateAttendanceSettingDocument from "./graphql/updateAttendanceSetting.graphql";
 import { useAttendanceSetting } from "./hooks/use-attendance-setting";
 import { type ModalAttendanceSettingLocationFormRef } from "./modals/modal-attendance-setting-location-form";
 
@@ -30,7 +30,7 @@ const AttendanceSettingContent: FC<{ setting: AttendanceSettingFragment }> = ({ 
   );
   const modalAttendanceSettingLocationFormRef = useRef<ModalAttendanceSettingLocationFormRef>(null);
 
-  const [uploadAttendanceSetting] = useMutation(UPLOAD_ATTENDANCE_SETTING_MUTATION);
+  const [uploadAttendanceSetting] = useMutation(UpdateAttendanceSettingDocument);
 
   const onApply = async () => {
     await uploadAttendanceSetting({

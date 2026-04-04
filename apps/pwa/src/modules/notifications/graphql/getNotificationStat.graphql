@@ -1,0 +1,6 @@
+query GetNotificationStat {
+  notificationStat: getNotificationStat {
+    count
+    unListViewed
+  }
+}

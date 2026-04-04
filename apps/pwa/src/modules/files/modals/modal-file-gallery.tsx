@@ -7,7 +7,6 @@ import { Modal } from "@/components/modal/modal";
 import { FileType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { downloadFileFromURL } from "@/modules/files/file-service";
-import { FileEntity } from "@/modules/files/file-types";
 import { parseFile, renderFileUrl } from "@/modules/files/files-utils";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
@@ -29,8 +28,9 @@ import {
 import dynamic from "next/dynamic";
 import { forwardRef, Fragment, ReactNode, useEffect, useImperativeHandle, useState } from "react";
 import { useFileSize } from "../files-hooks";
-import MUTATAION_REMOVE_FILE from "../graphql/mutationRemoveFile.graphql";
-import QUERY_FILE_INFO from "../graphql/queryFileInfo.graphql";
+import { FileFragment } from "../graphql/fragmentFile.graphql";
+import GetFileByIdDocument from "../graphql/getFileById.graphql";
+import RemoveFileDocument from "../graphql/removeFile.graphql";
 
 const FilePdfViewer = dynamic(() => import("../file-pdf-viewer").then((mod) => mod.FilePdfViewer), {
   ssr: false,
@@ -38,7 +38,7 @@ const FilePdfViewer = dynamic(() => import("../file-pdf-viewer").then((mod) => m
 });
 
 export interface ModalFileGalleryArgs {
-  files: FileEntity[] | { url: string; _id?: string; fileName?: string; type?: FileType }[];
+  files: FileFragment[] | { url: string; _id?: string; fileName?: string; type?: FileType }[];
   index?: number;
   readonly?: boolean;
   disabled?: boolean;
@@ -75,7 +75,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
       },
     }));
 
-    const [removeFile] = useMutation(MUTATAION_REMOVE_FILE);
+    const [removeFile] = useMutation(RemoveFileDocument);
 
     const onClose = () => {
       setArgs(null);
@@ -95,7 +95,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
     const bodyHeight = layout.height - head;
     const renderFile = parseFile(activeFile?.url || "");
 
-    const fileInfo = useQuery(QUERY_FILE_INFO, {
+    const fileInfo = useQuery(GetFileByIdDocument, {
       skip: !renderFile.fileId,
       variables: { fileId: renderFile.fileId || "" },
     });
@@ -125,7 +125,7 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
           if (!args) return;
           const files = args.files.filter(
             (v) => typeof v === "object" && v._id !== activeFile._id,
-          ) as FileEntity[];
+          ) as FileFragment[];
           await args?.onRemoved?.();
           if (files.length === 0) return onClose();
           setArgs({ ...args, files });
@@ -178,14 +178,12 @@ export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGallery
                         truncate="end"
                         maw={layout.view === "mobile" ? "30dvw" : "40dvw"}
                       >
-                        {activeFile?.fileName ??
-                          fileInfo.data?.getFileInfo?.fileName ??
-                          renderFile.name}
+                        {activeFile?.fileName ?? fileInfo.data?.file?.fileName ?? renderFile.name}
                       </Text>
 
                       {fileSize.size && (
                         <Text fz={12} c="gray">
-                          {formatBytes(fileInfo.data?.getFileInfo?.size ?? fileSize.size)}
+                          {formatBytes(fileInfo.data?.file?.size ?? fileSize.size)}
                         </Text>
                       )}
                     </Group>

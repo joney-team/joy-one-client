@@ -1,7 +1,6 @@
 "use client";
 
 import { FileType } from "@/graphql/enums.graphql";
-import { getFileTypeIcon } from "@/modules/files/file-service";
 import { formatBytes } from "@/utils/file.utils";
 import {
   Box,
@@ -17,6 +16,7 @@ import {
 import { IconCircleCheck, IconFile, IconVideo } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { Image } from "../../components/image";
+import { fileTypes } from "./files-constants";
 import { FileFragment } from "./graphql/fragmentFile.graphql";
 
 export interface InternalFileCardProps {
@@ -30,7 +30,7 @@ export interface InternalFileCardProps {
 export const InternalFileCard: FC<InternalFileCardProps> = (props) => {
   const { file } = props;
   const theme = useMantineTheme();
-  const Icon = getFileTypeIcon(file.type);
+  const Icon = fileTypes[file.type].icon;
   const fileType = file.type;
   const isDoubleClick = useRef<boolean>(false);
 

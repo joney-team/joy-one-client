@@ -1,0 +1,48 @@
+fragment ProductCombo on ProductCombo {
+  id
+  productId
+  customerId
+  sourceId
+  expireAt
+  status
+  createdAt
+  customer {
+    _id
+    name
+    avatar
+  }
+  product {
+    _id
+    name
+    image
+    type
+  }
+  productRefs {
+    productRefId
+    productRefRevenue
+    quantity
+    quantityUsed
+    product {
+      _id
+      name
+      image
+      type
+    }
+  }
+  history {
+    id
+    createdAt
+    productComboId
+    ref
+    orderId
+    note
+    used {
+      productRefId
+      quantity
+    }
+    records {
+      productRefId
+      quantity
+    }
+  }
+}

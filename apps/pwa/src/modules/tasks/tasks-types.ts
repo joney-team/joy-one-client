@@ -1,4 +1,4 @@
-import type { TagEntity } from "@/modules/tags/tags-types";
+import { TagFragment } from "../tags/graphql/fragmentTag.graphql";
 import { WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import type { TasksState } from "./tasks-provider";
 import type { TaskView } from "./views/types";
@@ -79,6 +79,6 @@ export interface TasksContext {
   setView: (view: TaskView) => void;
   state: TasksState;
   setState: (val: TasksState | ((prevState: TasksState) => TasksState)) => void;
-  activatedFolder: Pick<TagEntity, "_id" | "name" | "slug" | "color" | "__typename"> | null;
+  activatedFolder: Pick<TagFragment, "_id" | "name" | "slug" | "color" | "__typename"> | null;
   isReady: boolean;
 }

@@ -1,0 +1,7 @@
+#import "./fragmentTag.graphql"
+
+query GetTagBySlug($slug: String!) {
+  tag: getTagBySlug(slug: $slug) {
+    ...Tag
+  }
+}

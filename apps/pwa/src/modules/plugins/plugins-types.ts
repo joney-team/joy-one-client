@@ -1,7 +1,8 @@
-import { PluginAiAssistantEntity } from "./ai-assistants/plugin-ai-assistants-types";
-import { PluginMessageHubEntity } from "./message-hubs/message-hubs-types";
-import { PluginMetaPageEntity } from "./meta-pages/meta-pages-types";
-import { PluginZaloOaEntity, ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
+import { PluginAiAssistantFragment } from "./ai-assistants/graphql/fragmentPluginAiAssistant.graphql";
+import { PluginMessageHubFragment } from "./message-hubs/graphql/fragmentPluginMessageHub.graphql";
+import { MetaPageFragment } from "./meta-pages/graphql/fragmentMetaPage.graphql";
+import { ZaloOaFragment } from "./zalo-oas/graphql/fragmentZaloOa.graphql";
+import { ZnsTemplateConfigs } from "./zalo-oas/zalo-oas-types";
 
 export interface Plugin {
   type: "metaPages" | "zaloOas" | "messageHubs" | "aiAssistants";
@@ -11,11 +12,11 @@ export interface Plugin {
 
 export interface UsePlugins {
   isInitialized: boolean;
-  messageHubs: PluginMessageHubEntity[];
-  zaloOas: PluginZaloOaEntity[];
-  metaPages: PluginMetaPageEntity[];
+  messageHubs: PluginMessageHubFragment[];
+  zaloOas: ZaloOaFragment[];
+  metaPages: MetaPageFragment[];
   znsTemplateConfigs: ZnsTemplateConfigs;
-  aiAssistants: PluginAiAssistantEntity[];
+  aiAssistants: PluginAiAssistantFragment[];
   onCreateMessageHub: (name: string) => Promise<void>;
   plugins: Plugin[];
   getPlugin: (id: string | null | undefined) => Plugin | null;

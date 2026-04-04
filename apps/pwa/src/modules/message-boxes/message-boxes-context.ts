@@ -1,10 +1,10 @@
-import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
 import { createContext, useContext } from "react";
+import { MessageBoxFragment } from "./graphql/fragmentMessageBox.graphql";
 
 interface ContextType {
-  messageBox: MessageBoxEntity | null;
+  messageBox: MessageBoxFragment | null;
   messageBoxId: string | null;
-  open: (box: MessageBoxEntity) => void;
+  open: (box: Pick<MessageBoxFragment, "_id">) => void;
   close: () => void;
 }
 

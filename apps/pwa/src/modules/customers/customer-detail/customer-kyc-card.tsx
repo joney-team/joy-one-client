@@ -3,9 +3,9 @@
 import { CustomerKycStatus, FileType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalPrompt } from "@/modals/modal-prompt";
+import ApproveCustomerKycDocument from "@/modules/customer-kycs/graphql/approveCustomerKyc.graphql";
 import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
-import MUTATION_APPROVE_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationApproveCustomerKyc.graphql";
-import MUTATION_REJECT_CUSTOMER_KYC from "@/modules/customer-kycs/graphql/mutationRejectCustomerKyc.graphql";
+import RejectCustomerKycDocument from "@/modules/customer-kycs/graphql/rejectCustomerKyc.graphql";
 import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -49,8 +49,8 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const { renderVnLocation: renderLocation } = useLocations();
   const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
 
-  const [approveCustomerKyc] = useMutation(MUTATION_APPROVE_CUSTOMER_KYC);
-  const [rejectCustomerKyc] = useMutation(MUTATION_REJECT_CUSTOMER_KYC);
+  const [approveCustomerKyc] = useMutation(ApproveCustomerKycDocument);
+  const [rejectCustomerKyc] = useMutation(RejectCustomerKycDocument);
 
   if (!lastVersion) return null;
 
@@ -64,8 +64,8 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
             customerId: customer._id,
           },
         });
-        if (!approvedKyc.data?.approveCustomerKyc) return;
-        props.onApproved?.(approvedKyc.data?.approveCustomerKyc);
+        if (!approvedKyc.data?.customerKyc) return;
+        props.onApproved?.(approvedKyc.data?.customerKyc);
       },
     });
   };

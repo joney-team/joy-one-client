@@ -1,0 +1,3 @@
+query GeneratePostSlug($input: GenerateSlugInput!) {
+  slug: generatePostSlug(input: $input)
+}

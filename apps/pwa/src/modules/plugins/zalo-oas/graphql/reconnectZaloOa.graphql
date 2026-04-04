@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+mutation ReconnectZaloOa($zaloOaId: String!) {
+  reconnectZaloOa(id: $zaloOaId) {
+    ...ZaloOa
+  }
+}

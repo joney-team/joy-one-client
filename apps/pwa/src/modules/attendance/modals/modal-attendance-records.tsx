@@ -7,13 +7,12 @@ import { DateInput } from "@/components/inputs/date-input";
 import { Modal } from "@/components/modal/modal";
 import { EventType } from "@/graphql/enums.graphql";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import { useVariablesQuery } from "@/graphql/use-query";
 import { useEventsListener } from "@/modules/events/event-service";
 import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
 import { useWorkspaceMember } from "@/modules/workspace-members/hooks/use-workspace-member";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
+import { useQuery } from "@apollo/client/react";
 import { DateTime, type RawDate } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, Skeleton, Stack, Text } from "@mantine/core";
@@ -23,8 +22,7 @@ import { FC, forwardRef, useCallback, useImperativeHandle, useRef, useState } fr
 import { attendanceRecordTypes } from "../attendance-constants";
 import { AttendanceRecordCard } from "../attendance-record-card";
 import { getWorkingDurationTime } from "../attendance-utils";
-import QUERY_ATTENDANCE_RECORDS from "../graphql/queryAttendanceRecords.graphql";
-import { useQuery } from "@apollo/client/react";
+import GetAttendanceRecordsDocument from "../graphql/getAttendanceRecords.graphql";
 
 const ModalConfirm = dynamic(
   () => import("@/modals/modal-confirm").then((mod) => mod.ModalConfirm),
@@ -63,7 +61,7 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
     loading: isAttendanceLoading,
     error: attendanceError,
     refetch,
-  } = useQuery(QUERY_ATTENDANCE_RECORDS, {
+  } = useQuery(GetAttendanceRecordsDocument, {
     variables: {
       query: {
         timeRangeTime: `date-${DateTime.toSeconds(selectedDate)}`,

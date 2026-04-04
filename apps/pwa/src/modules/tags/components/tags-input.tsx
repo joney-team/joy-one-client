@@ -1,18 +1,19 @@
 "use client";
 
 import { Renderer } from "@/components/renderer";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TagType } from "@/graphql/enums.graphql";
 import { TaskTag } from "@/modules/tasks/components/task-tag";
 import { Trans } from "@lingui/react/macro";
 import { em, Group, InputWrapperProps, Text, ThemeIcon } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { TagFragment } from "../graphql/fragmentTag.graphql";
 import { TagSelector } from "./tag-selector";
 
 interface TagsInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   type: TagType;
-  value?: TagEntity[];
-  onChange?: (value: TagEntity[]) => void;
+  value?: TagFragment[];
+  onChange?: (value: TagFragment[]) => void;
   disabled?: boolean;
 }
 
@@ -20,7 +21,7 @@ export const TagsInput: FC<TagsInputProps> = (props) => {
   const { type, value: rawValue, onChange, disabled, ...rest } = props;
   const value = rawValue || [];
 
-  const toogleSelect = (tag?: TagEntity) => {
+  const toogleSelect = (tag?: TagFragment) => {
     if (!tag || disabled) return;
     const tags = value.find((t) => t._id === tag._id)
       ? value.filter((t) => t._id !== tag._id)

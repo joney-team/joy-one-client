@@ -1,0 +1,13 @@
+mutation GenerateEInvoiceData($input: GenerateEInvoiceDataInput!) {
+  generateEInvoiceData(input: $input) {
+    providerId
+    provider
+    receiptId
+    receiptCode
+    invoiceId
+    invoiceData
+    providerData
+    url
+    isCancelled
+  }
+}

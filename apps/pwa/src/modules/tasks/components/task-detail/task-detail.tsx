@@ -18,10 +18,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedCallback } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
-import QUERY_TASK_BY_CODE, {
-  type TaskByCodeQuery,
-  type TaskByCodeQueryVariables,
-} from "../../graphql/queryTaskByCode.graphql";
+import GetTaskByCodeDocument from "../../graphql/getTaskByCode.graphql";
 import { useUpdateTasks } from "../../hooks/use-update-tasks";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { useTaskMenu } from "../task-menu/task-menu";
@@ -58,12 +55,9 @@ export const TaskDetail: FC = () => {
 
   const { code: taskCode } = useParams<{ code: string }>();
 
-  const [getTask, { data, loading }] = useLazyQuery<TaskByCodeQuery, TaskByCodeQueryVariables>(
-    QUERY_TASK_BY_CODE,
-    {
-      fetchPolicy: "cache-and-network",
-    },
-  );
+  const [getTask, { data, loading }] = useLazyQuery(GetTaskByCodeDocument, {
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     if (!taskCode) return;
@@ -78,7 +72,7 @@ export const TaskDetail: FC = () => {
   const containerHeight = layout.height - viewPadding * 2;
   const headerHeight = 48;
   const contentHeight = containerHeight - headerHeight;
-  const task = data?.taskByCode;
+  const task = data?.task;
 
   const taskMenu = useTaskMenu({ task, groupVariables: null });
   const modalId = `task-detail-${taskCode}`;

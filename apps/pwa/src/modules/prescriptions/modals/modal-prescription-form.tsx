@@ -4,27 +4,18 @@ import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { ProductType } from "@/graphql/enums.graphql";
+import { PrescriptionInput, PrescriptionItemInput } from "@/graphql/types.graphql";
 import { getView } from "@/layout/layout-service";
 import { PrintButton } from "@/modals/modal-printer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
-import {
-  createPrescription,
-  removePrescription,
-  updatePrescription,
-} from "@/modules/prescriptions/prescriptions-service";
-import {
-  PrescriptionDto,
-  PrescriptionEntity,
-  PrescriptionItem,
-} from "@/modules/prescriptions/prescriptions-types";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -52,22 +43,29 @@ import {
   IconSearch,
 } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import CreatePrescriptionDocument from "../graphql/createPrescription.graphql";
+import DeletePrescriptionDocument from "../graphql/deletePrescription.graphql";
+import { PrescriptionFragment } from "../graphql/fragmentPrescription.graphql";
+import UpdatePrescriptionDocument from "../graphql/updatePrescription.graphql";
 
 interface ModalPrescriptionFormProps {
-  prescription?: PrescriptionEntity;
+  prescription?: PrescriptionFragment;
   customer?: any;
   notUseTemplate?: boolean;
 }
 
-export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => {
+export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps & { onClose: () => void }> = (
+  props,
+) => {
   const workspace = useWorkspace();
+  const client = useApolloClient();
   const { t } = useLingui();
   const itemNotes = [t`Take after eating`, t`Take before eating`];
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [customer, setCustomer] = useState(props.customer);
 
-  const defaultItem: PrescriptionItem = {
+  const defaultItem: PrescriptionItemInput = {
     name: "",
     unit: t`Pill`,
     days: 1,
@@ -75,11 +73,11 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
     note: itemNotes[0],
   };
 
-  const [items, handler] = useListState<PrescriptionItem>(
-    props.prescription?.items || [defaultItem]
+  const [items, handler] = useListState<PrescriptionItemInput>(
+    props.prescription?.items || [defaultItem],
   );
 
-  const form = useForm<PrescriptionDto>({
+  const form = useForm<PrescriptionInput>({
     initialValues: {
       name: props.prescription?.name || "",
       note: props.prescription?.note || "",
@@ -97,11 +95,20 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
     try {
       if (props.prescription) {
-        await updatePrescription(props.prescription._id, { ...values, items });
+        await client.mutate({
+          mutation: UpdatePrescriptionDocument,
+          variables: {
+            input: { ...values, items },
+            prescriptionId: props.prescription._id,
+          },
+        });
       } else {
-        await createPrescription({ ...values, items });
+        await client.mutate({
+          mutation: CreatePrescriptionDocument,
+          variables: { input: { ...values, items } },
+        });
       }
-      modals.close("ModalPrescriptionForm");
+      props.onClose();
     } catch (error) {
       onError(error);
     }
@@ -191,7 +198,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                       <NumberInput
                         label={<Trans>Morning</Trans>}
-                        value={item.qty.morning}
+                        value={item.qty.morning ?? undefined}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, morning: +e } })
                         }
@@ -200,7 +207,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                       <NumberInput
                         label={<Trans>Noon</Trans>}
-                        value={item.qty.noon}
+                        value={item.qty.noon ?? undefined}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, noon: +e } })
                         }
@@ -209,7 +216,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                       <NumberInput
                         label={<Trans>Afternoon</Trans>}
-                        value={item.qty.afternoon}
+                        value={item.qty.afternoon ?? undefined}
                         onChange={(e) =>
                           handler.setItem(index, { ...item, qty: { ...item.qty, afternoon: +e } })
                         }
@@ -219,7 +226,7 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
 
                     <TextInput
                       label={<Trans>Usage</Trans>}
-                      value={item.note}
+                      value={item.note ?? undefined}
                       onChange={(e) =>
                         handler.setItem(index, { ...item, note: e.currentTarget.value })
                       }
@@ -288,11 +295,9 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
         <PrintButton
           customer={customer}
           prescription={{
-            ...form.values,
+            name: form.values.name,
+            note: form.values.note ?? "",
             items,
-            _id: props.prescription?._id || "",
-            createdAt: DateTime.toSeconds(new Date()),
-            workspaceId: workspace.member.workspaceId,
           }}
         />
 
@@ -343,8 +348,11 @@ export const ModalPrescriptionForm: FC<ModalPrescriptionFormProps> = (props) => 
               onArchive({
                 name: <Trans>Prescription</Trans>,
                 process: async () => {
-                  await removePrescription(props.prescription!._id);
-                  modals.close("ModalPrescriptionForm");
+                  await client.mutate({
+                    mutation: DeletePrescriptionDocument,
+                    variables: { prescriptionId: props.prescription!._id },
+                  });
+                  props.onClose();
                 },
               })
             }
@@ -363,7 +371,9 @@ export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
   return modals.open({
     modalId: "ModalPrescriptionForm",
     title: <ModalHead name={<Trans>Prescription</Trans>} icon={IconPill} />,
-    children: <ModalPrescriptionForm {...props} />,
+    children: (
+      <ModalPrescriptionForm {...props} onClose={() => modals.close("ModalPrescriptionForm")} />
+    ),
     size: "xl",
     fullScreen: getView() === "mobile",
     zIndex: zIndexes.commonModals,

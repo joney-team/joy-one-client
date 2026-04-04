@@ -1,0 +1,10 @@
+#import "./fragmentWorkspaceApiApp.graphql"
+
+query GetWorkspaceApiApps($query: JSONObject, $ids: [String!], $limit: Float, $offset: Float) {
+  list: getWorkspaceApiApps(query: $query, ids: $ids, limit: $limit, offset: $offset) {
+    total
+    results {
+      ...WorkspaceApiApp
+    }
+  }
+}

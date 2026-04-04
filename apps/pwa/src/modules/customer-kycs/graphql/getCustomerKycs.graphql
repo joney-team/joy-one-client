@@ -1,0 +1,10 @@
+#import "./fragmentCustomerKyc.graphql"
+
+query GetCustomerKycs($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getCustomerKycs(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...CustomerKyc
+    }
+  }
+}

@@ -1,7 +1,0 @@
-#import "./fragmentCustomer.graphql"
-
-query CustomerByCode($code: String!) {
-  customerByCode(code: $code) {
-    ...Customer
-  }
-}

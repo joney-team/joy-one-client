@@ -2,10 +2,6 @@
 
 import { Circle } from "@/components/circle";
 import { TagType } from "@/graphql/enums.graphql";
-import QUERY_TAGS, {
-  type TagsQuery,
-  type TagsQueryVariables,
-} from "@/modules/tags/graphql/queryTags.graphql";
 import { useLazyQuery } from "@apollo/client/react";
 import { FocusTrap, Group, Loader, Stack, Text, TextInput } from "@mantine/core";
 import { TaskMenuComponent } from "./task-menu-types";
@@ -20,6 +16,7 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 
 export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const { t } = useLingui();
@@ -31,12 +28,9 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const [isSearchEmpty, setIsSearchEmpty] = useState(false);
 
-  const [getTags, { data, fetchMore, loading }] = useLazyQuery<TagsQuery, TagsQueryVariables>(
-    QUERY_TAGS,
-    {
-      fetchPolicy: "cache-and-network",
-    },
-  );
+  const [getTags, { data, fetchMore, loading }] = useLazyQuery(GetTagsDocument, {
+    fetchPolicy: "cache-and-network",
+  });
 
   const onGetTags = useCallback(
     async (q: string) => {
@@ -61,14 +55,14 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
     if (!data || isFetchingMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { type: TagType.Task, offset: data.tags.results.length },
+      variables: { type: TagType.Task, offset: data.list.results.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
-          tags: {
-            ...prev.tags,
-            data: [...prev.tags.results, ...fetchMoreResult.tags.results],
+          list: {
+            ...prev.list,
+            data: [...prev.list.results, ...fetchMoreResult.list.results],
           },
         };
       },
@@ -80,7 +74,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
     !isFetchingMore &&
     !loading &&
     data &&
-    data.tags.results.length < data.tags.total &&
+    data.list.results.length < data.list.total &&
     textSearch.length === 0;
 
   useEffect(() => {
@@ -154,7 +148,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
           })}
 
         {!isSearchEmpty &&
-          data?.tags.results.map((tag) => {
+          data?.list.results.map((tag) => {
             const isSelected = selected.some((t) => t._id === tag._id);
             if (textSearch.length === 0 && isSelected) return null;
 

@@ -18,7 +18,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { EventFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import QUERY_LOAN from "@/modules/loans/graphql/queryLoan.graphql";
+import GetLoanByIdDocument from "@/modules/loans/graphql/getLoanById.graphql";
 import {
   getStaticQrCode,
   getTransactionInfo,
@@ -26,7 +26,7 @@ import {
 } from "@/modules/plugins/banks/banks.services";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchFragment } from "@/modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import WORKSPACE_BRANCH_QUERY from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
+import GetWorkspaceBranchByIdDocument from "@/modules/workspace-branches/graphql/getWorkspaceBranchById.graphql";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -70,8 +70,8 @@ import {
 } from "react";
 import { PrintButton } from "../../../modals/modal-printer";
 import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
-import MUTATION_PAY_RECEIPT from "../graphql/mutationPayReceipt.graphql";
-import QUERY_RECEIPT from "../graphql/queryReceipt.graphql";
+import GetReceiptByIdDocument from "../graphql/getReceiptById.graphql";
+import PayReceiptDocument from "../graphql/payReceipt.graphql";
 import { receiptPaymentMethods } from "../receipt-constants";
 import { type ModalReceiptDetailRef } from "./modal-receipt-detail";
 
@@ -109,7 +109,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     data: receiptData,
     loading: loadingReceipt,
     refetch: refetchReceipt,
-  } = useQuery(QUERY_RECEIPT, {
+  } = useQuery(GetReceiptByIdDocument, {
     variables: {
       id: props.receipt.id,
     },
@@ -120,7 +120,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
 
   const modalReceiptDetailRef = useRef<ModalReceiptDetailRef | null>(null);
 
-  const [payReceipt] = useMutation(MUTATION_PAY_RECEIPT);
+  const [payReceipt] = useMutation(PayReceiptDocument);
 
   const [paymentMethod, setPaymentMethod] = useState(
     workspaceSetting?.receiptPaymentMethodDefault ?? ReceiptPaymentMethod.Cash,
@@ -139,7 +139,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     if (receipt.type === ReceiptType.Income && receipt.relatedLoanId && receipt.relatedCustomer) {
       const customer = receipt.relatedCustomer;
       const loan = await client.query({
-        query: QUERY_LOAN,
+        query: GetLoanByIdDocument,
         variables: {
           id: receipt.relatedLoanId,
         },
@@ -167,7 +167,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
   > | null>(workspace.defaultBranch ?? null);
   const totalAmount = receipt ? round(receipt.amount + (receipt.tipAmount || 0)) : 0;
 
-  const { data: workspaceBranchData } = useQuery(WORKSPACE_BRANCH_QUERY, {
+  const { data: workspaceBranchData } = useQuery(GetWorkspaceBranchByIdDocument, {
     variables: { id: workspaceBranch?._id ?? "" },
     skip: !receipt?.workspaceBranch?._id,
     fetchPolicy: "cache-and-network",
@@ -215,7 +215,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
     if (!receipt) return;
 
     const data = await client.query({
-      query: QUERY_RECEIPT,
+      query: GetReceiptByIdDocument,
       variables: {
         id: receipt.id,
       },
@@ -256,14 +256,14 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
         },
       });
 
-      if (!data?.payReceipt) return;
+      if (!data?.receipt) return;
 
-      if (data?.payReceipt.status === ReceiptStatus.Paid) {
+      if (data?.receipt.status === ReceiptStatus.Paid) {
         onClose();
-        modalReceiptDetailRef.current?.open(data.payReceipt.id);
+        modalReceiptDetailRef.current?.open(data.receipt.id);
       }
 
-      setTransactionDesc(await getDefaultTransactionDesc(data.payReceipt));
+      setTransactionDesc(await getDefaultTransactionDesc(data.receipt));
       refetchReceipt();
     } catch (error) {
       onError(error);
@@ -288,7 +288,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
 
         if (receipt.status === ReceiptStatus.Paid)
           return (
-            <Stack gap={16}>
+            <Stack gap="md">
               <Card
                 withBorder
                 style={{
@@ -296,7 +296,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
                   borderWidth: 1,
                 }}
               >
-                <Stack align="center" gap={16} p={10}>
+                <Stack align="center" gap="md" p={10}>
                   <ThemeIcon size={55} radius={200}>
                     <IconClipboardCheck strokeWidth={1.4} size={35} />
                   </ThemeIcon>
@@ -550,7 +550,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
               </Group>
             </Renderer>
 
-            <Stack gap={16} mt={10} align="center">
+            <Stack gap="md" mt={10} align="center">
               <Button leftIcon={IconCheck} onClick={onPayReceipt} tt="uppercase" h={42}>
                 <Trans>Confirm paid</Trans>
               </Button>

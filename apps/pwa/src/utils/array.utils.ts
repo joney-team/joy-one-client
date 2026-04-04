@@ -14,7 +14,7 @@ export function changeIndex<T = any>(array: T[], currentIndex: number, index: nu
   }
   arr.splice(index, 0, arr.splice(currentIndex, 1)[0]);
   return arr; // for testing purposes
-};
+}
 
 export function exchangeIndex<T = any>(arr: T[], from: number, to: number): T[] {
   const newArr = [...arr];
@@ -22,7 +22,6 @@ export function exchangeIndex<T = any>(arr: T[], from: number, to: number): T[] 
   newArr[from] = newArr[to];
   newArr[to] = temp;
   return newArr;
-
 }
 
 export function addItemToIndex<T = any>(arr: T[], item: T, index: number): T[] {
@@ -35,7 +34,7 @@ export function shiftSelect(
   ids: string[],
   interactedId: string,
   selectedIds: string[],
-  lastSelectedId: string | null
+  lastSelectedId: string | null,
 ): string[] {
   // Tìm index của interactedId và lastSelectedId
   const interactedIndex = ids.indexOf(interactedId);
@@ -60,4 +59,8 @@ export function shiftSelect(
 
   // Trả về danh sách _id được chọn (bao gồm cả các phần tử đã chọn trước đó)
   return [...new Set([...selectedIds, ...newSelection])];
+}
+
+export function nonnulArray<T>(value: (T | null)[]): T[] {
+  return value.filter((v) => v !== null) as T[];
 }

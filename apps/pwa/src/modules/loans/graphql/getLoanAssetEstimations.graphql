@@ -1,0 +1,3 @@
+query GetLoanAssetEstimations {
+  assetEstimations: getLoanAssetEstimations
+}

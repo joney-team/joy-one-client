@@ -1,0 +1,3 @@
+mutation ArchivePost($postId: String!) {
+  archivePost(id: $postId)
+}

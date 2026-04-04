@@ -1,0 +1,7 @@
+#import "./fragmentProductCombo.graphql"
+
+query GetProductCombo($comboId: String!) {
+  getProductCombo(id: $comboId) {
+    ...ProductCombo
+  }
+}

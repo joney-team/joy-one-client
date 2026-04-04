@@ -1,26 +1,15 @@
 "use client";
 
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, TagType } from "@/graphql/enums.graphql";
+import { InternalEvent, useInternalEventsListener } from "@/hooks/use-internal-event";
 import { useEventsListener } from "@/modules/events/event-service";
 import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
-import BULK_UPDATE_TAGS_MUTATION, {
-  type BulkUpdateTagsMutation,
-  type BulkUpdateTagsMutationVariables,
-} from "@/modules/tags/graphql/mutationBulkUpdateTags.graphql";
-import QUERY_TAGS, {
-  type TagsQuery,
-  type TagsQueryVariables,
-} from "@/modules/tags/graphql/queryTags.graphql";
-import { TagType } from "@/modules/tags/tags-types";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useParams, useRouter } from "next/navigation";
 import { parseTaskPath } from "../tasks-route-helpers";
-import {
-  InternalEvent,
-  onInternalEvent,
-  useInternalEventsListener,
-} from "@/hooks/use-internal-event";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
+import BulkUpdateTagsDocument from "@/modules/tags/graphql/bulkUpdateTags.graphql";
 
 export type TaskFolder = TagFragment;
 
@@ -28,11 +17,11 @@ export const useTaskFolders = () => {
   const params = useParams<{ slug: string }>();
   const router = useRouter();
 
-  const { data, loading, refetch, client } = useQuery<TagsQuery, TagsQueryVariables>(QUERY_TAGS, {
-    variables: { type: TagType.TASK_FOLDER },
+  const { data, loading, refetch, client } = useQuery(GetTagsDocument, {
+    variables: { type: TagType.TaskFolder },
   });
 
-  const folders = Array.from(data?.tags.results ?? []).sort(
+  const folders = Array.from(data?.list.results ?? []).sort(
     (a, b) => (a.order ?? 0) - (b.order ?? 0),
   );
 
@@ -50,24 +39,22 @@ export const useTaskFolders = () => {
     router.push(url, { scroll: false });
   };
 
-  const [bulkUpdateTags] = useMutation<BulkUpdateTagsMutation, BulkUpdateTagsMutationVariables>(
-    BULK_UPDATE_TAGS_MUTATION,
-  );
+  const [bulkUpdateTags] = useMutation(BulkUpdateTagsDocument);
 
   const onBulkUpdateTags = async (items: (Partial<TagFragment> & { _id: string })[]) => {
     try {
-      client.cache.updateQuery<TagsQuery, TagsQueryVariables>(
+      client.cache.updateQuery(
         {
-          query: QUERY_TAGS,
-          variables: { type: TagType.TASK_FOLDER },
+          query: GetTagsDocument,
+          variables: { type: TagType.TaskFolder },
         },
         (prev) => {
           if (!prev) return prev;
           return {
             ...prev,
-            tags: {
-              ...prev.tags,
-              results: prev.tags.results
+            list: {
+              ...prev.list,
+              results: prev.list.results
                 .map((v) => ({ ...v, ...(items.find((v2) => v2._id === v._id) ?? {}) }))
                 .sort((a, b) => a.order - b.order),
             },

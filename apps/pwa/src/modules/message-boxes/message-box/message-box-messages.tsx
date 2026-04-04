@@ -2,19 +2,18 @@
 
 import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
-import { EventType, FileType } from "@/graphql/enums.graphql";
-import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
-import { FileCard } from "@/modules/files/file-card";
-import { parseFile } from "@/modules/files/files-utils";
-import { getMessages } from "@/modules/message-boxes/message-boxes-service";
 import {
-  MessageBoxEntity,
+  EventType,
+  FileType,
   MessageResource,
   MessageStatus,
   MessageType,
-} from "@/modules/message-boxes/message-boxes-types";
+} from "@/graphql/enums.graphql";
+import { eventsEmitter, useEventsListener } from "@/modules/events/event-service";
+import { FileCard } from "@/modules/files/file-card";
+import { parseFile } from "@/modules/files/files-utils";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
@@ -39,20 +38,23 @@ import {
 } from "@mantine/core";
 import { IconAnalyze, IconUserFilled, IconX } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useRef } from "react";
+import { MessageFragment } from "../graphql/fragmentMessage.graphql";
+import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
+import GetMessagesDocument from "../graphql/getMessages.graphql";
 
-export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> = (props) => {
+export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }> = (props) => {
   const color = useColor();
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);
 
-  const messages = useList({
+  const messages = useGraphqlList<MessageFragment>({
+    query: GetMessagesDocument,
+    params: {
+      boxId: props.box._id,
+      getAll: true,
+    },
+    events: [EventType.MessageNew, EventType.MessageUpdated],
     autoFetch: false,
-    fetch: (q) =>
-      getMessages({
-        ...q,
-        boxId: props.box._id,
-        getAll: true,
-      }),
   });
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth", delay = 0) => {
@@ -63,11 +65,6 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
       });
     }, delay);
   };
-
-  useEffect(() => {
-    messages.setStatus({ isInitialized: false });
-    messages.fetch(true, { isSilient: true }).then(() => scrollToBottom("instant"));
-  }, [props.box._id]);
 
   useEffect(() => {
     const listner = (e: { type: string; args?: any }) => {
@@ -81,6 +78,10 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
     };
   }, []);
 
+  useEffect(() => {
+    messages.fetch();
+  }, [props.box._id]);
+
   useEventsListener(
     [EventType.MessageNew, EventType.MessageUpdated],
     (msgEvent) => {
@@ -90,13 +91,13 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           messageRef.current.scrollHeight - messageRef.current.scrollTop <=
             messageRef.current.clientHeight + 100;
 
-        messages.fetch(true, { isSilient: true }).then(() => {
+        messages.fetch().then(() => {
           if (!isAtBottom) return;
           scrollToBottom("smooth", 200);
         });
       }
     },
-    [props.box._id]
+    [props.box._id],
   );
 
   useEffect(() => {
@@ -104,7 +105,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
       const handler = () => {
         if (messageRef.current && messageRef.current.scrollTop <= 100) {
           messageRef.current?.removeEventListener("scroll", handler);
-          messages.fetch(false, { isSilient: true });
+          messages.loadMore();
         }
       };
 
@@ -134,16 +135,19 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
 
         {messagesList.map((msg, index) => {
           const bgColor =
-            msg.type === MessageType.RECEIVE
+            msg.type === MessageType.Receive
               ? "var(--mantine-color-body)"
               : colorScheme === "dark"
-              ? rgba(color("primary"), 0.2)
-              : color("primary.0");
+                ? rgba(color("primary"), 0.2)
+                : color("primary.0");
 
           const prevMsg = messagesList[index - 1];
           const nextMsg = messagesList[index + 1];
           const senderMember = userMemberInfos.find((m) => m.userId === msg.userId);
-          const timeBtw = prevMsg ? DateTime.diff(msg.createdAt, prevMsg.createdAt, "minute") : 0;
+          const timeBtw =
+            prevMsg && msg.createdAt && prevMsg.createdAt
+              ? DateTime.diff(msg.createdAt, prevMsg.createdAt, "minute")
+              : 0;
           const limitTimeBtw = 30;
 
           const needToShowDivider =
@@ -158,7 +162,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           const cornorRadius = "3px";
 
           const getBorderRadius = () => {
-            if (msg.type === MessageType.SEND) {
+            if (msg.type === MessageType.Send) {
               if (isOnlyOneMessageSession) return `${radius} ${cornorRadius} ${radius} ${radius}`;
               if (isFirstSession) return `${radius} ${radius} ${cornorRadius} ${radius}`;
               if (isLastSession) return `${radius} ${cornorRadius} ${radius} ${radius}`;
@@ -172,6 +176,8 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
           };
 
           const getTime = () => {
+            if (!msg.createdAt) return "";
+
             // Today
             if (DateTime.isSame(msg.createdAt, new Date(), "day")) {
               return <DateFormat value={msg.createdAt} type="time" />;
@@ -201,15 +207,15 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                 gap={8}
                 wrap="nowrap"
                 align="start"
-                justify={msg.type === MessageType.RECEIVE ? "start" : "end"}
+                justify={msg.type === MessageType.Receive ? "start" : "end"}
               >
-                <Renderer visible={msg.type === MessageType.RECEIVE}>
+                <Renderer visible={msg.type === MessageType.Receive}>
                   <Avatar
                     messageBox={props.box}
                     customer={props.box.customer}
                     icon={IconUserFilled}
                     opacity={needToShowClientAvatar ? 1 : 0}
-                    radius={msg.type === MessageType.RECEIVE ? 5 : undefined}
+                    radius={msg.type === MessageType.Receive ? 5 : undefined}
                   />
                 </Renderer>
 
@@ -217,10 +223,10 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                   maw="100%"
                   gap={3}
                   key={msg._id}
-                  justify={msg.type === MessageType.RECEIVE ? "flex-start" : "flex-end"}
-                  align={msg.type === MessageType.RECEIVE ? "flex-start" : "flex-end"}
+                  justify={msg.type === MessageType.Receive ? "flex-start" : "flex-end"}
+                  align={msg.type === MessageType.Receive ? "flex-start" : "flex-end"}
                 >
-                  <Renderer visible={msg.type === MessageType.RECEIVE}>
+                  <Renderer visible={msg.type === MessageType.Receive}>
                     <Renderer visible={isFirstSession}>
                       <Text fz={12} c="gray.6">
                         • {getTime()}
@@ -234,7 +240,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                     </Renderer>
                   </Renderer>
 
-                  <Renderer visible={msg.type === MessageType.SEND}>
+                  <Renderer visible={msg.type === MessageType.Send}>
                     <Renderer visible={isFirstSession || needToShowDivider}>
                       <ModalUserInformation>
                         {(modal) => (
@@ -248,7 +254,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                                 modal.open(senderMember?.userId || "");
                               }}
                             >
-                              {msg.resource === MessageResource.AI_ASSISTANT
+                              {msg.resource === MessageResource.AiAssistant
                                 ? t`AI assistant`
                                 : senderMember?.name || ""}
                             </Anchor>
@@ -277,7 +283,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                     >
                       <Stack
                         gap={8}
-                        align={msg.type === MessageType.RECEIVE ? "flex-start" : "flex-end"}
+                        align={msg.type === MessageType.Receive ? "flex-start" : "flex-end"}
                       >
                         <Renderer visible={!!msg.text}>
                           <Text
@@ -316,7 +322,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                     </Card>
 
                     {(function () {
-                      if (msg.status === MessageStatus.SENT_FAILED) {
+                      if (msg.status === MessageStatus.SentFailed) {
                         return (
                           <Group gap={10} h={20}>
                             <Group justify="center" gap={0}>
@@ -332,7 +338,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxEntity; height: number }> =
                         );
                       }
 
-                      if (msg.status === MessageStatus.PENDING) {
+                      if (msg.status === MessageStatus.Pending) {
                         return (
                           <Group justify="center" gap={0}>
                             <ThemeIcon variant="transparent" size="xs" color="gray">

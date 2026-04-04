@@ -1,0 +1,3 @@
+mutation RevertProductComboHistory($historyId: String!) {
+  revertProductComboHistory(historyId: $historyId)
+}

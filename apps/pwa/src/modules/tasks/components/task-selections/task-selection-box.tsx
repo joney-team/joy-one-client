@@ -1,17 +1,17 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
+import { classNames } from "@/utils/ui.utils";
 import { Group } from "@mantine/core";
 import { IconSquareCheckFilled, IconSquareDashed } from "@tabler/icons-react";
 import { type FC } from "react";
 import { type TaskFragment } from "../../graphql/fragmentTask.graphql";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTaskSelections } from "./task-selections-context";
-import { classNames } from "@/utils/ui.utils";
 
 export const TaskSelectionBox: FC<{
   task: TaskFragment;
-  groupVariables: TasksQueryVariables | null;
+  groupVariables: GetTasksQueryVariables | null;
   className?: string;
   activeClassName?: string;
 }> = ({ task, groupVariables, className, activeClassName }) => {

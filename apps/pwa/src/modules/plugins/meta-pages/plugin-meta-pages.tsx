@@ -1,15 +1,12 @@
 "use client";
 
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import {
-  disconnectPluginMetaPage,
-  getPluginMetaPagesInfo,
-} from "@/modules/plugins/meta-pages/meta-pages-service";
+import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useApolloClient } from "@apollo/client/react";
 import config from "@joy-one-client/config";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -30,10 +27,13 @@ import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
+import DisconnectMetaPageDocument from "./graphql/disconnectMetaPage.graphql";
+import GetMetaPagesInfosDocument from "./graphql/getMetaPagesInfos.graphql";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
   const plugins = usePlugins();
+  const client = useApolloClient();
 
   const color = useColor();
 
@@ -63,7 +63,11 @@ export const PluginMetaPages: FC = () => {
           {(open) => {
             const onConnect = async () => {
               const authResponse = await onFacebookLogin();
-              const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
+              const { data } = await client.query({
+                query: GetMetaPagesInfosDocument,
+                variables: { accessToken: authResponse.accessToken },
+              });
+              const pages = data?.getMetaPagesInfos ?? [];
               open({ pages, accessToken: authResponse.accessToken });
             };
 
@@ -102,11 +106,15 @@ export const PluginMetaPages: FC = () => {
                       type: "danger",
                       icon: IconPuzzle,
                       content: <Trans>Are you sure you want to disconnect {page.name}?</Trans>,
-                      onConfirm: () => disconnectPluginMetaPage(page._id),
+                      onConfirm: () =>
+                        client.mutate({
+                          mutation: DisconnectMetaPageDocument,
+                          variables: { metaPageId: page._id },
+                        }),
                     })
                   }
                 >
-                  <Trans>Disconect</Trans>
+                  <Trans>Disconnect</Trans>
                 </Anchor>
               </Group>
             </Card>
@@ -117,7 +125,11 @@ export const PluginMetaPages: FC = () => {
           {(open) => {
             const onConnect = async () => {
               const authResponse = await onFacebookLogin();
-              const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
+              const { data } = await client.query({
+                query: GetMetaPagesInfosDocument,
+                variables: { accessToken: authResponse.accessToken },
+              });
+              const pages = data?.getMetaPagesInfos ?? [];
               open({ pages, accessToken: authResponse.accessToken });
             };
 

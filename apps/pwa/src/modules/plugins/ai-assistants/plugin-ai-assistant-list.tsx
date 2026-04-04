@@ -20,7 +20,7 @@ export const AiAssistantList: FC = () => {
 
   if (plugins.aiAssistants.length === 0) {
     return (
-      <Container size="sm" p={16}>
+      <Container size="sm" p="md">
         <Card shadow="xs">
           <Stack align="center" py={20}>
             <Group gap={30} mb={20}>
@@ -54,7 +54,7 @@ export const AiAssistantList: FC = () => {
   }
 
   return (
-    <Container size="xs" p={16}>
+    <Container size="xs" p="md">
       <Stack>
         {plugins.aiAssistants.map((plugin) => {
           return (

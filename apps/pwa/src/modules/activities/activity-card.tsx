@@ -35,10 +35,6 @@ import { useApolloClient, useMutation } from "@apollo/client/react";
 import styles from "./activity-card.module.css";
 
 import { onError } from "@/utils/exceptions.utils";
-import ARCHIVE_ACTIVITY_MUTATION, {
-  type ArchiveActivityMutation,
-  type ArchiveActivityMutationVariables,
-} from "./graphql/mutationArchiveActivity.graphql";
 
 import { NumberFormat } from "@/components/format/number-format";
 import { ReactionType } from "@/graphql/enums.graphql";
@@ -46,17 +42,15 @@ import { AppEntity } from "@/types";
 import { wait } from "@/utils/common.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useAuth } from "../auth/auth-context";
 import { reactionTypes } from "../reactions/reactions-constants";
 import { useReactions } from "../reactions/use-reactions";
 import { ActivityReactionUsers } from "./activity-reaction-users";
+import ArchiveActivityDocument from "./graphql/archiveActivity.graphql";
 import ACTIVITY_FRAGMENT from "./graphql/fragmentActivity.graphql";
-import UPDATE_ACTIVITY_MUTATION, {
-  type UpdateActivityMutation,
-  type UpdateActivityMutationVariables,
-} from "./graphql/mutationUpdateActivity.graphql";
-import QUERY_ACTIVITIES from "./graphql/queryActivities.graphql";
-import Image from "next/image";
+import GetActivitiesDocument from "./graphql/getActivities.graphql";
+import UpdateActivityDocument from "./graphql/updateActivity.graphql";
 
 const ActivityReplies = dynamic(
   () => import("./activity-replies").then((mod) => mod.ActivityReplies),
@@ -84,9 +78,7 @@ export const ActivityCard: FC<{ activity: ActivityFragment }> = ({ activity }) =
 
   const isSelf = activity.createdByUser._id === user._id;
 
-  const [archive] = useMutation<ArchiveActivityMutation, ArchiveActivityMutationVariables>(
-    ARCHIVE_ACTIVITY_MUTATION,
-  );
+  const [archive] = useMutation(ArchiveActivityDocument);
 
   const onArchive = async () => {
     setIsArchived(true);
@@ -94,7 +86,7 @@ export const ActivityCard: FC<{ activity: ActivityFragment }> = ({ activity }) =
     try {
       await archive({
         variables: { id: activity._id },
-        refetchQueries: [QUERY_ACTIVITIES],
+        refetchQueries: [GetActivitiesDocument],
       });
     } catch (error) {
       onError(error);
@@ -102,9 +94,7 @@ export const ActivityCard: FC<{ activity: ActivityFragment }> = ({ activity }) =
     }
   };
 
-  const [update] = useMutation<UpdateActivityMutation, UpdateActivityMutationVariables>(
-    UPDATE_ACTIVITY_MUTATION,
-  );
+  const [update] = useMutation(UpdateActivityDocument);
 
   const onSaveEdit = async () => {
     if (!activity || !editorRef.current) return;

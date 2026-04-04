@@ -1,9 +1,8 @@
 "use client";
 
 import { getBanks } from "@/modules/plugins/banks/banks.services";
-import { BankInformation } from "@/modules/plugins/banks/banks.types";
+import { BankInformationFragment } from "@/modules/plugins/banks/graphql/fragmentBankInformation.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -28,14 +27,13 @@ import { Image } from "../../../components/image";
 
 export const WorkspaceBankInformation: FC = () => {
   const { t } = useLingui();
-  const [banks, setBanks] = useState<BankInformation[]>([]);
+  const [banks, setBanks] = useState<BankInformationFragment[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const workspace = useWorkspace();
   const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
 
   const fetchBanks = async () => {
     return getBanks()
-      .then((res) => setBanks(res.data))
+      .then((res) => setBanks(res))
       .catch(() => false);
   };
 

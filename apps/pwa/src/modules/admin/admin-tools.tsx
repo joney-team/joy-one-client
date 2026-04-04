@@ -3,33 +3,43 @@
 import { Button } from "@/components/buttons/button";
 import { SectionTitle } from "@/components/session-title";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Card, Divider, Group, Stack, Textarea } from "@mantine/core";
-import {
-  IconCalendar,
-  IconClipboard,
-  IconLocation,
-  IconReportAnalytics,
-  IconTools,
-} from "@tabler/icons-react";
+import { Card, Group, Stack } from "@mantine/core";
+import { IconCalendar, IconClipboard, IconReportAnalytics, IconTools } from "@tabler/icons-react";
 
-import { onError } from "@/utils/exceptions.utils";
+import { AdminAction } from "@/graphql/enums.graphql";
+import { useApolloClient } from "@apollo/client/react";
 import { type FC } from "react";
-import { restClient } from "../apis/rest-client";
+import AdminActionDocument from "./graphql/adminAction.graphql";
 
 export const AdminTools: FC = () => {
-  const workspace = useWorkspace();
+  const client = useApolloClient();
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <SectionTitle name="System Tools" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button color="red" onClick={() => restClient.post("/helpers/reset-redis")}>
+          <Button
+            color="red"
+            onClick={() =>
+              client.mutate({
+                mutation: AdminActionDocument,
+                variables: { action: AdminAction.ResetCache },
+              })
+            }
+          >
             Redis | Reset Cache
           </Button>
 
-          <Button color="teal" onClick={() => restClient.patch("/search/sys/index-all")}>
+          <Button
+            color="teal"
+            onClick={() =>
+              client.mutate({
+                mutation: AdminActionDocument,
+                variables: { action: AdminAction.SearchReindex },
+              })
+            }
+          >
             Search | Re-Index All
           </Button>
         </Stack>
@@ -38,178 +48,46 @@ export const AdminTools: FC = () => {
       <SectionTitle name="Migrations" icon={IconTools} />
       <Card shadow="xs">
         <Stack align="start">
-          <Button onClick={() => restClient.patch(`/files/move-to-external-storage`)}>
-            Move files to external storage
+          <Button
+            onClick={() =>
+              client.mutate({
+                mutation: AdminActionDocument,
+                variables: { action: AdminAction.SyncReceipts },
+              })
+            }
+          >
+            Sync All Receipts
           </Button>
 
-          <Button onClick={() => restClient.patch(`/tasks/rebalance-order`)}>
-            Rebalance Task Order
+          <Button
+            onClick={() =>
+              client.mutate({
+                mutation: AdminActionDocument,
+                variables: { action: AdminAction.SyncLoans },
+              })
+            }
+          >
+            Sync All Loans
           </Button>
-
-          <Button onClick={() => restClient.patch(`/tasks/trigger-sync-all-tasks`)}>
-            Trigger Sync All Tasks
-          </Button>
-
-          <Button onClick={() => restClient.patch(`/files/migrate-file-refs`)}>
-            Migrate file refs
-          </Button>
-
-          <Divider miw="100%" />
-
-          <Button onClick={() => restClient.patch(`/loans/migrate-created-at`)}>
-            Migrate Loan Created At
-          </Button>
-
-          <Button onClick={() => restClient.patch(`/receipts/sync-all`)}>Sync All Receipts</Button>
-
-          <Button onClick={() => restClient.patch(`/loans/sync-all`)}>Sync All Loans</Button>
-
-          <Button onClick={() => restClient.patch(`/orders/sync-all`)}>Sync All Orders</Button>
-
-          <Button onClick={() => restClient.patch(`/loans/sync-customer-branch`)}>
-            Sync Loan branch to Customer branch
-          </Button>
-
-          <Button onClick={() => restClient.patch(`/files/migrate`)}>Migrate files</Button>
-          <Button onClick={() => restClient.patch(`/files/remove-old-files`)}>
-            Remove old files
-          </Button>
-        </Stack>
-      </Card>
-
-      <SectionTitle name="VN Locations" icon={IconLocation} />
-      <Card shadow="xs">
-        <Stack align="start">
-          <Button onClick={() => restClient.patch("/locations/crawls/vn-locations")}>
-            Crawl VN Location
-          </Button>
-        </Stack>
-      </Card>
-
-      <SectionTitle name="Set Runtime Webhook URL" icon={IconTools} />
-      <Card shadow="xs">
-        <Stack>
-          <Textarea id="runtime-webhook-url" placeholder="Enter the runtime webhook URL" />
-          <Group>
-            <Button
-              onClick={() => {
-                const input = document.getElementById("runtime-webhook-url") as HTMLInputElement;
-                const urls = [];
-
-                for (const line of input.value.split("\n")) {
-                  const url = line.trim();
-                  if (url) urls.push(url);
-                }
-
-                return restClient.post(`/plugins/meta-pages/webhook/runtime`, { urls });
-              }}
-            >
-              Set
-            </Button>
-          </Group>
         </Stack>
       </Card>
 
       <SectionTitle name="Scheduling" icon={IconCalendar} />
 
-      <Card shadow="xs">
-        <Group>
-          <Button
-            color="cyan"
-            onClick={() =>
-              restClient.post(`/scheduling/execFetchExternalStorageSize`, {
-                workspaceId: workspace.member.workspaceId,
-              })
-            }
-          >
-            execFetchExternalStorageSize
-          </Button>
-
-          <Button
-            color="cyan"
-            onClick={() =>
-              restClient.post(`/scheduling/execWorkspaceHealthCheckLoans`, {
-                workspaceId: workspace.member.workspaceId,
-              })
-            }
-          >
-            execWorkspaceHealthCheckLoans
-          </Button>
-
-          <Button
-            color="cyan"
-            onClick={() =>
-              restClient.post(`/scheduling/execSendReportToAdmin`, {
-                workspaceId: workspace.member.workspaceId,
-              })
-            }
-          >
-            execSendReportToAdmin
-          </Button>
-
-          <Button
-            color="cyan"
-            onClick={() =>
-              restClient.post(`/scheduling/execRejectPendingLoans`, {
-                workspaceId: workspace.member.workspaceId,
-              })
-            }
-          >
-            execRejectPendingLoans
-          </Button>
-
-          <Button
-            color="cyan"
-            onClick={() =>
-              restClient.post(`/scheduling/heathcheckSocialConnections`, {
-                workspaceId: workspace.member.workspaceId,
-              })
-            }
-          >
-            heathcheckSocialConnections
-          </Button>
-        </Group>
-      </Card>
-
       <SectionTitle name="Reports" icon={IconReportAnalytics} />
       <Card shadow="xs">
         <Group>
           <Button
-            color="orange"
-            onClick={() => {
-              restClient.patch(`/reports/sync-all-workspace-reports`).catch(onError);
-            }}
-          >
-            Sync Reports - All Workspaces
-          </Button>
-
-          <Button
             color="red"
             variant="outline"
-            onClick={() => restClient.delete(`/reports/purge-range-reports`).catch(onError)}
-          >
-            Purge Range Reports
-          </Button>
-
-          <Button
-            color="red"
-            variant="outline"
-            onClick={() => restClient.delete(`/reports/purge`).catch(onError)}
-          >
-            Purge Reports
-          </Button>
-        </Group>
-      </Card>
-
-      <SectionTitle name="Testing" />
-      <Card shadow="xs">
-        <Group>
-          <Button
             onClick={() =>
-              Promise.all(new Array(100).fill(0).map(() => restClient.get(`/receipts`)))
+              client.mutate({
+                mutation: AdminActionDocument,
+                variables: { action: AdminAction.PureReports },
+              })
             }
           >
-            Test Rate Limit
+            Purge Reports
           </Button>
         </Group>
       </Card>

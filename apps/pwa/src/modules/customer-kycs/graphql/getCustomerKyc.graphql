@@ -1,0 +1,7 @@
+#import "./fragmentCustomerKyc.graphql"
+
+query GetCustomerKyc($customerId: String!) {
+  customerKyc: getCustomerKyc(customerId: $customerId) {
+    ...CustomerKyc
+  }
+}

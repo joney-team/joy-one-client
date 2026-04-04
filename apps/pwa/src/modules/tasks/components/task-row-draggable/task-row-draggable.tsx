@@ -22,7 +22,7 @@ import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/el
 
 import { useColor } from "@/modules/theme/use-color";
 import { type TaskFragment } from "../../graphql/fragmentTask.graphql";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { type UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 
 const config = {
@@ -34,12 +34,12 @@ interface OverlayOptions extends CardProps {}
 export const TaskRowDraggable: FC<{
   rootRef: RefObject<HTMLElement | null>;
   task: TaskFragment;
-  groupVariables: TasksQueryVariables | null;
+  groupVariables: GetTasksQueryVariables | null;
   nextParentTask: TaskFragment | null;
   isAllowTopDroppable?: boolean;
   nextTask: TaskFragment | null;
   prevTask: TaskFragment | null;
-  subTasksGroupVariables: TasksQueryVariables | null;
+  subTasksGroupVariables: GetTasksQueryVariables | null;
   children: (draggingRef: Ref<HTMLDivElement | null>) => ReactNode;
   disabled?: boolean;
   droppableOptions?: {
@@ -148,7 +148,7 @@ export const TaskRowDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: groupVariables,
           };
 
@@ -190,7 +190,7 @@ export const TaskRowDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: groupVariables,
           };
 
@@ -243,7 +243,7 @@ export const TaskRowDraggable: FC<{
           if (!sourceTask) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: task.parent ? groupVariables : subTasksGroupVariables,
           };
 

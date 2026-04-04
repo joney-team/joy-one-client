@@ -1,0 +1,7 @@
+#import "../../../modules/tasks/graphql/fragmentTask.graphql"
+
+query GetTaskMention($id: String!) {
+  task: getTaskById(_id: $id) {
+    ...Task
+  }
+}

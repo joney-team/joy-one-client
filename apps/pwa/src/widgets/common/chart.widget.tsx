@@ -45,7 +45,7 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
     const mean = (min + max) / 2;
 
     return (
-      <Card w="100%" h="100%" shadow="xs" p={16}>
+      <Card w="100%" h="100%" shadow="xs" p="md">
         <Stack gap={20} h="100%">
           <Group ml={-5} justify="space-between">
             <Group gap={3}>

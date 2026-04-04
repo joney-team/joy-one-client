@@ -70,7 +70,7 @@ export const AuthRequire: FC = () => {
           <Pattern />
 
           <ScrollArea.Autosize w={layout.width} mah={layout.height} scrollbars="y">
-            <Stack mih={layout.height} w={layout.width} p={16}>
+            <Stack mih={layout.height} w={layout.width} p="md">
               <Group justify="space-between" wrap="nowrap">
                 <Group align="center" wrap="nowrap" gap={layout.view === "desktop" ? 16 : 8}>
                   {app.metadata.isExtended ? (

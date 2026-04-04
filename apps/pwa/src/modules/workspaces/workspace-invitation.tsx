@@ -31,11 +31,10 @@ import { IconHeartHandshake } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, Fragment, useEffect } from "react";
 import { Pattern } from "../../components/pattern/pattern";
+import GetWorkspaceInviteInformationDocument, {
+  GetWorkspaceInviteInformationQuery,
+} from "./graphql/getWorkspaceInviteInformation.graphql";
 import { workspaceTypes } from "./workspace-constants";
-
-import QUERY_WORKSPACE_INVITE_INFORMATION, {
-  type WorkspaceInviteInformationQuery,
-} from "./graphql/queryWorkspaceInviteInformation.graphql";
 
 export interface WorkspaceInvitationProps {
   inviteCode: string;
@@ -43,7 +42,7 @@ export interface WorkspaceInvitationProps {
 
 const WorkspaceInvitationContent: FC<
   WorkspaceInvitationProps & {
-    invite: WorkspaceInviteInformationQuery["workspaceInviteInformation"];
+    invite: GetWorkspaceInviteInformationQuery["workspaceInviteInformation"];
   }
 > = (props) => {
   const { invite } = props;
@@ -58,7 +57,7 @@ const WorkspaceInvitationContent: FC<
   useEffect(() => {
     // Redirect to workspace if already joined
     const member = workspace.userMembers.find(
-      (m) => m.userId === auth.user?._id && m.workspaceId === invite.workspaceId
+      (m) => m.userId === auth.user?._id && m.workspaceId === invite.workspaceId,
     );
 
     if (workspace.member?.userId === props.invite.workspaceId) {
@@ -148,7 +147,7 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
   const color = useColor();
   const layout = useLayout();
 
-  const { data, loading, error, refetch } = useQuery(QUERY_WORKSPACE_INVITE_INFORMATION, {
+  const { data, loading, error, refetch } = useQuery(GetWorkspaceInviteInformationDocument, {
     variables: { inviteCode: props.inviteCode },
     fetchPolicy: "network-only",
   });

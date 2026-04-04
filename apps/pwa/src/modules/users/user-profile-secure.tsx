@@ -21,7 +21,7 @@ export const UserProfileSecure: FC = () => {
   }, []);
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack gap={30}>
         <Stack>
           <SectionTitle name={t`Update password`} icon={IconLockFilled} />

@@ -19,7 +19,7 @@ export const UserProfileNotifications: FC = () => {
   }, []);
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       {auth.device.notificationToken ? (
         <Group gap={8} justify="center" align="center" py={30}>
           <ThemeIcon color="green" variant="outline" radius={100}>

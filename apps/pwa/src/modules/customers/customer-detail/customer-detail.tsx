@@ -23,7 +23,7 @@ import { Trans } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
 
 import { Container } from "@/components/container";
-import ARCHIVE_CUSTOMER from "../graphql/mutationArchiveCustomer.graphql";
+import ArchiveCustomerDocument from "../graphql/archiveCustomer.graphql";
 import { useCustomerByCode } from "../hooks/useCustomer";
 
 const Activities = dynamic(
@@ -31,7 +31,7 @@ const Activities = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const EventsList = dynamic(
@@ -39,7 +39,7 @@ const EventsList = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const BookingsList = dynamic(
@@ -47,7 +47,7 @@ const BookingsList = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const CustomerDetail = () => {
@@ -58,11 +58,11 @@ export const CustomerDetail = () => {
 
   const { customer, loading, error } = useCustomerByCode(params.code);
 
-  const [archiveCustomer] = useMutation(ARCHIVE_CUSTOMER);
+  const [archiveCustomer] = useMutation(ArchiveCustomerDocument);
 
   if (loading)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={150} />
         {new Array(3).fill(0).map((_, i) => (
           <Stack key={i}>
@@ -80,7 +80,7 @@ export const CustomerDetail = () => {
 
   return (
     <Container size={900}>
-      <Stack gap={30} p={16}>
+      <Stack gap={30} p="md">
         <CustomerInformations customer={customer} />
 
         <Renderer visible={!!getAvailableModule("customerKYCs")}>

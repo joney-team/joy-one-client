@@ -1,0 +1,31 @@
+#import "./fragmentBooking.graphql"
+
+mutation RescheduleBooking(
+  $startTime: Float!
+  $endTime: Float!
+  $status: BookingStatus!
+  $prevBookingId: String!
+  $title: String
+  $note: String
+  $reasonForCancellation: String
+  $assigneeUserIds: [String!]
+  $customerId: String
+  $createdAt: Float
+  $workspaceBranchId: String
+) {
+  booking: rescheduleBooking(
+    startTime: $startTime
+    endTime: $endTime
+    status: $status
+    prevBookingId: $prevBookingId
+    title: $title
+    note: $note
+    reasonForCancellation: $reasonForCancellation
+    assigneeUserIds: $assigneeUserIds
+    customerId: $customerId
+    createdAt: $createdAt
+    workspaceBranchId: $workspaceBranchId
+  ) {
+    ...Booking
+  }
+}

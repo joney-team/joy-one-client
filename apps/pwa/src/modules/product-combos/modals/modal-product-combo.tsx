@@ -6,18 +6,11 @@ import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ModalHead } from "@/components/modal/modal-head";
-import { EventType } from "@/graphql/enums.graphql";
-import { getOrderById } from "@/modules/orders/orders-service";
-import { ProductComboHistoryEntity } from "@/modules/product-combos/product-combos-entity";
-import {
-  getProductCombo,
-  productComboStatusOptions,
-  revertProductComboHistory,
-} from "@/modules/product-combos/product-combos-service";
+import GetOrderByIdDocument from "@/modules/orders/graphql/getOrderById.graphql";
 import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -33,6 +26,10 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import { IconHistory, IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
+import { ProductComboFragment } from "../graphql/fragmentProductCombo.graphql";
+import GetProductComboDocument from "../graphql/getProductCombo.graphql";
+import RevertProductComboHistoryDocument from "../graphql/revertProductComboHistory.graphql";
+import { productComboStatuses } from "../product-combos-constants";
 import { ModalProductComboUsing } from "./modal-product-combo-using";
 
 export interface ProductComboModalProps {
@@ -42,22 +39,28 @@ export interface ProductComboModalProps {
 export const ModalProductCombo: FC<{
   children: (open: (args: ProductComboModalProps) => void) => ReactNode;
 }> = ({ children }) => {
+  const client = useApolloClient();
   const [opened, { open, close }] = useDisclosure(false);
   const propsRef = useRef<ProductComboModalProps | null>(null);
   const color = useColor();
 
-  const combo = useFetch({
-    id: propsRef.current?.id,
+  const { data, loading, error } = useQuery(GetProductComboDocument, {
+    variables: {
+      comboId: propsRef.current?.id ?? "",
+    },
     skip: !!!propsRef.current?.id,
-    fetch: () => getProductCombo(propsRef.current!.id),
-    refetchEvents: [EventType.ProductComboUpdate],
+    fetchPolicy: "cache-and-network",
   });
 
   const onRevertHistory = (historyId: string) => {
     onActionLoad({
       name: <Trans>Revert history</Trans>,
       icon: IconHistory,
-      process: () => revertProductComboHistory(historyId),
+      process: () =>
+        client.mutate({
+          mutation: RevertProductComboHistoryDocument,
+          variables: { historyId },
+        }),
     });
   };
 
@@ -78,24 +81,26 @@ export const ModalProductCombo: FC<{
               size="xl"
             >
               {(function () {
-                if (combo.isFetching) return <Skeleton height={100} />;
-                if (combo.error || !combo.data) return <Errored error={combo.error} />;
-                const { icon: Icon } = productTypes[combo.data.product.type];
+                if (loading && !data) return <Skeleton height={100} />;
+                if (error || !data) return <Errored error={error} />;
+
+                const combo = data.getProductCombo;
+                const { icon: Icon } = productTypes[combo.product.type];
 
                 return (
                   <Stack>
                     <Group align="start">
-                      <EntityImage src={combo.data.product.image} icon={Icon} size={80} />
+                      <EntityImage src={combo.product.image} icon={Icon} size={80} />
                       <Stack gap={8}>
-                        <Text fw={600}>{combo.data.product.name}</Text>
+                        <Text fw={600}>{combo.product.name}</Text>
 
-                        {combo.data.productRefs.map((ref) => {
-                          const statusOptions = productComboStatusOptions[combo.data!.status];
+                        {combo.productRefs.map((ref) => {
+                          const statusOptions = productComboStatuses[combo.status];
 
                           return (
                             <Group key={ref.productRefId} gap={8}>
                               <Text fz={16} c="dark" fw={400}>
-                                • {ref.productRef.name}
+                                • {ref.product.name}
                               </Text>
 
                               <Badge variant="light" color={color(statusOptions.color)}>
@@ -137,7 +142,7 @@ export const ModalProductCombo: FC<{
                               color="gray"
                               onClick={() => {
                                 openProductComboUsing({
-                                  combo: combo.data!,
+                                  combo,
                                 });
                               }}
                             >
@@ -147,13 +152,15 @@ export const ModalProductCombo: FC<{
                         </Table.Tr>
                       </Table.Thead>
 
-                      {combo.data.history.length > 0 && (
+                      {combo.history.length > 0 && (
                         <Table.Tbody>
-                          {combo.data.history.map((history) => {
+                          {combo.history.map((history) => {
                             return (
                               <Table.Tr key={history.id}>
                                 <Table.Td>
-                                  <DateFormat value={history.createdAt} type="date-time" />
+                                  {history.createdAt && (
+                                    <DateFormat value={history.createdAt} type="date-time" />
+                                  )}
                                 </Table.Td>
 
                                 <Table.Td>
@@ -164,10 +171,10 @@ export const ModalProductCombo: FC<{
 
                                 <Table.Td>
                                   <Stack gap={5}>
-                                    {history.records.map((record) => {
-                                      const product = combo.data!.productRefs.find(
-                                        (ref) => ref.productRefId === record.productRefId
-                                      )?.productRef;
+                                    {history.records?.map((record) => {
+                                      const product = combo!.productRefs.find(
+                                        (ref) => ref.productRefId === record.productRefId,
+                                      )?.product;
 
                                       return (
                                         <Group key={record.productRefId}>
@@ -203,7 +210,7 @@ export const ModalProductCombo: FC<{
                         </Table.Tbody>
                       )}
 
-                      {combo.data.history.length === 0 && (
+                      {combo.history.length === 0 && (
                         <Table.Caption>
                           <Empty />
                         </Table.Caption>
@@ -221,20 +228,20 @@ export const ModalProductCombo: FC<{
 };
 
 const BindOrder: FC<{
-  history: ProductComboHistoryEntity;
+  history: ProductComboFragment["history"][number];
   onClose: () => void;
 }> = ({ history, onClose }) => {
-  const order = useFetch({
-    id: history.orderId,
-    skip: !!!history.orderId,
-    fetch: async () => getOrderById(history.orderId!),
+  const { data } = useQuery(GetOrderByIdDocument, {
+    variables: {
+      orderId: history.orderId ?? "",
+    },
   });
 
-  if (!order.data) return null;
+  if (!data) return null;
 
   return (
-    <Anchor href={`/orders/${order.data.code}`} onClick={onClose}>
-      {order.data.code}
+    <Anchor href={`/orders/${data.order.code}`} onClick={onClose}>
+      {data.order.code}
     </Anchor>
   );
 };

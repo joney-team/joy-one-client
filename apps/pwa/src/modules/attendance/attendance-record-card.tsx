@@ -12,10 +12,9 @@ import { getGoogleMapLinkCoord } from "../locations/locations-service";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { attendanceRecordStatuses, attendanceRecordTypes } from "./attendance-constants";
+import ApproveAttendanceRecordDocument from "./graphql/approveAttendanceRecord.graphql";
 import { AttendanceRecordFragment } from "./graphql/fragmentAttendanceRecord.graphql";
-
-import MUTATION_APPROVE_ATTENDANCE_RECORD from "./graphql/mutationApproveAttendanceRecord.graphql";
-import MUTATION_REJECT_ATTENDANCE_RECORD from "./graphql/mutationRejectAttendanceRecord.graphql";
+import RejectAttendanceRecordDocument from "./graphql/rejectAttendanceRecord.graphql";
 
 export const AttendanceRecordCard: FC<{
   record: AttendanceRecordFragment;
@@ -27,8 +26,8 @@ export const AttendanceRecordCard: FC<{
   const { label, color: statusColor } = attendanceRecordStatuses[record.status];
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
-  const [approveAttendance] = useMutation(MUTATION_APPROVE_ATTENDANCE_RECORD);
-  const [rejectAttendance] = useMutation(MUTATION_REJECT_ATTENDANCE_RECORD);
+  const [approveAttendance] = useMutation(ApproveAttendanceRecordDocument);
+  const [rejectAttendance] = useMutation(RejectAttendanceRecordDocument);
 
   return (
     <Card key={record._id} withBorder shadow="none" p="xs">

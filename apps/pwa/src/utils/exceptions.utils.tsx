@@ -21,7 +21,7 @@ export const getErrorMessage = (error: unknown): string => {
 export const onError = (
   error: any,
   notification?: NotificationData | string,
-  throwError?: boolean
+  throwError?: boolean,
 ) => {
   let message: string = t`Internal server error`;
 
@@ -102,6 +102,17 @@ export function onFormError<T>(form: UseFormReturnType<T>, error: any) {
   }
 
   return onError(error);
+}
+
+export function onFormErrorBinding(form: UseFormReturnType<any>) {
+  return (error: Error) => {
+    if (error instanceof AxiosError) {
+      const { errors } = error.response?.data || {};
+      if (errors && Object.keys(errors).length > 0) return form.setErrors(errors);
+    }
+
+    return onError(error);
+  };
 }
 
 export const onErrorLog = (error: any) => {

@@ -1,0 +1,15 @@
+#import "./fragmentMessage.graphql"
+
+query GetMessages(
+  $query: JSONObject
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  getMessages(query: $query, ids: $ids, limit: $limit, offset: $offset) {
+    total
+    results {
+      ...Message
+    }
+  }
+}

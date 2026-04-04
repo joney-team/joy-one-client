@@ -6,7 +6,7 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
-import CREATE_TASK_MUTATION from "../graphql/mutationCreateTask.graphql";
+import CreateTaskDocument from "../graphql/createTask.graphql";
 
 interface QuickCreateTaskInputProps {
   folderId?: string | null;
@@ -17,7 +17,7 @@ export const QuickCreateTaskInput: FC<PropsWithChildren<QuickCreateTaskInputProp
   const [opened, setOpened] = useState(false);
   const { t } = useLingui();
 
-  const [createTask] = useMutation(CREATE_TASK_MUTATION);
+  const [createTask] = useMutation(CreateTaskDocument);
 
   const children = props.children ? (
     <Group onClick={() => setOpened((s) => !s)}>{props.children}</Group>

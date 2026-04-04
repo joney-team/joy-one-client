@@ -1,0 +1,3 @@
+mutation ArchivePartner($partnerId: String!) {
+  archivePartner(id: $partnerId)
+}

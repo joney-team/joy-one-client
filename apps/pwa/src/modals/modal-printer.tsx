@@ -4,19 +4,22 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
+import { PrescriptionItemInput } from "@/graphql/types.graphql";
 import { customerGenders } from "@/modules/customers/customer-constants";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
+import GetCustomerByIdDocument from "@/modules/customers/graphql/getCustomerById.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { OrderEntity } from "@/modules/orders/order-entity";
-import { getOrderById } from "@/modules/orders/orders-service";
+import { OrderFragment } from "@/modules/orders/graphql/fragmentOrder.graphql";
+import GetOrderByIdDocument from "@/modules/orders/graphql/getOrderById.graphql";
 import { BankQrCode } from "@/modules/plugins/banks/banks.types";
-import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
+import { PrescriptionFragment } from "@/modules/prescriptions/graphql/fragmentPrescription.graphql";
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { uppercase } from "@/utils/string.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { loadImage } from "@joy-one-client/utils/assets";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -53,9 +56,11 @@ interface PrinterArgs {
   label?: string | ReactNode;
   receipt?: ReceiptFragment;
   bankQrCode?: BankQrCode;
-  prescription?: PrescriptionEntity;
-  customer?: Pick<CustomerFragment, "_id">;
-  order?: OrderEntity;
+  prescription?: Pick<PrescriptionFragment, "name" | "note"> & {
+    items: PrescriptionItemInput[];
+  };
+  customer?: Pick<CustomerFragment, "_id"> | null;
+  order?: OrderFragment;
 }
 
 interface ModalPrinterArgs extends PrinterArgs {
@@ -127,10 +132,11 @@ export const ModalPrinter = forwardRef<
   const forceUpdate = useForceUpdate();
   const printSettings = getPrintSettings();
   const workspace = useWorkspace();
+  const client = useApolloClient();
 
   const [args, setArgs] = useState<ModalPrinterArgs | null>(null);
   const [loading, setIsLoading] = useState(true);
-  const [relatedOrder, setRelatedOrder] = useState<OrderEntity>();
+  const [relatedOrder, setRelatedOrder] = useState<OrderFragment>();
   const [customer, setCustomer] = useState<CustomerFragment>();
 
   const contentRef = useRef<HTMLDivElement>(null);
@@ -168,16 +174,21 @@ export const ModalPrinter = forwardRef<
       }
 
       if (_p.receipt?.relatedOrderId) {
-        const order = await getOrderById(_p.receipt.relatedOrderId);
-        setRelatedOrder(order);
+        const order = await client.query({
+          query: GetOrderByIdDocument,
+          variables: { orderId: _p.receipt.relatedOrderId },
+        });
+        setRelatedOrder(order.data?.order);
       }
 
       const customerId =
         _p.customer?._id || _p.order?.relatedCustomerId || _p.receipt?.relatedCustomerId;
       if (customerId) {
-        // TODO: get customer by ID
-        // const customer = await getCustomer(customerId);
-        // setCustomer(customer);
+        const customer = await client.query({
+          query: GetCustomerByIdDocument,
+          variables: { id: customerId },
+        });
+        setCustomer(customer.data?.customer);
       }
 
       currentProps = _p;
@@ -558,19 +569,21 @@ export const ModalPrinter = forwardRef<
                                           </p>
                                           <div className="flex gap-1">
                                             <p className="text-smaller">
-                                              {t`Morning`}: {renderQty(item.qty.morning)}
+                                              <Trans>Morning</Trans>:{" "}
+                                              {renderQty(item.qty.morning ?? 0)}
                                             </p>
                                             <p className="text-smaller">
-                                              {t`Noon`}: {renderQty(item.qty.noon)}
+                                              <Trans>Noon</Trans>: {renderQty(item.qty.noon ?? 0)}
                                             </p>
                                             <p className="text-smaller">
-                                              {t`Afternoon`}: {renderQty(item.qty.afternoon)}
+                                              <Trans>Afternoon</Trans>:{" "}
+                                              {renderQty(item.qty.afternoon ?? 0)}
                                             </p>
                                           </div>
 
                                           {item.note && (
                                             <p className="text-smaller">
-                                              {t`Usage`}: <strong>{item.note}</strong>
+                                              <Trans>Usage</Trans>: <strong>{item.note}</strong>
                                             </p>
                                           )}
                                         </div>
@@ -590,11 +603,11 @@ export const ModalPrinter = forwardRef<
 
                             <div className="flex column">
                               <p>
-                                {t`Days number`}: <strong>{totalDays}</strong>
+                                <Trans>Days number</Trans>: <strong>{totalDays}</strong>
                               </p>
                               {!!prescription.note && (
                                 <p>
-                                  {t`Advice`}: <strong>{prescription.note}</strong>
+                                  <Trans>Advice</Trans>: <strong>{prescription.note}</strong>
                                 </p>
                               )}
                             </div>
@@ -605,7 +618,9 @@ export const ModalPrinter = forwardRef<
 
                     {printSettings.showThanks && (
                       <div className="printer-footer">
-                        <p className="ta-center">{t`Thank you!`}</p>
+                        <p className="ta-center">
+                          <Trans>Thank you!</Trans>
+                        </p>
                       </div>
                     )}
                   </div>
@@ -613,7 +628,7 @@ export const ModalPrinter = forwardRef<
               </Card>
 
               <Card withBorder shadow="none" p={10}>
-                <Group align="center" justify="space-around" gap={16}>
+                <Group align="center" justify="space-around" gap="md">
                   <Switch
                     label="Logo"
                     defaultChecked={printSettings.showLogo}
@@ -624,7 +639,7 @@ export const ModalPrinter = forwardRef<
                   />
 
                   <Switch
-                    label={t`Address`}
+                    label={<Trans>Address</Trans>}
                     defaultChecked={printSettings.showAddress}
                     onChange={(e) => {
                       const _checked = e.target.checked;
@@ -633,7 +648,7 @@ export const ModalPrinter = forwardRef<
                   />
 
                   <Switch
-                    label={t`Cashier`}
+                    label={<Trans>Cashier</Trans>}
                     defaultChecked={printSettings.showCashier}
                     onChange={(e) => {
                       const _checked = e.target.checked;
@@ -642,7 +657,7 @@ export const ModalPrinter = forwardRef<
                   />
 
                   <Switch
-                    label={t`Show currency`}
+                    label={<Trans>Show currency</Trans>}
                     defaultChecked={printSettings.showCurrency}
                     onChange={(e) => {
                       const _checked = e.target.checked;
@@ -651,7 +666,7 @@ export const ModalPrinter = forwardRef<
                   />
 
                   <Switch
-                    label={t`Show customer`}
+                    label={<Trans>Show customer</Trans>}
                     defaultChecked={printSettings.showCustomer}
                     onChange={(e) => {
                       const _checked = e.target.checked;
@@ -661,7 +676,7 @@ export const ModalPrinter = forwardRef<
 
                   {args.bankQrCode && (
                     <Switch
-                      label={t`Payment code`}
+                      label={<Trans>Payment code</Trans>}
                       defaultChecked={printSettings.showBankQrCode}
                       onChange={(e) => {
                         const _checked = e.target.checked;
@@ -701,12 +716,12 @@ export const ModalPrinter = forwardRef<
                   type="submit"
                   leftSection={<IconPrinter size={18} />}
                 >
-                  {t`Quick print`}
+                  <Trans>Quick print</Trans>
                 </Button>
               </Group>
 
               <Anchor ta="center" onClick={close} fz={12} c="gray">
-                {t`Exit`}
+                <Trans>Exit</Trans>
               </Anchor>
             </Stack>
           );

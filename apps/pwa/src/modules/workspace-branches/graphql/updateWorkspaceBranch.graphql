@@ -1,0 +1,7 @@
+#import "../graphql/fragmentWorkspaceBranch.graphql"
+
+mutation UpdateWorkspaceBranch($input: WorkspaceBranchInput!, $id: String!) {
+  workspaceBranch: updateWorkspaceBranch(input: $input, id: $id) {
+    ...WorkspaceBranch
+  }
+}

@@ -4,7 +4,7 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { NumberFormat } from "@/components/format/number-format";
-import { UseGraphqlList, useGraphqlList } from "@/components/list/use-graphql-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -14,13 +14,13 @@ import { IconAnalyzeFilled } from "@tabler/icons-react";
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";
 import { customerKycStatuses } from "./customer-kyc-constants";
-import QUERY_CUSTOMER_KYCS from "./graphql/queryCustomerKycs.graphql";
 import { CustomerKycFragment } from "./graphql/fragmentCustomerKyc.graphql";
+import GetCustomerKycsDocument from "./graphql/getCustomerKycs.graphql";
 
 export const CustomerKycList: FC = () => {
   const { t } = useLingui();
-  const kycs: UseGraphqlList<CustomerKycFragment> = useGraphqlList({
-    query: QUERY_CUSTOMER_KYCS,
+  const kycs = useGraphqlList<CustomerKycFragment>({
+    query: GetCustomerKycsDocument,
     id: "ckys",
   });
 
@@ -31,10 +31,10 @@ export const CustomerKycList: FC = () => {
 
   return (
     <InfiniteScroll loadMore={() => kycs.loadMore()} hasMore={kycs.isAbleToLoadMore}>
-      <Stack gap={16} p={16}>
+      <Stack gap="md" p="md">
         <Group gap={5}>
           <ButtonSelect
-            label="Trạng thái"
+            label={<Trans>Status</Trans>}
             icon={IconAnalyzeFilled}
             onClear={() => kycs.removeParams(["status"])}
             value={kycs.params.status}

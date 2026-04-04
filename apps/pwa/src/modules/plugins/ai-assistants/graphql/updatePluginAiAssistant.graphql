@@ -1,0 +1,10 @@
+#import "./fragmentPluginAiAssistant.graphql"
+
+mutation UpdatePluginAiAssistant(
+  $updatePluginAiAssistantId: String!
+  $input: UpdatePluginAiAssistantInput!
+) {
+  updatePluginAiAssistant(id: $updatePluginAiAssistantId, input: $input) {
+    ...PluginAiAssistant
+  }
+}

@@ -1,0 +1,3 @@
+mutation DeleteMessageBox($boxId: String!) {
+  deleteMessageBox(boxId: $boxId)
+}

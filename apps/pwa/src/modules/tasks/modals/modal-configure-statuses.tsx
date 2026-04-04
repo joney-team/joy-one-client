@@ -41,14 +41,8 @@ import {
 } from "react";
 import { v4 as uuid } from "uuid";
 import { TaskStatusIcon } from "../components/task-status-icon";
-import UPDATE_TASK_STATUSES_MUTATION, {
-  type UpdateTaskStatusesMutation,
-  type UpdateTaskStatusesMutationVariables,
-} from "../graphql/mutationUpdateTaskStatuses.graphql";
-import TASK_STATUS_QUERY, {
-  type TaskStatusesQuery,
-  type TaskStatusesQueryVariables,
-} from "../graphql/queryTaskStatuses.graphql";
+import GetTaskStatusesDocument, { GetTaskStatusesQuery } from "../graphql/getTaskStatuses.graphql";
+import UpdateTaskStatusesDocument from "../graphql/updateTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
@@ -184,22 +178,19 @@ const StatusCard: FC<{
 };
 
 const ModalConfigureStatusesContent: FC<ModalConfigureStatusesArgs & { close: () => void }> = (
-  props
+  props,
 ) => {
   const client = useApolloClient();
   const color = useColor();
-  const [taskStatusesData, setTaskStatusesData] = useState<TaskStatusesQuery["taskStatuses"]>();
+  const [taskStatusesData, setTaskStatusesData] = useState<GetTaskStatusesQuery["taskStatuses"]>();
   const [statuses, setStatuses] = useState<TaskStatus[]>([]);
 
-  const [updateTaskStatuses] = useMutation<
-    UpdateTaskStatusesMutation,
-    UpdateTaskStatusesMutationVariables
-  >(UPDATE_TASK_STATUSES_MUTATION);
+  const [updateTaskStatuses] = useMutation(UpdateTaskStatusesDocument);
 
   const fetchData = async () => {
     try {
-      const taskStatusesData = await client.query<TaskStatusesQuery, TaskStatusesQueryVariables>({
-        query: TASK_STATUS_QUERY,
+      const taskStatusesData = await client.query({
+        query: GetTaskStatusesDocument,
         variables: {
           contextType: props.contextType,
           contextId: props.contextId,
@@ -227,7 +218,7 @@ const ModalConfigureStatusesContent: FC<ModalConfigureStatusesArgs & { close: ()
       activationConstraint: {
         distance: 5,
       },
-    })
+    }),
   );
 
   const onAddProgress = (taskStatuses = statuses) => {
@@ -283,7 +274,7 @@ const ModalConfigureStatusesContent: FC<ModalConfigureStatusesArgs & { close: ()
               order: index,
             })),
         },
-        refetchQueries: [TASK_STATUS_QUERY],
+        refetchQueries: [GetTaskStatusesDocument],
         awaitRefetchQueries: true,
       });
       props.close();

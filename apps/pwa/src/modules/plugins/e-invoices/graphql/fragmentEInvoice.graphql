@@ -1,0 +1,19 @@
+fragment EInvoice on EInvoice {
+  _id
+  refs
+  createdAt
+  updatedAt
+  providerId
+  provider
+  receiptId
+  receiptCode
+  invoiceId
+  invoiceData
+  providerData
+  url
+  isCancelled
+  providerInformation {
+    name
+    logo
+  }
+}

@@ -99,7 +99,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
           </Group>
 
           {(!!customer.phone || !!customer.gender) && (
-            <Group gap={16}>
+            <Group gap="md">
               {!!customer.phone &&
                 workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT) && (
                   <Anchor

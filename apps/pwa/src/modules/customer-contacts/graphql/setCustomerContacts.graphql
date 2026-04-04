@@ -1,0 +1,10 @@
+#import "./fragmentCustomerContact.graphql"
+
+mutation SetCustomerContacts(
+  $customerId: String!
+  $input: SetCustomerContactsInput!
+) {
+  setCustomerContacts(customerId: $customerId, input: $input) {
+    ...CustomerContact
+  }
+}

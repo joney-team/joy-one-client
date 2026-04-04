@@ -1,9 +1,15 @@
+import { graphqlClient } from "@/graphql/graphql-client";
 import { AppEntity } from "@/types";
-import { restClient } from "../apis/rest-client";
+import AvailableSearchEntitiesDocument from "./graphql/availableSearchEntities.graphql";
+import SearchDocument from "./graphql/search.graphql";
 import { SearchEntityResult } from "./search-types";
 
 export async function searchGetAvailableEntities() {
-  return restClient.get<AppEntity[]>("/search/available-entities");
+  return graphqlClient
+    .query({
+      query: AvailableSearchEntitiesDocument,
+    })
+    .then((result) => result.data?.availableSearchEntities as AppEntity[]);
 }
 
 export async function searchEntity<T = SearchEntityResult>(
@@ -11,7 +17,16 @@ export async function searchEntity<T = SearchEntityResult>(
   q: string,
   filter?: any,
 ) {
-  return restClient.get<T[]>(`/search/entities/${entity}`, { params: { q, ...filter } });
+  const result = await graphqlClient.query({
+    query: SearchDocument,
+    variables: {
+      query: q,
+      entities: [entity],
+      filter,
+    },
+  });
+
+  return result.data?.search as T[];
 }
 
 export function removeAccents(str: string): string {

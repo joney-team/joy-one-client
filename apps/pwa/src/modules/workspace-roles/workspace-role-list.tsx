@@ -11,10 +11,10 @@ import { type FC } from "react";
 import { useWorkspaceRoles } from "./hooks/use-workspace-roles";
 
 export const WorkspaceRoleList: FC = () => {
-  const { roles } = useWorkspaceRoles();
+  const { workspaceRoles } = useWorkspaceRoles();
 
   return (
-    <Container size="sm" p={16}>
+    <Container size="sm" p="md">
       <Stack className="MemberRoles">
         <Group justify="start">
           <Button
@@ -28,7 +28,7 @@ export const WorkspaceRoleList: FC = () => {
           </Button>
         </Group>
 
-        {roles.map((role) => {
+        {workspaceRoles.map((role) => {
           return <WorkspaceRoleCard key={role._id} role={role} />;
         })}
       </Stack>

@@ -2,9 +2,6 @@
 
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 
-import UPDATE_WORKSPACE_SETTING_MUTATION from "../graphql/mutationUpdateWorkspaceSetting.graphql";
-import QUERY_WORKSPACE_SETTING from "../graphql/queryWorkspaceSetting.graphql";
-
 import { UpdateWorkspaceSettingInput, WorkspaceView } from "@/graphql/types.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Currency } from "@joy-one-client/utils/currency";
@@ -12,19 +9,21 @@ import { normalizeObject } from "@joy-one-client/utils/object";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 import { useMemo } from "react";
 import { WorkspaceSettingFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
+import GetWorkspaceSettingDocument from "../graphql/getWorkspaceSetting.graphql";
+import UpdateWorkspaceSettingDocument from "../graphql/updateWorkspaceSetting.graphql";
 import { getDefaultWorkspaceView } from "../workspace-settings-view";
 
 export const useWorkspaceSetting = () => {
   const client = useApolloClient();
   const { member } = useWorkspace();
-  const { data } = useQuery(QUERY_WORKSPACE_SETTING, { skip: !member });
+  const { data } = useQuery(GetWorkspaceSettingDocument, { skip: !member });
 
   const workspaceSetting = useMemo(() => {
     if (data) return normalizeObject(data.workspaceSetting);
     return null;
   }, [data]);
 
-  const [handleUpdate] = useMutation(UPDATE_WORKSPACE_SETTING_MUTATION);
+  const [handleUpdate] = useMutation(UpdateWorkspaceSettingDocument);
 
   const updateWorkspaceSetting = async (partial: Partial<WorkspaceSettingFragment>) => {
     if (!data?.workspaceSetting) return;
@@ -33,7 +32,7 @@ export const useWorkspaceSetting = () => {
     try {
       client.cache.updateQuery(
         {
-          query: QUERY_WORKSPACE_SETTING,
+          query: GetWorkspaceSettingDocument,
         },
         (prev) => {
           if (!prev) return prev;
@@ -79,10 +78,10 @@ export const useWorkspaceSetting = () => {
         },
       });
 
-      if (result.data?.updateWorkspaceSetting) {
+      if (result.data?.workspaceSetting) {
         client.cache.updateQuery(
           {
-            query: QUERY_WORKSPACE_SETTING,
+            query: GetWorkspaceSettingDocument,
           },
           (prev) => {
             if (!prev) return prev;
@@ -90,7 +89,7 @@ export const useWorkspaceSetting = () => {
               ...prev,
               workspaceSetting: {
                 ...prev.workspaceSetting,
-                ...result.data?.updateWorkspaceSetting,
+                ...result.data?.workspaceSetting,
               },
             };
           },
@@ -99,7 +98,7 @@ export const useWorkspaceSetting = () => {
     } catch (error) {
       client.cache.updateQuery(
         {
-          query: QUERY_WORKSPACE_SETTING,
+          query: GetWorkspaceSettingDocument,
         },
         (prev) => {
           if (!prev) return prev;
@@ -138,6 +137,8 @@ export const useWorkspaceSetting = () => {
 
   const updateWorkspaceView = async (partial: Partial<WorkspaceView>) => {
     const view = { ...workspaceViewValue, ...partial };
+
+    console.log("partial", partial);
 
     updateWorkspaceSetting({
       view: {

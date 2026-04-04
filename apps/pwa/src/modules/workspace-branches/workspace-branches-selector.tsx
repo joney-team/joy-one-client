@@ -9,6 +9,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
 import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
+import GetWorkspaceBranchesDocument from "./graphql/getWorkspaceBranches.graphql";
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
 
@@ -19,7 +20,7 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
     <Selector<WorkspaceBranchOption>
       {...props}
       onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
-      listRoute="/workspace-branches"
+      listQuery={GetWorkspaceBranchesDocument}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>

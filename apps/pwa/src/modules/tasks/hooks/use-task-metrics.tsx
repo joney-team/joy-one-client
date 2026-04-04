@@ -1,21 +1,17 @@
 "use client";
 
-import { useQuery } from "@apollo/client/react";
-import QUERY_TASK_METRICS, {
-  type TaskMetricsQuery,
-  type TaskMetricsQueryVariables,
-} from "../graphql/queryTaskMetrics.graphql";
-import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
+import { useQuery } from "@apollo/client/react";
+import GetTaskMetricsDocument, {
+  GetTaskMetricsQueryVariables,
+} from "../graphql/getTaskMetrics.graphql";
 
-export const useTaskMetrics = (variables: TaskMetricsQueryVariables) => {
-  const { data, loading, error, refetch } = useQuery<TaskMetricsQuery, TaskMetricsQueryVariables>(
-    QUERY_TASK_METRICS,
-    {
-      variables,
-      fetchPolicy: "cache-and-network",
-    }
-  );
+export const useTaskMetrics = (variables: GetTaskMetricsQueryVariables) => {
+  const { data, loading, error, refetch } = useQuery(GetTaskMetricsDocument, {
+    variables,
+    fetchPolicy: "cache-and-network",
+  });
 
   useEventsListener(
     EventType.TaskMetricSynced,
@@ -27,11 +23,11 @@ export const useTaskMetrics = (variables: TaskMetricsQueryVariables) => {
         refetch();
       }
     },
-    [variables.contextType, variables.contextId, refetch]
+    [variables.contextType, variables.contextId, refetch],
   );
 
   return {
-    metric: data?.taskMetrics,
+    metrics: data?.metrics,
     loading,
     error,
   };

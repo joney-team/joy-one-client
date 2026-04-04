@@ -1,15 +1,11 @@
 "use client";
 
-import { type FC } from "react";
-import { useEventsListener } from "../events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
 import { useApolloClient } from "@apollo/client/react";
-import { ActivityFragment } from "./graphql/fragmentActivity.graphql";
-import ACTIVITY_QUERY, {
-  type ActivityQuery,
-  type ActivityQueryVariables,
-} from "./graphql/queryActivity.graphql";
-import ACTIVITY_FRAGMENT from "./graphql/fragmentActivity.graphql";
+import { type FC } from "react";
+import { useEventsListener } from "../events/event-service";
+import ACTIVITY_FRAGMENT, { ActivityFragment } from "./graphql/fragmentActivity.graphql";
+import GetActivityByIdDocument from "./graphql/getActivityById.graphql";
 
 export const ActivitiesEvents: FC = () => {
   const client = useApolloClient();
@@ -19,8 +15,8 @@ export const ActivitiesEvents: FC = () => {
     async (ev) => {
       if (!ev.ref) return;
 
-      const activityData = await client.query<ActivityQuery, ActivityQueryVariables>({
-        query: ACTIVITY_QUERY,
+      const activityData = await client.query({
+        query: GetActivityByIdDocument,
         variables: {
           id: ev.ref,
         },

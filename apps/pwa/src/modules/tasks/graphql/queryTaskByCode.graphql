@@ -1,7 +1,0 @@
-#import "./fragmentTask.graphql"
-
-query TaskByCode($code: String!) {
-  taskByCode(code: $code) {
-    ...Task
-  }
-}

@@ -1,0 +1,10 @@
+#import "./fragmentCustomField.graphql"
+
+query GetCustomFields($limit: Float, $offset: Float, $query: CustomFieldsQuery) {
+  list: getCustomFields(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...CustomField
+    }
+  }
+}

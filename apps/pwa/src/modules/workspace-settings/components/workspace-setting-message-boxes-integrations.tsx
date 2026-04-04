@@ -2,21 +2,19 @@
 
 import { Avatar } from "@/components/avatar";
 import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
-import { RelativeTimeFormat } from "@/components/format/date-format";
+import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
+import { MessageBoxPlatformType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { getClientLocale } from "@/modules/lang/lang-service";
-import { messageBoxPlatformImages } from "@/modules/message-boxes/message-boxes-service";
-import { MessageBoxPlatformType } from "@/modules/message-boxes/message-boxes-types";
+import { messageBoxPlatforms } from "@/modules/message-boxes/message-boxes-contants";
+import UpdatePluginAiAssistantDocument from "@/modules/plugins/ai-assistants/graphql/updatePluginAiAssistant.graphql";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { updatePluginAiAssistant } from "@/modules/plugins/ai-assistants/plugin-ai-assistants-service";
 import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
@@ -87,6 +85,7 @@ const RootNode = () => {
 const AiIntegrationNode = () => {
   const plugins = usePlugins();
   const aiPlugin = plugins.aiAssistants[0];
+  const client = useApolloClient();
 
   return (
     <Fragment>
@@ -118,7 +117,7 @@ const AiIntegrationNode = () => {
                 <Fragment>
                   <Tooltip label={aiPlugin.providerName}>
                     <Text fz={16} fw={500} truncate="end">
-                      {String.limitCharacters(aiPlugin.providerName, 20)}
+                      {String.limitCharacters(aiPlugin.providerName ?? "Unknown", 20)}
                     </Text>
                   </Tooltip>
                   <Text fz={10} c="gray.6" truncate="end">
@@ -148,7 +147,15 @@ const AiIntegrationNode = () => {
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                updatePluginAiAssistant(aiPlugin._id, { enabled: !aiPlugin.enabled });
+                client.mutate({
+                  mutation: UpdatePluginAiAssistantDocument,
+                  variables: {
+                    updatePluginAiAssistantId: aiPlugin._id,
+                    input: {
+                      enabled: !aiPlugin.enabled,
+                    },
+                  },
+                });
               }}
             />
           )}
@@ -163,10 +170,10 @@ const PluginNode = (props: any) => {
 
   const platformType =
     type === "metaPages"
-      ? MessageBoxPlatformType.META_PAGE
+      ? MessageBoxPlatformType.MetaPage
       : type === "zalaOAs"
-      ? MessageBoxPlatformType.ZALO
-      : MessageBoxPlatformType.MESSAGE_HUB;
+        ? MessageBoxPlatformType.Zalo
+        : MessageBoxPlatformType.MessageHub;
 
   const PluginAvatar: FC = (
     {
@@ -190,9 +197,9 @@ const PluginNode = (props: any) => {
         p={0}
         style={{ cursor: "default" }}
       >
-        <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p={16} wrap="nowrap">
+        <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p="md" wrap="nowrap">
           <Indicator
-            label={<Image src={messageBoxPlatformImages[platformType]} w={16} h={16} />}
+            label={<Image src={messageBoxPlatforms[platformType].image} w={16} h={16} />}
             radius={8}
             color="var(--mantine-color-body)"
             position="bottom-end"
@@ -212,15 +219,17 @@ const PluginNode = (props: any) => {
           <Stack gap={0}>
             <Tooltip label={name} disabled={!name || name.length < 15}>
               <Text fz={16} fw={500} truncate="end" maw={150}>
-                {name || t`Plugin`}
+                {name || <Trans>Plugin</Trans>}
               </Text>
             </Tooltip>
 
             {!!plugin.lastInteractionAt && (
               <Tooltip
-                label={`${t`Last interaction at`}: ${DateTime.format(plugin.lastInteractionAt, {
-                  locale: getClientLocale(),
-                })}`}
+                label={
+                  <Trans>
+                    Last interaction at <DateFormat value={plugin.lastInteractionAt} />
+                  </Trans>
+                }
               >
                 <Text fz={10} fw={500} c="gray" truncate="end">
                   <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}
@@ -255,7 +264,7 @@ const PlusPluginNode = (props: any) => {
           align="center"
           h={cardSize.height}
           w={cardSize.width}
-          p={16}
+          p="md"
           wrap="nowrap"
           bg="var(--mantine-color-body)"
         >
@@ -263,7 +272,7 @@ const PlusPluginNode = (props: any) => {
             <IconPlus size={20} strokeWidth={1.5} />
           </ActionIcon>
           <Text fz={14} fw={500} truncate="end">
-            {isHasPlugin ? t`Connect more` : t`Connect platform`}
+            {isHasPlugin ? <Trans>Connect more</Trans> : <Trans>Connect platform</Trans>}
           </Text>
         </Group>
       </Card>

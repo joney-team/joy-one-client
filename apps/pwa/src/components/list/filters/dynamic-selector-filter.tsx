@@ -4,7 +4,7 @@ import { ActionIcon, Checkbox, Combobox, ComboboxDropdownProps, Radio } from "@m
 
 import { Renderer } from "@/components/renderer";
 import { Selector } from "@/components/selector";
-import { ApolloClient } from "@apollo/client";
+import { ApolloClient, TypedDocumentNode } from "@apollo/client";
 import { useApolloClient } from "@apollo/client/react";
 import { Group, Text } from "@mantine/core";
 import { IconChevronDown } from "@tabler/icons-react";
@@ -21,11 +21,11 @@ export interface DynamicSelectorFilterOption {
 export interface DynamicSelectorFilterConfig {
   multiple?: boolean;
   dropdownProps?: ComboboxDropdownProps;
-  listRoute?: string;
+  listQuery?: TypedDocumentNode;
   listParams?: Record<string, any>;
   getSelectedOptions: (
     ids: string[],
-    client: ApolloClient
+    client: ApolloClient,
   ) => Promise<DynamicSelectorFilterOption[]>;
   pinnedOptions?: DynamicSelectorFilterOption[];
   search: (query: string, client: ApolloClient) => Promise<DynamicSelectorFilterOption[]>;
@@ -50,7 +50,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
       config?.getSelectedOptions?.(missingIds, client).then((options) => {
         setOptions((prevOptions) => [
           ...prevOptions.filter(
-            (prevOption) => !options.find((option) => option.value === prevOption.value)
+            (prevOption) => !options.find((option) => option.value === prevOption.value),
           ),
           ...options,
         ]);
@@ -65,7 +65,7 @@ export const DynamicSelectorFilter: FC<FilterProps> = ({ column, wrapper: Wrappe
     <Selector
       flex={1}
       key={column.columnKey}
-      listRoute={config.listRoute}
+      listQuery={config.listQuery}
       listParams={config.listParams}
       autoCloseOnChange={!multiple}
       getOptionId={config.getOptionId}

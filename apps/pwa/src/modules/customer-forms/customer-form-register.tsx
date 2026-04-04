@@ -4,7 +4,6 @@ import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { LocationForm } from "@/components/location-form";
-import QUERY_WORKSPACE_BRANCH from "@/modules/workspace-branches/graphql/queryWorkspaceBranch.graphql";
 import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import { Card, Center, Group, Loader, Stack, Text, TextInput, Title } from "@mantine/core";
@@ -13,10 +12,11 @@ import { IconCheck } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, useEffect, useRef, useState } from "react";
 import { WorkspaceBranchFragment } from "../workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
+import GetWorkspaceBranchByIdDocument from "../workspace-branches/graphql/getWorkspaceBranchById.graphql";
 import { WorkspaceFragment } from "../workspaces/graphql/fragmentWorkspace.graphql";
-import QUERY_WORKSPACE_BY_ID from "../workspaces/graphql/queryWorkspaceById.graphql";
+import GetWorkspaceByIdDocument from "../workspaces/graphql/getWorkspaceById.graphql";
+import CreateCustomerFormDocument from "./graphql/createCustomerForm.graphql";
 import { CustomerFormFragment } from "./graphql/fragmentCustomerForm.graphql";
-import CREATE_CUSTOMER_FORM_MUTATION from "./graphql/mutationCreateCustomerForm.graphql";
 
 export const CustomerFormRegister: FC = () => {
   const app = useApp();
@@ -35,7 +35,7 @@ export const CustomerFormRegister: FC = () => {
     workspaceBranch: null,
   });
 
-  const [createCustomerForm] = useMutation(CREATE_CUSTOMER_FORM_MUTATION);
+  const [createCustomerForm] = useMutation(CreateCustomerFormDocument);
 
   const [customerForm, setCustomerForm] = useState<CustomerFormFragment | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
@@ -82,14 +82,14 @@ export const CustomerFormRegister: FC = () => {
     try {
       state.current.workspace = await client
         .query({
-          query: QUERY_WORKSPACE_BY_ID,
+          query: GetWorkspaceByIdDocument,
           variables: { workspaceByIdId: workspaceId },
         })
-        .then((result) => result.data?.workspaceById ?? null);
+        .then((result) => result.data?.workspace ?? null);
 
       if (workspaceBranchId) {
         const results = await client.query({
-          query: QUERY_WORKSPACE_BRANCH,
+          query: GetWorkspaceBranchByIdDocument,
           variables: { id: workspaceBranchId },
         });
         state.current.workspaceBranch = results.data?.workspaceBranch ?? null;
@@ -114,8 +114,8 @@ export const CustomerFormRegister: FC = () => {
         },
       });
 
-      if (result.data?.createCustomerForm) {
-        setCustomerForm(result.data?.createCustomerForm);
+      if (result.data?.customerForm) {
+        setCustomerForm(result.data?.customerForm);
       }
     } catch (error) {
       onFormError(form, error);

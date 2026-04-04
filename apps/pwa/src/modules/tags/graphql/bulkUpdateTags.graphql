@@ -1,0 +1,7 @@
+#import "./fragmentTag.graphql"
+
+mutation BulkUpdateTags($items: [UpdateTagInput!]!) {
+  tags: bulkUpdateTags(items: $items) {
+    ...Tag
+  }
+}

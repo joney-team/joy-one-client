@@ -47,11 +47,11 @@ import { BookingStatus } from "@/graphql/enums.graphql";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { BookingFragment } from "../graphql/fragmentBooking.graphql";
-import CREATE_BOOKING_MUTATION, {
+import CreateBookingDocument, {
   CreateBookingMutationVariables,
-} from "../graphql/mutationCreateBooking.graphql";
-import RESCHEDULE_BOOKING_MUTATION from "../graphql/mutationRescheduleMeeting.graphql";
-import UPDATE_BOOKING_MUTATION from "../graphql/mutationUpdateBooking.graphql";
+} from "../graphql/createBooking.graphql";
+import RescheduleBookingDocument from "../graphql/rescheduleBooking.graphql";
+import UpdateBookingDocument from "../graphql/updateBooking.graphql";
 
 export interface BookingFormProps {
   startTime?: Date;
@@ -78,9 +78,9 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
 
   const type = props.update ? "UPDATE" : props.reschedule ? "RESCHEDULE" : "CREATE";
 
-  const [createBooking] = useMutation(CREATE_BOOKING_MUTATION);
-  const [rescheduleBooking] = useMutation(RESCHEDULE_BOOKING_MUTATION);
-  const [updateBooking] = useMutation(UPDATE_BOOKING_MUTATION);
+  const [createBooking] = useMutation(CreateBookingDocument);
+  const [rescheduleBooking] = useMutation(RescheduleBookingDocument);
+  const [updateBooking] = useMutation(UpdateBookingDocument);
 
   const initialValues = useMemo(() => {
     return {
@@ -123,8 +123,8 @@ export const BookingForm: FC<BookingFormProps> = (props) => {
           },
         });
 
-        if (data?.rescheduleBooking) {
-          props.onRescheduled?.(data?.rescheduleBooking);
+        if (data?.booking) {
+          props.onRescheduled?.(data?.booking);
         }
       }
 

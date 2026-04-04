@@ -4,13 +4,10 @@ import { Group } from "@mantine/core";
 import { IconChevronCompactRight } from "@tabler/icons-react";
 import { FC, ReactNode, RefObject, useEffect, useRef } from "react";
 
+import GetTasksDocument from "@/modules/tasks/graphql/getTasks.graphql";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { IconChevronCompactLeft } from "@tabler/icons-react";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../../../graphql/queryTasks.graphql";
 import { UpdateTask, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";
@@ -111,12 +108,12 @@ export const GanttTaskTimelineResizable: FC<{
         return;
       }
 
-      const subtasksData = client.cache.readQuery<TasksQuery, TasksQueryVariables>({
-        query: QUERY_TASKS,
+      const subtasksData = client.cache.readQuery({
+        query: GetTasksDocument,
         variables: subTasksGroupVariables,
       });
 
-      const subtasks = Array.from(subtasksData?.tasks.results ?? []);
+      const subtasks = Array.from(subtasksData?.list.results ?? []);
 
       if (resizingDirection === "LEFT") {
         // Calculate new start index (keep end index fixed)
@@ -152,7 +149,7 @@ export const GanttTaskTimelineResizable: FC<{
                 });
               }
               return acc;
-            }, [])
+            }, []),
           );
         } else {
           const startDate = DateTime.toSeconds(startColumn.start);
@@ -169,7 +166,7 @@ export const GanttTaskTimelineResizable: FC<{
         const newWidth = initialWidth + distance;
         const newEndIndex = Math.min(
           gantt.columns.length - 1,
-          Math.floor((initialLeft + newWidth) / ganttConfig.columnSize)
+          Math.floor((initialLeft + newWidth) / ganttConfig.columnSize),
         );
 
         // Ensure end index is not before start index
@@ -201,7 +198,7 @@ export const GanttTaskTimelineResizable: FC<{
                 });
               }
               return acc;
-            }, [])
+            }, []),
           );
         } else {
           const startDate = DateTime.toSeconds(startColumn.start);

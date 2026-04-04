@@ -3,6 +3,7 @@
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { useAuth } from "@/modules/auth/auth-context";
 import { DeviceEntity } from "@/modules/devices/devices-types";
+import { DeviceFragment } from "@/modules/devices/graphql/fragmentDevice.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { t } from "@lingui/core/macro";
@@ -17,13 +18,13 @@ import {
 import { FC, Fragment } from "react";
 
 interface UserDeviceCardProps {
-  device: DeviceEntity;
+  device: DeviceFragment;
 }
 
-const renderIcon = (device: DeviceEntity) => {
-  if (device.ua.device.type === "tablet") return IconDeviceTablet;
-  if (device.ua.device.type === "mobile") return IconDeviceMobile;
-  if (device.ua.browser.name === "Chrome") return IconDeviceDesktop;
+const renderIcon = (device: DeviceFragment) => {
+  if (device.ua?.device.type === "tablet") return IconDeviceTablet;
+  if (device.ua?.device.type === "mobile") return IconDeviceMobile;
+  if (device.ua?.browser.name === "Chrome") return IconDeviceDesktop;
   return IconDeviceUnknown;
 };
 
@@ -44,8 +45,8 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
         <Stack gap={5} mt={-3}>
           <Group>
             <Text>
-              {ua.device.model || t`Unknown device`}
-              {ua.device.vendor ? ` - ${ua.device.vendor}` : ""}
+              {ua?.device.model || t`Unknown device`}
+              {ua?.device.vendor ? ` - ${ua.device.vendor}` : ""}
             </Text>
 
             {auth.device._id === device._id && (
@@ -61,13 +62,13 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
             </Text>
           )}
 
-          {!!ua.os.name && !!ua.os.version && (
+          {!!ua?.os.name && !!ua.os.version && (
             <Text fz={em(12)} c="gray">
               {ua.os.name} ({ua.os.version})
             </Text>
           )}
 
-          {!!ua.browser.name && (
+          {!!ua?.browser.name && (
             <Text fz={em(12)} c="gray">
               {ua.browser.name}{" "}
               {!!ua.browser.version && <Fragment>({ua.browser.version})</Fragment>}

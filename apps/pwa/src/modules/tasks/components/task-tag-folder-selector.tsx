@@ -1,28 +1,30 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { TagType } from "@/graphql/enums.graphql";
 import { searchEntity } from "@/modules/search/search-service";
-import { TagEntity, TagType } from "@/modules/tags/tags-types";
+import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 import { AppEntity } from "@/types";
 import { Trans } from "@lingui/react/macro";
-import { Combobox, em, Group, Text } from "@mantine/core";
+import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
 
 interface TaskTagFolderSelectorProps {
   excludeIds?: string[];
-  onSelect: (value?: TagEntity) => void;
-  render?: (ctx: SelectorContext<TagEntity>) => ReactNode;
+  onSelect: (value?: TagFragment) => void;
+  render?: (ctx: SelectorContext<TagFragment>) => ReactNode;
 }
 
 export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => {
   return (
-    <Selector<TagEntity>
+    <Selector<TagFragment>
       excludeIds={props.excludeIds}
-      listRoute="/tags"
-      listParams={{ type: TagType.TASK_FOLDER }}
-      onSearch={(q) => searchEntity<TagEntity>(AppEntity.TAGS, q, { type: TagType.TASK_FOLDER })}
+      listQuery={GetTagsDocument}
+      listParams={{ type: TagType.TaskFolder }}
+      onSearch={(q) => searchEntity<TagFragment>(AppEntity.TAGS, q, { type: TagType.TaskFolder })}
       renderOption={(tag) => {
         return (
           <Combobox.Option value={tag._id} key={tag._id}>

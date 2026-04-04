@@ -5,28 +5,26 @@ import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loa
 import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
+import { CreateWorkspaceInput } from "@/graphql/types.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { getLocalStorage, useLocalStorage } from "@/hooks/use-local-storage";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
-import MUTATION_JOIN_WORKSPACE_WITH_INVITE_CODE from "@/modules/workspace-members/graphql/mutationJoinWorkspaceWithInviteCode.graphql";
+import { JoinWorkspaceWithInviteCodeDocument } from "@/modules/workspace-members/graphql/joinWorkspaceWithInviteCode.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { isExtendedApp } from "@/service";
 import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client/react";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useRouter } from "next/navigation";
-import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { restClient } from "../apis/rest-client";
-import QUERY_USER_WORKSPACE_MEMBERS from "../workspace-members/graphql/queryUserWorkspaceMembers.graphql";
-import QUERY_WORKSPACE_SETTING from "../workspace-settings/graphql/queryWorkspaceSetting.graphql";
+import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
+import GetUserWorkspaceMembersDocument from "../workspace-members/graphql/getUserWorkspaceMembers.graphql";
+import { isMemberHasPermission } from "../workspace-roles/workspace-role-utils";
+import GetWorkspaceSettingDocument from "../workspace-settings/graphql/getWorkspaceSetting.graphql";
+import ArchiveWorkspaceDocument from "./graphql/archiveWorkspace.graphql";
+import CreateWorkspaceDocument from "./graphql/createWorkspace.graphql";
 import { Context } from "./workspace-context";
-import {
-  WorkspaceContext,
-  WorkspaceDto,
-  WorkspaceEntity,
-  WorkspaceMemberInvitationState,
-} from "./workspaces-types";
+import { WorkspaceContext } from "./workspaces-types";
 
 const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -36,18 +34,17 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const [isInitialized, setIsInitialized] = useState(false);
   const [isCreateNew, setIsCreateNew] = useState(false);
-  const [invitationState, setInvitationState] = useState<WorkspaceMemberInvitationState>();
   const [workspaceId, setWorkspaceId] = useLocalStorage(StorageKey.WORKSPACE_ID);
 
   const [fetchWorkspaceMembers, { data: workspaceMembersData }] = useLazyQuery(
-    QUERY_USER_WORKSPACE_MEMBERS,
+    GetUserWorkspaceMembersDocument,
     {
       fetchPolicy: "network-only",
     },
   );
 
   const [fetchWorkspaceSetting, { data: workspaceSettingData }] = useLazyQuery(
-    QUERY_WORKSPACE_SETTING,
+    GetWorkspaceSettingDocument,
     {
       fetchPolicy: "cache-and-network",
     },
@@ -56,7 +53,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   const member = useMemo(
     () =>
       auth.user
-        ? workspaceMembersData?.userWorkspaceMembers.find((w) => w.workspaceId === workspaceId)
+        ? workspaceMembersData?.members.find((w) => w.workspaceId === workspaceId)
         : undefined,
     [workspaceMembersData, workspaceId],
   );
@@ -71,12 +68,15 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   };
 
-  const create = async (dto: WorkspaceDto) => {
-    const workspace = await restClient.post<WorkspaceEntity>("/workspaces", dto);
+  const create = async (input: CreateWorkspaceInput) => {
+    const workspace = await client.mutate({
+      mutation: CreateWorkspaceDocument,
+      variables: { input },
+    });
     const result = await fetchWorkspaceMembers();
 
-    const userWorkspace = result.data?.userWorkspaceMembers.find(
-      (userWorkspace) => userWorkspace.workspaceId === workspace._id,
+    const userWorkspace = result.data?.members.find(
+      (userWorkspaceMember) => userWorkspaceMember.workspaceId === workspace.data?.workspace._id,
     );
 
     if (userWorkspace) select(userWorkspace.workspaceId);
@@ -88,12 +88,12 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const archive = async () => {
-    await restClient.delete(`/workspaces`);
+    await client.mutate({ mutation: ArchiveWorkspaceDocument });
     await fetchWorkspaceMembers();
     leave();
   };
 
-  const [joinWorkspaceWithInviteCode] = useMutation(MUTATION_JOIN_WORKSPACE_WITH_INVITE_CODE);
+  const [joinWorkspaceWithInviteCode] = useMutation(JoinWorkspaceWithInviteCodeDocument);
   const join = async (code: string) => {
     const result = await joinWorkspaceWithInviteCode({
       variables: { inviteCode: code },
@@ -103,7 +103,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   const leaveInvitation = () => {
     router.replace("/");
-    setInvitationState(undefined);
   };
 
   const initialize = async (selectedWorkspaceId: string | null) => {
@@ -113,7 +112,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       await runWithDelay(async () => {
         const result = await fetchWorkspaceMembers();
 
-        const workspaceMember = result.data?.userWorkspaceMembers.find(
+        const workspaceMember = result.data?.members.find(
           (member) =>
             member.workspaceId === selectedWorkspaceId ||
             member.workspaceId === app.metadata.workspaceId,
@@ -190,31 +189,38 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     }
   }, [auth.user?._id, auth.isInitialized, workspaceId]);
 
-  const isShouldEnableBranches =
-    !!member &&
-    member.workspace.branches > 0 &&
-    (member.workspaceBranches.length > 1 ||
-      member.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS));
+  const hasPermission: WorkspaceContext["hasPermission"] = useCallback(
+    (permission) => {
+      if (!member) return false;
+      return isMemberHasPermission({ member, permission });
+    },
+    [member],
+  );
+
+  const isShouldEnableBranches = useMemo(() => {
+    return (
+      !!member &&
+      member.workspace.branches > 0 &&
+      (member.workspaceBranches.length > 1 ||
+        hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS))
+    );
+  }, [member, hasPermission]);
 
   const contextValue: WorkspaceContext = {
     type: member?.workspace?.type!,
-    hasPermission: (permission: WorkspacePermission) =>
-      member?.permissions.includes(permission) ?? false,
+    hasPermission,
     isInitialized,
     member: member!,
-    userMembers: workspaceMembersData?.userWorkspaceMembers ?? [],
+    userMembers: workspaceMembersData?.members ?? [],
     select,
     create,
     leave,
-    invitationState,
     leaveInvitation,
     isCreateNew,
     setIsCreateNew,
     archive,
     join,
     ref: `${member?.workspaceId || "WS"}`,
-    isHasAccessAllBranches:
-      !!member && member.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS),
     isShouldEnableBranches,
     isShowBranches: !!member && member.workspace.branches > 0,
     defaultBranch: member?.workspaceBranches[0],

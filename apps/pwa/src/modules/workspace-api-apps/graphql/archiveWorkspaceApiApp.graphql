@@ -1,0 +1,3 @@
+mutation ArchiveWorkspaceApiApp($appId: String!) {
+  archiveWorkspaceApiApp(id: $appId)
+}

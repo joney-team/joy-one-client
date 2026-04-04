@@ -1,0 +1,7 @@
+#import './fragmentWorkspaceRole.graphql'
+
+query GetWorkspaceRoles {
+  workspaceRoles: getWorkspaceRoles {
+    ...WorkspaceRole
+  }
+}

@@ -1,0 +1,10 @@
+#import "./fragmentCustomerForm.graphql"
+
+query GetCustomerForms($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getCustomerForms(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...CustomerForm
+    }
+  }
+}

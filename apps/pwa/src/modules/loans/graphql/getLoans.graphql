@@ -1,0 +1,18 @@
+#import "./fragmentLoan.graphql"
+
+query GetLoans(
+  $limit: Float
+  $offset: Float
+  $query: JSONObject
+) {
+  list: getLoans(
+    limit: $limit
+    offset: $offset
+    query: $query
+  ) {
+    total
+    results {
+      ...Loan
+    }
+  }
+}

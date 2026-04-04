@@ -1,0 +1,10 @@
+#import "./fragmentProductCombo.graphql"
+
+query GetProductCombos($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getProductCombos(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...ProductCombo
+    }
+  }
+}

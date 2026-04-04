@@ -1,7 +1,0 @@
-#import "./fragmentTask.graphql"
-
-query TaskById($id: String!) {
-  task(_id: $id) {
-    ...Task
-  }
-}

@@ -1,0 +1,19 @@
+query GetActivityReactionUsers(
+  $ignoreSelf: Boolean
+  $userIds: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  users: getWorkspaceMembers(
+    ignoreSelf: $ignoreSelf
+    userId: $userIds
+    limit: $limit
+    offset: $offset
+  ) {
+    results {
+      _id
+      name
+    }
+    total
+  }
+}

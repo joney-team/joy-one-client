@@ -1,0 +1,7 @@
+#import "./fragmentPost.graphql"
+
+mutation CreatePost($input: PostInput!) {
+  post: createPost(input: $input) {
+    ...Post
+  }
+}

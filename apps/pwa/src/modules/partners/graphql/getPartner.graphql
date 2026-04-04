@@ -1,0 +1,7 @@
+#import "./fragmentPartner.graphql"
+
+query GetPartner($partnerId: String!) {
+  getPartner(id: $partnerId) {
+    ...Partner
+  }
+}

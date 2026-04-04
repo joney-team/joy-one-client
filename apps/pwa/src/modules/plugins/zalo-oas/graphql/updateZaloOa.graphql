@@ -1,0 +1,10 @@
+#import "./fragmentZaloOa.graphql"
+
+mutation UpdateZaloOa(
+  $updateZaloOaId: String!
+  $input: UpdatePluginZaloOaInput!
+) {
+  updateZaloOa(id: $updateZaloOaId, input: $input) {
+    ...ZaloOa
+  }
+}

@@ -1,7 +1,0 @@
-#import "./fragmentCustomerForm.graphql"
-
-mutation BulkUpdateCustomerFormWorkspaceBranch($input: BulkUpdateWorkspaceBranchInput!) {
-  bulkUpdateCustomerFormWorkspaceBranch(input: $input) {
-    ...CustomerForm
-  }
-}

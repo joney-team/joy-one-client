@@ -1,37 +1,42 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { useRestQuery } from "@/modules/apis/use-rest-query";
-import { PrescriptionEntity } from "@/modules/prescriptions/prescriptions-types";
 import { searchEntity } from "@/modules/search/search-service";
-import { AppEntity, ResponseList } from "@/types";
+import { AppEntity } from "@/types";
+import { useQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorContext } from "../../../components/selector";
+import { PrescriptionFragment } from "../graphql/fragmentPrescription.graphql";
+import GetPrescriptionsDocument from "../graphql/getPrescriptions.graphql";
 
 interface PrescriptionSelectorProps {
   excludeIds?: string[];
-  onSelect: (value: PrescriptionEntity) => void;
-  target?: (ctx: SelectorContext<PrescriptionEntity>) => ReactNode;
+  onSelect: (value: PrescriptionFragment) => void;
+  target?: (ctx: SelectorContext<PrescriptionFragment>) => ReactNode;
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
-  const initOptions = useRestQuery<ResponseList<PrescriptionEntity>>({
-    route: "/prescriptions",
-    params: {
+  const { data: prescriptionsData } = useQuery(GetPrescriptionsDocument, {
+    variables: {
       limit: 9,
-      sortLastInteractionAt: -1,
+      query: {
+        sortLastInteractionAt: -1,
+      },
     },
   });
 
   return (
     <Selector
       excludeIds={props.excludeIds}
-      onSearch={(q) => searchEntity<PrescriptionEntity>(AppEntity.PRESCRIPTIONS, q)}
-      pinnedOptions={initOptions.data?.data.map((item) => ({ ...item, _group: t`Recently` }))}
+      onSearch={(q) => searchEntity<PrescriptionFragment>(AppEntity.PRESCRIPTIONS, q)}
+      pinnedOptions={prescriptionsData?.list.results.map((item) => ({
+        ...item,
+        _group: t`Recently`,
+      }))}
       renderOption={(prescription) => {
         return (
           <Combobox.Option value={prescription._id} key={prescription._id}>

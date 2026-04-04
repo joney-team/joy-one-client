@@ -1,0 +1,14 @@
+fragment MetaPage on MetaPage {
+  _id
+  id
+  name
+  logo
+  tasks
+  category
+  categories {
+    id
+    name
+  }
+  status
+  isDisabled
+}

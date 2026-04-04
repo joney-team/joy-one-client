@@ -1,0 +1,20 @@
+fragment Prescription on Prescription {
+  _id
+  name
+  items {
+    productId
+    name
+    unit
+    qty {
+      morning
+      noon
+      afternoon
+    }
+    days
+    note
+  }
+  note
+  isArchived
+  updatedAt
+  createdAt
+}

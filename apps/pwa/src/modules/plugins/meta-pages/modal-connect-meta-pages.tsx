@@ -4,15 +4,15 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
+import { StorageKey } from "@/constants/storage-key";
+import { MetaPageInfoStatus } from "@/graphql/enums.graphql";
+import { MetaPageInfo } from "@/graphql/types.graphql";
 import { useRouter } from "@/hooks/use-router";
-import { restClient } from "@/modules/apis/rest-client";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import { getPluginMetaPagesInfo } from "@/modules/plugins/meta-pages/meta-pages-service";
-import { PluginMetaPageInfo } from "@/modules/plugins/meta-pages/meta-pages-types";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StorageKey } from "@/constants/storage-key";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
@@ -23,28 +23,34 @@ import {
   IconStack,
 } from "@tabler/icons-react";
 import { type FC, Fragment, ReactNode, useState } from "react";
+import ConnectMetaPagesDocument from "./graphql/connectMetaPages.graphql";
+import GetMetaPagesInfosDocument from "./graphql/getMetaPagesInfos.graphql";
 
 interface ModalConnectMetaPagesArgs {
-  pages: PluginMetaPageInfo[];
+  pages: MetaPageInfo[];
   accessToken: string;
 }
 
-export type OnModalConnectMetaPages = (dto: ModalConnectMetaPagesArgs) => void;
+export type OnModalConnectMetaPages = (args: ModalConnectMetaPagesArgs) => void;
 
 export const ModalConnectMetaPages: FC<{
   children: (open: OnModalConnectMetaPages) => ReactNode;
 }> = ({ children }) => {
+  const client = useApolloClient();
   const workspace = useWorkspace();
   const router = useRouter();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const [dto, setDto] = useState<ModalConnectMetaPagesArgs>({ pages: [], accessToken: "" });
+  const [args, setArgs] = useState<ModalConnectMetaPagesArgs>({ pages: [], accessToken: "" });
   const color = useColor();
   const [status, setStatus] = useState<"CONNECTING" | "CONNECTED" | "FAILED">("CONNECTING");
 
-  const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
+  const onConnect = async (modalArgs: ModalConnectMetaPagesArgs) => {
     try {
-      await restClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await client.mutate({
+        mutation: ConnectMetaPagesDocument,
+        variables: { accessToken: modalArgs.accessToken },
+      });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {
@@ -56,11 +62,16 @@ export const ModalConnectMetaPages: FC<{
     try {
       setStatus("CONNECTING");
       const authResponse = await onFacebookLogin();
-      const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
-      const canConnectPages = pages.filter((v) => v.status !== "CONNECTED");
-      setDto({ pages: canConnectPages, accessToken: authResponse.accessToken });
+      const result = await client.query({
+        query: GetMetaPagesInfosDocument,
+        variables: { accessToken: authResponse.accessToken },
+      });
+      const canConnectPages =
+        result.data?.getMetaPagesInfos.filter((v) => v.status !== MetaPageInfoStatus.Connected) ??
+        [];
+      setArgs({ pages: canConnectPages, accessToken: authResponse.accessToken });
 
-      if (canConnectPages.length > 0) await onConnect(dto);
+      if (canConnectPages.length > 0) await onConnect(args);
     } catch (error) {
       onError(error);
       setStatus("FAILED");
@@ -76,7 +87,7 @@ export const ModalConnectMetaPages: FC<{
     <Fragment>
       {children((p) => {
         setStatus("CONNECTING");
-        setDto(p);
+        setArgs(p);
         onConnect(p);
         open();
       })}
@@ -90,8 +101,8 @@ export const ModalConnectMetaPages: FC<{
         size="xl"
       >
         {opened && (
-          <Stack align="center" p={16}>
-            <Renderer visible={dto.pages.length > 0}>
+          <Stack align="center" p="md">
+            <Renderer visible={args.pages.length > 0}>
               {(function () {
                 if (status === "CONNECTED") {
                   return (
@@ -169,7 +180,7 @@ export const ModalConnectMetaPages: FC<{
                 <Fragment>
                   <Stack align="center" gap={5}>
                     <Group>
-                      {dto.pages.map((page) => {
+                      {args.pages.map((page) => {
                         return (
                           <Card key={page.pageId} withBorder shadow="none" p={10}>
                             <Group gap={10} wrap="nowrap">
@@ -207,7 +218,7 @@ export const ModalConnectMetaPages: FC<{
               )}
             </Renderer>
 
-            <Renderer visible={dto.pages.length === 0}>
+            <Renderer visible={args.pages.length === 0}>
               <Stack gap={8}>
                 <Title ta="center" c={color("primary")} fz={em(25)}>
                   <Trans>Failed to connect with Meta.</Trans>
@@ -237,15 +248,19 @@ export const WithConnectMetaPagesModal: FC<{
 }> = ({ children }) => {
   const workspace = useWorkspace();
   const router = useRouter();
+  const client = useApolloClient();
+  const color = useColor();
 
   const [opened, { open, close }] = useDisclosure(false);
   const [dto, setDto] = useState<ModalConnectMetaPagesArgs>({ pages: [], accessToken: "" });
-  const color = useColor();
   const [status, setStatus] = useState<"CONNECTING" | "CONNECTED" | "FAILED">("CONNECTING");
 
   const onConnect = async (dto: ModalConnectMetaPagesArgs) => {
     try {
-      await restClient.post(`/plugins/meta-pages/connect`, { accessToken: dto.accessToken });
+      await client.mutate({
+        mutation: ConnectMetaPagesDocument,
+        variables: { accessToken: dto.accessToken },
+      });
       localStorage.removeItem(StorageKey.META_ACCESS_TOKEN);
       setStatus("CONNECTED");
     } catch (error) {
@@ -257,8 +272,13 @@ export const WithConnectMetaPagesModal: FC<{
     try {
       setStatus("CONNECTING");
       const authResponse = await onFacebookLogin();
-      const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
-      const canConnectPages = pages.filter((v) => v.status !== "CONNECTED");
+      const result = await client.query({
+        query: GetMetaPagesInfosDocument,
+        variables: { accessToken: authResponse.accessToken },
+      });
+      const canConnectPages =
+        result.data?.getMetaPagesInfos.filter((v) => v.status !== MetaPageInfoStatus.Connected) ??
+        [];
       setDto({ pages: canConnectPages, accessToken: authResponse.accessToken });
 
       if (canConnectPages.length > 0) await onConnect(dto);
@@ -290,7 +310,7 @@ export const WithConnectMetaPagesModal: FC<{
         size="xl"
       >
         {opened && (
-          <Stack align="center" p={16}>
+          <Stack align="center" p="md">
             <Renderer visible={dto.pages.length > 0}>
               {(function () {
                 if (status === "CONNECTED") {

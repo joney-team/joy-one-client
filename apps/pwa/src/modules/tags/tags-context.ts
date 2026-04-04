@@ -1,17 +1,16 @@
 import { createContext, useContext } from "react";
 
-import { ReorderTag, TagDto } from "./tags-types";
-
-import { TagEntity } from "./tags-types";
+import { TagInput } from "@/graphql/types.graphql";
+import { TagFragment } from "./graphql/fragmentTag.graphql";
 
 export interface TagsContext {
   isInitialized: boolean;
-  list: TagEntity[];
-  create: (dto: TagDto) => Promise<TagEntity>;
-  update: (id: string, dto: TagDto) => Promise<TagEntity>;
+  list: TagFragment[];
+  create: (dto: TagInput) => Promise<TagFragment>;
+  update: (id: string, dto: TagInput) => Promise<TagFragment>;
   remove: (id: string) => Promise<void>;
-  search: (q: string) => TagEntity[];
-  reorder: (items: ReorderTag[]) => Promise<void>;
+  search: (q: string) => TagFragment[];
+  reorder: (items: { _id: string; order: number }[]) => Promise<void>;
 }
 
 export const Context = createContext({} as TagsContext);

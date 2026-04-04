@@ -7,27 +7,28 @@ import { primaryColumn } from "@/components/list/columns/primary-column";
 import { EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onArchive } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconArchive, IconNews } from "@tabler/icons-react";
 import { type FC } from "react";
-import { restClient } from "../apis/rest-client";
 import { CategoryColumn } from "../categories/components/category-column";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
-import QUERY_POSTS from "./graphql/queryPosts.graphql";
-import { PostEntity } from "./posts-types";
+import BulkArchivePostsDocument from "./graphql/bulkArchivePosts.graphql";
+import { PostFragment } from "./graphql/fragmentPost.graphql";
+import GetPostsDocument from "./graphql/getPosts.graphql";
 
 export const PostsList: FC = () => {
   const router = useRouter();
+  const client = useApolloClient();
 
   return (
-    <Stack p={16}>
-      <List<PostEntity>
+    <Stack p="md">
+      <List<PostFragment>
         icon={IconNews}
         id="pst"
         name={<Trans>Posts</Trans>}
-        query={QUERY_POSTS}
+        query={GetPostsDocument}
         columns={{
           _id: primaryColumn({
             name: <Trans>Title</Trans>,
@@ -63,7 +64,13 @@ export const PostsList: FC = () => {
             permission: WorkspacePermission.POSTS_MANAGER,
             handler: async (data) => {
               onArchive({
-                process: () => restClient.delete("/posts/bulk", { ids: data.map((v) => v._id) }),
+                process: () =>
+                  client.mutate({
+                    mutation: BulkArchivePostsDocument,
+                    variables: {
+                      ids: data.map((v) => v._id),
+                    },
+                  }),
               });
             },
           },

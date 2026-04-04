@@ -1,0 +1,8 @@
+mutation SetPluginExternalStorage($input: SetPluginExternalStorageInput!) {
+  setPluginExternalStorage(input: $input) {
+    provider
+    region
+    bucketName
+    endpointUrl
+  }
+}

@@ -60,6 +60,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
     const getValue = () => {
       try {
         const val = args.renderValue(ctx);
+        if (val === -0) return 0;
         return val;
       } catch (error) {
         return 0;
@@ -68,6 +69,7 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
 
     const name = config.name;
     const value = getValue();
+
     const sparkline = args.renderSparkline ? args.renderSparkline(ctx) : undefined;
     const isLoading = args.isLoading ? args.isLoading(ctx) : typeof value === "undefined";
 

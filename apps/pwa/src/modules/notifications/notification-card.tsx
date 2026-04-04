@@ -9,7 +9,7 @@ import { IconChevronRight } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useState } from "react";
 import { NotificationFragment } from "./graphql/fragmentNotification.graphql";
-import MUTATION_MARK_NOTIFICATION_AS_READED from "./graphql/mutationMarkNotificationAsReaded.graphql";
+import MarkNotificationAsReadedDocument from "./graphql/markNotificationAsReaded.graphql";
 import { notificationTypes } from "./notifications-constants";
 
 export const NotificationCard: FC<{
@@ -22,7 +22,7 @@ export const NotificationCard: FC<{
   const { color: notificationColor, icon: Icon } =
     notificationTypes[notification.type] || notificationTypes[NotificationType.Info];
 
-  const [markNotificationAsReaded] = useMutation(MUTATION_MARK_NOTIFICATION_AS_READED);
+  const [markNotificationAsReaded] = useMutation(MarkNotificationAsReadedDocument);
 
   return (
     <Anchor
@@ -32,7 +32,7 @@ export const NotificationCard: FC<{
         setReaded(true);
         markNotificationAsReaded({
           variables: {
-            markNotificationAsReadedId: notification._id,
+            notificationId: notification._id,
           },
         }).catch(console.error);
       }}

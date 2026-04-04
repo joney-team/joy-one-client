@@ -1,0 +1,7 @@
+#import "./fragmentBooking.graphql"
+
+mutation CancelBooking($id: String!, $reason: String!) {
+  booking: cancelBooking(id: $id, reason: $reason) {
+    ...Booking
+  }
+}

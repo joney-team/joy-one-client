@@ -1,22 +1,25 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { UpdateUserPasswordInput } from "@/graphql/types.graphql";
 import { useFormSubmit } from "@/hooks/use-form";
 import { useAuth } from "@/modules/auth/auth-context";
-import { updatePassword } from "@/modules/users/users-service";
-import { UpdateUserPasswordDto } from "@/modules/users/users-types";
 import { onSuccess } from "@/utils/actions";
+import { onFormErrorBinding } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Group, PasswordInput, SimpleGrid, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IconLock } from "@tabler/icons-react";
 import { FC } from "react";
+import UpdateUserPasswordDocument from "../graphql/updateUserPassword.graphql";
 
 export const UpdatePassword: FC = () => {
   const auth = useAuth();
+  const client = useApolloClient();
   const { t } = useLingui();
 
-  const form = useForm<UpdateUserPasswordDto & { confirmPassword: string }>({
+  const form = useForm<UpdateUserPasswordInput & { confirmPassword: string }>({
     validate: {
       password: auth.user.isPasswordProvided
         ? (v) => {
@@ -36,10 +39,9 @@ export const UpdatePassword: FC = () => {
 
   const submitting = useFormSubmit(form, {
     onSubmit: (values) =>
-      updatePassword({
-        password: values.password,
-        plainPassword: values.plainPassword,
-      }),
+      client
+        .mutate({ mutation: UpdateUserPasswordDocument, variables: { input: values } })
+        .catch(onFormErrorBinding(form)),
     onSuccess: async (_, _form) => {
       onSuccess({ message: t`Password updated` });
       _form.reset();

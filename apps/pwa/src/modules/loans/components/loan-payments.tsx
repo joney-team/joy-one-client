@@ -6,16 +6,15 @@ import { DateFormat } from "@/components/format/date-format";
 import { Renderer } from "@/components/renderer";
 import { EventType, LoanStatus, ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { restClient } from "@/modules/apis/rest-client";
 import { useEventsListener } from "@/modules/events/event-service";
 import { OnModalLoanLiquidation } from "@/modules/loans/modals/modal-loan-liquidation";
-import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
+import GetReceiptsDocument from "@/modules/receipts/graphql/getReceipts.graphql";
 import { ModalPayReceipt, ModalPayReceiptRef } from "@/modules/receipts/modals/modal-pay-receipt";
 import { OnModalReceiptForm } from "@/modules/receipts/modals/modal-receipt-form";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Center, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
 import {
@@ -26,8 +25,9 @@ import {
 } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
-import MUTATION_HEALTH_CHECK_LOAN from "../graphql/mutationHealthCheckLoan.graphql";
-import MUTATION_REVERT_LIQUIDATION_LOAN from "../graphql/mutationRevertLiquidationLoan.graphql";
+import HealthCheckLoanDocument from "../graphql/healthCheckLoan.graphql";
+import RevertFulfilledLoanDocument from "../graphql/revertFulfilledLoan.graphql";
+import RevertLiquidationLoanDocument from "../graphql/revertLiquidationLoan.graphql";
 import { LoanReceiptCard } from "./loan-receipt-card";
 import { LoanRowInfo } from "./loan-row-info";
 
@@ -38,17 +38,18 @@ interface LoanPaymentsProps {
 
 export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
   const color = useColor();
+  const client = useApolloClient();
   const { loan, refetch } = props;
   const { hasPermission } = useWorkspace();
-  const [healthCheckLoan] = useMutation(MUTATION_HEALTH_CHECK_LOAN);
-  const [revertLiquidationLoan] = useMutation(MUTATION_REVERT_LIQUIDATION_LOAN);
+  const [healthCheckLoan] = useMutation(HealthCheckLoanDocument);
+  const [revertLiquidationLoan] = useMutation(RevertLiquidationLoanDocument);
   const modalPayReceiptRef = useRef<ModalPayReceiptRef | null>(null);
 
   const {
     data: receiptsData,
     loading,
     refetch: refetchReceipts,
-  } = useQuery(QUERY_RECEIPTS, {
+  } = useQuery(GetReceiptsDocument, {
     variables: {
       query: {
         relatedLoanId: loan?.id,
@@ -86,7 +87,11 @@ export const LoanPayments: FC<LoanPaymentsProps> = (props) => {
     if (!loan || !hasPermission(WorkspacePermission.LOANS_FULFILLED_REVERTED)) return;
     onConfirmModal({
       content: <Trans>Are you sure you want to revert the payment?</Trans>,
-      onConfirm: () => restClient.post(`/loans/${loan.id}/revert-fulfilled`),
+      onConfirm: () =>
+        client.mutate({
+          mutation: RevertFulfilledLoanDocument,
+          variables: { loanId: loan.id },
+        }),
     });
   };
 

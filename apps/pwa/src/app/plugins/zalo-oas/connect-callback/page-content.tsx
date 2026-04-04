@@ -6,12 +6,11 @@ import { Errored } from "@/components/errored";
 import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { useLayout } from "@/layout/layout-context";
-import {
-  connectCallbackPluginZalo,
-  connectPluginZalo,
-} from "@/modules/plugins/zalo-oas/zalo-oas-service";
+import ConnectZaloOaDocument from "@/modules/plugins/zalo-oas/graphql/connectZaloOa.graphql";
+import ConnectZaloOaCallbackDocument from "@/modules/plugins/zalo-oas/graphql/connectZaloOaCallback.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
+import { useApolloClient } from "@apollo/client/react";
 import config from "@joy-one-client/config";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Center, Group, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
@@ -24,6 +23,7 @@ let interval: NodeJS.Timeout;
 const Page: NextPage = () => {
   const viewport = useLayout();
   const workspace = useWorkspace();
+  const client = useApolloClient();
   const [tick, setTick] = useState(5);
 
   const onDone = () => {
@@ -33,7 +33,12 @@ const Page: NextPage = () => {
   const connect = useFetch({
     fetch: async () => {
       const search = new URLSearchParams(window.location.search);
-      const res = await connectCallbackPluginZalo({ code: search.get("code")! });
+      const res = await client.mutate({
+        mutation: ConnectZaloOaCallbackDocument,
+        variables: {
+          code: search.get("code")!,
+        },
+      });
       interval = setInterval(() => {
         setTick((tick) => {
           if (tick <= 0) {
@@ -84,7 +89,19 @@ const Page: NextPage = () => {
             <Fragment>
               <Errored error={connect.error} />
               <Center>
-                <Button onClick={() => connectPluginZalo()}>Thử lại</Button>
+                <Button
+                  onClick={() =>
+                    client
+                      .mutate({
+                        mutation: ConnectZaloOaDocument,
+                      })
+                      .then((result) => {
+                        window.open(result.data?.connectZaloOa?.url, "_blank");
+                      })
+                  }
+                >
+                  Thử lại
+                </Button>
               </Center>
 
               <Anchor

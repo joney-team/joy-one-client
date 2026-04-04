@@ -4,22 +4,20 @@ import { Button } from "@/components/buttons/button";
 import { EntityImage } from "@/components/entity-image";
 import { Renderer } from "@/components/renderer";
 import { configs } from "@/configs/layout.config";
-import { AppLocale } from "@/graphql/enums.graphql";
+import {
+  AppLocale,
+  ChannelWidgetWelcomeInputType,
+  MessageHubWidgetPosition,
+} from "@/graphql/enums.graphql";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { localeNames } from "@/modules/lang/lang-service";
-import {
-  removePluginMessageHub,
-  updatePluginMessageHub,
-} from "@/modules/plugins/message-hubs/message-hubs-service";
-import {
-  ChannelWidgetWelcomeInput,
-  PluginMessageHubEntity,
-} from "@/modules/plugins/message-hubs/message-hubs-types";
+import { normalizeMessageHubInput } from "@/modules/plugins/message-hubs/message-hubs-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { isDiff } from "@/utils/object.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { DndContext, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
 import {
   arrayMove,
@@ -65,13 +63,18 @@ import {
 } from "@tabler/icons-react";
 import { FC, useEffect, useState } from "react";
 import { v4 as uuid } from "uuid";
+import DeletePluginMessageHubDocument from "./graphql/deletePluginMessageHub.graphql";
+import { PluginMessageHubFragment } from "./graphql/fragmentPluginMessageHub.graphql";
+import UpdatePluginMessageHubDocument from "./graphql/updatePluginMessageHub.graphql";
+import { MessageHubWidgetWelcome } from "@/graphql/types.graphql";
 
 interface MessageHubCardProps {
-  messageHub: PluginMessageHubEntity;
+  messageHub: PluginMessageHubFragment;
 }
 
 export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
   const { t } = useLingui();
+  const client = useApolloClient();
   const workspace = useWorkspace();
   const uploadFile = useUploadFile();
 
@@ -98,13 +101,37 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
 
     if (_widgetSettings.welcomeInputs) {
       _widgetSettings.welcomeInputs = _widgetSettings.welcomeInputs.filter(
-        (input) => !!input.type && !!input.id
+        (input) => !!input.type && !!input.id,
       );
     }
 
-    updatePluginMessageHub(messageHub._id, {
-      ...props.messageHub,
-      widgetSettings: _widgetSettings,
+    client.mutate({
+      mutation: UpdatePluginMessageHubDocument,
+      variables: {
+        messageHubId: messageHub._id,
+        input: {
+          name: messageHub.name,
+          widgetSettings: {
+            brandLogo: _widgetSettings.brandLogo,
+            chatIcon: _widgetSettings.chatIcon,
+            brandName: _widgetSettings.brandName,
+            color: _widgetSettings.color,
+            welcomMessage: _widgetSettings.welcomMessage,
+            welcomSubMessage: _widgetSettings.welcomSubMessage,
+            position: _widgetSettings.position,
+            locale: _widgetSettings.locale,
+            welcomeInputs: _widgetSettings.welcomeInputs?.map((input) => ({
+              id: input.id,
+              type: input.type,
+              label: input.label,
+              fieldName: input.fieldName,
+              description: input.description,
+              placeholder: input.placeholder,
+              isRequired: input.isRequired,
+            })),
+          },
+        },
+      },
     });
   };
 
@@ -117,7 +144,13 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
   const onRemove = () => {
     onArchive({
       name: "Message Hub",
-      process: () => removePluginMessageHub(messageHub._id),
+      process: () =>
+        client.mutate({
+          mutation: DeletePluginMessageHubDocument,
+          variables: {
+            messageHubId: messageHub._id,
+          },
+        }),
     });
   };
 
@@ -146,7 +179,16 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
                         value: messageHub.name,
                         onDone: (name) => {
                           if (name.length > 0) {
-                            updatePluginMessageHub(messageHub._id, { ...messageHub, name });
+                            client.mutate({
+                              mutation: UpdatePluginMessageHubDocument,
+                              variables: {
+                                messageHubId: messageHub._id,
+                                input: {
+                                  ...normalizeMessageHubInput(messageHub),
+                                  name,
+                                },
+                              },
+                            });
                           }
                         },
                       });
@@ -183,7 +225,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
         <CopyButton value={messageHub.script.html}>
           {({ copied, copy }) => (
             <Group gap={10} w="100%" onClick={copy} align="start">
-              <Code p={16} flex={1}>
+              <Code p="md" flex={1}>
                 {messageHub.script.html}
               </Code>
 
@@ -230,7 +272,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <Stack>
             <TextInput
               label={<Trans>Brand name</Trans>}
-              value={widgetSettings.brandName}
+              value={widgetSettings.brandName ?? undefined}
               onChange={(e) => setWidgetSettings({ ...widgetSettings, brandName: e.target.value })}
             />
 
@@ -238,14 +280,14 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
               label={<Trans>Color</Trans>}
               format="hex"
               swatches={configs.swatches}
-              value={widgetSettings.color}
+              value={widgetSettings.color ?? undefined}
               onChange={(color) => setWidgetSettings({ ...widgetSettings, color })}
             />
           </Stack>
 
           <TextInput
             label={<Trans>Welcome message</Trans>}
-            value={widgetSettings.welcomMessage}
+            value={widgetSettings.welcomMessage ?? undefined}
             placeholder={`${t`Welcome to`} ${workspace.member.workspace.name}`}
             onChange={(e) =>
               setWidgetSettings({ ...widgetSettings, welcomMessage: e.target.value })
@@ -254,7 +296,7 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
 
           <TextInput
             label={<Trans>Welcome sub message</Trans>}
-            value={widgetSettings.welcomSubMessage}
+            value={widgetSettings.welcomSubMessage ?? undefined}
             placeholder={t`You need advice! Start chatting with us now.`}
             onChange={(e) =>
               setWidgetSettings({ ...widgetSettings, welcomSubMessage: e.target.value })
@@ -264,8 +306,8 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
           <Select
             label={<Trans>Message hub position</Trans>}
             data={[
-              { value: "left", label: t`Left` },
-              { value: "right", label: t`Right` },
+              { value: MessageHubWidgetPosition.Left, label: t`Left` },
+              { value: MessageHubWidgetPosition.Right, label: t`Right` },
             ]}
             value={widgetSettings.position}
             onChange={(position) =>
@@ -307,13 +349,17 @@ export const MessageHubCard: FC<MessageHubCardProps> = (props) => {
 };
 
 const WelcomInputs: FC<{
-  onChange: (value: ChannelWidgetWelcomeInput[]) => void;
-  inputs: ChannelWidgetWelcomeInput[];
+  onChange: (value: MessageHubWidgetWelcome[]) => void;
+  inputs: MessageHubWidgetWelcome[];
 }> = (props) => {
   const addWelcomeInput = () => {
     props.onChange([
       ...props.inputs,
       {
+        __typename: "MessageHubWidgetWelcome",
+        isRequired: false,
+        fieldName: "",
+        placeholder: "",
         id: uuid(),
         type: "" as any,
         label: "",
@@ -322,12 +368,12 @@ const WelcomInputs: FC<{
     ]);
   };
 
-  const onChange = (index: number, value: ChannelWidgetWelcomeInput) => {
+  const onChange = (index: number, value: MessageHubWidgetWelcome) => {
     props.onChange(
       props.inputs.map((input, i) => {
         if (i === index) return value;
         return input;
-      })
+      }),
     );
   };
 
@@ -340,7 +386,7 @@ const WelcomInputs: FC<{
       activationConstraint: {
         distance: 10,
       },
-    })
+    }),
   );
 
   return (
@@ -393,14 +439,14 @@ const WelcomInputs: FC<{
 };
 
 const WelcomInput: FC<{
-  input: ChannelWidgetWelcomeInput;
-  onChange: (value: ChannelWidgetWelcomeInput) => void;
+  input: MessageHubWidgetWelcome;
+  onChange: (value: MessageHubWidgetWelcome) => void;
   onRemove: () => void;
 }> = ({ input, onChange, onRemove }) => {
   const { t } = useLingui();
   const isDynamicInput = ["text", "number"].includes(input.type);
 
-  const _onChange = (key: keyof ChannelWidgetWelcomeInput, value: any) => {
+  const _onChange = (key: keyof MessageHubWidgetWelcome, value: any) => {
     const _input = { ...input, [key]: value };
     onChange(_input);
   };
@@ -447,11 +493,11 @@ const WelcomInput: FC<{
               label={<Trans>Data type</Trans>}
               value={input.type}
               data={[
-                { label: t`Name`, value: "name" },
-                { label: t`Phone`, value: "phone" },
-                { label: t`Email`, value: "email" },
-                { label: t`Text`, value: "text" },
-                { label: t`Number`, value: "number" },
+                { label: t`Name`, value: ChannelWidgetWelcomeInputType.Name },
+                { label: t`Phone`, value: ChannelWidgetWelcomeInputType.Phone },
+                { label: t`Email`, value: ChannelWidgetWelcomeInputType.Email },
+                { label: t`Text`, value: ChannelWidgetWelcomeInputType.Text },
+                { label: t`Number`, value: ChannelWidgetWelcomeInputType.Number },
               ]}
               onChange={(type) => _onChange("type", type)}
             />
@@ -478,7 +524,7 @@ const WelcomInput: FC<{
           <Grid.Col span={{ md: 12 }}>
             <TextInput
               label={<Trans>Input description</Trans>}
-              value={input.description}
+              value={input.description ?? undefined}
               onChange={(e) => _onChange("description", e.target.value)}
             />
           </Grid.Col>

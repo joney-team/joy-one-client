@@ -18,12 +18,12 @@ import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animat
 const ModalConfigureStatuses = dynamic(
   () =>
     import("@/modules/tasks/modals/modal-configure-statuses").then(
-      (mod) => mod.ModalConfigureStatuses
+      (mod) => mod.ModalConfigureStatuses,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const BoardGroupByStatuses = dynamic(
@@ -31,7 +31,7 @@ const BoardGroupByStatuses = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={500} w={300} />,
-  }
+  },
 );
 
 export const TasksBoardView: FC<PropsWithChildren> = (props) => {
@@ -78,7 +78,7 @@ export const TasksBoardView: FC<PropsWithChildren> = (props) => {
   const boardTasksGroup = useMemo(() => {
     if (!isReady || loading)
       return (
-        <Stack p={16}>
+        <Stack p="md">
           <Skeleton height={500} />
         </Stack>
       );

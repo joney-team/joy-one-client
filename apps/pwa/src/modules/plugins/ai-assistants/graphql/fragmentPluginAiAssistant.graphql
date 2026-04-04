@@ -1,0 +1,8 @@
+fragment PluginAiAssistant on PluginAiAssistant {
+  _id
+  providerName
+  provider
+  apiKey
+  enabled
+  status
+}

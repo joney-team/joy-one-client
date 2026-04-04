@@ -1,0 +1,43 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment MessageBox on MessageBox {
+  _id
+  ref
+  senderId
+  senderName
+  senderAvatar
+  customerId
+  assigneeUserId
+  platformId
+  phone
+  platformType
+  lastInteractionAt
+  expireAt
+  status
+  aiAssistantconversationId
+  aiAssistantDisabled
+  customer {
+    _id
+    code
+    plainCode
+    name
+    avatar
+    phone
+    email
+    gender
+  }
+  assigneeUser {
+    ...WorkspaceMember
+  }
+  lastMessage {
+    _id
+    type
+    text
+    attachments {
+      type
+      url
+      raw
+    }
+    createdAt
+  }
+}

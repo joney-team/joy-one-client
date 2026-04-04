@@ -1,0 +1,7 @@
+#import "./fragmentPost.graphql"
+
+query GetPostById($postId: String!) {
+  post: getPostById(id: $postId) {
+    ...Post
+  }
+}

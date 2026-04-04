@@ -1,0 +1,3 @@
+mutation ArchiveEInvoiceProvider($providerId: String!) {
+  archiveEInvoiceProvider(providerId: $providerId)
+}

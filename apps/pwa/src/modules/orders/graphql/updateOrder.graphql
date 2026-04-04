@@ -1,0 +1,7 @@
+#import "./fragmentOrder.graphql"
+
+mutation UpdateOrder($orderId: String!, $input: OrderInput!) {
+  order: updateOrder(id: $orderId, input: $input) {
+    ...Order
+  }
+}

@@ -4,16 +4,17 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
-import { getCustomerContacts } from "@/modules/customer-contacts/customer-contacts.service";
+import GetCustomerContactsDocument from "@/modules/customer-contacts/graphql/getCustomerContacts.graphql";
 import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { CustomerFragment } from "@/modules/customers/graphql/fragmentCustomer.graphql";
 import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-customer-contacts";
+import { useEventsListener } from "@/modules/events/event-service";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { formatPhoneNumber } from "@/utils/phone.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,
@@ -41,12 +42,21 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
   const workspace = useWorkspace();
   const { getGoogleMapLink } = useLocations();
 
-  const contacts = useFetch({
-    id: `customer-contacts-${customer._id}`,
-    skip: !workspace.hasPermission(WorkspacePermission.CUSTOMERS_VIEW_CONTACT),
-    fetch: () => getCustomerContacts(customer._id),
-    refetchEvents: [EventType.CustomerContactsUpdated],
+  const {
+    data: customerContactsData,
+    refetch,
+    loading,
+  } = useQuery(GetCustomerContactsDocument, {
+    variables: { customerId: customer._id },
   });
+
+  useEventsListener(
+    [EventType.CustomerContactsUpdated],
+    () => {
+      refetch();
+    },
+    [customer._id],
+  );
 
   const kyc = props.kyc?.versions[props.kyc?.versions.length - 1];
 
@@ -175,16 +185,16 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
 
               <LoanRowInfo
                 label={<Trans>Contacts</Trans>}
-                value={contacts.data?.contacts.length}
+                value={customerContactsData?.customerContact?.contacts.length}
                 renderValue={() =>
-                  contacts.isFetching ? (
+                  loading && !customerContactsData ? (
                     <Loader size="xs" />
-                  ) : contacts.data ? (
+                  ) : customerContactsData ? (
                     <Anchor
                       c="dark"
                       onClick={(e) => {
                         e.stopPropagation();
-                        OnModalCustomerContacts({ contacts: contacts.data! });
+                        OnModalCustomerContacts({ contacts: customerContactsData.customerContact });
                       }}
                     >
                       <Group gap={1} wrap="nowrap">
@@ -192,7 +202,9 @@ export const LoanCustomerKyc: FC<LoanCustomerKycProps> = (props) => {
                           <IconAddressBook strokeWidth={1.5} size={18} />
                         </ThemeIcon>
                         <Text fz={em(15)}>
-                          <NumberFormat value={contacts.data.contacts.length} />
+                          <NumberFormat
+                            value={customerContactsData.customerContact.contacts.length}
+                          />
                         </Text>
                       </Group>
                     </Anchor>

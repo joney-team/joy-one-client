@@ -1,0 +1,7 @@
+#import "./fragmentOrder.graphql"
+
+mutation ArchiveOrder($orderId: String!) {
+  order: archiveOrder(id: $orderId) {
+    ...Order
+  }
+}

@@ -1,27 +1,29 @@
-import { t } from "@lingui/core/macro";
-import { PluginZaloOaZNSTemplateId } from "./zalo-oas-types";
+import { PluginZaloOaZnsTemplateId } from "@/graphql/enums.graphql";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 
-export const pluginZaloOaZNSTemplateIds: Record<PluginZaloOaZNSTemplateId, { name: () => string }> =
-  {
-    [PluginZaloOaZNSTemplateId.BOOKING]: {
-      name: () => t`Booking`,
-    },
-    [PluginZaloOaZNSTemplateId.CUSTOMER_BIRTHDAY]: {
-      name: () => t`Customer birthday`,
-    },
-    [PluginZaloOaZNSTemplateId.OTP]: {
-      name: () => t`OTP`,
-    },
-    [PluginZaloOaZNSTemplateId.LOAN_FULFILLED]: {
-      name: () => t`Loan fulfilled`,
-    },
-    [PluginZaloOaZNSTemplateId.LOAN_RECEIPT_PAID]: {
-      name: () => t`Loan receipt paid`,
-    },
-    [PluginZaloOaZNSTemplateId.LOAN_RECEIPT_PARTIAL_PAY]: {
-      name: () => t`Loan receipt partial pay`,
-    },
-    [PluginZaloOaZNSTemplateId.LOAN_RECEIPT_REMIND]: {
-      name: () => t`Loan receipt remind`,
-    },
-  };
+export const pluginZaloOaZNSTemplateIds: Record<
+  PluginZaloOaZnsTemplateId,
+  { name: MacroMessageDescriptor }
+> = {
+  [PluginZaloOaZnsTemplateId.Booking]: {
+    name: defineMessage`Booking`,
+  },
+  [PluginZaloOaZnsTemplateId.CustomerBirthday]: {
+    name: defineMessage`Customer birthday`,
+  },
+  [PluginZaloOaZnsTemplateId.Otp]: {
+    name: defineMessage`OTP`,
+  },
+  [PluginZaloOaZnsTemplateId.LoanFulfilled]: {
+    name: defineMessage`Loan fulfilled`,
+  },
+  [PluginZaloOaZnsTemplateId.LoanReceiptPaid]: {
+    name: defineMessage`Loan receipt paid`,
+  },
+  [PluginZaloOaZnsTemplateId.LoanReceiptPartialPay]: {
+    name: defineMessage`Loan receipt partial pay`,
+  },
+  [PluginZaloOaZnsTemplateId.LoanReceiptRemind]: {
+    name: defineMessage`Loan receipt remind`,
+  },
+};

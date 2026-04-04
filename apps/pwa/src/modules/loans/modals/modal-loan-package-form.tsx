@@ -115,7 +115,7 @@ export const ModalLoanPackageForm: FC<{
         opened={opened}
         size="xl"
       >
-        <Stack gap={16}>
+        <Stack gap="md">
           <TextInput
             withAsterisk
             label={<Trans>Loan package code</Trans>}
@@ -182,7 +182,7 @@ export const ModalLoanPackageForm: FC<{
             onChange={(e) =>
               form.setFieldValue(
                 "periodDaysOptions",
-                e.map((v) => +v)
+                e.map((v) => +v),
               )
             }
           />
@@ -215,7 +215,7 @@ export const ModalLoanPackageForm: FC<{
                         {capitalRates.map((v, j) => {
                           const onChange = (e: number) => {
                             let _unFixedCapitalRates = new Array(
-                              form.values.periodDaysOptions.length
+                              form.values.periodDaysOptions.length,
                             )
                               .fill([])
                               .map((_, k) => form.values.unFixedCapitalRates[k] || []);

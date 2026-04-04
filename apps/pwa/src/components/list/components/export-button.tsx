@@ -61,7 +61,7 @@ export const ExportButton: FC = () => {
       process: async () => {
         const { data: queryData } = await client.query<UseGraphqlListData>({
           query: context.query,
-          variables: { ...context.list.params, getAll: true },
+          variables: { query: { ...context.list.params, getAll: true } },
         });
 
         const data: any[] = queryData?.list.results ?? [];
@@ -127,7 +127,7 @@ export const ExportButton: FC = () => {
                     });
                   } else {
                     const indexOfCol = headers.findIndex(
-                      (v) => v?.value === getColumnName(column.columnKey)
+                      (v) => v?.value === getColumnName(column.columnKey),
                     );
                     cols[indexOfCol] = renderExportItem(columnExport);
                   }
@@ -137,13 +137,13 @@ export const ExportButton: FC = () => {
 
                 // Automation
                 const indexOfCol = headers.findIndex(
-                  (v) => v?.value === getColumnName(column.columnKey)
+                  (v) => v?.value === getColumnName(column.columnKey),
                 );
                 cols[indexOfCol] = { value: cellValue };
               }
 
               return cols;
-            })
+            }),
           );
 
           const primaryColor = parseThemeColor({
@@ -171,13 +171,13 @@ export const ExportButton: FC = () => {
                   const value = row[i];
                   return Math.max(
                     Math.max(acc, (value?.value?.toString()?.length || 0) + 2),
-                    v.value?.toString()?.length || 0
+                    v.value?.toString()?.length || 0,
                   );
                 }, 0);
 
                 return { width };
               }),
-            }
+            },
           );
 
           const blob = new Blob([buffer], {

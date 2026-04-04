@@ -28,9 +28,9 @@ import { FC, Fragment, useEffect, useMemo } from "react";
 import { useTaskMenu } from "../components/task-menu/task-menu";
 import { TaskMenuAction } from "../components/task-menu/task-menu-types";
 import { TaskTimeline } from "../components/task-timeline";
+import CreateTaskDocument from "../graphql/createTask.graphql";
 import { TaskFragment } from "../graphql/fragmentTask.graphql";
-import CREATE_TASK_MUTATION from "../graphql/mutationCreateTask.graphql";
-import TASK_STATUS_QUERY from "../graphql/queryTaskStatuses.graphql";
+import GetTaskStatusesDocument from "../graphql/getTaskStatuses.graphql";
 import { useTaskStatuses } from "../hooks/use-task-statuses";
 import { taskPriorities } from "../tasks-constants";
 import { DefaultTaskStatusId, TaskPriority } from "../tasks-types";
@@ -48,7 +48,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
   const { member } = useWorkspace();
 
   const [getTaskStatuses, { data: taskStatusesData, loading: taskStatusesLoading }] = useLazyQuery(
-    TASK_STATUS_QUERY,
+    GetTaskStatusesDocument,
     {
       fetchPolicy: "cache-and-network",
     },
@@ -62,7 +62,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
     });
   }, [initial?.folder?._id]);
 
-  const [createTask] = useMutation(CREATE_TASK_MUTATION);
+  const [createTask] = useMutation(CreateTaskDocument);
 
   const form = useForm<Partial<TaskFragment> & { status: TaskFragment["status"] }>({
     initialValues: {
@@ -103,7 +103,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
       emitInternalEvent(InternalEvent.REFETCH_TASKS);
       if (!newTask) throw new Error(t`Failed to create task`);
-      onCreated?.(newTask.createTask._id);
+      onCreated?.(newTask.task._id);
       onClose?.();
     } catch (error) {
       onError(error);
@@ -144,7 +144,7 @@ export const CreateTaskForm: FC<CreateTaskFormProps> = ({ initial, onCreated, on
 
   if (taskStatusesLoading)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={200} miw="100%" />
       </Stack>
     );

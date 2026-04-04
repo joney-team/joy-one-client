@@ -1,14 +1,13 @@
 "use client";
 
+import { Clickable } from "@/components/clickable";
 import { EntityImage } from "@/components/entity-image";
 import { Column } from "@/components/list/types";
-import { restClient } from "@/modules/apis/rest-client";
 import { AppEntity } from "@/types";
 import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconNews } from "@tabler/icons-react";
 import { searchEntity } from "../../search/search-service";
-import { PostEntity } from "../posts-types";
-import { Clickable } from "@/components/clickable";
+import GetPostsDocument from "../graphql/getPosts.graphql";
 
 export interface PostColumnArgs extends Omit<Column, "render"> {}
 
@@ -30,25 +29,36 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        listRoute: "/posts",
-        getSelectedOptions: async (ids: string[]) => {
-          const options = await restClient.get<PostEntity[]>("/posts/ids", { params: { ids } });
-          return options.map((v) => ({
-            label: v.title,
-            value: v._id,
-            data: v,
-          }));
-        },
-        search: async (query) => {
-          const result = await searchEntity(AppEntity.POSTS, query);
-          const options = await restClient.get<PostEntity[]>("/posts/ids", {
-            params: { ids: result.map((v) => v._id) },
+        listQuery: GetPostsDocument,
+        getSelectedOptions: async (ids, client) => {
+          const options = await client.query({
+            query: GetPostsDocument,
+            variables: { ids },
           });
-          return options.map((v) => ({
-            label: v.title,
-            value: v._id,
-            data: v,
-          }));
+
+          return (
+            options.data?.list.results.map((v) => ({
+              label: v.title,
+              value: v._id,
+              data: v,
+            })) ?? []
+          );
+        },
+        search: async (query, client) => {
+          const result = await searchEntity(AppEntity.POSTS, query);
+
+          const options = await client.query({
+            query: GetPostsDocument,
+            variables: { ids: result.map((v) => v._id) },
+          });
+
+          return (
+            options.data?.list.results.map((v) => ({
+              label: v.title,
+              value: v._id,
+              data: v,
+            })) ?? []
+          );
         },
         render: ({ data }) => {
           return (

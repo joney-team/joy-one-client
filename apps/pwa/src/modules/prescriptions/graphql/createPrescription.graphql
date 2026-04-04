@@ -1,0 +1,7 @@
+#import "./fragmentPrescription.graphql"
+
+mutation CreatePrescription($input: PrescriptionInput!) {
+  createPrescription(input: $input) {
+    ...Prescription
+  }
+}

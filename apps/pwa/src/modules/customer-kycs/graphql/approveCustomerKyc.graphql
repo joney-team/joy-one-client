@@ -1,0 +1,7 @@
+#import "./fragmentCustomerKyc.graphql"
+
+mutation ApproveCustomerKyc($customerId: String!) {
+  customerKyc: approveCustomerKyc(customerId: $customerId) {
+    ...CustomerKyc
+  }
+}

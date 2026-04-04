@@ -4,12 +4,9 @@ import { classNames } from "@/utils/ui.utils";
 import { Fragment, useEffect, useMemo, useRef, type FC } from "react";
 import { useGanttTaskRow } from "../gantt-task-provider";
 
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "@/modules/tasks/graphql/queryTasks.graphql";
-import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { useTaskMenu } from "@/modules/tasks/components/task-menu/task-menu";
+import GetTasksDocument from "@/modules/tasks/graphql/getTasks.graphql";
+import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { useColor } from "@/modules/theme/use-color";
 import { useApolloClient } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -82,12 +79,12 @@ export const GanttTaskTimeline: FC = () => {
         const distanceIndex = newStartIndex - timeline.startIndex;
         const distanceTime = distanceIndex * oneDay;
 
-        const subtasksData = client.cache.readQuery<TasksQuery, TasksQueryVariables>({
-          query: QUERY_TASKS,
+        const subtasksData = client.cache.readQuery({
+          query: GetTasksDocument,
           variables: subTasksGroupVariables,
         });
 
-        const subtasks = Array.from(subtasksData?.tasks.results ?? []);
+        const subtasks = Array.from(subtasksData?.list.results ?? []);
 
         updateTasks(
           subtasks.reduce<UpdateTask[]>((acc, subtask) => {
@@ -100,7 +97,7 @@ export const GanttTaskTimeline: FC = () => {
             }
 
             return acc;
-          }, [])
+          }, []),
         );
       } else {
         const startDate = DateTime.toSeconds(startColumn.start);

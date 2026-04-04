@@ -1,0 +1,7 @@
+#import "./fragmentPromotion.graphql"
+
+query GetAvailableCustomerPromotions($customerId: String!) {
+  promotions: getAvailableCustomerPromotions(customerId: $customerId) {
+    ...Promotion
+  }
+}

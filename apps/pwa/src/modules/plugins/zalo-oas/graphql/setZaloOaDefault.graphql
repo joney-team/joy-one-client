@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+mutation SetZaloOaDefault($zaloOaId: String!) {
+  setZaloOaDefault(id: $zaloOaId) {
+    ...ZaloOa
+  }
+}

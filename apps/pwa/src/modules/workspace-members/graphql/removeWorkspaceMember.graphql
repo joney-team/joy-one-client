@@ -1,0 +1,3 @@
+mutation RemoveWorkspaceMember($memberId: String!) {
+  removeWorkspaceMember(memberId: $memberId)
+}

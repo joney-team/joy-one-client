@@ -46,7 +46,7 @@ export const WorkspaceModuleSetup: FC = () => {
   const { workspaceView, updateWorkspaceView } = useWorkspaceSetting();
 
   const [components, handleComponents] = useListState(
-    workspaceView.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? []
+    workspaceView.menu ?? getDefaultWorkspaceView(workspace.type).menu ?? [],
   );
 
   const sensors = useSensors(
@@ -54,7 +54,7 @@ export const WorkspaceModuleSetup: FC = () => {
       activationConstraint: {
         distance: 10,
       },
-    })
+    }),
   );
 
   const isUpdateAble = useRef(false);
@@ -78,7 +78,7 @@ export const WorkspaceModuleSetup: FC = () => {
   };
 
   return (
-    <Container size={600} p={16}>
+    <Container size={600} p="md">
       <ModalInput>
         {(openInput) => (
           <Stack gap={10}>

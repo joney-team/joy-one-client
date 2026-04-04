@@ -1,0 +1,42 @@
+#import "./fragmentTask.graphql"
+
+query GetTasks(
+  $folderId: String
+  $parentId: String
+  $status: String
+  $offset: Float
+  $limit: Float
+  $ids: [String!]
+  $assigneeUserIds: [String!]
+  $partnerIds: [String!]
+  $tagIds: [String!]
+  $priority: TaskPriority
+  $all: Boolean
+  $isProgressOnly: Boolean
+  $isClosedOnly: Boolean
+  $fromTrackingTime: Float
+  $toTrackingTime: Float
+) {
+  list: getTasks(
+    folderId: $folderId
+    parentId: $parentId
+    status: $status
+    offset: $offset
+    limit: $limit
+    ids: $ids
+    assigneeUserIds: $assigneeUserIds
+    partnerIds: $partnerIds
+    tagIds: $tagIds
+    priority: $priority
+    all: $all
+    isProgressOnly: $isProgressOnly
+    isClosedOnly: $isClosedOnly
+    fromTrackingTime: $fromTrackingTime
+    toTrackingTime: $toTrackingTime
+  ) {
+    total
+    results {
+      ...Task      
+    }
+  }
+}

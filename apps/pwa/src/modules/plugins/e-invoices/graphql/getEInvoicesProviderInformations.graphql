@@ -1,0 +1,10 @@
+query GetEInvoicesProviderInformations {
+  getEInvoicesProviderInformations {
+    type
+    name
+    logo
+    isDemo
+    apiUrl
+    defaultTemplates
+  }
+}

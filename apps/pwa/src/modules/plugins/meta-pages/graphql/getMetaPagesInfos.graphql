@@ -1,0 +1,12 @@
+query GetMetaPagesInfos($accessToken: String!) {
+  getMetaPagesInfos(accessToken: $accessToken) {
+    pageId
+    name
+    categories {
+      id
+      name
+    }
+    status
+    avatar
+  }
+}

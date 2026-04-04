@@ -9,8 +9,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Center, NumberInput, Slider, Stack, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
@@ -19,7 +18,7 @@ import { IconCheck, IconCircleHalf2 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useState } from "react";
 import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
-import MUTATION_PARTIAL_PAYMENT_RECEIPT from "../graphql/mutationPartialPaymentReceipt.graphql";
+import PartialPaymentReceiptDocument from "../graphql/partialPaymentReceipt.graphql";
 
 const ModalPayReceipt = dynamic(
   () => import("./modal-pay-receipt").then((mod) => mod.ModalPayReceipt),
@@ -35,11 +34,12 @@ interface ModalPartialPaymentProps {
 }
 
 export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
+  const { t } = useLingui();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const lang = useLang();
   const dateFormat = DateTime.getDateFormatString(lang.locale);
 
-  const [partialPaymentReceipt] = useMutation(MUTATION_PARTIAL_PAYMENT_RECEIPT);
+  const [partialPaymentReceipt] = useMutation(PartialPaymentReceiptDocument);
 
   const form = useForm({
     initialValues: {
@@ -73,7 +73,7 @@ export const ModalPartialPayment: FC<ModalPartialPaymentProps> = (props) => {
               },
             });
             if (!result.data) return;
-            const receipts = result.data.partialPaymentReceipt;
+            const receipts = result.data.receipt;
             modals.close("ModalPartialPayment");
             modalPayReceipt.open({ receipt: receipts[0] });
           } catch (error) {

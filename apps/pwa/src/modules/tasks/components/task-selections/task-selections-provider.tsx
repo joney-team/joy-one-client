@@ -5,10 +5,7 @@ import { useApolloClient } from "@apollo/client/react";
 import { shiftSelect } from "@joy-one-client/utils/array";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
-import QUERY_TASKS, {
-  type TasksQuery,
-  type TasksQueryVariables,
-} from "../../graphql/queryTasks.graphql";
+import GetTasksDocument from "../../graphql/getTasks.graphql";
 import {
   SelectedTask,
   TaskSelectionsContext,
@@ -20,7 +17,7 @@ const TaskSelectionMenu = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -31,8 +28,8 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
   const toggleSelectTask: TasksSelectionContextType["toggleSelect"] = (args) => {
     const { task, isShiftKey, groupVariables } = args;
 
-    const data = client.cache.readQuery<TasksQuery, TasksQueryVariables>({
-      query: QUERY_TASKS,
+    const data = client.cache.readQuery({
+      query: GetTasksDocument,
       variables: groupVariables ?? undefined,
     });
 
@@ -40,7 +37,7 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
       const isSelected = selected.some((v) => v._id === task._id);
       if (isSelected) return;
 
-      const relatedTasks = Array.from(data.tasks.results).sort((a, b) => a.order - b.order);
+      const relatedTasks = Array.from(data.list.results).sort((a, b) => a.order - b.order);
       const relatedSelectedTaskIds = selected
         .filter((t) => relatedTasks.some((v) => v._id === t._id))
         .map((t) => t._id);
@@ -49,13 +46,13 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
         relatedTasks.map((t) => t._id),
         task._id,
         relatedSelectedTaskIds,
-        relatedSelectedTaskIds[relatedSelectedTaskIds.length - 1] || null
+        relatedSelectedTaskIds[relatedSelectedTaskIds.length - 1] || null,
       );
 
       return setSelected((s) => [
         ...s,
         ...relatedTasks.filter(
-          (t) => selectedIds.includes(t._id) && !s.some((v) => v._id === t._id)
+          (t) => selectedIds.includes(t._id) && !s.some((v) => v._id === t._id),
         ),
       ]);
     }
@@ -63,7 +60,7 @@ export const TaskSelectionsProvider: FC<PropsWithChildren> = ({ children }) => {
     return setSelected((prev) =>
       prev.some((v) => v._id === task._id)
         ? prev.filter((v) => v._id !== task._id)
-        : [...prev, task]
+        : [...prev, task],
     );
   };
 

@@ -31,7 +31,7 @@ import { DateTimePicker } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCalculator } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useMemo, useState } from "react";
-import QUERY_CALCULATE_LOAN_PAYMENT_PLAN from "../graphql/queryCalculateLoanPaymentPlan.graphql";
+import CalculateLoanPaymentPlanDocument from "../graphql/calculateLoanPaymentPlan.graphql";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode }> = ({
@@ -84,7 +84,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
   );
 
   const { data: paymentPlanData, loading: paymentPlanLoading } = useQuery(
-    QUERY_CALCULATE_LOAN_PAYMENT_PLAN,
+    CalculateLoanPaymentPlanDocument,
     {
       variables: {
         input: {
@@ -117,7 +117,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
         opened={opened}
         size={1000}
       >
-        <Stack gap={16}>
+        <Stack gap="md">
           <Group>
             <NumberInput
               flex={1}

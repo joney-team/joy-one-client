@@ -28,11 +28,13 @@ import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
 import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
-import QUERY_WORKSPACE_BRANCHES_BY_IDS from "@/modules/workspace-branches/graphql/queryWorkspaceBranchsByIds.graphql";
+import GetWorkspaceBranchesDocument from "../workspace-branches/graphql/getWorkspaceBranches.graphql";
+import GetWorkspaceBranchesByIdsDocument from "../workspace-branches/graphql/getWorkspaceBranchesByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
-import MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES from "./graphql/mutationAssignWorkspaceMemberRoles.graphql";
-import MUTATION_UPDATE_WORKSPACE_MEMBER from "./graphql/mutationUpdateWorkspaceMember.graphql";
-import QUERY_WORKSPACE_MEMBERS from "./graphql/queryWorkspaceMembers.graphql";
+import { isMemberHasPermission } from "../workspace-roles/workspace-role-utils";
+import AssignWorkspaceMemberRolesDocument from "./graphql/assignWorkspaceMemberRoles.graphql";
+import GetWorkspaceMembersDocument from "./graphql/getWorkspaceMembers.graphql";
+import UpdateWorkspaceMemberDocument from "./graphql/updateWorkspaceMember.graphql";
 import { normalizeUpdateWorkspaceMemberInput } from "./workspace-members-utils";
 
 export const WorkspaceMemberList: FC = () => {
@@ -42,8 +44,8 @@ export const WorkspaceMemberList: FC = () => {
   const { normalizeRole } = useNormalizeRoles();
   const modalUserInformationRef = useRef<ModalUserInformationRef>(null);
 
-  const [assignRoles] = useMutation(MUTATION_ASSIGN_WORKSPACE_MEMBER_ROLES);
-  const [updateWorkspaceMember] = useMutation(MUTATION_UPDATE_WORKSPACE_MEMBER);
+  const [assignRoles] = useMutation(AssignWorkspaceMemberRolesDocument);
+  const [updateWorkspaceMember] = useMutation(UpdateWorkspaceMemberDocument);
 
   const bindOptions = (options: DynamicSelectorFilterOption[]) => {
     return [
@@ -53,10 +55,10 @@ export const WorkspaceMemberList: FC = () => {
   };
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <List<WorkspaceMemberFragment>
         id="workspace-members"
-        query={QUERY_WORKSPACE_MEMBERS}
+        query={GetWorkspaceMembersDocument}
         name={<Trans>Members</Trans>}
         columns={{
           name: {
@@ -158,7 +160,12 @@ export const WorkspaceMemberList: FC = () => {
             name: <Trans>Branch</Trans>,
             icon: IconBuilding,
             render: ({ data }) => {
-              if (data.permissions.includes(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS)) {
+              if (
+                isMemberHasPermission({
+                  permission: WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS,
+                  member: data,
+                })
+              ) {
                 return (
                   <Badge variant="light">
                     <Trans>All branches</Trans>
@@ -196,7 +203,7 @@ export const WorkspaceMemberList: FC = () => {
                     dynamicSelector: {
                       getSelectedOptions: async (ids, client) => {
                         const results = await client.query({
-                          query: QUERY_WORKSPACE_BRANCHES_BY_IDS,
+                          query: GetWorkspaceBranchesByIdsDocument,
                           variables: { ids: ids.filter((v) => v !== "root") },
                         });
                         const options = results.data?.branches ?? [];
@@ -210,7 +217,7 @@ export const WorkspaceMemberList: FC = () => {
                           options.map((v) => ({ label: v.name, value: v._id, data: v })),
                         );
                       },
-                      listRoute: "/workspace-branches",
+                      listQuery: GetWorkspaceBranchesDocument,
                     },
                   }
                 : workspace.member.workspaceBranches.length > 1

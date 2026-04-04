@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+query GetZaloOas {
+  getZaloOas {
+    ...ZaloOa
+  }
+}

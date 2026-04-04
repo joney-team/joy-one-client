@@ -6,12 +6,7 @@ import { eventsEmitter } from "@/modules/events/event-service";
 import { FileCard } from "@/modules/files/file-card";
 import { parseFile } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import {
-  sendFileMessage,
-  sendImageMessage,
-  sendTextMessage,
-} from "@/modules/message-boxes/message-boxes-service";
-import { MessageBoxEntity } from "@/modules/message-boxes/message-boxes-types";
+import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { ActionIcon, em, Group, ScrollArea, Stack, Text, Textarea, Title } from "@mantine/core";
 import {
@@ -25,11 +20,15 @@ import {
 import { useForceUpdate } from "@mantine/hooks";
 import { IconPaperclip, IconPhoto, IconSend } from "@tabler/icons-react";
 import { FC, useRef, useState } from "react";
+import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
+import SendImageToMessageBoxDocument from "../graphql/sendImageToMessageBox.graphql";
+import SendTextToMessageBoxDocument from "../graphql/sendTextToMessageBox.graphql";
 
-export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
+export const InputMessageBox: FC<{ box: MessageBoxFragment }> = (props) => {
   const textInputRef = useRef<HTMLTextAreaElement>(null);
   const forceUpdate = useForceUpdate();
   const uploadFile = useUploadFile();
+  const client = useApolloClient();
 
   const isSubmitting = useRef(false);
   const [files, setFiles] = useState<(File | string)[]>([]);
@@ -49,14 +48,25 @@ export const InputMessageBox: FC<{ box: MessageBoxEntity }> = (props) => {
         const url = file instanceof File ? await uploadFile(file).then((r) => r.url) : file;
 
         if (type === FileType.Photo) {
-          await sendImageMessage(props.box._id, { url });
+          await client.mutate({
+            mutation: SendImageToMessageBoxDocument,
+            variables: { boxId: props.box._id, url },
+          });
         } else {
-          await sendFileMessage(props.box._id, { url });
+          await client.mutate({
+            mutation: SendImageToMessageBoxDocument,
+            variables: { boxId: props.box._id, url },
+          });
         }
       }
 
       // Send text message
-      if (_text) await sendTextMessage(props.box._id, { text: _text });
+      if (_text) {
+        await client.mutate({
+          mutation: SendTextToMessageBoxDocument,
+          variables: { boxId: props.box._id, text: _text },
+        });
+      }
 
       eventsEmitter.emit("message-box", { type: "scrollToBottom", args: ["smooth", 200] });
 

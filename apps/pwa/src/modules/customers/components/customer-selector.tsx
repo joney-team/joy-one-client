@@ -10,6 +10,7 @@ import { IconPhone, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
+import GetCustomersDocument from "../graphql/getCustomers.graphql";
 
 export type CustomerSelectorValue = Pick<CustomerFragment, "_id" | "name" | "phone" | "avatar">;
 
@@ -22,7 +23,7 @@ export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
   return (
     <Selector
       {...props}
-      listRoute="/customers"
+      listQuery={GetCustomersDocument}
       onSearch={(q) => searchEntity<CustomerSelectorValue>(AppEntity.CUSTOMERS, q)}
       renderOption={(item) => {
         return (

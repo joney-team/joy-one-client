@@ -1,0 +1,7 @@
+#import "./fragmentPluginMessageHub.graphql"
+
+mutation CreatePluginMessageHub($input: PluginMessageHubInput!) {
+  createPluginMessageHub(input: $input) {
+    ...PluginMessageHub
+  }
+}

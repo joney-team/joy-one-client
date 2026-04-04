@@ -1,0 +1,7 @@
+#import "./fragmentPluginEInvoiceProvider.graphql"
+
+mutation HealthcheckEInvoicesProvider($providerId: String!) {
+  healthcheckEInvoicesProvider(providerId: $providerId) {
+    ...PluginEInvoiceProvider
+  }
+}

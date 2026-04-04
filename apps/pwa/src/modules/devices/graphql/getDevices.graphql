@@ -1,0 +1,10 @@
+#import "./fragmentDevice.graphql"
+
+query GetDevices($offset: Float, $query: JSONObject) {
+  devices: getDevices(offset: $offset, query: $query) {
+    total
+    results {
+      ...Device
+    }
+  }
+}

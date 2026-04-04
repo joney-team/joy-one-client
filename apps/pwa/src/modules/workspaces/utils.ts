@@ -3,7 +3,7 @@ import type { AppMetadata } from "@/types";
 import { defaultMetadata } from "@/configs/metadata.config";
 import { restServerClient } from "../apis/server";
 import { renderFileUrl } from "../files/files-utils";
-import type { WorkspaceEntity } from "./workspaces-types";
+import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
 
 export function encodeWorkspace(params: { workspaceCode: string; code: string; entity: string }) {
   return `${params.workspaceCode}${params.code}${params.entity}`;
@@ -55,7 +55,7 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
     ? `/workspaces/ids/${args.workspaceId}`
     : `/workspaces/domains/${args.host}`;
 
-  const workspace = await restServerClient.get<WorkspaceEntity>(url).catch((error) => {
+  const workspace = await restServerClient.get<WorkspaceFragment>(url).catch((error) => {
     console.error(
       `[${new Date().toLocaleTimeString("vi")}] getWorkspaceMetadata error`,
       error.message,
@@ -71,7 +71,7 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
       favicon: renderFileUrl(workspace.appIcon) || "/favicon.ico",
       webURL: `https://${workspace.appDomain}`,
       appColor: workspace.appColor ?? "",
-      appColorShape: workspace.appColorShape,
+      appColorShape: workspace.appColorShape ?? undefined,
       appName: workspace.appName ?? "",
       workspaceId: workspace._id,
       isExtended: true,

@@ -5,8 +5,8 @@ import FingerprintJS from "@fingerprintjs/fingerprintjs";
 import { v4 as uuid } from "uuid";
 import { graphqlClient } from "../../graphql/graphql-client";
 import { DeviceFragment } from "./graphql/fragmentDevice.graphql";
-import MUTATION_REGISTER_DEVICE from "./graphql/mutationRegisterDevice.graphql";
-import QUERY_DEVICE_BY_IDENTIFY_ID from "./graphql/queryDeviceByIdentifyId.graphql";
+import GetDeviceByIdentifyIdDocument from "./graphql/getDeviceByIdentifyId.graphql";
+import RegisterDeviceDocument from "./graphql/registerDevice.graphql";
 
 export const getDeviceIdentifyId = async (): Promise<string> => {
   const deviceIdentifyId = localStorage.getItem(StorageKey.DEVICE_IDENTIFY_ID);
@@ -33,12 +33,12 @@ export async function getDevice(): Promise<DeviceFragment | undefined | null> {
     const action = async () => {
       try {
         const result = await graphqlClient.query({
-          query: QUERY_DEVICE_BY_IDENTIFY_ID,
+          query: GetDeviceByIdentifyIdDocument,
           variables: { identifyId },
           fetchPolicy: "network-only",
         });
 
-        resolve(result.data?.getDeviceByIdentifyId);
+        resolve(result.data?.device);
       } catch (error) {
         setTimeout(action, 1000);
       }
@@ -58,7 +58,7 @@ export async function prepareDevice(): Promise<DeviceFragment> {
 
   // Register new device
   const newDevice = await graphqlClient.mutate({
-    mutation: MUTATION_REGISTER_DEVICE,
+    mutation: RegisterDeviceDocument,
     variables: {
       input: {
         identifyId: await getDeviceIdentifyId(),
@@ -71,9 +71,9 @@ export async function prepareDevice(): Promise<DeviceFragment> {
     throw new Error("Failed to register device");
   }
 
-  localStorage.setItem(StorageKey.DEVICE_ID, newDevice.data.registerDevice._id);
+  localStorage.setItem(StorageKey.DEVICE_ID, newDevice.data.device._id);
 
-  return newDevice.data.registerDevice;
+  return newDevice.data.device;
 }
 
 export function isNotificationAvailable() {

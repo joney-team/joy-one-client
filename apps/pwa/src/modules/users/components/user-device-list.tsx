@@ -7,7 +7,8 @@ import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { useAuth } from "@/modules/auth/auth-context";
-import QUERY_DEVICES from "@/modules/devices/graphql/queryDevices.graphql";
+import { DeviceFragment } from "@/modules/devices/graphql/fragmentDevice.graphql";
+import GetDevicesDocument from "@/modules/devices/graphql/getDevices.graphql";
 import { useUserEventsListner } from "@/modules/events/event-service";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
@@ -19,8 +20,8 @@ import { UserDeviceCard } from "./user-device-card";
 export const UserDeviceList = () => {
   const auth = useAuth();
 
-  const devices = useGraphqlList({
-    query: QUERY_DEVICES,
+  const devices = useGraphqlList<DeviceFragment>({
+    query: GetDevicesDocument,
     id: "d",
   });
 

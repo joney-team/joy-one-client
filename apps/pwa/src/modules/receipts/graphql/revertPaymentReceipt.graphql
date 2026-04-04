@@ -1,0 +1,7 @@
+#import "../graphql/fragmentReceipt.graphql"
+
+mutation RevertPaymentReceipt($revertPaymentReceiptId: String!) {
+  receipt: revertPaymentReceipt(id: $revertPaymentReceiptId) {
+    ...Receipt
+  }
+}

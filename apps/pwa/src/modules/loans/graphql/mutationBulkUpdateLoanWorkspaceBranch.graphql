@@ -1,7 +1,0 @@
-#import "./fragmentLoan.graphql"
-
-mutation BulkUpdateLoanWorkspaceBranch($input: BulkUpdateWorkspaceBranchInput!) {
-  bulkUpdateLoanWorkspaceBranch(input: $input) {
-    ...Loan
-  }
-}

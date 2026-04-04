@@ -2,37 +2,29 @@
 
 import { Avatar } from "@/components/avatar";
 import { DateFormat } from "@/components/format/date-format";
-import { useList } from "@/components/list/use-rest-list";
 import { TextOverflow } from "@/components/text-overflow";
-import { EventType } from "@/graphql/enums.graphql";
-import { useEventsListener } from "@/modules/events/event-service";
-import {
-  getMessages,
-  messageBoxPlatformImages,
-} from "@/modules/message-boxes/message-boxes-service";
-import {
-  MessageAttachmentType,
-  MessageBoxEntity,
-  MessageBoxStatus,
-} from "@/modules/message-boxes/message-boxes-types";
+import { MessageAttachmentType, MessageBoxStatus } from "@/graphql/enums.graphql";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import { FC } from "react";
-import { messageBoxStatuses } from "../message-boxes-contants";
+import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
+import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
 
 interface CardMessageBoxProps {
-  box: MessageBoxEntity;
+  box: MessageBoxFragment;
 }
 
 export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
-  const messageBoxes = useMessageBoxes();
   const { box } = props;
+  const { t } = useLingui();
+
+  const messageBoxes = useMessageBoxes();
   const color = useColor();
   const plugins = usePlugins();
   const aiPlugin = plugins.aiAssistants[0];
@@ -40,24 +32,8 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
 
   const isAiAssistantEnabled = aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
-  const newLatestMessage = useList({
-    autoFetch: false,
-    id: `newLatestMessage-${box._id}`,
-    fetch: () =>
-      getMessages({
-        boxId: box._id,
-        limit: 1,
-      }),
-  });
-
-  useEventsListener([EventType.MessageNew], (e) => {
-    if (e.relatedEntities?.some((r) => r.id === box._id)) {
-      newLatestMessage.fetch(true, { isSilient: true });
-    }
-  });
-
-  const latestMessage = newLatestMessage.data[0] || box.latestMessage;
-  const messageBoxStatus = messageBoxStatuses[box.status || MessageBoxStatus.CLOSED];
+  const latestMessage = box.lastMessage;
+  const messageBoxStatus = messageBoxStatuses[box.status || MessageBoxStatus.Closed];
 
   return (
     <Card
@@ -72,7 +48,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
         <Indicator
           label={
             <Tooltip label={plugin?.name} disabled={!plugin}>
-              <Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />
+              <Image src={messageBoxPlatforms[box.platformType].image} w={16} h={16} />
             </Tooltip>
           }
           radius={8}
@@ -104,7 +80,7 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
               {props.box.senderName || props.box.customer?.name || t`Guest`}
             </TextOverflow>
 
-            {latestMessage && (
+            {latestMessage && latestMessage.createdAt && (
               <Text fz={12} c="gray">
                 {(function () {
                   const isToday = DateTime.isSame(latestMessage.createdAt, new Date(), "day");
@@ -120,27 +96,27 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
               if (!latestMessage) return null;
               if (latestMessage.text) return String.limitCharacters(latestMessage.text, 72);
               if (latestMessage.attachments?.[0]) {
-                if (latestMessage.attachments[0].type === MessageAttachmentType.STICKER) {
-                  return t`Sent sticker`;
+                if (latestMessage.attachments[0].type === MessageAttachmentType.Sticker) {
+                  return <Trans>Sent sticker</Trans>;
                 }
 
-                if (latestMessage.attachments[0].type === MessageAttachmentType.IMAGE) {
-                  return t`Sent image`;
+                if (latestMessage.attachments[0].type === MessageAttachmentType.Image) {
+                  return <Trans>Sent image</Trans>;
                 }
 
-                return t`Sent ${latestMessage.attachments.length} attached files`;
+                return <Trans>Sent {latestMessage.attachments.length} attached files</Trans>;
               }
             })()}
           </TextOverflow>
 
           <Group mt={5} gap={5} justify="space-between" w="100%">
             <Badge size="xs" color={messageBoxStatus.color} variant="light">
-              {messageBoxStatus.label()}
+              {t(messageBoxStatus.label)}
             </Badge>
 
             {isAiAssistantEnabled && (
               <Badge size="xs" color={color("violet.9")} variant="light">
-                {t`AI assistants`}
+                <Trans>AI assistants</Trans>
               </Badge>
             )}
           </Group>

@@ -3,57 +3,39 @@
 import { Container } from "@/components/container";
 import { Errored } from "@/components/errored";
 import { OrderCard } from "@/modules/orders/order-card";
-import { useLayout } from "@/layout/layout-context";
-import { getOrderByCode } from "@/modules/orders/orders-service";
-import { useFetch } from "@/utils/use-fetch.util";
-import { Skeleton } from "@mantine/core";
-import { useParams } from "next/navigation";
-import { Fragment, useEffect, type FC } from "react";
-import { EventType } from "@/graphql/enums.graphql";
-import dynamic from "next/dynamic";
 import { nonLoading } from "@/utils/non-loading";
+import { useQuery } from "@apollo/client/react";
+import { Skeleton } from "@mantine/core";
+import dynamic from "next/dynamic";
+import { useParams } from "next/navigation";
+import { Fragment, type FC } from "react";
+import GetOrderByCodeDocument from "./graphql/getOrderByCode.graphql";
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const OrderDetail: FC = () => {
-  const params = useParams();
-  const code = params.code as string;
-  const layout = useLayout();
+  const params = useParams<{ code: string }>();
 
-  const order = useFetch(
-    {
-      id: `orders-${code}`,
-      fetch: () => getOrderByCode(code),
-      refetchEvents: {
-        types: [EventType.OrderSynced, EventType.OrderUpdated],
-        condition: (e, _order) => {
-          return e.ref === _order.id;
-        },
-      },
-    },
-    [code]
-  );
-
-  useEffect(() => {
-    layout.setComponents({ head: code });
-  }, [code]);
+  const { data, loading, error } = useQuery(GetOrderByCodeDocument, {
+    variables: { code: params.code },
+  });
 
   return (
-    <Container p={16}>
-      {!order.isInitialized && <Skeleton height={150} />}
+    <Container p="md">
+      {loading && !data && <Skeleton height={150} />}
 
-      {order.error && <Errored error={order.error} />}
+      {error && <Errored error={error} />}
 
-      {order.data && (
+      {data && (
         <Fragment>
-          <OrderCard data={order.data} />
-          <EventsList ref={order.data.id} />
+          <OrderCard data={data.getOrderByCode} />
+          <EventsList ref={data.getOrderByCode.id} />
         </Fragment>
       )}
     </Container>

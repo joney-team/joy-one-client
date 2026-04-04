@@ -12,16 +12,10 @@ import { ActionIcon, Center, ColorInput, Stack, TextInput } from "@mantine/core"
 import { useForm } from "@mantine/form";
 import { IconCheck, IconX } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useMemo, useState } from "react";
+import BulkUpdateTagsDocument from "../graphql/bulkUpdateTags.graphql";
+import CreateTagDocument from "../graphql/createTag.graphql";
 import { TagFragment } from "../graphql/fragmentTag.graphql";
-import BULK_UPDATE_TAGS_MUTATION, {
-  type BulkUpdateTagsMutation,
-  type BulkUpdateTagsMutationVariables,
-} from "../graphql/mutationBulkUpdateTags.graphql";
-import CREATE_TAG_MUTATION, {
-  type CreateTagMutation,
-  type CreateTagMutationVariables,
-} from "../graphql/mutationCreateTag.graphql";
-import QUERY_TAGS from "../graphql/queryTags.graphql";
+import GetTagsDocument from "../graphql/getTags.graphql";
 import { tagTypes } from "../tags-constants";
 
 type ModalTagFormProps =
@@ -54,13 +48,8 @@ export const ModalTagForm = forwardRef<
   const initalTag = args && "tag" in args ? args.tag : undefined;
   const tagType = initalTag?.type ?? (args && "type" in args ? args.type : TagType.Task);
 
-  const [createTag] = useMutation<CreateTagMutation, CreateTagMutationVariables>(
-    CREATE_TAG_MUTATION,
-  );
-
-  const [bulkUpdateTags] = useMutation<BulkUpdateTagsMutation, BulkUpdateTagsMutationVariables>(
-    BULK_UPDATE_TAGS_MUTATION,
-  );
+  const [createTag] = useMutation(CreateTagDocument);
+  const [bulkUpdateTags] = useMutation(BulkUpdateTagsDocument);
 
   const form = useForm<Partial<TagFragment>>({
     initialValues: {},
@@ -113,12 +102,12 @@ export const ModalTagForm = forwardRef<
               ...values,
             },
           },
-          refetchQueries: [QUERY_TAGS],
+          refetchQueries: [GetTagsDocument],
           awaitRefetchQueries: true,
         });
 
-        if (result.data?.createTag && args && "onCreated" in args) {
-          args.onCreated?.(result.data.createTag);
+        if (result.data?.tag && args && "onCreated" in args) {
+          args.onCreated?.(result.data.tag);
         }
       }
       onClose();
@@ -137,9 +126,7 @@ export const ModalTagForm = forwardRef<
 
   return (
     <Fragment>
-      {typeof props.children === "function"
-        ? props.children({ isOpened: Boolean(args), onClose, open: onOpen })
-        : null}
+      {props.children?.({ isOpened: Boolean(args), onClose, open: onOpen })}
 
       <Modal
         id="tag-form"

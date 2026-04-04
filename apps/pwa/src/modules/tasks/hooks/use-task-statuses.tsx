@@ -4,7 +4,7 @@ import { TaskContextType } from "@/graphql/enums.graphql";
 import { useQuery } from "@apollo/client/react";
 import { useMemo } from "react";
 import { TaskFragment } from "../graphql/fragmentTask.graphql";
-import QUERY_TASK_STATUSES from "../graphql/queryTaskStatuses.graphql";
+import GetTaskStatusesDocument from "../graphql/getTaskStatuses.graphql";
 import { normalizeTaskStatuses } from "../tasks-constants";
 import { DefaultTaskStatusId } from "../tasks-types";
 
@@ -33,7 +33,7 @@ export const useFolderStatuses = (folderId?: string | null) => {
       : {};
   }, [folderId]);
 
-  const taskStatusesData = useQuery(QUERY_TASK_STATUSES, {
+  const taskStatusesData = useQuery(GetTaskStatusesDocument, {
     variables,
     fetchPolicy: "cache-and-network",
   });

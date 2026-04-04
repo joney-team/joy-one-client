@@ -2,30 +2,27 @@
 
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
+import { PromotionType } from "@/graphql/enums.graphql";
 import { Trans } from "@lingui/react/macro";
-import { FC, Fragment } from "react";
-import { PromotionEntity, PromotionType } from "../promotions-types";
+import { FC } from "react";
+import { PromotionFragment } from "../graphql/fragmentPromotion.graphql";
 
-export const PromotionDescription: FC<{ promotion: Pick<PromotionEntity, "type" | "value"> }> = ({
+export const PromotionDescription: FC<{ promotion: Pick<PromotionFragment, "type" | "value"> }> = ({
   promotion,
 }) => {
-  if (promotion.type === PromotionType.DISCOUNT_RATE) {
+  if (promotion.type === PromotionType.DiscountRate) {
     return (
-      <Fragment>
-        <Trans>
-          Discount <NumberFormat value={promotion.value} suffix="%" /> on total bill
-        </Trans>
-      </Fragment>
+      <Trans>
+        Discount <NumberFormat value={promotion.value} suffix="%" /> on total bill
+      </Trans>
     );
   }
 
-  if (promotion.type === PromotionType.DISCOUNT_AMOUNT) {
+  if (promotion.type === PromotionType.DiscountAmount) {
     return (
-      <Fragment>
-        <Trans>
-          Discount <CurrencyFormat value={promotion.value} /> on total bill
-        </Trans>
-      </Fragment>
+      <Trans>
+        Discount <CurrencyFormat value={promotion.value} /> on total bill
+      </Trans>
     );
   }
 

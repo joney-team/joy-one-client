@@ -4,19 +4,19 @@ import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, MessageBoxStatus } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { getMessageBoxes } from "@/modules/message-boxes/message-boxes-service";
-import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
+import { MessageBoxFragment } from "./graphql/fragmentMessageBox.graphql";
+import GetMessageBoxesDocument from "./graphql/getMessageBoxes.graphql";
 import { CardMessageBox } from "./message-box/message-box-card";
 import { messageBoxStatuses } from "./message-boxes-contants";
 import { MessageBoxesIntegrate } from "./message-boxes-integrate";
@@ -25,14 +25,14 @@ export const MessageBoxList = () => {
   const plugins = usePlugins();
   const layout = useLayout();
   const workspace = useWorkspace();
+  const { t } = useLingui();
 
-  const boxes = useList({
+  const boxes = useGraphqlList<MessageBoxFragment>({
     id: "message-boxes",
-    fetch: (q) =>
-      getMessageBoxes({
-        ...q,
-        sortLastInteractionAt: -1,
-      }),
+    query: GetMessageBoxesDocument,
+    params: {
+      sortLastInteractionAt: -1,
+    },
     events: [
       EventType.MessageNew,
       EventType.MessageBoxNew,
@@ -63,11 +63,11 @@ export const MessageBoxList = () => {
       <Group gap={5} p={8}>
         <ButtonSelect
           icon={IconAnalyze}
-          label={t`Status`}
+          label={<Trans>Status</Trans>}
           autoHideLabel
           value={boxes.params.status}
-          options={Object.values(MessageBoxStatus).map((st) => ({
-            label: messageBoxStatuses[st as MessageBoxStatus].label(),
+          options={(Object.values(MessageBoxStatus) as MessageBoxStatus[]).map((st) => ({
+            label: t(messageBoxStatuses[st].label),
             value: st,
           }))}
           onClear={() => boxes.removeParams(["status"])}
@@ -76,7 +76,7 @@ export const MessageBoxList = () => {
 
         <ButtonSelect
           icon={IconPuzzle}
-          label={t`Platform`}
+          label={<Trans>Platform</Trans>}
           autoHideLabel
           value={boxes.params.platformId}
           options={[
@@ -103,7 +103,7 @@ export const MessageBoxList = () => {
 
       <ScrollArea flex={1} viewportProps={{ id: "message-boxes-list" }}>
         <Stack gap={12} pb={8} px={12}>
-          <Empty message={t`No messages`} visible={boxes.isEmpty} />
+          <Empty message={<Trans>No messages</Trans>} visible={boxes.isEmpty} />
           <Errored error={boxes.error} visible={boxes.isHasError} />
 
           {boxes.isHasData &&
@@ -118,7 +118,7 @@ export const MessageBoxList = () => {
           {boxes.isFetching && <Skeleton height={115} />}
 
           <WayPoint
-            onReached={() => boxes.fetch(false)}
+            onReached={boxes.loadMore}
             enabled={boxes.isAbleToLoadMore}
             offset={200}
             scrollContainerId="message-boxes-list"
@@ -134,7 +134,7 @@ export const MessageBoxList = () => {
               right: 0,
               background: `linear-gradient(to bottom, ${rgba(`var(--color-bg-content)`, 0)}, ${rgba(
                 `var(--color-bg-content)`,
-                1
+                1,
               )}, ${rgba(`var(--color-bg-content)`, 1)})`,
               height: 50,
               zIndex: 100,

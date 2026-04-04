@@ -1,8 +1,10 @@
 "use client";
 
 import { TaskStatus } from "@/graphql/types.graphql";
+import { GetTasksQueryVariables } from "@/modules/tasks/graphql/getTasks.graphql";
 import { useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
+import { useColor } from "@/modules/theme/use-color";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import {
   createContext,
@@ -14,18 +16,16 @@ import {
   useMemo,
   useRef,
 } from "react";
-import { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { ganttConfig } from "../gantt-tasks-config";
 import { useGantt } from "../gantt-tasks-context";
 import type { GanttTaskProps, GanttTaskTimeline } from "./gantt-task-types";
-import { useColor } from "@/modules/theme/use-color";
 
 type GanttTaskRowRefs = {
   rootRef: RefObject<HTMLDivElement | null>;
   ganttTaskAreaRef: RefObject<HTMLDivElement | null>;
 
   taskStatus: TaskStatus;
-  subTasksGroupVariables: TasksQueryVariables;
+  subTasksGroupVariables: GetTasksQueryVariables;
   timeline: GanttTaskTimeline | null;
 } & GanttTaskProps;
 
@@ -41,7 +41,7 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
   const rootRef = useRef<HTMLDivElement>(null);
   const ganttTaskAreaRef = useRef<HTMLDivElement>(null);
 
-  const subTasksGroupVariables = useMemo<TasksQueryVariables>(() => {
+  const subTasksGroupVariables = useMemo<GetTasksQueryVariables>(() => {
     return {
       parentId: task._id,
       all: true,
@@ -59,14 +59,14 @@ export const GanttTaskRowProvider: FC<GanttTaskProps & { children: ReactNode }> 
       const startIndexCaptured = gantt.columns.findIndex(
         (column) =>
           DateTime.toSeconds(column.start) >= startDate ||
-          DateTime.toSeconds(column.end) >= startDate
+          DateTime.toSeconds(column.end) >= startDate,
       );
 
       const startIndex = startIndexCaptured >= 0 ? startIndexCaptured : 0;
 
       const endIndexCaptured = gantt.columns.findIndex(
         (column) =>
-          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate
+          DateTime.toSeconds(column.end) >= dueDate || DateTime.toSeconds(column.start) >= dueDate,
       );
 
       const endIndex = endIndexCaptured >= 0 ? endIndexCaptured : gantt.columns.length - 1;

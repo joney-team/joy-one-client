@@ -11,7 +11,7 @@ import { ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { InputModalType } from "@/modals/modal-input";
 import { useInspectLoanReceipt } from "@/modules/loans/hooks/use-inspect-loan-receipt";
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
-import MUTATION_UPDATE_RECEIPT from "@/modules/receipts/graphql/mutationUpdateReceipt.graphql";
+import UpdateReceiptDocument from "@/modules/receipts/graphql/updateReceipt.graphql";
 import { OnModalPartialPayment } from "@/modules/receipts/modals/modal-partial-payment";
 import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { type ModalReceiptDetailRef } from "@/modules/receipts/modals/modal-receipt-detail";
@@ -22,7 +22,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { useMutation } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Badge, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
@@ -72,7 +71,7 @@ export const LoanReceiptCard: FC<{
     ? workspaceSetting?.loanSettings.receiptPdfUrl.replace("{id}", receipt.id)
     : undefined;
 
-  const [updateReceipt] = useMutation(MUTATION_UPDATE_RECEIPT);
+  const [updateReceipt] = useMutation(UpdateReceiptDocument);
 
   const onChangeAmount = async (amount: number) => {
     if (!isAbleToUpdate) return;

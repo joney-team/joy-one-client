@@ -2,9 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION from "@/modules/customer-forms/graphql/mutationBulkUpdateCustomerFormWorkspaceBranch.graphql";
-import MUTATION_BULK_UPDATE_CUSTOMER_WORKSPACE_BRANCH from "@/modules/customers/graphql/mutationBulkUpdateCustomerWorkspaceBranch.graphql";
-import MUTATION_BULK_UPDATE_LOAN_WORKSPACE_BRANCH from "@/modules/loans/graphql/mutationBulkUpdateLoanWorkspaceBranch.graphql";
+import BulkUpdateCustomerFormWorkspaceBranchDocument from "@/modules/customer-forms/graphql/bulkUpdateCustomerFormWorkspaceBranch.graphql";
+import BulkUpdateCustomerWorkspaceBranchDocument from "@/modules/customers/graphql/bulkUpdateCustomerWorkspaceBranch.graphql";
+import BulkUpdateLoanWorkspaceBranchDocument from "@/modules/loans/graphql/bulkUpdateLoanWorkspaceBranch.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
@@ -50,13 +50,13 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
   const ids = args?.ids ?? [];
 
   const [bulkUpdateCustomerFormWorkspaceBranch] = useMutation(
-    BULK_UPDATE_CUSTOMER_FORM_WORKSPACE_BRANCH_MUTATION,
+    BulkUpdateCustomerFormWorkspaceBranchDocument,
   );
 
-  const [bulkUpdateLoanWorkspaceBranch] = useMutation(MUTATION_BULK_UPDATE_LOAN_WORKSPACE_BRANCH);
+  const [bulkUpdateLoanWorkspaceBranch] = useMutation(BulkUpdateLoanWorkspaceBranchDocument);
 
   const [bulkUpdateCustomerWorkspaceBranch] = useMutation(
-    MUTATION_BULK_UPDATE_CUSTOMER_WORKSPACE_BRANCH,
+    BulkUpdateCustomerWorkspaceBranchDocument,
   );
 
   const onSubmit = async () => {
@@ -138,12 +138,12 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
       >
         <Stack align="stretch">
           {entity === AppEntity.LOANS && (
-            <Blockquote variant="light" color="orange" p={16} py={8} fz={14}>
+            <Blockquote variant="light" color="orange" p="md" py={8} fz={14}>
               <Trans>All receipts of the payment plans will also be moved to the new branch</Trans>
             </Blockquote>
           )}
 
-          <Blockquote variant="light" color="gray" p={16} py={8} fz={14}>
+          <Blockquote variant="light" color="gray" p="md" py={8} fz={14}>
             <Trans>Leave blank to use main office</Trans>
           </Blockquote>
 

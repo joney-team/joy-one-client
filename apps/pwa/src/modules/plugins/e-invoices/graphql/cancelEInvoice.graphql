@@ -1,0 +1,7 @@
+#import "./fragmentEInvoice.graphql"
+
+mutation CancelEInvoice($invoiceId: String!) {
+  cancelEInvoice(invoiceId: $invoiceId) {
+    ...EInvoice
+  }
+}

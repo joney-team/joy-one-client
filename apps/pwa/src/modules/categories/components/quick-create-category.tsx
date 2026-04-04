@@ -1,17 +1,19 @@
 "use client";
 
-import { restClient } from "@/modules/apis/rest-client";
+import { CategoryType } from "@/graphql/enums.graphql";
+import { graphqlClient } from "@/graphql/graphql-client";
 import { onActionLoad } from "@/utils/actions";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
-import { CategoryEntity, CategoryType } from "../category-types";
+import CreateCategoryDocument from "../graphql/createCategory.graphql";
+import { CategoryFragment } from "../graphql/fragmentCategory.graphql";
 
 interface QuickCreateCategoryProps {
   type?: CategoryType;
-  onCreated?: (category: CategoryEntity) => void;
+  onCreated?: (category: CategoryFragment) => void;
 }
 
 export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => {
@@ -45,11 +47,18 @@ export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>
               onActionLoad({
                 name: <Trans>Create {entity}</Trans>,
                 process: async () => {
-                  const category = await restClient.post<CategoryEntity>("/categories", {
-                    name: value,
-                    type: props.type,
+                  const category = await graphqlClient.mutate({
+                    mutation: CreateCategoryDocument,
+                    variables: {
+                      input: {
+                        name: value,
+                        type: props.type,
+                      },
+                    },
                   });
-                  props.onCreated?.(category);
+                  if (category.data?.category) {
+                    props.onCreated?.(category.data?.category);
+                  }
                 },
               });
               setOpened(false);

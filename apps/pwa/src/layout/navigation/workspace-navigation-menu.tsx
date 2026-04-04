@@ -2,11 +2,11 @@
 
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
-import { WorkspaceType } from "@/graphql/enums.graphql";
+import { StorageKey } from "@/constants/storage-key";
+import { TagType, WorkspaceType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { type ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
-import { TagType } from "@/modules/tags/tags-types";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { type ModalConfigureStatusesRef } from "@/modules/tasks/modals/modal-configure-statuses";
 import { type ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-task";
@@ -15,7 +15,6 @@ import { TaskView } from "@/modules/tasks/views/types";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -42,12 +41,12 @@ import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspac
 const ModalConfigureStatuses = dynamic(
   () =>
     import("@/modules/tasks/modals/modal-configure-statuses").then(
-      (mod) => mod.ModalConfigureStatuses
+      (mod) => mod.ModalConfigureStatuses,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCreateTask = dynamic(
@@ -55,7 +54,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalTagForm = dynamic(
@@ -63,18 +62,18 @@ const ModalTagForm = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceNavigationTaskFolders = dynamic(
   () =>
     import("@/layout/navigation/workspace-navigation-task-folders").then(
-      (mod) => mod.WorkspaceNavigationTaskFolders
+      (mod) => mod.WorkspaceNavigationTaskFolders,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const WorkspaceNavigationMenu: FC<{
@@ -299,7 +298,7 @@ export const WorkspaceNavigationMenu: FC<{
                           e.stopPropagation();
                           e.preventDefault();
                           modalTagFormRef.current?.open({
-                            type: TagType.TASK_FOLDER,
+                            type: TagType.TaskFolder,
                             onCreated: (tag) => {
                               router.push(updateTaskPath({ slug: tag.slug }));
                             },

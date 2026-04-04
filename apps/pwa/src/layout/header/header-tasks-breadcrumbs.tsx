@@ -1,8 +1,8 @@
 "use client";
 
+import { TagType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { type ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
-import { TagType } from "@/modules/tags/tags-types";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
 import { useTaskFolders } from "@/modules/tasks/hooks/use-task-folders";
 import { updateTaskPath } from "@/modules/tasks/tasks-route-helpers";
@@ -20,7 +20,7 @@ const ModalTagForm = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
@@ -91,7 +91,7 @@ export const WorkspaceHeaderTasksBreadcrumbs: FC = () => {
                         e.stopPropagation();
                         modalTagFormRef.current?.open({
                           tag: activatedFolder,
-                          type: TagType.TASK_FOLDER,
+                          type: TagType.TaskFolder,
                         });
                       }}
                     >

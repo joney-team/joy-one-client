@@ -26,7 +26,6 @@ import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { InputModalType } from "@/modals/modal-input";
 import { PrintButton } from "@/modals/modal-printer";
 import { FilesBox } from "@/modules/files/files-box";
-import { getOrderById } from "@/modules/orders/orders-service";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
 
@@ -39,19 +38,19 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import GetOrderByIdDocument from "../orders/graphql/getOrderById.graphql";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
+import ArchiveReceiptDocument from "./graphql/archiveReceipt.graphql";
 import { ReceiptFragment } from "./graphql/fragmentReceipt.graphql";
 import { type ModalReceiptDetailRef } from "./modals/modal-receipt-detail";
 import { receiptPaymentMethods, receiptStatuses, receiptTypes } from "./receipt-constants";
-import { useMutation } from "@apollo/client/react";
-import MUTATION_ARCHIVE_RECEIPT from "./graphql/mutationArchiveReceipt.graphql";
 import { normalizeUpdateReceiptInput } from "./utils/normalize-update-receipt-input";
 
 const ModalPayReceipt = dynamic(
@@ -87,7 +86,7 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
   const workspace = useWorkspace();
   const { workspaceSetting } = useWorkspaceSetting();
 
-  const [archiveReceipt] = useMutation(MUTATION_ARCHIVE_RECEIPT);
+  const [archiveReceipt] = useMutation(ArchiveReceiptDocument);
 
   const banks = useBanks();
   const bank = banks.find((v) => workspaceSetting?.bankAccount?.bankId === v.id);
@@ -112,13 +111,10 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
 
   const ReceiptTypeIcon = receiptTypes[receipt.type].icon;
 
-  const relatedOrder = useFetch({
-    id: `order-order-${receipt.relatedOrderId}`,
+  const { data: relatedOrder } = useQuery(GetOrderByIdDocument, {
+    variables: { orderId: receipt.relatedOrderId! },
     skip: !receipt.relatedOrderId,
-    fetch: async () => {
-      if (!receipt.relatedOrderId) return null;
-      return getOrderById(receipt.relatedOrderId);
-    },
+    fetchPolicy: "cache-and-network",
   });
 
   const onRejectExpense = () => {
@@ -240,15 +236,15 @@ export const ReceiptCard: FC<ReceiptCardProps> = ({ isOpenModal = true, ...props
                   </Table.Th>
                   <Table.Td ta="right">
                     <Group h={20} justify="end">
-                      {relatedOrder.data ? (
+                      {relatedOrder?.order ? (
                         <Anchor
                           component={Link}
-                          href={`/orders/${relatedOrder.data.code}`}
+                          href={`/orders/${relatedOrder?.order.code}`}
                           fz={em(15)}
                           fw={600}
                           onClick={() => modals.closeAll()}
                         >
-                          {renderEntityCode(relatedOrder.data.code)}
+                          {renderEntityCode(relatedOrder?.order.code)}
                         </Anchor>
                       ) : (
                         <Skeleton h={20} w={80} />

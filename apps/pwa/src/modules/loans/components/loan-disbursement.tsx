@@ -8,12 +8,11 @@ import { Image } from "@/components/image";
 import { Loading } from "@/components/loading";
 import { LoanStatus, ReceiptPaymentMethod, ReceiptType } from "@/graphql/enums.graphql";
 import { PluginBankAccount } from "@/graphql/types.graphql";
-import { restClient } from "@/modules/apis/rest-client";
 import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { FilesBox } from "@/modules/files/files-box";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
-import QUERY_RECEIPTS from "@/modules/receipts/graphql/queryReceipts.graphql";
+import GetReceiptsDocument from "@/modules/receipts/graphql/getReceipts.graphql";
 import { ReceiptCard } from "@/modules/receipts/receipt-card";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { useColor } from "@/modules/theme/use-color";
@@ -22,7 +21,7 @@ import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
-import { useMutation, useQuery } from "@apollo/client/react";
+import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
@@ -40,7 +39,8 @@ import {
 import { DateTimePicker } from "@mantine/dates";
 import { FC, Fragment, useState } from "react";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
-import MUTATION_FULFILL_LOAN from "../graphql/mutationFulfillLoan.graphql";
+import FulfillLoanDocument from "../graphql/fulfillLoan.graphql";
+import RevertApproveLoanDocument from "../graphql/revertApproveLoan.graphql";
 import { LoanRowInfo } from "./loan-row-info";
 
 interface LoanDisburesementProps {
@@ -52,11 +52,12 @@ interface LoanDisburesementProps {
 export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const { t } = useLingui();
   const color = useColor();
+  const client = useApolloClient();
   const workspace = useWorkspace();
   const banks = useBanks();
   const uploadFile = useUploadFile();
 
-  const [fulfillLoan] = useMutation(MUTATION_FULFILL_LOAN);
+  const [fulfillLoan] = useMutation(FulfillLoanDocument);
 
   const { loan } = props;
   const [paymentMethod, setPaymentMethod] = useState<ReceiptPaymentMethod>(
@@ -68,7 +69,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const [isCustomFulfilledAt, setIsCustomFulfilledAt] = useState(false);
   const [fulfilledAt, setFulfilledAt] = useState<number | null>(DateTime.toSeconds(new Date()));
 
-  const { data: disbursementReceiptData } = useQuery(QUERY_RECEIPTS, {
+  const { data: disbursementReceiptData } = useQuery(GetReceiptsDocument, {
     variables: {
       query: {
         relatedLoanId: loan.id,
@@ -80,7 +81,12 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
   const disbursementReceipt = disbursementReceiptData?.list.results[0];
 
   const onRevertApproval = async () => {
-    await restClient.post(`/loans/${loan.id}/revert-approve`);
+    await client.mutate({
+      mutation: RevertApproveLoanDocument,
+      variables: {
+        loanId: loan.id,
+      },
+    });
   };
 
   const onSubmit = async () => {
@@ -180,7 +186,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
             })}
           </Group>
 
-          <Card withBorder shadow="none" p={16}>
+          <Card withBorder shadow="none" p="md">
             <Stack>
               <LoanRowInfo
                 copy

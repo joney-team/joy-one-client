@@ -1,0 +1,7 @@
+#import "./fragmentOrder.graphql"
+
+query CalculateOrder($input: OrderInput!) {
+  calculated: calculateOrder(input: $input) {
+    ...Order
+  }
+}

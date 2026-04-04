@@ -15,7 +15,7 @@ import {
 } from "@tabler/icons-react";
 import { getColor } from "../theme/use-color";
 import { NotificationFragment } from "./graphql/fragmentNotification.graphql";
-import MUTATION_MARK_NOTIFICATION_AS_READED from "./graphql/mutationMarkNotificationAsReaded.graphql";
+import MarkNotificationAsReadedDocument from "./graphql/markNotificationAsReaded.graphql";
 
 export const notificationIcons: Record<NotificationIcon, Icon> = {
   MESSAGE: IconMessage,
@@ -49,8 +49,8 @@ export async function showInAppNotification(
     onClick: () => {
       graphqlClient
         .mutate({
-          mutation: MUTATION_MARK_NOTIFICATION_AS_READED,
-          variables: { markNotificationAsReadedId: notification._id },
+          mutation: MarkNotificationAsReadedDocument,
+          variables: { notificationId: notification._id },
         })
         .catch(console.error);
       notifications.hide(notification._id);

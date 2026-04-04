@@ -1,0 +1,7 @@
+#import "./fragmentPost.graphql"
+
+mutation UpdatePost($postId: String!, $input: PostInput!) {
+  post: updatePost(id: $postId, input: $input) {
+    ...Post
+  }
+}

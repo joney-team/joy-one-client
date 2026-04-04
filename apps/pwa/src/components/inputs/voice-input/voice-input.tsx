@@ -2,7 +2,7 @@
 
 import { ActionIcon } from "@/components/action-icon/action-icon";
 import { restClient } from "@/modules/apis/rest-client";
-import { FileEntity } from "@/modules/files/file-types";
+import { FileFragment } from "@/modules/files/graphql/fragmentFile.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
@@ -14,7 +14,7 @@ import { ReactNode, useEffect, useRef, useState, type FC } from "react";
 
 interface VoiceInputProps {
   children: ReactNode;
-  onComplete: (file: Pick<FileEntity, "_id" | "url">) => void;
+  onComplete: (file: Pick<FileFragment, "_id" | "url">) => void;
 }
 
 function getAudioMimeType() {

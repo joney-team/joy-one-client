@@ -6,7 +6,7 @@ import { type FC } from "react";
 interface QuantityInputProps {
   value: number;
   onChange: (value: number) => void;
-  step?: number;
+  step?: number | null;
   min?: number;
 }
 

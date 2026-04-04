@@ -25,7 +25,7 @@ export const Errored: FC<ErroredProps> = (props) => {
         justify={centered ? "center" : "flex-start"}
         align="center"
         gap={0}
-        p={16}
+        p="md"
         bg="var(--mantine-color-dark-light)"
         style={{ borderRadius: 5 }}
       >

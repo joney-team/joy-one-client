@@ -9,9 +9,9 @@ import { useForm } from "@mantine/form";
 import { notifications } from "@mantine/notifications";
 import { IconLock, IconMail } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
-import MUTATION_RENEW_PASSWORD from "../graphql/mutationRenewPassword.graphql";
-import MUTATION_REQUEST_RENEW_PASSWORD from "../graphql/mutationRequestRenewPassword.graphql";
-import MUTATION_VERIFY_RENEW_PASSWORD_CODE from "../graphql/mutationVerifyRenewPasswordCode.graphql";
+import RenewPasswordDocument from "../graphql/renewPassword.graphql";
+import RequestRenewPasswordDocument from "../graphql/requestRenewPassword.graphql";
+import VerifyRenewPasswordCodeDocument from "../graphql/verifyRenewPasswordCode.graphql";
 
 export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
   const { t } = useLingui();
@@ -19,9 +19,9 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
   const [isSent, setIsSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
-  const [renewPassword] = useMutation(MUTATION_RENEW_PASSWORD);
-  const [requestRenewPassword] = useMutation(MUTATION_REQUEST_RENEW_PASSWORD);
-  const [verifyRenewPasswordCode] = useMutation(MUTATION_VERIFY_RENEW_PASSWORD_CODE);
+  const [renewPassword] = useMutation(RenewPasswordDocument);
+  const [requestRenewPassword] = useMutation(RequestRenewPasswordDocument);
+  const [verifyRenewPasswordCode] = useMutation(VerifyRenewPasswordCodeDocument);
 
   const form = useForm({
     initialValues: {

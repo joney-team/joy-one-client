@@ -1,0 +1,7 @@
+#import "./fragmentZaloOa.graphql"
+
+mutation ConnectZaloOaCallback($code: String!) {
+  connectZaloOaCallback(code: $code) {
+    ...ZaloOa
+  }
+}

@@ -1,0 +1,7 @@
+#import "./fragmentCustomerForm.graphql"
+
+query GetCustomerFormById($id: String!) {
+  customerForm: getCustomerFormById(id: $id) {
+    ...CustomerForm 
+  }
+}

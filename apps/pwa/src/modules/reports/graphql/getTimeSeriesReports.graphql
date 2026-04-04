@@ -1,0 +1,10 @@
+#import "./fragmentTimeSeriesReport.graphql"
+
+query GetTimeSeriesReports($input: ExportTimeSeriesReportInput!) {
+  list: getTimeSeriesReports(input: $input) {
+    total
+    results {
+      ...TimeSeriesReport
+    }
+  }
+}

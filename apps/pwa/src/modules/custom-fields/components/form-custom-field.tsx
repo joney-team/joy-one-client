@@ -4,9 +4,11 @@ import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { Form } from "@/components/form";
 import { appEntities } from "@/constant";
-import { restClient } from "@/modules/apis/rest-client";
+import { CustomFieldType } from "@/graphql/enums.graphql";
+import { CustomFieldInput } from "@/graphql/types.graphql";
 import { AppEntity } from "@/types";
 import { onError, onFormError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,
@@ -20,37 +22,32 @@ import {
 import { useForm } from "@mantine/form";
 import { useCallback, type FC } from "react";
 import { customFieldTypes } from "../custom-field-constants";
-import { CustomFieldEntity, CustomFieldType } from "../custom-field-types";
+import CreateCustomFieldDocument from "../graphql/createCustomField.graphql";
+import DeleteCustomFieldDocument from "../graphql/deleteCustomField.graphql";
+import { CustomFieldFragment } from "../graphql/fragmentCustomField.graphql";
+import UpdateCustomFieldDocument from "../graphql/updateCustomField.graphql";
 
 export interface FormCustomFieldProps {
-  customField?: CustomFieldEntity;
+  customField?: CustomFieldFragment;
   type?: CustomFieldType;
-  onSuccess?: (customField: CustomFieldEntity) => void;
+  onSuccess?: (customField: CustomFieldFragment) => void;
   onArchive?: () => void;
 }
 
-const supportedTypes = [CustomFieldType.TEXT, CustomFieldType.NUMBER, CustomFieldType.SWITCH];
+const supportedTypes = [CustomFieldType.Text, CustomFieldType.Number, CustomFieldType.Switch];
 
 export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
+  const client = useApolloClient();
   const { customField, onSuccess } = props;
   const { t } = useLingui();
 
-  const form = useForm<{
-    label: string;
-    description?: string;
-    placeholder?: string;
-    type: CustomFieldType;
-    entities: AppEntity[];
-    config?: any;
-    key?: string;
-    order: number;
-  }>({
+  const form = useForm<CustomFieldInput>({
     initialValues: {
       label: customField?.label || "",
       description: customField?.description || "",
       placeholder: customField?.placeholder || "",
       type: props.type || props.customField?.type || supportedTypes[0],
-      entities: props.customField?.entities || [],
+      entities: (props.customField?.entities || []) as AppEntity[],
       config: props.customField?.config || {},
       key: props.customField?.key || "",
       order: props.customField?.order || 0,
@@ -71,12 +68,27 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      let customField: CustomFieldEntity;
+      let customField: CustomFieldFragment;
 
       if (props.customField) {
-        customField = await restClient.put(`/custom-fields/${props.customField._id}`, values);
+        customField = await client
+          .mutate({
+            mutation: UpdateCustomFieldDocument,
+            variables: {
+              input: values,
+              updateCustomFieldId: props.customField._id,
+            },
+          })
+          .then((result) => result.data?.customField!);
       } else {
-        customField = await restClient.post("/custom-fields", values);
+        customField = await client
+          .mutate({
+            mutation: CreateCustomFieldDocument,
+            variables: {
+              input: values,
+            },
+          })
+          .then((result) => result.data?.customField!);
       }
 
       if (customField) onSuccess?.(customField);
@@ -88,7 +100,10 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
   const onArchive = useCallback(async () => {
     if (!customField) return;
     try {
-      await restClient.delete(`/custom-fields/${customField._id}`);
+      await client.mutate({
+        mutation: DeleteCustomFieldDocument,
+        variables: { deleteCustomFieldId: customField._id },
+      });
       props.onArchive?.();
     } catch (error) {
       onError(error);
@@ -113,7 +128,7 @@ export const FormCustomField: FC<FormCustomFieldProps> = (props) => {
           label={<Trans>Type</Trans>}
           {...form.getInputProps("type")}
           data={supportedTypes.map((type) => ({
-            label: customFieldTypes[type].label(),
+            label: t(customFieldTypes[type].label),
             value: type,
           }))}
         />

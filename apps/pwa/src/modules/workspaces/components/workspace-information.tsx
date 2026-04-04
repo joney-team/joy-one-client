@@ -26,10 +26,9 @@ import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
 
 import { useDebouncedCallback } from "@mantine/hooks";
-import { type UpdateWorkspaceMutationVariables } from "../graphql/mutationUpdateWorkspace.graphql";
+import { UpdateWorkspaceMutationVariables } from "../graphql/updateWorkspace.graphql";
 import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 import { normalizeWorkspaceInput } from "../workspaces-service";
-import { toSlug } from "@joy-one-client/utils/string";
 
 export const WorkspaceInformationForm: FC = () => {
   const { t } = useLingui();

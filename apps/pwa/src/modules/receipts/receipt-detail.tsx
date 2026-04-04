@@ -18,12 +18,12 @@ import { FC } from "react";
 import { ReceiptEInvoices } from "./receipt-e-invoices";
 
 import { UpdateReceiptInput } from "@/graphql/types.graphql";
-import MUTATION_ARCHIVE_RECEIPT from "@/modules/receipts/graphql/mutationArchiveReceipt.graphql";
-import MUTATION_REVERT_PAYMENT_RECEIPT from "@/modules/receipts/graphql/mutationRevertPaymentReceipt.graphql";
-import MUTATION_UPDATE_RECEIPT from "@/modules/receipts/graphql/mutationUpdateReceipt.graphql";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useEventsListener } from "../events/event-service";
-import QUERY_RECEIPT from "./graphql/queryReceipt.graphql";
+import ArchiveReceiptDocument from "./graphql/archiveReceipt.graphql";
+import GetReceiptByIdDocument from "./graphql/getReceiptById.graphql";
+import RevertPaymentReceiptDocument from "./graphql/revertPaymentReceipt.graphql";
+import UpdateReceiptDocument from "./graphql/updateReceipt.graphql";
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
@@ -44,7 +44,7 @@ export const ReceiptDetail: FC<{
     refetch: refetchReceipt,
     loading: isLoadingReceipt,
     error: errorReceipt,
-  } = useQuery(QUERY_RECEIPT, {
+  } = useQuery(GetReceiptByIdDocument, {
     variables: {
       id: receiptId,
     },
@@ -71,9 +71,9 @@ export const ReceiptDetail: FC<{
 
   const receipt = receiptData?.receipt;
 
-  const [updateReceipt] = useMutation(MUTATION_UPDATE_RECEIPT);
-  const [archiveReceipt] = useMutation(MUTATION_ARCHIVE_RECEIPT);
-  const [revertPaymentReceipt] = useMutation(MUTATION_REVERT_PAYMENT_RECEIPT);
+  const [updateReceipt] = useMutation(UpdateReceiptDocument);
+  const [archiveReceipt] = useMutation(ArchiveReceiptDocument);
+  const [revertPaymentReceipt] = useMutation(RevertPaymentReceiptDocument);
 
   const onUpdate = async (input: UpdateReceiptInput) => {
     if (!receipt) return;

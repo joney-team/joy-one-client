@@ -1,0 +1,10 @@
+#import "./fragmentPluginEInvoiceProvider.graphql"
+
+mutation UpdateEInvoiceProvider(
+  $providerId: String!
+  $input: UpdatePluginEInvoiceProviderInput!
+) {
+  provider: updateEInvoiceProvider(providerId: $providerId, input: $input) {
+    ...PluginEInvoiceProvider
+  }
+}

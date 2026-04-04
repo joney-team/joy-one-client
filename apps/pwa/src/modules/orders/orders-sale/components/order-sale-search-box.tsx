@@ -2,15 +2,15 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
-import { useList } from "@/components/list/use-rest-list";
+import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { ScrollArea } from "@/components/scroll-area";
-import { restClient } from "@/modules/apis/rest-client";
-import { useRestQuery } from "@/modules/apis/use-rest-query";
+import { ProductFragment } from "@/modules/products/graphql/fragmentProduct.graphql";
+import GetProductsDocument from "@/modules/products/graphql/getProducts.graphql";
 import { productTypes } from "@/modules/products/products-constants";
-import { ProductEntity } from "@/modules/products/products-types";
-import { SearchCustomer, SearchProduct, SearchResult } from "@/modules/search/search-types";
+import SearchDocument from "@/modules/search/graphql/search.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
+import { useLazyQuery } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
 import { Card, Group, Popover, Stack, Text, TextInput } from "@mantine/core";
 import { useClickOutside, useThrottledValue } from "@mantine/hooks";
@@ -30,33 +30,36 @@ export const OrderSaleSearchBox: FC = () => {
   const [searchText, setSearchText] = useState("");
   const throttledSearchText = useThrottledValue(searchText, 300);
 
-  const { data: searchResult } = useRestQuery<SearchResult>({
-    isSkip: searchText.length === 0,
-    route: "/search",
-    params: {
-      q: throttledSearchText,
-      entities: [AppEntity.PRODUCTS, AppEntity.CUSTOMERS],
-    },
+  const [searchQuery, { data: searchResult }] = useLazyQuery(SearchDocument, {
+    fetchPolicy: "cache-and-network",
   });
 
-  const latestProducts = useList<ProductEntity>({
+  useEffect(() => {
+    if (throttledSearchText.length > 0) {
+      searchQuery({
+        variables: {
+          query: throttledSearchText,
+          entities: [AppEntity.PRODUCTS, AppEntity.CUSTOMERS],
+        },
+      });
+    }
+  }, [throttledSearchText]);
+
+  const latestProducts = useGraphqlList<ProductFragment>({
     id: "latest-products",
+    query: GetProductsDocument,
     params: {
       sortLastInteractionAt: -1,
     },
-    fetch: (params) => restClient.get("/products", { params }),
   });
 
   const searchResultCount = useMemo(() => {
-    return Object.keys(searchResult || {}).reduce((acc, entity) => {
-      return acc + (searchResult?.[entity as keyof SearchResult]?.length || 0);
-    }, 0);
+    return searchResult?.search.length ?? 0;
   }, [searchResult]);
 
-  const pointerData = useMemo<SearchProduct | SearchCustomer | null>(() => {
-    if (pointerIndex === null) return null;
-    const flatSearchResult = Object.values(searchResult || {}).flat();
-    return flatSearchResult[pointerIndex] || null;
+  const pointerData = useMemo(() => {
+    if (!pointerIndex) return null;
+    return (searchResult?.search ?? [])[pointerIndex] || null;
   }, [pointerIndex, searchResult]);
 
   useEffect(() => {
@@ -73,12 +76,25 @@ export const OrderSaleSearchBox: FC = () => {
 
       const handleKeyUp = (e: KeyboardEvent) => {
         if (e.key === "Enter" && pointerData) {
-          if (pointerData._entity === AppEntity.PRODUCTS) {
-            orderSale.addProduct(pointerData);
+          if (pointerData.__typename === "SearchResultProduct") {
+            orderSale.addProduct({
+              ...pointerData,
+              __typename: "OrderItemProduct",
+              _id: pointerData.id,
+              code: pointerData.productCode,
+              type: pointerData.productType,
+            });
           }
 
-          if (pointerData._entity === AppEntity.CUSTOMERS) {
-            orderSale.updateOrder({ relatedCustomer: pointerData });
+          if (pointerData.__typename === "SearchResultCustomer") {
+            orderSale.updateOrder({
+              relatedCustomer: {
+                ...pointerData,
+                __typename: "Customer",
+                _id: pointerData.id,
+                code: pointerData.customerCode,
+              },
+            });
           }
         }
       };
@@ -116,91 +132,97 @@ export const OrderSaleSearchBox: FC = () => {
           </Popover.Target>
 
           <Popover.Dropdown p={0} miw={searchBoxWidth} style={{ overflow: "hidden" }}>
-            {Object.keys(searchResult || {}).map((entity) => {
-              const data = searchResult?.[entity as keyof SearchResult];
-              if (!data || data.length === 0) return null;
+            {searchResult && searchResult.search.length > 0 && (
+              <Stack gap={0} miw={searchBoxWidth}>
+                {searchResult.search.map((result) => {
+                  if (result.__typename === "SearchResultProduct") {
+                    const isPointer = pointerData?.id === result.id;
+                    return (
+                      <Card
+                        key={result.id}
+                        shadow="none"
+                        withBorder={false}
+                        p={8}
+                        radius={0}
+                        bg={isPointer ? "primary.0" : "transparent"}
+                        className="clickable"
+                        onClick={() => {
+                          orderSale.addProduct({
+                            ...result,
+                            __typename: "OrderItemProduct",
+                            type: result.productType,
+                            code: result.productCode,
+                            _id: result.id,
+                          });
+                        }}
+                      >
+                        <Group>
+                          <EntityImage
+                            src={result.image}
+                            size={40}
+                            icon={productTypes[result.productType].icon}
+                          />
+                          <Stack gap={3}>
+                            <Text>{result.name}</Text>
+                            <Text fz={12}>
+                              {(function () {
+                                if (
+                                  typeof result.minPrice === "number" &&
+                                  typeof result.maxPrice === "number"
+                                ) {
+                                  return (
+                                    <Fragment>
+                                      <CurrencyFormat value={result.minPrice} /> -{" "}
+                                      <CurrencyFormat value={result.maxPrice} />
+                                    </Fragment>
+                                  );
+                                }
 
-              return (
-                <Stack key={entity} gap={0} miw={searchBoxWidth}>
-                  {data.map((result) => {
-                    if (entity === AppEntity.PRODUCTS) {
-                      const product = result as SearchProduct;
-                      const isPointer = pointerData?._id === product._id;
-                      return (
-                        <Card
-                          key={result._id}
-                          shadow="none"
-                          withBorder={false}
-                          p={8}
-                          radius={0}
-                          bg={isPointer ? "primary.0" : "transparent"}
-                          className="clickable"
-                          onClick={() => orderSale.addProduct(product)}
-                        >
-                          <Group>
-                            <EntityImage
-                              src={product.image}
-                              size={40}
-                              icon={productTypes[product.type].icon}
-                            />
-                            <Stack gap={3}>
-                              <Text>{product.name}</Text>
-                              <Text fz={12}>
-                                {(function () {
-                                  if (
-                                    typeof product.minPrice === "number" &&
-                                    typeof product.maxPrice === "number"
-                                  ) {
-                                    return (
-                                      <Fragment>
-                                        <CurrencyFormat value={product.minPrice} /> -{" "}
-                                        <CurrencyFormat value={product.maxPrice} />
-                                      </Fragment>
-                                    );
-                                  }
+                                return <CurrencyFormat value={result.price} />;
+                              })()}{" "}
+                              / {result.unit}
+                            </Text>
+                          </Stack>
+                        </Group>
+                      </Card>
+                    );
+                  }
 
-                                  return <CurrencyFormat value={product.price} />;
-                                })()}{" "}
-                                / {product.unit}
-                              </Text>
-                            </Stack>
-                          </Group>
-                        </Card>
-                      );
-                    }
-
-                    if (entity === AppEntity.CUSTOMERS) {
-                      const customer = result as SearchCustomer;
-                      const isPointer = pointerData?._id === customer._id;
-                      return (
-                        <Card
-                          key={result._id}
-                          shadow="none"
-                          withBorder={false}
-                          p={8}
-                          radius={0}
-                          bg={isPointer ? "primary.0" : "transparent"}
-                          className="clickable"
-                          onClick={() => orderSale.updateOrder({ relatedCustomer: customer })}
-                        >
-                          <Group>
-                            <EntityImage
-                              src={customer.avatar}
-                              size={40}
-                              icon={IconUserSquareRounded}
-                            />
-                            <Stack gap={3}>
-                              <Text>{customer.name}</Text>
-                              <Text fz={12}>{customer.phone}</Text>
-                            </Stack>
-                          </Group>
-                        </Card>
-                      );
-                    }
-                  })}
-                </Stack>
-              );
-            })}
+                  if (result.__typename === "SearchResultCustomer") {
+                    const isPointer = pointerData?.id === result.id;
+                    return (
+                      <Card
+                        key={result.id}
+                        shadow="none"
+                        withBorder={false}
+                        p={8}
+                        radius={0}
+                        bg={isPointer ? "primary.0" : "transparent"}
+                        className="clickable"
+                        onClick={() =>
+                          orderSale.updateOrder({
+                            relatedCustomer: {
+                              ...result,
+                              __typename: "Customer",
+                              _id: result.id,
+                              code: result.customerCode,
+                            },
+                          })
+                        }
+                      >
+                        <Group>
+                          <EntityImage src={result.avatar} size={40} icon={IconUserSquareRounded} />
+                          <Stack gap={3}>
+                            <Text>{result.name}</Text>
+                            {result.phone && <Text fz={12}>{result.phone}</Text>}
+                          </Stack>
+                        </Group>
+                      </Card>
+                    );
+                  }
+                })}
+              </Stack>
+            )}
 
             {searchText.length === 0 && (
               <ScrollArea
@@ -219,7 +241,12 @@ export const OrderSaleSearchBox: FC = () => {
                         p={8}
                         radius={0}
                         className="clickable"
-                        onClick={() => orderSale.addProduct(product)}
+                        onClick={() =>
+                          orderSale.addProduct({
+                            ...product,
+                            __typename: "OrderItemProduct",
+                          })
+                        }
                       >
                         <Group>
                           <EntityImage

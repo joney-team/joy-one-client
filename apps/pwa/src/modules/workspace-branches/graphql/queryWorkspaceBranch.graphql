@@ -1,7 +1,0 @@
-#import "./fragmentWorkspaceBranch.graphql"
-
-query WorkspaceBranch($id: String!) {
-  workspaceBranch(id: $id) {
-    ...WorkspaceBranch
-  }
-}

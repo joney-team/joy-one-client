@@ -2,29 +2,25 @@
 
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
-import { useList } from "@/components/list/use-rest-list";
 import { EventType } from "@/graphql/enums.graphql";
-import { restClient } from "@/modules/apis/rest-client";
+import { useEventsListener } from "@/modules/events/event-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { ResponseList } from "@/types";
-import { t } from "@lingui/core/macro";
+import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Anchor, Card, Group, Stack, Switch, Text } from "@mantine/core";
 import { IconExternalLink } from "@tabler/icons-react";
 import { type FC } from "react";
-import { ZaloOaGmfGroup } from "../zalo-oas-types";
+import GetOaGmfGroupsDocument from "../graphql/getOaGmfGroups.graphql";
 
 export const ZaloOaGmfGroups: FC = () => {
   const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
+  const { data, refetch } = useQuery(GetOaGmfGroupsDocument);
 
-  const { data, count } = useList({
-    fetch: async () => restClient.get<ResponseList<ZaloOaGmfGroup>>("/plugins/zalo-oas/gmf-groups"),
-    events: [EventType.WorkspaceSettingUpdated],
-  });
+  useEventsListener([EventType.WorkspaceSettingUpdated], () => refetch());
 
   return (
     <Stack>
-      {data.map((item) => {
+      {data?.getOaGmfGroups.map((item) => {
         const setting = workspaceSetting?.zaloOaGmfGroupSettings?.[item.group_id] || {};
         return (
           <Card key={item.group_id} withBorder shadow="none">
@@ -57,14 +53,14 @@ export const ZaloOaGmfGroups: FC = () => {
                     },
                   });
                 }}
-                label={t`Enable/Disable notifications for admin`}
+                label={<Trans>Enable/Disable notifications for admin</Trans>}
               />
             </Stack>
           </Card>
         );
       })}
 
-      {count === 0 && <Empty />}
+      {data?.getOaGmfGroups.length === 0 && <Empty />}
     </Stack>
   );
 };

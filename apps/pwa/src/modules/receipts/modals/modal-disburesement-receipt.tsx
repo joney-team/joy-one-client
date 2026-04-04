@@ -14,8 +14,8 @@ import { Group, Stack, Text, em } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconTag } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import DisburseReceiptDocument from "../graphql/disburseReceipt.graphql";
 import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
-import MUTATION_DISBURSE_RECEIPT from "../graphql/mutationDisburseReceipt.graphql";
 import { receiptPaymentMethods } from "../receipt-constants";
 
 interface ModalDisburesementReceiptProps {
@@ -29,7 +29,7 @@ export const ModalDisburesementReceipt: FC<ModalDisburesementReceiptProps> = (pr
     ReceiptPaymentMethod.Cash,
   );
 
-  const [disburseReceipt] = useMutation(MUTATION_DISBURSE_RECEIPT);
+  const [disburseReceipt] = useMutation(DisburseReceiptDocument);
 
   const onSubmit = async () => {
     await disburseReceipt({

@@ -2,11 +2,10 @@
 
 import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
-import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
+import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { usePlugins } from "@/modules/plugins/plugins-context";
-import { connectPluginZalo } from "@/modules/plugins/zalo-oas/zalo-oas-service";
-import { t } from "@lingui/core/macro";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
@@ -14,10 +13,12 @@ import { IconMessage, IconPuzzle } from "@tabler/icons-react";
 import { FC } from "react";
 import { onFacebookLogin } from "../auth/auth-service";
 import { useWorkspace } from "../workspaces/workspace-context";
-import { getPluginMetaPagesInfo } from "./meta-pages/meta-pages-service";
+import GetMetaPagesInfosDocument from "./meta-pages/graphql/getMetaPagesInfos.graphql";
+import ConnectZaloOaDocument from "./zalo-oas/graphql/connectZaloOa.graphql";
 
 const ModalConnectPlugins: FC = () => {
   const plugins = usePlugins();
+  const client = useApolloClient();
   const workspace = useWorkspace();
 
   const close = () => {
@@ -30,8 +31,14 @@ const ModalConnectPlugins: FC = () => {
         {(open) => {
           const onConnect = async () => {
             const authResponse = await onFacebookLogin();
-            const { pages } = await getPluginMetaPagesInfo(authResponse.accessToken);
-            open({ pages, accessToken: authResponse.accessToken });
+            const result = await client.query({
+              query: GetMetaPagesInfosDocument,
+              variables: { accessToken: authResponse.accessToken },
+            });
+            open({
+              pages: result.data?.getMetaPagesInfos ?? [],
+              accessToken: authResponse.accessToken,
+            });
             close();
           };
 
@@ -53,9 +60,15 @@ const ModalConnectPlugins: FC = () => {
         shadow="none"
         p={10}
         style={{ cursor: "pointer" }}
-        onClick={() => {
-          connectPluginZalo();
-        }}
+        onClick={async () =>
+          client
+            .mutate({
+              mutation: ConnectZaloOaDocument,
+            })
+            .then((result) => {
+              window.open(result.data?.connectZaloOa?.url, "_blank");
+            })
+        }
       >
         <Group>
           <Image w={40} src="/images/plugins-zalo-oa.svg" />
@@ -97,6 +110,6 @@ const ModalConnectPlugins: FC = () => {
 export const OnModalConnectPlugins = () =>
   modals.open({
     modalId: "ModalConnectPlugins",
-    title: <ModalHead name={t`Connect more platforms`} icon={IconPuzzle} />,
+    title: <ModalHead name={<Trans>Connect more platforms</Trans>} icon={IconPuzzle} />,
     children: <ModalConnectPlugins />,
   });

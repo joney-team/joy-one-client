@@ -1,17 +1,10 @@
 import { useQuery } from "@apollo/client/react";
 import { Group, Loader, Menu, Stack, Text } from "@mantine/core";
 import { FC } from "react";
-
-import QUERY_ACTIVITY_REACTION_USERS, {
-  type ActivityReactionUsersQuery,
-  type ActivityReactionUsersQueryVariables,
-} from "./graphql/queryActivityReactionUsers.graphql";
+import GetActivityReactionUsersDocument from "./graphql/getActivityReactionUsers.graphql";
 
 export const ActivityReactionUsers: FC<{ userIds: string[] }> = ({ userIds }) => {
-  const { data, loading } = useQuery<
-    ActivityReactionUsersQuery,
-    ActivityReactionUsersQueryVariables
-  >(QUERY_ACTIVITY_REACTION_USERS, {
+  const { data, loading } = useQuery(GetActivityReactionUsersDocument, {
     variables: {
       userIds,
     },

@@ -1,0 +1,5 @@
+query GetBankAccountInformation($input: GetBankAccountInformationInput!) {
+  getBankAccountInformation(input: $input) {
+    accountName
+  }
+}

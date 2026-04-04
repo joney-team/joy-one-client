@@ -1,6 +1,7 @@
+import { TimeSeriesReport } from "@/graphql/types.graphql";
 import { AppRouter } from "@/hooks/use-router";
-import { ReportEntity } from "@/modules/reports/reports-entity";
-import { RangeReport, RealtimeReport } from "@/modules/reports/reports-types";
+import { MetricsReportFragment } from "@/modules/reports/graphql/fragmentMetricsReport.graphql";
+import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
 import { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
 import { UseFetch } from "@/utils/use-fetch.util";
 import { CurrencyData } from "@joy-one-client/utils/currency";
@@ -28,16 +29,17 @@ export enum DashboardWidgetType {
   TASKS_COMPLETED_RATE_CHART = "TASKS_COMPLETED_RATE_CHART",
 }
 
-export type RangeReports = {
+export type TimeSeriesReports = {
   lastSyncedAt?: number;
-  period: ReportEntity<RangeReport>[];
-  prevPeriod: ReportEntity<RangeReport>[];
+  period: TimeSeriesReportFragment[];
+  prevPeriod: TimeSeriesReportFragment[];
 };
 
 export interface DashboardWidgetsContext {
   router: AppRouter;
-  realtimeReport: UseFetch<ReportEntity<RealtimeReport>>;
-  rangeReports: UseFetch<RangeReports>;
+  metrics: MetricsReportFragment | null | undefined;
+  isMetricsLoading: boolean;
+  timeSeries: UseFetch<TimeSeriesReports>;
   workspace: WorkspaceContext;
   currency?: CurrencyData;
 }

@@ -1,7 +1,0 @@
-#import "./fragmentAttendanceSetting.graphql"
-
-query AttendanceSetting {
-  attendanceSetting {
-    ...AttendanceSetting
-  }
-}

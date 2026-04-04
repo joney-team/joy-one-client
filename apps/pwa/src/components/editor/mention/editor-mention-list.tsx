@@ -1,6 +1,5 @@
 "use client";
 
-import QUERY_SEARCH, { type SearchQuery } from "@/modules/search/graphql/querySearch.graphql";
 import { classNames } from "@/utils/ui.utils";
 import { Card, Group, Loader, Stack, Text, ThemeIcon } from "@mantine/core";
 
@@ -15,6 +14,7 @@ import type { Editor } from "@tiptap/react";
 import { forwardRef, Fragment, useEffect, useImperativeHandle, useMemo, useState } from "react";
 import { MentionAttributes } from "./editor-mention-types";
 import styles from "./editor-mention.module.css";
+import SearchDocument, { SearchQuery } from "@/modules/search/graphql/search.graphql";
 
 export interface MentionListProps {
   command: (option: MentionAttributes) => void;
@@ -91,7 +91,7 @@ const MentionListItem = ({
         </ThemeIcon>
         <Stack gap={0}>
           <Text fz={9} c="gray" fw={500}>
-            {result.code}
+            {result.loanCode}
           </Text>
           <Text fz="sm">{result.customerName}</Text>
         </Stack>
@@ -117,7 +117,7 @@ const MentionListItem = ({
         </ThemeIcon>
         <Stack gap={0}>
           <Text fz={9} c="gray" fw={500}>
-            {result.code}
+            {result.taskCode}
           </Text>
           <Text fz="sm" maw={200} truncate>
             {result.name}
@@ -137,7 +137,7 @@ export const MentionList = forwardRef<MentionListRef, MentionListProps>((props, 
   const [isHidden, setIsHidden] = useState(false);
   const refClickOutside = useClickOutside(() => setIsHidden(true));
 
-  const { data: searchResult, loading: isSearchLoading } = useQuery(QUERY_SEARCH, {
+  const { data: searchResult, loading: isSearchLoading } = useQuery(SearchDocument, {
     variables: {
       query: textSearch,
       limit: 5,

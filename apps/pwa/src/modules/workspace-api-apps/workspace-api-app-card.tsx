@@ -1,20 +1,23 @@
 "use client";
 
-import { IWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-entity";
-import { updateWorkspaceApiApp } from "@/modules/workspace-api-apps/workspace-api-apps-service";
 import { onActionLoad } from "@/utils/actions";
+import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Switch, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconApiApp, IconId } from "@tabler/icons-react";
 import { FC } from "react";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
+import { WorkspaceApiAppFragment } from "./graphql/fragmentWorkspaceApiApp.graphql";
+import UpdateWorkspaceApiAppDocument from "./graphql/updateWorkspaceApiApp.graphql";
 import { OnModalWorkspaceApiApp } from "./workspace-api-app-modal";
 
 interface WorkspaceApiAppCardProps {
-  app: IWorkspaceApiApp;
+  app: WorkspaceApiAppFragment;
 }
 
 export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
+  const [update] = useMutation(UpdateWorkspaceApiAppDocument);
+
   return (
     <Card
       withBorder
@@ -27,7 +30,7 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
           <IconApiApp />
         </ThemeIcon>
 
-        <Stack gap={16} flex={1}>
+        <Stack gap="md" flex={1}>
           <Group gap={5} justify="space-between" align="center" w="100%">
             <Text fw={500}>{app.member.name}</Text>
 
@@ -39,10 +42,15 @@ export const WorkspaceApiAppCard: FC<WorkspaceApiAppCardProps> = ({ app }) => {
                 onActionLoad({
                   name: <Trans>Update workspace API app</Trans>,
                   process: () =>
-                    updateWorkspaceApiApp(app._id, {
-                      name: app.member.name,
-                      roleIds: app.member.roles.map((v) => v._id),
-                      enabled: !app.enabled,
+                    update({
+                      variables: {
+                        appId: app._id,
+                        input: {
+                          name: app.member.name,
+                          roleIds: app.member.roles.map((v) => v._id),
+                          enabled: !app.enabled,
+                        },
+                      },
                     }),
                 });
               }}

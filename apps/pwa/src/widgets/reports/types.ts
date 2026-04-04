@@ -1,8 +1,8 @@
+import { Period } from "@/graphql/types.graphql";
 import type { AppRouter } from "@/hooks/use-router";
-import type { Period } from "@/types";
-import type { RangeReport } from "@/modules/reports/reports-types";
-import type { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
+import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
 import { WorkspaceSettingFragment } from "@/modules/workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
+import type { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
 import { CurrencyData } from "@joy-one-client/utils/currency";
 
 export enum ReportWidgetType {
@@ -29,7 +29,7 @@ export interface ReportWidgetsContext {
   isInitialized: boolean;
   isFetching: boolean;
   router: AppRouter;
-  rangeReports: RangeReport[];
+  rangeReports: TimeSeriesReportFragment[];
   fromTime: number;
   toTime: number;
   period: Period;

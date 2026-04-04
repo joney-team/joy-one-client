@@ -8,10 +8,7 @@ import { FC } from "react";
 import { ActivitiesProps } from "./activities-types";
 import { ActivityCard } from "./activity-card";
 import { ActivityInput } from "./activity-input";
-import QUERY_ACTIVITIES, {
-  type ActivitiesQuery,
-  type ActivitiesQueryVariables,
-} from "./graphql/queryActivities.graphql";
+import GetActivitiesDocument from "./graphql/getActivities.graphql";
 
 const ActivitiesEvents = dynamic(
   () => import("./activities-events").then((mod) => mod.ActivitiesEvents),
@@ -22,7 +19,7 @@ const ActivitiesEvents = dynamic(
 );
 
 export const Activities: FC<ActivitiesProps> = (props) => {
-  const { data } = useQuery<ActivitiesQuery, ActivitiesQueryVariables>(QUERY_ACTIVITIES, {
+  const { data } = useQuery(GetActivitiesDocument, {
     variables: {
       contextType: props.contextType,
       contextId: props.contextId,
@@ -32,7 +29,7 @@ export const Activities: FC<ActivitiesProps> = (props) => {
 
   return (
     <Stack gap="sm">
-      {data?.activities.results.map((activity) => (
+      {data?.list.results.map((activity) => (
         <ActivityCard key={activity._id} activity={activity} />
       ))}
 

@@ -68,11 +68,10 @@ import { useCustomer } from "../customers/hooks/useCustomer";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { CustomerKycFragment } from "../customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import { useCustomerKyc } from "../customer-kycs/hooks/use-customer-kyc";
+import ArchiveLoanDocument from "./graphql/archiveLoan.graphql";
 import { LoanFragment } from "./graphql/fragmentLoan.graphql";
-import QUERY_LOAN_BY_CODE from "./graphql/queryLoanByCode.graphql";
-
-import MUTATION_ARCHIVE_LOAN from "./graphql/mutationArchiveLoan.graphql";
-import MUTATION_UPDATE_LOAN_ASSET_DATA from "./graphql/mutationUpdateLoanAssetData.graphql";
+import GetLoanByCodeDocument from "./graphql/getLoanByCode.graphql";
+import UpdateLoanAssetDataDocument from "./graphql/updateLoanAssetData.graphql";
 
 const RelatedLoans = dynamic(
   () => import("./components/related-loans").then((mod) => mod.RelatedLoans),
@@ -167,12 +166,12 @@ export const LoanDetail: NextPage = () => {
     loading: loanLoading,
     error: loanError,
     refetch: refetchLoan,
-  } = useQuery(QUERY_LOAN_BY_CODE, {
+  } = useQuery(GetLoanByCodeDocument, {
     variables: { code },
     fetchPolicy: "cache-and-network",
   });
 
-  const loan = loanData?.loanByCode;
+  const loan = loanData?.loan;
 
   useEventsListener(
     [
@@ -192,44 +191,44 @@ export const LoanDetail: NextPage = () => {
       EventType.LoansFulfilledReverted,
     ],
     (e) => {
-      if (e.ref === loanData?.loanByCode?.id) {
+      if (e.ref === loanData?.loan?.id) {
         refetchLoan();
       }
     },
-    [loanData?.loanByCode?.id],
+    [loanData?.loan?.id],
   );
 
   const {
     customerKyc,
     loading: customerKycLoading,
     error: customerKycError,
-  } = useCustomerKyc(loanData?.loanByCode?.customerId);
+  } = useCustomerKyc(loanData?.loan?.customerId);
 
   useEffect(() => {
-    if (loanData?.loanByCode && customerKyc && isAutoRedirectStep.current) {
-      const step = getStepActive(loanData.loanByCode, customerKyc);
+    if (loanData?.loan && customerKyc && isAutoRedirectStep.current) {
+      const step = getStepActive(loanData.loan, customerKyc);
       setPointedStep(step);
     }
-  }, [loanData?.loanByCode, customerKyc]);
+  }, [loanData?.loan, customerKyc]);
 
   const {
     customer,
     loading: customerLoading,
     error: customerError,
-  } = useCustomer(loanData?.loanByCode?.customerId);
+  } = useCustomer(loanData?.loan?.customerId);
 
-  const [updateLoanAssetData] = useMutation(MUTATION_UPDATE_LOAN_ASSET_DATA);
-  const [archiveLoan] = useMutation(MUTATION_ARCHIVE_LOAN);
+  const [updateLoanAssetData] = useMutation(UpdateLoanAssetDataDocument);
+  const [archiveLoan] = useMutation(ArchiveLoanDocument);
 
   const handleUpdateAssetData = useDebouncedCallback((assetData) => {
-    if (!loanData?.loanByCode?.id) return;
+    if (!loanData?.loan?.id) return;
     onActionLoad({
       name: <Trans>Update asset information</Trans>,
       process: async () => {
         const assetDataUploaded = await prepareLoanAssetData(assetData, uploadFile);
         await updateLoanAssetData({
           variables: {
-            updateLoanAssetDataId: loanData?.loanByCode?.id,
+            updateLoanAssetDataId: loanData?.loan?.id,
             input: { assetData: assetDataUploaded },
           },
         }).catch(onError);

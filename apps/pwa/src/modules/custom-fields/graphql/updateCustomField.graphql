@@ -1,0 +1,10 @@
+#import "./fragmentCustomField.graphql"
+
+mutation UpdateCustomField(
+  $updateCustomFieldId: String!
+  $input: CustomFieldInput!
+) {
+  customField: updateCustomField(id: $updateCustomFieldId, input: $input) {
+    ...CustomField
+  }
+}

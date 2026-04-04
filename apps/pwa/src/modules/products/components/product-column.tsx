@@ -9,23 +9,28 @@ import { IconBox } from "@tabler/icons-react";
 import Link from "next/link";
 import { ReactNode } from "react";
 import { searchEntity } from "../../search/search-service";
+import { ProductFragment } from "../graphql/fragmentProduct.graphql";
+import GetProductsDocument from "../graphql/getProducts.graphql";
+import GetProductsByIdsDocument from "../graphql/getProductsByIds.graphql";
 import { productTypes } from "../products-constants";
-import { getProductByIds } from "../products-service";
-import { ProductEntity } from "../products-types";
 
-export interface ProductColumnArgs extends Omit<Column, "render"> {
-  extraInfos?: (value: ProductEntity) => ReactNode;
+type ProductColumnType = Pick<ProductFragment, "_id" | "name" | "image" | "type"> | null;
+
+export interface ProductColumnArgs<T extends ProductColumnType> extends Omit<Column, "render"> {
+  extraInfos?: (value: T) => ReactNode;
   type?: ProductType | ProductType[];
 }
 
-export const ProductColumn = (args?: ProductColumnArgs): Column => {
+export const ProductColumn = <T extends ProductColumnType>(
+  args?: ProductColumnArgs<T>,
+): Column<any, T> => {
   return {
     icon: IconBox,
     name: args?.name || "product",
     render: ({ value }) => {
       if (!value) return "--";
 
-      const { icon: Icon } = productTypes[value.type as ProductType];
+      const { icon: Icon } = productTypes[value.type];
 
       return (
         <Anchor component={Link} href={`/products/${value._id}`} className="link">
@@ -45,22 +50,32 @@ export const ProductColumn = (args?: ProductColumnArgs): Column => {
       dynamicSelector: {
         ...args?.filter,
         multiple: true,
-        listRoute: "/products",
+        listQuery: GetProductsDocument,
         listParams: args?.type ? { type: args?.type } : undefined,
-        getSelectedOptions: async (ids: string[]) => {
-          const options = await getProductByIds(ids);
-          return options.map((v) => ({
+        getSelectedOptions: async (ids: string[], client) => {
+          const options = await client.query({
+            query: GetProductsByIdsDocument,
+            variables: {
+              ids,
+            },
+          });
+          return (options.data?.getProductsByIds ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,
           }));
         },
-        search: async (query) => {
+        search: async (query, client) => {
           const result = await searchEntity(AppEntity.PRODUCTS, query, {
             type: args?.type,
           });
-          const options = await getProductByIds(result.map((v) => v._id));
-          return options.map((v) => ({
+          const options = await client.query({
+            query: GetProductsByIdsDocument,
+            variables: {
+              ids: result.map((v) => v._id),
+            },
+          });
+          return (options.data?.getProductsByIds ?? []).map((v) => ({
             label: v.name,
             value: v._id,
             data: v,

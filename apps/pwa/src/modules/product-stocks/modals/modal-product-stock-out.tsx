@@ -2,28 +2,24 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { ProductType } from "@/graphql/enums.graphql";
-import { ProductStockEntity } from "@/modules/product-stocks/product-stocks-entity";
-import {
-  productStockOut,
-  productStockRecordTypeOptions,
-} from "@/modules/product-stocks/product-stocks-service";
-import {
-  ProductStockOutDto,
-  ProductStockRecordType,
-} from "@/modules/product-stocks/product-stocks-types";
+import { ProductStockRecordType, ProductType } from "@/graphql/enums.graphql";
+import { ProductStockOutInput } from "@/graphql/types.graphql";
 import { ProductSelector } from "@/modules/products/components/product-selector";
-import { ProductEntity } from "@/modules/products/products-types";
+import { ProductFragment } from "@/modules/products/graphql/fragmentProduct.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Input, InputWrapper, Modal, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { FC, Fragment, ReactNode, useRef } from "react";
+import { ProductStockFragment } from "../graphql/fragmentProductStock.graphql";
+import ProductStockOutDocument from "../graphql/productStockOut.graphql";
+import { productStockRecordTypes } from "../product-stocks-constants";
 
 interface ModalProductStockOutArgs {
-  stock?: ProductStockEntity;
+  stock?: ProductStockFragment;
 }
 
 export const ModalProductStockOut: FC<{
@@ -33,9 +29,10 @@ export const ModalProductStockOut: FC<{
   const color = useColor();
   const props = useRef<ModalProductStockOutArgs | null>(null);
   const { t } = useLingui();
+  const client = useApolloClient();
 
   const form = useForm<{
-    product?: ProductEntity;
+    product?: Pick<ProductFragment, "_id" | "name">;
     quantity?: number;
     note?: string;
   }>({
@@ -50,14 +47,17 @@ export const ModalProductStockOut: FC<{
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const dto: ProductStockOutDto = {
+      const input: ProductStockOutInput = {
         productId: values.product?._id || "",
         quantity: values.quantity || 0,
         note: values.note || undefined,
         stockId: props.current?.stock?.id,
       };
 
-      await productStockOut(dto);
+      await client.mutate({
+        mutation: ProductStockOutDocument,
+        variables: { input },
+      });
       onClose();
     } catch (error) {
       onError(error);
@@ -79,8 +79,8 @@ export const ModalProductStockOut: FC<{
         title={
           <ModalHead
             name={<Trans>Stock out</Trans>}
-            icon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
-            color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
+            icon={productStockRecordTypes[ProductStockRecordType.StockOut].icon}
+            color={color(productStockRecordTypes[ProductStockRecordType.StockOut].color)}
           />
         }
         onClose={onClose}
@@ -121,8 +121,8 @@ export const ModalProductStockOut: FC<{
 
           <Stack align="center" mt={16}>
             <Button
-              rightIcon={productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].icon}
-              color={color(productStockRecordTypeOptions[ProductStockRecordType.STOCK_OUT].color)}
+              rightIcon={productStockRecordTypes[ProductStockRecordType.StockOut].icon}
+              color={color(productStockRecordTypes[ProductStockRecordType.StockOut].color)}
               loading={form.submitting}
               onClick={() => onSubmit()}
             >

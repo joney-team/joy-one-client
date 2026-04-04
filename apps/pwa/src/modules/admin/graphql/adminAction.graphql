@@ -1,0 +1,3 @@
+mutation AdminAction($action: AdminAction!) {
+  adminAction(action: $action)
+}

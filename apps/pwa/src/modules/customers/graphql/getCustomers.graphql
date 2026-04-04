@@ -1,0 +1,15 @@
+#import "./fragmentCustomer.graphql"
+
+query GetCustomers(
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+  $query: JSONObject
+) {
+  list: getCustomers(ids: $ids, limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Customer
+    }
+  }
+}

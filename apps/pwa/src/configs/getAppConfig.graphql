@@ -1,0 +1,7 @@
+#import "./fragmentAppConfig.graphql"
+
+query GetAppConfig {
+  appConfig: getAppConfig {
+    ...AppConfig
+  }
+}

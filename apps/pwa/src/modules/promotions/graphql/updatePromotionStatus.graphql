@@ -1,0 +1,10 @@
+#import "./fragmentPromotion.graphql"
+
+mutation UpdatePromotionStatus(
+  $promotionId: String!
+  $status: PromotionStatus!
+) {
+  promotion: updatePromotionStatus(promotionId: $promotionId, status: $status) {
+    ...Promotion
+  }
+}

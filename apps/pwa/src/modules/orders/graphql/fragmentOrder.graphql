@@ -1,0 +1,71 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
+fragment Order on Order {
+  id
+  code
+  type
+  paymentStatus
+  comboIds
+  promotionIds
+  discounts {
+    type
+    amount
+    productComboId
+    promotionId
+    productId
+    productQuantity
+  }
+  assigneeUserIds
+  paidAmount
+  totalAmount
+  note
+  relatedCustomerId
+  relatedCustomer {
+    _id
+    code
+    name
+    phone
+    avatar
+  }
+  relatedUserIds
+  isFulfilled
+  createdByUser {
+    ...WorkspaceMember
+  }
+  assigneeUsers {
+    ...WorkspaceMember
+  }
+  comboIds
+  promotionIds
+  items {
+    note
+    price
+    productId
+    product {
+      _id
+      type
+      unit
+      name
+      code
+      displayName
+      image
+      isHiddenInReceiptWhenNoPrice
+      defaultQtyPerUse
+      price
+      minPrice
+      maxPrice
+    }
+    quantity
+    revenue
+    revenueRate
+    assigneeUsers {
+      ...WorkspaceMember
+    }
+  }
+  directDiscount
+  tipAmount
+  createdAt
+  updatedAt
+  workspaceBranchId
+  isArchived
+}

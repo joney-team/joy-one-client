@@ -1,0 +1,7 @@
+#import "./fragmentPluginMessageHub.graphql"
+
+query GetPluginMessageHubs {
+  getPluginMessageHubs {
+    ...PluginMessageHub
+  }
+}

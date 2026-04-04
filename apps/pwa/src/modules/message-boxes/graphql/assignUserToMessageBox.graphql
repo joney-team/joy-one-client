@@ -1,0 +1,7 @@
+#import "./fragmentMessageBox.graphql"
+
+mutation AssignUserToMessageBox($boxId: String!, $userId: String) {
+  assignUserToMessageBox(boxId: $boxId, userId: $userId) {
+    ...MessageBox
+  }
+}

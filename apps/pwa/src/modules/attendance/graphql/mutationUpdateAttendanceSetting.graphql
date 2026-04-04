@@ -1,7 +1,0 @@
-#import "./fragmentAttendanceSetting.graphql"
-
-mutation UpdateAttendanceSetting($input: UpdateAttendanceSettingInput!) {
-  updateAttendanceSetting(input: $input) {
-    ...AttendanceSetting
-  }
-}

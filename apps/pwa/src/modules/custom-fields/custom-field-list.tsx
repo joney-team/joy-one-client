@@ -3,27 +3,28 @@
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { appEntities } from "@/constant";
-import { EventType } from "@/graphql/enums.graphql";
+import { CustomFieldType, EventType } from "@/graphql/enums.graphql";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Badge, Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
 import { customFieldTypes } from "./custom-field-constants";
-import { CustomFieldEntity, CustomFieldType } from "./custom-field-types";
 import { OnModalCustomField } from "./modals/modal-custom-field";
 
-import QUERY_CUSTOM_FIELDS from "./graphql/queryCustomFields.graphql";
+import { AppEntity } from "@/types";
+import { CustomFieldFragment } from "./graphql/fragmentCustomField.graphql";
+import GetCustomFieldsDocument from "./graphql/getCustomFields.graphql";
 
 export const CustomFieldList: FC = () => {
   const { t } = useLingui();
 
   return (
-    <Stack p={16}>
-      <List<CustomFieldEntity>
+    <Stack p="md">
+      <List<CustomFieldFragment>
         id="custom-fields"
         name={<Trans>Custom fields</Trans>}
         icon={IconForms}
-        query={QUERY_CUSTOM_FIELDS}
+        query={GetCustomFieldsDocument}
         columns={{
           label: { name: <Trans>Name</Trans> },
           description: { name: <Trans>Description</Trans> },
@@ -31,7 +32,7 @@ export const CustomFieldList: FC = () => {
           type: enumColumn({
             name: <Trans>Type</Trans>,
             options: Object.values(CustomFieldType).map((type) => ({
-              label: customFieldTypes[type].label(),
+              label: t(customFieldTypes[type].label),
               value: type,
             })),
           }),
@@ -42,7 +43,7 @@ export const CustomFieldList: FC = () => {
                 <Group>
                   {value?.map((entity) => (
                     <Badge variant="light" key={entity} color="gray">
-                      {t(appEntities[entity].name)}
+                      {t(appEntities[entity as AppEntity].name)}
                     </Badge>
                   ))}
                 </Group>

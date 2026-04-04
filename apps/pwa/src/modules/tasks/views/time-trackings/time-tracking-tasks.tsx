@@ -7,6 +7,7 @@ import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
+import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
@@ -15,12 +16,11 @@ import { IconStopwatch } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import type { ModalTaskTimeTrackingRef } from "../../modals/modal-task-time-tracking";
 import { TimeTrackingTask } from "./time-tracking-task";
 import { TaskTimeTracking, TaskTimeTrackingUser } from "./time-tracking-types";
-import { CalendarView } from "@/types";
 
 const ModalTaskTimeTracking = dynamic(
   () => import("../../modals/modal-task-time-tracking").then((mod) => mod.ModalTaskTimeTracking),
@@ -39,7 +39,7 @@ export const TimeTrackingTasks: FC<PropsWithChildren> = (props) => {
   const modalTaskTimeTrackingRef = useRef<ModalTaskTimeTrackingRef>(null);
   const [view, setView] = useState<CalendarView>(CalendarView.MONTH);
 
-  const groupVariables = useMemo<TasksQueryVariables>(() => {
+  const groupVariables = useMemo<GetTasksQueryVariables>(() => {
     const date = queryDate ? new Date(+queryDate * 1000) : new Date();
     const range = DateTime.getRange(date, "month");
 

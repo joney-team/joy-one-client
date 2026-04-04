@@ -5,19 +5,19 @@ import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { QuantityInput } from "@/components/inputs/quantity-input";
+import { ProductType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { ProductSelector } from "@/modules/products/components/product-selector";
 import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 import { OrderItem } from "../../orders-management/orders-management-types";
-import { ProductType } from "@/graphql/enums.graphql";
-import { Trans, useLingui } from "@lingui/react/macro";
 
 export const OrderSaleItemComponent: FC<{
   index: number;
@@ -53,8 +53,8 @@ export const OrderSaleItemComponent: FC<{
                     style={{ cursor: "pointer" }}
                     onClick={() => {
                       openInput({
-                        title: item.note ? t`Edit note` : t`Add note`,
-                        label: t`Note`,
+                        title: item.note ? <Trans>Edit note</Trans> : <Trans>Add note</Trans>,
+                        label: <Trans>Note</Trans>,
                         value: item.note,
                         type: InputModalType.TEXTAREA,
                         onDone: (value) => onUpdate({ ...item, note: value }),
@@ -69,7 +69,7 @@ export const OrderSaleItemComponent: FC<{
                     )}
 
                     <Text fz={12} c={color("blue")}>
-                      {item.note || t`Note`}
+                      {item.note || <Trans>Note</Trans>}
                     </Text>
                   </Group>
 
@@ -78,9 +78,11 @@ export const OrderSaleItemComponent: FC<{
                     value={item.assigneeUsers}
                     onChange={(value) => onUpdate({ ...item, assigneeUsers: value })}
                     tooltipLabel={
-                      item.product.type === ProductType.Product
-                        ? t`Assignee products revenue`
-                        : t`Assignee services revenue`
+                      item.product.type === ProductType.Product ? (
+                        <Trans>Assignee products revenue</Trans>
+                      ) : (
+                        <Trans>Assignee services revenue</Trans>
+                      )
                     }
                   />
                 </Group>
@@ -275,7 +277,12 @@ export const OrderSaleItems: FC = () => {
           <Group justify="center" align="center" py={20}>
             <ProductSelector
               type={[ProductType.Product, ProductType.Service]}
-              onSelect={(product) => orderSale.addProduct(product)}
+              onSelect={(product) =>
+                orderSale.addProduct({
+                  ...product,
+                  __typename: "OrderItemProduct",
+                })
+              }
               target={(ctx) => {
                 return (
                   <Button leftIcon={IconPlus} variant="outline" color="gray" onClick={ctx.toggle}>

@@ -1,6 +1,6 @@
+import { VnLocation } from "@/graphql/types.graphql";
 import { createContext, useContext } from "react";
 import { LocationFragment } from "./graphql/fragmentLocation.graphql";
-import { RawLocation } from "./locations-types";
 
 export type RenderVnLocation = (
   location: Partial<LocationFragment> | null | undefined,
@@ -16,7 +16,7 @@ export type GetGoogleMapLink = (
 ) => string;
 
 interface LocationsContextValue {
-  vnLocations: RawLocation[];
+  vnLocations: VnLocation[];
   renderVnLocation: RenderVnLocation;
   getGoogleMapLink: GetGoogleMapLink;
 }

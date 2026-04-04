@@ -5,14 +5,12 @@ import { Image } from "@/components/image";
 import { SectionTitle } from "@/components/session-title";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
-import { restClient } from "@/modules/apis/rest-client";
-import { useRestQuery } from "@/modules/apis/use-rest-query";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient, useQuery } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Badge,
@@ -34,15 +32,20 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useRef, useState } from "react";
-import { OnModalCheckEInvoice } from "./modal-check-e-invoice";
-import { OnModalEInvoiceProvider } from "./modal-e-invoice-provider";
+import ArchiveEInvoiceProviderDocument from "./graphql/archiveEInvoiceProvider.graphql";
+import { PluginEInvoiceProviderFragment } from "./graphql/fragmentPluginEInvoiceProvider.graphql";
+import GetEInvoiceTemplateVariablesDocument from "./graphql/getEInvoiceTemplateVariables.graphql";
+import HealthcheckEInvoicesProviderDocument from "./graphql/healthcheckEInvoicesProvider.graphql";
+import ResetEInvoicesProviderTemplatesDocument from "./graphql/resetEInvoicesProviderTemplates.graphql";
+import UpdateEInvoiceProviderDocument from "./graphql/updateEInvoiceProvider.graphql";
+import { OnModalCheckEInvoice } from "./components/modal-check-e-invoice";
+import { OnModalEInvoiceProvider } from "./components/modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
 import {
   eInvoicesProviderStatuses,
   eInvoicesTemplateAutoCreateModes,
   eInvoicesTemplateCreateCriteria,
 } from "./plugin-e-invoices-constants";
-import { PluginEInvoicesProviderEntity } from "./plugin-e-invoices.entities";
 import {
   PluginEInvoiceTemplateAutoCreateMode,
   PluginEInvoiceTemplateCreateCriteria,
@@ -59,7 +62,7 @@ const ModalConfirm = dynamic(
 );
 
 interface PluginEInvoiceProviderItemProps {
-  provider: PluginEInvoicesProviderEntity;
+  provider: PluginEInvoiceProviderFragment;
   onRefetch: () => Promise<unknown>;
 }
 
@@ -68,30 +71,41 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
   onRefetch,
 }) => {
   const workspace = useWorkspace();
+  const client = useApolloClient();
+  const { t } = useLingui();
 
   const status = eInvoicesProviderStatuses[provider.status];
   const [templates, setTemplates] = useState(provider.templates);
 
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
-  const { data: variables } = useRestQuery<PluginEInvoiceTemplateVariables>({
-    route: "/plugins/e-invoices/templates/variables",
-    refetchWhenReconnected: true,
-  });
+  const { data: variablesResult } = useQuery(GetEInvoiceTemplateVariablesDocument);
+  const variables =
+    variablesResult?.getEInvoiceTemplateVariables as PluginEInvoiceTemplateVariables;
 
   const syncTemplates = useDebouncedCallback(() => {
     if (JSON.stringify(templates) !== JSON.stringify(provider.templates)) {
-      restClient
-        .put(`/plugins/e-invoices/providers/${provider._id}`, {
-          ...provider,
-          templates,
+      client
+        .mutate({
+          mutation: UpdateEInvoiceProviderDocument,
+          variables: {
+            providerId: provider._id,
+            input: {
+              templates,
+            },
+          },
         })
         .catch(onError);
     }
   }, 2000);
 
   const archive = async () => {
-    await restClient.delete(`/plugins/e-invoices/providers/${provider._id}`);
+    await client.mutate({
+      mutation: ArchiveEInvoiceProviderDocument,
+      variables: {
+        providerId: provider._id,
+      },
+    });
     await onRefetch();
   };
 
@@ -100,7 +114,12 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
       icon: IconTemplate,
       content: <Trans>Are you sure you want to reset the templates?</Trans>,
       onConfirm: async () => {
-        await restClient.post(`/plugins/e-invoices/providers/${provider._id}/reset-templates`);
+        await client.mutate({
+          mutation: ResetEInvoicesProviderTemplatesDocument,
+          variables: {
+            providerId: provider._id,
+          },
+        });
         await onRefetch();
       },
       confirmLabel: <Trans>Reset</Trans>,
@@ -123,7 +142,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
               </Text>
 
               <Badge color={status.color} variant="light">
-                {status.name()}
+                {t(status.name)}
               </Badge>
             </Group>
 
@@ -160,7 +179,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 <Trans>Change auth</Trans>
               </Button>
 
-              <Tooltip label={t`Healthcheck`}>
+              <Tooltip label={<Trans>Healthcheck</Trans>}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -170,9 +189,10 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                       name: <Trans>Healthcheck</Trans>,
                       icon: IconRefresh,
                       process: async () => {
-                        await restClient.post(
-                          `/plugins/e-invoices/providers/${provider._id}/healthcheck`,
-                        );
+                        await client.mutate({
+                          mutation: HealthcheckEInvoicesProviderDocument,
+                          variables: { providerId: provider._id },
+                        });
                         await onRefetch();
                       },
                     })
@@ -182,13 +202,13 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t`Reset templates`}>
+              <Tooltip label={<Trans>Reset templates</Trans>}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={resetTemplates}>
                   <IconTemplate size={18} />
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t`Check invoice`}>
+              <Tooltip label={<Trans>Check invoice</Trans>}>
                 <ActionIcon
                   variant="light"
                   color="gray"
@@ -199,7 +219,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                 </ActionIcon>
               </Tooltip>
 
-              <Tooltip label={t`Archive`}>
+              <Tooltip label={<Trans>Archive</Trans>}>
                 <ActionIcon variant="light" color="gray" size={30} onClick={archive}>
                   <IconArchive size={18} />
                 </ActionIcon>
@@ -229,7 +249,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                       label={<Trans>Auto create mode</Trans>}
                       data={Object.entries(eInvoicesTemplateAutoCreateModes).map(
                         ([key, value]) => ({
-                          label: value.name(),
+                          label: t(value.name),
                           value: key,
                         }),
                       )}
@@ -249,7 +269,7 @@ export const PluginEInvoiceProviderItem: FC<PluginEInvoiceProviderItemProps> = (
                       flex={1}
                       label={<Trans>Create E-Invoice criteria</Trans>}
                       data={Object.entries(eInvoicesTemplateCreateCriteria).map(([key, value]) => ({
-                        label: value.name(),
+                        label: t(value.name),
                         value: key,
                       }))}
                       value={templates[type]?.createCriteria}

@@ -1,0 +1,31 @@
+fragment Promotion on Promotion {
+  id
+  refs
+  createdAt
+  updatedAt
+  name
+  description
+  image
+  limitPerCustomer
+  type
+  value
+  expireAt
+  status
+  productsSelection {
+    entity
+    operator
+    value
+  }
+  customersSelection {
+    entity
+    operator
+    value
+  }
+  customFieldValues {
+    type
+    key
+    config
+    customFieldId
+    value
+  }
+}

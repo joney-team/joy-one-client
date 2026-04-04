@@ -1,0 +1,15 @@
+#import "./fragmentNotification.graphql"
+
+query GetNotifications(
+  $query: JSONObject
+  $offset: Float
+  $limit: Float
+  $ids: [String!]
+) {
+  list: getNotifications(query: $query, offset: $offset, limit: $limit, ids: $ids) {
+    total
+    results {
+      ...Notification
+    }
+  }
+}

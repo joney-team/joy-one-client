@@ -18,7 +18,7 @@ export const SectionTitle: FC<PropsWithChildren<SessionTitleProps>> = (props) =>
   const color = useColor();
 
   return (
-    <Group id={props.id} wrap="nowrap" gap={16} mb={props.mb}>
+    <Group id={props.id} wrap="nowrap" gap="md" mb={props.mb}>
       <Group gap={3} wrap="nowrap" ml={-3}>
         {!!props.icon && (
           <ThemeIcon

@@ -48,17 +48,17 @@ import {
 } from "@tabler/icons-react";
 import { motion } from "framer-motion";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef, useState } from "react";
-import { TaskFragment } from "../../graphql/fragmentTask.graphql";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
-import { useTasksQuery } from "../../hooks/use-tasks-query";
-import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { useTaskMenu } from "../../components/task-menu/task-menu";
 import { TaskMenuAction } from "../../components/task-menu/task-menu-types";
+import { TaskFragment } from "../../graphql/fragmentTask.graphql";
+import { useTasksQuery } from "../../hooks/use-tasks-query";
+import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks";
 import { taskPriorities } from "../../tasks-constants";
 
 import { Avatar } from "@/components/avatar";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useRouter } from "next/navigation";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";
 import { updateTaskPath } from "../../tasks-route-helpers";
 import { DefaultTaskStatusId } from "../../tasks-types";
@@ -155,7 +155,7 @@ interface BoardTaskCardProps {
   nextTask?: TaskFragment | null;
   showStatus?: boolean;
   scrollContainerRef?: HTMLDivElement | null;
-  groupVariables: TasksQueryVariables | null;
+  groupVariables: GetTasksQueryVariables | null;
 }
 
 export const BoardTaskCard: FC<BoardTaskCardProps> = ({
@@ -190,7 +190,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
     [task],
   );
 
-  const subtaskVariables: TasksQueryVariables = useMemo(() => {
+  const subtaskVariables: GetTasksQueryVariables = useMemo(() => {
     return {
       parentId: task._id,
     };
@@ -272,7 +272,7 @@ export const BoardTaskCard: FC<BoardTaskCardProps> = ({
           if (!closestEdge) return;
 
           const context: UpdateTaskContext = {
-            fromGroupVariables: source.data.groupVariables as TasksQueryVariables,
+            fromGroupVariables: source.data.groupVariables as GetTasksQueryVariables,
             toGroupVariables: groupVariables,
           };
 

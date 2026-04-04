@@ -1,0 +1,7 @@
+#import "./fragmentPartner.graphql"
+
+mutation CreatePartner($input: PartnerInput!) {
+  partner: createPartner(input: $input) {
+    ...Partner
+  }
+}

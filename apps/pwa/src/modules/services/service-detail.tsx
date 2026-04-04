@@ -2,9 +2,7 @@
 
 import { Errored } from "@/components/errored";
 import { EventType } from "@/graphql/enums.graphql";
-import { archiveProduct, getProduct } from "@/modules/products/products-service";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { useFetch } from "@/utils/use-fetch.util";
 import { Center, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive } from "@tabler/icons-react";
 import { FC, Fragment, useEffect } from "react";
@@ -17,49 +15,51 @@ import { ProductCard } from "@/modules/products/components/product-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { onArchive } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
+import { useEventsListener } from "../events/event-service";
+import ArchiveProductDocument from "../products/graphql/archiveProduct.graphql";
+import GetProductByIdDocument from "../products/graphql/getProductById.graphql";
 
 const EventsList = dynamic(
   () => import("@/modules/events/events-list").then((mod) => mod.EventsList),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const ServiceDetail: FC = () => {
   const workspace = useWorkspace();
+  const client = useApolloClient();
   const router = useRouter();
   const layout = useLayout();
 
-  const params = useParams();
-  const serviceId = params.id as string;
-  const product = useFetch({
-    fetch: async () => getProduct(serviceId),
-    refetchEvents: {
-      types: [EventType.ProductNew, EventType.ProductUpdate, EventType.ProductArchived],
-      condition: (e, _product) =>
-        e.ref === _product._id || (e.relatedEntities || []).some((v) => v.id === _product._id),
-    },
+  const params = useParams<{ id: string }>();
+
+  const { data, loading, error, refetch } = useQuery(GetProductByIdDocument, {
+    variables: { productId: params.id },
   });
 
+  useEventsListener([EventType.ProductUpdate, EventType.ProductArchived], () => refetch());
+
   useEffect(() => {
-    if (product.data) {
-      layout.setComponents({ head: product.data.name });
+    if (data) {
+      layout.setComponents({ head: data.product.name });
     }
-  }, [product.data]);
+  }, [data]);
 
   return (
-    <Container size="md" p={16}>
+    <Container size="md" p="md">
       <Stack gap={30}>
-        {!product.isInitialized && <Skeleton height={200} />}
-        {!!product.error && <Errored error={product.error} />}
-        {product.data && (
+        {loading && <Skeleton height={200} />}
+        {error && <Errored error={error} />}
+        {data && (
           <Fragment>
-            <ProductCard product={product.data} />
-            <EventsList ref={serviceId} />
+            <ProductCard product={data.product} />
+            <EventsList ref={params.id} />
 
             {workspace.hasPermission(WorkspacePermission.PRODUCTS_SERVICES_WRITE) && (
               <Center>
@@ -72,9 +72,12 @@ export const ServiceDetail: FC = () => {
                   }
                   onClick={() =>
                     onArchive({
-                      name: product.data?.name,
+                      name: data.product?.name,
                       process: async () => {
-                        await archiveProduct(serviceId);
+                        await client.mutate({
+                          mutation: ArchiveProductDocument,
+                          variables: { productId: params.id },
+                        });
                         router.back();
                       },
                     })

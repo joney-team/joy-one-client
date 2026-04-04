@@ -1,7 +1,0 @@
-#import "./fragmentDevice.graphql"
-
-mutation SetDeviceLocale($input: SetDeviceLocaleInput!) {
-  setDeviceLocale(input: $input) {
-    ...Device
-  }
-}

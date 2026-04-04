@@ -1,15 +1,17 @@
-import { PartnerEntity } from "@/modules/partners/partners-types";
+import { Renderer } from "@/components/renderer";
+import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 import { ActionIcon, Group, InputWrapperProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { PartnerFragment } from "../graphql/fragmentPartner.graphql";
 import { PartnerCard } from "./partner-card";
-import { Renderer } from "@/components/renderer";
-import { PartnerSelector } from "@/modules/partners/components/partner-selector";
 
-interface PartnersInputProps
-  extends Omit<InputWrapperProps, "value" | "onChange" | "onSelect" | "target"> {
-  value?: PartnerEntity[];
-  onChange?: (value: PartnerEntity[]) => void;
+interface PartnersInputProps extends Omit<
+  InputWrapperProps,
+  "value" | "onChange" | "onSelect" | "target"
+> {
+  value?: PartnerFragment[];
+  onChange?: (value: PartnerFragment[]) => void;
 }
 
 export const PartnersInput: FC<PartnersInputProps> = (props) => {
@@ -17,7 +19,7 @@ export const PartnersInput: FC<PartnersInputProps> = (props) => {
 
   const partners = value || [];
 
-  const toogleSelect = (partner?: PartnerEntity | null) => {
+  const toogleSelect = (partner?: PartnerFragment | null) => {
     if (!partner) return;
 
     const index = props.value?.findIndex((u) => u._id === partner._id);

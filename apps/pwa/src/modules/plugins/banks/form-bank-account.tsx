@@ -1,13 +1,14 @@
 "use client";
 
-import { useRestQuery } from "@/modules/apis/use-rest-query";
-import { BankAccount, BankInformation } from "@/modules/plugins/banks/banks.types";
-import { ResponseList } from "@/types";
+import { PluginBankAccountInput } from "@/graphql/types.graphql";
+import { BankAccount } from "@/modules/plugins/banks/banks.types";
+import { useQuery } from "@apollo/client/react";
+import { Trans } from "@lingui/react/macro";
 import { em, Group, Select, SelectProps, SimpleGrid, Stack, Text, TextInput } from "@mantine/core";
 import { IconCheck } from "@tabler/icons-react";
 import { FC } from "react";
 import { Image } from "../../../components/image";
-import { PluginBankAccountInput } from "@/graphql/types.graphql";
+import GetBankInformationsDocument from "./graphql/getBankInformations.graphql";
 
 interface FormBankAccountProps {
   bankAccount?: Partial<PluginBankAccountInput> | null | undefined;
@@ -15,9 +16,7 @@ interface FormBankAccountProps {
 }
 
 export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChange }) => {
-  const banks = useRestQuery<ResponseList<BankInformation>>({
-    route: "/plugins/banks",
-  });
+  const { data } = useQuery(GetBankInformationsDocument);
 
   const handleChange = (key: keyof BankAccount, value: any) => {
     onChange({ ...(bankAccount || {}), [key]: value } as any);
@@ -27,9 +26,9 @@ export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChang
     <Stack>
       <SimpleGrid>
         <Select
-          label="Chọn ngân hàng"
+          label={<Trans>Select Bank</Trans>}
           searchable
-          data={banks.data?.data.map((v) => ({
+          data={data?.getBankInformations.results.map((v) => ({
             value: v.id.toString(),
             label: `${v.shortName}`,
             name: v.name,
@@ -41,7 +40,7 @@ export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChang
         />
 
         <TextInput
-          label="Số tài khoản"
+          label={<Trans>Account Number</Trans>}
           value={bankAccount?.accountNumber}
           onChange={(e) => handleChange("accountNumber", e.target.value)}
         />

@@ -1,0 +1,13 @@
+query GetTaskMetrics($contextType: TaskContextType!, $contextId: String) {
+  metrics: getTaskMetrics(contextType: $contextType, contextId: $contextId) {
+    contextType
+    contextId
+    estimatedTime
+    progress
+    totalTasks
+    inProgressTasks
+    startDate
+    dueDate
+    overdueTasks
+  }
+}

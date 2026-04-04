@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+query GetLoanById($id: String!) {
+  loan: getLoanById(id: $id) {
+    ...Loan
+  }
+}

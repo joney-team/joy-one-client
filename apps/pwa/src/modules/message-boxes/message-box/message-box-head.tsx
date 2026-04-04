@@ -1,23 +1,15 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { MessageBoxStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
-import {
-  closeMesssageBox,
-  messageBoxPlatformImages,
-  messageBoxStatusColors,
-  removeMessageBox,
-  setAssigneeToMessageBox,
-  toggleMessageBoxAiAssistant,
-} from "@/modules/message-boxes/message-boxes-service";
-import { MessageBoxStatus } from "@/modules/message-boxes/message-boxes-types";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { onActionLoad, onArchive } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { useApolloClient } from "@apollo/client/react";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Badge, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
 import {
   IconCheck,
@@ -28,10 +20,16 @@ import {
   IconUserSquareRounded,
 } from "@tabler/icons-react";
 import { FC } from "react";
-import { messageBoxStatuses } from "../message-boxes-contants";
+import AssignUserToMessageBoxDocument from "../graphql/assignUserToMessageBox.graphql";
+import CloseMessageBoxDocument from "../graphql/closeMessageBox.graphql";
+import DeleteMessageBoxDocument from "../graphql/deleteMessageBox.graphql";
+import SwitchMessageBoxAiAssistantDocument from "../graphql/switchMessageBoxAiAssistant.graphql";
+import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
 import { useMessageBoxes } from "../message-boxes-context";
 
 export const MessageBoxHead: FC = () => {
+  const { t } = useLingui();
+  const client = useApolloClient();
   const messageBoxes = useMessageBoxes();
   const box = messageBoxes.messageBox;
   const router = useRouter();
@@ -49,7 +47,11 @@ export const MessageBoxHead: FC = () => {
       type: "success",
       icon: IconCircleCheck,
       content: <Trans>Are you sure you want to mark as done?</Trans>,
-      onConfirm: () => closeMesssageBox(box._id),
+      onConfirm: () =>
+        client.mutate({
+          mutation: CloseMessageBoxDocument,
+          variables: { boxId: box._id },
+        }),
     });
   };
 
@@ -59,7 +61,10 @@ export const MessageBoxHead: FC = () => {
     onArchive({
       name: <Trans>Message boxes</Trans>,
       process: async () => {
-        await removeMessageBox(box._id);
+        await client.mutate({
+          mutation: DeleteMessageBoxDocument,
+          variables: { boxId: box._id },
+        });
         router.replace("/message-boxes");
       },
     });
@@ -78,11 +83,11 @@ export const MessageBoxHead: FC = () => {
         />
 
         <Stack gap={3}>
-          <Title fz={18}>{box?.senderName || box?.customer?.name || t`Guest`}</Title>
+          <Title fz={18}>{box?.senderName || box?.customer?.name || <Trans>Guest</Trans>}</Title>
 
           {plugin && (
             <Group gap={4}>
-              <Image src={messageBoxPlatformImages[box.platformType]} w={16} h={16} />
+              <Image src={messageBoxPlatforms[box.platformType].image} w={16} h={16} />
               <Text fz={14} c="dimmed">
                 {plugin.name}
               </Text>
@@ -92,7 +97,7 @@ export const MessageBoxHead: FC = () => {
       </Group>
 
       <Group gap={8}>
-        <Tooltip label={t`Assignee`}>
+        <Tooltip label={<Trans>Assignee</Trans>}>
           <Group>
             <WorkspaceMemberInput
               value={box.assigneeUser}
@@ -101,7 +106,10 @@ export const MessageBoxHead: FC = () => {
                   name: <Trans>Assign assignee</Trans>,
                   icon: IconUser,
                   process: async () => {
-                    return setAssigneeToMessageBox(box._id, u?.userId);
+                    return client.mutate({
+                      mutation: AssignUserToMessageBoxDocument,
+                      variables: { boxId: box._id, userId: u?.userId },
+                    });
                   },
                 });
               }}
@@ -112,27 +120,43 @@ export const MessageBoxHead: FC = () => {
         {(function () {
           if (!box.status) return null;
 
-          if (box.status === MessageBoxStatus.IN_PROGRESS)
+          if (box.status === MessageBoxStatus.InProgress)
             return (
-              <Tooltip label={t`Message box closed`}>
+              <Tooltip label={<Trans>Message box closed</Trans>}>
                 <ActionIcon color="green" onClick={onMarkAsDone}>
                   <IconCheck size={20} />
                 </ActionIcon>
               </Tooltip>
             );
 
-          const statusColor = messageBoxStatusColors[box.status];
+          const { color: statusColor } = messageBoxStatuses[box.status];
 
-          return <Badge color={color(statusColor)}>{messageBoxStatuses[box.status].label()}</Badge>;
+          return (
+            <Badge color={color(statusColor)}>{t(messageBoxStatuses[box.status].label)}</Badge>
+          );
         })()}
 
-        <Tooltip label={`${isAiAssistantEnabled ? t`Disable` : t`Enable`} ${t`AI assistants`}`}>
+        <Tooltip
+          label={
+            isAiAssistantEnabled ? (
+              <Trans>Disable AI assistants</Trans>
+            ) : (
+              <Trans>Enable AI assistants</Trans>
+            )
+          }
+        >
           <ActionIcon
             variant={isAiAssistantEnabled ? "filled" : "outline"}
             color="violet.9"
             onClick={() => {
-              if (aiPlugin) toggleMessageBoxAiAssistant(box._id, !box.aiAssistantDisabled);
-              else router.push("/workspace-settings/messages");
+              if (aiPlugin) {
+                client.mutate({
+                  mutation: SwitchMessageBoxAiAssistantDocument,
+                  variables: { boxId: box._id, disabled: !box.aiAssistantDisabled },
+                });
+              } else {
+                router.push("/workspace-settings/messages");
+              }
             }}
           >
             <IconRobot size={20} />

@@ -1,0 +1,7 @@
+#import "./fragmentTimeZone.graphql"
+
+query GetTimeZones {
+  timeZones: getTimeZones {
+    ...TimeZone
+  }
+}

@@ -1,0 +1,10 @@
+#import "./fragmentReceipt.graphql"
+
+query GetReceipts($limit: Float, $offset: Float, $query: JSONObject) {
+  list: getReceipts(limit: $limit, offset: $offset, query: $query) {
+    total
+    results {
+      ...Receipt
+    }
+  }
+}

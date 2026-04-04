@@ -1,11 +1,11 @@
 import { useQuery } from "@apollo/client/react";
 
-import QUERY_CUSTOMER_KYC from "../graphql/queryCustomerKyc.graphql";
-import { useEventsListener } from "@/modules/events/event-service";
 import { EventType } from "@/graphql/enums.graphql";
+import { useEventsListener } from "@/modules/events/event-service";
+import GetCustomerKycDocument from "../graphql/getCustomerKyc.graphql";
 
 export const useCustomerKyc = (customerId?: string | null) => {
-  const { data, loading, error, refetch } = useQuery(QUERY_CUSTOMER_KYC, {
+  const { data, loading, error, refetch } = useQuery(GetCustomerKycDocument, {
     variables: { customerId: customerId ?? "" },
     skip: !customerId,
   });
@@ -17,7 +17,7 @@ export const useCustomerKyc = (customerId?: string | null) => {
         refetch();
       }
     },
-    [customerId]
+    [customerId],
   );
 
   return {

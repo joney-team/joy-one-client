@@ -1,0 +1,7 @@
+#import "./fragmentMessageBox.graphql"
+
+mutation SetMessageBoxCustomer($boxId: String!, $customerId: String) {
+  setMessageBoxCustomer(boxId: $boxId, customerId: $customerId) {
+    ...MessageBox
+  }
+}

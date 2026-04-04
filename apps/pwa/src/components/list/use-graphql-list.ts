@@ -6,7 +6,7 @@ import { onReconnected, useEventsListener } from "@/modules/events/event-service
 import { EventFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { TypedDocumentNode } from "@apollo/client";
+import { gql, TypedDocumentNode } from "@apollo/client";
 import { useApolloClient, useLazyQuery } from "@apollo/client/react";
 import { type BaseData } from "@joy-one-client/utils/base-data";
 import { removeParams, setParams } from "@joy-one-client/utils/location-query";
@@ -15,8 +15,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { isPlural } from "../../utils/string.utils";
 
-export interface UseGraphqlListArgs<T = any> {
-  id: string;
+export interface UseGraphqlListArgs<T extends BaseData = BaseData> {
+  id?: string;
   isSkip?: boolean;
   params?: Record<string, any>;
   initialData?: T[];
@@ -33,12 +33,18 @@ export interface UseGraphqlListArgs<T = any> {
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
 }
 
-export type UseGraphqlListData<T = BaseData> = {
+export type UseGraphqlListData<T extends BaseData = BaseData> = {
   list: {
     results: T[];
     total: number;
   };
 };
+
+export const emptyDocument = gql`
+  query {
+    dummy: __typename
+  }
+`;
 
 export const useGraphqlList = <T extends BaseData>({
   limit = 30,
@@ -54,7 +60,7 @@ export const useGraphqlList = <T extends BaseData>({
   const workspace = useWorkspace();
   const client = useApolloClient();
 
-  const isReadyToFetch = !isSkip;
+  const isReadyToFetch = !isSkip && args.query !== emptyDocument;
 
   const [newDataCount, setNewDataCount] = useState(0);
 
@@ -91,10 +97,11 @@ export const useGraphqlList = <T extends BaseData>({
     };
   }, [limit, params]);
 
-  const [fetch, { data: queryData, loading, error: queryError, refetch, fetchMore }] =
-    useLazyQuery<UseGraphqlListData>(args.query, {
-      fetchPolicy: "cache-and-network",
-    });
+  const [fetch, { data: queryData, loading, error: queryError, refetch, fetchMore }] = useLazyQuery<
+    UseGraphqlListData<T>
+  >(args.query, {
+    fetchPolicy: "cache-and-network",
+  });
 
   useEffect(() => {
     if (!isReadyToFetch) return;
@@ -106,7 +113,7 @@ export const useGraphqlList = <T extends BaseData>({
     refetch();
   }, [workspace.member?.workspaceId]);
 
-  const listData = useMemo(() => {
+  const listData = useMemo<T[]>(() => {
     const list =
       queryData &&
       typeof queryData === "object" &&
@@ -205,7 +212,7 @@ export const useGraphqlList = <T extends BaseData>({
       }
 
       if (e.actionType === EventDataActionType.Create) {
-        const response = await client.query<UseGraphqlListData>({
+        const response = await client.query<UseGraphqlListData<T>>({
           query: args.query,
           variables,
         });
@@ -285,6 +292,7 @@ export const useGraphqlList = <T extends BaseData>({
     },
     newDataCount,
     refetch: onRefetch,
+    fetch,
   };
 };
 

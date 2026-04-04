@@ -1,0 +1,31 @@
+fragment UserPublicInformation on UserPublicInformation {
+  _id
+  name
+  email
+  avatar
+  birthday
+  phone
+  color
+  lastSignInAt
+  providers {
+    providerId
+    uid
+    username
+  }
+  mutualWorkspaces {
+    _id
+    name
+    type
+    logo
+    color
+    displayName
+    roles {
+      _id
+      name
+      description
+      color
+    }
+    memberId
+    memberColor
+  }
+}

@@ -1,0 +1,7 @@
+#import "./fragmentBooking.graphql"
+
+query GetBooking($id: String!) {
+  booking: getBooking(id: $id) {
+    ...Booking
+  }
+}

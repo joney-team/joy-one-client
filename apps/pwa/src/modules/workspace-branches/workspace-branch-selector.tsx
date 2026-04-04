@@ -12,6 +12,7 @@ import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { Selector, SelectorProps } from "../../components/selector";
 import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
+import GetWorkspaceBranchesDocument from "./graphql/getWorkspaceBranches.graphql";
 
 type WorkspaceBranchOption = Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
 
@@ -26,7 +27,6 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   const workspace = useWorkspace();
   const isFullAccess = workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
 
-  const listRoute = isFullAccess ? "/workspace-branches" : undefined;
   const rootOption = {
     _id: "root",
     name: t`Main office`,
@@ -44,7 +44,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
 
         return searchArray(workspace.member.workspaceBranches, ["name"], q);
       }}
-      listRoute={listRoute}
+      listQuery={isFullAccess ? GetWorkspaceBranchesDocument : undefined}
       pinnedOptions={
         isFullAccess ? (isShowRoot ? [rootOption] : undefined) : workspace.member.workspaceBranches
       }

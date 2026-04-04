@@ -1,11 +1,11 @@
-import QUERY_APP_CONFIG from "@/configs/queryAppConfig.graphql";
 import config from "@joy-one-client/config";
 import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
+import GetAppConfigDocument from "./configs/getAppConfig.graphql";
 import { graphqlClient } from "./graphql/graphql-client";
 
 export async function getAppConfig(): Promise<AppConfigFragment> {
   const result = await graphqlClient.query({
-    query: QUERY_APP_CONFIG,
+    query: GetAppConfigDocument,
   });
 
   return result.data?.appConfig!;

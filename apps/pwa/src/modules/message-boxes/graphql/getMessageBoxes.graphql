@@ -1,0 +1,15 @@
+#import "./fragmentMessageBox.graphql"
+
+query GetMessageBoxes(
+  $query: JSONObject
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  getMessageBoxes(query: $query, ids: $ids, limit: $limit, offset: $offset) {
+    total
+    results {
+      ...MessageBox
+    }
+  }
+}

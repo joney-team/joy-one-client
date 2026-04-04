@@ -1,0 +1,7 @@
+#import "./fragmentWorkspaceApiApp.graphql"
+
+mutation CreateWorkspaceApiApp($input: WorkspaceApiAppInput!) {
+  apiApp: createWorkspaceApiApp(input: $input) {
+    ...WorkspaceApiApp
+  }
+}

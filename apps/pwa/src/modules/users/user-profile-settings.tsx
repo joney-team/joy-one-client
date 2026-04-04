@@ -75,7 +75,7 @@ export const UserProfileSettings: FC = () => {
   );
 
   return (
-    <Container p={16}>
+    <Container p="md">
       <Stack gap={30}>
         <Card shadow="xs">
           <Stack>

@@ -1,6 +1,6 @@
-import { computePosition, shift, flip } from "@floating-ui/react-dom";
+import { computePosition, flip, shift } from "@floating-ui/react-dom";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { Editor, JSONContent, posToDOMRect } from "@tiptap/react";
+import { Editor, posToDOMRect } from "@tiptap/react";
 
 export const parseEditorJSON = (rawValue?: string | null): object | null => {
   try {

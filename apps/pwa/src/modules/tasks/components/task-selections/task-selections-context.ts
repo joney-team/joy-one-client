@@ -1,8 +1,8 @@
 import { createContext, useContext } from "react";
-import { type TasksQueryVariables, type TasksQuery } from "../../graphql/queryTasks.graphql";
+import { GetTasksQuery, GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 
 export type SelectedTask = Pick<
-  TasksQuery["tasks"]["results"][number],
+  GetTasksQuery["list"]["results"][number],
   "_id" | "parentId" | "statuses"
 >;
 
@@ -11,7 +11,7 @@ export interface TasksSelectionContextType {
   toggleSelect: (args: {
     task: SelectedTask;
     isShiftKey: boolean;
-    groupVariables: TasksQueryVariables | null;
+    groupVariables: GetTasksQueryVariables | null;
   }) => void;
   unselect: (...ids: string[]) => void;
 }

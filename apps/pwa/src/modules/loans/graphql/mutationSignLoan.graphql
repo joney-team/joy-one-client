@@ -1,7 +1,0 @@
-#import "./fragmentLoan.graphql"
-
-mutation SignLoan($signLoanId: String!, $input: SignLoanInput!) {
-  signLoan(id: $signLoanId, input: $input) {
-    ...Loan
-  }
-}

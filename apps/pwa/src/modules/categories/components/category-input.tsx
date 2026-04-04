@@ -4,14 +4,15 @@ import { t } from "@lingui/core/macro";
 import { ActionIcon, Input, InputWrapperProps } from "@mantine/core";
 import { IconPlus, IconX } from "@tabler/icons-react";
 import { type FC } from "react";
-import { CategoryEntity, CategoryType } from "../category-types";
+import { CategoryFragment } from "../graphql/fragmentCategory.graphql";
 import { CategorySelector } from "./category-selector";
 import { QuickCreateCategory } from "./quick-create-category";
+import { CategoryType } from "@/graphql/enums.graphql";
 
 interface CategoryInputProps extends Omit<InputWrapperProps, "value" | "onChange"> {
   type?: CategoryType;
-  value?: CategoryEntity;
-  onChange?: (value?: CategoryEntity | null) => void;
+  value?: CategoryFragment;
+  onChange?: (value?: CategoryFragment | null) => void;
   disabled?: boolean;
 }
 

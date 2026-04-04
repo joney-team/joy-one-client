@@ -1,0 +1,7 @@
+#import "./fragmentReceipt.graphql"
+
+query GetReceiptById($id: String!) {
+  receipt: getReceiptById(id: $id) {
+    ...Receipt
+  }
+}

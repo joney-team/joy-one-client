@@ -1,0 +1,7 @@
+query GetCustomerMention($customerId: String!) {
+  customer: getCustomerById(id: $customerId) {
+    _id
+    code
+    name
+  }
+}

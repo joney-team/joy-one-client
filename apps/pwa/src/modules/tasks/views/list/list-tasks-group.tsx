@@ -17,7 +17,7 @@ import { ListTaskRowHead } from "./list-task-row-head";
 import { TaskStatus } from "@/graphql/types.graphql";
 import { useElementLazyLoad, useWaitElementLazyLoad } from "@/hooks/use-element-lazy-load";
 import { nonLoading } from "@/utils/non-loading";
-import { type TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import styles from "./list-tasks.module.css";
 
@@ -31,7 +31,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 interface ListTasksGroupProps {
@@ -55,7 +55,7 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({
 
   const isClosedTasks = status.id === DefaultTaskStatusId.CLOSED;
 
-  const groupVariables: TasksQueryVariables = useMemo(() => {
+  const groupVariables: GetTasksQueryVariables = useMemo(() => {
     return {
       ...state.variables,
       status: status.id,
@@ -66,7 +66,7 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({
   }, [status.id, activatedFolder?._id, state.variables]);
 
   const { getTasks, tasks, loading, loadMore, isCanLoadMore, isLoadingMore, count } = useTasksQuery(
-    { variables: groupVariables }
+    { variables: groupVariables },
   );
 
   useEffect(() => {

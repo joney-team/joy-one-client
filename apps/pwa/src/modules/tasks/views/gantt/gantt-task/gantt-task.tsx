@@ -19,7 +19,6 @@ import {
   IconTrash,
 } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import TASKS_QUERY, { type TasksQueryVariables } from "../../../graphql/queryTasks.graphql";
 import { useUpdateTasks } from "../../../hooks/use-update-tasks";
 import { updateTaskPath } from "../../../tasks-route-helpers";
 import { useGantt } from "../gantt-tasks-context";
@@ -30,18 +29,16 @@ import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
 import { useTaskMenu } from "@/modules/tasks/components/task-menu/task-menu";
 import { TaskMenuAction } from "@/modules/tasks/components/task-menu/task-menu-types";
 import { TaskRowDraggable } from "@/modules/tasks/components/task-row-draggable/task-row-draggable";
+import DuplicateTaskDocument from "@/modules/tasks/graphql/duplicateTask.graphql";
+import GetTasksDocument, { GetTasksQueryVariables } from "@/modules/tasks/graphql/getTasks.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
 import { t } from "@lingui/core/macro";
 import dynamic from "next/dynamic";
-import MUTATION_DUPLICATE_TASK, {
-  type DuplicateTaskMutation,
-  type DuplicateTaskMutationVariables,
-} from "../../../graphql/mutationDuplicateTask.graphql";
-import { useTasksQuery } from "../../../hooks/use-tasks-query";
 import { TaskSelectionBox } from "../../../components/task-selections/task-selection-box";
+import { useTasksQuery } from "../../../hooks/use-tasks-query";
 import styles from "../gantt-tasks.module.css";
 import { GanttTaskRowProvider, useGanttTaskRow } from "./gantt-task-provider";
 import { GanttTaskProps } from "./gantt-task-types";
@@ -51,7 +48,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTaskTimeline = dynamic(
@@ -59,7 +56,7 @@ const GanttTaskTimeline = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTaskDrawTimeline = dynamic(
@@ -67,7 +64,7 @@ const GanttTaskDrawTimeline = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTaskEstimatedTime = dynamic(
@@ -75,7 +72,7 @@ const GanttTaskEstimatedTime = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTaskContent: FC = () => {
@@ -104,7 +101,7 @@ const GanttTaskContent: FC = () => {
 
   const [isShowSubtasks, setIsShowSubtasks] = useState(true);
 
-  const subTasksGroupVariables = useMemo<TasksQueryVariables>(() => {
+  const subTasksGroupVariables = useMemo<GetTasksQueryVariables>(() => {
     return {
       parentId: task._id,
       all: true,
@@ -116,10 +113,7 @@ const GanttTaskContent: FC = () => {
     isSkipLoadCount: task.childCount === 0,
   });
 
-  const [duplicate, { loading: isDuplicating }] = useMutation<
-    DuplicateTaskMutation,
-    DuplicateTaskMutationVariables
-  >(MUTATION_DUPLICATE_TASK);
+  const [duplicate, { loading: isDuplicating }] = useMutation(DuplicateTaskDocument);
 
   useEffect(() => {
     if (isShowSubtasks && task.childCount > 0) {
@@ -175,7 +169,7 @@ const GanttTaskContent: FC = () => {
         refetchQueries: groupVariables
           ? [
               {
-                query: TASKS_QUERY,
+                query: GetTasksDocument,
                 variables: groupVariables,
               },
             ]
@@ -429,7 +423,7 @@ const GanttTaskContent: FC = () => {
             </div>
           </Fragment>,
           ganttRefs.body.current,
-          task._id + "-timeline"
+          task._id + "-timeline",
         )}
 
       {isShowSubtasks &&

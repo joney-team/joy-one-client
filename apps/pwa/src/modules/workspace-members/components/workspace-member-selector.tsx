@@ -9,12 +9,13 @@ import { IconUserPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 import { WorkspaceMemberFragment } from "../graphql/fragmentWorkspaceMember.graphql";
+import GetWorkspaceMembersDocument from "../graphql/getWorkspaceMembers.graphql";
 
 export type WorkspaceMemberSelectorValue = WorkspaceMemberFragment;
 
 export interface WorkspaceMemberSelectorProps extends Omit<
   SelectorProps<WorkspaceMemberSelectorValue>,
-  "listRoute" | "searchPlaceholder" | "renderOption"
+  "listQuery" | "searchPlaceholder" | "renderOption"
 > {
   iconSize?: number;
   avatarSize?: number;
@@ -29,7 +30,7 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
     <Selector<WorkspaceMemberSelectorValue>
       {...rest}
       autoCloseOnChange={false}
-      listRoute="/workspace-members"
+      listQuery={GetWorkspaceMembersDocument}
       renderOption={(user) => {
         return (
           <Combobox.Option value={user._id} key={user._id}>

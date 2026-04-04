@@ -151,7 +151,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
   return (
     <ModalLoanAssetEstimationForm>
       {(openLoanAssetEstimationForm) => (
-        <Stack p={16}>
+        <Stack p="md">
           <Group>
             <Button leftIcon={IconPlus} onClick={() => openLoanAssetEstimationForm()}>
               <Trans>Add asset estimation</Trans>

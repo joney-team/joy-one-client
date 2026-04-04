@@ -16,11 +16,11 @@ import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
 import { createPortal } from "react-dom";
-import { TasksQueryVariables } from "../../graphql/queryTasks.graphql";
+import { useTaskSelections } from "../../components/task-selections/task-selections-context";
+import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTaskMetrics } from "../../hooks/use-task-metrics";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import { type ModalCreateTaskRef } from "../../modals/modal-create-task";
-import { useTaskSelections } from "../../components/task-selections/task-selections-context";
 import { useTasks } from "../../tasks-context";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
@@ -67,7 +67,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const folderColor = folder?.color ?? "gray";
 
-  const groupVariables = useMemo<TasksQueryVariables>(() => {
+  const groupVariables = useMemo<GetTasksQueryVariables>(() => {
     return {
       ...state.variables,
       folderId: folder?._id ?? "none",
@@ -78,7 +78,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
 
   const { getTasks, tasks, loading, count } = useTasksQuery({ variables: groupVariables });
 
-  const { metric } = useTaskMetrics({
+  const { metrics } = useTaskMetrics({
     contextType: TaskContextType.Folder,
     contextId: folder?._id,
   });
@@ -163,10 +163,10 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
     startDate: number;
     dueDate: number;
   } | null>(() => {
-    if (!metric || !metric.startDate || !metric.dueDate) return null;
+    if (!metrics || !metrics.startDate || !metrics.dueDate) return null;
 
-    const startDate = metric.startDate;
-    const dueDate = metric.dueDate;
+    const startDate = metrics.startDate;
+    const dueDate = metrics.dueDate;
 
     const startIndexCaptured = gantt.columns.findIndex(
       (column) =>
@@ -191,7 +191,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
       startDate,
       dueDate,
     };
-  }, [metric, gantt.columns]);
+  }, [metrics, gantt.columns]);
 
   return (
     <Fragment>
@@ -263,7 +263,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
               }}
               ref={bodyRef}
             >
-              {!!metric?.estimatedTime && !!gantt.state.isShowEstimatedTime && (
+              {!!metrics?.estimatedTime && !!gantt.state.isShowEstimatedTime && (
                 <Group
                   pos="sticky"
                   style={{
@@ -277,7 +277,7 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                   align="center"
                 >
                   <Badge bg={alpha(folder?.color ?? "gray", 0.4)} size="xs" tt="none">
-                    {formatDuration(metric.estimatedTime)}
+                    {formatDuration(metrics.estimatedTime)}
                   </Badge>
                 </Group>
               )}
@@ -298,10 +298,10 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
                           <DateFormat value={timeline.dueDate} type="date" />
                         </Trans>
 
-                        {metric?.progress && (
+                        {metrics?.progress && (
                           <Fragment>
                             {" | "}
-                            <Trans>Progress</Trans>: {metric.progress}%
+                            <Trans>Progress</Trans>: {metrics.progress}%
                           </Fragment>
                         )}
                       </Fragment>

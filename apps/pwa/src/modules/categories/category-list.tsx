@@ -3,26 +3,28 @@
 import { Clickable } from "@/components/clickable";
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
-import { EventType } from "@/graphql/enums.graphql";
-import { Trans } from "@lingui/react/macro";
+import { CategoryType, EventType } from "@/graphql/enums.graphql";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import { IconCategory, IconEdit, IconOutlet } from "@tabler/icons-react";
 import { type FC } from "react";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { categoryTypes } from "./category-constants";
-import { CategoryEntity, CategoryType } from "./category-types";
 import { OnModalCategory } from "./modals/modal-category";
 
-import QUERY_CATEGORIES from "./graphql/queryCategories.graphql";
+import { CategoryFragment } from "./graphql/fragmentCategory.graphql";
+import GetCategoriesDocument from "./graphql/getCategories.graphql";
 
 export const CategoryList: FC = () => {
+  const { t } = useLingui();
+
   return (
-    <Stack p={16}>
-      <List<CategoryEntity>
+    <Stack p="md">
+      <List<CategoryFragment>
         id="categories"
         name={<Trans>Categories</Trans>}
         icon={IconCategory}
-        query={QUERY_CATEGORIES}
+        query={GetCategoriesDocument}
         columns={{
           name: {
             name: <Trans>Name</Trans>,
@@ -43,7 +45,7 @@ export const CategoryList: FC = () => {
             defaultWidth: 200,
             options: Object.values(CategoryType).map((type) => ({
               value: type,
-              label: categoryTypes[type].label(),
+              label: t(categoryTypes[type].label),
               color: categoryTypes[type].color,
             })),
           }),

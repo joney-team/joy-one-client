@@ -1,9 +1,9 @@
-import { TasksQuery } from "../../graphql/queryTasks.graphql";
+import { GetTasksQuery } from "../../graphql/getTasks.graphql";
 
 export type TaskTimeTrackingUser = NonNullable<
-  TasksQuery["tasks"]["results"][number]["timeTrackings"]
+  GetTasksQuery["list"]["results"][number]["timeTrackings"]
 >[number]["user"];
 
 export type TaskTimeTracking = NonNullable<
-  TasksQuery["tasks"]["results"][number]["timeTrackings"]
+  GetTasksQuery["list"]["results"][number]["timeTrackings"]
 >[number];

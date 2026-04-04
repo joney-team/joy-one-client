@@ -5,12 +5,11 @@ import { Errored } from "@/components/errored";
 import { EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { ModalParnterForm } from "@/modules/partners/modals/modal-partner-form";
-import { getPartner, updatePartner } from "@/modules/partners/partners-service";
-import { PartnerEntity } from "@/modules/partners/partners-types";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
-import { useFetch } from "@/utils/use-fetch.util";
+import { useApolloClient, useQuery } from "@apollo/client/react";
+import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -26,69 +25,92 @@ import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { IconMail, IconPencil, IconPhone, IconUpload } from "@tabler/icons-react";
 import { useParams } from "next/navigation";
 import { FC, Fragment, useEffect } from "react";
+import { useEventsListener } from "../events/event-service";
 import { useUploadFile } from "../files/hooks/use-upload-file";
+import GetPartnerDocument from "./graphql/getPartner.graphql";
+import UpdatePartnerDocument from "./graphql/updatePartner.graphql";
 
 export const PartnerDetail: FC = () => {
-  const params = useParams();
-  const partnerId = params.id as string;
+  const client = useApolloClient();
+  const params = useParams<{ id: string }>();
   const workspace = useWorkspace();
   const layout = useLayout();
   const uploadFile = useUploadFile();
 
-  const data = useFetch<PartnerEntity>({
-    id: `partners-${partnerId}`,
-    fetch: async () => getPartner(partnerId as string),
-    refetchEvents: {
-      types: [EventType.PartnerUpdated, EventType.PartnerArchived],
-      condition: (e, _partner) => e.ref === _partner._id,
+  const { data, loading, error, refetch } = useQuery(GetPartnerDocument, {
+    variables: {
+      partnerId: params.id,
     },
+    skip: !params.id,
   });
+
+  useEventsListener([EventType.PartnerUpdated, EventType.PartnerArchived], (event) => {
+    if (event.ref === params.id) {
+      refetch();
+    }
+  });
+
+  const partner = data ? data.getPartner : null;
 
   useEffect(() => {
     layout.setComponents({
-      navigation: data.data && (
+      navigation: partner && (
         <Fragment>
-          <Anchor href={`tel:${data.data.phone}`}>
-            <Button leftSection={<IconPhone size={18} strokeWidth={1.5} />}>Gọi ngay</Button>
+          <Anchor href={`tel:${partner.phone}`}>
+            <Button leftSection={<IconPhone size={18} strokeWidth={1.5} />}>
+              <Trans>Call now</Trans>
+            </Button>
           </Anchor>
 
-          {data.data.email && (
-            <Anchor href={`mailto:${data.data.email}`}>
+          {partner.email && (
+            <Anchor href={`mailto:${partner.email}`}>
               <Button leftSection={<IconMail size={18} strokeWidth={1.5} />} variant="outline">
-                Gửi mail
+                <Trans>Send email</Trans>
               </Button>
             </Anchor>
           )}
         </Fragment>
       ),
     });
-  }, [data.data]);
+  }, [partner]);
 
   const uploadLogo = async (file: File) => {
     try {
-      const _file = await uploadFile(file, { compressSize: 1 });
-      await updatePartner(partner._id, { ...partner, logo: _file.path });
+      if (!partner) return;
+
+      const uploadedFile = await uploadFile(file, { compressSize: 1 });
+      client.mutate({
+        mutation: UpdatePartnerDocument,
+        variables: {
+          partnerId: params.id,
+          input: {
+            name: partner?.name,
+            phone: partner?.phone,
+            email: partner?.email,
+            logo: uploadedFile.path,
+          },
+        },
+      });
     } catch (error) {
       onError(error);
     }
   };
 
-  if (data.isFetching)
+  if (loading && !data)
     return (
-      <Stack p={16}>
+      <Stack p="md">
         <Skeleton height={150} />
       </Stack>
     );
 
-  if (data.error || !data.data) return <Errored error={data.error} />;
-  const { data: partner } = data;
+  if (error || !partner) return <Errored error={error} />;
 
   return (
-    <Stack p={16}>
+    <Stack p="md">
       <Card shadow="xs" p={10}>
         <Group align="start" wrap="nowrap" justify="space-between">
-          <Stack gap={16}>
-            <Group wrap="nowrap" align="start" gap={16}>
+          <Stack gap="md">
+            <Group wrap="nowrap" align="start" gap="md">
               <Dropzone accept={IMAGE_MIME_TYPE} onDrop={(files) => uploadLogo(files[0])}>
                 <Stack style={{ cursor: "pointer", position: "relative" }} gap={2}>
                   <Avatar partner={partner} size={65} radius={8} />

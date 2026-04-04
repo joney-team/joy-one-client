@@ -1,0 +1,7 @@
+#import "./fragmentPromotion.graphql"
+
+query GetPromotionsByIds($ids: [String!]!) {
+  promotions: getPromotionsByIds(ids: $ids) {
+    ...Promotion
+  }
+}

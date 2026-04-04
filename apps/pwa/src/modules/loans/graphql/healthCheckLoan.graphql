@@ -1,0 +1,7 @@
+#import "./fragmentLoan.graphql"
+
+mutation HealthCheckLoan($healthCheckLoanId: String!) {
+  loan: healthCheckLoan(id: $healthCheckLoanId) {
+    ...Loan
+  }
+}

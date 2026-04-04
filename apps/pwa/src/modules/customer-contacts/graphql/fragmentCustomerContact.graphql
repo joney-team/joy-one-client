@@ -1,0 +1,8 @@
+fragment CustomerContact on CustomerContact {
+  _id
+  customerId
+  contacts {
+    name
+    phones
+  }
+}

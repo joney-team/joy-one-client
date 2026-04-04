@@ -14,24 +14,23 @@ import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
 import { type FC } from "react";
+import { ProductStockFragment } from "./graphql/fragmentProductStock.graphql";
+import GetProductStocksDocument from "./graphql/getProductStocks.graphql";
 import { ModalProductStockIn } from "./modals/modal-product-stock-in";
-import { ProductStockEntity } from "./product-stocks-entity";
-
-import QUERY_PRODUCT_STOCKS from "./graphql/queryProductStocks.graphql";
 
 export const ProductStockList: FC = () => {
   return (
     <ModalProductStockIn>
       {(openStockIn) => (
-        <Stack p={16}>
-          <List<ProductStockEntity>
+        <Stack p="md">
+          <List<ProductStockFragment>
             id="psks"
             icon={IconBuildingWarehouse}
             name={<Trans>Stocks</Trans>}
-            query={QUERY_PRODUCT_STOCKS}
+            query={GetProductStocksDocument}
             columns={{
               createdAt: dateTimeColumn({ sortable: true, name: <Trans>Time</Trans> }),
-              productId: ProductColumn({
+              product: ProductColumn({
                 type: ProductType.Product,
                 name: <Trans>Product</Trans>,
                 valuePath: "product",

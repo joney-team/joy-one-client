@@ -1,0 +1,10 @@
+#import "./fragmentPrescription.graphql"
+
+mutation UpdatePrescription(
+  $prescriptionId: String!
+  $input: PrescriptionInput!
+) {
+  updatePrescription(id: $prescriptionId, input: $input) {
+    ...Prescription
+  }
+}

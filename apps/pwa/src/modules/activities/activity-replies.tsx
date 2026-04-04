@@ -6,17 +6,14 @@ import { type FC } from "react";
 import { ActivitiesProps } from "./activities-types";
 import { ActivityCard } from "./activity-card";
 import { ActivityInput } from "./activity-input";
-import QUERY_ACTIVITIES, {
-  type ActivitiesQuery,
-  type ActivitiesQueryVariables,
-} from "./graphql/queryActivities.graphql";
+import GetActivitiesDocument from "./graphql/getActivities.graphql";
 
 export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFocus?: boolean }> = ({
   activityId,
   autoFocus = false,
   ...context
 }) => {
-  const { data } = useQuery<ActivitiesQuery, ActivitiesQueryVariables>(QUERY_ACTIVITIES, {
+  const { data } = useQuery(GetActivitiesDocument, {
     variables: {
       contextId: context.contextId,
       contextType: context.contextType,
@@ -28,7 +25,7 @@ export const ActivityReplies: FC<ActivitiesProps & { activityId: string; autoFoc
   return (
     <Stack pl="lg" gap={0}>
       <Stack gap={0}>
-        {data?.activities.results.map((activity) => (
+        {data?.list.results.map((activity) => (
           <ActivityCard key={activity._id} activity={activity} />
         ))}
       </Stack>

@@ -1,0 +1,7 @@
+#import "./fragmentMessageBox.graphql"
+
+mutation SwitchMessageBoxAiAssistant($boxId: String!, $disabled: Boolean!) {
+  switchMessageBoxAiAssistant(boxId: $boxId, disabled: $disabled) {
+    ...MessageBox
+  }
+}

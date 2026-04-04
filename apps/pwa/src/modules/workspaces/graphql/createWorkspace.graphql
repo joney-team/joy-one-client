@@ -1,0 +1,7 @@
+#import "./fragmentWorkspace.graphql"
+
+mutation CreateWorkspace($input: CreateWorkspaceInput!) {
+  workspace: createWorkspace(input: $input) {
+    ...Workspace
+  }
+}
