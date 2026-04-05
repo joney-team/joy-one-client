@@ -1,9 +1,9 @@
 "use client";
 
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Card, Group, Modal, Stack, Text, TextInput, Tooltip } from "@mantine/core";
+import { ActionIcon, Card, Group, Stack, Text, TextInput, Tooltip } from "@mantine/core";
 import { IconBox, IconMinus, IconPlus, IconPuzzle, IconSearch } from "@tabler/icons-react";
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
@@ -18,7 +18,7 @@ interface ManageWidgetsProps<WidgetContextType = any, WidgetType = string> {
 }
 
 export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
-  props: ManageWidgetsProps<WidgetContextType, WidgetType>
+  props: ManageWidgetsProps<WidgetContextType, WidgetType>,
 ) {
   const workspace = useWorkspace();
   const [search, setSearch] = useState("");
@@ -28,7 +28,8 @@ export function ManageWidgets<WidgetContextType = any, WidgetType = string>(
     <Modal
       opened={props.opened}
       onClose={props.onClose}
-      title={<ModalHead name={<Trans>Manage widgets</Trans>} icon={IconPuzzle} />}
+      name={<Trans>Manage widgets</Trans>}
+      icon={IconPuzzle}
     >
       <Stack>
         <TextInput

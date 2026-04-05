@@ -116,11 +116,11 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
                 size="xl"
                 bg={iconBackground}
               >
-                <Icon size={25} strokeWidth={1.2} />
+                <Icon size={25} strokeWidth={1.5} />
               </ActionIcon>
             ) : (
               <ThemeIcon color={iconColor} variant={iconVariant} size="xl" bg={iconBackground}>
-                <Icon size={25} strokeWidth={1.2} />
+                <Icon size={25} strokeWidth={1.5} />
               </ThemeIcon>
             )}
 

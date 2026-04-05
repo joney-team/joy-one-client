@@ -15,7 +15,6 @@ import {
   em,
   Group,
   InputWrapper,
-  Modal,
   MultiSelect,
   NumberInput,
   Select,
@@ -30,6 +29,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconCoins, IconPlus, IconX } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
+import { Modal } from "@/components/modal/modal";
 
 interface ModalLoanPackageFormArgs {
   loanPackage?: LoanPackage;
@@ -107,7 +107,8 @@ export const ModalLoanPackageForm: FC<{
         open();
       })}
       <Modal
-        title={<ModalHead name={<Trans>Loan package</Trans>} icon={IconCoins} />}
+        name={<Trans>Loan package</Trans>}
+        icon={IconCoins}
         onClose={onClose}
         opened={opened}
         size="xl"

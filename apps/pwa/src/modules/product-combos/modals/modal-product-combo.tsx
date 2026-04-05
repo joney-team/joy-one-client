@@ -6,14 +6,14 @@ import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import GetOrderByIdDocument from "@/modules/orders/graphql/getOrderById.graphql";
 import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Anchor, Group, Modal, Skeleton, Stack, Table, Text } from "@mantine/core";
+import { ActionIcon, Anchor, Group, Skeleton, Stack, Table, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconHistory, IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";
@@ -68,7 +68,8 @@ export const ModalProductCombo: FC<{
             <Modal
               opened={opened}
               onClose={close}
-              title={<ModalHead name={<Trans>Combo</Trans>} icon={IconPackage} />}
+              name={<Trans>Combo</Trans>}
+              icon={IconPackage}
               size="xl"
             >
               {(function () {

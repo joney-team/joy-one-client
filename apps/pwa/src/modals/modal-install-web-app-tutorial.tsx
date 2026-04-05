@@ -1,7 +1,8 @@
 "use client";
 
+import { Modal } from "@/components/modal/modal";
 import { useLayout } from "@/layout/layout-context";
-import { Anchor, Center, Modal, Stack, Text, Title, em } from "@mantine/core";
+import { Anchor, Center, Stack, Text, Title, em } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical, IconShare2, IconSquarePlus } from "@tabler/icons-react";
 import { FC, Fragment } from "react";

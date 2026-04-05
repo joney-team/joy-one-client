@@ -50,14 +50,14 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
           <Group ml={-5} justify="space-between">
             <Group gap={3}>
               <ThemeIcon variant="subtle">
-                <Icon size={em(25)} strokeWidth={1.5} color={color("primary")} />
+                <Icon size={25} strokeWidth={1.5} color={color("primary")} />
               </ThemeIcon>
-              <Text fz={em(15)} fw={400}>
+              <Text fz="sm" fw={400}>
                 {name()}
               </Text>
             </Group>
             {unit && (
-              <Text fz={em(12)} fw={400}>
+              <Text fz="xs" fw={400}>
                 <Trans>Unit</Trans>: {unit?.full}
               </Text>
             )}

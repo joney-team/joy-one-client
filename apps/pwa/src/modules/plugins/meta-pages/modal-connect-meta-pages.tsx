@@ -3,6 +3,7 @@
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
+import { Modal } from "@/components/modal/modal";
 import { Renderer } from "@/components/renderer";
 import { StorageKey } from "@/constants/storage-key";
 import { MetaPageInfoStatus } from "@/graphql/enums.graphql";
@@ -14,7 +15,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Anchor, Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { Anchor, Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconCirclesRelation,

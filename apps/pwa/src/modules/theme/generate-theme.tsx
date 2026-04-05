@@ -55,6 +55,9 @@ export const generateTheme = (args: {
       light: 6,
       dark: 4,
     },
+    fontWeights: {
+      medium: "500",
+    },
     defaultRadius: "md",
     shadows: {
       xs: "lch(0 0 0 / 0.022) 0px 3px 6px -2px, lch(0 0 0 / 0.044) 0px 1px 1px",
@@ -64,7 +67,6 @@ export const generateTheme = (args: {
         styles: {
           label: {
             fontSize: 12,
-            fontWeight: 400,
           },
           description: {
             fontSize: 11,
@@ -141,9 +143,9 @@ export const generateTheme = (args: {
       }),
       MenuItem: MenuItem.extend({
         defaultProps: {
-          px: 12,
-          py: 5,
-          fz: 15,
+          px: 8,
+          py: 6,
+          fz: "sm",
         },
       }),
       NumberInput: NumberInput.extend({

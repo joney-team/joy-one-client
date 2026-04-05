@@ -2,13 +2,13 @@
 
 import { Button } from "@/components/buttons/button";
 import { Form } from "@/components/form";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { PluginExternalStorageProvider } from "@/graphql/enums.graphql";
 import { SetPluginExternalStorageInput } from "@/graphql/types.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Group, Modal, Select, Stack, TextInput } from "@mantine/core";
+import { Group, Select, Stack, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCloudDataConnection } from "@tabler/icons-react";
@@ -52,12 +52,8 @@ const PluginStorageModalContent = ({
     <Modal
       opened={isOpened}
       onClose={onClose}
-      title={
-        <ModalHead
-          name={storage ? <Trans>Edit Cloud Storage</Trans> : <Trans>Connect Cloud Storage</Trans>}
-          icon={IconCloudDataConnection}
-        />
-      }
+      name={storage ? <Trans>Edit Cloud Storage</Trans> : <Trans>Connect Cloud Storage</Trans>}
+      icon={IconCloudDataConnection}
     >
       <Form onSubmit={onSubmit} autoFocus={false}>
         <Stack>

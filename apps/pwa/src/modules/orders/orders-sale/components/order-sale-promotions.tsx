@@ -11,11 +11,12 @@ import { useColor } from "@/modules/theme/use-color";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Card, Group, Indicator, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCheck, IconPackage } from "@tabler/icons-react";
 import { ReactNode, type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
+import { Modal } from "@/components/modal/modal";
 
 export const OrderSalePromotions: FC = () => {
   const { getAvailableModule } = useAvailableWorkspaceModules();
@@ -74,7 +75,8 @@ export const OrderSalePromotions: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalHead name={<Trans>Promotions</Trans>} icon={IconPackage} />}
+        name={<Trans>Promotions</Trans>}
+        icon={IconPackage}
         size={500}
       >
         <Stack>

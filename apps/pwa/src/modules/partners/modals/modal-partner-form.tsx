@@ -2,13 +2,13 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { PartnerInput } from "@/graphql/types.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { em, Group, Modal, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
+import { em, Group, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
@@ -99,12 +99,8 @@ export const ModalParnterForm: FC<{
       <Modal
         opened={opened}
         onClose={close}
-        title={
-          <ModalHead
-            name={props?.partner ? <Trans>Update partner</Trans> : <Trans>Create partner</Trans>}
-            icon={IconTopologyStar3}
-          />
-        }
+        name={props?.partner ? <Trans>Update partner</Trans> : <Trans>Create partner</Trans>}
+        icon={IconTopologyStar3}
         zIndex={400}
       >
         <Stack>

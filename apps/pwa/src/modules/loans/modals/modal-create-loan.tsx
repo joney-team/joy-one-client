@@ -28,7 +28,6 @@ import {
   Card,
   Group,
   InputWrapper,
-  Modal,
   NumberInput,
   Select,
   SimpleGrid,
@@ -62,6 +61,7 @@ import {
 import CreateLoanDocument from "../graphql/createLoan.graphql";
 import GetLoansDocument from "../graphql/getLoans.graphql";
 import { loanAssetTypes } from "../loans-constants";
+import { Modal } from "@/components/modal/modal";
 
 interface ModalCreateLoanProps {
   customer?: CustomerFragment;
@@ -260,7 +260,8 @@ export const ModalCreateLoan = forwardRef<
         : null}
 
       <Modal
-        title={<ModalHead name={t`Create loan`} icon={IconCreditCardPay} />}
+        name={<Trans>Create loan</Trans>}
+        icon={IconCreditCardPay}
         onClose={onClose}
         opened={!!args}
         size={1000}
@@ -272,7 +273,7 @@ export const ModalCreateLoan = forwardRef<
 
             return (
               <Fragment>
-                <Session name={t`Customer`} icon={IconUser}>
+                <Session name={<Trans>Customer</Trans>} icon={IconUser}>
                   <CustomerInput
                     value={customer}
                     onSelect={(c) => initialize({ customer: c as any })}
@@ -480,7 +481,7 @@ export const ModalCreateLoan = forwardRef<
   );
 });
 
-const Session: FC<PropsWithChildren<{ name: string; icon: Icon; isWithoutCard?: boolean }>> = (
+const Session: FC<PropsWithChildren<{ name: ReactNode; icon: Icon; isWithoutCard?: boolean }>> = (
   props,
 ) => {
   return (

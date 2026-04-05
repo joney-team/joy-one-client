@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { renderFileUrl } from "@/modules/files/files-utils";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
@@ -12,7 +12,7 @@ import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { downloadJSON } from "@joy-one-client/utils/files";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Center, Modal, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
+import { Center, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDownload, IconFileExport } from "@tabler/icons-react";
 import { FC, Fragment, useState } from "react";
@@ -206,7 +206,8 @@ export const ExportButton: FC = () => {
       <Modal
         opened={opened}
         onClose={close}
-        title={<ModalHead name={t`Export data`} icon={IconFileExport} />}
+        name={<Trans>Export data</Trans>}
+        icon={IconFileExport}
       >
         <Stack>
           <Select

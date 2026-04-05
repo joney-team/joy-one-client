@@ -4,7 +4,7 @@ import { Badge } from "@/components/badge";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { LoanAssetType } from "@/graphql/enums.graphql";
 import { useLoans } from "@/modules/loans/loans-context";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
@@ -17,7 +17,6 @@ import {
   Card,
   Group,
   InputWrapper,
-  Modal,
   NumberInput,
   Select,
   SimpleGrid,
@@ -112,7 +111,8 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
       {children(open)}
 
       <Modal
-        title={<ModalHead name={<Trans>Loan package calculator</Trans>} icon={IconCalculator} />}
+        name={<Trans>Loan package calculator</Trans>}
+        icon={IconCalculator}
         onClose={onClose}
         opened={opened}
         size={1000}

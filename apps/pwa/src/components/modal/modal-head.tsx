@@ -31,7 +31,7 @@ export const ModalHead: FC<Props> = (props) => {
           </ThemeIcon>
         )}
 
-        <Text fw="700" fz={16} c={modalColor} style={{ flex: 1 }}>
+        <Text fw="600" fz="md" c={modalColor} style={{ flex: 1 }}>
           {props.name}
         </Text>
       </Group>

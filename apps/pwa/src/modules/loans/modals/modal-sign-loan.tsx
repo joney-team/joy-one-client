@@ -2,14 +2,13 @@
 
 import { Button } from "@/components/buttons/button";
 import { SignatureInput } from "@/components/inputs/signature-input";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Center, Modal, Stack } from "@mantine/core";
+import { Center, Stack } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCreditCardPay } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
@@ -56,12 +55,12 @@ export const ModalSignLoan: FC<{
       })}
 
       <Modal
-        title={
-          <ModalHead
-            name={t`Sign loan #${renderEntityCode(props?.loan.code)}`}
-            icon={IconCreditCardPay}
-          />
+        name={
+          <Fragment>
+            <Trans>Sign loan</Trans> #{renderEntityCode(props?.loan.code)}
+          </Fragment>
         }
+        icon={IconCreditCardPay}
         onClose={onClose}
         opened={opened}
         size={1000}

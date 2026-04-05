@@ -3,7 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { WithCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { genders } from "@/constant";
 import { CustomerKycInput } from "@/graphql/types.graphql";
 import { optionsFilter } from "@/modules/theme/generate-theme";
@@ -16,7 +16,6 @@ import {
   Card,
   Group,
   InputWrapper,
-  Modal,
   Select,
   SimpleGrid,
   Stack,
@@ -168,7 +167,8 @@ export const WithModalRegisterCustomerKyc: FC<{
         return (
           <Fragment>
             <Modal
-              title={<ModalHead name={<Trans>Customer KYC</Trans>} icon={IconUserScan} />}
+              name={<Trans>Customer KYC</Trans>}
+              icon={IconUserScan}
               onClose={onClose}
               opened={opened}
               yOffset={20}

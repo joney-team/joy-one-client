@@ -18,7 +18,6 @@ import {
   ActionIcon,
   Group,
   InputWrapper,
-  Modal,
   NumberInput,
   Select,
   SimpleGrid,
@@ -31,6 +30,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
+import { Modal } from "@/components/modal/modal";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;

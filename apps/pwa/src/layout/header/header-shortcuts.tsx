@@ -204,7 +204,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
               size="xs"
               onClick={open}
               leftIcon={IconCalculator}
-              px={5}
+              px={6}
             >
               <Trans>Loan calculator</Trans>
             </Button>
@@ -216,7 +216,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
         <Menu trigger="hover">
           <Menu.Target>
             <Group>
-              <Button px={5} id="create-credit" size="xs" leftIcon={IconBolt} variant="subtle">
+              <Button px={6} id="create-credit" size="xs" leftIcon={IconBolt} variant="subtle">
                 <Trans>Quick Creation</Trans>
               </Button>
             </Group>
@@ -231,7 +231,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
                 return (
                   <Menu.Item
                     key={workspaceModule.id}
-                    leftSection={<shortcut.icon size={18} />}
+                    leftSection={<shortcut.icon size={16} />}
                     onClick={() => shortcut.onClick({ router, modals })}
                   >
                     {workspaceModule.name}
@@ -241,7 +241,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
               return (
                 <Menu.Item
                   key={workspaceModule.id}
-                  leftSection={<shortcut.icon size={18} />}
+                  leftSection={<shortcut.icon size={16} />}
                   component={Link}
                   href={shortcut.href}
                 >

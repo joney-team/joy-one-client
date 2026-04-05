@@ -6,7 +6,7 @@ import { UseProductComboInput } from "@/graphql/types.graphql";
 import { onFormError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Center, Modal, NumberInput, Stack, Table, Textarea } from "@mantine/core";
+import { Center, NumberInput, Stack, Table, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconPackage } from "@tabler/icons-react";
@@ -14,6 +14,7 @@ import { FC, Fragment, ReactNode, useRef } from "react";
 import { v4 as uuid } from "uuid";
 import { ProductComboFragment } from "../graphql/fragmentProductCombo.graphql";
 import UseProductComboDocument from "../graphql/useProductCombo.graphql";
+import { Modal } from "@/components/modal/modal";
 
 export interface ProductComboUsingModalArgs {
   combo: ProductComboFragment;
@@ -75,7 +76,8 @@ export const ModalProductComboUsing: FC<{
         key={propsRef.current?.combo.id}
         opened={opened}
         onClose={close}
-        title={<ModalHead name={<Trans>Add combo history</Trans>} icon={IconPackage} />}
+        name={<Trans>Add combo history</Trans>}
+        icon={IconPackage}
         size="lg"
         yOffset={80}
       >

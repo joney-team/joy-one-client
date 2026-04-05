@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { DateInput } from "@/components/inputs/date-input";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { ProductStockRecordType, ProductType } from "@/graphql/enums.graphql";
 import { BulkProductsStockInInput } from "@/graphql/types.graphql";
 import { ProductSelector } from "@/modules/products/components/product-selector";
@@ -18,7 +18,6 @@ import {
   ActionIcon,
   Group,
   InputWrapper,
-  Modal,
   NumberInput,
   Stack,
   Table,
@@ -118,7 +117,8 @@ export const ModalProductStockIn: FC<{
       })}
 
       <Modal
-        title={<ModalHead name={<Trans>Stock in</Trans>} icon={IconBuildingWarehouse} />}
+        name={<Trans>Stock in</Trans>}
+        icon={IconBuildingWarehouse}
         onClose={onClose}
         opened={opened}
         size={1000}

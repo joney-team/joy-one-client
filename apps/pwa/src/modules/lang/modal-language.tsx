@@ -1,13 +1,14 @@
 "use client";
 
 import { Image } from "@/components/image";
+import { Modal } from "@/components/modal/modal";
 import { AppLocale } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { Trans } from "@lingui/react/macro";
-import { Card, em, Group, Modal, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLanguage, IconWorld } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode } from "react";
@@ -61,7 +62,7 @@ export const ModalLang: FC<{
               >
                 <Group gap={10}>
                   <Image src={`/lang/${locale}.png`} w={30} />
-                  <Text fz={em(15)} fw={500}>
+                  <Text fz="sm" fw={500}>
                     {localeNames[locale]}
                   </Text>
                 </Group>

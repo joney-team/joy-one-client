@@ -4,6 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Badge } from "@/components/badge";
 import { Empty } from "@/components/empty";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
+import { Modal } from "@/components/modal/modal";
 import { EventType } from "@/graphql/enums.graphql";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
@@ -24,7 +25,6 @@ import {
   Anchor,
   Card,
   Group,
-  Modal,
   SimpleGrid,
   Skeleton,
   Stack,

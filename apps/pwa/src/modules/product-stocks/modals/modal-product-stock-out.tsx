@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { ProductStockRecordType, ProductType } from "@/graphql/enums.graphql";
 import { ProductStockOutInput } from "@/graphql/types.graphql";
 import { ProductSelector } from "@/modules/products/components/product-selector";
@@ -10,7 +10,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Input, InputWrapper, Modal, NumberInput, Stack, Textarea } from "@mantine/core";
+import { Input, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { FC, Fragment, ReactNode, useRef } from "react";
@@ -76,13 +76,9 @@ export const ModalProductStockOut: FC<{
       })}
 
       <Modal
-        title={
-          <ModalHead
-            name={<Trans>Stock out</Trans>}
-            icon={productStockRecordTypes[ProductStockRecordType.StockOut].icon}
-            color={color(productStockRecordTypes[ProductStockRecordType.StockOut].color)}
-          />
-        }
+        name={<Trans>Stock out</Trans>}
+        icon={productStockRecordTypes[ProductStockRecordType.StockOut].icon}
+        color={color(productStockRecordTypes[ProductStockRecordType.StockOut].color)}
         onClose={onClose}
         opened={opened}
       >

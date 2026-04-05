@@ -10,11 +10,12 @@ import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Blockquote, Center, Modal, Stack } from "@mantine/core";
+import { Blockquote, Center, Stack } from "@mantine/core";
 import { IconBuildingSkyscraper } from "@tabler/icons-react";
 import { forwardRef, Fragment, ReactNode, useImperativeHandle, useState } from "react";
 import { WorkspaceBranchFragment } from "../graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchInput } from "../workspace-branch-input";
+import { Modal } from "@/components/modal/modal";
 
 export interface ModalUpdateWorkspaceBranchRef {
   open: (p: ModalUpdateWorkspaceBranchProps) => void;
@@ -132,9 +133,8 @@ export const ModalUpdateWorkspaceBranch = forwardRef<
       <Modal
         opened={!!args}
         onClose={() => setArgs(null)}
-        title={
-          <ModalHead name={<Trans>Move workspace branch</Trans>} icon={IconBuildingSkyscraper} />
-        }
+        name={<Trans>Move workspace branch</Trans>}
+        icon={IconBuildingSkyscraper}
       >
         <Stack align="stretch">
           {entity === AppEntity.LOANS && (

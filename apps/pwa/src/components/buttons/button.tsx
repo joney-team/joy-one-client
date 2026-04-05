@@ -33,6 +33,7 @@ const defaultStyle: Partial<
       iconSpacing?: number;
       iconStrokeWidth?: number;
       fontSize?: number;
+      fontWeight?: number | string;
     }
   >
 > = {
@@ -47,6 +48,7 @@ const defaultStyle: Partial<
     iconSpacing: -6,
     iconStrokeWidth: 2.2,
     fontSize: 11,
+    fontWeight: "600",
   },
   "compact-sm": {
     iconSize: 16,
@@ -56,7 +58,7 @@ const defaultStyle: Partial<
   },
   sm: {
     iconSize: 16,
-    iconSpacing: -5,
+    iconSpacing: -4,
     iconStrokeWidth: 1.8,
     fontSize: 12,
   },
@@ -65,6 +67,24 @@ const defaultStyle: Partial<
     iconSpacing: -6,
     iconStrokeWidth: 1.8,
     fontSize: 14,
+  },
+  "compact-md": {
+    iconSize: 18,
+    iconSpacing: -6,
+    iconStrokeWidth: 1.8,
+    fontSize: 14,
+  },
+  lg: {
+    iconSize: 20,
+    iconSpacing: -6,
+    iconStrokeWidth: 1.8,
+    fontSize: 16,
+  },
+  "compact-lg": {
+    iconSize: 20,
+    iconSpacing: -6,
+    iconStrokeWidth: 1.8,
+    fontSize: 16,
   },
 };
 
@@ -172,6 +192,7 @@ export const Button: FC<ButtonProps> = ({
       styles={{
         label: {
           fontSize: rest.fz || buttonStyle?.fontSize,
+          fontWeight: buttonStyle?.fontWeight,
           ...(rest.styles && "label" in rest.styles ? rest.styles.label : {}),
         },
         root: {
