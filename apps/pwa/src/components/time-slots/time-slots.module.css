@@ -6,7 +6,7 @@
   & .Row {
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid var(--mantine-color-dark-light);
+    border-bottom: 1px solid var(--mantine-color-gray-light-hover);
     position: relative;
 
     &.isSticky {
@@ -25,7 +25,7 @@
       }
 
       &:not(.Head) {
-        border-right: 1px solid var(--mantine-color-dark-light);
+        border-right: 1px solid var(--mantine-color-gray-light-hover);
       }
 
       &.Hour {
