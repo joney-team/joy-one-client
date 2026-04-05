@@ -11,33 +11,42 @@ import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-
 import { MessageBoxList } from "@/modules/message-boxes/message-boxes";
 import { MessageBoxesContext } from "@/modules/message-boxes/message-boxes-context";
 import { MessageBoxesIntegrate } from "@/modules/message-boxes/message-boxes-integrate";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { type FC, type PropsWithChildren } from "react";
-import GetMessageBoxDocument from "./graphql/getMessageBox.graphql";
+import { useMemo, type FC, type PropsWithChildren } from "react";
+import { useWorkspaceStat } from "../workspace-stats/hooks/useWorkspaceStat";
+import GetMessageBoxByIdDocument from "./graphql/getMessageBoxById.graphql";
 
 export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const layout = useLayout();
   const router = useRouter();
   const params = useParams<{ boxId: string }>();
-  const plugins = usePlugins();
   const workspaceLayout = useWorkspaceLayout();
+  const { workspaceStat, loading: workspaceStatLoading } = useWorkspaceStat();
 
-  const { data, loading, error } = useQuery(GetMessageBoxDocument, {
+  const { data, loading, error } = useQuery(GetMessageBoxByIdDocument, {
     variables: { messageBoxId: params.boxId! },
+    skip: !params.boxId,
+    fetchPolicy: "cache-and-network",
   });
 
-  if (!plugins.isInitialized)
+  const isConnectedWithPlugins = useMemo(() => {
+    return (
+      workspaceStat &&
+      workspaceStat.metaPages + workspaceStat.messageHubs + workspaceStat.zaloOas > 0
+    );
+  }, [workspaceStat]);
+
+  if (workspaceStatLoading)
     return (
       <Stack p="md">
         <Skeleton height={250} />
       </Stack>
     );
 
-  if (!plugins.isHasPlugin) {
+  if (!isConnectedWithPlugins) {
     return (
       <Stack p="md">
         <MessageBoxesIntegrate />
@@ -48,7 +57,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   return (
     <MessageBoxesContext.Provider
       value={{
-        messageBox: data?.getMessageBox ?? null,
+        messageBox: data?.messageBox ?? null,
         messageBoxId: params.boxId!,
         open: (box) => {
           router.push(`/message-boxes/${box._id}`);
@@ -94,14 +103,14 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
               </Card>
 
               <Card style={{ height: contentHeight }} shadow="xs" flex={1} p={0}>
-                {data?.getMessageBox ? (
+                {data?.messageBox ? (
                   <Stack
                     gap={0}
                     style={{ height: contentHeight, overflow: "hidden" }}
                     align="stretch"
                   >
                     <Group style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}>
-                      <MessageBoxHead key={data.getMessageBox._id} />
+                      <MessageBoxHead key={data.messageBox._id} />
                     </Group>
 
                     <ContainerMessageBox />

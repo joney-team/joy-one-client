@@ -25,6 +25,7 @@ export const AdminWorkspaces: FC = () => {
         columns={{
           workspace: {
             name: "Information",
+            minWidth: 250,
             render: ({ data }) => {
               return (
                 <Group>
@@ -43,23 +44,38 @@ export const AdminWorkspaces: FC = () => {
               value: type,
             })),
           }),
-          memberCount: {
+          members: {
             name: "Members",
             defaultWidth: 150,
             sortable: true,
           },
-          customerCount: {
+          customers: {
             name: "Customers",
             defaultWidth: 150,
             sortable: true,
           },
-          bookingCount: {
+          bookings: {
             name: "Bookings",
             defaultWidth: 150,
             sortable: true,
           },
-          orderCount: {
+          orders: {
             name: "Orders",
+            defaultWidth: 150,
+            sortable: true,
+          },
+          zaloOas: {
+            name: "Zalo OAs",
+            defaultWidth: 150,
+            sortable: true,
+          },
+          metaPages: {
+            name: "Meta Pages",
+            defaultWidth: 150,
+            sortable: true,
+          },
+          messageHubs: {
+            name: "Message Hubs",
             defaultWidth: 150,
             sortable: true,
           },

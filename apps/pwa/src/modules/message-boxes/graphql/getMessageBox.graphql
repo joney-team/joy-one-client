@@ -1,7 +1,0 @@
-#import "./fragmentMessageBox.graphql"
-
-query GetMessageBox($messageBoxId: String!) {
-  getMessageBox(id: $messageBoxId) {
-    ...MessageBox
-  }
-}

@@ -1,0 +1,13 @@
+query GetWorkspaceStat {
+  workspaceStat: getWorkspaceStat {
+    _id
+    storageUsage
+    members
+    bookings
+    customers
+    orders
+    metaPages
+    zaloOas
+    messageHubs
+  }
+}

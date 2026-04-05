@@ -43,19 +43,6 @@ export const useEventsListener = (
   }, [...(deps || []), ...(Array.isArray(type) ? type : [type])]);
 };
 
-export const usePureEventsListner = (
-  listener: (event: EventFragment) => void,
-  deps?: DependencyList,
-) => {
-  useEffect(() => {
-    socket.on("EVENT_NEW", listener);
-
-    return () => {
-      socket.removeListener("EVENT_NEW", listener);
-    };
-  }, deps || []);
-};
-
 export const useUserEventsListner = (
   listener: (event: UserEventDto) => void,
   deps?: DependencyList,

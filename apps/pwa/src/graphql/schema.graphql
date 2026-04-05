@@ -31,6 +31,7 @@ enum ActivityType {
 
 """Available admin actions"""
 enum AdminAction {
+  AGGREGATE_WORKSPACE_STATS
   PURE_REPORTS
   RESET_CACHE
   SEARCH_REINDEX
@@ -1013,6 +1014,7 @@ enum EventType {
   PLUGIN_ZALO_OA_DISABLED
   PLUGIN_ZALO_OA_ENABLED
   PLUGIN_ZALO_OA_INACTIVE
+  PLUGIN_ZALO_OA_REMOVED
   PLUGIN_ZALO_OA_UPDATED
   POST_ARCHIVED
   POST_NEW
@@ -1639,8 +1641,8 @@ type MessagesPaginated {
 
 type MetaPage {
   _id: String!
-  categories: [MetaPageCategory!]!
-  category: String!
+  categories: [MetaPageCategory!]
+  category: String
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
   id: String!
@@ -1651,7 +1653,7 @@ type MetaPage {
   refs: [String!]
   source: EntitySource
   status: MetaPageStatus!
-  tasks: [String!]!
+  tasks: [String!]
   updatedAt: Float
 }
 
@@ -3097,7 +3099,7 @@ type Query {
     """
     query: JSONObject
   ): LoansPaginated!
-  getMessageBox(id: String!): MessageBox!
+  getMessageBoxById(id: String!): MessageBox!
   getMessageBoxes(
     ids: [String!]
     limit: Float = 30
@@ -3809,6 +3811,7 @@ type Query {
   getWorkspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
   getWorkspaceRoles: [WorkspaceRole!]!
   getWorkspaceSetting: WorkspaceSetting!
+  getWorkspaceStat: WorkspaceStat!
   getWorkspaceStats(
     ids: [String!]
     limit: Float = 30
@@ -4882,19 +4885,22 @@ type WorkspaceSetting {
 
 type WorkspaceStat {
   _id: String!
-  bookingCount: Float
+  bookings: Float!
   createdAt: Float
   customFieldValues: [CustomFieldValue!]
-  customerCount: Float
+  customers: Float!
   isArchived: Boolean
-  memberCount: Float
-  orderCount: Float
+  members: Float!
+  messageHubs: Float!
+  metaPages: Float!
+  orders: Float!
   refs: [String!]
   source: EntitySource
-  storageUsage: Float
+  storageUsage: Float!
   type: WorkspaceType!
   updatedAt: Float
   workspace: WorkspaceStatWorkspaceInformation!
+  zaloOas: Float!
 }
 
 type WorkspaceStatWorkspaceInformation {

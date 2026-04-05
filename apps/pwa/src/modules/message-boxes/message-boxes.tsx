@@ -15,24 +15,29 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
+import { useMemo } from "react";
+import { useWorkspaceStat } from "../workspace-stats/hooks/useWorkspaceStat";
 import { MessageBoxFragment } from "./graphql/fragmentMessageBox.graphql";
 import GetMessageBoxesDocument from "./graphql/getMessageBoxes.graphql";
 import { CardMessageBox } from "./message-box/message-box-card";
 import { messageBoxStatuses } from "./message-boxes-contants";
 import { MessageBoxesIntegrate } from "./message-boxes-integrate";
 
+const params = {
+  sortLastInteractionAt: -1,
+};
+
 export const MessageBoxList = () => {
   const plugins = usePlugins();
   const layout = useLayout();
   const workspace = useWorkspace();
+  const { workspaceStat, loading: workspaceStatLoading } = useWorkspaceStat();
   const { t } = useLingui();
 
   const boxes = useGraphqlList<MessageBoxFragment>({
     id: "message-boxes",
     query: GetMessageBoxesDocument,
-    params: {
-      sortLastInteractionAt: -1,
-    },
+    params,
     events: [
       EventType.MessageNew,
       EventType.MessageBoxNew,
@@ -47,14 +52,21 @@ export const MessageBoxList = () => {
 
   const padding = layout.view === "mobile" ? 0 : 10;
 
-  if (!plugins.isInitialized || !boxes.isInitialized || !boxes.isInitialized)
+  const isConnectedWithPlugins = useMemo(() => {
+    return (
+      workspaceStat &&
+      workspaceStat.metaPages + workspaceStat.messageHubs + workspaceStat.zaloOas > 0
+    );
+  }, [workspaceStat]);
+
+  if (!boxes.isInitialized || workspaceStatLoading)
     return (
       <Group p={padding}>
         <Skeleton height={150} />
       </Group>
     );
 
-  if (!plugins.isHasPlugin && workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)) {
+  if (!isConnectedWithPlugins && workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)) {
     return <MessageBoxesIntegrate />;
   }
 

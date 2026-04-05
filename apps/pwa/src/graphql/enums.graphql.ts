@@ -7,6 +7,7 @@ export const ActivityType = {
 export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
 /** Available admin actions */
 export const AdminAction = {
+  AggregateWorkspaceStats: 'AGGREGATE_WORKSPACE_STATS',
   PureReports: 'PURE_REPORTS',
   ResetCache: 'RESET_CACHE',
   SearchReindex: 'SEARCH_REINDEX',
@@ -228,6 +229,7 @@ export const EventType = {
   PluginZaloOaDisabled: 'PLUGIN_ZALO_OA_DISABLED',
   PluginZaloOaEnabled: 'PLUGIN_ZALO_OA_ENABLED',
   PluginZaloOaInactive: 'PLUGIN_ZALO_OA_INACTIVE',
+  PluginZaloOaRemoved: 'PLUGIN_ZALO_OA_REMOVED',
   PluginZaloOaUpdated: 'PLUGIN_ZALO_OA_UPDATED',
   PostArchived: 'POST_ARCHIVED',
   PostNew: 'POST_NEW',

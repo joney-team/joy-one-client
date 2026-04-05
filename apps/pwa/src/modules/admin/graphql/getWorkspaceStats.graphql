@@ -7,10 +7,13 @@ query GetWorkspaceStats($limit: Float, $offset: Float, $query: JSONObject) {
       updatedAt
       _id
       storageUsage
-      memberCount
-      bookingCount
-      customerCount
-      orderCount
+      members
+      bookings
+      customers
+      orders
+      metaPages
+      messageHubs
+      zaloOas
       type
       workspace {
         _id

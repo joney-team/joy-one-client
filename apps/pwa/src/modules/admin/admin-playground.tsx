@@ -9,11 +9,12 @@ import { TimeSlots } from "@/components/time-slots/time-slots";
 import { TimeEvent } from "@/components/time-slots/time-slots.types";
 import GetAppConfigDocument from "@/configs/getAppConfig.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
+import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
-import { FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { Card, FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
+import { IconClipboard, IconPlus } from "@tabler/icons-react";
 import { useMemo, useRef, useState, type FC } from "react";
 import { graphqlClient } from "../../graphql/graphql-client";
 import AuthUserDocument from "../auth/graphql/authUser.graphql";
@@ -384,6 +385,38 @@ export const AdminPlayground: FC = () => {
               <li>Copy/Cut converts selection to @variable format</li>
             </ul>
           </Paper>
+        </Stack>
+      </Paper>
+
+      <Paper withBorder p={20}>
+        <Stack>
+          <SectionTitle name="Modal Inputs" icon={IconClipboard} />
+          <Card shadow="xs">
+            <ModalInput>
+              {(open) => (
+                <Group align="start">
+                  {Object.values(InputModalType).map((type) => (
+                    <Button
+                      key={type}
+                      onClick={() =>
+                        open({
+                          type,
+                          onDone: console.log,
+                          options: [
+                            { label: "Option 1", value: "option1" },
+                            { label: "Option 2", value: "option2" },
+                            { label: "Option 3", value: "option3" },
+                          ],
+                        })
+                      }
+                    >
+                      {type}
+                    </Button>
+                  ))}
+                </Group>
+              )}
+            </ModalInput>
+          </Card>
         </Stack>
       </Paper>
     </Stack>
