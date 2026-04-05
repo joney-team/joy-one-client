@@ -59,7 +59,7 @@ export const MessageBoxList = () => {
     );
   }, [workspaceStat]);
 
-  if (!boxes.isInitialized || workspaceStatLoading)
+  if (workspaceStatLoading)
     return (
       <Group p={padding}>
         <Skeleton height={150} />

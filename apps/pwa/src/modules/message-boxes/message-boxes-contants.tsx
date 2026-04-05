@@ -20,7 +20,7 @@ export const messageBoxPlatforms: Record<
   }
 > = {
   [MessageBoxPlatformType.Zalo]: {
-    image: "/images/plugins-zalo.svg",
+    image: "/images/plugins-zalo-oa.svg",
     label: "Zalo OA",
   },
   [MessageBoxPlatformType.MetaPage]: {
