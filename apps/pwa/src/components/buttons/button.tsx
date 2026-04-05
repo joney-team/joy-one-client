@@ -149,6 +149,12 @@ export const Button: FC<ButtonProps> = ({
       if (rest.variant === "light") {
         return color(rest.color);
       }
+
+      return rest.color;
+    }
+
+    if (rest.variant === "light") {
+      return color("primary.6");
     }
 
     return rest.c;
