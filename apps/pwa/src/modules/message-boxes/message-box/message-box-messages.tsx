@@ -41,6 +41,7 @@ import { FC, Fragment, useEffect, useMemo, useRef } from "react";
 import { MessageFragment } from "../graphql/fragmentMessage.graphql";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import GetMessagesDocument from "../graphql/getMessages.graphql";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
 export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }> = (props) => {
   const color = useColor();
@@ -50,7 +51,7 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
   const params = useMemo(() => {
     return {
       boxId: props.box._id,
-      getAll: true,
+      all: true,
     };
   }, [props.box._id]);
 
@@ -58,7 +59,6 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
     query: GetMessagesDocument,
     params,
     events: [EventType.MessageNew, EventType.MessageUpdated],
-    autoFetch: false,
   });
 
   const scrollToBottom = (behavior: ScrollBehavior = "smooth", delay = 0) => {
@@ -83,8 +83,12 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
   }, []);
 
   useEffect(() => {
-    messages.fetch();
-  }, [props.box._id]);
+    if (messages.isInitialized) {
+      requestAnimationFrameTimes(() => {
+        scrollToBottom("instant");
+      });
+    }
+  }, [messages.isInitialized]);
 
   useEventsListener(
     [EventType.MessageNew, EventType.MessageUpdated],
@@ -103,22 +107,6 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
     },
     [props.box._id],
   );
-
-  useEffect(() => {
-    if (messages.isAbleToLoadMore) {
-      const handler = () => {
-        if (messageRef.current && messageRef.current.scrollTop <= 100) {
-          messageRef.current?.removeEventListener("scroll", handler);
-          messages.loadMore();
-        }
-      };
-
-      messageRef.current?.addEventListener("scroll", handler);
-      return () => {
-        messageRef.current?.removeEventListener("scroll", handler);
-      };
-    }
-  }, [messages.isAbleToLoadMore]);
 
   const messagesList = [...messages.data].reverse();
 

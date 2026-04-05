@@ -26,7 +26,7 @@ export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChang
     <Stack>
       <SimpleGrid>
         <Select
-          label={<Trans>Select Bank</Trans>}
+          label={<Trans>Select bank</Trans>}
           searchable
           data={data?.getBankInformations.results.map((v) => ({
             value: v.id.toString(),
@@ -40,7 +40,7 @@ export const FormBankAccount: FC<FormBankAccountProps> = ({ bankAccount, onChang
         />
 
         <TextInput
-          label={<Trans>Account Number</Trans>}
+          label={<Trans>Account number</Trans>}
           value={bankAccount?.accountNumber}
           onChange={(e) => handleChange("accountNumber", e.target.value)}
         />

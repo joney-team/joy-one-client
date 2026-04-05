@@ -46,7 +46,6 @@ export const MessageBoxList = () => {
       EventType.MessageBoxWaiting,
       EventType.MessageBoxRemoved,
       EventType.MessageBoxUpdated,
-      EventType.CustomerUpdated,
     ],
   });
 

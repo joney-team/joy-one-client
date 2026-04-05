@@ -31,6 +31,7 @@ export interface UseGraphqlListArgs<T extends BaseData = BaseData> {
       };
   isIgnoreEventDataActionType?: boolean;
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
+  debug?: boolean;
 }
 
 export type UseGraphqlListData<T extends BaseData = BaseData> = {
@@ -110,40 +111,19 @@ export const useGraphqlList = <T extends BaseData>({
 
   useEffect(() => {
     if (!queryData) return;
-    refetch();
+    refetch({ variables });
   }, [workspace.member?.workspaceId]);
 
   const listData = useMemo<T[]>(() => {
-    const list =
-      queryData &&
-      typeof queryData === "object" &&
-      "list" in queryData &&
-      typeof queryData.list === "object"
-        ? queryData.list
-        : {};
-
-    const results =
-      list && "results" in list && typeof list === "object" && Array.isArray(list.results)
-        ? list.results
-        : [];
-
-    return results;
+    const list = queryData?.list || {};
+    const results = list && "results" in list ? list.results : [];
+    return Array.from(results as T[]);
   }, [queryData]);
 
   const listTotal = useMemo(() => {
-    const list =
-      queryData &&
-      typeof queryData === "object" &&
-      "list" in queryData &&
-      typeof queryData.list === "object"
-        ? queryData.list
-        : {};
-
-    const total =
-      list && "total" in list && typeof list === "object" && typeof list.total === "number"
-        ? list.total
-        : 0;
-    return total;
+    const list = queryData?.list || {};
+    const total = list && "total" in list ? list.total : 0;
+    return Number(total);
   }, [queryData]);
 
   const [isFetchingMore, setIsFetchingMore] = useState(false);
@@ -156,7 +136,7 @@ export const useGraphqlList = <T extends BaseData>({
     if (!queryData || !isAbleToLoadMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { limit, query: params, offset: listData.length },
+      variables: { ...variables, offset: listData.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult || !prev) return prev;
         return {
@@ -167,23 +147,20 @@ export const useGraphqlList = <T extends BaseData>({
     })
       .catch(() => false)
       .finally(() => setIsFetchingMore(false));
-  }, [listData, isAbleToLoadMore, fetchMore, limit, params]);
+  }, [listData, isAbleToLoadMore, fetchMore, variables]);
 
   const onRefetch = useCallback(async () => {
-    await fetchMore({
+    await refetch({
       variables: {
         ...variables,
         limit: listData.length,
         offset: 0,
       },
-      updateQuery: (_, { fetchMoreResult }) => {
-        return fetchMoreResult;
-      },
     }).catch(onError);
-  }, [listData, limit, params]);
+  }, [listData, variables]);
 
   const isHasData = useMemo(() => {
-    return listTotal > 0 && !loading;
+    return listTotal > 0;
   }, [loading, listTotal]);
 
   const listError = useMemo(() => {
@@ -249,7 +226,7 @@ export const useGraphqlList = <T extends BaseData>({
   }, [JSON.stringify(params), autoFetch, listKey, isReadyToFetch]);
 
   return {
-    isFetching: loading,
+    isFetching: loading || isFetchingMore,
     isInitialized: !!queryData,
     data: listData,
     count: listTotal,

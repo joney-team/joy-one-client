@@ -11,11 +11,11 @@ import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-
 import { MessageBoxList } from "@/modules/message-boxes/message-boxes";
 import { MessageBoxesContext } from "@/modules/message-boxes/message-boxes-context";
 import { MessageBoxesIntegrate } from "@/modules/message-boxes/message-boxes-integrate";
-import { useQuery } from "@apollo/client/react";
+import { useLazyQuery, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
-import { useMemo, type FC, type PropsWithChildren } from "react";
+import { useEffect, useMemo, type FC, type PropsWithChildren } from "react";
 import { useWorkspaceStat } from "../workspace-stats/hooks/useWorkspaceStat";
 import GetMessageBoxByIdDocument from "./graphql/getMessageBoxById.graphql";
 
@@ -26,11 +26,15 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const workspaceLayout = useWorkspaceLayout();
   const { workspaceStat, loading: workspaceStatLoading } = useWorkspaceStat();
 
-  const { data, loading, error } = useQuery(GetMessageBoxByIdDocument, {
-    variables: { messageBoxId: params.boxId! },
-    skip: !params.boxId,
+  const [getMessageBoxById, { data, loading, error }] = useLazyQuery(GetMessageBoxByIdDocument, {
     fetchPolicy: "cache-and-network",
   });
+
+  useEffect(() => {
+    if (params.boxId) {
+      getMessageBoxById({ variables: { messageBoxId: params.boxId } });
+    }
+  }, [params.boxId]);
 
   const isConnectedWithPlugins = useMemo(() => {
     return (
@@ -75,7 +79,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
 
             return (
               <Stack style={{ height: workspaceLayout.bodyHeight }}>
-                <MessageBox />
+                <MessageBox key={params.boxId} />
               </Stack>
             );
           }
@@ -99,7 +103,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
               }}
             >
               <Card style={{ height: contentHeight }} shadow="xs" w={350} p={0}>
-                <MessageBoxList />
+                <MessageBoxList key="list" />
               </Card>
 
               <Card style={{ height: contentHeight }} shadow="xs" flex={1} p={0}>
@@ -113,7 +117,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
                       <MessageBoxHead key={data.messageBox._id} />
                     </Group>
 
-                    <ContainerMessageBox />
+                    <ContainerMessageBox key={data.messageBox._id} />
                   </Stack>
                 ) : (
                   <Stack

@@ -31,7 +31,7 @@ export const ContainerMessageBox: FC = () => {
                   width: `${layoutSplit * 100}%`,
                 }}
               >
-                <MessageBox />
+                <MessageBox key={messageBox._id} />
               </Stack>
 
               <Stack
