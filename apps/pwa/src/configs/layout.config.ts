@@ -1,4 +1,4 @@
-import { primaryColors } from "@joy-one-client/config/colors";
+import config from "@joy-one-client/config";
 
 export const configs = {
   backgroundColors: {
@@ -13,7 +13,7 @@ export const configs = {
     "#e64980",
     "#be4bdb",
     "#7950f2",
-    primaryColors[6],
+    config.PRIMARY_COLOR,
     "#228be6",
     "#15aabf",
     "#12b886",

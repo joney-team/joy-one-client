@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
@@ -7,7 +8,7 @@ import { loanAssetTypes, loanPackageTypes } from "@/modules/loans/loans-constant
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { ModalLoanPackageForm } from "@/modules/loans/modals/modal-loan-package-form";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Anchor, Badge, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
+import { Anchor, Card, Group, SimpleGrid, Stack, Text, TextProps } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
 import { useWorkspaceSetting } from "../hooks/use-workspace-setting";
@@ -37,12 +38,12 @@ export const WorkspacetSettingLoans: FC = () => {
                       <Anchor fw={600}>{pkg.id}</Anchor>
 
                       <RowInfo
-                        label={t`Asset types`}
+                        label={<Trans>Asset types</Trans>}
                         value={pkg.assetTypes.map((v) => t(loanAssetTypes[v].label)).join(", ")}
                       />
 
                       <RowInfo
-                        label={t`Loan package type`}
+                        label={<Trans>Loan package type</Trans>}
                         value={
                           <Badge color={loanPackageTypes[pkg.type].color}>
                             {t(loanPackageTypes[pkg.type].label)}
@@ -51,7 +52,7 @@ export const WorkspacetSettingLoans: FC = () => {
                       />
 
                       <RowInfo
-                        label={t`Loan period`}
+                        label={<Trans>Loan period</Trans>}
                         value={
                           <Text flex={1} ta="right">
                             <NumberFormat value={totalMonth} /> <Trans>months</Trans>
@@ -59,7 +60,7 @@ export const WorkspacetSettingLoans: FC = () => {
                         }
                       />
                       <RowInfo
-                        label={t`Contract fee`}
+                        label={<Trans>Contract fee</Trans>}
                         value={
                           <Text flex={1} ta="right">
                             <CurrencyFormat value={pkg.contractFee} />
@@ -68,12 +69,12 @@ export const WorkspacetSettingLoans: FC = () => {
                       />
 
                       <RowInfo
-                        label={t`Payment period`}
+                        label={<Trans>Payment period</Trans>}
                         value={pkg.periodDaysOptions.map((v) => renderLoanPeriod(v)).join(", ")}
                       />
 
                       <RowInfo
-                        label={t`Liquidation fee rate`}
+                        label={<Trans>Liquidation fee rate</Trans>}
                         value={
                           pkg.liquidationFeeRate ? (
                             <Text flex={1} ta="right">
@@ -105,8 +106,8 @@ export const WorkspacetSettingLoans: FC = () => {
 };
 
 const RowInfo: FC<{
-  label: string;
-  value: string | ReactNode;
+  label: ReactNode;
+  value: ReactNode;
   valueProps?: TextProps;
 }> = (props) => {
   return (

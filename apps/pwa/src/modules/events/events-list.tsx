@@ -24,7 +24,7 @@ import { DateFormat, RelativeTimeFormat } from "../../components/format/date-for
 import { EventFragment } from "./graphql/fragmentEvent.graphql";
 import GetEventsDocument, { GetEventsQueryVariables } from "./graphql/getEvents.graphql";
 
-interface EventListProps extends StackProps {
+interface EventListProps extends Omit<StackProps, "ref"> {
   ref?: string;
   userId?: string;
   type?: EventType;

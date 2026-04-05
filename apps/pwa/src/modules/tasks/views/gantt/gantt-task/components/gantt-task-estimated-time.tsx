@@ -1,11 +1,12 @@
 "use client";
 
 import { formatDuration } from "@/components/inputs/estimate-time-input/estimate-time-input-utils";
-import { alpha, Badge, Group, Tooltip } from "@mantine/core";
+import { alpha, Group, Tooltip } from "@mantine/core";
 import { type FC } from "react";
 import { useGanttTaskRow } from "../gantt-task-provider";
 import { Trans } from "@lingui/react/macro";
 import { useGantt } from "../../gantt-tasks-context";
+import { Badge } from "@/components/badge";
 
 export const GanttTaskEstimatedTime: FC = () => {
   const gantt = useGantt();

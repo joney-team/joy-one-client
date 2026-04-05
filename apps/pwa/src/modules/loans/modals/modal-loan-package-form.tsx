@@ -4,7 +4,6 @@ import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { LoanAssetType, LoanPackageType } from "@/graphql/enums.graphql";
 import { LoanPackage } from "@/graphql/types.graphql";
-import { useFormSubmit } from "@/hooks/use-form";
 import { useLoans } from "@/modules/loans/loans-context";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Currency } from "@joy-one-client/utils/currency";
@@ -75,27 +74,25 @@ export const ModalLoanPackageForm: FC<{
     close();
   };
 
-  const submitting = useFormSubmit(form, {
-    onSubmit: async (values) => {
-      if (!workspaceSetting?.loanSettings) return;
+  const onSubmit = form.onSubmit(async (values) => {
+    if (!workspaceSetting?.loanSettings) return;
 
-      let loanPackages = workspaceSetting?.loanSettings?.loanPackages ?? [];
+    let loanPackages = workspaceSetting?.loanSettings?.loanPackages ?? [];
 
-      if (props?.loanPackage) {
-        loanPackages = loanPackages.map((p) => (p.id === props.loanPackage?.id ? values : p));
-      } else {
-        loanPackages.push(values);
-      }
+    if (props?.loanPackage) {
+      loanPackages = loanPackages.map((p) => (p.id === props.loanPackage?.id ? values : p));
+    } else {
+      loanPackages.push(values);
+    }
 
-      await updateWorkspaceSetting({
-        loanSettings: {
-          ...workspaceSetting.loanSettings,
-          loanPackages,
-        },
-      });
+    await updateWorkspaceSetting({
+      loanSettings: {
+        ...workspaceSetting.loanSettings,
+        loanPackages,
+      },
+    });
 
-      close();
-    },
+    close();
   });
 
   if (!loans.isInitialized || !loans.assetEstimations) return null;
@@ -336,11 +333,7 @@ export const ModalLoanPackageForm: FC<{
           <Textarea label={<Trans>Description</Trans>} {...form.getInputProps("description")} />
 
           <Center mt={12}>
-            <Button
-              onClick={() => submitting.handle()}
-              loading={submitting.isSubmitting}
-              leftIcon={IconCheck}
-            >
+            <Button onClick={() => onSubmit()} loading={form.submitting} leftIcon={IconCheck}>
               {props?.loanPackage ? <Trans>Update</Trans> : <Trans>Create</Trans>}
             </Button>
           </Center>

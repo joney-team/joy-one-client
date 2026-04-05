@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Container } from "@/components/container";
 import { PluginZaloOaStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
@@ -10,7 +11,7 @@ import { onActionLoad } from "@/utils/actions";
 import { String } from "@/utils/string.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Badge, Card, Group, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Card, Group, SimpleGrid, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconLinkOff,
   IconPuzzle,

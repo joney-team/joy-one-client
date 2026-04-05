@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { SpeedIllustration } from "@/components/illustrations/speed";
 import { Renderer } from "@/components/renderer";
 import { appEntities } from "@/constant";
@@ -12,7 +13,7 @@ import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Card, Center, Loader, rem, Stack, Text } from "@mantine/core";
+import { Card, Center, Loader, rem, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { Spotlight, SpotlightActionData, SpotlightActionGroupData } from "@mantine/spotlight";
 import {

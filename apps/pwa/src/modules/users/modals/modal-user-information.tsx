@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { Empty } from "@/components/empty";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { EventType } from "@/graphql/enums.graphql";
@@ -21,7 +22,6 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
-  Badge,
   Card,
   Group,
   Modal,
@@ -98,7 +98,7 @@ const UserInformation: FC<{ user: UserPublicInformationFragment; onClose: () => 
                   variant={isOnline ? "filled" : "light"}
                   radius={4}
                 >
-                  {isOnline ? t`Online` : t`Offline`}
+                  {isOnline ? <Trans>Online</Trans> : <Trans>Offline</Trans>}
                 </Badge>
               </Group>
 
@@ -119,7 +119,7 @@ const UserInformation: FC<{ user: UserPublicInformationFragment; onClose: () => 
           <SimpleGrid cols={{ md: 3 }}>
             {!!member?.memberDisplayName && (
               <ShortInfoSession
-                label={t`Display name`}
+                label={<Trans>Display name</Trans>}
                 value={member?.memberDisplayName}
                 icon={IconUser}
               />
@@ -127,7 +127,7 @@ const UserInformation: FC<{ user: UserPublicInformationFragment; onClose: () => 
 
             {!!mutualWorkspace && member && (
               <ShortInfoSession
-                label={t`Member role`}
+                label={<Trans>Member role</Trans>}
                 value={<WorkspaceMemberRoleName member={member} />}
                 icon={IconAccessible}
               />
@@ -263,7 +263,7 @@ const UserActivity: FC<{ user: UserPublicInformationFragment }> = (props) => {
 };
 
 const ShortInfoSession: FC<{
-  label: string;
+  label: ReactNode;
   value: ReactNode;
   icon?: Icon;
   href?: string;

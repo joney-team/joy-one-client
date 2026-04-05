@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
@@ -19,7 +20,6 @@ import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Card,
   Center,
   em,

@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { ProductType } from "@/graphql/enums.graphql";
@@ -8,17 +9,7 @@ import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  CardProps,
-  Group,
-  Stack,
-  Text,
-  ThemeIcon,
-  em,
-} from "@mantine/core";
+import { ActionIcon, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import {
   IconBuildingWarehouse,
   IconClock,

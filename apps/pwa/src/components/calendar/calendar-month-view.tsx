@@ -3,9 +3,10 @@
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { Badge, Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine/core";
+import { Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { FC } from "react";
+import { Badge } from "../badge";
 import { DateFormat } from "../format/date-format";
 import { CalendarProps, CalendarViewProps } from "./calendar-types";
 

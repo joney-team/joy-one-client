@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { BookingStatus } from "@/graphql/enums.graphql";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
@@ -10,7 +11,6 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
-  Badge,
   Blockquote,
   Card,
   CardProps,
@@ -115,7 +115,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             <RelativeTimeFormat value={startTime} />
           </Text>
 
-          <Badge color={color(bookingStatus.color)} size="xs" variant="light">
+          <Badge color={color(bookingStatus.color)} size="xs" fz={8} variant="light">
             {t(bookingStatuses[booking.status].label)}
           </Badge>
         </Stack>

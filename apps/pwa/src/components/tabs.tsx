@@ -2,9 +2,9 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { Box, Group, MantineStyleProp, Text, alpha, em } from "@mantine/core";
-import { useResizeObserver } from "@mantine/hooks";
+import { useMergedRef, useResizeObserver } from "@mantine/hooks";
 import { Icon } from "@tabler/icons-react";
-import { CSSProperties, FC, Fragment, useEffect, useState } from "react";
+import { CSSProperties, FC, Fragment, useEffect, useRef, useState } from "react";
 
 export interface AppTabItem {
   id: string;
@@ -26,17 +26,22 @@ export interface TabsProps {
 
 export const Tabs: FC<TabsProps> = (props) => {
   const color = useColor();
+
+  const tabsRef = useRef<HTMLDivElement>(null);
+
   const [ref, rect] = useResizeObserver();
+  const mergedRef = useMergedRef(ref, tabsRef);
+
   const [itemSize, setItemSize] = useState({ w: 0, h: 0 });
   const tabs = props.tabs.filter((v) => !v.isHide);
   const type = props.type || "default";
   const spacing = props.spacing || 0;
 
   const fetchSize = () => {
-    const width = ref.current ? ref.current.offsetWidth - spacing * (tabs.length - 1) : 0;
+    const width = tabsRef.current ? tabsRef.current.offsetWidth - spacing * (tabs.length - 1) : 0;
     setItemSize({
       w: width / tabs.length,
-      h: ref.current?.offsetHeight || 0,
+      h: tabsRef.current?.offsetHeight || 0,
     });
   };
 
@@ -85,7 +90,7 @@ export const Tabs: FC<TabsProps> = (props) => {
           }}
           h={35}
           wrap="nowrap"
-          ref={ref}
+          ref={mergedRef}
         >
           <Box
             style={{
@@ -104,7 +109,7 @@ export const Tabs: FC<TabsProps> = (props) => {
             <div
               style={{
                 background: color(
-                  props.tabs.find((tab) => tab.id === props.active)?.activeColor || "primary"
+                  props.tabs.find((tab) => tab.id === props.active)?.activeColor || "primary",
                 ),
                 boxShadow: "0px 1px 1px #00000010",
                 width: "100%",

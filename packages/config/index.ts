@@ -9,12 +9,15 @@ const initializeConfig = {
   SECRET_KEY: "",
   ANALYTICS_KEY: "",
   SENTRY_DSN: "",
-  GOOGLE_MAPS_KEY: env.GOOGLE_MAPS_KEY,
+  GOOGLE_MAPS_KEY: "",
+  PRIMARY_COLOR: "#0063ff",
 };
 
 export default Object.keys(initializeConfig).reduce(
   (acc, key) => {
-    acc[key] = env[key] || initializeConfig[key as keyof typeof initializeConfig];
+    acc[key] =
+      (env as Record<string, string>)[key] ||
+      initializeConfig[key as keyof typeof initializeConfig];
     return acc;
   },
   {} as Record<string, string>,

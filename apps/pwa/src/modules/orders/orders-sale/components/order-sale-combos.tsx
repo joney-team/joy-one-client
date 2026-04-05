@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
@@ -9,17 +10,7 @@ import GetProductCombosByIdsDocument from "@/modules/product-combos/graphql/getP
 import { useColor } from "@/modules/theme/use-color";
 import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import {
-  Badge,
-  Card,
-  Group,
-  Indicator,
-  Modal,
-  Skeleton,
-  Stack,
-  Text,
-  ThemeIcon,
-} from "@mantine/core";
+import { Card, Group, Indicator, Modal, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { Icon, IconCheck, IconPackage } from "@tabler/icons-react";
 import { ReactNode, type FC } from "react";

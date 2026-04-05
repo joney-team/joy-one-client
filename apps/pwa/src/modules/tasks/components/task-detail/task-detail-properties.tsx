@@ -6,7 +6,7 @@ import { formatDuration } from "@/components/inputs/estimate-time-input/estimate
 import { TimeTrackingsInput } from "@/components/inputs/time-trackings-input";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Badge, Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import {
   Icon,
@@ -32,6 +32,7 @@ import { taskPriorities } from "../../tasks-constants";
 import { DefaultTaskStatusId } from "../../tasks-types";
 import { useTaskMenu } from "../task-menu/task-menu";
 import { TaskMenuAction } from "../task-menu/task-menu-types";
+import { Badge } from "@/components/badge";
 
 const FormField: FC<
   PropsWithChildren<{

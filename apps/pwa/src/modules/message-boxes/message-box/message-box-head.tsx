@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { MessageBoxStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
@@ -10,7 +11,7 @@ import { WorkspaceMemberInput } from "@/modules/workspace-members/components/wor
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Badge, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
 import {
   IconCheck,
   IconCircleCheck,

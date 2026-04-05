@@ -10,7 +10,7 @@ import { EventType, PromotionStatus, PromotionType } from "@/graphql/enums.graph
 import { DynamicSelectionOperator } from "@/types";
 import { onActionLoad } from "@/utils/actions";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
+import { Combobox, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconCheck, IconEdit } from "@tabler/icons-react";
 import { Fragment } from "react";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
@@ -18,6 +18,7 @@ import { PromotionDescription } from "./components/promotion-description";
 import { OnPromotionModal } from "./modals/modal-promotion";
 import { promotionStatuses, promotionTypes } from "./promotions-constants";
 
+import { Badge } from "@/components/badge";
 import { useApolloClient } from "@apollo/client/react";
 import { PromotionFragment } from "./graphql/fragmentPromotion.graphql";
 import GetPromotionsDocument from "./graphql/getPromotions.graphql";

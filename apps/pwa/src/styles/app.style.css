@@ -627,3 +627,7 @@ button.removeOutline {
     justify-content: center;
   }
 }
+
+a {
+  color: inherit;
+}

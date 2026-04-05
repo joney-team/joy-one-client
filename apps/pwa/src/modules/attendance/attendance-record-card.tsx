@@ -1,10 +1,11 @@
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { DateFormat } from "@/components/format/date-format";
 import { AttendanceRecordStatus } from "@/graphql/enums.graphql";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Anchor, Badge, Card, Group, Menu, Stack, Text } from "@mantine/core";
+import { ActionIcon, Anchor, Card, Group, Menu, Stack, Text } from "@mantine/core";
 import { IconCheck, IconClock, IconDotsVertical, IconLocation, IconX } from "@tabler/icons-react";
 import { FC, useRef } from "react";
 import { renderFileUrl } from "../files/files-utils";

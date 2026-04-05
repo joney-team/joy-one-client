@@ -11,7 +11,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, alpha, Badge, Box, Group, Loader, Stack, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, alpha, Box, Group, Loader, Stack, Text, Tooltip } from "@mantine/core";
 import { IconFolder, IconFolderOpen, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { Fragment, useEffect, useMemo, useRef, useState, type FC } from "react";
@@ -25,6 +25,7 @@ import { useTasks } from "../../tasks-context";
 import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { useGanttRefs } from "./gantt-tasks-refs";
+import { Badge } from "@/components/badge";
 
 const GanttTask = dynamic(() => import("./gantt-task/gantt-task").then((mod) => mod.GanttTask), {
   ssr: false,

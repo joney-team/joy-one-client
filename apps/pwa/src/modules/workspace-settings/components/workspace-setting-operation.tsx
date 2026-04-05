@@ -1,10 +1,12 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { FormSession } from "@/components/form-session";
 import { appEntities } from "@/constant";
 import { EventType, ReceiptPaymentMethod } from "@/graphql/enums.graphql";
 import { WorkingDayInterval } from "@/graphql/types.graphql";
+import { AttendanceSetting } from "@/modules/attendance/attendance-setting";
 import { useLang } from "@/modules/lang/lang-context";
 import { receiptPaymentMethods } from "@/modules/receipts/receipt-constants";
 import { searchGetAvailableEntities } from "@/modules/search/search-service";
@@ -15,7 +17,6 @@ import { Currency } from "@joy-one-client/utils/currency";
 import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
-  Badge,
   Card,
   Divider,
   Group,
@@ -37,7 +38,6 @@ import {
   type ModalWorkspaceSettingWorkingDaysRef,
   ModalWorkspaceSettingWorkingDays,
 } from "../modals/modal-workspace-setting-working-days";
-import { AttendanceSetting } from "@/modules/attendance/attendance-setting";
 
 export const slotGroupColors = ["primary", "orange", "teal"];
 

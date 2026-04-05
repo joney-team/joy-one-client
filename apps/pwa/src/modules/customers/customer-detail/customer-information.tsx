@@ -20,7 +20,6 @@ import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
-  Badge,
   Card,
   Center,
   CheckIcon,
@@ -58,6 +57,7 @@ import type { ModalCustomerRef } from "../customer-modal";
 import AssignCustomerDocument from "../graphql/assignCustomer.graphql";
 import UpdateCustomerDocument from "../graphql/updateCustomer.graphql";
 import type { ModalCustomerRelationshipContactsRef } from "../modals/modal-customer-relationship-contacts";
+import { Badge } from "@/components/badge";
 
 const ModalCustomerRelationshipContacts = dynamic(
   () =>

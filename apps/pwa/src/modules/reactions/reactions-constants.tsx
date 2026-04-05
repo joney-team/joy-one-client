@@ -1,6 +1,7 @@
 "use client";
 
 import { ReactionType } from "@/graphql/enums.graphql";
+import { MantineColor } from "@mantine/core";
 
 import angryIcon from "./icons/angry.svg";
 import dislikeIcon from "./icons/dislike.svg";
@@ -10,7 +11,6 @@ import likeIcon from "./icons/like.svg";
 import loveIcon from "./icons/love.svg";
 import sadIcon from "./icons/sad.svg";
 import surpriseIcon from "./icons/surprise.svg";
-import { MantineColor } from "@mantine/core";
 
 export const reactionTypes: Record<ReactionType, { color: MantineColor; iconSrc: string }> = {
   [ReactionType.Like]: {

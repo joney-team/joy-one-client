@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
 import { Errored } from "@/components/errored";
@@ -12,17 +13,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { onActionLoad } from "@/utils/actions";
 import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Anchor,
-  Badge,
-  Group,
-  Modal,
-  Skeleton,
-  Stack,
-  Table,
-  Text,
-} from "@mantine/core";
+import { ActionIcon, Anchor, Group, Modal, Skeleton, Stack, Table, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconHistory, IconPackage, IconPlus, IconTrash } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useRef } from "react";

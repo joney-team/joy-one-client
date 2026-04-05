@@ -6,11 +6,9 @@ import { EntityImage } from "@/components/entity-image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { genders } from "@/constant";
 import { CustomerKycInput } from "@/graphql/types.graphql";
-import { useFormSubmit } from "@/hooks/use-form";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { Gender } from "@/types";
-import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -122,33 +120,30 @@ export const WithModalRegisterCustomerKyc: FC<{
     },
   });
 
-  const submit = useFormSubmit(form, {
-    onSubmit: async (values) => {
-      if (!props) return;
+  const onSubmit = form.onSubmit(async (values) => {
+    if (!props) return;
 
-      const input: CustomerKycInput = {
-        backOfCidImage: await uploadFile(values.backOfCidImage).then((res) => res.path),
-        frontOfCidImage: await uploadFile(values.frontOfCidImage).then((res) => res.path),
-        portraitImage: await uploadFile(values.portraitImage).then((res) => res.path),
-        cidBirthday: values.cidBirthday,
-        cidFullName: values.cidFullName,
-        cidGender: values.cidGender,
-        cidVnLocation: values.cidVnLocation,
-        cidNumber: values.cidNumber,
-        cidRaw: values.cidRaw,
-        cidCreatedAt: values.cidCreatedAt,
-      };
+    const input: CustomerKycInput = {
+      backOfCidImage: await uploadFile(values.backOfCidImage).then((res) => res.path),
+      frontOfCidImage: await uploadFile(values.frontOfCidImage).then((res) => res.path),
+      portraitImage: await uploadFile(values.portraitImage).then((res) => res.path),
+      cidBirthday: values.cidBirthday,
+      cidFullName: values.cidFullName,
+      cidGender: values.cidGender,
+      cidVnLocation: values.cidVnLocation,
+      cidNumber: values.cidNumber,
+      cidRaw: values.cidRaw,
+      cidCreatedAt: values.cidCreatedAt,
+    };
 
-      await registerCustomerKyc({
-        variables: {
-          customerId: props.customer._id,
-          input: input,
-        },
-      });
-      await props.onDone?.();
-      close();
-    },
-    onError,
+    await registerCustomerKyc({
+      variables: {
+        customerId: props.customer._id,
+        input: input,
+      },
+    });
+    await props.onDone?.();
+    close();
   });
 
   const detectKyc = async (file: File) => {
@@ -361,7 +356,13 @@ export const WithModalRegisterCustomerKyc: FC<{
                 </Session>
 
                 <Group mt={10} justify="center">
-                  <Button onClick={() => submit.handle()} type="submit" miw={300} maw="100%">
+                  <Button
+                    onClick={() => onSubmit()}
+                    type="submit"
+                    miw={300}
+                    maw="100%"
+                    loading={form.submitting}
+                  >
                     <Trans>Complete</Trans>
                   </Button>
                 </Group>

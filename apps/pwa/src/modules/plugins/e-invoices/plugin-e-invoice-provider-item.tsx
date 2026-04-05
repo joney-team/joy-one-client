@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { SectionTitle } from "@/components/session-title";
@@ -11,17 +12,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { useApolloClient, useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Group,
-  InputWrapper,
-  Select,
-  Stack,
-  Text,
-  Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Card, Group, InputWrapper, Select, Stack, Text, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconArchive,
@@ -32,14 +23,14 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useRef, useState } from "react";
+import { OnModalCheckEInvoice } from "./components/modal-check-e-invoice";
+import { OnModalEInvoiceProvider } from "./components/modal-e-invoice-provider";
 import ArchiveEInvoiceProviderDocument from "./graphql/archiveEInvoiceProvider.graphql";
 import { PluginEInvoiceProviderFragment } from "./graphql/fragmentPluginEInvoiceProvider.graphql";
 import GetEInvoiceTemplateVariablesDocument from "./graphql/getEInvoiceTemplateVariables.graphql";
 import HealthcheckEInvoicesProviderDocument from "./graphql/healthcheckEInvoicesProvider.graphql";
 import ResetEInvoicesProviderTemplatesDocument from "./graphql/resetEInvoicesProviderTemplates.graphql";
 import UpdateEInvoiceProviderDocument from "./graphql/updateEInvoiceProvider.graphql";
-import { OnModalCheckEInvoice } from "./components/modal-check-e-invoice";
-import { OnModalEInvoiceProvider } from "./components/modal-e-invoice-provider";
 import { PluginEInvoiceTemplateEditor } from "./plugin-e-invoice-template-editor";
 import {
   eInvoicesProviderStatuses,

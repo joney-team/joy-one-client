@@ -41,20 +41,24 @@ export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
     },
   );
 
-  const values: CustomFieldValue[] = (customFields?.list?.results || []).map((customField) => {
-    const customFieldValue = props.value?.find((v) => v.customFieldId === customField._id);
+  const values: CustomFieldValue[] = Array.from(customFields?.list?.results || []).map(
+    (customField) => {
+      const customFieldValue = props.value?.find((v) => v.customFieldId === customField._id);
 
-    return {
-      __typename: "CustomFieldValue",
-      customFieldId: customField._id,
-      value: customFieldValue?.value,
-      key: customFieldValue?.key ?? null,
-      type: customField.type,
-      config: customField.config,
-    };
-  });
+      return {
+        __typename: "CustomFieldValue",
+        customFieldId: customField._id,
+        value: customFieldValue?.value,
+        key: customFieldValue?.key ?? null,
+        type: customField.type,
+        config: customField.config,
+      };
+    },
+  );
 
-  const sortedCustomFields = (customFields?.list?.results || []).sort((a, b) => b.order - a.order);
+  const sortedCustomFields = Array.from(customFields?.list?.results || []).sort(
+    (a, b) => b.order - a.order,
+  );
   const commonCustomFields = sortedCustomFields.filter((v) => v.type !== CustomFieldType.Switch);
   const switchCustomFields = sortedCustomFields.filter((v) => v.type === CustomFieldType.Switch);
 

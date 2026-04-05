@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { CustomerKycStatus, FileType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { OnModalPrompt } from "@/modals/modal-prompt";
@@ -16,7 +17,6 @@ import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
-  Badge,
   Card,
   CardProps,
   Divider,

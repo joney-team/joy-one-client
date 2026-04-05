@@ -22,7 +22,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Card, ColorSwatch, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconBuilding, IconLock, IconMail, IconPhone } from "@tabler/icons-react";
 import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
@@ -36,6 +36,7 @@ import AssignWorkspaceMemberRolesDocument from "./graphql/assignWorkspaceMemberR
 import GetWorkspaceMembersDocument from "./graphql/getWorkspaceMembers.graphql";
 import UpdateWorkspaceMemberDocument from "./graphql/updateWorkspaceMember.graphql";
 import { normalizeUpdateWorkspaceMemberInput } from "./workspace-members-utils";
+import { Badge } from "@/components/badge";
 
 export const WorkspaceMemberList: FC = () => {
   const { t } = useLingui();

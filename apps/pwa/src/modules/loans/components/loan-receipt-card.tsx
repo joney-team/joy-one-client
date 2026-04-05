@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
@@ -23,7 +24,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Anchor, Badge, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
+import { Anchor, Card, Group, Stack, Table, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {
   IconCashRegister,
   IconCircleHalf2,

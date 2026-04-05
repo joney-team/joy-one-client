@@ -76,8 +76,10 @@ const generateInitialOrderSale = (): OrderState => {
   };
 };
 
-const getCurrentState = () => {
-  return readLocalStorageValue<OrdersManagementState>(initialStorage);
+const getCurrentState = (): OrdersManagementState => {
+  const localStorageValue = readLocalStorageValue(initialStorage);
+  if (localStorageValue) return localStorageValue;
+  return initialStorage.defaultValue!;
 };
 
 interface OrdersManagementProps extends PropsWithChildren {}
@@ -91,7 +93,17 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   const mode = searchParams.get("mode");
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [state, setState] = useLocalStorage<OrdersManagementState>(initialStorage);
+  const [localState, setLocaleState] = useLocalStorage<OrdersManagementState>(initialStorage);
+
+  const state = localState || initialStorage.defaultValue!;
+  const setState = (
+    value: OrdersManagementState | ((val: OrdersManagementState) => OrdersManagementState),
+  ) => {
+    setLocaleState({
+      ...initialStorage.defaultValue,
+      ...(value instanceof Function ? value(state!) : value),
+    });
+  };
 
   const initialize = async () => {
     let currentState = getCurrentState();
@@ -145,8 +157,8 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
   }, [isInitialized]);
 
   const activeOrder = useMemo(() => {
-    return state.orders.find((o) => o.id === state.activeOrderId) || null;
-  }, [state.orders, state.activeOrderId]);
+    return state?.orders.find((o) => o.id === state.activeOrderId) || null;
+  }, [state?.orders, state?.activeOrderId]);
 
   const [calculate, { data: calculated, loading: isCalculating }] = useLazyQuery(
     CalculateOrderDocument,
@@ -167,9 +179,11 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     (calculated?.calculated?.totalAmount ?? 0) - (calculated?.calculated?.paidAmount ?? 0);
 
   const closeOrder = (id?: string | null) => {
+    if (!state) return;
+
     const _id = id ?? activeOrder?.id;
-    const orderIndex = state.orders.findIndex((o) => o.id === _id);
-    const order = state.orders[orderIndex];
+    const orderIndex = state?.orders.findIndex((o) => o.id === _id);
+    const order = state?.orders[orderIndex];
 
     if (!order) return;
     if (order.code === orderCode) router.removeQuery("code");

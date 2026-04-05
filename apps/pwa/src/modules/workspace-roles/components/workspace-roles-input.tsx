@@ -2,12 +2,13 @@
 
 import { Hovered } from "@/components/hovered";
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
+import { ActionIcon, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useMemo } from "react";
 import { WorkspaceRoleFragment } from "../graphql/fragmentWorkspaceRole.graphql";
 import { useNormalizeRoles } from "../hooks/use-normalize-roles";
 import { WorkspaceRolesSelector } from "./workspace-roles-selector";
+import { Badge } from "@/components/badge";
 
 type WorkspaceRoleOption = Pick<WorkspaceRoleFragment, "_id" | "name" | "color">;
 

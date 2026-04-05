@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { Group, GroupProps, Stack } from "@mantine/core";
-import { useForceUpdate, useMouse } from "@mantine/hooks";
+import { useForceUpdate, useMergedRef, useMouse } from "@mantine/hooks";
 import { FC, Fragment, PropsWithChildren, useEffect, useRef, useState } from "react";
 
 interface LayoutSplitProps extends Omit<GroupProps, "value" | "onChange"> {
@@ -19,13 +19,16 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
   const pointerX = useRef(0);
   const forceUpdate = useForceUpdate();
 
+  const ref = useRef<HTMLDivElement>(null);
+  const mergedRef = useMergedRef(mouse.ref, ref);
+
   useEffect(() => {
-    if (isResizing) {
-      const containerRect = mouse.ref.current?.getBoundingClientRect();
+    if (isResizing && ref.current) {
+      const containerRect = ref.current.getBoundingClientRect();
       pointerX.current = mouse.x / containerRect.width;
       forceUpdate();
     }
-  }, [mouse.x, mouse.ref.current, isResizing]);
+  }, [mouse.x, mouse.ref, isResizing]);
 
   useEffect(() => {
     if (isResizing) {
@@ -50,7 +53,7 @@ export const LayoutSplit: FC<PropsWithChildren<LayoutSplitProps>> = (props) => {
       {...rest}
       wrap="nowrap"
       pos="relative"
-      ref={mouse.ref}
+      ref={mergedRef}
       style={{
         cursor: isResizing ? "col-resize" : undefined,
         zIndex: 10,

@@ -7,10 +7,11 @@ import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { Badge, em, Group, Stack, Text } from "@mantine/core";
+import { em, Group, Stack, Text } from "@mantine/core";
 import { IconEditCircle, IconSettings } from "@tabler/icons-react";
 import { type FC } from "react";
 
+import { Badge } from "@/components/badge";
 import { Trans } from "@lingui/react/macro";
 import { ProductFragment } from "../products/graphql/fragmentProduct.graphql";
 import GetProductsDocument from "../products/graphql/getProducts.graphql";

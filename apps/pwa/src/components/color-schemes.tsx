@@ -18,7 +18,7 @@ export const ColorSchemes: FC = () => {
       <Menu.Target>
         <ActionIcon
           size={30}
-          color="var(--mantine-color-text)"
+          c="var(--mantine-color-text)"
           variant="subtle"
           aria-label="Toggle color scheme"
         >
@@ -29,7 +29,7 @@ export const ColorSchemes: FC = () => {
 
       <Menu.Dropdown>
         <Menu.Item
-          color={colorScheme === "light" ? color("primary") : undefined}
+          c={colorScheme === "light" ? color("primary") : undefined}
           leftSection={<IconSun size={18} />}
           onClick={() => setColorScheme("light")}
         >
@@ -37,7 +37,7 @@ export const ColorSchemes: FC = () => {
         </Menu.Item>
 
         <Menu.Item
-          color={colorScheme === "dark" ? color("primary") : undefined}
+          c={colorScheme === "dark" ? color("primary") : undefined}
           leftSection={<IconMoon size={18} />}
           onClick={() => setColorScheme("dark")}
         >
@@ -45,7 +45,7 @@ export const ColorSchemes: FC = () => {
         </Menu.Item>
 
         <Menu.Item
-          color={colorScheme === "auto" ? color("primary") : undefined}
+          c={colorScheme === "auto" ? color("primary") : undefined}
           leftSection={<IconBrightnessAutoFilled size={18} />}
           onClick={() => clearColorScheme()}
         >

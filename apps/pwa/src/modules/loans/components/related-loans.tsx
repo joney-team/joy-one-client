@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Empty } from "@/components/empty";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
@@ -9,7 +10,7 @@ import { LoanStatus } from "@/graphql/enums.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Card, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconCreditCardPay } from "@tabler/icons-react";
 import Link from "next/link";
 import { useMemo, useState, type FC } from "react";

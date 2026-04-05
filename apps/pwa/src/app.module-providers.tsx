@@ -1,6 +1,5 @@
 "use client";
 
-import { useLayout } from "@/layout/layout-context";
 import { useLang } from "@/modules/lang/lang-context";
 import LoansProvider from "@/modules/loans/loans-provider";
 import PluginsProvider from "@/modules/plugins/plugins-provider";
@@ -22,18 +21,18 @@ const AuthRequire = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceAuthorization = dynamic(
   () =>
     import("./modules/workspaces/workspace-authorization").then(
-      (mod) => mod.WorkspaceAuthorization
+      (mod) => mod.WorkspaceAuthorization,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const PreloadResource = dynamic(() => import("./components/preload-source"), {
@@ -46,7 +45,7 @@ const Notifications = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const SearchEngine = dynamic(
@@ -54,7 +53,7 @@ const SearchEngine = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalUpgradeVersion = dynamic(
@@ -62,7 +61,7 @@ const ModalUpgradeVersion = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalInstallWebAppTutorial = dynamic(
@@ -71,7 +70,7 @@ const ModalInstallWebAppTutorial = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const InAppNotification = dynamic(
@@ -79,17 +78,16 @@ const InAppNotification = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
   const lang = useLang();
-  const layout = useLayout();
 
   return (
     <MantineProvider
-      theme={generateTheme(app.metadata, layout, lang.locale)}
+      theme={generateTheme({ metadata: app.metadata, locale: lang.locale })}
       defaultColorScheme="auto"
     >
       <DatesProvider settings={{ locale: lang.locale }}>

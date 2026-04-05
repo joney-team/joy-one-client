@@ -1,11 +1,12 @@
 "use client";
 
-import { ActionIcon, Badge, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
+import { ActionIcon, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { FC, useState } from "react";
 import { Hovered } from "../../components/hovered";
 import { WorkspaceBranchFragment } from "./graphql/fragmentWorkspaceBranch.graphql";
 import { WorkspaceBranchesSelector } from "./workspace-branches-selector";
+import { Badge } from "@/components/badge";
 
 interface WorkspaceBranchesInputProps extends Omit<
   InputWrapperProps,

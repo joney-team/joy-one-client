@@ -6,7 +6,6 @@ import { shiftSelect } from "@joy-one-client/utils/array";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Card,
   Center,
   Group,
@@ -28,6 +27,7 @@ import { cleanObject, generateDefaultViewState } from "./list-utils";
 import { nonLoading } from "@/utils/non-loading";
 import { type BaseData, getId } from "@joy-one-client/utils/base-data";
 import dynamic from "next/dynamic";
+import { Badge } from "../badge";
 import { Column, ColumnState, ListContext, ListProps, ListViewState, TableColumn } from "./types";
 
 const ListTable = dynamic(() => import("./table/table"), {
@@ -40,7 +40,7 @@ const ListFilterModes = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const Filter = dynamic(() => import("./filters").then((m) => m.Filter), {
@@ -58,7 +58,7 @@ const ColsSettings = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ToggleView = dynamic(() => import("./components/toggle-view").then((m) => m.ToggleView), {
@@ -71,7 +71,7 @@ const ResetDefaultButton = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ExportButton = dynamic(
@@ -79,7 +79,7 @@ const ExportButton = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const CreateButton = dynamic(
@@ -87,7 +87,7 @@ const CreateButton = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const BulkActions = dynamic(() => import("./components/bulk-actions").then((m) => m.BulkActions), {
@@ -267,7 +267,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
           list.data.map((v) => getId(v)),
           id,
           selectedIds,
-          selectedIds[selectedIds.length - 1]
+          selectedIds[selectedIds.length - 1],
         );
         setSelectedIds(output);
       } else {
@@ -338,7 +338,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
                           </ActionIcon>
 
                           {list.count > 0 && (
-                            <Badge variant="light" color="dark" size="sm">
+                            <Badge variant="light" color="gray" size="sm">
                               <NumberFormat value={list.count} />
                             </Badge>
                           )}

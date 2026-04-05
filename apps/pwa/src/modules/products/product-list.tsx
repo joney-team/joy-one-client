@@ -11,7 +11,7 @@ import { ProductCard } from "@/modules/products/components/product-card";
 import { OnProductModal } from "@/modules/products/modals/modal-product";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { Trans } from "@lingui/react/macro";
-import { Badge, Stack, Text } from "@mantine/core";
+import { Stack, Text } from "@mantine/core";
 import { IconBox, IconBuildingWarehouse, IconEdit } from "@tabler/icons-react";
 import { type FC } from "react";
 import { CategoryColumn } from "../categories/components/category-column";
@@ -19,6 +19,7 @@ import { CategoryColumn } from "../categories/components/category-column";
 import { ProductFragment } from "./graphql/fragmentProduct.graphql";
 import GetProductsDocument from "./graphql/getProducts.graphql";
 import { productTypes } from "./products-constants";
+import { Badge } from "@/components/badge";
 
 export const ProductList: FC = () => {
   return (

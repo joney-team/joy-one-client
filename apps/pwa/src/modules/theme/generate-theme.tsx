@@ -2,12 +2,14 @@
 
 import type { AppLocale } from "@/graphql/types.graphql";
 import { type AppMetadata } from "@/types";
-import { primaryColors } from "@joy-one-client/config/colors";
+import config from "@joy-one-client/config";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
+import { generateColors } from "@mantine/colors-generator";
 import {
   ActionIcon,
+  Badge,
   Card,
   Checkbox,
   ComboboxItem,
@@ -27,27 +29,31 @@ import {
   TagsInput,
   Tooltip,
 } from "@mantine/core";
-import { LayoutContext } from "../../layout/layout-context";
 import { String } from "../../utils/string.utils";
 
-export const getColorShape = (shape?: number) => {
-  if (typeof shape === "number" && shape >= 0 && shape <= 9) {
-    return shape;
-  }
+export const generateTheme = (args: {
+  metadata: AppMetadata;
+  locale: AppLocale;
+  colorName?: string;
+}) => {
+  const { metadata, locale } = args;
+  const primaryColors = generateColors(
+    metadata.appColor && metadata.appColor.startsWith("#")
+      ? metadata.appColor
+      : config.PRIMARY_COLOR,
+  );
 
-  return 6;
-};
+  const primaryColorName = args.colorName || "primary";
 
-export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: AppLocale) => {
   return createTheme({
     fontFamily: "Inter, sans-serif",
     colors: {
-      primary: primaryColors,
+      [primaryColorName]: primaryColors,
     },
-    primaryColor: metadata.appColor ?? "primary",
+    primaryColor: primaryColorName,
     primaryShade: {
-      light: getColorShape(metadata.appColorShape) as any,
-      dark: (getColorShape(metadata.appColorShape) - 2) as any,
+      light: 6,
+      dark: 4,
     },
     defaultRadius: "md",
     shadows: {
@@ -57,12 +63,20 @@ export const generateTheme = (metadata: AppMetadata, _: LayoutContext, locale: A
       InputWrapper: InputWrapper.extend({
         styles: {
           label: {
-            fontSize: 13,
+            fontSize: 12,
+            fontWeight: 400,
           },
           description: {
             fontSize: 11,
             fontWeight: 300,
             marginBottom: 4,
+          },
+        },
+      }),
+      Badge: Badge.extend({
+        styles: {
+          label: {
+            textBoxTrim: "unset",
           },
         },
       }),

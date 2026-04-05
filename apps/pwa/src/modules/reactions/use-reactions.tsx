@@ -9,14 +9,8 @@ import { getId } from "@joy-one-client/utils/base-data";
 import { type DocumentNode } from "graphql";
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../auth/auth-context";
-import ADD_REACTION_MUTATION, {
-  type AddReactionMutation,
-  type AddReactionMutationVariables,
-} from "./graphql/addReaction.graphql";
-import REMOVE_REACTION_MUTATION, {
-  type RemoveReactionMutation,
-  type RemoveReactionMutationVariables,
-} from "./graphql/removeReaction.graphql";
+import AddReactionDocument from "./graphql/addReaction.graphql";
+import RemoveReactionDocument from "./graphql/removeReaction.graphql";
 import { reactionTypes } from "./reactions-constants";
 
 type DataWithReactions = {
@@ -32,7 +26,7 @@ export const useReactions = <T extends DataWithReactions>(args: {
 }) => {
   const client = useApolloClient();
   const { user } = useAuth();
-  const fragmentName = args.fragmentName ?? `${args.fragmentData.__typename}Data`;
+  const fragmentName = args.fragmentName ?? `${args.fragmentData.__typename}`;
 
   const [isAddLoading, setIsAddLoading] = useState(false);
   const [isRemoveLoading, setIsRemoveLoading] = useState(false);
@@ -40,12 +34,12 @@ export const useReactions = <T extends DataWithReactions>(args: {
   const reactions = useMemo(() => {
     const userReactions =
       args.fragmentData.reactionsCount?.reactions.filter((reaction) =>
-        reaction.userIds.includes(user?._id)
+        reaction.userIds.includes(user?._id),
       ) ?? [];
 
     const otherReactions =
       args.fragmentData.reactionsCount?.reactions.filter(
-        (reaction) => !reaction.userIds.includes(user?._id) && reaction.count > 0
+        (reaction) => !reaction.userIds.includes(user?._id) && reaction.count > 0,
       ) ?? [];
 
     return { userReactions, otherReactions };
@@ -53,21 +47,16 @@ export const useReactions = <T extends DataWithReactions>(args: {
 
   const entityId = getId(args.fragmentData);
 
-  const [addReaction] = useMutation<AddReactionMutation, AddReactionMutationVariables>(
-    ADD_REACTION_MUTATION
-  );
-
-  const [removeReaction] = useMutation<RemoveReactionMutation, RemoveReactionMutationVariables>(
-    REMOVE_REACTION_MUTATION
-  );
+  const [addReaction] = useMutation(AddReactionDocument);
+  const [removeReaction] = useMutation(RemoveReactionDocument);
 
   const cacheIdentifiedId = client.cache.identify(
     Object.assign(
       {
         __typename: args.fragmentData.__typename,
       },
-      "_id" in args.fragmentData ? { _id: args.fragmentData._id } : { id: args.fragmentData.id }
-    )
+      "_id" in args.fragmentData ? { _id: args.fragmentData._id } : { id: args.fragmentData.id },
+    ),
   );
 
   const handleAddReaction = async (type: ReactionType, options?: { onSuccess?: () => unknown }) => {
@@ -101,11 +90,11 @@ export const useReactions = <T extends DataWithReactions>(args: {
                       count: reaction.count + 1,
                       userIds: [...reaction.userIds, user._id],
                     }
-                  : reaction
+                  : reaction,
               ),
             },
           };
-        }
+        },
       );
 
       await options?.onSuccess?.();
@@ -152,11 +141,11 @@ export const useReactions = <T extends DataWithReactions>(args: {
                         count: reaction.count - 1,
                         userIds: reaction.userIds.filter((userId) => userId !== user._id),
                       }
-                    : reaction
+                    : reaction,
                 ),
               },
             };
-          }
+          },
         );
       } catch (error) {
         onError(error);
@@ -173,7 +162,7 @@ export const useReactions = <T extends DataWithReactions>(args: {
       removeReaction,
       user._id,
       entityId,
-    ]
+    ],
   );
 
   const availableReactions = useMemo(() => {

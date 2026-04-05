@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { useFormSubmit } from "@/hooks/use-form";
+import { LoanAssetType } from "@/graphql/enums.graphql";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { FilesBox } from "@/modules/files/files-box";
 import { useLoans } from "@/modules/loans/loans-context";
@@ -31,7 +31,6 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
 import { loanAssetTypes } from "../loans-constants";
-import { LoanAssetType } from "@/graphql/enums.graphql";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -81,31 +80,29 @@ export const ModalLoanAssetEstimationForm: FC<{
     close();
   };
 
-  const submitting = useFormSubmit(form, {
-    onSubmit: async (values) => {
-      if (props?.estimation) {
-        await loans.setAssetEstimations({
-          ...loans.assetEstimations,
-          estimations: loans.assetEstimations.estimations.map((e) => {
-            if (e.id === props.estimation!.id) return values;
-            return e;
-          }),
-        });
-      } else {
-        await loans.setAssetEstimations({
-          ...loans.assetEstimations,
-          estimations: [
-            ...loans.assetEstimations.estimations,
-            {
-              ...values,
-              id: loans.assetEstimations.estimations.length.toString(),
-            },
-          ],
-        });
-      }
+  const onSubmit = form.onSubmit(async (values) => {
+    if (props?.estimation) {
+      await loans.setAssetEstimations({
+        ...loans.assetEstimations,
+        estimations: loans.assetEstimations.estimations.map((e) => {
+          if (e.id === props.estimation!.id) return values;
+          return e;
+        }),
+      });
+    } else {
+      await loans.setAssetEstimations({
+        ...loans.assetEstimations,
+        estimations: [
+          ...loans.assetEstimations.estimations,
+          {
+            ...values,
+            id: loans.assetEstimations.estimations.length.toString(),
+          },
+        ],
+      });
+    }
 
-      close();
-    },
+    close();
   });
 
   if (!loans.isInitialized || !loans.assetEstimations) return null;
@@ -390,7 +387,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                 <FilesBox refs={[`loan-asset-estimations-${form.values.id}`]} autoUpload />
               </InputWrapper>
 
-              <Button onClick={() => submitting.handle()} loading={submitting.isSubmitting} mt={10}>
+              <Button onClick={() => onSubmit()} loading={form.submitting} mt={10}>
                 {props?.estimation ? <Trans>Update</Trans> : <Trans>Create</Trans>}
               </Button>
             </Stack>

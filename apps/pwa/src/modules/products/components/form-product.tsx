@@ -432,10 +432,12 @@ export const FormProduct: FC<
                   )}
                 >
                   <Stack>
-                    <Divider mb={-10} label={t`Product supplies`} labelPosition="left" fw={700} />
-                    <Text fz={em(10)} c="gray">
-                      <Trans>Enter product supplies</Trans>
-                    </Text>
+                    <Divider
+                      mb={-10}
+                      label={<Trans>Product supplies</Trans>}
+                      labelPosition="left"
+                      fw={700}
+                    />
 
                     <Stack gap={10}>
                       {supplies.map((supply, index) => {
@@ -571,7 +573,7 @@ export const FormProduct: FC<
                                 leftIcon={IconPlus}
                                 onClick={ctx.toggle}
                               >
-                                <Trans>Add</Trans> <Trans>Products/Services</Trans>
+                                <Trans>Add Products/Services</Trans>
                               </Button>
                             );
                           }}

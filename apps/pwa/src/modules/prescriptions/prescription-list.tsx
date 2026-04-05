@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { ButtonPlus } from "@/components/buttons/button-plus";
 import { Empty } from "@/components/empty";
 import { NumberFormat } from "@/components/format/number-format";
@@ -9,17 +10,7 @@ import { OnModalPrescriptionForm } from "@/modules/prescriptions/modals/modal-pr
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Badge,
-  Card,
-  Group,
-  SimpleGrid,
-  Skeleton,
-  Stack,
-  Text,
-  em,
-} from "@mantine/core";
+import { ActionIcon, Card, Group, SimpleGrid, Skeleton, Stack, Text, em } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import { type FC } from "react";
 import GetPrescriptionsDocument from "./graphql/getPrescriptions.graphql";

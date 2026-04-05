@@ -1,12 +1,12 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformationFragment } from "@/modules/plugins/banks/graphql/fragmentBankInformation.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { onFormErrorLegacy } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
-  Badge,
   Box,
   Card,
   em,
@@ -74,7 +74,7 @@ export const WorkspaceBankInformation: FC = () => {
       <Stack>
         <SimpleGrid cols={{ md: 2 }}>
           <Select
-            label="Chọn ngân hàng"
+            label={<Trans>Select bank</Trans>}
             searchable
             data={banks.map((v) => ({
               value: v.id.toString(),
@@ -88,7 +88,10 @@ export const WorkspaceBankInformation: FC = () => {
             renderOption={renderBankSelectOption}
           />
 
-          <TextInput label="Số tài khoản" {...form.getInputProps("accountNumber")} />
+          <TextInput
+            label={<Trans>Account number</Trans>}
+            {...form.getInputProps("accountNumber")}
+          />
         </SimpleGrid>
 
         <Group justify="space-between">
@@ -100,7 +103,7 @@ export const WorkspaceBankInformation: FC = () => {
                     <IconInfoCircle strokeWidth={1.5} />
                   </ThemeIcon>
                   <Text c="gray" fz={12}>
-                    Cần cập nhật thông tin ngân hàng nhận thanh toán
+                    <Trans>Need to update bank information for receiving payments</Trans>
                   </Text>
                 </Group>
               );
@@ -114,9 +117,11 @@ export const WorkspaceBankInformation: FC = () => {
                 </ThemeIcon>
                 <Stack gap={0}>
                   <Group gap={8}>
-                    <Text>Tài khoản</Text>
+                    <Text>
+                      <Trans>Bank account</Trans>
+                    </Text>
                     <Badge color="green" size="xs">
-                      Đã xác thực
+                      <Trans>Verified</Trans>
                     </Badge>
                   </Group>
                   <Text>

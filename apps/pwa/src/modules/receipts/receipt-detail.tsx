@@ -10,13 +10,14 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
-import { Badge, Center, Group, Skeleton, Stack } from "@mantine/core";
+import { Center, Group, Skeleton, Stack } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconArchive, IconEdit, IconRefresh, IconReload } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC } from "react";
 import { ReceiptEInvoices } from "./receipt-e-invoices";
 
+import { Badge } from "@/components/badge";
 import { UpdateReceiptInput } from "@/graphql/types.graphql";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { useEventsListener } from "../events/event-service";

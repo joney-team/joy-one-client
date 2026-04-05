@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
 import { Empty } from "@/components/empty";
@@ -10,7 +11,7 @@ import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { String } from "@/utils/string.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
-import { Badge, Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
+import { Card, Center, Group, Image, Skeleton, Stack, Text } from "@mantine/core";
 import { IconArchive, IconEye, IconFileInvoice } from "@tabler/icons-react";
 import { useMemo, type FC } from "react";
 import CancelEInvoiceDocument from "../plugins/e-invoices/graphql/cancelEInvoice.graphql";

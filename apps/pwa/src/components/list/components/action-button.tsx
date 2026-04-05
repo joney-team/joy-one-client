@@ -1,8 +1,9 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { NumberFormat } from "@/components/format/number-format";
 import { useColor } from "@/modules/theme/use-color";
-import { ActionIcon, Badge, Button, Group, Text, Tooltip } from "@mantine/core";
+import { ActionIcon, Button, Group, Text, Tooltip } from "@mantine/core";
 import { Icon, IconX } from "@tabler/icons-react";
 import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 
@@ -53,7 +54,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
         style={{
           cursor: "pointer",
           borderColor: color(
-            withBorder ? (active ? "primary" : "var(--mantine-color-placeholder)") : "transparent"
+            withBorder ? (active ? "primary" : "var(--mantine-color-placeholder)") : "transparent",
           ),
           borderStyle: borderStyle,
         }}
@@ -68,8 +69,8 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
                 disabled
                   ? "var(--mantine-color-dimmed)"
                   : active
-                  ? "primary"
-                  : "var(--mantine-color-dimmed)"
+                    ? "primary"
+                    : "var(--mantine-color-dimmed)",
               )}
               strokeWidth={1.8}
             />
@@ -81,7 +82,7 @@ export const ActionButton: FC<PropsWithChildren<ActionButtonProps>> = ({
           )}
 
           {quantity && quantity > 0 && (
-            <Badge size="xs" variant="outline" color={color(quantityColor || "primary")} px={5}>
+            <Badge size="xs" variant="outline" color={quantityColor} px={5}>
               <NumberFormat value={quantity} />
             </Badge>
           )}

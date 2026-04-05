@@ -20,10 +20,9 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { IconCashRegister, IconCheck } from "@tabler/icons-react";
 import { FC, useState } from "react";
+import CreateReceiptDocument from "../graphql/createReceipt.graphql";
 import { ReceiptFragment } from "../graphql/fragmentReceipt.graphql";
 import { receiptTypes } from "../receipt-constants";
-
-import MUTATION_CREATE_RECEIPT from "../graphql/createReceipt.graphql";
 
 interface ReceiptFormValues {
   amount: number;
@@ -52,7 +51,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [receiptFiles, setReceiptFiles] = useState<File[]>([]);
 
-  const [createReceipt] = useMutation(MUTATION_CREATE_RECEIPT);
+  const [createReceipt] = useMutation(CreateReceiptDocument);
 
   const form = useForm<ReceiptFormValues>({
     initialValues: {

@@ -19,7 +19,6 @@ import { setCustomNativeDragPreview } from "@atlaskit/pragmatic-drag-and-drop/el
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Card,
   Group,
   GroupProps,
@@ -56,6 +55,7 @@ import { UpdateTaskContext, useUpdateTasks } from "../../hooks/use-update-tasks"
 import { taskPriorities } from "../../tasks-constants";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { useRouter } from "next/navigation";
 import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";

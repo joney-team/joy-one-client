@@ -17,7 +17,6 @@ import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Button,
   Center,
   CopyButton,
@@ -48,6 +47,7 @@ import CreateWorkspaceApiAppDocument from "./graphql/createWorkspaceApiApp.graph
 import { WorkspaceApiAppFragment } from "./graphql/fragmentWorkspaceApiApp.graphql";
 import RegenerateWorkspaceApiAppSecretDocument from "./graphql/regenerateWorkspaceApiAppSecret.graphql";
 import UpdateWorkspaceApiAppDocument from "./graphql/updateWorkspaceApiApp.graphql";
+import { Badge } from "@/components/badge";
 
 interface ModalWorkspaceApiAppProps {
   app?: WorkspaceApiAppFragment;

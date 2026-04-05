@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { Empty } from "@/components/empty";
 import { EntityImage } from "@/components/entity-image";
@@ -13,7 +14,7 @@ import { productTypes } from "@/modules/products/products-constants";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Badge, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
+import { ActionIcon, Card, Group, NumberInput, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBox, IconNote, IconPlus, IconTrash } from "@tabler/icons-react";
 import { type FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";

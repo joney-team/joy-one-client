@@ -10,7 +10,6 @@ import { useColor } from "@/modules/theme/use-color";
 import { useIsOnline } from "@/modules/workspace-members/hooks/use-is-member-online";
 import { WorkspaceFragment } from "@/modules/workspaces/graphql/fragmentWorkspace.graphql";
 import { getAvatarInitials } from "@/utils/string.utils";
-import { primaryColors } from "@joy-one-client/config/colors";
 import {
   Indicator,
   IndicatorProps,
@@ -71,8 +70,7 @@ export const Avatar: FC<AvatarProps> = (props) => {
   const getColor = () => {
     if (props.color) return props.color;
     if (props.workspace) {
-      if (!props.workspace.appColor || props.workspace.appColor === "primary")
-        return primaryColors[6];
+      if (!props.workspace.appColor || props.workspace.appColor === "primary") return "primary";
       return props.workspace.appColor;
     }
     if (props.pluginMetaPage) return "primary";

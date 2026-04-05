@@ -24,7 +24,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { capitalize } from "@/utils/string.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
+import { Center, ColorInput, Select, Skeleton, Stack, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { IconArchive, IconLock } from "@tabler/icons-react";
@@ -32,6 +32,7 @@ import { FC } from "react";
 import AssignWorkspaceMemberRolesDocument from "../graphql/assignWorkspaceMemberRoles.graphql";
 import RemoveWorkspaceMemberDocument from "../graphql/removeWorkspaceMember.graphql";
 import UpdateWorkspaceMemberDocument from "../graphql/updateWorkspaceMember.graphql";
+import { Badge } from "@/components/badge";
 
 interface WorkspaceMemberSettingProps {
   userId: string;
@@ -126,7 +127,7 @@ const WorkspaceMemberSettingContent: FC<
         {isOwner ? (
           <Badge
             variant="light"
-            color={color("primary")}
+            color="primary"
             rightSection={<IconLock size={13} style={{ marginLeft: -3 }} />}
           >
             {t(workspaceDefaultRoles[WorkspaceDefaultRoleId.OWNER].name)}

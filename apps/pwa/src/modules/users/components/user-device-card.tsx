@@ -1,14 +1,13 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { useAuth } from "@/modules/auth/auth-context";
-import { DeviceEntity } from "@/modules/devices/devices-types";
 import { DeviceFragment } from "@/modules/devices/graphql/fragmentDevice.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Badge, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import {
   IconDeviceDesktop,
   IconDeviceMobile,
@@ -45,13 +44,13 @@ export const UserDeviceCard: FC<UserDeviceCardProps> = (props) => {
         <Stack gap={5} mt={-3}>
           <Group>
             <Text>
-              {ua?.device.model || t`Unknown device`}
+              {ua?.device.model || <Trans>Unknown device</Trans>}
               {ua?.device.vendor ? ` - ${ua.device.vendor}` : ""}
             </Text>
 
             {auth.device._id === device._id && (
               <Badge size="xs" color={color("primary")}>
-                {t`This device`}
+                <Trans>This device</Trans>
               </Badge>
             )}
           </Group>

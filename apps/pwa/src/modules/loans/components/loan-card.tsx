@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat } from "@/components/format/date-format";
 import { LoanStatus } from "@/graphql/enums.graphql";
@@ -9,7 +10,7 @@ import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-work
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Anchor, Badge, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
+import { Anchor, Card, CardProps, em, Group, Stack, Text } from "@mantine/core";
 import { IconFileTypePdf } from "@tabler/icons-react";
 import { FC, Fragment } from "react";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";

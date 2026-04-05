@@ -10,6 +10,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import {
   ActionIcon,
+  alpha,
   Box,
   Card,
   em,
@@ -19,6 +20,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  ThemeIconVariant,
   Tooltip,
   useMantineTheme,
 } from "@mantine/core";
@@ -79,7 +81,8 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
     const isDarkContent = widgetsContext.getState(id, "style") === "dark-content";
     const contentColor = isDarkContent ? "white" : "var(--mantine-color-bright)";
     const iconColor = isDarkContent ? "white" : color(boxColor);
-    const iconVariant = "light";
+    const iconVariant: ThemeIconVariant = isDarkContent ? "transparent" : "light";
+    const iconBackground = isDarkContent ? alpha("#ffffff", 0.1) : undefined;
 
     const isShowSparkline = sparkline && sparkline.filter((v) => v !== 0).length > 1;
     const tooltip = args.tooltip?.(ctx);
@@ -111,12 +114,13 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
                 color={iconColor}
                 variant={iconVariant}
                 size="xl"
+                bg={iconBackground}
               >
-                <Icon size={30} strokeWidth={1.2} />
+                <Icon size={25} strokeWidth={1.2} />
               </ActionIcon>
             ) : (
-              <ThemeIcon color={iconColor} variant={iconVariant} size="xl">
-                <Icon size={30} strokeWidth={1.2} />
+              <ThemeIcon color={iconColor} variant={iconVariant} size="xl" bg={iconBackground}>
+                <Icon size={25} strokeWidth={1.2} />
               </ThemeIcon>
             )}
 

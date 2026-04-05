@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
@@ -9,7 +10,7 @@ import { CustomerKycStatus, EventType } from "@/graphql/enums.graphql";
 import { CustomerKycCard } from "@/modules/customers/customer-detail/customer-kyc-card";
 import { useEventsListener } from "@/modules/events/event-service";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
+import { Group, SimpleGrid, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyzeFilled } from "@tabler/icons-react";
 import { FC } from "react";
 import InfiniteScroll from "react-infinite-scroller";

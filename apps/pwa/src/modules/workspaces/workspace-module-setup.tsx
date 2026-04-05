@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Renderer } from "@/components/renderer";
 import { WorkspaceViewComponent } from "@/graphql/types.graphql";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
@@ -17,7 +18,6 @@ import { CSS } from "@dnd-kit/utilities";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Card,
   Container,
   Divider,

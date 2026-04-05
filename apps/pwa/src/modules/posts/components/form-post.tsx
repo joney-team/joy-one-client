@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Button } from "@/components/buttons/button";
 import { ContentEditable } from "@/components/content-editable/content-editable";
 import { Editor } from "@/components/editor/editor";
@@ -17,7 +18,6 @@ import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Box,
   Card,
   Grid,
@@ -34,10 +34,10 @@ import { modals } from "@mantine/modals";
 import { IconCheck, IconEye } from "@tabler/icons-react";
 import { type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
+import CreatePostDocument from "../graphql/createPost.graphql";
 import { PostFragment } from "../graphql/fragmentPost.graphql";
 import GeneratePostSlugDocument from "../graphql/generatePostSlug.graphql";
 import UpdatePostDocument from "../graphql/updatePost.graphql";
-import CreatePostDocument from "../graphql/createPost.graphql";
 
 interface FormPostProps {
   post?: PostFragment;

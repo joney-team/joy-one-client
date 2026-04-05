@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { DateFormat } from "@/components/format/date-format";
 import { TextOverflow } from "@/components/text-overflow";
 import { MessageAttachmentType, MessageBoxStatus } from "@/graphql/enums.graphql";
@@ -9,7 +10,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
+import { Card, Group, Image, Indicator, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import { FC } from "react";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";

@@ -5,12 +5,13 @@ import { enumColumn } from "@/components/list/columns/enum-column";
 import { appEntities } from "@/constant";
 import { CustomFieldType, EventType } from "@/graphql/enums.graphql";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Badge, Group, Stack } from "@mantine/core";
+import { Group, Stack } from "@mantine/core";
 import { IconEdit, IconForms } from "@tabler/icons-react";
 import { type FC } from "react";
 import { customFieldTypes } from "./custom-field-constants";
 import { OnModalCustomField } from "./modals/modal-custom-field";
 
+import { Badge } from "@/components/badge";
 import { AppEntity } from "@/types";
 import { CustomFieldFragment } from "./graphql/fragmentCustomField.graphql";
 import GetCustomFieldsDocument from "./graphql/getCustomFields.graphql";

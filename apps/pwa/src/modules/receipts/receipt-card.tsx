@@ -2,7 +2,6 @@
 
 import {
   Anchor,
-  Badge,
   Card,
   CardProps,
   em,
@@ -29,6 +28,7 @@ import { FilesBox } from "@/modules/files/files-box";
 import { getStaticQrCode, useBanks } from "@/modules/plugins/banks/banks.services";
 import { OnModalDisburesementReceipt } from "@/modules/receipts/modals/modal-disburesement-receipt";
 
+import { Badge } from "@/components/badge";
 import { ReceiptPaymentMethod, ReceiptStatus, ReceiptType } from "@/graphql/enums.graphql";
 import { UpdateReceiptInput } from "@/graphql/types.graphql";
 import { UserCard } from "@/modules/users/components/user-card";

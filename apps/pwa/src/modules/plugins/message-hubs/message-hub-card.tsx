@@ -487,7 +487,7 @@ const WelcomInput: FC<{
           </ActionIcon>
         </Group>
 
-        <Grid gutter={10}>
+        <Grid gap={10}>
           <Grid.Col span={{ md: isDynamicInput ? 4 : 6 }}>
             <Select
               label={<Trans>Data type</Trans>}

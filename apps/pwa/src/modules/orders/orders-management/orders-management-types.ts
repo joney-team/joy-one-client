@@ -9,7 +9,7 @@ export interface OrderState extends OrderFragment {
 
 export interface OrdersManagementState {
   orders: OrderState[];
-  activeOrderId: string;
+  activeOrderId?: string | null;
 }
 
 export type OrderItem = OrderFragment["items"][number];

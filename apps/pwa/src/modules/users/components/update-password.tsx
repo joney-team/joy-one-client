@@ -2,10 +2,9 @@
 
 import { Button } from "@/components/buttons/button";
 import { UpdateUserPasswordInput } from "@/graphql/types.graphql";
-import { useFormSubmit } from "@/hooks/use-form";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onSuccess } from "@/utils/actions";
-import { onFormErrorBinding } from "@/utils/exceptions.utils";
+import { onFormError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Group, PasswordInput, SimpleGrid, Stack } from "@mantine/core";
@@ -37,15 +36,14 @@ export const UpdatePassword: FC = () => {
     },
   });
 
-  const submitting = useFormSubmit(form, {
-    onSubmit: (values) =>
-      client
-        .mutate({ mutation: UpdateUserPasswordDocument, variables: { input: values } })
-        .catch(onFormErrorBinding(form)),
-    onSuccess: async (_, _form) => {
+  const onSubmit = form.onSubmit(async (values) => {
+    try {
+      await client.mutate({ mutation: UpdateUserPasswordDocument, variables: { input: values } });
       onSuccess({ message: t`Password updated` });
-      _form.reset();
-    },
+      form.reset();
+    } catch (error) {
+      onFormError(form, error);
+    }
   });
 
   return (
@@ -79,7 +77,7 @@ export const UpdatePassword: FC = () => {
         </SimpleGrid>
 
         <Group justify="center" mt={10}>
-          <Button onClick={() => submitting.handle()} disabled={!form.isDirty()}>
+          <Button loading={form.submitting} onClick={() => onSubmit()} disabled={!form.isDirty()}>
             <Trans>Update</Trans>
           </Button>
         </Group>

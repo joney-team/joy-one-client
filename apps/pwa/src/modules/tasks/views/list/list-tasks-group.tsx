@@ -8,7 +8,17 @@ import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-tas
 import { useTasks } from "@/modules/tasks/tasks-context";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Card, Center, Group, Loader, Skeleton, Stack, Text } from "@mantine/core";
+import {
+  ActionIcon,
+  alpha,
+  Card,
+  Center,
+  Group,
+  Loader,
+  Skeleton,
+  Stack,
+  Text,
+} from "@mantine/core";
 import { IconCaretDownFilled, IconCaretRightFilled, IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, useEffect, useMemo, useRef, useState } from "react";
@@ -20,6 +30,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTasksQuery } from "../../hooks/use-tasks-query";
 import styles from "./list-tasks.module.css";
+import { useColor } from "@/modules/theme/use-color";
 
 const ListTaskRow = dynamic(() => import("./list-task-row").then((mod) => mod.ListTaskRow), {
   ssr: false,
@@ -47,6 +58,7 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({
   defaultVisible = true,
   status,
 }) => {
+  const color = useColor();
   const modalCreateTaskRef = useRef<ModalCreateTaskRef>(null);
   const { activatedFolder, state } = useTasks();
 
@@ -103,6 +115,8 @@ export const ListTasksGroup: FC<ListTasksGroupProps> = ({
               </Center>
             }
             tt="uppercase"
+            // c={status.color ?? "gray"}
+            // bg={alpha(color(status.color || "gray"), 0.1)}
           >
             {status.name}
           </Button>

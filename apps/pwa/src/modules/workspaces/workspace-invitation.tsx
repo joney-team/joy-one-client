@@ -11,8 +11,9 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useQuery } from "@apollo/client/react";
-import { primaryColors } from "@joy-one-client/config/colors";
+import config from "@joy-one-client/config";
 import { Trans, useLingui } from "@lingui/react/macro";
+import { generateColors } from "@mantine/colors-generator";
 import {
   Anchor,
   Avatar,
@@ -155,7 +156,7 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
   return (
     <MantineProvider
       theme={createTheme({
-        colors: { primary: primaryColors },
+        colors: { primary: generateColors(config.PRIMARY_COLOR) },
         primaryColor: (data?.workspaceInviteInformation?.appColor || "primary") as any,
         primaryShade: (data?.workspaceInviteInformation?.appColorShape || 6) as any,
       })}

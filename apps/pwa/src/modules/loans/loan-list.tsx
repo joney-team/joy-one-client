@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { Circle } from "@/components/circle";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
@@ -23,7 +24,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Anchor, Badge, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
+import { Anchor, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconBan,
   IconBrandSpeedtest,

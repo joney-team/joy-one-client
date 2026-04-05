@@ -2,8 +2,9 @@
 
 import { configs } from "@/configs/layout.config";
 import LangProvider from "@/modules/lang/lang-provider";
-import { primaryColors } from "@joy-one-client/config/colors";
+import config from "@joy-one-client/config";
 import { Trans } from "@lingui/react/macro";
+import { generateColors } from "@mantine/colors-generator";
 import {
   Button,
   Container,
@@ -111,7 +112,12 @@ const Content: FC<ErrorBoundaryProps> = (props) => {
 export const ErrorBoundary: FC<ErrorBoundaryProps> = (props) => {
   return (
     <LangProvider>
-      <MantineProvider theme={createTheme({ colors: { primary: primaryColors } })}>
+      <MantineProvider
+        theme={createTheme({
+          colors: { primary: generateColors(config.PRIMARY_COLOR) },
+          primaryColor: "primary",
+        })}
+      >
         <Modal
           opened
           onClose={() => {}}

@@ -9,11 +9,12 @@ import { customerColumn } from "@/modules/customers/components/customer-column";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { ModalProductCombo } from "@/modules/product-combos/modals/modal-product-combo";
 import { useColor } from "@/modules/theme/use-color";
-import { Badge, Group, Stack, Text } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 import { IconHistory, IconPackage } from "@tabler/icons-react";
 import { type FC } from "react";
 import { productComboStatuses } from "./product-combos-constants";
 
+import { Badge } from "@/components/badge";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ProductComboFragment } from "./graphql/fragmentProductCombo.graphql";
 import GetProductCombosDocument from "./graphql/getProductCombos.graphql";

@@ -40,7 +40,7 @@ const ModalLoanCalculator = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCustomer = dynamic(
@@ -48,7 +48,7 @@ const ModalCustomer = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCreateBooking = dynamic(
@@ -57,7 +57,7 @@ const ModalCreateBooking = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCreateLoan = dynamic(
@@ -65,7 +65,7 @@ const ModalCreateLoan = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const ModalCreateTask = dynamic(
@@ -73,7 +73,7 @@ const ModalCreateTask = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 type ShortcutModals = {
   createLoan: () => void;
@@ -156,7 +156,7 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
     return (
       <Menu>
         <Menu.Target>
-          <ActionIcon radius={100} color={color("primary")}>
+          <ActionIcon radius={100}>
             <IconPlus size={18} />
           </ActionIcon>
         </Menu.Target>

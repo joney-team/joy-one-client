@@ -5,7 +5,7 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { useAuth } from "@/modules/auth/auth-context";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-import MUTATION_TRANSFER_OWNER from "@/modules/workspace-members/graphql/transferWorkspaceOwner.graphql";
+import TransferWorkspaceOwnerDocument from "@/modules/workspace-members/graphql/transferWorkspaceOwner.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
@@ -18,7 +18,7 @@ export const ModalTransferWorkspaceOwner: FC = () => {
   const auth = useAuth();
   const [newOwner, setNewOwner] = useState<WorkspaceMemberFragment>();
 
-  const [transferOwner] = useMutation(MUTATION_TRANSFER_OWNER);
+  const [transferOwner] = useMutation(TransferWorkspaceOwnerDocument);
 
   const onSubmit = async () => {
     if (!newOwner) return;

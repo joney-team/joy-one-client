@@ -6,17 +6,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { TaskStatusIcon } from "@/modules/tasks/components/task-status-icon";
 import { Trans } from "@lingui/react/macro";
-import {
-  ActionIcon,
-  Badge,
-  Box,
-  Group,
-  Progress,
-  Stack,
-  Text,
-  ThemeIcon,
-  Tooltip,
-} from "@mantine/core";
+import { ActionIcon, Box, Group, Progress, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
   IconCalendar,
@@ -58,6 +48,7 @@ import { ListTaskRowHeadProps } from "./list-task-row-head";
 
 import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import styles from "./list-tasks.module.css";
+import { Badge } from "@/components/badge";
 
 const ModalCreateTask = dynamic(
   () => import("@/modules/tasks/modals/modal-create-task").then((mod) => mod.ModalCreateTask),
@@ -269,6 +260,7 @@ export const ListTaskRow: FC<
                                   <Badge
                                     className="clickable"
                                     color={tag.color || "gray"}
+                                    // c="white"
                                     key={tag._id}
                                     size="sm"
                                     variant="light"

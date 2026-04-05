@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { StorageKey } from "@/constants/storage-key";
@@ -20,7 +21,6 @@ import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
-  Badge,
   Group,
   Indicator,
   Menu,

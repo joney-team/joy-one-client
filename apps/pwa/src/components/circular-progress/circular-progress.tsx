@@ -1,4 +1,4 @@
-import { primaryColors } from "@joy-one-client/config/colors";
+import config from "@joy-one-client/config";
 
 interface CircularProgressProps {
   progress: number; // 0 to 1
@@ -12,7 +12,7 @@ interface CircularProgressProps {
 export const CircularProgress: React.FC<CircularProgressProps> = ({
   progress,
   size = 16,
-  color = primaryColors[6],
+  color = config.PRIMARY_COLOR,
   strokeWidth = 1.6,
   gap = 2.6,
   borderType = "solid",
@@ -43,10 +43,10 @@ export const CircularProgress: React.FC<CircularProgressProps> = ({
     clampedProgress === 0
       ? ""
       : clampedProgress === 1
-      ? `M ${center},${center} m 0,-${innerRadius} a ${innerRadius},${innerRadius} 0 1,1 0,${
-          innerRadius * 2
-        } a ${innerRadius},${innerRadius} 0 1,1 0,-${innerRadius * 2}`
-      : `M ${center},${center} L ${startX},${startY} A ${innerRadius},${innerRadius} 0 ${largeArcFlag},1 ${endX},${endY} Z`;
+        ? `M ${center},${center} m 0,-${innerRadius} a ${innerRadius},${innerRadius} 0 1,1 0,${
+            innerRadius * 2
+          } a ${innerRadius},${innerRadius} 0 1,1 0,-${innerRadius * 2}`
+        : `M ${center},${center} L ${startX},${startY} A ${innerRadius},${innerRadius} 0 ${largeArcFlag},1 ${endX},${endY} Z`;
 
   // Calculate stroke dash array for dashed border
   const circumference = 2 * Math.PI * outerRadius;

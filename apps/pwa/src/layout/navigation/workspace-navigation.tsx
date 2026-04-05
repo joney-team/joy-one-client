@@ -20,7 +20,6 @@ import { String } from "@/utils/string.utils";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
-  Badge,
   Divider,
   Drawer,
   Group,
@@ -36,13 +35,14 @@ import { FC, Fragment, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
 import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
+import { Badge } from "@/components/badge";
 
 const WorkspaceNavigationDrawer = dynamic(
   () => import("./workspace-navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const WorkspaceNavigation: FC = () => {
@@ -87,7 +87,7 @@ export const WorkspaceNavigation: FC = () => {
     const mainCpns = components.filter((v) => v.type === "MODULE").slice(0, maxModules);
     const navigationGroup = getNavigationGroups(
       components.filter((v) => !mainCpns.some((m) => m.id === v.id)),
-      availableModules
+      availableModules,
     );
 
     return (

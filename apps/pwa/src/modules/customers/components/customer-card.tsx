@@ -7,13 +7,14 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { Anchor, Badge, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
+import { Anchor, Card, CardProps, Group, Stack, Text, ThemeIcon, em } from "@mantine/core";
 import { IconClock, IconPhone, IconTags } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { customerGenders } from "../customer-constants";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
+import { Badge } from "@/components/badge";
 
 interface CustomerCardProps extends CardProps {
   customer: Pick<
@@ -137,7 +138,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
                 {tags.list
                   .filter((v) => v._id && customer.tagIds!.includes(v._id) === true)
                   .map((tag) => (
-                    <Badge key={tag._id} color={tag.color || ""} size="sm" tt="none">
+                    <Badge key={tag._id} color={tag.color} size="sm" tt="none">
                       {tag.name}
                     </Badge>
                   ))}

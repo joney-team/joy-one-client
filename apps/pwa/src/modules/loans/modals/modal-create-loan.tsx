@@ -5,7 +5,6 @@ import { Empty } from "@/components/empty";
 import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { LoanAssetType } from "@/graphql/enums.graphql";
-import { useFormSubmit } from "@/hooks/use-form";
 import { useRouter } from "@/hooks/use-router";
 import { useCustomerKyc } from "@/modules/customer-kycs/hooks/use-customer-kyc";
 import { WithModalRegisterCustomerKyc } from "@/modules/customer-kycs/modals/modal-register-customer-kyc";
@@ -210,44 +209,41 @@ export const ModalCreateLoan = forwardRef<
     return output;
   }, [] as number[]);
 
-  const submit = useFormSubmit(form, {
-    onSubmit: async (values) => {
-      if (!customer) return;
-      const location = await getGeolocation();
-      const loanPackage = loanPackages.find(
-        (p) => p.assetTypes.includes(values.assetType) && p.days === values.packageDays,
-      );
-      if (!loanPackage) return;
+  const onSubmit = form.onSubmit(async (values) => {
+    if (!customer) return;
+    const location = await getGeolocation();
+    const loanPackage = loanPackages.find(
+      (p) => p.assetTypes.includes(values.assetType) && p.days === values.packageDays,
+    );
+    if (!loanPackage) return;
 
-      const assetData = await prepareLoanAssetData(values.assetData, uploadFile);
+    const assetData = await prepareLoanAssetData(values.assetData, uploadFile);
 
-      const loan = await createLoan({
-        variables: {
-          input: {
-            workspaceBranchId: values.workspaceBranch?._id,
-            customerId: customer._id,
-            amount: values.amount,
-            assetType: values.assetType,
-            packageId: loanPackage.id,
-            packagePeriodDays: values.packagePeriodDays,
-            assetData,
-            payment: {
-              accountName: values.payment_accountName,
-              accountNumber: values.payment_accountNumber,
-              accountBankId: values.payment_accountBankId,
-            },
-            coord: {
-              lat: location.coords.latitude,
-              lng: location.coords.longitude,
-            },
+    const loan = await createLoan({
+      variables: {
+        input: {
+          workspaceBranchId: values.workspaceBranch?._id,
+          customerId: customer._id,
+          amount: values.amount,
+          assetType: values.assetType,
+          packageId: loanPackage.id,
+          packagePeriodDays: values.packagePeriodDays,
+          assetData,
+          payment: {
+            accountName: values.payment_accountName,
+            accountNumber: values.payment_accountNumber,
+            accountBankId: values.payment_accountBankId,
+          },
+          coord: {
+            lat: location.coords.latitude,
+            lng: location.coords.longitude,
           },
         },
-      });
+      },
+    });
 
-      await router.push(`/loans/${loan.data?.loan.code}`);
-      onClose();
-    },
-    onError,
+    await router.push(`/loans/${loan.data?.loan.code}`);
+    onClose();
   });
 
   return (
@@ -465,7 +461,8 @@ export const ModalCreateLoan = forwardRef<
 
                 <Group mt={10} justify="center">
                   <Button
-                    onClick={() => submit.handle()}
+                    onClick={() => onSubmit()}
+                    loading={form.submitting}
                     type="submit"
                     miw={300}
                     maw="100%"
