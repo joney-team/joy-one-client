@@ -100,6 +100,7 @@ export const WorkspaceAppSettings: FC = () => {
             appDomain: values.appDomain?.trim(),
             appName: values.appName ?? "",
             appColor: values.appColor ?? "",
+            appColorShape: values.appColorShape || 6,
           },
         },
       });
