@@ -23,12 +23,7 @@ export interface UseGraphqlListArgs<T extends BaseData = BaseData> {
   limit?: number;
   autoFetch?: boolean;
   query: TypedDocumentNode;
-  events?:
-    | EventType[]
-    | {
-        types: EventType[];
-        condition?: (data: EventFragment, currentData: T[]) => boolean;
-      };
+  events?: EventType[];
   isIgnoreEventDataActionType?: boolean;
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
   debug?: boolean;
@@ -177,62 +172,60 @@ export const useGraphqlList = <T extends BaseData>({
   }, [queryError]);
 
   // Event listener
-  const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
-  const onEvent = async (e: EventFragment) => {
-    try {
-      if (
-        e.actionType &&
-        (
-          [EventDataActionType.Create, EventDataActionType.Archived] as EventDataActionType[]
-        ).includes(e.actionType)
-      ) {
-        const response = await client
-          .query<UseGraphqlListData<T>>({
-            query: args.query,
-            variables,
-            fetchPolicy: "network-only",
-          })
-          .catch((error) => {
-            console.error("Failed to fetch data for event: ", error);
-          });
+  const events = args.events ?? [];
+  const onEvent = useCallback(
+    async (e: EventFragment) => {
+      try {
+        if (
+          e.actionType &&
+          (
+            [EventDataActionType.Create, EventDataActionType.Archived] as EventDataActionType[]
+          ).includes(e.actionType)
+        ) {
+          const response = await client
+            .query<UseGraphqlListData<T>>({
+              query: args.query,
+              variables,
+              fetchPolicy: "network-only",
+            })
+            .catch((error) => {
+              console.error("Failed to fetch data for event: ", error);
+            });
 
-        if (response?.data && response.data.list.total !== listTotal) {
-          setTotalChange(response.data.list.total - listTotal);
+          if (response?.data && response.data.list.total !== listTotal) {
+            setTotalChange(response.data.list.total - listTotal);
+          }
+
+          return;
         }
 
-        return;
+        if (e.ref && e.actionType === EventDataActionType.Update) {
+          await client
+            .query<UseGraphqlListData<T>>({
+              query: args.query,
+              variables: { query: { userId: [e.ref] } },
+              fetchPolicy: "network-only",
+            })
+            .then((result) => {
+              if (args.debug) {
+                console.info("Fetched data for archived event: ", result);
+              }
+            })
+            .catch((error) => console.error("Failed to fetch data for update event: ", error));
+        }
+      } catch (error) {
+        console.error(error);
       }
-
-      if (e.ref && e.actionType === EventDataActionType.Update) {
-        await client
-          .query<UseGraphqlListData<T>>({
-            query: args.query,
-            variables: { query: { userId: [e.ref] } },
-            fetchPolicy: "network-only",
-          })
-          .then((result) => {
-            if (args.debug) {
-              console.info("Fetched data for archived event: ", result);
-            }
-          })
-          .catch((error) => console.error("Failed to fetch data for update event: ", error));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
+    },
+    [args.query, variables, listTotal, args.debug],
+  );
 
   useEventsListener(
     events,
     (e) => {
-      if (isReadyToFetch) {
-        const condition =
-          args.events && "condition" in args.events ? args.events.condition : undefined;
-        if (condition && !condition(e, listData)) return;
-        onEvent(e);
-      }
+      if (isReadyToFetch) onEvent(e);
     },
-    [args.events, listKey, params, isReadyToFetch, listData, listTotal],
+    [onEvent, isReadyToFetch],
   );
 
   // Auto fetch when server reconnected
@@ -254,9 +247,13 @@ export const useGraphqlList = <T extends BaseData>({
     });
   }
 
+  const isInitialized = useMemo(() => {
+    return !!queryData || !!queryError;
+  }, [queryData, queryError]);
+
   return {
-    isFetching: loading || isFetchingMore,
-    isInitialized: !!queryData || !!queryError,
+    isInitialized,
+    isFetching: isFetchingMore || (!isInitialized && loading),
     data: listData,
     total: listTotal,
     error: listError,

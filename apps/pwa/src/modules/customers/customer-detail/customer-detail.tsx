@@ -62,21 +62,33 @@ export const CustomerDetail = () => {
 
   if (loading)
     return (
-      <Stack p="md">
-        <Skeleton height={150} />
-        {new Array(3).fill(0).map((_, i) => (
-          <Stack key={i}>
-            <Group>
-              <Skeleton key={i} height={20} width={100} />
-            </Group>
-            <Skeleton key={i} height={100} />
-          </Stack>
-        ))}
-      </Stack>
+      <Container size={900}>
+        <Stack p="md">
+          <Skeleton height={150} />
+          {new Array(3).fill(0).map((_, i) => (
+            <Stack key={i}>
+              <Group>
+                <Skeleton key={i} height={20} width={100} />
+              </Group>
+              <Skeleton key={i} height={100} />
+            </Stack>
+          ))}
+        </Stack>
+      </Container>
     );
 
-  if (error || !customer) return <Errored error={error} />;
-  if (customer.isArchived) return <Archived entity={<Trans>Customer</Trans>} />;
+  if (error || !customer)
+    return (
+      <Container size={900}>
+        <Errored error={error} />;
+      </Container>
+    );
+  if (customer.isArchived)
+    return (
+      <Container size={900}>
+        <Archived entity={<Trans>Customer</Trans>} />;
+      </Container>
+    );
 
   return (
     <Container size={900}>
