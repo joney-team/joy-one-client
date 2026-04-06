@@ -223,6 +223,18 @@ export const AdminPlayground: FC = () => {
               compact-lg
             </Button>
           </Group>
+
+          <Stack>
+            {[undefined, "red", "orange", "teal", "gray"].map((color) => (
+              <Group>
+                {["filled", "light", "outline"].map((variant) => (
+                  <Button key={`${color}-${variant}`} color={color} variant={variant}>
+                    {variant} {color}
+                  </Button>
+                ))}
+              </Group>
+            ))}
+          </Stack>
         </Stack>
       </Paper>
 
