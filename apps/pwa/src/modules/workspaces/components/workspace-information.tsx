@@ -25,11 +25,10 @@ import { FC, useState } from "react";
 import { workspaceTypes } from "../workspace-constants";
 import { WorkspaceTypeItem } from "./workpsace-type-item";
 
+import { WorkspaceInput } from "@/graphql/types.graphql";
 import { useDebouncedCallback } from "@mantine/hooks";
-import { UpdateWorkspaceMutationVariables } from "../graphql/updateWorkspace.graphql";
 import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 import { normalizeWorkspaceInput } from "../workspaces-service";
-import { UpdateWorkspaceInput } from "@/graphql/types.graphql";
 
 export const WorkspaceInformationForm: FC = () => {
   const { t } = useLingui();
@@ -38,7 +37,7 @@ export const WorkspaceInformationForm: FC = () => {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const { updateWorkspace } = useUpdateWorkspace();
 
-  const handleUpdateWorkspace = useDebouncedCallback(async (values: UpdateWorkspaceInput) => {
+  const handleUpdateWorkspace = useDebouncedCallback(async (values: WorkspaceInput) => {
     await updateWorkspace({
       variables: {
         input: values,

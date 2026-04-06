@@ -2,12 +2,14 @@
 
 import { Container } from "@/components/container";
 import { Layout, renderPage } from "@/layout/layout-page";
-import { Card } from "@mantine/core";
+import { Card, Skeleton } from "@mantine/core";
 
-const WorkspaceAppSettings = renderPage(() =>
-  import("@/modules/workspace-settings/components/workspace-setting-app").then(
-    (mod) => mod.WorkspaceAppSettings,
-  ),
+const WorkspaceAppSettings = renderPage(
+  () =>
+    import("@/modules/workspace-settings/components/workspace-setting-app").then(
+      (mod) => mod.WorkspaceAppSettings,
+    ),
+  () => <Skeleton height={150} />,
 );
 
 const Content = () => {

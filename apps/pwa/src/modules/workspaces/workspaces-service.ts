@@ -1,5 +1,5 @@
 import { StorageKey } from "@/constants/storage-key";
-import { UpdateWorkspaceInput } from "@/graphql/types.graphql";
+import { WorkspaceInput } from "@/graphql/types.graphql";
 import { getLocalStorage } from "@/hooks/use-local-storage";
 import { isServer } from "@/utils/common.utils";
 import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
@@ -9,7 +9,7 @@ export const getWorkspaceId = () => {
   return getLocalStorage(StorageKey.WORKSPACE_ID);
 };
 
-export function normalizeWorkspaceInput(workspace: WorkspaceFragment): UpdateWorkspaceInput {
+export function normalizeWorkspaceInput(workspace: WorkspaceFragment): WorkspaceInput {
   return {
     name: workspace?.name ?? "",
     phone: workspace?.phone ?? "",

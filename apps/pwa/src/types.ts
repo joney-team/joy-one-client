@@ -148,6 +148,7 @@ export interface AppMetadata {
   appName?: string | null;
   appIcon?: string | null;
   appColor?: string | null;
+  appColorShape?: number | null;
   workspaceId?: string;
   isExtended: boolean;
 }

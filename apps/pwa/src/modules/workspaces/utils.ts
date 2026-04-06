@@ -71,6 +71,7 @@ export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: 
       favicon: renderFileUrl(workspace.appIcon) || "/favicon.ico",
       webURL: `https://${workspace.appDomain}`,
       appColor: workspace.appColor ?? "",
+      appColorShape: workspace.appColorShape ?? 6,
       appName: workspace.appName ?? "",
       workspaceId: workspace._id,
       isExtended: true,

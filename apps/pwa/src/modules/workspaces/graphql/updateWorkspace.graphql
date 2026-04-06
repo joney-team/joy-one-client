@@ -1,6 +1,6 @@
 #import "./fragmentWorkspace.graphql"
 
-mutation UpdateWorkspace($input: UpdateWorkspaceInput!) {
+mutation UpdateWorkspace($input: WorkspaceInput!) {
   workspace: updateWorkspace(input: $input) {
     ...Workspace
   }

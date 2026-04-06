@@ -17,6 +17,7 @@ import {
   em,
   InputWrapper,
   LoadingOverlay,
+  MantinePrimaryShade,
   Menu,
   MenuItem,
   Modal,
@@ -44,6 +45,7 @@ export const generateTheme = (args: {
   );
 
   const primaryColorName = args.colorName || "primary";
+  const primaryShade = metadata.appColorShape || 6;
 
   return createTheme({
     fontFamily: "Inter, sans-serif",
@@ -52,9 +54,9 @@ export const generateTheme = (args: {
     },
     primaryColor: primaryColorName,
     primaryShade: {
-      light: 6,
-      dark: 4,
-    },
+      light: primaryShade,
+      dark: primaryShade - 2,
+    } as MantinePrimaryShade,
     fontWeights: {
       medium: "500",
     },

@@ -469,7 +469,20 @@ input CreateTaskInput {
 }
 
 input CreateWorkspaceInput {
+  appColor: String
+  appColorShape: Float
+  appDomain: String
+  appIcon: String
+  appName: String
   code: String!
+  hotline: String
+  locale: AppLocale
+  location: LocationInput
+  logo: String
+  name: String!
+  phone: String
+  refCode: String
+  type: WorkspaceType!
 }
 
 type CustomField {
@@ -1868,7 +1881,7 @@ type Mutation {
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   updateUserPassword(input: UpdateUserPasswordInput!): Boolean!
   updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
-  updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
+  updateWorkspace(input: WorkspaceInput!): Workspace!
   updateWorkspaceApiApp(id: String!, input: WorkspaceApiAppInput!): WorkspaceApiApp!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
@@ -4540,20 +4553,6 @@ input UpdateUserProfileInput {
   settings: UserSettingsInput
 }
 
-input UpdateWorkspaceInput {
-  appColor: String
-  appDomain: String
-  appIcon: String
-  appName: String
-  hotline: String
-  locale: AppLocale
-  location: LocationInput
-  logo: String
-  name: String!
-  phone: String
-  type: WorkspaceType!
-}
-
 input UpdateWorkspaceMemberInput {
   color: String
   displayName: String
@@ -4701,13 +4700,17 @@ input WorkingDayIntervalInput {
 type Workspace {
   _id: String!
   appColor: String
+  appColorShape: Float
   appDomain: String
   appIcon: String
   appName: String
   branches: Float!
   code: String!
   cover: String
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
   hotline: String
+  inherit: Boolean
   inviteCode: String
   isArchived: Boolean
   locale: AppLocale
@@ -4715,7 +4718,10 @@ type Workspace {
   logo: String
   name: String!
   phone: String
+  refs: [String!]
+  source: EntitySource
   type: WorkspaceType!
+  updatedAt: Float
 }
 
 type WorkspaceApiApp {
@@ -4778,6 +4784,21 @@ input WorkspaceBranchSettingsInput {
 type WorkspaceBranchesPaginated {
   results: [WorkspaceBranch!]!
   total: Float!
+}
+
+input WorkspaceInput {
+  appColor: String
+  appColorShape: Float
+  appDomain: String
+  appIcon: String
+  appName: String
+  hotline: String
+  locale: AppLocale
+  location: LocationInput
+  logo: String
+  name: String!
+  phone: String
+  type: WorkspaceType!
 }
 
 type WorkspaceInviteInformation {

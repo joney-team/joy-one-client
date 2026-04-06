@@ -14,6 +14,7 @@ fragment Workspace on Workspace {
   }
   appIcon
   appColor
+  appColorShape
   appName
   appDomain
   branches

@@ -4,7 +4,6 @@ import { useApp } from "@/app.context";
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { CopyText } from "@/components/copy-text";
-import { Renderer } from "@/components/renderer";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import WORKSPACE_DATE_FRAGMENT from "@/modules/workspaces/graphql/fragmentWorkspace.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -14,12 +13,24 @@ import { useMutation } from "@apollo/client/react";
 import { swatches } from "@joy-one-client/config/colors";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { Card, Center, ColorInput, Group, Stack, Text, TextInput, ThemeIcon } from "@mantine/core";
+import {
+  Card,
+  Center,
+  ColorInput,
+  Group,
+  InputWrapper,
+  Slider,
+  Stack,
+  Text,
+  TextInput,
+  ThemeIcon,
+} from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
 import { useForm } from "@mantine/form";
 import { IconExternalLink, IconUpload } from "@tabler/icons-react";
 import { FC, useState } from "react";
 
+import { WorkspaceInput } from "@/graphql/types.graphql";
 import UpdateWorkspaceDocument from "@/modules/workspaces/graphql/updateWorkspace.graphql";
 import { normalizeWorkspaceInput } from "@/modules/workspaces/workspaces-service";
 import config from "@joy-one-client/config";
@@ -30,14 +41,19 @@ export const WorkspaceAppSettings: FC = () => {
   const uploadFile = useUploadFile();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const form = useForm({
+  const form = useForm<
+    Pick<WorkspaceInput, "appDomain" | "appName" | "appColor" | "appColorShape"> & {
+      iconFile?: File;
+    }
+  >({
     initialValues: {
-      appDomain: "",
-      appName: "",
+      appDomain: workspace.member.workspace.appDomain || "",
+      appName: workspace.member.workspace.appName || "",
       appColor: workspace.member.workspace.appColor || config.PRIMARY_COLOR,
+      appColorShape: workspace.member.workspace.appColorShape || 6,
     } as any,
     validate: {
-      appDomain: (value: string) => {
+      appDomain: (value) => {
         if (value && !value.includes("localhost") && !/^[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(value))
           return t`Invalid domain`;
       },
@@ -139,9 +155,19 @@ export const WorkspaceAppSettings: FC = () => {
           label={<Trans>Brand color</Trans>}
           format="hex"
           swatches={swatches}
-          value={form.values.appColor}
+          value={form.values.appColor ?? undefined}
           onChange={(value) => form.setFieldValue("appColor", value)}
         />
+
+        <InputWrapper label={<Trans>Color shape</Trans>}>
+          <Slider
+            value={form.values.appColorShape || 6}
+            onChange={(value) => form.setFieldValue("appColorShape", value)}
+            min={0}
+            max={9}
+            step={1}
+          />
+        </InputWrapper>
 
         <Stack>
           <TextInput
@@ -157,66 +183,68 @@ export const WorkspaceAppSettings: FC = () => {
             }}
           />
 
-          <Renderer visible={!!app.config.workspaceDomainIP && isDomain(form.values.appDomain)}>
-            <Group>
-              <Card withBorder shadow="none">
-                <Stack gap={3}>
-                  <Text fz={16}>
-                    <Trans>
-                      You need to create a DNS Record with domain{" "}
-                      <strong>{getMainDomain(form.values.appDomain)}</strong>
-                    </Trans>
-                  </Text>
-                  <Group>
+          {!!app.config.workspaceDomainIP &&
+            !!form.values.appDomain &&
+            isDomain(form.values.appDomain) && (
+              <Group>
+                <Card withBorder shadow="none">
+                  <Stack gap={3}>
                     <Text fz={16}>
-                      <Trans>Type</Trans>
-                      {":"}
+                      <Trans>
+                        You need to create a DNS Record with domain{" "}
+                        <strong>{getMainDomain(form.values.appDomain)}</strong>
+                      </Trans>
                     </Text>
-                    <CopyText text="A">
-                      <Text fz={16} fw={700}>
-                        A
+                    <Group>
+                      <Text fz={16}>
+                        <Trans>Type</Trans>
+                        {":"}
                       </Text>
-                    </CopyText>
-                  </Group>
+                      <CopyText text="A">
+                        <Text fz={16} fw={700}>
+                          A
+                        </Text>
+                      </CopyText>
+                    </Group>
 
-                  <Group>
-                    <Text fz={16}>
-                      <Trans>Name</Trans>
-                      {":"}
-                    </Text>
-                    <CopyText text={getDnsRecordName(form.values.appDomain)}>
-                      <Text fz={16} fw={700}>
-                        {getDnsRecordName(form.values.appDomain)}
+                    <Group>
+                      <Text fz={16}>
+                        <Trans>Name</Trans>
+                        {":"}
                       </Text>
-                    </CopyText>
-                  </Group>
+                      <CopyText text={getDnsRecordName(form.values.appDomain)}>
+                        <Text fz={16} fw={700}>
+                          {getDnsRecordName(form.values.appDomain)}
+                        </Text>
+                      </CopyText>
+                    </Group>
 
-                  <Group>
-                    <Text fz={16}>
-                      <Trans>IPv4 address</Trans>
-                      {":"}
-                    </Text>
-                    <CopyText text={app.config.workspaceDomainIP}>
-                      <Text fz={16} fw={700}>
-                        {app.config.workspaceDomainIP}
+                    <Group>
+                      <Text fz={16}>
+                        <Trans>IPv4 address</Trans>
+                        {":"}
                       </Text>
-                    </CopyText>
-                  </Group>
+                      <CopyText text={app.config.workspaceDomainIP}>
+                        <Text fz={16} fw={700}>
+                          {app.config.workspaceDomainIP}
+                        </Text>
+                      </CopyText>
+                    </Group>
 
-                  <Group mt={10}>
-                    <Button
-                      variant="light"
-                      radius={100}
-                      rightIcon={IconExternalLink}
-                      onClick={() => window.open(`https://${form.values.appDomain}`, "_blank")}
-                    >
-                      <Trans>Open app</Trans>
-                    </Button>
-                  </Group>
-                </Stack>
-              </Card>
-            </Group>
-          </Renderer>
+                    <Group mt={10}>
+                      <Button
+                        variant="light"
+                        radius={100}
+                        rightIcon={IconExternalLink}
+                        onClick={() => window.open(`https://${form.values.appDomain}`, "_blank")}
+                      >
+                        <Trans>Open app</Trans>
+                      </Button>
+                    </Group>
+                  </Stack>
+                </Card>
+              </Group>
+            )}
         </Stack>
       </Stack>
 
