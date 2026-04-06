@@ -28,6 +28,7 @@ const ModalCheckEInvoice: FC = () => {
         variables: {
           code: receiptCode,
         },
+        fetchPolicy: "network-only",
       });
 
       if (!receipt?.data?.receipt) return;

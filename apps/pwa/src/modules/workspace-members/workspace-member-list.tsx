@@ -28,6 +28,7 @@ import { FC, Fragment, useRef } from "react";
 import { useNormalizeRoles } from "../workspace-roles/hooks/use-normalize-roles";
 import { WorkspaceMemberFragment } from "./graphql/fragmentWorkspaceMember.graphql";
 
+import { Badge } from "@/components/badge";
 import GetWorkspaceBranchesDocument from "../workspace-branches/graphql/getWorkspaceBranches.graphql";
 import GetWorkspaceBranchesByIdsDocument from "../workspace-branches/graphql/getWorkspaceBranchesByIds.graphql";
 import { WorkspaceMemberRoleName } from "../workspace-roles/components/workspace-role-name";
@@ -36,7 +37,6 @@ import AssignWorkspaceMemberRolesDocument from "./graphql/assignWorkspaceMemberR
 import GetWorkspaceMembersDocument from "./graphql/getWorkspaceMembers.graphql";
 import UpdateWorkspaceMemberDocument from "./graphql/updateWorkspaceMember.graphql";
 import { normalizeUpdateWorkspaceMemberInput } from "./workspace-members-utils";
-import { Badge } from "@/components/badge";
 
 export const WorkspaceMemberList: FC = () => {
   const { t } = useLingui();
@@ -58,7 +58,7 @@ export const WorkspaceMemberList: FC = () => {
   return (
     <Stack p="md">
       <List<WorkspaceMemberFragment>
-        id="workspace-members"
+        id="wm"
         query={GetWorkspaceMembersDocument}
         name={<Trans>Members</Trans>}
         columns={{
@@ -234,12 +234,7 @@ export const WorkspaceMemberList: FC = () => {
           },
         }}
         card={({ data }) => <MemberCard member={data} />}
-        events={[
-          EventType.WorkspaceMemberUpdated,
-          EventType.WorkspaceMemberAssignRoles,
-          EventType.WorkspaceMemberLeaved,
-          EventType.WorkspaceMemberTransferOwner,
-        ]}
+        events={[EventType.WorkspaceMemberJoined, EventType.WorkspaceMemberLeaved]}
       />
 
       <ModalUserInformation ref={modalUserInformationRef} />

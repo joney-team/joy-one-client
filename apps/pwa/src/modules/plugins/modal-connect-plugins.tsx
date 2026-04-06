@@ -34,6 +34,7 @@ const ModalConnectPlugins: FC = () => {
             const result = await client.query({
               query: GetMetaPagesInfosDocument,
               variables: { accessToken: authResponse.accessToken },
+              fetchPolicy: "network-only",
             });
             open({
               pages: result.data?.getMetaPagesInfos ?? [],

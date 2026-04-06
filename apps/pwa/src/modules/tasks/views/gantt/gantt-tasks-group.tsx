@@ -219,16 +219,21 @@ export const GanttTasksGroup: FC<GanttTasksGroupProps> = ({
           className="clickable unselectable"
         >
           <Group gap={6} flex={1} miw={0} wrap="nowrap">
-            <ActionIcon component="div" color={color(folderColor)} variant="light" size="sm">
+            <ActionIcon
+              component="div"
+              c={color(folderColor)}
+              bg={alpha(color(folderColor), 0.1)}
+              size="sm"
+            >
               {opened ? <IconFolderOpen size={14} /> : <IconFolder size={14} />}
             </ActionIcon>
 
-            <Text fz={14} fw={500} truncate>
+            <Text fz="sm" fw={500} truncate>
               {folder?.name ?? <Trans>General tasks</Trans>}{" "}
             </Text>
 
             {count && count > 0 && (
-              <Text fz={12} c="gray.5">
+              <Text fz="xs" c="gray.5">
                 <NumberFormat value={count} />
               </Text>
             )}

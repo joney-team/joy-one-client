@@ -216,7 +216,7 @@ const TabItem: FC<{
           c={props.isActive ? "white" : "dark"}
           style={{ transition: "color 0.3s ease" }}
           fw={600}
-          fz={em(12)}
+          fz="xs"
         >
           {props.tab.name}
         </Text>

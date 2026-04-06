@@ -150,7 +150,7 @@ export const UserNotifications: FC = () => {
                   <Trans>Notifications</Trans>
                 </Text>
 
-                {notifications.count > 0 && (
+                {notifications.total > 0 && (
                   <Group ml="xs">
                     <Button
                       size="compact-sm"
@@ -171,7 +171,7 @@ export const UserNotifications: FC = () => {
           </Drawer.Header>
           <Drawer.Body>
             <Stack>
-              <Renderer visible={notifications.count > 0}>
+              <Renderer visible={notifications.total > 0}>
                 <Stack onClick={close}>
                   {notifications.data.map((noti) => (
                     <NotificationCard notification={noti} key={noti._id} />

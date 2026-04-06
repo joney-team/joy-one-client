@@ -36,7 +36,13 @@ export const ReceiptEInvoices: FC<ReceiptEInvoicesProps> = ({ receipt }) => {
     };
   }, [receipt.id]);
 
-  const { data, isFetching, refetch, isInitialized, count } = useGraphqlList<EInvoiceFragment>({
+  const {
+    data,
+    isFetching,
+    refetch,
+    isInitialized,
+    total: count,
+  } = useGraphqlList<EInvoiceFragment>({
     query: GetEInvoicesDocument,
     params,
     events: [EventType.EInvoiceCreated, EventType.EInvoiceRemoved, EventType.ReceiptPaid],

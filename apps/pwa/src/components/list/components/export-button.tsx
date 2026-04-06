@@ -62,6 +62,7 @@ export const ExportButton: FC = () => {
         const { data: queryData } = await client.query<UseGraphqlListData>({
           query: context.query,
           variables: { query: { ...context.list.params, getAll: true } },
+          fetchPolicy: "network-only",
         });
 
         const data: any[] = queryData?.list.results ?? [];

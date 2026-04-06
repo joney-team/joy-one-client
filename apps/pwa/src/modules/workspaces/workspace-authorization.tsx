@@ -65,6 +65,7 @@ const TriggerConnectMetaPage: FC<{ open: OnModalConnectMetaPages }> = (props) =>
       const result = await client.query({
         query: GetMetaPagesInfosDocument,
         variables: { accessToken },
+        fetchPolicy: "network-only",
       });
       const pages = result.data?.getMetaPagesInfos ?? [];
       const canConnectPages = pages.filter((v) => v.status !== "CONNECTED");

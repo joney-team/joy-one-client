@@ -66,6 +66,7 @@ export const ModalConnectMetaPages: FC<{
       const result = await client.query({
         query: GetMetaPagesInfosDocument,
         variables: { accessToken: authResponse.accessToken },
+        fetchPolicy: "network-only",
       });
       const canConnectPages =
         result.data?.getMetaPagesInfos.filter((v) => v.status !== MetaPageInfoStatus.Connected) ??
@@ -276,6 +277,7 @@ export const WithConnectMetaPagesModal: FC<{
       const result = await client.query({
         query: GetMetaPagesInfosDocument,
         variables: { accessToken: authResponse.accessToken },
+        fetchPolicy: "network-only",
       });
       const canConnectPages =
         result.data?.getMetaPagesInfos.filter((v) => v.status !== MetaPageInfoStatus.Connected) ??

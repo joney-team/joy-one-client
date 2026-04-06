@@ -78,6 +78,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
             variables: {
               ids: result.map((v) => v._id),
             },
+            fetchPolicy: "network-only",
           });
           return (results.data?.customers ?? []).map((v) => ({
             label: v.name,

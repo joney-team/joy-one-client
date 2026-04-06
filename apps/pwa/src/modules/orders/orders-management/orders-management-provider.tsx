@@ -112,6 +112,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
     const serverOrders = await client.query({
       query: GetOrdersByIdsDocument,
       variables: { ids: currentState.orders.map((o) => o.id) },
+      fetchPolicy: "network-only",
     });
     currentState.orders = currentState.orders.map((o) => {
       return serverOrders.data?.orders.find((v) => v.id === o.id) ?? o;
@@ -123,6 +124,7 @@ export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
         const orderByCode = await client.query({
           query: GetOrderByCodeDocument,
           variables: { code: orderCode },
+          fetchPolicy: "network-only",
         });
 
         if (orderByCode.data?.getOrderByCode) {

@@ -94,6 +94,7 @@ export const DashboardWidgets: FC = () => {
     (e) => {
       const _report = e.data as TimeSeriesReportFragment;
 
+      // TODO: Get from server instead of updating by hand
       if (rangeReports.data) {
         rangeReports.setData({
           ...rangeReports.data,

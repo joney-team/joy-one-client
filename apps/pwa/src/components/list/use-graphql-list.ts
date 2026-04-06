@@ -63,7 +63,7 @@ export const useGraphqlList = <T extends BaseData>({
 
   const isReadyToFetch = !isSkip && args.query !== emptyDocument;
 
-  const [newDataCount, setNewDataCount] = useState(0);
+  const [totalChange, setTotalChange] = useState(0);
 
   const listKey = useMemo(() => {
     return args.id ? args.id.replace(/-/g, "") : undefined;
@@ -169,7 +169,7 @@ export const useGraphqlList = <T extends BaseData>({
   }, [queryError]);
 
   const isEmpty = useMemo(() => {
-    return !loading && listTotal === 0 && !queryError;
+    return !!queryData && listTotal === 0 && !queryError;
   }, [loading, listTotal]);
 
   const isHasError = useMemo(() => {
@@ -180,25 +180,42 @@ export const useGraphqlList = <T extends BaseData>({
   const events = Array.isArray(args.events) ? args.events : args.events?.types || [];
   const onEvent = async (e: EventFragment) => {
     try {
-      if (args.isIgnoreEventDataActionType || e.userId === workspace.member.userId) {
-        return refetch();
-      }
+      if (
+        e.actionType &&
+        (
+          [EventDataActionType.Create, EventDataActionType.Archived] as EventDataActionType[]
+        ).includes(e.actionType)
+      ) {
+        const response = await client
+          .query<UseGraphqlListData<T>>({
+            query: args.query,
+            variables,
+            fetchPolicy: "network-only",
+          })
+          .catch((error) => {
+            console.error("Failed to fetch data for event: ", error);
+          });
 
-      if (e.actionType === EventDataActionType.Archived) {
-        return;
-      }
-
-      if (e.actionType === EventDataActionType.Create) {
-        const response = await client.query<UseGraphqlListData<T>>({
-          query: args.query,
-          variables,
-        });
-
-        if (response.data && response.data.list.total > listTotal) {
-          setNewDataCount(response.data.list.total - listTotal);
+        if (response?.data && response.data.list.total !== listTotal) {
+          setTotalChange(response.data.list.total - listTotal);
         }
 
         return;
+      }
+
+      if (e.ref && e.actionType === EventDataActionType.Update) {
+        await client
+          .query<UseGraphqlListData<T>>({
+            query: args.query,
+            variables: { query: { userId: [e.ref] } },
+            fetchPolicy: "network-only",
+          })
+          .then((result) => {
+            if (args.debug) {
+              console.info("Fetched data for archived event: ", result);
+            }
+          })
+          .catch((error) => console.error("Failed to fetch data for update event: ", error));
       }
     } catch (error) {
       console.error(error);
@@ -225,11 +242,23 @@ export const useGraphqlList = <T extends BaseData>({
     }
   }, [JSON.stringify(params), autoFetch, listKey, isReadyToFetch]);
 
+  if (args.debug) {
+    console.info("useGraphqlList debug: ", {
+      loading,
+      isFetchingMore,
+      isInitialized: !!queryData || !!queryError,
+      listData,
+      isEmpty,
+      isHasData,
+      isAbleToLoadMore,
+    });
+  }
+
   return {
     isFetching: loading || isFetchingMore,
-    isInitialized: !!queryData,
+    isInitialized: !!queryData || !!queryError,
     data: listData,
-    count: listTotal,
+    total: listTotal,
     error: listError,
     params,
     isHasError,
@@ -267,7 +296,7 @@ export const useGraphqlList = <T extends BaseData>({
       }
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
-    newDataCount,
+    totalChange,
     refetch: onRefetch,
     fetch,
   };

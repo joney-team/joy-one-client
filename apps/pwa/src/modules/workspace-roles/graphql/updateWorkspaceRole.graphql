@@ -1,19 +1,7 @@
 #import "./fragmentWorkspaceRole.graphql"
 
-mutation UpdateWorkspaceRole(
-  $id: String!
-  $name: String!
-  $permissions: [String!]!
-  $description: String
-  $color: String
-) {
-  workspaceRole: updateWorkspaceRole(
-    _id: $id
-    name: $name
-    permissions: $permissions
-    description: $description
-    color: $color
-  ) {
+mutation UpdateWorkspaceRole($roleId: String!, $input: WorkspaceRoleInput!) {
+  workspaceRole: updateWorkspaceRole(id: $roleId, input: $input) {
     ...WorkspaceRole
   }
 }

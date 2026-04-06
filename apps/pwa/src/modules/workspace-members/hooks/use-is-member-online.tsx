@@ -15,9 +15,14 @@ export const useMemberOnlineEventHandler = () => {
     client.cache.updateQuery(
       {
         query: GetWorkspaceMembersOnlineStatusDocument,
+        overwrite: true,
       },
       (prev) => {
         if (!prev) return prev;
+
+        const workspaceMembersOnlineStatus = prev.workspaceMembersOnlineStatus.filter(
+          (v) => v.userId !== event.userId,
+        );
 
         const memberOnlineStatus: GetWorkspaceMembersOnlineStatusQuery["workspaceMembersOnlineStatus"][number] =
           {
@@ -26,12 +31,11 @@ export const useMemberOnlineEventHandler = () => {
             isOnline: true,
           };
 
+        workspaceMembersOnlineStatus.push(memberOnlineStatus);
+
         return {
           ...prev,
-          workspaceMembersOnlineStatus: [
-            ...prev.workspaceMembersOnlineStatus.filter((v) => v.userId !== event.userId),
-            memberOnlineStatus,
-          ],
+          workspaceMembersOnlineStatus,
         };
       },
     );

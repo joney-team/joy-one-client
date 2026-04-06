@@ -171,6 +171,7 @@ export const ModalCreateLoan = forwardRef<
           },
           limit: 1,
         },
+        fetchPolicy: "network-only",
       }),
     ]);
 

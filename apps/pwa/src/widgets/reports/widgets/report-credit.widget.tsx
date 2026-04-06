@@ -319,6 +319,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
               offset: 0,
               limit: chunkingSize,
             },
+            fetchPolicy: "network-only",
           });
 
           count = receiptsResult.data?.list.total || 0;
@@ -335,6 +336,7 @@ export const ReportCreditWidget: FC<WidgetProps<ReportWidgetsContext>> = (props)
                 offset: receipts.length,
                 limit: chunkingSize,
               },
+              fetchPolicy: "network-only",
             });
 
             receipts = [

@@ -51,7 +51,7 @@ export const CustomerKycList: FC = () => {
           <Badge variant="light" style={{ borderRadius: 100 }}>
             <Trans>QTY</Trans>
             {": "}
-            {kycs.isInitialized && <NumberFormat value={kycs.count} />}
+            {kycs.isInitialized && <NumberFormat value={kycs.total} />}
           </Badge>
         </Group>
 

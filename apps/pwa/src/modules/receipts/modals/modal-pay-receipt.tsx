@@ -143,6 +143,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
         variables: {
           id: receipt.relatedLoanId,
         },
+        fetchPolicy: "network-only",
       });
       return `${removeAccents(customer.name).toUpperCase()} ${loan.data?.loan.code} ${
         receipt.code
@@ -219,6 +220,7 @@ const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
       variables: {
         id: receipt.id,
       },
+      fetchPolicy: "network-only",
     });
 
     if (data.data?.receipt?.status === ReceiptStatus.Paid) {

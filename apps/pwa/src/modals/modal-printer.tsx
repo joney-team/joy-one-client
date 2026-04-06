@@ -187,6 +187,7 @@ export const ModalPrinter = forwardRef<
         const customer = await client.query({
           query: GetCustomerByIdDocument,
           variables: { id: customerId },
+          fetchPolicy: "network-only",
         });
         setCustomer(customer.data?.customer);
       }

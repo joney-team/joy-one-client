@@ -66,6 +66,7 @@ export const PluginMetaPages: FC = () => {
               const { data } = await client.query({
                 query: GetMetaPagesInfosDocument,
                 variables: { accessToken: authResponse.accessToken },
+                fetchPolicy: "network-only",
               });
               const pages = data?.getMetaPagesInfos ?? [];
               open({ pages, accessToken: authResponse.accessToken });
@@ -128,6 +129,7 @@ export const PluginMetaPages: FC = () => {
               const { data } = await client.query({
                 query: GetMetaPagesInfosDocument,
                 variables: { accessToken: authResponse.accessToken },
+                fetchPolicy: "network-only",
               });
               const pages = data?.getMetaPagesInfos ?? [];
               open({ pages, accessToken: authResponse.accessToken });

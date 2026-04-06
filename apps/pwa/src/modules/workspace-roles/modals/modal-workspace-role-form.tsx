@@ -3,6 +3,7 @@
 import { Button } from "@/components/buttons/button";
 import { ButtonArchive } from "@/components/buttons/button-archive";
 import { ModalHead } from "@/components/modal/modal-head";
+import { WorkspaceRoleInput } from "@/graphql/types.graphql";
 import { permissionGroups } from "@/modules/workspace-roles/workspace-roles-config";
 import {
   WorkspaceDefaultRoleId,
@@ -47,7 +48,7 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
 
   const isAbleToEdit = role && role.isEditable;
 
-  const form = useForm({
+  const form = useForm<WorkspaceRoleInput>({
     initialValues: {
       name: role?.name ?? "",
       permissions: role?.permissions ?? [],
@@ -74,8 +75,8 @@ export const ModalWorkspaceRoleForm: FC<ModalWorkspaceRoleFormProps> = (props) =
       };
 
       const action = role
-        ? () => updateRole({ variables: { ...payload, id: role._id } })
-        : () => createRole({ variables: payload });
+        ? () => updateRole({ variables: { roleId: role._id, input: payload } })
+        : () => createRole({ variables: { input: payload } });
 
       await action()
         .then(async () => close())

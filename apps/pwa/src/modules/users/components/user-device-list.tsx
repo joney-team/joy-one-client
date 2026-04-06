@@ -41,7 +41,7 @@ export const UserDeviceList = () => {
   return (
     <Fragment>
       <SectionTitle name={<Trans>Devices</Trans>} icon={IconDevices}>
-        <Renderer visible={devices.count > 1}>
+        <Renderer visible={devices.total > 1}>
           <Group gap={8}>
             <Button
               size="xs"

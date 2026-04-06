@@ -331,22 +331,22 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
                             loading={isRefreshing}
                             variant="subtle"
                             radius="50%"
-                            color={list.newDataCount > 0 ? undefined : "gray"}
+                            color={list.totalChange > 0 ? undefined : "gray"}
                             onClick={refreshList}
                           >
                             <IconRefresh size={16} strokeWidth={1.8} />
                           </ActionIcon>
 
-                          {list.count > 0 && (
+                          {list.total > 0 && (
                             <Badge variant="light" color="gray" size="sm">
-                              <NumberFormat value={list.count} />
+                              <NumberFormat value={list.total} />
                             </Badge>
                           )}
 
-                          {list.newDataCount > 0 && (
+                          {list.totalChange > 0 && (
                             <Badge size="sm" variant="light" onClick={list.refetch}>
                               <Trans>
-                                +<NumberFormat value={list.newDataCount || 0} /> new one
+                                +<NumberFormat value={list.totalChange || 0} /> new one
                               </Trans>
                             </Badge>
                           )}

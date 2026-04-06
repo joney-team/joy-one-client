@@ -80,9 +80,9 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
       : widgetsContext.getState(id, "color") || "primary";
     const isDarkContent = widgetsContext.getState(id, "style") === "dark-content";
     const contentColor = isDarkContent ? "white" : "var(--mantine-color-bright)";
-    const iconColor = isDarkContent ? "white" : color(boxColor);
+    const iconColor = isDarkContent ? "white" : boxColor;
     const iconVariant: ThemeIconVariant = isDarkContent ? "transparent" : "light";
-    const iconBackground = isDarkContent ? alpha("#ffffff", 0.1) : undefined;
+    const iconBackground = isDarkContent ? alpha("#ffffff", 0.1) : alpha(color(boxColor), 0.1);
 
     const isShowSparkline = sparkline && sparkline.filter((v) => v !== 0).length > 1;
     const tooltip = args.tooltip?.(ctx);
@@ -112,14 +112,21 @@ export function numberWidget<CT = any>(args: NumberReportWidget<CT>): WidgetComp
               <ActionIcon
                 onClick={() => args.onClick?.(ctx)}
                 color={iconColor}
-                variant={iconVariant}
+                variant="light"
                 size="xl"
                 bg={iconBackground}
+                c={!isDarkContent ? `${boxColor}.5` : undefined}
               >
                 <Icon size={25} strokeWidth={1.5} />
               </ActionIcon>
             ) : (
-              <ThemeIcon color={iconColor} variant={iconVariant} size="xl" bg={iconBackground}>
+              <ThemeIcon
+                color={iconColor}
+                variant={iconVariant}
+                size="xl"
+                bg={iconBackground}
+                c={!isDarkContent ? `${boxColor}.5` : undefined}
+              >
                 <Icon size={25} strokeWidth={1.5} />
               </ThemeIcon>
             )}

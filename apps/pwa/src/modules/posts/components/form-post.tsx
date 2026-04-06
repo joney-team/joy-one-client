@@ -75,6 +75,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       const response = await client.query({
         query: GeneratePostSlugDocument,
         variables: { input: { title } },
+        fetchPolicy: "network-only",
       });
       form.setFieldValue("slug", response.data?.slug ?? "");
     } catch (error) {

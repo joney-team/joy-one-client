@@ -1759,7 +1759,7 @@ type Mutation {
   createWorkspace(input: CreateWorkspaceInput!): Workspace!
   createWorkspaceApiApp(input: WorkspaceApiAppInput!): WorkspaceApiApp!
   createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
-  createWorkspaceRole(color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
+  createWorkspaceRole(input: WorkspaceRoleInput!): WorkspaceRole!
   defaultAttendanceCaptureRecord(input: DefaultRecordAttendanceInput!): AttendanceRecord!
   deleteCategory(id: String!): Boolean!
   deleteCustomField(id: String!): Boolean!
@@ -1767,7 +1767,7 @@ type Mutation {
   deletePluginAiAssistant(id: String!): Boolean!
   deletePluginMessageHub(id: String!): Boolean!
   deletePrescription(id: String!): Boolean!
-  deleteWorkspaceRole(_id: String!): Boolean!
+  deleteWorkspaceRole(id: String!): Boolean!
   disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
   disconnectMetaPage(id: String!): Boolean!
   duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
@@ -1872,7 +1872,7 @@ type Mutation {
   updateWorkspaceApiApp(id: String!, input: WorkspaceApiAppInput!): WorkspaceApiApp!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
-  updateWorkspaceRole(_id: String!, color: String, description: String, name: String!, permissions: [String!]!): WorkspaceRole!
+  updateWorkspaceRole(id: String!, input: WorkspaceRoleInput!): WorkspaceRole!
   updateWorkspaceSetting(input: UpdateWorkspaceSettingInput!): WorkspaceSetting!
   updateZaloOa(id: String!, input: UpdatePluginZaloOaInput!): PluginZaloOa!
   useProductCombo(id: String!, input: UseProductComboInput!): ProductCombo!
@@ -4832,6 +4832,13 @@ type WorkspaceRole {
   color: String
   description: String
   isEditable: Boolean!
+  name: String!
+  permissions: [String!]!
+}
+
+input WorkspaceRoleInput {
+  color: String
+  description: String
   name: String!
   permissions: [String!]!
 }

@@ -19,6 +19,7 @@ import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
 import { useRouter } from "next/navigation";
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import GetUserWorkspaceMembersDocument from "../workspace-members/graphql/getUserWorkspaceMembers.graphql";
+import GetWorkspaceMemberByUserIdDocument from "../workspace-members/graphql/getWorkspaceMemberByUserId.graphql";
 import { isMemberHasPermission } from "../workspace-roles/workspace-role-utils";
 import GetWorkspaceSettingDocument from "../workspace-settings/graphql/getWorkspaceSetting.graphql";
 import ArchiveWorkspaceDocument from "./graphql/archiveWorkspace.graphql";
@@ -43,12 +44,10 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     },
   );
 
-  const [fetchWorkspaceSetting, { data: workspaceSettingData }] = useLazyQuery(
-    GetWorkspaceSettingDocument,
-    {
+  const [fetchWorkspaceSetting, { data: workspaceSettingData, refetch: refetchWorkspaceSetting }] =
+    useLazyQuery(GetWorkspaceSettingDocument, {
       fetchPolicy: "cache-and-network",
-    },
-  );
+    });
 
   const member = useMemo(
     () =>
@@ -137,28 +136,34 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
   };
 
   useEventsListener(
-    [
-      EventType.WorkspaceUpdated,
-      EventType.WorkspaceArchived,
-      EventType.WorkspaceMemberLeaved,
-      EventType.WorkspaceMemberUpdated,
-      EventType.WorkspaceMemberTransferOwner,
-      EventType.WorkspaceBranchNew,
-      EventType.WorkspaceBranchUpdated,
-      EventType.WorkspaceRolesNew,
-      EventType.WorkspaceRolesUpdated,
-      EventType.WorkspaceRolesRemoved,
-      EventType.WorkspaceInviteCodeUpdated,
-      EventType.WorkspaceMemberTransferOwner,
-      EventType.WorkspaceBranchNew,
-      EventType.WorkspaceMemberSynced,
-    ],
-    () => fetchWorkspaceMembers(),
+    [EventType.WorkspaceMemberSynced, EventType.WorkspaceMemberLeaved, EventType.WorkspaceArchived],
+    (e) => {
+      if (
+        (e.type === EventType.WorkspaceMemberLeaved && e.ref === auth.user?._id) ||
+        e.type === EventType.WorkspaceArchived
+      ) {
+        fetchWorkspaceMembers();
+      }
+
+      if (
+        e.ref &&
+        (
+          [EventType.WorkspaceMemberSynced, EventType.WorkspaceMemberLeaved] as EventType[]
+        ).includes(e.type)
+      ) {
+        client
+          .query({
+            query: GetWorkspaceMemberByUserIdDocument,
+            variables: { userId: e.ref },
+            fetchPolicy: "network-only",
+          })
+          .catch((error) => console.error("Failed to fetch workspace member for event: ", error));
+      }
+    },
   );
 
   useEventsListener([EventType.WorkspaceSettingUpdated], () => {
-    fetchWorkspaceMembers();
-    fetchWorkspaceSetting();
+    refetchWorkspaceSetting();
   });
 
   useEffect(() => {

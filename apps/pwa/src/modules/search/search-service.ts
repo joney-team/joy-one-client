@@ -24,6 +24,7 @@ export async function searchEntity<T = SearchEntityResult>(
       entities: [entity],
       filter,
     },
+    fetchPolicy: "network-only",
   });
 
   return result.data?.search as T[];

@@ -50,6 +50,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
             variables: {
               ids: result.map((v) => v._id),
             },
+            fetchPolicy: "network-only",
           });
           return (results.data?.list.results ?? []).map((v) => ({
             label: v.name,

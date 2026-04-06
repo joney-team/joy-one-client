@@ -31,12 +31,16 @@ const buttonProps: ButtonProps = {
   variant: "subtle",
   size: "sm",
   color: "gray",
-  c: "var(--mantine-color-text)",
   radius: 5,
   py: 0,
   px: 8,
   fw: 500,
   fz: 13,
+  styles: {
+    inner: {
+      color: "var(--mantine-color-text)",
+    },
+  },
 };
 
 export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
@@ -61,8 +65,8 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
             const isActive = props.activeTab
               ? props.activeTab === tab.id
               : tab.exact
-              ? router.pathname === tab.id
-              : router.pathname.includes(tab.id);
+                ? router.pathname === tab.id
+                : router.pathname.includes(tab.id);
 
             return (
               <Group
