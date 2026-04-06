@@ -4,7 +4,6 @@ import { EventDataActionType, EventType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { onReconnected, useEventsListener } from "@/modules/events/event-service";
 import { EventFragment } from "@/modules/events/graphql/fragmentEvent.graphql";
-import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { gql, TypedDocumentNode } from "@apollo/client";
 import { useApolloClient, useLazyQuery } from "@apollo/client/react";
@@ -53,7 +52,6 @@ export const useGraphqlList = <T extends BaseData>({
   const searchs = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-  const workspace = useWorkspace();
   const client = useApolloClient();
 
   const isReadyToFetch = !isSkip && args.query !== emptyDocument;
@@ -103,11 +101,6 @@ export const useGraphqlList = <T extends BaseData>({
     if (!isReadyToFetch) return;
     fetch({ variables });
   }, [isReadyToFetch, variables]);
-
-  useEffect(() => {
-    if (!queryData) return;
-    refetch({ variables });
-  }, [workspace.member?.workspaceId]);
 
   const listData = useMemo<T[]>(() => {
     const list = queryData?.list || {};

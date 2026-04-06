@@ -137,6 +137,7 @@ export const CustomerList: FC = () => {
             EventType.CustomerUpdated,
             EventType.CustomerArchived,
             EventType.CustomerBulkUpdateWorkspaceBranch,
+            EventType.CustomerAssignToUser,
           ]}
         />
       </Stack>
