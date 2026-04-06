@@ -19,7 +19,7 @@ const WorkspaceNavigation = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceHeader = dynamic(
@@ -27,7 +27,7 @@ const WorkspaceHeader = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceNavigationSplitter = dynamic(
@@ -35,7 +35,7 @@ const WorkspaceNavigationSplitter = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 export const LayoutWorkspace: FC = () => {
@@ -129,7 +129,7 @@ export const LayoutWorkspace: FC = () => {
                   top: 0,
                   left: 0,
                   width: workspaceLayout.navigationWidth,
-                  height: workspaceLayout.navigationHeight,
+                  height: "100dvh",
                   zIndex: zIndexes.pannel,
                   borderRight: `1px solid ${workspaceLayout.dividerColor}`,
                 }
