@@ -9,6 +9,5 @@ query GetWorkspaceInviteInformation($inviteCode: String!) {
     hotline
     phone
     appColor
-    appColorShape
   }
 }

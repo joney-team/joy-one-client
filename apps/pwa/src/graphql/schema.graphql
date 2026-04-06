@@ -1868,7 +1868,7 @@ type Mutation {
   updateTaskStatuses(contextId: String, contextType: TaskContextType, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
   updateUserPassword(input: UpdateUserPasswordInput!): Boolean!
   updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
-  updateWorkspace(appColor: String, appColorShape: Float, appDomain: String, appIcon: String, appName: String, hotline: String, locale: AppLocale, location: LocationInput, logo: String, name: String!, phone: String, type: WorkspaceType!): Workspace!
+  updateWorkspace(input: UpdateWorkspaceInput!): Workspace!
   updateWorkspaceApiApp(id: String!, input: WorkspaceApiAppInput!): WorkspaceApiApp!
   updateWorkspaceBranch(id: String!, input: WorkspaceBranchInput!): WorkspaceBranch!
   updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
@@ -4540,6 +4540,20 @@ input UpdateUserProfileInput {
   settings: UserSettingsInput
 }
 
+input UpdateWorkspaceInput {
+  appColor: String
+  appDomain: String
+  appIcon: String
+  appName: String
+  hotline: String
+  locale: AppLocale
+  location: LocationInput
+  logo: String
+  name: String!
+  phone: String
+  type: WorkspaceType!
+}
+
 input UpdateWorkspaceMemberInput {
   color: String
   displayName: String
@@ -4687,7 +4701,6 @@ input WorkingDayIntervalInput {
 type Workspace {
   _id: String!
   appColor: String
-  appColorShape: Float
   appDomain: String
   appIcon: String
   appName: String
@@ -4769,7 +4782,6 @@ type WorkspaceBranchesPaginated {
 
 type WorkspaceInviteInformation {
   appColor: String
-  appColorShape: Float
   hotline: String
   logo: String
   name: String!

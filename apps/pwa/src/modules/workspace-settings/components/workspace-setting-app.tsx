@@ -78,11 +78,13 @@ export const WorkspaceAppSettings: FC = () => {
 
       await updateWorkspace({
         variables: {
-          ...normalizeWorkspaceInput(workspace.member.workspace),
-          appIcon,
-          appDomain: values.appDomain?.trim(),
-          appName: values.appName ?? "",
-          appColor: values.appColor ?? "",
+          input: {
+            ...normalizeWorkspaceInput(workspace.member.workspace),
+            appIcon,
+            appDomain: values.appDomain?.trim(),
+            appName: values.appName ?? "",
+            appColor: values.appColor ?? "",
+          },
         },
       });
     } catch (error) {

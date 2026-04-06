@@ -29,6 +29,7 @@ import { useDebouncedCallback } from "@mantine/hooks";
 import { UpdateWorkspaceMutationVariables } from "../graphql/updateWorkspace.graphql";
 import { useUpdateWorkspace } from "../hooks/useUpdateWorkspace";
 import { normalizeWorkspaceInput } from "../workspaces-service";
+import { UpdateWorkspaceInput } from "@/graphql/types.graphql";
 
 export const WorkspaceInformationForm: FC = () => {
   const { t } = useLingui();
@@ -37,12 +38,13 @@ export const WorkspaceInformationForm: FC = () => {
   const [avatarUploading, setAvatarUploading] = useState(false);
   const { updateWorkspace } = useUpdateWorkspace();
 
-  const handleUpdateWorkspace = useDebouncedCallback(
-    async (values: UpdateWorkspaceMutationVariables) => {
-      await updateWorkspace({ variables: values }).catch(onError);
-    },
-    300,
-  );
+  const handleUpdateWorkspace = useDebouncedCallback(async (values: UpdateWorkspaceInput) => {
+    await updateWorkspace({
+      variables: {
+        input: values,
+      },
+    }).catch(onError);
+  }, 300);
 
   const form = useForm({
     initialValues: normalizeWorkspaceInput(workspace.member.workspace),
@@ -53,7 +55,7 @@ export const WorkspaceInformationForm: FC = () => {
     setAvatarUploading(true);
     try {
       const uploadedLogo = await uploadFile(file, { maxWidthOrHeight: 300 });
-      await updateWorkspace({ variables: { ...form.values, logo: uploadedLogo.path } });
+      await updateWorkspace({ variables: { input: { ...form.values, logo: uploadedLogo.path } } });
     } catch (error) {
       onError(error);
     }

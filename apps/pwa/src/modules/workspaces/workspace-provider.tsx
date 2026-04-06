@@ -177,7 +177,6 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         appColor: member.workspace.appColor || defaultMetadata.appColor,
         appName: member.workspace.appName || defaultMetadata.appName,
         appIcon: member.workspace.appIcon || defaultMetadata.appIcon,
-        appColorShape: member.workspace.appColorShape || defaultMetadata.appColorShape,
       });
     }
   }, [member]);

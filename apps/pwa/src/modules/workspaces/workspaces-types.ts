@@ -80,5 +80,4 @@ export interface WorkspaceInviteInformation {
   hotline?: string;
   phone?: string;
   appColor?: string;
-  appColorShape?: number;
 }

@@ -158,7 +158,6 @@ const WorkspaceInvitation: FC<WorkspaceInvitationProps> = (props) => {
       theme={createTheme({
         colors: { primary: generateColors(config.PRIMARY_COLOR) },
         primaryColor: (data?.workspaceInviteInformation?.appColor || "primary") as any,
-        primaryShade: (data?.workspaceInviteInformation?.appColorShape || 6) as any,
       })}
     >
       <Stack

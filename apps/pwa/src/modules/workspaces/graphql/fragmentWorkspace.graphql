@@ -16,7 +16,6 @@ fragment Workspace on Workspace {
   appColor
   appName
   appDomain
-  appColorShape
   branches
   isArchived
 }
