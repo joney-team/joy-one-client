@@ -2685,8 +2685,6 @@ type PromotionsPaginated {
 }
 
 type Query {
-  attendanceRecord(id: String!): AttendanceRecord!
-  attendanceRecordsForToday: [AttendanceRecord!]!
   authUser: AuthUser!
   availableSearchEntities: [String!]!
   calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
@@ -2730,6 +2728,7 @@ type Query {
   ): ActivitiesPaginated!
   getActivityById(id: String!): Activity!
   getAppConfig: AppConfig!
+  getAttendanceRecordById(id: String!): AttendanceRecord!
   getAttendanceRecords(
     ids: [String!]
     limit: Float = 30
@@ -2762,6 +2761,7 @@ type Query {
     """
     query: JSONObject
   ): AttendanceRecordsPaginated!
+  getAttendanceRecordsForToday: [AttendanceRecord!]!
   getAttendanceSetting: AttendanceSetting!
   getAvailableCustomerPromotions(customerId: String!): [Promotion!]!
   getBankAccountInformation(input: GetBankAccountInformationInput!): GetBankAccountInformationResult!

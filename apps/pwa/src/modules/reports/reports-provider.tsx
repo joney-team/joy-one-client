@@ -11,11 +11,7 @@ import GetMetricsReportDocument from "./graphql/getMetricsReport.graphql";
 export const ReportsProvider: FC<PropsWithChildren> = (props) => {
   const workspace = useWorkspace();
 
-  const {
-    data,
-    refetch,
-    loading: isMetricsLoading,
-  } = useQuery(GetMetricsReportDocument, {
+  const { data, refetch, loading } = useQuery(GetMetricsReportDocument, {
     fetchPolicy: "cache-and-network",
     skip: !workspace.member?.workspaceId,
   });
@@ -31,7 +27,9 @@ export const ReportsProvider: FC<PropsWithChildren> = (props) => {
   );
 
   return (
-    <Context.Provider value={{ metrics: data?.metricsReport, isMetricsLoading, refetch }}>
+    <Context.Provider
+      value={{ metrics: data?.metricsReport, isMetricsLoading: loading && !data, refetch }}
+    >
       {props.children}
     </Context.Provider>
   );
