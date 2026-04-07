@@ -32,7 +32,9 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
   };
 
   const initialize = () => {
-    setState({ isInitialized: true, ...getViewSize() });
+    const result = getViewSize();
+    document.documentElement.setAttribute("data-view", result.view);
+    setState({ isInitialized: true, ...result });
   };
 
   useEffect(() => {
@@ -43,22 +45,19 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
   }, [pathname]);
 
   const onResized = useDebouncedCallback(() => {
-    setState({ ...getViewSize() });
+    const result = getViewSize();
+    document.documentElement.setAttribute("data-view", result.view);
+    setState({ ...result });
     setIsResizing(false);
   }, 300);
 
   useEffect(() => {
     initialize();
 
-    const onResize = () => {
-      // setIsResizing(true);
-      onResized();
-    };
-
-    window.addEventListener("resize", onResize);
+    window.addEventListener("resize", onResized);
 
     return () => {
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener("resize", onResized);
     };
   }, []);
 

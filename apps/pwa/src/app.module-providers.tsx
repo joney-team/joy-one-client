@@ -11,9 +11,8 @@ import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { ModalsProvider } from "@mantine/modals";
 import dynamic from "next/dynamic";
-import { FC, PropsWithChildren } from "react";
+import { FC, PropsWithChildren, useMemo } from "react";
 import { useApp } from "./app.context";
-import { LayoutWorkspace } from "./layout/layout-workspace";
 import { nonLoading } from "./utils/non-loading";
 
 const AuthRequire = dynamic(
@@ -81,15 +80,25 @@ const InAppNotification = dynamic(
   },
 );
 
+const LayoutWorkspace = dynamic(
+  () => import("./layout/layout-workspace").then((mod) => mod.LayoutWorkspace),
+  {
+    ssr: false,
+    loading: nonLoading,
+  },
+);
+
 const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
   const lang = useLang();
 
+  const theme = useMemo(
+    () => generateTheme({ metadata: app.metadata, locale: lang.locale }),
+    [app.metadata, lang.locale],
+  );
+
   return (
-    <MantineProvider
-      theme={generateTheme({ metadata: app.metadata, locale: lang.locale })}
-      defaultColorScheme="auto"
-    >
+    <MantineProvider theme={theme} defaultColorScheme="auto">
       <DatesProvider settings={{ locale: lang.locale }}>
         <ReportsProvider>
           <TagsProvider>

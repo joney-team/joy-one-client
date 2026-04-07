@@ -3,7 +3,6 @@
 import { Errored } from "@/components/errored";
 import { CommentsIllustration } from "@/components/illustrations/comments";
 import { useRouter } from "@/hooks/use-router";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { MessageBox } from "@/modules/message-boxes/message-box/message-box";
 import { ContainerMessageBox } from "@/modules/message-boxes/message-box/message-box-container";
@@ -11,7 +10,7 @@ import { MessageBoxHead } from "@/modules/message-boxes/message-box/message-box-
 import { MessageBoxList } from "@/modules/message-boxes/message-boxes";
 import { MessageBoxesContext } from "@/modules/message-boxes/message-boxes-context";
 import { MessageBoxesIntegrate } from "@/modules/message-boxes/message-boxes-integrate";
-import { useLazyQuery, useQuery } from "@apollo/client/react";
+import { useLazyQuery } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Text } from "@mantine/core";
 import { useParams } from "next/navigation";
@@ -23,7 +22,6 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
   const layout = useLayout();
   const router = useRouter();
   const params = useParams<{ boxId: string }>();
-  const workspaceLayout = useWorkspaceLayout();
   const { workspaceStat, loading: workspaceStatLoading } = useWorkspaceStat();
 
   const [getMessageBoxById, { data, loading, error }] = useLazyQuery(GetMessageBoxByIdDocument, {
@@ -78,7 +76,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
             if (error) return <Errored error={error} />;
 
             return (
-              <Stack style={{ height: workspaceLayout.bodyHeight }}>
+              <Stack style={{ height: "var(--app-layout-body-height)" }}>
                 <MessageBox key={params.boxId} />
               </Stack>
             );
@@ -91,8 +89,8 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
           );
         }
 
-        const contentHeight = workspaceLayout.bodyHeight - 16 * 2;
-        const contentWidth = workspaceLayout.bodyWidth - 16 * 2;
+        const contentHeight = `calc(var(--app-layout-body-height) - 16 * 2)`;
+        const contentWidth = `calc(var(--app-layout-body-width) - 16 * 2)`;
 
         return (
           <Stack p="md">
@@ -113,7 +111,7 @@ export const MessageBoxesLayout: FC<PropsWithChildren> = (props) => {
                     style={{ height: contentHeight, overflow: "hidden" }}
                     align="stretch"
                   >
-                    <Group style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}>
+                    <Group style={{ borderBottom: `1px solid var(--app-divider-color)` }}>
                       <MessageBoxHead key={data.messageBox._id} />
                     </Group>
 

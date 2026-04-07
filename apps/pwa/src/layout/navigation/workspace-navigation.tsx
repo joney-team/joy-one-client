@@ -1,6 +1,7 @@
 "use client";
 
 import { Avatar } from "@/components/avatar";
+import { Badge } from "@/components/badge";
 import { useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { useColor } from "@/modules/theme/use-color";
@@ -33,9 +34,8 @@ import { IconDotsVertical } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
-import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useNavigationWidth, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
-import { Badge } from "@/components/badge";
 
 const WorkspaceNavigationDrawer = dynamic(
   () => import("./workspace-navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
@@ -49,12 +49,12 @@ export const WorkspaceNavigation: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const { workspaceView } = useWorkspaceSetting();
+  const { isNavbarCollapsed } = useNavigationWidth();
 
   const { availableModules, isModuleAvailable, getAvailableModule } =
     useAvailableWorkspaceModules();
 
   const { getModule } = useWorkspaceModules();
-  const workspaceLayout = useWorkspaceLayout();
   const router = useRouter();
   const color = useColor();
 
@@ -94,7 +94,7 @@ export const WorkspaceNavigation: FC = () => {
       <Group
         justify="space-around"
         wrap="nowrap"
-        style={{ width: "100%", height: workspaceLayout.navigationHeight }}
+        style={{ width: "100%", height: "var(--app-layout-navigation-height)" }}
         gap={0}
         align="start"
       >
@@ -214,7 +214,7 @@ export const WorkspaceNavigation: FC = () => {
           h: workspaceLayoutConfig.headerHeight,
           mih: workspaceLayoutConfig.headerHeight,
           style: {
-            borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+            borderBottom: `1px solid var(--app-divider-color)`,
           },
         }}
       />
@@ -231,14 +231,14 @@ export const WorkspaceNavigation: FC = () => {
         <Stack
           miw={0}
           id="app-navigation"
-          gap={workspaceLayout.isNavbarCollapsed ? 5 : 0}
+          gap={isNavbarCollapsed ? 5 : 0}
           pb={16}
-          pt={workspaceLayout.isNavbarCollapsed ? 5 : 10}
+          pt={isNavbarCollapsed ? 5 : 10}
         >
           {navigationGroup.map((group) => {
             return (
               <Fragment key={group.id}>
-                <Renderer visible={group.id !== "default" && !workspaceLayout.isNavbarCollapsed}>
+                <Renderer visible={group.id !== "default" && !isNavbarCollapsed}>
                   <Divider
                     tt="capitalize"
                     label={group.name}
@@ -248,7 +248,7 @@ export const WorkspaceNavigation: FC = () => {
                   />
                 </Renderer>
 
-                <Renderer visible={group.id !== "default" && workspaceLayout.isNavbarCollapsed}>
+                <Renderer visible={group.id !== "default" && isNavbarCollapsed}>
                   <Divider my={5} />
                 </Renderer>
 

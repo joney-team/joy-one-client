@@ -29,11 +29,13 @@ import "@mantine/spotlight/styles.css";
 import "@mantine/tiptap/styles.css";
 import "@xyflow/react/dist/style.css";
 
+import "./styles/app.style.css";
+import "./styles/react-big-calendar.css";
+
 import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
 import { serverGetAccessToken } from "./modules/auth/auth-server";
 import { EventFragment } from "./modules/events/graphql/fragmentEvent.graphql";
-import "./styles/app.style.css";
-import "./styles/react-big-calendar.css";
+
 import { nonLoading } from "./utils/non-loading";
 
 if (config.SENTRY_DSN) {

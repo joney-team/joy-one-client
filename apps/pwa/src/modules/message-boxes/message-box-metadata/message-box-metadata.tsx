@@ -5,7 +5,6 @@ import { Button } from "@/components/buttons/button";
 import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { WorkspaceType } from "@/graphql/enums.graphql";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import {
   ModalCreateBooking,
   ModalCreateBookingRef,
@@ -62,7 +61,6 @@ export const MetadataMessageBox: FC = () => {
   const client = useApolloClient();
   const messageBoxes = useMessageBoxes();
   const workspace = useWorkspace();
-  const workspaceLayout = useWorkspaceLayout();
   const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const { getAvailableModule } = useAvailableWorkspaceModules();
@@ -88,7 +86,7 @@ export const MetadataMessageBox: FC = () => {
           gap={5}
           justify="space-between"
           style={{
-            borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+            borderBottom: `1px solid var(--app-divider-color)`,
           }}
         >
           <Group gap={8}>

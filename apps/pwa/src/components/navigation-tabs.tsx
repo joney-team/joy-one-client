@@ -1,7 +1,6 @@
 "use client";
 
 import { useRouter } from "@/hooks/use-router";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { Group, ScrollArea } from "@mantine/core";
@@ -48,12 +47,11 @@ export const NavigationTabs: FC<NavigationTabsProps> = (props) => {
   const router = useRouter();
   const color = useColor();
   const colorScheme = useColorScheme();
-  const workspaceLayout = useWorkspaceLayout();
 
   return (
     <Group
       style={{
-        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+        borderBottom: `1px solid var(--app-divider-color)`,
         background: "var(--mantine-color-body)",
         width: "100%",
         overflowX: "hidden",

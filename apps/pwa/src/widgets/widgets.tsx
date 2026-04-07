@@ -16,7 +16,7 @@ import {
 import { ContextMenuProvider } from "@/components/context-menu/context-menu-provider";
 import { ContextMenuDropdownComponentProps } from "@/components/context-menu/context-menu-types";
 import { Empty } from "@/components/empty";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
+import { useNavigationWidth } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { isDiff } from "@/utils/object.utils";
 import { getId } from "@joy-one-client/utils/base-data";
@@ -41,7 +41,6 @@ export function Widgets<ContextType = object, WidgetType = string>(
   });
 
   const layout = useLayout();
-  const workspaceLayout = useWorkspaceLayout();
   const readonly = props.readonly || !props.onChange;
 
   const [isManageWidgetsOpened, setIsManageWidgetsOpened] = useState(false);
@@ -163,14 +162,14 @@ export function Widgets<ContextType = object, WidgetType = string>(
     updateState,
   };
 
+  const { navigationWidth } = useNavigationWidth();
+
   const width = useMemo(() => {
     return Math.max(
-      layout.view === "mobile"
-        ? layout.width - 16 * 2
-        : layout.width - workspaceLayout.navigationWidth - 16 * 2,
+      layout.view === "mobile" ? layout.width - 16 * 2 : layout.width - navigationWidth - 16 * 2,
       100,
     );
-  }, [layout.view, layout.width, workspaceLayout.navigationWidth]);
+  }, [layout.view, layout.width, navigationWidth]);
 
   const layoutItems = useMemo(() => {
     return layout.view === "mobile" ? gridLayout.map((v) => ({ ...v, w: 12 })) : gridLayout;

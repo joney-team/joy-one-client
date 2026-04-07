@@ -36,7 +36,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, useMemo, useRef, type FC, type ReactNode } from "react";
-import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useNavigationWidth, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 const ModalConfigureStatuses = dynamic(
   () =>
@@ -87,7 +87,6 @@ export const WorkspaceNavigationMenu: FC<{
   const router = useRouter();
   const layout = useLayout();
   const workspace = useWorkspace();
-  const workspaceLayout = useWorkspaceLayout();
   const pathname = usePathname();
   const colorScheme = useColorScheme();
   const color = useColor();
@@ -98,6 +97,7 @@ export const WorkspaceNavigationMenu: FC<{
     key: StorageKey.TASKS_VIEW,
     defaultValue: TaskView.LIST,
   });
+  const { isNavbarCollapsed } = useNavigationWidth();
 
   const { folders } = useTaskFolders();
 
@@ -160,7 +160,7 @@ export const WorkspaceNavigationMenu: FC<{
     );
   }
 
-  if (workspaceLayout.isNavbarCollapsed) {
+  if (isNavbarCollapsed) {
     return (
       <Fragment>
         <Group justify="center">

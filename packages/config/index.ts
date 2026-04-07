@@ -10,7 +10,7 @@ const initializeConfig = {
   ANALYTICS_KEY: "",
   SENTRY_DSN: "",
   GOOGLE_MAPS_KEY: "",
-  PRIMARY_COLOR: "#3cbd52",
+  PRIMARY_COLOR: "#0063ff",
 };
 
 export default Object.keys(initializeConfig).reduce(

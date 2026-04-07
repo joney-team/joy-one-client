@@ -21,14 +21,14 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, memo } from "react";
-import { useWorkspaceLayout, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useNavigationWidth, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
 
 const WorkspaceHeaderShortcuts = dynamic(
   () => import("./header-shortcuts").then((mod) => mod.WorkspaceHeaderShortcuts),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceHeaderTasksBreadcrumbs = dynamic(
@@ -36,7 +36,7 @@ const WorkspaceHeaderTasksBreadcrumbs = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceHeaderBreadcrumbs = dynamic(
@@ -44,7 +44,7 @@ const WorkspaceHeaderBreadcrumbs = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const WorkspaceHeaderAccount = dynamic(
@@ -52,15 +52,39 @@ const WorkspaceHeaderAccount = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
+
+function ToggleSidebarButton() {
+  const { isNavbarCollapsed, setNavigationWidth } = useNavigationWidth();
+
+  return (
+    <ActionIcon
+      variant="subtle"
+      color="gray.6"
+      onClick={() => {
+        setNavigationWidth(
+          isNavbarCollapsed
+            ? workspaceLayoutConfig.defaultNavigationExpandedWidth
+            : workspaceLayoutConfig.minNavigationWidth,
+        );
+      }}
+    >
+      {isNavbarCollapsed ? (
+        <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
+      ) : (
+        <IconLayoutSidebarLeftCollapse strokeWidth={1.5} size={20} />
+      )}
+    </ActionIcon>
+  );
+}
 
 export const WorkspaceHeader: FC = memo(() => {
   const router = useRouter();
   const layout = useLayout();
   const workspace = useWorkspace();
   const colorScheme = useColorScheme();
-  const workspaceLayout = useWorkspaceLayout();
+  const { isNavbarCollapsed, setNavigationWidth } = useNavigationWidth();
 
   if (!workspace.isAvailable) return null;
 
@@ -131,24 +155,7 @@ export const WorkspaceHeader: FC = memo(() => {
     >
       <Group gap={5} flex={1} wrap="nowrap">
         <Group gap={5} flex={1} wrap="nowrap">
-          <ActionIcon
-            variant="subtle"
-            color="gray.6"
-            onClick={() => {
-              workspaceLayout.setNavigationWidth(
-                workspaceLayout.isNavbarCollapsed
-                  ? workspaceLayoutConfig.defaultNavigationExpandedWidth
-                  : workspaceLayoutConfig.minNavigationWidth
-              );
-            }}
-          >
-            {workspaceLayout.isNavbarCollapsed ? (
-              <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
-            ) : (
-              <IconLayoutSidebarLeftCollapse strokeWidth={1.5} size={20} />
-            )}
-          </ActionIcon>
-
+          <ToggleSidebarButton />
           <WorkspaceHeaderTasksBreadcrumbs />
           <WorkspaceHeaderBreadcrumbs />
         </Group>

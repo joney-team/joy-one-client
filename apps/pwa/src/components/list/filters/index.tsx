@@ -1,6 +1,5 @@
 "use client";
 
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { Trans } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
@@ -91,7 +90,6 @@ export const FilterBar: FC = () => {
   const ctx = useListContext();
   const isHasFilter = Object.values(ctx.columns).some((v) => v?.filter);
   const onReset = () => ctx.list.removeAllParams();
-  const workspaceLayout = useWorkspaceLayout();
 
   const filterCount = Object.keys(ctx.list.params).reduce((acc, key) => {
     const ignoreKeys = ["sort"];
@@ -105,7 +103,7 @@ export const FilterBar: FC = () => {
     <Group
       gap={ctx.spacing}
       p={ctx.spacing}
-      style={{ borderTop: `1px solid ${workspaceLayout.dividerColor}` }}
+      style={{ borderTop: `1px solid var(--app-divider-color)` }}
       align="start"
     >
       <Group gap={ctx.spacing} flex={1}>

@@ -1,14 +1,14 @@
-import { useWorkspaceLayout, workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
-import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from "@tabler/icons-react";
+import { useNavigationWidth, workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { ActionIcon, ActionIconProps } from "@mantine/core";
+import { IconLayoutSidebarLeftCollapse, IconLayoutSidebarLeftExpand } from "@tabler/icons-react";
 import { type FC } from "react";
 
 interface WorkspaceLayoutSidebarCollapseButton extends Omit<ActionIconProps, "onClick"> {}
 
 export const WorkspaceLayoutSidebarCollapseButton: FC<WorkspaceLayoutSidebarCollapseButton> = (
-  props
+  props,
 ) => {
-  const workspaceLayout = useWorkspaceLayout();
+  const { setNavigationWidth, isNavbarCollapsed } = useNavigationWidth();
 
   return (
     <ActionIcon
@@ -16,14 +16,14 @@ export const WorkspaceLayoutSidebarCollapseButton: FC<WorkspaceLayoutSidebarColl
       color="gray.6"
       {...props}
       onClick={() => {
-        workspaceLayout.setNavigationWidth(
-          workspaceLayout.isNavbarCollapsed
+        setNavigationWidth(
+          isNavbarCollapsed
             ? workspaceLayoutConfig.defaultNavigationExpandedWidth
-            : workspaceLayoutConfig.minNavigationWidth
+            : workspaceLayoutConfig.minNavigationWidth,
         );
       }}
     >
-      {workspaceLayout.isNavbarCollapsed ? (
+      {isNavbarCollapsed ? (
         <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
       ) : (
         <IconLayoutSidebarLeftCollapse strokeWidth={1.5} size={20} />

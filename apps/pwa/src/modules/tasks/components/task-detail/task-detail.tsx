@@ -1,6 +1,5 @@
 "use client";
 
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { useLazyQuery } from "@apollo/client/react";
 import { Container, Group, Skeleton, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -49,7 +48,6 @@ const FilesBox = dynamic(() => import("@/modules/files/files-box").then((mod) =>
 export const TaskDetail: FC = () => {
   const router = useRouter();
   const layout = useLayout();
-  const workspaceLayout = useWorkspaceLayout();
   const { t } = useLingui();
   const { updateTasks } = useUpdateTasks();
 
@@ -114,7 +112,7 @@ export const TaskDetail: FC = () => {
           <Stack
             h={headerHeight}
             w="100%"
-            style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+            style={{ borderBottom: `1px solid var(--app-divider-color)` }}
             px="sm"
           >
             <TaskDetailHead key={modalId + "head"} task={task} close={onClose} />
@@ -191,7 +189,7 @@ export const TaskDetail: FC = () => {
               h={contentHeight}
               mih={contentHeight}
               w={300}
-              style={{ borderLeft: `1px solid ${workspaceLayout.dividerColor}` }}
+              style={{ borderLeft: `1px solid var(--app-divider-color)` }}
               gap="sm"
             >
               <Group px="md" pt="sm">

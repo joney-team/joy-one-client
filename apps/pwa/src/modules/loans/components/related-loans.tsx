@@ -85,6 +85,7 @@ export const RelatedLoans: FC<{ customerCidNumber: string; ignoreCode?: string }
 
         return (
           <Card
+            key={loan.id}
             shadow="xs"
             withBorder={false}
             padding="xs"

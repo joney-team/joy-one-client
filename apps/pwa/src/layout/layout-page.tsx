@@ -7,7 +7,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Stack } from "@mantine/core";
 import dynamic, { DynamicOptions, DynamicOptionsLoadingProps, Loader } from "next/dynamic";
 import { ComponentType, PropsWithChildren, Suspense, type FC } from "react";
-import { useWorkspaceLayout } from "./hooks/use-workspace-layout";
 import { LayoutAdmin } from "./layout-admin";
 import { useLayout } from "./layout-context";
 
@@ -31,7 +30,6 @@ export function Layout<P>({
   const routeRule = useRouteRule();
   const auth = useAuth();
   const workspace = useWorkspace();
-  const workspaceLayout = useWorkspaceLayout();
   const componentProps = props.props as any;
   const isRequireAuth = routeRule.auth !== "public";
 
@@ -60,12 +58,12 @@ export function Layout<P>({
       style={
         layout.view === "mobile"
           ? {
-              paddingTop: workspaceLayout.headerHeight,
-              paddingBottom: workspaceLayout.navigationHeight,
+              paddingTop: "var(--app-layout-header-height)",
+              paddingBottom: "var(--app-layout-navigation-height)",
             }
           : {
-              paddingTop: workspaceLayout.headerHeight,
-              paddingLeft: workspaceLayout.navigationWidth,
+              paddingTop: "var(--app-layout-header-height)",
+              paddingLeft: "var(--app-layout-navigation-width)",
             }
       }
     >

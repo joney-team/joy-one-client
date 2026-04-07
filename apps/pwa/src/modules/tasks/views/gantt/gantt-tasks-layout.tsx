@@ -3,7 +3,6 @@
 import { DateFormat } from "@/components/format/date-format";
 import { TagType } from "@/graphql/enums.graphql";
 import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
-import { useWorkspaceLayout } from "@/layout/hooks/use-workspace-layout";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
@@ -27,7 +26,6 @@ import { useGantt } from "./gantt-tasks-context";
 
 export const SidebarHead: FC = () => {
   const gantt = useGantt();
-  const workspaceLayout = useWorkspaceLayout();
   const [isOpenedAllFolder, setIsOpenedAllFolder] = useState(false);
 
   return (
@@ -47,7 +45,7 @@ export const SidebarHead: FC = () => {
         transition: "max-width 0.3s ease-in-out",
         minHeight: ganttConfig.headHeight,
         maxHeight: ganttConfig.headHeight,
-        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+        borderBottom: `1px solid var(--app-divider-color)`,
       }}
     >
       <Group gap={5} wrap="nowrap" miw={0}>
@@ -167,7 +165,6 @@ export const SidebarHead: FC = () => {
 
 export const BodyHead: FC = () => {
   const gantt = useGantt();
-  const workspaceLayout = useWorkspaceLayout();
 
   return (
     <Stack
@@ -182,7 +179,7 @@ export const BodyHead: FC = () => {
         zIndex: 10,
         minHeight: ganttConfig.headHeight,
         maxHeight: ganttConfig.headHeight,
-        borderBottom: `1px solid ${workspaceLayout.dividerColor}`,
+        borderBottom: `1px solid var(--app-divider-color)`,
       }}
     >
       <Group
@@ -190,7 +187,7 @@ export const BodyHead: FC = () => {
         gap={0}
         w="max-content"
         wrap="nowrap"
-        style={{ borderBottom: `1px solid ${workspaceLayout.dividerColor}` }}
+        style={{ borderBottom: `1px solid var(--app-divider-color)` }}
       >
         {gantt.range.weeks.map((week, index) => {
           const first = index === 0;
@@ -201,7 +198,7 @@ export const BodyHead: FC = () => {
               w={`${ganttConfig.columnSize * week.dates}px`}
               maw={`${ganttConfig.columnSize * week.dates}px`}
               style={{
-                borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
+                borderLeft: first ? undefined : `1px solid var(--app-divider-color)`,
               }}
               h="100%"
               justify="center"
@@ -267,7 +264,7 @@ export const BodyHead: FC = () => {
             <Group
               key={index}
               style={{
-                borderLeft: first ? undefined : `1px solid ${workspaceLayout.dividerColor}`,
+                borderLeft: first ? undefined : `1px solid var(--app-divider-color)`,
                 width: ganttConfig.columnSize,
               }}
               data-column-index={index}

@@ -35,7 +35,7 @@ import {
 import Link from "next/link";
 import { FC, Fragment, ReactNode, useMemo } from "react";
 import { Avatar } from "../../components/avatar";
-import { useWorkspaceLayout } from "../hooks/use-workspace-layout";
+import { useNavigationWidth } from "../hooks/use-workspace-layout";
 
 interface WorkspaceNavigationDrawerProps {
   style?: MantineStyleProp;
@@ -44,10 +44,9 @@ interface WorkspaceNavigationDrawerProps {
 
 export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (props) => {
   const workspace = useWorkspace();
-  const workspaceLayout = useWorkspaceLayout();
-
   const [opened, { open, close }] = useDisclosure(false);
   const contentSize = useElementSize();
+  const { isNavbarCollapsed } = useNavigationWidth();
 
   const NavigationItem: FC<{
     leftSection?: ReactNode;
@@ -92,13 +91,13 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         <Text fz={14} c="var(--mantine-color-text)" fw={500}>
           {props.label}
         </Text>
-      </Group>
+      </Group>,
     );
   };
 
   const otherWorkspace = useMemo(() => {
     return workspace.userMembers.filter(
-      (userMember) => userMember.workspace._id !== workspace.member.workspaceId
+      (userMember) => userMember.workspace._id !== workspace.member.workspaceId,
     );
   }, [workspace.userMembers, workspace.member]);
 
@@ -107,7 +106,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
       <Group
         px={10}
         gap={10}
-        justify={workspaceLayout.isNavbarCollapsed ? "center" : "space-between"}
+        justify={isNavbarCollapsed ? "center" : "space-between"}
         wrap="nowrap"
         {...props.targetProps}
         style={{
@@ -125,7 +124,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
           radius={5}
         />
 
-        <Renderer visible={!workspaceLayout.isNavbarCollapsed}>
+        <Renderer visible={!isNavbarCollapsed}>
           <Stack gap={0} flex={1} ref={contentSize.ref}>
             <Text fz={rem(14)} fw={600} truncate="end" maw={contentSize.width}>
               {workspace.member.workspace.name}

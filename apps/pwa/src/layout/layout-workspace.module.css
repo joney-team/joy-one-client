@@ -1,0 +1,60 @@
+.WorkspaceHeader {
+  width: 100dvh;
+  background: var(--app-panel-background);
+  position: fixed;
+  z-index: var(--app-z-index-pannel);
+  transition: transform 0.2s ease-out;
+}
+
+html[data-view="desktop"] {
+  .WorkspaceHeader {
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    width: 100dvw;
+    height: var(--app-layout-header-height);
+    padding-left: var(--app-layout-navigation-width);
+    z-index: var(--app-layout-z-index-pannel);
+    border-bottom: 1px solid var(--app-divider-color);
+  }
+}
+
+html[data-view="mobile"] {
+  .WorkspaceHeader {
+    top: 0;
+    right: 0;
+    width: 100dvw;
+    height: var(--app-layout-header-height);
+    z-index: var(--app-layout-z-index-pannel);
+    border-bottom: 1px solid var(--app-divider-color);
+  }
+}
+
+.WorkspaceNavigation {
+  position: fixed;
+  background: var(--app-panel-background);
+  display: var(--app-layout-navigation-display);
+  gap: 0;
+  z-index: var(--app-z-index-pannel);
+  transition: transform 0.2s ease-out;
+}
+
+html[data-view="desktop"] {
+  .WorkspaceNavigation {
+    top: 0;
+    left: 0;
+    height: 100dvh;
+    width: var(--app-layout-navigation-width);
+    border-right: 1px solid var(--app-divider-color);
+  }
+}
+
+html[data-view="mobile"] {
+  .WorkspaceNavigation {
+    bottom: 0;
+    left: 0;
+    width: 100dvw;
+    height: var(--app-layout-navigation-height);
+    border-top: 1px solid var(--app-divider-color);
+  }
+}
