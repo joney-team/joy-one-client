@@ -4,6 +4,7 @@ import { EntityImage } from "@/components/entity-image";
 import { Selector, SelectorProps } from "@/components/selector";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
+import { useApolloClient } from "@apollo/client/react";
 import { ActionIcon, Combobox, Group, Input, Text } from "@mantine/core";
 import { IconNews, IconX } from "@tabler/icons-react";
 import { FC } from "react";
@@ -18,11 +19,24 @@ export interface PostSelectorProps extends Omit<
 }
 
 export const PostSelector: FC<PostSelectorProps> = (props) => {
+  const client = useApolloClient();
   return (
     <Selector
       {...props}
       listQuery={GetPostsDocument}
-      onSearch={(q) => searchEntity<PostFragment>(AppEntity.POSTS, q)}
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.POSTS, q);
+        const options = await client.query({
+          query: GetPostsDocument,
+          variables: {
+            limit: 10,
+            query: {
+              ids: result.map((item) => item.id),
+            },
+          },
+        });
+        return options.data?.list.results ?? [];
+      }}
       renderOption={(post) => {
         return (
           <Combobox.Option value={post._id} key={post._id}>

@@ -48,7 +48,7 @@ export function CategoryColumn<T = any>(args?: CategoryColumnArgs<T>): Column {
           const results = await client.query({
             query: GetCategoriesDocument,
             variables: {
-              ids: result.map((v) => v._id),
+              ids: result.map((v) => v.id),
             },
             fetchPolicy: "network-only",
           });

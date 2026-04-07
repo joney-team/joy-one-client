@@ -20,7 +20,7 @@ interface PrescriptionSelectorProps {
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
-  const { data: prescriptionsData } = useQuery(GetPrescriptionsDocument, {
+  const { data: prescriptionsData, client } = useQuery(GetPrescriptionsDocument, {
     variables: {
       limit: 9,
       query: {
@@ -32,7 +32,18 @@ export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
   return (
     <Selector
       excludeIds={props.excludeIds}
-      onSearch={(q) => searchEntity<PrescriptionFragment>(AppEntity.PRESCRIPTIONS, q)}
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.PRESCRIPTIONS, q);
+        const options = await client.query({
+          query: GetPrescriptionsDocument,
+          variables: {
+            query: {
+              ids: result.map((item) => item.id),
+            },
+          },
+        });
+        return options.data?.list.results ?? [];
+      }}
       pinnedOptions={prescriptionsData?.list.results.map((item) => ({
         ...item,
         _group: t`Recently`,

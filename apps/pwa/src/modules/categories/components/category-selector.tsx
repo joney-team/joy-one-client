@@ -52,9 +52,19 @@ export const CategorySelector: FC<CategorySelectorProps> = (props) => {
       excludeIds={props.excludeIds}
       pinnedOptions={initOptions?.list.results.map((item) => ({ ...item, _group: t`Recently` }))}
       autoCloseOnChange={false}
-      onSearch={(q) =>
-        searchEntity<CategoryFragment>(AppEntity.CATEGORIES, q, { type: props.type })
-      }
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.CATEGORIES, q, { type });
+        return client
+          .query({
+            query: GetCategoriesDocument,
+            variables: {
+              query: {
+                ids: result.map((i) => i.id),
+              },
+            },
+          })
+          .then((res) => res.data?.list.results ?? []);
+      }}
       renderOption={(category) => {
         return (
           <Combobox.Option value={category._id} key={category._id}>

@@ -95,7 +95,7 @@ export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, upda
         if (searchResult.length === 0) return setIsSearchEmpty(true);
 
         await getMembers({
-          variables: { ignoreSelf: true, ids: searchResult.map((result) => result._id) },
+          variables: { ignoreSelf: true, ids: searchResult.map((result) => result.id) },
         });
         return setIsSearchEmpty(false);
       }

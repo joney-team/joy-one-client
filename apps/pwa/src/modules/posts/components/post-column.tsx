@@ -49,7 +49,7 @@ export const PostColumn = (args?: PostColumnArgs): Column => {
 
           const options = await client.query({
             query: GetPostsDocument,
-            variables: { ids: result.map((v) => v._id) },
+            variables: { ids: result.map((v) => v.id) },
             fetchPolicy: "network-only",
           });
 

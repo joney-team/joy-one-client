@@ -55,7 +55,11 @@ export const workspaceBranchColumn = (): Column => {
               },
               search: async (q) => {
                 const options = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
-                return bindOptions(options.map((v) => ({ label: v.name, value: v._id, data: v })));
+                return bindOptions(
+                  options
+                    .filter((v) => v.__typename === "SearchResultWorkspaceMember")
+                    .map((v) => ({ label: v.name, value: v.id, data: v })),
+                );
               },
               listQuery: GetWorkspaceBranchesDocument,
             },

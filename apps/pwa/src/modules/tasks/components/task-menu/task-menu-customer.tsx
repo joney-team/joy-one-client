@@ -87,7 +87,7 @@ export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, upda
         if (searchResult.length === 0) return setIsSearchEmpty(true);
 
         await getCustomers({
-          variables: { ids: searchResult.map((result) => result._id) },
+          variables: { ids: searchResult.map((result) => result.id) },
         });
         return setIsSearchEmpty(false);
       }

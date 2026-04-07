@@ -72,11 +72,13 @@ export const userColumn = (args?: UserColumnArgs): Column => {
         },
         search: async (query) => {
           return searchEntity(AppEntity.WORKSPACE_MEMBERS, query).then((res) =>
-            res.map((v) => ({
-              label: v.name,
-              value: v.userId,
-              data: v,
-            })),
+            res
+              .filter((v) => v.__typename === "SearchResultWorkspaceMember")
+              .map((v) => ({
+                label: v.name,
+                value: v.userId,
+                data: v,
+              })),
           );
         },
         render: ({ data: member }) => {

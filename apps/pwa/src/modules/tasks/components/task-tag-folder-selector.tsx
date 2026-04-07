@@ -6,6 +6,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 import { AppEntity } from "@/types";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -19,12 +20,24 @@ interface TaskTagFolderSelectorProps {
 }
 
 export const TaskTagFolderSelector: FC<TaskTagFolderSelectorProps> = (props) => {
+  const client = useApolloClient();
+
   return (
     <Selector<TagFragment>
       excludeIds={props.excludeIds}
       listQuery={GetTagsDocument}
       listParams={{ type: TagType.TaskFolder }}
-      onSearch={(q) => searchEntity<TagFragment>(AppEntity.TAGS, q, { type: TagType.TaskFolder })}
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.TAGS, q, { type: TagType.TaskFolder });
+        const options = await client.query({
+          query: GetTagsDocument,
+          variables: {
+            ids: result.map((v) => v.id),
+          },
+        });
+
+        return options.data?.list.results ?? [];
+      }}
       renderOption={(tag) => {
         return (
           <Combobox.Option value={tag._id} key={tag._id}>

@@ -4189,6 +4189,13 @@ type SearchResultTask implements SearchResult {
   name: String!
 }
 
+type SearchResultWorkspaceBranch implements SearchResult {
+  entity: String!
+  hotline: String
+  id: String!
+  name: String!
+}
+
 type SearchResultWorkspaceMember implements SearchResult {
   avatar: String
   color: String

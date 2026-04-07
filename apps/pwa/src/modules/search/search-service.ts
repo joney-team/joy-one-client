@@ -1,8 +1,7 @@
 import { graphqlClient } from "@/graphql/graphql-client";
 import { AppEntity } from "@/types";
 import AvailableSearchEntitiesDocument from "./graphql/availableSearchEntities.graphql";
-import SearchDocument from "./graphql/search.graphql";
-import { SearchEntityResult } from "./search-types";
+import SearchDocument, { SearchQuery } from "./graphql/search.graphql";
 
 export async function searchGetAvailableEntities() {
   return graphqlClient
@@ -12,7 +11,7 @@ export async function searchGetAvailableEntities() {
     .then((result) => result.data?.availableSearchEntities as AppEntity[]);
 }
 
-export async function searchEntity<T = SearchEntityResult>(
+export async function searchEntity<T extends SearchQuery["search"][number]>(
   entity: AppEntity,
   q: string,
   filter?: any,

@@ -38,7 +38,7 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
         const searchResult = await searchEntity(AppEntity.TAGS, q, { type: TagType.Task });
         if (searchResult.length === 0) return setIsSearchEmpty(true);
         await getTags({
-          variables: { type: TagType.Task, ids: searchResult.map((result) => result._id) },
+          variables: { type: TagType.Task, ids: searchResult.map((result) => result.id) },
         });
         return setIsSearchEmpty(false);
       } else {

@@ -68,5 +68,9 @@ query Search(
       imeil
       status
     }
+    ... on SearchResultWorkspaceBranch {
+      name
+      hotline
+    }
   }
 }

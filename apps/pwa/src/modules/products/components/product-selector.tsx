@@ -6,6 +6,7 @@ import { Selector, SelectorContext, SelectorProps } from "@/components/selector"
 import { ProductType } from "@/graphql/enums.graphql";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
@@ -25,6 +26,7 @@ interface ProductSelectorProps extends Omit<
 }
 
 export const ProductSelector: FC<ProductSelectorProps> = (props) => {
+  const client = useApolloClient();
   const { type, isStockCheck, excludeIds, onSelect, target, ...rest } = props;
   const strictType = props.type ? (Array.isArray(props.type) ? props.type : [props.type]) : [];
   const funcStrictType = (v: ProductFragment) => strictType.includes(v.type);
@@ -34,15 +36,24 @@ export const ProductSelector: FC<ProductSelectorProps> = (props) => {
       {...rest}
       listQuery={GetProductsDocument}
       listParams={type ? { type } : undefined}
-      onSearch={(q) =>
-        searchEntity<ProductFragment>(AppEntity.PRODUCTS, q, {
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.PRODUCTS, q, {
           isStockCheck,
           type,
-        }).then((res) => {
-          if (strictType.length > 0) return res.filter(funcStrictType);
-          return res;
-        })
-      }
+        });
+
+        const options = await client.query({
+          query: GetProductsDocument,
+          variables: {
+            query: {
+              ids: result.map((i) => i.id),
+            },
+          },
+        });
+
+        if (strictType.length > 0) return options.data?.list.results.filter(funcStrictType) ?? [];
+        return options.data?.list.results ?? [];
+      }}
       renderOption={(product) => {
         const { icon: Icon } = productTypes[product.type as ProductType];
 

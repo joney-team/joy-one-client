@@ -39,7 +39,17 @@ export const TagSelector: FC<TagSelectorProps> = (props) => {
         listQuery={GetTagsDocument}
         listParams={{ type: props.type }}
         autoCloseOnChange={false}
-        onSearch={(q) => searchEntity<TagFragment>(AppEntity.TAGS, q, { type: props.type })}
+        onSearch={async (q) => {
+          const result = await searchEntity(AppEntity.TAGS, q, { type: props.type });
+          const options = await client.query({
+            query: GetTagsDocument,
+            variables: {
+              ids: result.map((v) => v.id),
+            },
+          });
+
+          return options.data?.list.results ?? [];
+        }}
         renderOption={(tag) => {
           return (
             <Combobox.Option value={tag._id} key={tag._id}>

@@ -19,7 +19,17 @@ export const WorkspaceBranchesSelector: FC<WorkspaceBranchesSelectorProps> = (pr
   return (
     <Selector<WorkspaceBranchOption>
       {...props}
-      onSearch={(q) => searchEntity(AppEntity.WORKSPACE_BRANCHES, q)}
+      onSearch={(q) => {
+        return searchEntity(AppEntity.WORKSPACE_BRANCHES, q).then((res) =>
+          res
+            .filter((v) => v.__typename === "SearchResultWorkspaceBranch")
+            .map((v) => ({
+              _id: v.id,
+              name: v.name,
+              hotline: v.hotline,
+            })),
+        );
+      }}
       listQuery={GetWorkspaceBranchesDocument}
       renderOption={(item) => {
         return (

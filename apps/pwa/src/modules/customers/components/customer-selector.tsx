@@ -11,6 +11,8 @@ import { FC } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 import GetCustomersDocument from "../graphql/getCustomers.graphql";
+import { useApolloClient } from "@apollo/client/react";
+import GetCustomersByIdsDocument from "../graphql/getCustomersByIds.graphql";
 
 export type CustomerSelectorValue = Pick<CustomerFragment, "_id" | "name" | "phone" | "avatar">;
 
@@ -20,11 +22,23 @@ interface CustomerSelectorProps extends Omit<
 > {}
 
 export const CustomerSelector: FC<CustomerSelectorProps> = (props) => {
+  const client = useApolloClient();
+
   return (
     <Selector
       {...props}
       listQuery={GetCustomersDocument}
-      onSearch={(q) => searchEntity<CustomerSelectorValue>(AppEntity.CUSTOMERS, q)}
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.CUSTOMERS, q);
+        const customers = await client.query({
+          query: GetCustomersByIdsDocument,
+          variables: {
+            ids: result.map((item) => item.id),
+          },
+        });
+
+        return customers.data?.customers ?? [];
+      }}
       renderOption={(item) => {
         return (
           <Combobox.Option value={item._id} key={item._id}>

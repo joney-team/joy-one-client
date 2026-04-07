@@ -70,6 +70,7 @@ export const CustomerInput: FC<CustomerInputProps> = (props) => {
               return (
                 <Card
                   ref={hover.ref}
+                  key={value._id}
                   p={2}
                   style={{
                     borderColor: theme.colors.gray[4],

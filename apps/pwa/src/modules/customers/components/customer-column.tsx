@@ -76,7 +76,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
           const results = await client.query({
             query: GetCustomersByIdsDocument,
             variables: {
-              ids: result.map((v) => v._id),
+              ids: result.map((v) => v.id),
             },
             fetchPolicy: "network-only",
           });

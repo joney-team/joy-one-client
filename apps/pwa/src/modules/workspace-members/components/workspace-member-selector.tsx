@@ -10,6 +10,8 @@ import { FC, ReactNode } from "react";
 import { Selector, SelectorProps } from "../../../components/selector";
 import { WorkspaceMemberFragment } from "../graphql/fragmentWorkspaceMember.graphql";
 import GetWorkspaceMembersDocument from "../graphql/getWorkspaceMembers.graphql";
+import GetWorkspaceMembersByIdsDocument from "../graphql/getWorkspaceMembersByIds.graphql";
+import { useApolloClient } from "@apollo/client/react";
 
 export type WorkspaceMemberSelectorValue = WorkspaceMemberFragment;
 
@@ -24,6 +26,7 @@ export interface WorkspaceMemberSelectorProps extends Omit<
 }
 
 export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props) => {
+  const client = useApolloClient();
   const { iconSize, avatarSize, collapsed, optionRightSection, ...rest } = props;
 
   return (
@@ -66,7 +69,20 @@ export const WorkspaceMemberSelector: FC<WorkspaceMemberSelectorProps> = (props)
           </ActionIcon>
         );
       }}
-      onSearch={(q) => searchEntity(AppEntity.WORKSPACE_MEMBERS, q)}
+      onSearch={async (q) => {
+        const result = await searchEntity(AppEntity.WORKSPACE_MEMBERS, q).then((res) =>
+          res.filter((v) => v.__typename === "SearchResultWorkspaceMember"),
+        );
+
+        const members = await client.query({
+          query: GetWorkspaceMembersByIdsDocument,
+          variables: {
+            ids: result.map((v) => v.userId),
+          },
+        });
+
+        return members.data?.members ?? [];
+      }}
     />
   );
 };

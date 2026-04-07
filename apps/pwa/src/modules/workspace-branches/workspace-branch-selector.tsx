@@ -37,9 +37,16 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
     <Selector<WorkspaceBranchOption>
       {...props}
       staticSearch={!isFullAccess}
-      onSearch={(q) => {
+      onSearch={async (q) => {
         if (isFullAccess) {
-          return searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
+          const results = await searchEntity(AppEntity.WORKSPACE_BRANCHES, q);
+          return results
+            .filter((v) => v.__typename === "SearchResultWorkspaceBranch")
+            .map((v) => ({
+              _id: v.id,
+              name: v.name,
+              hotline: v.hotline,
+            }));
         }
 
         return searchArray(workspace.member.workspaceBranches, ["name"], q);

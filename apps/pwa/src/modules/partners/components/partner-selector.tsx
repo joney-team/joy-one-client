@@ -7,6 +7,7 @@ import { searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
+import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Combobox, em, Group, Stack, Text } from "@mantine/core";
 import { IconPhone, IconPlus } from "@tabler/icons-react";
@@ -26,6 +27,7 @@ interface PartnerSelectorProps extends Omit<
 
 export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
   const { target, createable = true, optionRightSection, ...rest } = props;
+  const client = useApolloClient();
 
   const workspace = useWorkspace();
   const _createable = createable && workspace.hasPermission(WorkspacePermission.PARTNERS_WRITE);
@@ -35,7 +37,19 @@ export const PartnerSelector: FC<PartnerSelectorProps> = (props) => {
       {(open) => (
         <Selector<PartnerFragment>
           {...rest}
-          onSearch={(q) => searchEntity<PartnerFragment>(AppEntity.PARTNERS, q)}
+          onSearch={async (q) => {
+            const result = await searchEntity(AppEntity.PARTNERS, q);
+            const options = await client.query({
+              query: GetPartnersDocument,
+              variables: {
+                query: {
+                  ids: result.map((i) => i.id),
+                },
+              },
+            });
+
+            return options.data?.list.results ?? [];
+          }}
           listQuery={GetPartnersDocument}
           renderOption={(item) => {
             return (

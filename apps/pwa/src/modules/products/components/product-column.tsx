@@ -72,7 +72,7 @@ export const ProductColumn = <T extends ProductColumnType>(
           const options = await client.query({
             query: GetProductsByIdsDocument,
             variables: {
-              ids: result.map((v) => v._id),
+              ids: result.map((v) => v.id),
             },
           });
           return (options.data?.getProductsByIds ?? []).map((v) => ({
