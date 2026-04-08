@@ -287,9 +287,9 @@ export const useGraphqlList = <T extends BaseData>({
       router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     },
     totalChange,
-    refetch: () => {
-      if (!queryData) return refetch();
-      return onRefetch();
+    refetch: async () => {
+      if (!queryData) await refetch();
+      await onRefetch();
     },
     fetch,
   };
