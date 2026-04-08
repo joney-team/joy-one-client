@@ -1,17 +1,17 @@
 "use client";
 
+import { Errored } from "@/components/errored";
 import { useLayout } from "@/layout/layout-context";
 import { useQuery } from "@apollo/client/react";
+import { Trans } from "@lingui/react/macro";
 import { Card, Group, Skeleton, Stack, Title } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { FC, useEffect } from "react";
 import GetMessageBoxByIdDocument from "../graphql/getMessageBoxById.graphql";
+import { MetadataMessageBox } from "../message-box-metadata/message-box-metadata";
+import { MessageBoxHead } from "./message-box-head";
 import { InputMessageBox } from "./message-box-input";
 import { MessageBoxMessages } from "./message-box-messages";
-import { MessageBoxHead } from "./message-box-head";
-import { MetadataMessageBox } from "../message-box-metadata/message-box-metadata";
-import { Errored } from "@/components/errored";
-import { Trans } from "@lingui/react/macro";
 
 export const MessageBox: FC<{ boxId: string }> = ({ boxId }) => {
   const layout = useLayout();
@@ -110,7 +110,7 @@ export const MessageBox: FC<{ boxId: string }> = ({ boxId }) => {
           </Stack>
 
           <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
-            <Stack p="sm" pb={layout.isStandalone && !layout.isAndroid ? 36 : undefined}>
+            <Stack p="sm">
               <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
                 <InputMessageBox key={messageBox._id} box={messageBox} />
               </Card>
