@@ -1,62 +1,135 @@
 "use client";
 
 import { useLayout } from "@/layout/layout-context";
-import { Card, Stack } from "@mantine/core";
+import { useQuery } from "@apollo/client/react";
+import { Card, Group, Skeleton, Stack, Title } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { FC, useEffect } from "react";
-import { useMessageBoxes } from "../message-boxes-context";
+import GetMessageBoxByIdDocument from "../graphql/getMessageBoxById.graphql";
 import { InputMessageBox } from "./message-box-input";
 import { MessageBoxMessages } from "./message-box-messages";
+import { MessageBoxHead } from "./message-box-head";
+import { MetadataMessageBox } from "../message-box-metadata/message-box-metadata";
+import { Errored } from "@/components/errored";
+import { Trans } from "@lingui/react/macro";
 
-export const MessageBox: FC = () => {
-  const messageBoxes = useMessageBoxes();
-  const box = messageBoxes.messageBox;
+export const MessageBox: FC<{ boxId: string }> = ({ boxId }) => {
   const layout = useLayout();
   const rootSize = useElementSize();
   const inputSize = useElementSize();
 
+  const { data, error } = useQuery(GetMessageBoxByIdDocument, {
+    variables: { messageBoxId: boxId },
+    fetchPolicy: "cache-and-network",
+  });
+
+  const messageBox = data?.messageBox;
+
   useEffect(() => {
-    if (box?._id) {
+    if (messageBox?._id) {
       layout.setComponents({
-        head: box.senderName,
+        head: (
+          <Title order={5} fw={500}>
+            <Trans>Message</Trans>
+          </Title>
+        ),
       });
     }
-  }, [box?._id]);
+  }, [messageBox?._id]);
 
-  if (!box) return null;
+  if (error) {
+    return <Errored error={error} p="lg" />;
+  }
+
+  if (!messageBox) {
+    return <Skeleton h="100%" w="100%" />;
+  }
 
   const messagesHeight = rootSize.height - inputSize.height;
+
+  if (layout.view === "mobile") {
+    return (
+      <Stack
+        gap={0}
+        id="message-box"
+        pos="relative"
+        h="calc(100dvh - var(--app-layout-header-height))"
+      >
+        <MessageBoxHead key={messageBox._id} box={messageBox} />
+
+        <Stack ref={rootSize.ref} flex={1} h="100%" mih={0} pos="relative">
+          <Stack
+            id="messages"
+            flex={1}
+            pos="relative"
+            style={{ height: messagesHeight, overflow: "auto" }}
+          >
+            {messagesHeight > 0 && (
+              <MessageBoxMessages key={messageBox._id} box={messageBox} height={messagesHeight} />
+            )}
+          </Stack>
+
+          <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
+            <Stack
+              p={layout.view === "mobile" ? "md" : "sm"}
+              pb={layout.isStandalone && !layout.isAndroid ? 36 : undefined}
+            >
+              <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
+                <InputMessageBox key={messageBox._id} box={messageBox} />
+              </Card>
+            </Stack>
+          </Stack>
+        </Stack>
+      </Stack>
+    );
+  }
 
   return (
     <Stack
       flex={1}
-      ref={rootSize.ref}
       gap={0}
-      bg={layout.view === "mobile" ? undefined : "var(--mantine-color-dark-outline-hover)"}
+      bg="var(--mantine-color-dark-outline-hover)"
       id="message-box"
       pos="relative"
+      h="100%"
+      mih={0}
     >
-      <Stack
-        id="messages"
-        flex={1}
-        pos="relative"
-        style={{ height: messagesHeight, overflow: "hidden" }}
-      >
-        {messagesHeight > 0 && (
-          <MessageBoxMessages key={box._id} box={box} height={messagesHeight} />
-        )}
-      </Stack>
+      <MessageBoxHead key={messageBox._id} box={messageBox} />
 
-      <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
-        <Stack
-          p={layout.view === "mobile" ? 16 : 12}
-          pb={layout.isStandalone && !layout.isAndroid ? 36 : undefined}
-        >
-          <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
-            <InputMessageBox box={box} />
-          </Card>
+      <Group gap={0} flex={1} mih={0} w="100%" miw={0}>
+        <Stack ref={rootSize.ref} flex={1} h="100%" mih={0} pos="relative">
+          <Stack
+            id="messages"
+            flex={1}
+            pos="relative"
+            style={{ height: messagesHeight, overflow: "auto" }}
+          >
+            {messagesHeight > 0 && (
+              <MessageBoxMessages key={messageBox._id} box={messageBox} height={messagesHeight} />
+            )}
+          </Stack>
+
+          <Stack ref={inputSize.ref} pos="absolute" bottom={0} left={0} right={0}>
+            <Stack p="sm" pb={layout.isStandalone && !layout.isAndroid ? 36 : undefined}>
+              <Card bg="var(--mantine-color-body)" shadow="xs" p={0}>
+                <InputMessageBox key={messageBox._id} box={messageBox} />
+              </Card>
+            </Stack>
+          </Stack>
         </Stack>
-      </Stack>
+
+        <Stack
+          h="100%"
+          mih={0}
+          bg="var(--app-panel-background)"
+          style={{
+            overflow: "hidden",
+            width: "400px",
+          }}
+        >
+          <MetadataMessageBox key={messageBox._id} box={messageBox} />
+        </Stack>
+      </Group>
     </Stack>
   );
 };

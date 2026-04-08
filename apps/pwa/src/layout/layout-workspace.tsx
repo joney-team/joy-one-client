@@ -6,7 +6,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { Stack } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { Fragment, type FC } from "react";
-import { useNavigationWidth } from "./hooks/use-workspace-layout";
+import { useNavigationWidth, workspaceLayoutConfig } from "./hooks/use-workspace-layout";
 import { useLayout } from "./layout-context";
 import styles from "./layout-workspace.module.css";
 
@@ -63,6 +63,8 @@ const WorkspaceLayoutResizing = () => {
       onResizing={(width) => {
         document.documentElement.style.setProperty("--app-layout-navigation-width", `${width}px`);
       }}
+      min={workspaceLayoutConfig.minNavigationWidth}
+      max={workspaceLayoutConfig.maxNavigationWidth}
     />
   );
 };

@@ -20,6 +20,7 @@ import { ModalUserInformation } from "@/modules/users/modals/modal-user-informat
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
+import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -41,9 +42,11 @@ import { FC, Fragment, useEffect, useMemo, useRef } from "react";
 import { MessageFragment } from "../graphql/fragmentMessage.graphql";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import GetMessagesDocument from "../graphql/getMessages.graphql";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
 
-export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }> = (props) => {
+export const MessageBoxMessages: FC<{
+  box: MessageBoxFragment;
+  height: number;
+}> = (props) => {
   const color = useColor();
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);
@@ -113,6 +116,8 @@ export const MessageBoxMessages: FC<{ box: MessageBoxFragment; height: number }>
   const [userMemberInfos] = useWorkspaceMembers([
     ...new Set(messagesList.map((m) => m.userId || "").filter(Boolean)),
   ]);
+
+  if (props.height === 0) return null;
 
   return (
     <ScrollArea

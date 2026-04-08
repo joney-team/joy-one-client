@@ -21,7 +21,7 @@ import {
 } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, memo } from "react";
-import { useNavigationWidth, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { useNavigationWidth } from "../hooks/use-workspace-layout";
 
 const WorkspaceHeaderShortcuts = dynamic(
   () => import("./header-shortcuts").then((mod) => mod.WorkspaceHeaderShortcuts),
@@ -56,20 +56,10 @@ const WorkspaceHeaderAccount = dynamic(
 );
 
 function ToggleSidebarButton() {
-  const { isNavbarCollapsed, setNavigationWidth } = useNavigationWidth();
+  const { isNavbarCollapsed, toggleCollapse } = useNavigationWidth();
 
   return (
-    <ActionIcon
-      variant="subtle"
-      color="gray.6"
-      onClick={() => {
-        setNavigationWidth(
-          isNavbarCollapsed
-            ? workspaceLayoutConfig.defaultNavigationExpandedWidth
-            : workspaceLayoutConfig.minNavigationWidth,
-        );
-      }}
-    >
+    <ActionIcon variant="subtle" color="gray.6" onClick={toggleCollapse}>
       {isNavbarCollapsed ? (
         <IconLayoutSidebarLeftExpand strokeWidth={1.5} size={20} />
       ) : (
@@ -84,7 +74,6 @@ export const WorkspaceHeader: FC = memo(() => {
   const layout = useLayout();
   const workspace = useWorkspace();
   const colorScheme = useColorScheme();
-  const { isNavbarCollapsed, setNavigationWidth } = useNavigationWidth();
 
   if (!workspace.isAvailable) return null;
 

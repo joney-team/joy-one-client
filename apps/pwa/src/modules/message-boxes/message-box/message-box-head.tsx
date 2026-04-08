@@ -24,15 +24,13 @@ import { FC } from "react";
 import AssignUserToMessageBoxDocument from "../graphql/assignUserToMessageBox.graphql";
 import CloseMessageBoxDocument from "../graphql/closeMessageBox.graphql";
 import DeleteMessageBoxDocument from "../graphql/deleteMessageBox.graphql";
+import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import SwitchMessageBoxAiAssistantDocument from "../graphql/switchMessageBoxAiAssistant.graphql";
 import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
-import { useMessageBoxes } from "../message-boxes-context";
 
-export const MessageBoxHead: FC = () => {
+export const MessageBoxHead: FC<{ box: MessageBoxFragment }> = ({ box }) => {
   const { t } = useLingui();
   const client = useApolloClient();
-  const messageBoxes = useMessageBoxes();
-  const box = messageBoxes.messageBox;
   const router = useRouter();
   const color = useColor();
   const plugins = usePlugins();
@@ -71,11 +69,16 @@ export const MessageBoxHead: FC = () => {
     });
   };
 
-  if (!box) return null;
-
   return (
-    <Group className="bg-content" py={8} px={12} w="100%">
-      <Group flex={1} gap={10}>
+    <Group
+      className="bg-content"
+      py={8}
+      px="xs"
+      w="100%"
+      miw={0}
+      style={{ borderBottom: `1px solid var(--app-divider-color)` }}
+    >
+      <Group flex={1} gap={10} miw={0}>
         <Avatar
           radius={8}
           icon={IconUserSquareRounded}
@@ -83,8 +86,10 @@ export const MessageBoxHead: FC = () => {
           size={40}
         />
 
-        <Stack gap={3}>
-          <Title fz={18}>{box?.senderName || box?.customer?.name || <Trans>Guest</Trans>}</Title>
+        <Stack gap={3} flex={1} miw={0}>
+          <Text truncate fw={500} flex={1} miw={0}>
+            {box?.senderName || box?.customer?.name || <Trans>Guest</Trans>}
+          </Text>
 
           {plugin && (
             <Group gap={4}>

@@ -30,5 +30,12 @@ export const useNavigationWidth = () => {
       setNavigationWidth(clampedValue);
     },
     isNavbarCollapsed: navigationWidth <= workspaceLayoutConfig.minNavigationWidth * 1.5,
+    toggleCollapse: () => {
+      setNavigationWidth(
+        navigationWidth <= workspaceLayoutConfig.minNavigationWidth * 1.5
+          ? workspaceLayoutConfig.defaultNavigationExpandedWidth
+          : workspaceLayoutConfig.minNavigationWidth,
+      );
+    },
   };
 };

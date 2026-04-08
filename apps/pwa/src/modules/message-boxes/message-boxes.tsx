@@ -113,19 +113,11 @@ export const MessageBoxList = () => {
       </Group>
 
       <ScrollArea flex={1} viewportProps={{ id: "message-boxes-list" }}>
-        <Stack gap={12} pb={8} px={12}>
+        <Stack gap="xs" pb="sm" pr="sm" pl="xs">
           <Empty message={<Trans>No messages</Trans>} visible={boxes.isEmpty} />
           <Errored error={boxes.error} visible={boxes.isHasError} />
 
-          {boxes.isHasData &&
-            boxes.data.map((box) => {
-              return (
-                <Stack key={box._id}>
-                  <CardMessageBox box={box} />
-                </Stack>
-              );
-            })}
-
+          {boxes.isHasData && boxes.data.map((box) => <CardMessageBox key={box._id} box={box} />)}
           {boxes.isFetching && <Skeleton height={115} />}
 
           <WayPoint

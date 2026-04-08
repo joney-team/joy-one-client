@@ -10,6 +10,8 @@ export interface HorizontalLayoutResizingProps {
   onResizing?: (value: number) => void;
   height?: string | number;
   position?: "fixed" | "absolute";
+  min?: number;
+  max?: number;
 }
 
 const pointerSize = 12;
@@ -20,26 +22,38 @@ export const HorizontalLayoutResizing: FC<HorizontalLayoutResizingProps> = ({
   onFinished,
   height = "100%",
   position = "fixed",
+  min,
+  max,
 }) => {
   const [isResizing, setIsResizing] = useState(false);
   const capturePosition = useRef<number>(0);
   const dividerRef = useRef<HTMLDivElement>(null);
 
+  const withLimits = (value: number) => {
+    let nextValue = value;
+    if (min !== undefined) {
+      nextValue = Math.max(min, nextValue);
+    }
+    if (max !== undefined) {
+      nextValue = Math.min(max, nextValue);
+    }
+    return nextValue;
+  };
+
   useEffect(() => {
     if (!isResizing) return;
 
     const updateValue = (clientX: number) => {
-      const nextValue = Math.max(0, Math.round(clientX - capturePosition.current));
+      const nextValue = withLimits(Math.max(0, Math.round(clientX - capturePosition.current)));
       onFinished?.(nextValue);
     };
 
     const handleMouseMove = (event: MouseEvent) => {
-      dividerRef.current?.style.setProperty(
-        "transform",
-        `translateX(${event.clientX - capturePosition.current - value}px)`,
+      const nextValue = withLimits(
+        Math.max(0, Math.round(event.clientX - capturePosition.current)),
       );
-
-      onResizing?.(event.clientX - capturePosition.current);
+      dividerRef.current?.style.setProperty("transform", `translateX(${nextValue - value}px)`);
+      onResizing?.(nextValue);
     };
 
     const handleMouseUp = (event: MouseEvent) => {

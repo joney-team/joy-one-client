@@ -167,9 +167,10 @@ export const WorkspaceNavigationMenu: FC<{
           <Tooltip label={props.label} position="right">
             <Anchor component={Link} href={route} td="none">
               <ActionIcon
-                size="xl"
+                size="lg"
                 variant={isActive ? "light" : "subtle"}
                 color={color(isActive ? "primary" : "var(--mantine-color-text)")}
+                // mah={36}
               >
                 <props.icon strokeWidth={isActive ? 1.8 : 1.5} size={22} />
               </ActionIcon>

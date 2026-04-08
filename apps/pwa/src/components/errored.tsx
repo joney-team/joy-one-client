@@ -1,13 +1,13 @@
 "use client";
 
 import { Trans } from "@lingui/react/macro";
-import { Box, Group, Text, ThemeIcon } from "@mantine/core";
+import { Box, Group, MantineSpacing, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import { FC } from "react";
 
 export interface ErroredProps {
   error?: string | Error | null;
-  p?: number;
+  p?: MantineSpacing;
   visible?: boolean;
   centered?: boolean;
   hideIcon?: boolean;

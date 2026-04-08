@@ -233,7 +233,7 @@ export const WorkspaceNavigation: FC = () => {
           id="app-navigation"
           gap={isNavbarCollapsed ? 5 : 0}
           pb={16}
-          pt={isNavbarCollapsed ? 5 : 10}
+          pt={isNavbarCollapsed ? 12 : 10}
         >
           {navigationGroup.map((group) => {
             return (

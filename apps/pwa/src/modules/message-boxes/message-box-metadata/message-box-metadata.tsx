@@ -32,8 +32,8 @@ import {
 import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useRef } from "react";
+import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import SetMessageBoxCustomerDocument from "../graphql/setMessageBoxCustomer.graphql";
-import { useMessageBoxes } from "../message-boxes-context";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
 import { AccordionItem } from "./message-box-metadata-types";
@@ -57,19 +57,15 @@ const accordionItems: AccordionItem[] = [
   // },
 ];
 
-export const MetadataMessageBox: FC = () => {
+export const MetadataMessageBox: FC<{ box: MessageBoxFragment }> = ({ box }) => {
   const client = useApolloClient();
-  const messageBoxes = useMessageBoxes();
   const workspace = useWorkspace();
   const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const { getAvailableModule } = useAvailableWorkspaceModules();
-  const { messageBox } = messageBoxes;
   const { workspaceView } = useWorkspaceSetting();
 
-  const { customer, loading: customerLoading } = useCustomer(messageBox?.customerId);
-
-  if (!messageBox) return null;
+  const { customer, loading: customerLoading } = useCustomer(box?.customerId);
 
   if (customerLoading)
     return (
@@ -119,7 +115,7 @@ export const MetadataMessageBox: FC = () => {
                 onClick={() =>
                   client.mutate({
                     mutation: SetMessageBoxCustomerDocument,
-                    variables: { boxId: messageBox._id, customerId: null },
+                    variables: { boxId: box._id, customerId: null },
                   })
                 }
               >
@@ -221,7 +217,7 @@ export const MetadataMessageBox: FC = () => {
           if (!customer) return;
           return client.mutate({
             mutation: SetMessageBoxCustomerDocument,
-            variables: { boxId: messageBox._id, customerId: customer._id },
+            variables: { boxId: box._id, customerId: customer._id },
           });
         }}
         renderValue={(ctx) => {

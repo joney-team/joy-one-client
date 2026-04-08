@@ -4,11 +4,11 @@ import { StorageKey } from "@/constants/storage-key";
 import { useRouteRule } from "@/hooks/use-router";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { useLocalStorage } from "@mantine/hooks";
 import { useParams, usePathname } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";
 import { useColor } from "../modules/theme/use-color";
-import { zIndexes } from "@joy-one-client/config/layout";
 
 export const LayoutWorkspaceCssVariables: FC = () => {
   const color = useColor();
@@ -69,7 +69,7 @@ export const LayoutWorkspaceCssVariables: FC = () => {
   useEffect(() => {
     const zIndexVariables = Object.entries(zIndexes).reduce(
       (acc, [key, value]) => {
-        const indexKey = `--app-z-index-${key.toLowerCase()}`;
+        const indexKey = `--app-layout-z-index-${key.toLowerCase()}`;
         acc[indexKey] = value.toString();
         return acc;
       },
