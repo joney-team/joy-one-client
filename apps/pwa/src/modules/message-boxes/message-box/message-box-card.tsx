@@ -4,6 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Badge } from "@/components/badge";
 import { DateFormat } from "@/components/format/date-format";
 import { MessageAttachmentType, MessageBoxStatus } from "@/graphql/enums.graphql";
+import { useLayout } from "@/layout/layout-context";
 import { usePlugins } from "@/modules/plugins/plugins-context";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -14,7 +15,6 @@ import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
-import { useLayout } from "@/layout/layout-context";
 
 interface CardMessageBoxProps {
   box: MessageBoxFragment;

@@ -1,17 +1,17 @@
 "use client";
 
-import { Avatar } from "@/components/avatar";
 import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
+import { Image } from "@/components/image";
 import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { Renderer } from "@/components/renderer";
 import { WayPoint } from "@/components/way-point";
-import { EventType, MessageBoxStatus } from "@/graphql/enums.graphql";
+import { EventType, MessageBoxPlatformType, MessageBoxStatus } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
+import { useQuery } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Box, Group, rgba, ScrollArea, Skeleton, Stack } from "@mantine/core";
 import { IconAnalyze, IconPuzzle } from "@tabler/icons-react";
@@ -19,6 +19,7 @@ import { useMemo } from "react";
 import { useWorkspaceStat } from "../workspace-stats/hooks/useWorkspaceStat";
 import { MessageBoxFragment } from "./graphql/fragmentMessageBox.graphql";
 import GetMessageBoxesDocument from "./graphql/getMessageBoxes.graphql";
+import GetMessageBoxPlatformsDocument from "./graphql/getMessageBoxPlatforms.graphql";
 import { CardMessageBox } from "./message-box/message-box-card";
 import { messageBoxStatuses } from "./message-boxes-contants";
 import { MessageBoxesIntegrate } from "./message-boxes-integrate";
@@ -28,7 +29,6 @@ const params = {
 };
 
 export const MessageBoxList = () => {
-  const plugins = usePlugins();
   const layout = useLayout();
   const workspace = useWorkspace();
   const { workspaceStat, loading: workspaceStatLoading } = useWorkspaceStat();
@@ -49,6 +49,8 @@ export const MessageBoxList = () => {
     ],
   });
 
+  const { data: platformsData } = useQuery(GetMessageBoxPlatformsDocument);
+
   const padding = layout.view === "mobile" ? 0 : 10;
 
   const isConnectedWithPlugins = useMemo(() => {
@@ -65,7 +67,11 @@ export const MessageBoxList = () => {
       </Group>
     );
 
-  if (!isConnectedWithPlugins && workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)) {
+  if (
+    !isConnectedWithPlugins &&
+    !boxes.isHasData &&
+    workspace.hasPermission(WorkspacePermission.WORKSPACE_SETTINGS)
+  ) {
     return <MessageBoxesIntegrate />;
   }
 
@@ -90,23 +96,28 @@ export const MessageBoxList = () => {
           label={<Trans>Platform</Trans>}
           autoHideLabel
           value={boxes.params.platformId}
-          options={[
-            ...plugins.zaloOas.map((z) => ({
-              label: z.info.name,
-              value: z._id,
-              leftSession: <Avatar pluginZaloOa={z} size={20} />,
-            })),
-            ...plugins.messageHubs.map((m) => ({
-              label: m.name,
-              value: m._id,
-              leftSession: <Avatar src="/images/plugins-message-hubs.png" size={20} />,
-            })),
-            ...plugins.metaPages.map((m) => ({
-              label: m.name,
-              value: m._id,
-              leftSession: <Avatar pluginMetaPage={m} size={20} />,
-            })),
-          ]}
+          options={(platformsData?.platforms ?? []).map((platform) => {
+            return {
+              label: platform.name,
+              value: platform.id,
+              leftSession: (
+                <Image
+                  src={
+                    platform.type === MessageBoxPlatformType.Zalo
+                      ? "/images/plugins-zalo-oa.png"
+                      : platform.type === MessageBoxPlatformType.MessageHub
+                        ? "/images/plugins-message-hubs.png"
+                        : platform.type === MessageBoxPlatformType.MetaPage
+                          ? "/images/plugins-meta-pages.png"
+                          : undefined
+                  }
+                  w={20}
+                  h={20}
+                  radius="xs"
+                />
+              ),
+            };
+          })}
           onClear={() => boxes.removeParams(["platformId"])}
           onChange={(platformId) => boxes.setParams({ platformId })}
         />

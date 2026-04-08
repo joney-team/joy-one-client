@@ -995,6 +995,7 @@ enum EventType {
   LOANS_REVERT_REJECTED
   LOANS_SYNCED
   LOANS_UPDATED
+  MESSAGE_BOXES_PLATFORMS_UPDATED
   MESSAGE_BOX_CLOSED
   MESSAGE_BOX_IN_PROGRESS
   MESSAGE_BOX_NEW
@@ -1566,6 +1567,13 @@ type MessageBox {
   source: EntitySource
   status: MessageBoxStatus
   updatedAt: Float
+}
+
+type MessageBoxPlatform {
+  id: String!
+  image: String
+  name: String!
+  type: MessageBoxPlatformType!
 }
 
 """Platform type of the message box"""
@@ -3113,6 +3121,7 @@ type Query {
     query: JSONObject
   ): LoansPaginated!
   getMessageBoxById(id: String!): MessageBox!
+  getMessageBoxPlatforms: [MessageBoxPlatform!]!
   getMessageBoxes(
     ids: [String!]
     limit: Float = 30

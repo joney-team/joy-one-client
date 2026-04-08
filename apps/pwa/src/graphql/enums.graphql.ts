@@ -197,6 +197,7 @@ export const EventType = {
   LoansRevertRejected: 'LOANS_REVERT_REJECTED',
   LoansSynced: 'LOANS_SYNCED',
   LoansUpdated: 'LOANS_UPDATED',
+  MessageBoxesPlatformsUpdated: 'MESSAGE_BOXES_PLATFORMS_UPDATED',
   MessageBoxClosed: 'MESSAGE_BOX_CLOSED',
   MessageBoxInProgress: 'MESSAGE_BOX_IN_PROGRESS',
   MessageBoxNew: 'MESSAGE_BOX_NEW',

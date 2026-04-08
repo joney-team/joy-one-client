@@ -1,0 +1,8 @@
+query GetMessageBoxPlatforms {
+  platforms: getMessageBoxPlatforms {
+    id
+    name
+    type
+    image
+  }
+}
