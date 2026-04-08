@@ -1735,7 +1735,7 @@ type Mutation {
   bulkArchiveCustomerForms(input: BulkArchiveInput!): [CustomerForm!]!
   bulkArchiveLoans(input: BulkArchiveLoansInput!): [String!]!
   bulkArchivePosts(ids: [String!]!): Boolean!
-  bulkProductsStockIn(input: BulkProductsStockInInput!): Boolean!
+  bulkProductsStockIn(input: BulkProductsStockInInput!): [String!]!
   bulkRejectLoans(input: BulkRejectLoanInput!): [Loan!]!
   bulkRevertRejectedLoans(loanIds: [String!]!): [Loan!]!
   bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [CustomerForm!]!
@@ -1805,8 +1805,8 @@ type Mutation {
   payReceipt(id: String!, input: PayReceiptInput!): Receipt!
   pluginExternalStorageSignUploadUrl(input: PluginExternalStorageSignUploadUrlInput!): SignUploadUrlResponse!
   pluginMailerSendTestMail(input: TestSendMailInput!): Boolean!
-  productStockIn(input: ProductStockInInput!): Boolean!
-  productStockOut(input: ProductStockOutInput!): Boolean!
+  productStockIn(input: ProductStockInInput!): [String!]!
+  productStockOut(input: ProductStockOutInput!): [String!]!
   reconnectZaloOa(id: String!): PluginZaloOa!
   refreshToken(input: AuthRefreshTokenInput!): AuthTokenResult!
   regenerateWorkspaceApiAppSecret(id: String!): WorkspaceApiApp!

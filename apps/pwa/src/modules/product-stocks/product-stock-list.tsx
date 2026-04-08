@@ -9,8 +9,7 @@ import { numberColumn } from "@/components/list/columns/number-column";
 import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { ProductColumn } from "@/modules/products/components/product-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconBuildingWarehouse } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -19,6 +18,8 @@ import GetProductStocksDocument from "./graphql/getProductStocks.graphql";
 import { ModalProductStockIn } from "./modals/modal-product-stock-in";
 
 export const ProductStockList: FC = () => {
+  const { t } = useLingui();
+
   return (
     <ModalProductStockIn>
       {(openStockIn) => (
@@ -31,6 +32,7 @@ export const ProductStockList: FC = () => {
             columns={{
               createdAt: dateTimeColumn({ sortable: true, name: <Trans>Time</Trans> }),
               product: ProductColumn({
+                minWidth: 250,
                 type: ProductType.Product,
                 name: <Trans>Product</Trans>,
                 valuePath: "product",
@@ -68,8 +70,12 @@ export const ProductStockList: FC = () => {
                 emptyText: "--",
                 hideTime: true,
               }),
-              costPrice: numberColumn({ name: <Trans>Cost price</Trans>, type: "money" }),
-              note: { name: <Trans>Note</Trans> },
+              costPrice: numberColumn({
+                name: <Trans>Cost price</Trans>,
+                type: "money",
+                align: "right",
+              }),
+              note: { name: <Trans>Note</Trans>, defaultHidden: true },
             }}
             creatable={{
               onCreate: () => openStockIn(),

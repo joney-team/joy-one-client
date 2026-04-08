@@ -59,7 +59,7 @@ export function Columns() {
       activationConstraint: {
         distance: 10,
       },
-    })
+    }),
   );
 
   return (
@@ -94,7 +94,9 @@ export function Columns() {
               <ColumnItem
                 key={column.columnKey}
                 column={column}
-                onChange={(state) => changeColumnState(column.columnKey, state)}
+                onChange={(state) => {
+                  changeColumnState(column.columnKey, state);
+                }}
               />
             );
           })}
@@ -183,8 +185,8 @@ function ColumnItem<T = any>({
           <ActionIcon
             variant="subtle"
             size="sm"
-            color={column.isVisible ? "dark" : "gray"}
-            onClick={() => onChange({ isHidden: !column.isVisible })}
+            color="gray"
+            onClick={() => onChange({ isVisible: !column.isVisible })}
           >
             {!column.isVisible ? <IconEyeOff strokeWidth={1.5} /> : <IconEye strokeWidth={1.5} />}
           </ActionIcon>

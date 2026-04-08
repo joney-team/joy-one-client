@@ -220,7 +220,7 @@ export const ListCore = <T extends BaseData>(props: ListProps<T>) => {
             minWidth,
             defaultWidth,
             isVisible:
-              typeof state.isHidden === "boolean" ? !state.isHidden : !column.defaultHidden,
+              typeof state.isVisible === "boolean" ? state.isVisible : !column.defaultHidden,
             order: state.order ?? columnIndex,
             resizable: column.resizable ?? true,
             name: column.name ?? columnKey,

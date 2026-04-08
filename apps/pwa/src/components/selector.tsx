@@ -118,13 +118,6 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     };
   }, [listParams]);
 
-  const isListable = !!query;
-  const list = useGraphqlList<any>({
-    query: query ?? emptyDocument,
-    params: queryParams,
-    isSkip: !query,
-  });
-
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [searching, setSearching] = useState(false);
   const [search, setSearch] = useState("");
@@ -142,6 +135,13 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
       combobox.resetSelectedOption();
       if (searchRef.current) searchRef.current.value = "";
     },
+  });
+
+  const isListable = !!query;
+  const list = useGraphqlList<any>({
+    query: query ?? emptyDocument,
+    params: queryParams,
+    isSkip: !query || !combobox.dropdownOpened,
   });
 
   const options = useMemo(() => {

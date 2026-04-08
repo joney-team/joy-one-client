@@ -34,7 +34,7 @@ export const ProductColumn = <T extends ProductColumnType>(
 
       return (
         <Anchor component={Link} href={`/products/${value._id}`} className="link">
-          <Group gap={8}>
+          <Group gap={8} wrap="nowrap">
             <EntityImage src={value.image} icon={Icon} size={40} radius={8} />
             <Stack gap={0}>
               <Text fz={16} fw={500}>
@@ -85,7 +85,7 @@ export const ProductColumn = <T extends ProductColumnType>(
           const { icon: Icon } = productTypes[data.type as ProductType];
 
           return (
-            <Group gap={8} className="clickable">
+            <Group gap={8} wrap="nowrap" className="clickable">
               <EntityImage src={data.image} icon={Icon} size={40} radius={8} />
               <Stack gap={0}>
                 <Text fz={14} fw={500}>

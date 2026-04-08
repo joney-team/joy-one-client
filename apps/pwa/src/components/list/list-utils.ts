@@ -37,12 +37,15 @@ export function getSortQueryKey(colId: string) {
 }
 
 export function cleanObject<T extends Record<string, unknown>>(obj: T): T {
-  return Object.keys(obj).reduce((acc, key) => {
-    if (obj[key] !== undefined && obj[key] !== null) {
-      acc[key] = obj[key];
-    }
-    return acc;
-  }, {} as Record<string, unknown>) as T;
+  return Object.keys(obj).reduce(
+    (acc, key) => {
+      if (obj[key] !== undefined && obj[key] !== null) {
+        acc[key] = obj[key];
+      }
+      return acc;
+    },
+    {} as Record<string, unknown>,
+  ) as T;
 }
 
 export function getColumnName(columnKey: string) {
@@ -74,7 +77,7 @@ export function generateDefaultViewState(args: {
   const defaultMinWidth = 100;
   const elementWidth = args.element.clientWidth;
   const nonDefaultWidthColumns = Object.values(args.props.columns).filter(
-    (column) => column?.defaultHidden !== true && typeof column?.defaultWidth === "undefined"
+    (column) => column?.defaultHidden !== true && typeof column?.defaultWidth === "undefined",
   ).length;
 
   const totalRemainingWidth =
@@ -87,7 +90,7 @@ export function generateDefaultViewState(args: {
   const avgNonDefaultWidth = Math.floor(totalRemainingWidth / nonDefaultWidthColumns) - 10;
 
   const columns: { cols: Record<string, ColumnState>; remainingWidth: number } = Object.entries(
-    args.props.columns
+    args.props.columns,
   ).reduce(
     (acc, [columnKey, column], columnIndex) => {
       if (!column) return acc;
@@ -98,7 +101,7 @@ export function generateDefaultViewState(args: {
         defaultWidth ?? Math.max(avgNonDefaultWidth, minWidth ?? defaultMinWidth);
 
       const columnState: ColumnState = {
-        isHidden: column?.defaultHidden ?? false,
+        isVisible: typeof column?.defaultHidden === "boolean" ? !column.defaultHidden : true,
         width: initialWidth,
         order: columnIndex,
       };
@@ -111,7 +114,7 @@ export function generateDefaultViewState(args: {
         remainingWidth: acc.remainingWidth - initialWidth,
       };
     },
-    { cols: {}, remainingWidth: elementWidth }
+    { cols: {}, remainingWidth: elementWidth },
   );
 
   return {

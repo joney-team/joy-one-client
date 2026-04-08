@@ -118,7 +118,7 @@ export type ListProps<Data extends BaseData = any> = {
 
 export type ColumnState = {
   order: number;
-  isHidden: boolean;
+  isVisible: boolean;
   width?: number;
   pinned?: "left" | "right" | null;
 };
