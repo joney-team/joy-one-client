@@ -33,7 +33,7 @@ html[data-view="mobile"] {
   background: var(--app-panel-background);
   display: var(--app-layout-navigation-display);
   gap: 0;
-  z-index: var(--app-z-index-pannel);
+  z-index: calc(var(--app-layout-z-index-pannel) + 1);
   transition: transform 0.2s ease-out;
 }
 
