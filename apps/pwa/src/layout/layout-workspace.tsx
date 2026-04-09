@@ -81,9 +81,11 @@ export const LayoutWorkspace: FC = () => {
       <LayoutWorkspaceCssVariables />
       <LayoutWorkspaceHeadroom />
 
-      <Stack gap={0} id="workspace-header" className={styles.WorkspaceHeader}>
-        {workspace.isAvailable && <WorkspaceHeader />}
-      </Stack>
+      {!routeRule.isHideHeader && (
+        <Stack gap={0} id="workspace-header" className={styles.WorkspaceHeader}>
+          {workspace.isAvailable && <WorkspaceHeader />}
+        </Stack>
+      )}
 
       <Stack id="workspace-navigation" className={styles.WorkspaceNavigation}>
         {workspace.isAvailable && <WorkspaceNavigation />}

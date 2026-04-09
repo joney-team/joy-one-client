@@ -147,9 +147,6 @@ export const Avatar: FC<AvatarProps> = (props) => {
         color={color(getColor())}
         variant="filled"
         styles={{
-          placeholder: {
-            fontWeight: 400,
-          },
           image: {
             objectFit: getFit(),
           },

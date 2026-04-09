@@ -289,7 +289,7 @@ export const useGraphqlList = <T extends BaseData>({
     },
     totalChange,
     refetch: async () => {
-      if (!queryData) await refetch();
+      if (!queryData) await fetch({ variables });
       await onRefetch();
     },
     fetch,
