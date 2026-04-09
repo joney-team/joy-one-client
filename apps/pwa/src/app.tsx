@@ -43,7 +43,7 @@ if (config.SENTRY_DSN) {
 }
 
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
-const ModuleProviders = dynamic(() => import("@/app.module-providers"));
+const AppModuleProviders = dynamic(() => import("@/app.module-providers"));
 
 const AuthProvider = dynamic(() => import("@/modules/auth/auth-provider"));
 const WorkspaceProvider = dynamic(() => import("@/modules/workspaces/workspace-provider"));
@@ -182,7 +182,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
           <LayoutProvider>
             <AuthProvider>
               <WorkspaceProvider>
-                <ModuleProviders>
+                <AppModuleProviders>
                   {props.children}
 
                   <NavigationProgress />
@@ -190,7 +190,7 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
                   <EventsHandler />
                   <AppLoading />
                   <GeneralAnalytics />
-                </ModuleProviders>
+                </AppModuleProviders>
               </WorkspaceProvider>
             </AuthProvider>
           </LayoutProvider>
