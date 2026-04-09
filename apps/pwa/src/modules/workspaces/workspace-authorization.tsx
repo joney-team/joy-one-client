@@ -3,17 +3,17 @@
 import { Fullscreen } from "@/components/fullscreen";
 import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
+import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { AxiosError } from "axios";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 import { Fragment, useEffect, useMemo, type FC } from "react";
 import { useAuth } from "../auth/auth-context";
+import GetMetaPagesInfosDocument from "../plugins/meta-pages/graphql/getMetaPagesInfos.graphql";
 import type { OnModalConnectMetaPages } from "../plugins/meta-pages/modal-connect-meta-pages";
 import { WorkspacePermission } from "../workspace-roles/workspace-roles-types";
 import { useWorkspace } from "./workspace-context";
-import { useApolloClient } from "@apollo/client/react";
-import GetMetaPagesInfosDocument from "../plugins/meta-pages/graphql/getMetaPagesInfos.graphql";
 
 const WorkspaceInvitation = dynamic(() => import("./workspace-invitation"), {
   ssr: false,
@@ -39,6 +39,14 @@ const WorkspaceArchived = dynamic(
 const WorkspaceRequireBranches = dynamic(
   () =>
     import("./components/workspace-require-branches").then((mod) => mod.WorkspaceRequireBranches),
+  {
+    ssr: false,
+    loading: nonLoading,
+  },
+);
+
+const LayoutWorkspace = dynamic(
+  () => import("@/layout/layout-workspace").then((mod) => mod.LayoutWorkspace),
   {
     ssr: false,
     loading: nonLoading,
@@ -113,6 +121,7 @@ export const WorkspaceAuthorization: FC = () => {
     <Fragment>
       {Component && <Fullscreen zIndex={zIndexes.requireWorkspace}>{Component}</Fullscreen>}
 
+      <LayoutWorkspace />
       <ModalConnectMetaPages>
         {(open) => <TriggerConnectMetaPage open={open} />}
       </ModalConnectMetaPages>

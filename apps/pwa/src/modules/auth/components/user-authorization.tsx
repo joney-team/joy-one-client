@@ -13,15 +13,15 @@ import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { Card, Divider, em, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
 import { FC, Fragment, useEffect, useState } from "react";
-import { useApp } from "../../app.context";
-import { FormForgotPassword } from "./components/form-forgot-password";
-import { FormRegister } from "./components/form-register";
-import { FormSignIn } from "./components/form-sign-in";
+import { useApp } from "../../../app.context";
+import { FormForgotPassword } from "./form-forgot-password";
+import { FormRegister } from "./form-register";
+import { FormSignIn } from "./form-sign-in";
 import { useRouteRule } from "@/hooks/use-router";
 import { Fullscreen } from "@/components/fullscreen";
 import { zIndexes } from "@joy-one-client/config/layout";
 
-export const AuthRequire: FC = () => {
+export const UserAuthorization: FC = () => {
   const app = useApp();
   const layout = useLayout();
   const auth = useAuth();

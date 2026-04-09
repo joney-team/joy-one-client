@@ -11,8 +11,8 @@ import { FC, PropsWithChildren, useMemo } from "react";
 import { useApp } from "./app.context";
 import { nonLoading } from "./utils/non-loading";
 
-const AuthRequire = dynamic(
-  () => import("./modules/auth/auth-require").then((mod) => mod.AuthRequire),
+const UserAuthorization = dynamic(
+  () => import("./modules/auth/components/user-authorization").then((mod) => mod.UserAuthorization),
   {
     ssr: false,
     loading: nonLoading,
@@ -76,14 +76,6 @@ const InAppNotification = dynamic(
   },
 );
 
-const LayoutWorkspace = dynamic(
-  () => import("./layout/layout-workspace").then((mod) => mod.LayoutWorkspace),
-  {
-    ssr: false,
-    loading: nonLoading,
-  },
-);
-
 const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   const app = useApp();
   const lang = useLang();
@@ -99,14 +91,14 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
         <ModalsProvider>
           {props.children}
 
-          <LayoutWorkspace />
           <ModalUpgradeVersion />
           <ModalInstallWebAppTutorial />
           <PreloadResource />
           <SearchEngine />
           <InAppNotification />
+
+          <UserAuthorization />
           <WorkspaceAuthorization />
-          <AuthRequire />
         </ModalsProvider>
 
         <Notifications position="top-right" zIndex={zIndexes.notifications} />
