@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { onError, onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onError, onFormError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Center, em, PasswordInput, PinInput, Stack, Text, TextInput } from "@mantine/core";
@@ -83,7 +83,7 @@ export const FormForgotPassword: FC<{ onFinish: () => void }> = (props) => {
         props.onFinish();
       }
     } catch (error) {
-      onFormErrorLegacy(form)(error);
+      onFormError(form, error);
     }
     setIsSubmitting(false);
   });

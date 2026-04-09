@@ -11,13 +11,12 @@ export interface GanttState {
   toDate: Date;
   isShowTaskstatusColor?: boolean;
   isShowEstimatedTime?: boolean;
-  dividerPosition?: number;
 }
 
 export type GanttLayout = "sidebar" | "body" | "sidebar-head" | "body-head";
 
 export type ScrollToDate = (
-  args: (Date | number) | { date: Date | number; offset?: number; behavior?: "smooth" | "instant" }
+  args: (Date | number) | { date: Date | number; offset?: number; behavior?: "smooth" | "instant" },
 ) => void;
 
 export type UseGantt = {

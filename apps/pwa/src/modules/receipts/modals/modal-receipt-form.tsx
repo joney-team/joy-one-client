@@ -12,7 +12,7 @@ import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { LoanFragment } from "@/modules/loans/graphql/fragmentLoan.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
-import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onFormErrorBinding } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Card, Center, Group, InputWrapper, NumberInput, Stack, Textarea } from "@mantine/core";
@@ -101,7 +101,7 @@ export const ModalReceiptForm: FC<ModalReceiptFormProps> = (props) => {
         await props.onDone?.(receipt.data?.createReceipt);
         modals.close("ModalReceiptForm");
       })
-      .catch(onFormErrorLegacy(form));
+      .catch(onFormErrorBinding(form));
 
     setIsSubmitting(false);
   });

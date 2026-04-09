@@ -4,7 +4,7 @@ import { Badge } from "@/components/badge";
 import { getBanks } from "@/modules/plugins/banks/banks.services";
 import { BankInformationFragment } from "@/modules/plugins/banks/graphql/fragmentBankInformation.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { onFormErrorLegacy } from "@/utils/exceptions.utils";
+import { onFormError } from "@/utils/exceptions.utils";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Box,
@@ -56,9 +56,10 @@ export const WorkspaceBankInformation: FC = () => {
         bankAccount: { ...values, bankId: +values.bankId },
       });
     } catch (error) {
-      onFormErrorLegacy(form);
+      onFormError(form, error);
+    } finally {
+      setIsSubmitting(false);
     }
-    setIsSubmitting(false);
   });
 
   useEffect(() => {

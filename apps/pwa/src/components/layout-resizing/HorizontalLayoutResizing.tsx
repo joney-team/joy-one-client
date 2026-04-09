@@ -1,7 +1,7 @@
 "use client";
 
 import { classNames } from "@/utils/ui.utils";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, Fragment, useEffect, useRef, useState } from "react";
 import styles from "./HorizontalLayoutResizing.module.css";
 
 export interface HorizontalLayoutResizingProps {
@@ -78,22 +78,26 @@ export const HorizontalLayoutResizing: FC<HorizontalLayoutResizingProps> = ({
   }, [isResizing, onFinished]);
 
   return (
-    <div
-      className={classNames(styles.SplitPointer, {
-        [styles.isResizing]: isResizing,
-      })}
-      style={{ left: `${value - pointerSize / 2}px`, width: pointerSize, height, position }}
-      onMouseDown={(e) => {
-        capturePosition.current = e.clientX - value;
-        setIsResizing(true);
-        e.preventDefault();
-      }}
-    >
+    <Fragment>
+      <div
+        className={classNames(styles.SplitPointer, {
+          [styles.isResizing]: isResizing,
+        })}
+        style={{ left: `${value - pointerSize / 2}px`, width: pointerSize, height, position }}
+        onMouseDown={(e) => {
+          capturePosition.current = e.clientX - value;
+          setIsResizing(true);
+          e.preventDefault();
+        }}
+      />
+
       <div
         style={{ left: `${value - 1}px`, height, position }}
         ref={dividerRef}
-        className={styles.Divider}
+        className={classNames(styles.Divider, {
+          [styles.isResizing]: isResizing,
+        })}
       />
-    </div>
+    </Fragment>
   );
 };

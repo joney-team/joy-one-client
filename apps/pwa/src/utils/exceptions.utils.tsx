@@ -81,20 +81,6 @@ export const onInfo = (msg: string) => {
   });
 };
 
-export const onFormErrorLegacy = (form: UseFormReturnType<any>) => {
-  return (error: any) => {
-    onError(error);
-
-    if (error instanceof AxiosError) {
-      const { errors } = error.response?.data || {};
-
-      if (errors) {
-        form.setErrors(errors);
-      }
-    }
-  };
-};
-
 export function onFormError<T>(form: UseFormReturnType<T>, error: any) {
   if (error instanceof AxiosError) {
     const { errors } = error.response?.data || {};

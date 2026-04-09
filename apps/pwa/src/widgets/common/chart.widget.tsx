@@ -4,7 +4,7 @@ import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { useColor } from "@/modules/theme/use-color";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import { Trans } from "@lingui/react/macro";
-import { Card, em, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
+import { Card, Group, LoadingOverlay, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 

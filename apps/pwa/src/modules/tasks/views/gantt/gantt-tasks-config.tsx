@@ -8,4 +8,7 @@ export const ganttConfig = {
     horizontal: 12,
     vertical: 12,
   },
+  sidebarMinWidth: 200,
+  sidebarMaxWidth: 800,
+  defaultSidebarWidth: 360,
 };

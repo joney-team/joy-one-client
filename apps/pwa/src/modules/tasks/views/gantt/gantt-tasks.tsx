@@ -1,6 +1,5 @@
 "use client";
 
-import { LayoutSplit } from "@/components/layout-split";
 import { Group, Stack } from "@mantine/core";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { useTaskFolders } from "../../hooks/use-task-folders";
@@ -8,9 +7,10 @@ import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { GanttProvider } from "./gantt-tasks-provider";
 
-import { useLayout } from "@/layout/layout-context";
+import { HorizontalLayoutResizing } from "@/components/layout-resizing/HorizontalLayoutResizing";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
+import { useSessionStorage } from "@mantine/hooks";
 import dynamic from "next/dynamic";
 import { TaskSelectionsProvider } from "../../components/task-selections/task-selections-provider";
 import { GanttRefsProvider, useGanttRefs } from "./gantt-tasks-refs";
@@ -36,35 +36,34 @@ const GanttTasksGroup = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTasksVerticalScrollbar = dynamic(
   () =>
     import("./scrollbar/gantt-tasks-vertical-scrollbar").then(
-      (mod) => mod.GanttTasksVerticalScrollbar
+      (mod) => mod.GanttTasksVerticalScrollbar,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const GanttTasksHorizontalScrollbar = dynamic(
   () =>
     import("./scrollbar/gantt-tasks-horizontal-scrollbar").then(
-      (mod) => mod.GanttTasksHorizontalScrollbar
+      (mod) => mod.GanttTasksHorizontalScrollbar,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const Content: FC = () => {
   const ganttRefs = useGanttRefs();
   const gantt = useGantt();
-  const layout = useLayout();
   const { activatedFolder, folders } = useTaskFolders();
   const [sized, setSized] = useState({ width: 0, height: 0 });
 
@@ -115,13 +114,11 @@ const Content: FC = () => {
     };
   }, [sized]);
 
-  const dividerPosition = useMemo(() => {
-    return typeof gantt.state.dividerPosition === "number"
-      ? gantt.state.dividerPosition
-      : layout.view === "mobile"
-      ? 0.5
-      : 0.3;
-  }, [gantt.state.dividerPosition]);
+  const [_sidebarWidth, setSidebarWidth] = useSessionStorage<number>({
+    key: "gantt-sidebar-width",
+  });
+
+  const sidebarWidth = _sidebarWidth || ganttConfig.defaultSidebarWidth;
 
   return (
     <Stack
@@ -132,26 +129,17 @@ const Content: FC = () => {
       pos="relative"
       bg="var(--mantine-color-body)"
       gap={0}
+      id="GanttTasks"
     >
       <Group gap={0} w={sized.width} h={sized.height} style={{ overflow: "hidden" }}>
         <Stack gap={0}>
-          <LayoutSplit
-            h={contentSized.height}
-            w={contentSized.width}
-            value={dividerPosition}
-            onChange={(value) =>
-              gantt.setState({
-                ...gantt.state,
-                dividerPosition: value,
-              })
-            }
-          >
+          <Group h={contentSized.height} w={contentSized.width} wrap="nowrap" gap={0}>
             {/* Sidebar */}
             <Stack
               h={contentSized.height}
               style={{
                 borderRight: `1px solid var(--app-divider-color)`,
-                width: `${dividerPosition * 100}%`,
+                width: `${sidebarWidth}px`,
                 overflow: "hidden",
                 transition: "width 0.2s ease-out",
               }}
@@ -181,7 +169,7 @@ const Content: FC = () => {
               align="stretch"
               style={{
                 overflow: "hidden",
-                width: `${(1 - dividerPosition) * 100}%`,
+                width: `calc(100% - ${sidebarWidth}px)`,
                 height: contentSized.height,
                 maxHeight: contentSized.height,
                 transition: "width 0.2s ease-out",
@@ -193,11 +181,19 @@ const Content: FC = () => {
                 <GridColumns />
               </div>
             </Stack>
-          </LayoutSplit>
+          </Group>
           <GanttTasksHorizontalScrollbar />
         </Stack>
         <GanttTasksVerticalScrollbar />
       </Group>
+
+      <HorizontalLayoutResizing
+        position="absolute"
+        value={sidebarWidth}
+        min={ganttConfig.sidebarMinWidth}
+        max={ganttConfig.sidebarMaxWidth}
+        onFinished={(value) => setSidebarWidth(value)}
+      />
     </Stack>
   );
 };

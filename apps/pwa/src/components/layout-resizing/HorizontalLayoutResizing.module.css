@@ -2,7 +2,7 @@
   top: 0;
   bottom: 0;
   cursor: col-resize;
-  z-index: 100;
+  z-index: 500;
 
   &::before {
     content: "";
@@ -16,23 +16,9 @@
     opacity: 0;
   }
 
-  & .Divider {
-    width: 2px;
-    top: 0;
-    bottom: 0;
-    cursor: col-resize;
-    z-index: 100;
-    background: var(--app-primary-color);
-    opacity: 0;
-  }
-
   &:hover:not(.isResizing) {
     &::before {
       opacity: 0.1;
-    }
-
-    & .Divider {
-      opacity: 0.3;
     }
   }
 
@@ -40,20 +26,34 @@
     &::before {
       opacity: 0;
     }
-
-    & .Divider {
-      opacity: 0.6;
-    }
   }
 }
 
+.Divider {
+  width: 2px;
+  top: 0;
+  bottom: 0;
+  cursor: col-resize;
+  background: var(--app-primary-color);
+  opacity: 0;
+  z-index: 490;
 
+  &.isResizing {
+    opacity: 0.6;
+  }
+
+  &:hover {
+    opacity: 0.3;
+  }
+}
 
 .BodyResizing {
   user-select: none;
+  cursor: col-resize;
 
   * {
     pointer-events: none;
     user-select: none;
+    cursor: col-resize;
   }
 }

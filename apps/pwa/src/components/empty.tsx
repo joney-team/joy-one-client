@@ -4,7 +4,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
 import { alpha, Stack, StackProps, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
-import { FC, LegacyRef, ReactNode } from "react";
+import { FC, ReactNode, Ref } from "react";
 import { BoxIllustration } from "./illustrations/box";
 
 export interface EmptyProps extends StackProps {
@@ -12,7 +12,7 @@ export interface EmptyProps extends StackProps {
   icon?: Icon;
   color?: string;
   visible?: boolean;
-  ref?: LegacyRef<HTMLDivElement> | undefined;
+  ref?: Ref<HTMLDivElement> | undefined;
   hideBorder?: boolean;
 }
 

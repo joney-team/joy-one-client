@@ -2,17 +2,13 @@
 
 import { Stack } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
-import type { FC, LegacyRef } from "react";
+import type { FC, Ref } from "react";
 
 interface FlexSizeProps {
   debug?: boolean;
   id?: string;
   className?: string;
-  children: (size: {
-    width: number;
-    height: number;
-    ref: LegacyRef<HTMLDivElement>;
-  }) => React.ReactNode;
+  children: (size: { width: number; height: number; ref: Ref<HTMLDivElement> }) => React.ReactNode;
 }
 
 export const FlexSizeLegacy: FC<FlexSizeProps> = (props) => {
