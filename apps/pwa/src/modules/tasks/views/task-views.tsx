@@ -1,23 +1,24 @@
 "use client";
 
+import { StorageKey } from "@/constants/storage-key";
 import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { Skeleton } from "@mantine/core";
+import { useLocalStorage } from "@mantine/hooks";
 import { Icon, IconLayoutKanban, IconList, IconMist, IconStopwatch } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter } from "next/navigation";
 import { FC, Fragment, PropsWithChildren, ReactNode, useCallback, useMemo } from "react";
+import { TaskContextMenuDropdown } from "../components/task-menu/task-context-menu-dropdown";
 import { parseTaskPath, updateTaskPath } from "../tasks-route-helpers";
 import { TaskView } from "./types";
-import { StorageKey } from "@/constants/storage-key";
-import { useLocalStorage } from "@mantine/hooks";
 
 const TaskTabActions = dynamic(
   () => import("../components/task-tab-actions").then((mod) => mod.TaskTabActions),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const TaskDetail = dynamic(
@@ -25,7 +26,7 @@ const TaskDetail = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const NavigationTabs = dynamic(
@@ -33,7 +34,7 @@ const NavigationTabs = dynamic(
   {
     ssr: false,
     loading: () => <Skeleton height={44} radius={0} />,
-  }
+  },
 );
 
 const TasksRealtimeEvents = dynamic(
@@ -41,7 +42,7 @@ const TasksRealtimeEvents = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const TaskViewsGateway = dynamic(
@@ -49,29 +50,18 @@ const TaskViewsGateway = dynamic(
   {
     ssr: false,
     loading: nonLoading,
-  }
-);
-
-const TaskContextMenuDropdown = dynamic(
-  () =>
-    import("../components/task-menu/task-context-menu-dropdown").then(
-      (mod) => mod.TaskContextMenuDropdown
-    ),
-  {
-    ssr: false,
-    loading: () => <Skeleton miw={180} mih={220} />,
-  }
+  },
 );
 
 const ContextMenuProvider = dynamic(
   () =>
     import("@/components/context-menu/context-menu-provider").then(
-      (mod) => mod.ContextMenuProvider
+      (mod) => mod.ContextMenuProvider,
     ),
   {
     ssr: false,
     loading: nonLoading,
-  }
+  },
 );
 
 const allTaskViews: Record<TaskView, { icon: Icon; name: ReactNode }> = {
@@ -108,7 +98,7 @@ const TasksViews: FC<PropsWithChildren> = (props) => {
       setLocalView(selectedView as TaskView);
       router.replace(updateTaskPath({ view: selectedView as TaskView, pathname }));
     },
-    [router, pathname]
+    [router, pathname],
   );
 
   return (
