@@ -1,3 +1,7 @@
-mutation SetLoanAssetEstimations($input: JSONObject!) {
-  assetEstimations: setLoanAssetEstimations(input: $input)
+#import "./fragmentLoanAssetEstimations.graphql"
+
+mutation SetLoanAssetEstimations($input: SetLoanAssetEstimationsInput!) {
+  assetEstimations: setLoanAssetEstimations(input: $input) {
+    ...LoanAssetEstimations
+  }
 }

@@ -1,7 +1,12 @@
 #import "./fragmentTag.graphql"
 
-query GetTags($type: String, $offset: Float, $limit: Float, $ids: [String!]) {
-  list: getTags(type: $type, offset: $offset, limit: $limit, ids: $ids) {
+query GetTags(
+  $query: GetTagsQuery
+  $ids: [String!]
+  $limit: Float
+  $offset: Float
+) {
+  list: getTags(query: $query, ids: $ids, limit: $limit, offset: $offset) {
     total
     results {
       ...Tag

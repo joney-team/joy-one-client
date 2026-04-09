@@ -1,10 +1,5 @@
-import { LoanAssetEstimations } from "./loans-types";
-
-import { graphqlClient } from "@/graphql/graphql-client";
 import { t } from "@lingui/core/macro";
 import { UseUploadFile } from "../files/hooks/use-upload-file";
-import GetLoanAssetEstimationsDocument from "./graphql/getLoanAssetEstimations.graphql";
-import SetLoanAssetEstimationsDocument from "./graphql/setLoanAssetEstimations.graphql";
 
 export async function prepareLoanAssetData(data: any, uploadFile: UseUploadFile) {
   let _data = { ...data };
@@ -41,40 +36,6 @@ export async function prepareLoanAssetData(data: any, uploadFile: UseUploadFile)
   }
 
   return _data;
-}
-
-export const defaultLoanAssetEstimations: LoanAssetEstimations = {
-  brands: [],
-  estimations: [],
-  models: [],
-  colors: [],
-};
-
-export async function getLoanAssetEstimations(): Promise<LoanAssetEstimations> {
-  try {
-    let data = await graphqlClient
-      .query({ query: GetLoanAssetEstimationsDocument })
-      .then((res) => res.data?.assetEstimations);
-
-    Object.keys(defaultLoanAssetEstimations).forEach((key) => {
-      if (typeof data[key] === "undefined") {
-        data[key] = (defaultLoanAssetEstimations as any)[key];
-      }
-    });
-
-    return data;
-  } catch (error) {
-    return defaultLoanAssetEstimations;
-  }
-}
-
-export async function setLoanAssetEstimations(data: LoanAssetEstimations) {
-  await graphqlClient.mutate({
-    mutation: SetLoanAssetEstimationsDocument,
-    variables: {
-      input: data,
-    },
-  });
 }
 
 export function renderLoanPeriod(days: number) {

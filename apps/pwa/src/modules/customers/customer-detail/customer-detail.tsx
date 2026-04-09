@@ -80,13 +80,13 @@ export const CustomerDetail = () => {
   if (error || !customer)
     return (
       <Container size={900}>
-        <Errored error={error} />;
+        <Errored error={error} />
       </Container>
     );
   if (customer.isArchived)
     return (
       <Container size={900}>
-        <Archived entity={<Trans>Customer</Trans>} />;
+        <Archived entity={<Trans>Customer</Trans>} />
       </Container>
     );
 

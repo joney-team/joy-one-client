@@ -6,7 +6,6 @@ import { DateFormat } from "@/components/format/date-format";
 import { NumberFormat } from "@/components/format/number-format";
 import { Modal } from "@/components/modal/modal";
 import { LoanAssetType } from "@/graphql/enums.graphql";
-import { useLoans } from "@/modules/loans/loans-context";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useQuery } from "@apollo/client/react";
@@ -31,6 +30,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { IconCalculator } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useMemo, useState } from "react";
 import CalculateLoanPaymentPlanDocument from "../graphql/calculateLoanPaymentPlan.graphql";
+import { useLoanAssetEstimations } from "../hooks/use-loan-asset-estimations";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
 
 export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode }> = ({
@@ -38,7 +38,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
 }) => {
   const { workspaceSetting } = useWorkspaceSetting();
 
-  const loans = useLoans();
+  const { assetEstimations } = useLoanAssetEstimations();
   const { t } = useLingui();
 
   const [opened, { open, close }] = useDisclosure(false);
@@ -104,7 +104,7 @@ export const ModalLoanCalculator: FC<{ children: (open: () => void) => ReactNode
     );
   }, [paymentPlanData, packagePeriodDays]);
 
-  if (!loans.isInitialized || !loans.assetEstimations) return null;
+  if (!assetEstimations) return null;
 
   return (
     <Fragment>

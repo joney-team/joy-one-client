@@ -8,6 +8,7 @@ import { TaskMenuComponent } from "./task-menu-types";
 
 import { WayPoint } from "@/components/way-point";
 import { searchEntity } from "@/modules/search/search-service";
+import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -16,7 +17,6 @@ import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
 import { TaskFragment } from "../../graphql/fragmentTask.graphql";
 import styles from "./task-menu.module.css";
-import GetTagsDocument from "@/modules/tags/graphql/getTags.graphql";
 
 export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
   const { t } = useLingui();
@@ -38,12 +38,15 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
         const searchResult = await searchEntity(AppEntity.TAGS, q, { type: TagType.Task });
         if (searchResult.length === 0) return setIsSearchEmpty(true);
         await getTags({
-          variables: { type: TagType.Task, ids: searchResult.map((result) => result.id) },
+          variables: {
+            query: { type: TagType.Task },
+            ids: searchResult.map((result) => result.id),
+          },
         });
         return setIsSearchEmpty(false);
       } else {
         await getTags({
-          variables: { type: TagType.Task },
+          variables: { query: { type: TagType.Task } },
         });
         return setIsSearchEmpty(false);
       }
@@ -55,14 +58,14 @@ export const TaskMenuTags: TaskMenuComponent = ({ task, groupVariables, updateTa
     if (!data || isFetchingMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { type: TagType.Task, offset: data.list.results.length },
+      variables: { query: { type: TagType.Task }, offset: data.list.results.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {
           ...prev,
           list: {
             ...prev.list,
-            data: [...prev.list.results, ...fetchMoreResult.list.results],
+            results: [...prev.list.results, ...fetchMoreResult.list.results],
           },
         };
       },

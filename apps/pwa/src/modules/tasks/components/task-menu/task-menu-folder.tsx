@@ -37,12 +37,15 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
         const searchResult = await searchEntity(AppEntity.TAGS, q, { type: TagType.TaskFolder });
         if (searchResult.length === 0) return setIsSearchEmpty(true);
         await getFolders({
-          variables: { type: TagType.TaskFolder, ids: searchResult.map((result) => result.id) },
+          variables: {
+            query: { type: TagType.TaskFolder },
+            ids: searchResult.map((result) => result.id),
+          },
         });
         return setIsSearchEmpty(false);
       } else {
         await getFolders({
-          variables: { type: TagType.TaskFolder },
+          variables: { query: { type: TagType.TaskFolder } },
         });
         return setIsSearchEmpty(false);
       }
@@ -54,7 +57,7 @@ export const TaskMenuFolder: TaskMenuComponent = ({ task, groupVariables, update
     if (!data || isFetchingMore) return;
     setIsFetchingMore(true);
     await fetchMore({
-      variables: { type: TagType.TaskFolder, offset: data.list.results.length },
+      variables: { query: { type: TagType.TaskFolder }, offset: data.list.results.length },
       updateQuery: (prev, { fetchMoreResult }) => {
         if (!fetchMoreResult) return prev;
         return {

@@ -10,7 +10,6 @@ import { LoanAssetType } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { useLoans } from "@/modules/loans/loans-context";
 import { LoanAssetEstimation, LoanAssetEstimations } from "@/modules/loans/loans-types";
 import { ModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
@@ -30,11 +29,19 @@ import {
 import { useSearchParams } from "next/navigation";
 import { FC, useMemo, useState } from "react";
 import InfiniteScroll from "react-infinite-scroller";
+import { useLoanAssetEstimations } from "../loans/hooks/use-loan-asset-estimations";
 import { loanAssetTypes } from "../loans/loans-constants";
 import { useWorkspaceSetting } from "./hooks/use-workspace-setting";
 
 export const WorkspaceSettingLoanAssetEstimations: FC = () => {
-  const loans = useLoans();
+  const {
+    assetEstimations,
+    setAssetEstimations,
+    loading: assetEstimationsLoading,
+    updateEstimation,
+    removeEstimation,
+  } = useLoanAssetEstimations();
+
   const router = useRouter();
   const searchs = useSearchParams();
   const { t } = useLingui();
@@ -58,6 +65,8 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
     const File = await convertExcelToJson(file);
 
     let data: LoanAssetEstimations = {
+      __typename: "LoanAssetEstimations",
+      id: "0",
       brands: [],
       models: [],
       estimations: [],
@@ -112,14 +121,12 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
       data.estimations.push(estimation);
     }
 
-    await loans.setAssetEstimations(data);
+    await setAssetEstimations(data);
     setImporting(false);
   };
 
-  if (!loans.isInitialized) return <Skeleton height={100} />;
-
   const list = useMemo(() => {
-    return loans.assetEstimations.estimations
+    return (assetEstimations?.estimations ?? [])
       .filter((estimation) => {
         if (searchs.get("assetType")) return estimation.assetType === searchs.get("assetType");
         return true;
@@ -133,9 +140,9 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
         return true;
       })
       .slice(0, query.take);
-  }, [searchs]);
+  }, [searchs, assetEstimations?.estimations, query.take]);
 
-  const isAbleToLoadMore = list.length !== loans.assetEstimations.estimations.length && !loading;
+  const isAbleToLoadMore = list.length !== (assetEstimations?.estimations ?? []).length && !loading;
 
   const fetchMore = async () => {
     if (!isAbleToLoadMore) return;
@@ -147,6 +154,9 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
   const assetEstimationPriceSpreadRate =
     (workspaceSetting?.loanSettings?.assetEstimationPriceSpreadRate || 100) / 100;
+
+  if (assetEstimationsLoading) return <Skeleton height={100} />;
+  if (!assetEstimations) return null;
 
   return (
     <ModalLoanAssetEstimationForm>
@@ -178,7 +188,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
           <Group>
             <ButtonSelect
               icon={IconFilter}
-              label={t`Asset type`}
+              label={<Trans>Asset type</Trans>}
               iconStrokeWidth={1.8}
               value={searchs.get("assetType")}
               options={[LoanAssetType.CarRegistration, LoanAssetType.MotobikeRegistration].map(
@@ -195,10 +205,10 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
             <ButtonSelect
               icon={IconFilter}
-              label={t`Brand name`}
+              label={<Trans>Brand name</Trans>}
               iconStrokeWidth={1.8}
               value={searchs.get("brandId")}
-              options={loans.assetEstimations.brands
+              options={assetEstimations.brands
                 .filter((v) => {
                   if (!searchs.get("assetType")) return true;
                   return v.assetType === searchs.get("assetType");
@@ -212,10 +222,10 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
 
             <ButtonSelect
               icon={IconFilter}
-              label={t`Asset model`}
+              label={<Trans>Asset model</Trans>}
               iconStrokeWidth={1.8}
               value={searchs.get("modelId")}
-              options={loans.assetEstimations.models
+              options={assetEstimations.models
                 .filter((v) => {
                   if (!searchs.get("brandId")) return true;
                   return v.brandId === searchs.get("brandId");
@@ -234,7 +244,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
             }}
             hasMore={isAbleToLoadMore}
           >
-            {loans.assetEstimations.estimations.length === 0 ? (
+            {assetEstimations.estimations.length === 0 ? (
               <Empty message={t`No asset estimation`} />
             ) : (
               <Card p={0} shadow="xs">
@@ -242,12 +252,24 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                   <Table.Thead>
                     <Table.Tr>
                       <Table.Th>#</Table.Th>
-                      <Table.Th>{t`Type`}</Table.Th>
-                      <Table.Th>{t`Brand`}</Table.Th>
-                      <Table.Th>{t`Model`}</Table.Th>
-                      <Table.Th>{t`Name`}</Table.Th>
-                      <Table.Th>{t`Manufacturing year`}</Table.Th>
-                      <Table.Th>{t`Estimation price`}</Table.Th>
+                      <Table.Th>
+                        <Trans>Type</Trans>
+                      </Table.Th>
+                      <Table.Th>
+                        <Trans>Brand</Trans>
+                      </Table.Th>
+                      <Table.Th>
+                        <Trans>Model</Trans>
+                      </Table.Th>
+                      <Table.Th>
+                        <Trans>Name</Trans>
+                      </Table.Th>
+                      <Table.Th>
+                        <Trans>Manufacturing year</Trans>
+                      </Table.Th>
+                      <Table.Th>
+                        <Trans>Estimation price</Trans>
+                      </Table.Th>
                       <Table.Th></Table.Th>
                     </Table.Tr>
                   </Table.Thead>
@@ -260,14 +282,14 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                           <Table.Td>{t(loanAssetTypes[estimation.assetType].label)}</Table.Td>
                           <Table.Td>
                             {
-                              loans.assetEstimations.brands.find(
+                              assetEstimations.brands.find(
                                 (brand) => brand.id === estimation.brandId,
                               )?.name
                             }
                           </Table.Td>
                           <Table.Td>
                             {
-                              loans.assetEstimations.models.find(
+                              assetEstimations.models.find(
                                 (model) => model.id === estimation.modelId,
                               )?.name
                             }
@@ -288,7 +310,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                                         title: "Nhập giá thẩm định",
                                         type: InputModalType.NUMBER,
                                         onDone: (value) =>
-                                          loans.updateEstimation({
+                                          updateEstimation({
                                             ...estimation,
                                             estimatePrice: value,
                                           }),
@@ -302,7 +324,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                               </ModalInput>
 
                               {assetEstimationPriceSpreadRate > 0 && (
-                                <Tooltip label={t`Display price for users`}>
+                                <Tooltip label={<Trans>Display price for users</Trans>}>
                                   <Text fz={em(13)} c="gray">
                                     <CurrencyFormat
                                       value={
@@ -334,7 +356,7 @@ export const WorkspaceSettingLoanAssetEstimations: FC = () => {
                               <ActionIcon
                                 variant="subtle"
                                 color="red"
-                                onClick={() => loans.removeEstimation(estimation.id)}
+                                onClick={() => removeEstimation(estimation.id)}
                               >
                                 <IconX size={18} />
                               </ActionIcon>

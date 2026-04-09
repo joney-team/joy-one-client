@@ -15,7 +15,6 @@ import { OnModalPrompt } from "@/modals/modal-prompt";
 import { customerColumn } from "@/modules/customers/components/customer-column";
 import { LoanCard } from "@/modules/loans/components/loan-card";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
-import { ReportsContext, useReports } from "@/modules/reports/reports-context";
 import { type ModalUpdateWorkspaceBranchRef } from "@/modules/workspace-branches/modals/modal-update-workspace-branch";
 import { workspaceBranchColumn } from "@/modules/workspace-branches/workspace-branch-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
@@ -43,6 +42,7 @@ import {
 import dynamic from "next/dynamic";
 import { FC, Fragment, useRef } from "react";
 import { useLocations } from "../locations/locations-context";
+import { UseReports, useReports } from "../reports/hooks/use-reports";
 import { useColor } from "../theme/use-color";
 import { useWorkspaceSetting } from "../workspace-settings/hooks/use-workspace-setting";
 import BulkArchiveLoansDocument from "./graphql/bulkArchiveLoans.graphql";
@@ -75,7 +75,7 @@ const ModalCreateLoan = dynamic(
 interface LoanListProps {
   strictStatus?: LoanStatus[];
   counterColor?: string;
-  count?: (report: ReportsContext) => number;
+  count?: (report: UseReports) => number;
 }
 
 export const LoanList: FC<LoanListProps> = (props) => {

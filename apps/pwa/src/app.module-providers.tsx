@@ -1,9 +1,6 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import LoansProvider from "@/modules/loans/loans-provider";
-import { ReportsProvider } from "@/modules/reports/reports-provider";
-import TagsProvider from "@/modules/tags/tags-provider";
 import { generateTheme } from "@/modules/theme/generate-theme";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { MantineProvider } from "@mantine/core";
@@ -99,24 +96,18 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
   return (
     <MantineProvider theme={theme} defaultColorScheme="auto">
       <DatesProvider settings={{ locale: lang.locale }}>
-        <ReportsProvider>
-          <TagsProvider>
-            <LoansProvider>
-              <ModalsProvider>
-                {props.children}
+        <ModalsProvider>
+          {props.children}
 
-                <LayoutWorkspace />
-                <ModalUpgradeVersion />
-                <ModalInstallWebAppTutorial />
-                <PreloadResource />
-                <SearchEngine />
-                <InAppNotification />
-                <WorkspaceAuthorization />
-                <AuthRequire />
-              </ModalsProvider>
-            </LoansProvider>
-          </TagsProvider>
-        </ReportsProvider>
+          <LayoutWorkspace />
+          <ModalUpgradeVersion />
+          <ModalInstallWebAppTutorial />
+          <PreloadResource />
+          <SearchEngine />
+          <InAppNotification />
+          <WorkspaceAuthorization />
+          <AuthRequire />
+        </ModalsProvider>
 
         <Notifications position="top-right" zIndex={zIndexes.notifications} />
       </DatesProvider>

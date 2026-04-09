@@ -1,11 +1,10 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { LoanAssetType } from "@/graphql/enums.graphql";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { FilesBox } from "@/modules/files/files-box";
-import { useLoans } from "@/modules/loans/loans-context";
 import {
   LoanAssetEstimation,
   LoanAssetEstimationBrand,
@@ -29,8 +28,8 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCoins, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
+import { useLoanAssetEstimations } from "../hooks/use-loan-asset-estimations";
 import { loanAssetTypes } from "../loans-constants";
-import { Modal } from "@/components/modal/modal";
 
 interface ModalLoanAssetEstimationFormProps {
   estimation?: LoanAssetEstimation;
@@ -52,9 +51,9 @@ export const ModalLoanAssetEstimationForm: FC<{
   children: (open: (props?: ModalLoanAssetEstimationFormProps) => void) => ReactNode;
 }> = ({ children }) => {
   const { t } = useLingui();
+  const { setAssetEstimations, assetEstimations } = useLoanAssetEstimations();
 
   const [opened, { open, close }] = useDisclosure(false);
-  const loans = useLoans();
   const [props, setProps] = useState<ModalLoanAssetEstimationFormProps>();
 
   const form = useForm<LoanAssetEstimation>({
@@ -81,22 +80,24 @@ export const ModalLoanAssetEstimationForm: FC<{
   };
 
   const onSubmit = form.onSubmit(async (values) => {
+    if (!assetEstimations) return;
+
     if (props?.estimation) {
-      await loans.setAssetEstimations({
-        ...loans.assetEstimations,
-        estimations: loans.assetEstimations.estimations.map((e) => {
+      await setAssetEstimations({
+        ...assetEstimations,
+        estimations: assetEstimations.estimations.map((e) => {
           if (e.id === props.estimation!.id) return values;
           return e;
         }),
       });
     } else {
-      await loans.setAssetEstimations({
-        ...loans.assetEstimations,
+      await setAssetEstimations({
+        ...assetEstimations,
         estimations: [
-          ...loans.assetEstimations.estimations,
+          ...assetEstimations.estimations,
           {
             ...values,
-            id: loans.assetEstimations.estimations.length.toString(),
+            id: assetEstimations.estimations.length.toString(),
           },
         ],
       });
@@ -105,7 +106,7 @@ export const ModalLoanAssetEstimationForm: FC<{
     close();
   });
 
-  if (!loans.isInitialized || !loans.assetEstimations) return null;
+  if (!assetEstimations) return null;
 
   return (
     <ModalInput>
@@ -118,7 +119,8 @@ export const ModalLoanAssetEstimationForm: FC<{
           })}
 
           <Modal
-            title={<ModalHead name={t`Loan asset estimations`} icon={IconCoins} />}
+            name={<Trans>Loan asset estimations</Trans>}
+            icon={IconCoins}
             onClose={onClose}
             opened={opened}
             size="xl"
@@ -144,7 +146,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                     flex={1}
                     label={<Trans>Brand</Trans>}
                     placeholder={t`Select brand`}
-                    data={loans.assetEstimations.brands
+                    data={assetEstimations.brands
                       .filter((v) => v.assetType === form.values.assetType)
                       .map((brand) => ({ value: brand.id, label: brand.name }))}
                     {...form.getInputProps("brandId")}
@@ -159,16 +161,15 @@ export const ModalLoanAssetEstimationForm: FC<{
                       disabled={!form.values.brandId}
                       onClick={() =>
                         openInput({
-                          title: t`Update brand`,
+                          title: <Trans>Update brand</Trans>,
+                          label: <Trans>Brand name</Trans>,
                           type: InputModalType.TEXT,
-                          label: t`Brand name`,
-                          value: loans.assetEstimations.brands.find(
-                            (v) => v.id === form.values.brandId,
-                          )?.name,
+                          value: assetEstimations.brands.find((v) => v.id === form.values.brandId)
+                            ?.name,
                           onDone: (value: string) => {
-                            loans.setAssetEstimations({
-                              ...loans.assetEstimations,
-                              brands: loans.assetEstimations.brands.map((b) => {
+                            setAssetEstimations({
+                              ...assetEstimations,
+                              brands: assetEstimations.brands.map((b) => {
                                 if (b.id === form.values.brandId)
                                   return { ...b, name: value.trim() };
                                 return b;
@@ -188,18 +189,18 @@ export const ModalLoanAssetEstimationForm: FC<{
                       disabled={!form.values.assetType}
                       onClick={() =>
                         openInput({
-                          title: t`Create brand`,
                           type: InputModalType.TEXT,
-                          label: t`Brand name`,
+                          title: <Trans>Create brand</Trans>,
+                          label: <Trans>Brand name</Trans>,
                           onDone: (value: string) => {
                             const brand: LoanAssetEstimationBrand = {
                               assetType: form.values.assetType,
-                              id: loans.assetEstimations.brands.length.toString(),
+                              id: assetEstimations.brands.length.toString(),
                               name: value.trim(),
                             };
-                            loans.setAssetEstimations({
-                              ...loans.assetEstimations,
-                              brands: [...loans.assetEstimations.brands, brand],
+                            setAssetEstimations({
+                              ...assetEstimations,
+                              brands: [...assetEstimations.brands, brand],
                             });
                             form.setFieldValue("brandId", brand.id);
                           },
@@ -214,9 +215,9 @@ export const ModalLoanAssetEstimationForm: FC<{
                 <Group align="start" gap={10} wrap="nowrap">
                   <Select
                     flex={1}
-                    label={t`Model`}
+                    label={<Trans>Model</Trans>}
                     placeholder={t`Select model`}
-                    data={loans.assetEstimations.models
+                    data={assetEstimations.models
                       .filter((v) => v.brandId === form.values.brandId)
                       .map((model) => ({ value: model.id, label: model.name }))}
                     {...form.getInputProps("modelId")}
@@ -231,16 +232,15 @@ export const ModalLoanAssetEstimationForm: FC<{
                       disabled={!form.values.modelId}
                       onClick={() =>
                         openInput({
-                          title: t`Update model`,
                           type: InputModalType.TEXT,
-                          label: t`Model name`,
-                          value: loans.assetEstimations.models.find(
-                            (v) => v.id === form.values.modelId,
-                          )?.name,
+                          title: <Trans>Update model</Trans>,
+                          label: <Trans>Model name</Trans>,
+                          value: assetEstimations.models.find((v) => v.id === form.values.modelId)
+                            ?.name,
                           onDone: (value: string) => {
-                            loans.setAssetEstimations({
-                              ...loans.assetEstimations,
-                              models: loans.assetEstimations.models.map((b) => {
+                            setAssetEstimations({
+                              ...assetEstimations,
+                              models: assetEstimations.models.map((b) => {
                                 if (b.id === form.values.modelId)
                                   return { ...b, name: value.trim() };
                                 return b;
@@ -260,18 +260,18 @@ export const ModalLoanAssetEstimationForm: FC<{
                       disabled={!form.values.brandId}
                       onClick={() =>
                         openInput({
-                          title: t`Create model`,
                           type: InputModalType.TEXT,
-                          label: t`Model name`,
+                          title: <Trans>Create model</Trans>,
+                          label: <Trans>Model name</Trans>,
                           onDone: (value: string) => {
                             const model: LoanAssetEstimationModel = {
-                              id: loans.assetEstimations.models.length.toString(),
+                              id: assetEstimations.models.length.toString(),
                               name: value.trim(),
                               brandId: form.values.brandId,
                             };
-                            loans.setAssetEstimations({
-                              ...loans.assetEstimations,
-                              models: [...loans.assetEstimations.models, model],
+                            setAssetEstimations({
+                              ...assetEstimations,
+                              models: [...assetEstimations.models, model],
                             });
                             form.setFieldValue("modelId", model.id);
                           },
@@ -286,9 +286,9 @@ export const ModalLoanAssetEstimationForm: FC<{
                 <Group align="end" gap={10}>
                   <Select
                     flex={1}
-                    label={t`Color`}
+                    label={<Trans>Color</Trans>}
                     placeholder={t`Select color`}
-                    data={loans.assetEstimations.colors
+                    data={assetEstimations.colors
                       .filter((v) => v.brandId === form.values.brandId)
                       .map((color) => ({ value: color.id, label: color.name }))}
                     {...form.getInputProps("colorId")}
@@ -302,16 +302,15 @@ export const ModalLoanAssetEstimationForm: FC<{
                     disabled={!form.values.colorId}
                     onClick={() =>
                       openInput({
-                        title: t`Update color`,
                         type: InputModalType.TEXT,
-                        label: t`Color name`,
-                        value: loans.assetEstimations.colors.find(
-                          (v) => v.id === form.values.colorId,
-                        )?.name,
+                        title: <Trans>Update color</Trans>,
+                        label: <Trans>Color name</Trans>,
+                        value: assetEstimations.colors.find((v) => v.id === form.values.colorId)
+                          ?.name,
                         onDone: (value: string) => {
-                          loans.setAssetEstimations({
-                            ...loans.assetEstimations,
-                            colors: loans.assetEstimations.colors.map((b) => {
+                          setAssetEstimations({
+                            ...assetEstimations,
+                            colors: assetEstimations.colors.map((b) => {
                               if (b.id === form.values.colorId) return { ...b, name: value.trim() };
                               return b;
                             }),
@@ -330,18 +329,18 @@ export const ModalLoanAssetEstimationForm: FC<{
                     disabled={!form.values.brandId}
                     onClick={() =>
                       openInput({
-                        title: t`Create color`,
                         type: InputModalType.TEXT,
-                        label: t`Color name`,
+                        title: <Trans>Create color</Trans>,
+                        label: <Trans>Color name</Trans>,
                         onDone: (value: string) => {
                           const color: LoanAssetEstimationColor = {
-                            id: loans.assetEstimations.colors.length.toString(),
+                            id: assetEstimations.colors.length.toString(),
                             name: value.trim(),
                             brandId: form.values.brandId,
                           };
-                          loans.setAssetEstimations({
-                            ...loans.assetEstimations,
-                            colors: [...loans.assetEstimations.colors, color],
+                          setAssetEstimations({
+                            ...assetEstimations,
+                            colors: [...assetEstimations.colors, color],
                           });
                           form.setFieldValue("colorId", color.id);
                         },
@@ -353,7 +352,7 @@ export const ModalLoanAssetEstimationForm: FC<{
                 </Group>
 
                 <DatePickerInput
-                  label={t`Product manufacturing year`}
+                  label={<Trans>Product manufacturing year</Trans>}
                   level="decade"
                   value={
                     form.values.productManufacturingDate

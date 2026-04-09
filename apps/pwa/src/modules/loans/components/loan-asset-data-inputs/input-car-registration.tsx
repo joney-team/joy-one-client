@@ -2,15 +2,15 @@
 
 import { EntityImage } from "@/components/entity-image";
 import { EntityImages } from "@/components/entity-images";
-import { useLoans } from "@/modules/loans/loans-context";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { InputWrapper, Select, SimpleGrid, TextInput } from "@mantine/core";
 import { FC } from "react";
 import { LoanAssetDataInputProps } from ".";
+import { useLoanAssetEstimations } from "../../hooks/use-loan-asset-estimations";
 
 export const InputCarRegistration: FC<LoanAssetDataInputProps<"CAR_REGISTRATION">> = (props) => {
   const { t } = useLingui();
-  const loans = useLoans();
+  const { assetEstimations } = useLoanAssetEstimations();
 
   return (
     <SimpleGrid cols={{ md: 1 }}>
@@ -18,7 +18,7 @@ export const InputCarRegistration: FC<LoanAssetDataInputProps<"CAR_REGISTRATION"
         <Select
           label={<Trans>Brand name</Trans>}
           searchable
-          data={loans.assetEstimations.brands
+          data={assetEstimations?.brands
             .filter((v) => v.assetType === props.assetType)
             .map((brand) => ({ value: brand.id, label: brand.name }))}
           value={props.value?.brandId}
@@ -29,7 +29,7 @@ export const InputCarRegistration: FC<LoanAssetDataInputProps<"CAR_REGISTRATION"
         <Select
           label={<Trans>Asset model</Trans>}
           searchable
-          data={loans.assetEstimations.models
+          data={assetEstimations?.models
             .filter((v) => v.brandId === props.value?.brandId)
             .map((model) => ({ value: model.id, label: model.name }))}
           value={props.value?.modelId}

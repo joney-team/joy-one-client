@@ -87,6 +87,8 @@ export interface LoanAssetEstimation {
 }
 
 export interface LoanAssetEstimations {
+  __typename: "LoanAssetEstimations";
+  id: string;
   brands: LoanAssetEstimationBrand[];
   models: LoanAssetEstimationModel[];
   colors: LoanAssetEstimationColor[];

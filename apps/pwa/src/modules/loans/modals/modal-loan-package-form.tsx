@@ -1,10 +1,9 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
-import { ModalHead } from "@/components/modal/modal-head";
+import { Modal } from "@/components/modal/modal";
 import { LoanAssetType, LoanPackageType } from "@/graphql/enums.graphql";
 import { LoanPackage } from "@/graphql/types.graphql";
-import { useLoans } from "@/modules/loans/loans-context";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { Currency } from "@joy-one-client/utils/currency";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -28,8 +27,8 @@ import { useForm } from "@mantine/form";
 import { useDisclosure } from "@mantine/hooks";
 import { IconCheck, IconCoins, IconPlus, IconX } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode, useState } from "react";
+import { useLoanAssetEstimations } from "../hooks/use-loan-asset-estimations";
 import { loanAssetTypes, loanPackageTypes } from "../loans-constants";
-import { Modal } from "@/components/modal/modal";
 
 interface ModalLoanPackageFormArgs {
   loanPackage?: LoanPackage;
@@ -39,7 +38,7 @@ export const ModalLoanPackageForm: FC<{
   children: (open: (args?: ModalLoanPackageFormArgs) => void) => ReactNode;
 }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
-  const loans = useLoans();
+  const { assetEstimations } = useLoanAssetEstimations();
   const { workspaceSetting, updateWorkspaceSetting } = useWorkspaceSetting();
 
   const { t } = useLingui();
@@ -95,7 +94,7 @@ export const ModalLoanPackageForm: FC<{
     close();
   });
 
-  if (!loans.isInitialized || !loans.assetEstimations) return null;
+  if (!assetEstimations) return null;
 
   return (
     <Fragment>

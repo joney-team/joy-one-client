@@ -7,27 +7,28 @@ import { Card, Stack } from "@mantine/core";
 import { IconCreditCardPay, IconFileImport, IconReportMoney } from "@tabler/icons-react";
 import { type FC } from "react";
 import { WorkspaceSettingCreditOperation } from "./components/workspace-setting-credit-operation";
+import { Trans } from "@lingui/react/macro";
 
 export const WorkspaceSettingCredit: FC = () => {
   return (
     <Container p="md">
       <Stack gap={30}>
         <Stack gap={8}>
-          <SectionTitle name={t`Credit`} icon={IconReportMoney} />
+          <SectionTitle name={<Trans>Credit</Trans>} icon={IconReportMoney} />
           <Card shadow="xs">
             <WorkspaceSettingCreditOperation />
           </Card>
         </Stack>
 
         <Stack gap={8}>
-          <SectionTitle name={t`Import loan data`} icon={IconFileImport} />
+          <SectionTitle name={<Trans>Import loan data</Trans>} icon={IconFileImport} />
           <Card shadow="xs">
             <WorkspaceSettingImportLoans />
           </Card>
         </Stack>
 
         <Stack gap={8}>
-          <SectionTitle name={t`Loan package`} icon={IconCreditCardPay} />
+          <SectionTitle name={<Trans>Loan package</Trans>} icon={IconCreditCardPay} />
           <Card shadow="xs">
             <WorkspacetSettingLoans />
           </Card>

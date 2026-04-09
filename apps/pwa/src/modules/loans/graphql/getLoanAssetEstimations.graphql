@@ -1,3 +1,7 @@
+#import "./fragmentLoanAssetEstimations.graphql"
+
 query GetLoanAssetEstimations {
-  assetEstimations: getLoanAssetEstimations
+  assetEstimations: getLoanAssetEstimations {
+    ...LoanAssetEstimations
+  }
 }

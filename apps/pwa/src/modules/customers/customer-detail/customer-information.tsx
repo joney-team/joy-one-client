@@ -7,7 +7,6 @@ import { OnModalCustomerContacts } from "@/modules/customers/modals/modal-custom
 import { OnModalCustomerPlainCodeForm } from "@/modules/customers/modals/modal-customer-plain-code-form";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
-import { useTags } from "@/modules/tags/tags-context";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
@@ -49,7 +48,9 @@ import { Renderer } from "../../../components/renderer";
 import { customerGenders, normalizeCustomerInput } from "../customer-constants";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
 
+import { Badge } from "@/components/badge";
 import GetCustomerContactsDocument from "@/modules/customer-contacts/graphql/getCustomerContacts.graphql";
+import { useTags } from "@/modules/tags/hooks/use-tags";
 import type { ModalTagFormRef } from "@/modules/tags/modals/modal-tag-form";
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
@@ -57,7 +58,6 @@ import type { ModalCustomerRef } from "../customer-modal";
 import AssignCustomerDocument from "../graphql/assignCustomer.graphql";
 import UpdateCustomerDocument from "../graphql/updateCustomer.graphql";
 import type { ModalCustomerRelationshipContactsRef } from "../modals/modal-customer-relationship-contacts";
-import { Badge } from "@/components/badge";
 
 const ModalCustomerRelationshipContacts = dynamic(
   () =>
@@ -83,7 +83,7 @@ interface CustomerInformationsProps {
 export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
   const { t } = useLingui();
   const workspace = useWorkspace();
-  const tags = useTags();
+  const { tags } = useTags(TagType.Customer);
   const isCanUpdateInfo = workspace.hasPermission(WorkspacePermission.CUSTOMERS_UPDATE_INFO);
   const uploadFile = useUploadFile();
   const modalCustomerRef = useRef<ModalCustomerRef>(null);
@@ -306,15 +306,10 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                 <IconTags strokeWidth={1.5} size={18} />
               </ThemeIcon>
               <Group gap={5} wrap="nowrap">
-                {tags.list.length > 0 ? (
+                {tags.length > 0 ? (
                   <Fragment>
-                    {tags.list
-                      .filter(
-                        (v) =>
-                          v._id &&
-                          customer.tagIds?.includes(v._id) === true &&
-                          v.type === TagType.Customer,
-                      )
+                    {tags
+                      .filter((v) => v._id && customer.tagIds?.includes(v._id) === true)
                       .map((tag) => (
                         <Badge
                           key={tag._id}
@@ -345,34 +340,32 @@ export const CustomerInformations: FC<CustomerInformationsProps> = (props) => {
                       </Popover.Target>
                       <Popover.Dropdown p={8} ref={ref}>
                         <Stack gap="md">
-                          {tags.list
-                            .filter((v) => v._id && v.type === TagType.Customer)
-                            .map((tag) => {
-                              const isTagged = customer.tagIds?.includes(tag._id);
+                          {tags.map((tag) => {
+                            const isTagged = customer.tagIds?.includes(tag._id);
 
-                              return (
-                                <Group
-                                  gap={5}
-                                  key={tag._id}
-                                  onClick={() => toggleTag(tag)}
-                                  style={{ cursor: "pointer" }}
-                                >
-                                  <Center w={20}>
-                                    <ColorSwatch color={tag.color || ""} size={20}>
-                                      {isTagged && (
-                                        <CheckIcon
-                                          color="white"
-                                          style={{ width: rem(6), height: rem(6) }}
-                                        />
-                                      )}
-                                    </ColorSwatch>
-                                  </Center>
-                                  <Text fz={10} fw={500}>
-                                    {tag.name}
-                                  </Text>
-                                </Group>
-                              );
-                            })}
+                            return (
+                              <Group
+                                gap={5}
+                                key={tag._id}
+                                onClick={() => toggleTag(tag)}
+                                style={{ cursor: "pointer" }}
+                              >
+                                <Center w={20}>
+                                  <ColorSwatch color={tag.color || ""} size={20}>
+                                    {isTagged && (
+                                      <CheckIcon
+                                        color="white"
+                                        style={{ width: rem(6), height: rem(6) }}
+                                      />
+                                    )}
+                                  </ColorSwatch>
+                                </Center>
+                                <Text fz={10} fw={500}>
+                                  {tag.name}
+                                </Text>
+                              </Group>
+                            );
+                          })}
 
                           <Group
                             gap={5}

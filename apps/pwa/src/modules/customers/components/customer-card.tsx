@@ -1,8 +1,9 @@
 "use client";
 
+import { Badge } from "@/components/badge";
 import { DateFormat } from "@/components/format/date-format";
 import { useRouter } from "@/hooks/use-router";
-import { useTags } from "@/modules/tags/tags-context";
+import { useTags } from "@/modules/tags/hooks/use-tags";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { renderEntityCode } from "@/modules/workspaces/utils";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -14,7 +15,6 @@ import { FC } from "react";
 import { Avatar } from "../../../components/avatar";
 import { customerGenders } from "../customer-constants";
 import { CustomerFragment } from "../graphql/fragmentCustomer.graphql";
-import { Badge } from "@/components/badge";
 
 interface CustomerCardProps extends CardProps {
   customer: Pick<
@@ -42,7 +42,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
   const router = useRouter();
   const workspace = useWorkspace();
   const IconGender = customer.gender ? customerGenders[customer.gender] : null;
-  const tags = useTags();
+  const { tags } = useTags();
   const routePath = `/customers/${customer.code}`;
 
   const onClick = () => {
@@ -135,7 +135,7 @@ export const CustomerCard: FC<CustomerCardProps> = (props) => {
               </ThemeIcon>
 
               <Group gap={5}>
-                {tags.list
+                {tags
                   .filter((v) => v._id && customer.tagIds!.includes(v._id) === true)
                   .map((tag) => (
                     <Badge key={tag._id} color={tag.color} size="sm" tt="none">

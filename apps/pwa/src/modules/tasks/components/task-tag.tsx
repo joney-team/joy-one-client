@@ -1,13 +1,9 @@
 "use client";
 
-import { useTags } from "@/modules/tags/tags-context";
-import { IconMinus } from "@tabler/icons-react";
-import { ActionIcon, CardProps } from "@mantine/core";
-import { Group, Text } from "@mantine/core";
-import { alpha } from "@mantine/core";
-import { Card } from "@mantine/core";
+import { useTags } from "@/modules/tags/hooks/use-tags";
+import { ActionIcon, alpha, Card, CardProps, Group, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
-import { IconPencil } from "@tabler/icons-react";
+import { IconMinus, IconPencil } from "@tabler/icons-react";
 import { FC } from "react";
 import { Renderer } from "../../../components/renderer";
 
@@ -20,8 +16,8 @@ interface TaskTagProps extends CardProps {
 }
 
 export const TaskTag: FC<TaskTagProps> = ({ id, h, fz, onRemove, editable = false, ...rest }) => {
-  const tags = useTags();
-  const tag = tags.list.find((v) => v._id === id);
+  const { tags } = useTags();
+  const tag = tags.find((v) => v._id === id);
   const hover = useHover();
 
   if (!tag) return null;

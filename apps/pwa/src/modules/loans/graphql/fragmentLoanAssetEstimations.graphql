@@ -1,0 +1,7 @@
+fragment LoanAssetEstimations on LoanAssetEstimations {
+  id
+  brands
+  models
+  colors
+  estimations
+}

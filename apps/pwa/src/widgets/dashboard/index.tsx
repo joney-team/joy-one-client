@@ -6,7 +6,7 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
 import GetTimeSeriesReportsDocument from "@/modules/reports/graphql/getTimeSeriesReports.graphql";
-import { useReports } from "@/modules/reports/reports-context";
+import { useReports } from "@/modules/reports/hooks/use-reports";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";

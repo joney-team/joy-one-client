@@ -1213,6 +1213,10 @@ type GetBankAccountInformationResult {
   accountName: String!
 }
 
+input GetTagsQuery {
+  type: TagType
+}
+
 """Available task statuses modes"""
 enum GetTaskStatusesMode {
   EDIT
@@ -1266,6 +1270,14 @@ type Loan {
   updatedAt: Float
   workspaceBranch: WorkspaceBranch
   workspaceBranchId: String
+}
+
+type LoanAssetEstimations {
+  brands: [JSONObject!]!
+  colors: [JSONObject!]!
+  estimations: [JSONObject!]!
+  id: String!
+  models: [JSONObject!]!
 }
 
 """Available loan asset types"""
@@ -1847,7 +1859,7 @@ type Mutation {
   setCustomerContacts(customerId: String!, input: SetCustomerContactsInput!): CustomerContact!
   setDeviceLocale(input: SetDeviceLocaleInput!): Device!
   setDeviceNotificationToken(input: SetDeviceNotificationTokenInput!): Device!
-  setLoanAssetEstimations(input: JSONObject!): JSONObject!
+  setLoanAssetEstimations(input: SetLoanAssetEstimationsInput!): LoanAssetEstimations!
   setLocale(input: SetUserLocaleInput!): Boolean!
   setMessageBoxCustomer(boxId: String!, customerId: String): MessageBox!
   setPluginExternalStorage(input: SetPluginExternalStorageInput!): PluginExternalStorage!
@@ -3086,7 +3098,7 @@ type Query {
     """
     query: JSONObject
   ): FilesPaginated!
-  getLoanAssetEstimations: JSONObject!
+  getLoanAssetEstimations: LoanAssetEstimations!
   getLoanByCode(code: String!): Loan!
   getLoanById(id: String!): Loan!
   getLoans(
@@ -3595,39 +3607,7 @@ type Query {
   ): ReceiptsPaginated!
   getSiblingTasks(_id: String!): SiblingTasks!
   getTagBySlug(slug: String!): Tag!
-  getTags(
-    ids: [String!]
-    limit: Float = 30
-    offset: Float
-
-    """
-    Dynamic query object supporting advanced filtering and sorting:
-        
-        FILTERING:
-        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
-        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
-        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
-        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
-        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
-        
-        SORTING:
-        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
-        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
-        
-        PAGINATION & SPECIAL:
-        - limit: Max results (default: 30)
-        - offset: Skip results (default: 0) 
-        - getAll: Return all results if supportGetAll=true
-        - workspaceBranchIds: Filter by specific branches
-        - workspaceBranchId: Single branch filter
-        
-        EXAMPLES:
-        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
-        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
-    """
-    query: JSONObject
-    type: String
-  ): TagsPaginated!
+  getTags(ids: [String!], limit: Float = 30, offset: Float, query: GetTagsQuery): TagsPaginated!
   getTaskByCode(code: String!): Task!
   getTaskById(_id: String!): Task!
   getTaskMetrics(contextId: String, contextType: TaskContextType!): TaskMetrics!
@@ -4228,6 +4208,13 @@ input SetDeviceLocaleInput {
 
 input SetDeviceNotificationTokenInput {
   notificationToken: String!
+}
+
+input SetLoanAssetEstimationsInput {
+  brands: [JSONObject!]!
+  colors: [JSONObject!]!
+  estimations: [JSONObject!]!
+  models: [JSONObject!]!
 }
 
 input SetPluginExternalStorageInput {
