@@ -2,7 +2,6 @@
 
 import { useLang } from "@/modules/lang/lang-context";
 import LoansProvider from "@/modules/loans/loans-provider";
-import PluginsProvider from "@/modules/plugins/plugins-provider";
 import { ReportsProvider } from "@/modules/reports/reports-provider";
 import TagsProvider from "@/modules/tags/tags-provider";
 import { generateTheme } from "@/modules/theme/generate-theme";
@@ -103,20 +102,18 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
         <ReportsProvider>
           <TagsProvider>
             <LoansProvider>
-              <PluginsProvider>
-                <ModalsProvider>
-                  {props.children}
+              <ModalsProvider>
+                {props.children}
 
-                  <LayoutWorkspace />
-                  <ModalUpgradeVersion />
-                  <ModalInstallWebAppTutorial />
-                  <PreloadResource />
-                  <SearchEngine />
-                  <InAppNotification />
-                  <WorkspaceAuthorization />
-                  <AuthRequire />
-                </ModalsProvider>
-              </PluginsProvider>
+                <LayoutWorkspace />
+                <ModalUpgradeVersion />
+                <ModalInstallWebAppTutorial />
+                <PreloadResource />
+                <SearchEngine />
+                <InAppNotification />
+                <WorkspaceAuthorization />
+                <AuthRequire />
+              </ModalsProvider>
             </LoansProvider>
           </TagsProvider>
         </ReportsProvider>

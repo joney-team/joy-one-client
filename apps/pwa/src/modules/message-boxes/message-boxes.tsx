@@ -21,8 +21,9 @@ import { MessageBoxFragment } from "./graphql/fragmentMessageBox.graphql";
 import GetMessageBoxesDocument from "./graphql/getMessageBoxes.graphql";
 import GetMessageBoxPlatformsDocument from "./graphql/getMessageBoxPlatforms.graphql";
 import { CardMessageBox } from "./message-box/message-box-card";
-import { messageBoxStatuses } from "./message-boxes-contants";
+import { messageBoxPlatforms, messageBoxStatuses } from "./message-boxes-contants";
 import { MessageBoxesIntegrate } from "./message-boxes-integrate";
+import { useMessageBoxPlatforms } from "./hooks/use-message-box-platforms";
 
 const params = {
   sortLastInteractionAt: -1,
@@ -49,7 +50,7 @@ export const MessageBoxList = () => {
     ],
   });
 
-  const { data: platformsData } = useQuery(GetMessageBoxPlatformsDocument);
+  const { platforms } = useMessageBoxPlatforms();
 
   const padding = layout.view === "mobile" ? 0 : 10;
 
@@ -96,21 +97,13 @@ export const MessageBoxList = () => {
           label={<Trans>Platform</Trans>}
           autoHideLabel
           value={boxes.params.platformId}
-          options={(platformsData?.platforms ?? []).map((platform) => {
+          options={platforms.map((platform) => {
             return {
               label: platform.name,
               value: platform.id,
               leftSession: (
                 <Image
-                  src={
-                    platform.type === MessageBoxPlatformType.Zalo
-                      ? "/images/plugins-zalo-oa.png"
-                      : platform.type === MessageBoxPlatformType.MessageHub
-                        ? "/images/plugins-message-hubs.png"
-                        : platform.type === MessageBoxPlatformType.MetaPage
-                          ? "/images/plugins-meta-pages.png"
-                          : undefined
-                  }
+                  src={platform.image ?? messageBoxPlatforms[platform.type].image}
                   w={20}
                   h={20}
                   radius="xs"

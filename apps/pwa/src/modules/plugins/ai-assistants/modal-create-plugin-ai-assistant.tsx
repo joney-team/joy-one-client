@@ -255,7 +255,7 @@ export const ModalCreatePluginAiAssistant: FC<{
 export const OnModalCreatePluginAiAssistant = (plugin?: PluginAiAssistantFragment) => {
   return modals.open({
     modalId: "PluginAiAssistantModal",
-    title: <ModalHead name={t`AI assistant`} icon={IconAi} color="violet.9" />,
+    title: <ModalHead name={<Trans>AI assistant</Trans>} icon={IconAi} color="violet.9" />,
     children: <ModalCreatePluginAiAssistant plugin={plugin} />,
     size: "600px",
   });

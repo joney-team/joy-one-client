@@ -3,7 +3,6 @@
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useApolloClient } from "@apollo/client/react";
@@ -29,17 +28,18 @@ import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
 import DisconnectMetaPageDocument from "./graphql/disconnectMetaPage.graphql";
 import GetMetaPagesInfosDocument from "./graphql/getMetaPagesInfos.graphql";
+import { useMetaPages } from "./hooks/use-meta-pages";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
-  const plugins = usePlugins();
   const client = useApolloClient();
+  const { metaPages, loading } = useMetaPages();
 
   const color = useColor();
 
-  if (!plugins.isInitialized) return <Skeleton height={150} />;
+  if (loading) return <Skeleton height={150} />;
 
-  if (plugins.metaPages.length === 0)
+  if (metaPages.length === 0)
     return (
       <Stack align="center" py={20}>
         <Group gap={30} mb={20}>
@@ -85,7 +85,7 @@ export const PluginMetaPages: FC = () => {
   return (
     <Stack gap={30}>
       <SimpleGrid cols={{ md: 2 }}>
-        {plugins.metaPages.map((page) => {
+        {metaPages.map((page) => {
           return (
             <Card key={page._id} shadow="none" withBorder>
               <Group justify="space-between">

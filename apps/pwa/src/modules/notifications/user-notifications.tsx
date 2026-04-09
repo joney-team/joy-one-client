@@ -63,9 +63,7 @@ export const UserNotifications: FC = () => {
 
   const [cleanNotifications] = useMutation(CleanNotificationsDocument);
 
-  const { data: notificationStatData, refetch } = useQuery(GetNotificationStatDocument, {
-    fetchPolicy: "cache-and-network",
-  });
+  const { data: notificationStatData, refetch } = useQuery(GetNotificationStatDocument);
 
   const notificationStat = notificationStatData?.notificationStat;
 
@@ -76,6 +74,7 @@ export const UserNotifications: FC = () => {
   const notifications = useGraphqlList<NotificationFragment>({
     id: `user-notifications-${lang.locale}`,
     query: GetNotificationsDocument,
+    fetchPolicy: "cache-first",
   });
 
   const onClean = () => {

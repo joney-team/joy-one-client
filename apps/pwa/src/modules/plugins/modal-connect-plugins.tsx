@@ -4,7 +4,6 @@ import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text } from "@mantine/core";
@@ -13,13 +12,14 @@ import { IconMessage, IconPuzzle } from "@tabler/icons-react";
 import { FC } from "react";
 import { onFacebookLogin } from "../auth/auth-service";
 import { useWorkspace } from "../workspaces/workspace-context";
+import { useMessageHubs } from "./message-hubs/hooks/use-message-hubs";
 import GetMetaPagesInfosDocument from "./meta-pages/graphql/getMetaPagesInfos.graphql";
 import ConnectZaloOaDocument from "./zalo-oas/graphql/connectZaloOa.graphql";
 
 const ModalConnectPlugins: FC = () => {
-  const plugins = usePlugins();
   const client = useApolloClient();
   const workspace = useWorkspace();
+  const { createMessageHub } = useMessageHubs();
 
   const close = () => {
     modals.close("ModalConnectPlugins");
@@ -91,9 +91,7 @@ const ModalConnectPlugins: FC = () => {
                 title: <Trans>Enter name</Trans>,
                 icon: IconMessage,
                 value: workspace.member.name,
-                onDone: async (name) => {
-                  await plugins.onCreateMessageHub(name);
-                },
+                onDone: async (name) => createMessageHub(name),
               });
             }}
           >

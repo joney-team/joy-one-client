@@ -26,6 +26,7 @@ export interface UseGraphqlListArgs<T extends BaseData = BaseData> {
   isIgnoreEventDataActionType?: boolean;
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
   debug?: boolean;
+  fetchPolicy?: "cache-first" | "cache-and-network" | "network-only" | "no-cache";
 }
 
 export type UseGraphqlListData<T extends BaseData = BaseData> = {
@@ -94,7 +95,7 @@ export const useGraphqlList = <T extends BaseData>({
   const [fetch, { data: queryData, loading, error: queryError, refetch, fetchMore }] = useLazyQuery<
     UseGraphqlListData<T>
   >(args.query, {
-    fetchPolicy: "cache-and-network",
+    fetchPolicy: args.fetchPolicy || "cache-and-network",
   });
 
   useEffect(() => {

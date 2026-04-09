@@ -5,13 +5,13 @@ import { Badge } from "@/components/badge";
 import { MessageBoxStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { useRouter } from "@/hooks/use-router";
-import { usePlugins } from "@/modules/plugins/plugins-context";
+import { usePluginAiAssistants } from "@/modules/plugins/ai-assistants/hooks/use-plugin-ai-assistants";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
 import { onActionLoad, onArchive } from "@/utils/actions";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans, useLingui } from "@lingui/react/macro";
-import { ActionIcon, Group, Image, Stack, Text, Title, Tooltip } from "@mantine/core";
+import { ActionIcon, Group, Image, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconCheck,
   IconCircleCheck,
@@ -26,6 +26,7 @@ import CloseMessageBoxDocument from "../graphql/closeMessageBox.graphql";
 import DeleteMessageBoxDocument from "../graphql/deleteMessageBox.graphql";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
 import SwitchMessageBoxAiAssistantDocument from "../graphql/switchMessageBoxAiAssistant.graphql";
+import { useMessageBoxPlatform } from "../hooks/use-message-box-platforms";
 import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
 
 export const MessageBoxHead: FC<{ box: MessageBoxFragment }> = ({ box }) => {
@@ -33,10 +34,10 @@ export const MessageBoxHead: FC<{ box: MessageBoxFragment }> = ({ box }) => {
   const client = useApolloClient();
   const router = useRouter();
   const color = useColor();
-  const plugins = usePlugins();
-  const plugin = plugins.getPlugin(box?.platformId);
+  const { platform } = useMessageBoxPlatform(box?.platformType);
 
-  const aiPlugin = plugins.aiAssistants[0];
+  const { aiAssistants } = usePluginAiAssistants();
+  const aiPlugin = aiAssistants[0];
   const isAiAssistantEnabled = box && aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
   const onMarkAsDone = async () => {
@@ -91,11 +92,15 @@ export const MessageBoxHead: FC<{ box: MessageBoxFragment }> = ({ box }) => {
             {box?.senderName || box?.customer?.name || <Trans>Guest</Trans>}
           </Text>
 
-          {plugin && (
+          {platform && (
             <Group gap={4}>
-              <Image src={messageBoxPlatforms[box.platformType].image} w={16} h={16} />
+              <Image
+                src={platform.image ?? messageBoxPlatforms[box.platformType].image}
+                w={16}
+                h={16}
+              />
               <Text fz={14} c="dimmed">
-                {plugin.name}
+                {platform.name}
               </Text>
             </Group>
           )}

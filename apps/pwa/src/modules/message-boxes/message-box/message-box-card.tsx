@@ -5,7 +5,6 @@ import { Badge } from "@/components/badge";
 import { DateFormat } from "@/components/format/date-format";
 import { MessageAttachmentType, MessageBoxStatus } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -14,7 +13,9 @@ import { IconUserSquareRounded } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 import { FC } from "react";
 import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
+import { useMessageBoxPlatform } from "../hooks/use-message-box-platforms";
 import { messageBoxPlatforms, messageBoxStatuses } from "../message-boxes-contants";
+import { usePluginAiAssistants } from "@/modules/plugins/ai-assistants/hooks/use-plugin-ai-assistants";
 
 interface CardMessageBoxProps {
   box: MessageBoxFragment;
@@ -26,10 +27,9 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
   const router = useRouter();
   const layout = useLayout();
 
-  const plugins = usePlugins();
-  const aiPlugin = plugins.aiAssistants[0];
-  const plugin = plugins.getPlugin(box.platformId);
-
+  const { platform } = useMessageBoxPlatform(box.platformId);
+  const { aiAssistants } = usePluginAiAssistants();
+  const aiPlugin = aiAssistants[0];
   const isAiAssistantEnabled = aiPlugin && aiPlugin.enabled && !box.aiAssistantDisabled;
 
   const latestMessage = box.lastMessage;
@@ -55,8 +55,12 @@ export const CardMessageBox: FC<CardMessageBoxProps> = (props) => {
       <Group miw={0} w="100%" align="start" gap={12} wrap="nowrap">
         <Indicator
           label={
-            <Tooltip label={plugin?.name} disabled={!plugin}>
-              <Image src={messageBoxPlatforms[box.platformType].image} w={16} h={16} />
+            <Tooltip label={platform?.name} disabled={!platform}>
+              <Image
+                src={platform?.image ?? messageBoxPlatforms[box.platformType].image}
+                w={16}
+                h={16}
+              />
             </Tooltip>
           }
           radius={8}

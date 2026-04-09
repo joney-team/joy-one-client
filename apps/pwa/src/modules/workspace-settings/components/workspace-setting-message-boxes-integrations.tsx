@@ -2,23 +2,23 @@
 
 import { Avatar } from "@/components/avatar";
 import { defaultNodeTypes, groupNodes, moveNodes } from "@/components/flows";
-import { DateFormat, RelativeTimeFormat } from "@/components/format/date-format";
 import { Image } from "@/components/image";
-import { MessageBoxPlatformType } from "@/graphql/enums.graphql";
+import { MessageBoxPlatform } from "@/graphql/types.graphql";
 import { useLayout } from "@/layout/layout-context";
+import { useMessageBoxPlatforms } from "@/modules/message-boxes/hooks/use-message-box-platforms";
 import { messageBoxPlatforms } from "@/modules/message-boxes/message-boxes-contants";
 import UpdatePluginAiAssistantDocument from "@/modules/plugins/ai-assistants/graphql/updatePluginAiAssistant.graphql";
+import { usePluginAiAssistants } from "@/modules/plugins/ai-assistants/hooks/use-plugin-ai-assistants";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
 import { OnModalConnectPlugins } from "@/modules/plugins/modal-connect-plugins";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { String } from "@/utils/string.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Indicator, Stack, Switch, Text, Tooltip } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
-import { IconClock, IconMessage, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { Handle, Position, ReactFlow } from "@xyflow/react";
 import { FC, Fragment } from "react";
 
@@ -83,8 +83,8 @@ const RootNode = () => {
 };
 
 const AiIntegrationNode = () => {
-  const plugins = usePlugins();
-  const aiPlugin = plugins.aiAssistants[0];
+  const { aiAssistants } = usePluginAiAssistants();
+  const aiPlugin = aiAssistants[0];
   const client = useApolloClient();
 
   return (
@@ -166,24 +166,7 @@ const AiIntegrationNode = () => {
 };
 
 const PluginNode = (props: any) => {
-  const { plugin, name, type } = props.data;
-
-  const platformType =
-    type === "metaPages"
-      ? MessageBoxPlatformType.MetaPage
-      : type === "zalaOAs"
-        ? MessageBoxPlatformType.Zalo
-        : MessageBoxPlatformType.MessageHub;
-
-  const PluginAvatar: FC = (
-    {
-      metaPages: () => <Avatar color="primary" pluginMetaPage={plugin} size={30} />,
-      zalaOAs: () => <Avatar color="primary" pluginZaloOa={plugin} size={30} />,
-      messageHubs: () => (
-        <Avatar icon={IconMessage} src="/images/plugins-message-hubs.png" size={30} />
-      ),
-    } as any
-  )[type];
+  const { name, type, image } = props.data as MessageBoxPlatform;
 
   return (
     <Fragment>
@@ -199,7 +182,7 @@ const PluginNode = (props: any) => {
       >
         <Group gap={10} align="center" w={cardSize.width} h={cardSize.height} p="md" wrap="nowrap">
           <Indicator
-            label={<Image src={messageBoxPlatforms[platformType].image} w={16} h={16} />}
+            label={<Image src={image ?? messageBoxPlatforms[type].image} w={16} h={16} />}
             radius={8}
             color="var(--mantine-color-body)"
             position="bottom-end"
@@ -214,7 +197,7 @@ const PluginNode = (props: any) => {
               },
             }}
           >
-            <PluginAvatar />
+            <Avatar src={messageBoxPlatforms[type].image}>{name}</Avatar>
           </Indicator>
           <Stack gap={0}>
             <Tooltip label={name} disabled={!name || name.length < 15}>
@@ -222,21 +205,6 @@ const PluginNode = (props: any) => {
                 {name || <Trans>Plugin</Trans>}
               </Text>
             </Tooltip>
-
-            {!!plugin.lastInteractionAt && (
-              <Tooltip
-                label={
-                  <Trans>
-                    Last interaction at <DateFormat value={plugin.lastInteractionAt} />
-                  </Trans>
-                }
-              >
-                <Text fz={10} fw={500} c="gray" truncate="end">
-                  <IconClock size={12} style={{ marginBottom: -2.5 }} />{" "}
-                  <RelativeTimeFormat value={plugin.lastInteractionAt} />
-                </Text>
-              </Tooltip>
-            )}
           </Stack>
         </Group>
       </Card>
@@ -282,9 +250,11 @@ const PlusPluginNode = (props: any) => {
 
 export const WorkspaceSettingMessageBoxesIntegrations: FC = () => {
   const layout = useLayout();
+  const { t } = useLingui();
   const sized = useElementSize();
-  const plugins = usePlugins();
-  const aiPlugin = plugins.aiAssistants[0];
+  const { aiAssistants } = usePluginAiAssistants();
+  const aiPlugin = aiAssistants[0];
+  const { platforms } = useMessageBoxPlatforms();
 
   const distanceFromRoot = 100;
 
@@ -298,28 +268,14 @@ export const WorkspaceSettingMessageBoxesIntegrations: FC = () => {
       x: 0,
       y: 0,
       id: "plugins",
-      title: "message_source",
+      title: t`Message sources`,
       spacing: 16,
     },
     nodes: [
-      ...plugins.metaPages.map((m) => ({
-        id: m._id,
+      ...platforms.map((m) => ({
+        id: m.id,
         type: "plugin",
-        data: { name: m.name, plugin: m, type: "metaPages" },
-        position: { x: 0, y: 0 },
-        ...cardSize,
-      })),
-      ...plugins.zaloOas.map((m) => ({
-        id: m._id,
-        type: "plugin",
-        data: { name: m.info.name, plugin: m, type: "zalaOAs" },
-        position: { x: 0, y: 0 },
-        ...cardSize,
-      })),
-      ...plugins.messageHubs.map((m) => ({
-        id: m._id,
-        type: "plugin",
-        data: { name: m.name, plugin: m, type: "messageHubs" },
+        data: m,
         position: { x: 0, y: 0 },
         ...cardSize,
       })),

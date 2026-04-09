@@ -4,7 +4,6 @@ import { Badge } from "@/components/badge";
 import { Container } from "@/components/container";
 import { PluginZaloOaStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { ZnsTemplateConfig } from "@/modules/plugins/zalo-oas/zalo-oas-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
@@ -29,21 +28,24 @@ import { ZaloOasOnboarding } from "./components/zalo-oas-onboarding";
 import ReconnectZaloOaDocument from "./graphql/reconnectZaloOa.graphql";
 import RemoveZaloOaDocument from "./graphql/removeZaloOa.graphql";
 import SetZaloOaDefaultDocument from "./graphql/setZaloOaDefault.graphql";
+import { useZaloOas, useZnsTemplateConfigs } from "./hooks/use-zalo-oas";
 
 export const PluginZaloOAs: FC = () => {
   const workspace = useWorkspace();
-  const plugins = usePlugins();
   const client = useApolloClient();
+  const { zaloOas, loading } = useZaloOas();
+  const { znsTemplateConfigs } = useZnsTemplateConfigs();
 
-  if (plugins.zaloOas.length === 0) return <ZaloOasOnboarding />;
+  if (loading) return null;
+  if (zaloOas.length === 0) return <ZaloOasOnboarding />;
 
-  const defaultZaloOa = plugins.zaloOas.find((oa) => oa.isDefault);
+  const defaultZaloOa = zaloOas.find((oa) => oa.isDefault);
 
   return (
     <Container p="md">
       <Stack gap={30}>
         <Card>
-          {plugins.zaloOas.map((oa) => {
+          {zaloOas.map((oa) => {
             return (
               <Card key={oa._id} shadow="none" withBorder>
                 <Group justify="space-between" align="start">
@@ -170,8 +172,8 @@ export const PluginZaloOAs: FC = () => {
               <SectionTitle name={<Trans>ZNS templates</Trans>} icon={IconTemplate} />
               <Card>
                 <SimpleGrid cols={{ md: 2 }}>
-                  {Object.keys(plugins.znsTemplateConfigs).map((key) => {
-                    const config = (plugins.znsTemplateConfigs as any)[key] as ZnsTemplateConfig;
+                  {Object.keys(znsTemplateConfigs).map((key) => {
+                    const config = (znsTemplateConfigs as any)[key] as ZnsTemplateConfig;
                     const isvalid =
                       !config.workspaceTypes || config.workspaceTypes.includes(workspace.type);
                     if (!isvalid) return null;

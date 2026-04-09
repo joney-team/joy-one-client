@@ -4,21 +4,22 @@ import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
 import { Container } from "@/components/container";
 import { OnModalCreatePluginAiAssistant } from "@/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
 import { Trans } from "@lingui/react/macro";
-import { ActionIcon, Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
+import { ActionIcon, Card, Group, Skeleton, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconAi, IconCirclesRelation, IconLinkPlus, IconPencil } from "@tabler/icons-react";
 import { type FC } from "react";
+import { usePluginAiAssistants } from "./hooks/use-plugin-ai-assistants";
 
 export const AiAssistantList: FC = () => {
-  const plugins = usePlugins();
   const workspace = useWorkspace();
   const color = useColor();
+  const { aiAssistants, loading } = usePluginAiAssistants();
 
-  if (plugins.aiAssistants.length === 0) {
+  if (loading) return <Skeleton w="100%" h={300} />;
+
+  if (aiAssistants.length === 0) {
     return (
       <Container size="sm" p="md">
         <Card shadow="xs">
@@ -56,7 +57,7 @@ export const AiAssistantList: FC = () => {
   return (
     <Container size="xs" p="md">
       <Stack>
-        {plugins.aiAssistants.map((plugin) => {
+        {aiAssistants.map((plugin) => {
           return (
             <Card key={plugin._id} shadow="sm">
               <Group align="start">
@@ -67,7 +68,7 @@ export const AiAssistantList: FC = () => {
                 <Stack gap={3} flex={1}>
                   <Text fw={600}>{plugin.providerName}</Text>
                   <Text c="gray" fz={12}>
-                    <Trans>Provider</Trans>: {t`AI Assistant ${plugin.provider}`}
+                    <Trans>Provider</Trans>: <Trans>AI Assistant {plugin.provider}</Trans>
                   </Text>
                 </Stack>
 

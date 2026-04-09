@@ -5,7 +5,6 @@ import { Button } from "@/components/buttons/button";
 import { Image } from "@/components/image";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { PluginMetaPages } from "@/modules/plugins/meta-pages/plugin-meta-pages";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { PluginZaloOAs } from "@/modules/plugins/zalo-oas/zalo-oas";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -13,11 +12,12 @@ import { Trans } from "@lingui/react/macro";
 import { Card, em, Grid, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCirclesRelation, IconMessage, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
+import { useMessageHubs } from "../plugins/message-hubs/hooks/use-message-hubs";
 
 export const MessageBoxesIntegrate: FC = () => {
   const color = useColor();
   const workspace = useWorkspace();
-  const plugins = usePlugins();
+  const { createMessageHub } = useMessageHubs();
 
   return (
     <Stack p={20} py={30}>
@@ -79,9 +79,7 @@ export const MessageBoxesIntegrate: FC = () => {
                         title: <Trans>Enter name</Trans>,
                         icon: IconMessage,
                         value: workspace.member.name,
-                        onDone: async (name) => {
-                          await plugins.onCreateMessageHub(name);
-                        },
+                        onDone: async (name) => createMessageHub(name),
                       })
                     }
                   >

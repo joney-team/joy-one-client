@@ -9,13 +9,13 @@ import { LazyLoad } from "@/components/lazy-load";
 import { SectionTitle } from "@/components/session-title";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { MessageHubCard } from "@/modules/plugins/message-hubs/message-hub-card";
-import { usePlugins } from "@/modules/plugins/plugins-context";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { IconCirclesRelation, IconMessage, IconPlus } from "@tabler/icons-react";
 import { type FC } from "react";
+import { useMessageHubs } from "../plugins/message-hubs/hooks/use-message-hubs";
 
 export function getColorScheme(key: string) {
   return document.documentElement.getAttribute(key);
@@ -23,12 +23,12 @@ export function getColorScheme(key: string) {
 
 export const WorkspaceSettingMessageHubs: FC = () => {
   const workspace = useWorkspace();
-  const plugins = usePlugins();
+  const { messageHubs, loading, createMessageHub } = useMessageHubs();
   const color = useColor();
 
-  if (!plugins.isInitialized) return <LazyLoad />;
+  if (loading) return <LazyLoad />;
 
-  if (plugins.messageHubs.length === 0) {
+  if (messageHubs.length === 0) {
     return (
       <Container p="md">
         <Card shadow="xs">
@@ -62,9 +62,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
                       title: <Trans>Enter name</Trans>,
                       icon: IconMessage,
                       value: workspace.member.name,
-                      onDone: async (name) => {
-                        await plugins.onCreateMessageHub(name);
-                      },
+                      onDone: async (name) => await createMessageHub(name),
                     })
                   }
                 >
@@ -93,9 +91,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
                     title: <Trans>Enter name</Trans>,
                     icon: IconMessage,
                     value: workspace.member.name,
-                    onDone: async (name) => {
-                      await plugins.onCreateMessageHub(name);
-                    },
+                    onDone: async (name) => createMessageHub(name),
                   })
                 }
               />
@@ -103,7 +99,7 @@ export const WorkspaceSettingMessageHubs: FC = () => {
           </ModalInput>
         </SectionTitle>
 
-        {plugins.messageHubs.map((messageHub) => {
+        {messageHubs.map((messageHub) => {
           return <MessageHubCard key={messageHub._id} messageHub={messageHub} />;
         })}
       </Stack>
