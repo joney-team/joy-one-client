@@ -8,7 +8,7 @@ import { Card, Group, Skeleton, Stack, Title } from "@mantine/core";
 import { useElementSize } from "@mantine/hooks";
 import { FC, useEffect } from "react";
 import GetMessageBoxByIdDocument from "../graphql/getMessageBoxById.graphql";
-import { MetadataMessageBox } from "../message-box-metadata/message-box-metadata";
+import { MetadataMessageBox } from "./message-box-metadata/message-box-metadata";
 import { MessageBoxHead } from "./message-box-head";
 import { InputMessageBox } from "./message-box-input";
 import { MessageBoxMessages } from "./message-box-messages";

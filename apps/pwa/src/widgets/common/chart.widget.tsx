@@ -1,6 +1,5 @@
 "use client";
 
-import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { useColor } from "@/modules/theme/use-color";
 import type { WidgetComponent, WidgetLayoutConfig } from "@/widgets/widgets-types";
 import { Trans } from "@lingui/react/macro";
@@ -63,41 +62,35 @@ export function chartWidget<CT = any>(args: NumberReportWidget<CT>): WidgetCompo
             )}
           </Group>
 
-          <FlexSizeLegacy>
-            {(size) => {
-              return (
-                <Stack pos="relative" style={{ height: size.height }}>
-                  <LineChart
-                    h={size.height}
-                    ml={-4}
-                    data={data || []}
-                    dataKey="date"
-                    series={(args.renderSeries?.(ctx) || []).map((v) => ({
-                      ...v,
-                      color: color(v.color),
-                      value: v.label,
-                    }))}
-                    curveType="monotone"
-                    style={{ outline: "none" }}
-                    unit={unit?.short ? unit.short : undefined}
-                    tooltipAnimationDuration={200}
-                    referenceLines={
-                      mean !== 0
-                        ? [
-                            {
-                              y: mean,
-                              color: color(mean > 0 ? "primary.2" : "red.2"),
-                            },
-                          ]
-                        : []
-                    }
-                  />
+          <Stack pos="relative" h="100%" mih={0}>
+            <LineChart
+              h="100%"
+              ml={-4}
+              data={data || []}
+              dataKey="date"
+              series={(args.renderSeries?.(ctx) || []).map((v) => ({
+                ...v,
+                color: color(v.color),
+                value: v.label,
+              }))}
+              curveType="monotone"
+              style={{ outline: "none" }}
+              unit={unit?.short ? unit.short : undefined}
+              tooltipAnimationDuration={200}
+              referenceLines={
+                mean !== 0
+                  ? [
+                      {
+                        y: mean,
+                        color: color(mean > 0 ? "primary.2" : "red.2"),
+                      },
+                    ]
+                  : []
+              }
+            />
 
-                  <LoadingOverlay visible={isLoading} overlayProps={{ radius: "xs" }} />
-                </Stack>
-              );
-            }}
-          </FlexSizeLegacy>
+            <LoadingOverlay visible={isLoading} overlayProps={{ radius: "xs" }} />
+          </Stack>
         </Stack>
       </Card>
     );

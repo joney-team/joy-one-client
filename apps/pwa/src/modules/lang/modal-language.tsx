@@ -6,14 +6,14 @@ import { AppLocale } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { onActionLoad } from "@/utils/actions";
+import { zIndexes } from "@joy-one-client/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconLanguage, IconWorld } from "@tabler/icons-react";
 import { FC, Fragment, ReactNode } from "react";
 
-export const ModalLang: FC<{
+export const ModalLanguage: FC<{
   children: (open: () => void) => ReactNode;
 }> = ({ children }) => {
   const [opened, { open, close }] = useDisclosure(false);
@@ -22,21 +22,22 @@ export const ModalLang: FC<{
 
   const onSelect = async (locale: AppLocale | "default") => {
     close();
-    onActionLoad({
-      name: <Trans>Changing language</Trans>,
-      process: async () => {
-        await lang.changeLocale(locale);
-      },
-    });
+    lang.changeLocale(locale);
   };
 
   return (
     <Fragment>
       {children(open)}
-      <Modal opened={opened} onClose={close} withCloseButton={false}>
+
+      <Modal
+        opened={opened}
+        onClose={close}
+        withCloseButton={false}
+        zIndex={zIndexes.requireAuth + 10}
+      >
         <Stack>
           <Group justify="center" gap={5}>
-            <ThemeIcon variant="transparent">
+            <ThemeIcon variant="transparent" color="primary.6">
               <IconWorld strokeWidth={1.5} />
             </ThemeIcon>
 

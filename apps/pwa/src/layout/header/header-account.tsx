@@ -6,7 +6,7 @@ import { Image } from "@/components/image";
 import { Renderer } from "@/components/renderer";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { ModalLang } from "@/modules/lang/modal-language";
+import { ModalLanguage } from "@/modules/lang/modal-language";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { Trans } from "@lingui/react/macro";
@@ -30,7 +30,7 @@ export const WorkspaceHeaderAccount: FC = () => {
   if (!app.isInitialized) return null;
 
   return (
-    <ModalLang>
+    <ModalLanguage>
       {(openLang) => (
         <Menu>
           <Menu.Target>
@@ -113,6 +113,6 @@ export const WorkspaceHeaderAccount: FC = () => {
           </Menu.Dropdown>
         </Menu>
       )}
-    </ModalLang>
+    </ModalLanguage>
   );
 };

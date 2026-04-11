@@ -2,7 +2,6 @@
 
 import { Avatar } from "@/components/avatar";
 import { Button } from "@/components/buttons/button";
-import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { TechIllustration } from "@/components/illustrations/tech";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 import {
@@ -32,10 +31,11 @@ import {
 import { IconLinkOff, IconLinkPlus, IconMail, IconPhoneCall, IconPlus } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC, useRef } from "react";
-import { MessageBoxFragment } from "../graphql/fragmentMessageBox.graphql";
-import SetMessageBoxCustomerDocument from "../graphql/setMessageBoxCustomer.graphql";
+import { MessageBoxFragment } from "../../graphql/fragmentMessageBox.graphql";
+import SetMessageBoxCustomerDocument from "../../graphql/setMessageBoxCustomer.graphql";
 import { MessageBoxMetadataBookings } from "./message-box-metadata-bookings";
 import { MessageBoxMetadataLoans } from "./message-box-metadata-loans";
+import { MessageBoxMetadataOrders } from "./message-box-metadata-orders";
 import { AccordionItem } from "./message-box-metadata-types";
 
 const accordionItems: AccordionItem[] = [
@@ -50,11 +50,10 @@ const accordionItems: AccordionItem[] = [
     component: MessageBoxMetadataBookings,
     onCreate: (_, context) => context.actions.createBooking(),
   },
-  // TODO: Add orders
-  // {
-  //   moduleId: "orders",
-  //   component: MessageBoxMetadataOrders,
-  // },
+  {
+    moduleId: "orders",
+    component: MessageBoxMetadataOrders,
+  },
 ];
 
 export const MetadataMessageBox: FC<{ box: MessageBoxFragment }> = ({ box }) => {
@@ -76,7 +75,7 @@ export const MetadataMessageBox: FC<{ box: MessageBoxFragment }> = ({ box }) => 
 
   if (customer)
     return (
-      <Stack flex={1} gap={0}>
+      <Stack flex={1} gap={0} mih={0}>
         <Group
           p={12}
           gap={5}
@@ -125,83 +124,77 @@ export const MetadataMessageBox: FC<{ box: MessageBoxFragment }> = ({ box }) => 
           </Group>
         </Group>
 
-        <FlexSizeLegacy>
-          {(size) => {
-            return (
-              <ScrollArea h={size.height} w="100%">
-                <Accordion>
-                  {accordionItems
-                    .filter((item) => {
-                      if (item.workspaceTypes) {
-                        return item.workspaceTypes.includes(workspace.type);
-                      }
+        <ScrollArea.Autosize w="100%" flex={1}>
+          <Accordion>
+            {accordionItems
+              .filter((item) => {
+                if (item.workspaceTypes) {
+                  return item.workspaceTypes.includes(workspace.type);
+                }
 
-                      return true;
-                    })
-                    .map((item) => {
-                      const workspaceModule = getAvailableModule(item.moduleId);
+                return true;
+              })
+              .map((item) => {
+                const workspaceModule = getAvailableModule(item.moduleId);
 
-                      const isInView = (
-                        workspaceView.menu ??
-                        getDefaultWorkspaceView(workspace.type).menu ??
-                        []
-                      ).some((v) => v.moduleId === item.moduleId);
+                const isInView = (
+                  workspaceView.menu ??
+                  getDefaultWorkspaceView(workspace.type).menu ??
+                  []
+                ).some((v) => v.moduleId === item.moduleId);
 
-                      if (!workspaceModule || !isInView) return null;
-                      return (
-                        <Accordion.Item key={workspaceModule.id} value={workspaceModule.id}>
-                          <Accordion.Control>
-                            <Group gap={8}>
-                              <ActionIcon variant="subtle" color="dark" component="div">
-                                <workspaceModule.icon size={18} />
-                              </ActionIcon>
-                              <Text>{workspaceModule.name}</Text>
+                if (!workspaceModule || !isInView) return null;
+                return (
+                  <Accordion.Item key={workspaceModule.id} value={workspaceModule.id}>
+                    <Accordion.Control>
+                      <Group gap={8}>
+                        <ActionIcon variant="subtle" color="dark" component="div">
+                          <workspaceModule.icon size={18} />
+                        </ActionIcon>
+                        <Text>{workspaceModule.name}</Text>
 
-                              {item.onCreate && (
-                                <ActionIcon
-                                  variant="light"
-                                  color="gray"
-                                  size="sm"
-                                  component="div"
-                                  onClick={(e) => {
-                                    e.preventDefault();
-                                    e.stopPropagation();
-                                    const customerData = customer;
-                                    if (!customerData) return;
+                        {item.onCreate && (
+                          <ActionIcon
+                            variant="light"
+                            color="gray"
+                            size="sm"
+                            component="div"
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              const customerData = customer;
+                              if (!customerData) return;
 
-                                    item.onCreate?.(customerData, {
-                                      actions: {
-                                        createLoan: () => {
-                                          modalCreateLoanRef.current?.open({
-                                            customer: customerData,
-                                          });
-                                        },
-                                        createBooking: () => {
-                                          modalCreateBookingRef.current?.open({
-                                            customer: customerData,
-                                          });
-                                        },
-                                      },
+                              item.onCreate?.(customerData, {
+                                actions: {
+                                  createLoan: () => {
+                                    modalCreateLoanRef.current?.open({
+                                      customer: customerData,
                                     });
-                                  }}
-                                >
-                                  <IconPlus size={14} />
-                                </ActionIcon>
-                              )}
-                            </Group>
-                          </Accordion.Control>
+                                  },
+                                  createBooking: () => {
+                                    modalCreateBookingRef.current?.open({
+                                      customer: customerData,
+                                    });
+                                  },
+                                },
+                              });
+                            }}
+                          >
+                            <IconPlus size={14} />
+                          </ActionIcon>
+                        )}
+                      </Group>
+                    </Accordion.Control>
 
-                          <Accordion.Panel>
-                            <item.component customer={customer} />
-                          </Accordion.Panel>
-                        </Accordion.Item>
-                      );
-                    })}
-                </Accordion>
-              </ScrollArea>
-            );
-          }}
-        </FlexSizeLegacy>
+                    <Accordion.Panel>
+                      <item.component customer={customer} />
+                    </Accordion.Panel>
+                  </Accordion.Item>
+                );
+              })}
+          </Accordion>
+        </ScrollArea.Autosize>
 
         <ModalCreateBooking ref={modalCreateBookingRef} />
         <ModalCreateLoan ref={modalCreateLoanRef} />

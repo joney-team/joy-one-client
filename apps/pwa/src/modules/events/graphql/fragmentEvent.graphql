@@ -5,6 +5,7 @@ fragment Event on Event {
   ref
   time
   type
+  typeName
   channel
   userId
   actionType

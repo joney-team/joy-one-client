@@ -6,13 +6,18 @@ import GetOrdersDocument from "@/modules/orders/graphql/getOrders.graphql";
 import { OrderCard } from "@/modules/orders/order-card";
 import { Stack } from "@mantine/core";
 import { AccordionItemComponent } from "./message-box-metadata-types";
+import { useMemo } from "react";
 
 export const MessageBoxMetadataOrders: AccordionItemComponent = ({ customer }) => {
+  const params = useMemo(() => {
+    return {
+      relatedCustomerId: customer._id,
+    };
+  }, [customer._id]);
+
   const orders = useGraphqlList<OrderFragment>({
     query: GetOrdersDocument,
-    params: {
-      relatedCustomerId: customer._id,
-    },
+    params,
     events: [
       EventType.OrderNew,
       EventType.OrderUpdated,

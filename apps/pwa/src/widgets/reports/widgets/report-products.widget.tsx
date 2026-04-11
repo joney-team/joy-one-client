@@ -3,7 +3,6 @@
 import { Button } from "@/components/buttons/button";
 import { Circle } from "@/components/circle";
 import { Empty } from "@/components/empty";
-import { FlexSizeLegacy } from "@/components/flex-size-legacy";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { NumberFormat, numberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
@@ -112,8 +111,8 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
 
   return (
     <Card shadow="xs" p={0} w="100%" h="100%">
-      <Stack h="100%">
-        <Stack px={16} pt={16}>
+      <Stack h="100%" mih={0}>
+        <Stack px="md" pt="md">
           <SectionTitle name={<Trans>Products/Services</Trans>} icon={IconReportAnalytics} />
 
           <Renderer visible={props.ctx.isFetching}>
@@ -128,7 +127,7 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
         />
 
         <Renderer visible={!props.ctx.isFetching && Object.keys(groupByProducts).length > 0}>
-          <Group gap={10} px={16}>
+          <Group gap={10} px="md">
             {Object.values(ProductType).map((v) => {
               const isActive = filterState.current.productType === v;
               const Icon = productTypes[v].icon;
@@ -168,78 +167,72 @@ export const ReportProductsWidget: FC<WidgetProps<ReportWidgetsContext>> = (prop
             })}
           </Group>
 
-          <FlexSizeLegacy>
-            {(size) => {
-              return (
-                <ScrollArea.Autosize mah={size.height}>
-                  <Stack px={16}>
-                    <Empty visible={_groupByProducts.length === 0} />
+          <ScrollArea.Autosize mah="100%" h="100%">
+            <Stack px="md">
+              <Empty visible={_groupByProducts.length === 0} />
 
-                    <Renderer visible={_groupByProducts.length > 0}>
-                      <Table striped withRowBorders withTableBorder withColumnBorders stickyHeader>
-                        <Table.Thead>
-                          <Table.Tr>
-                            <Table.Th w={40}>#</Table.Th>
-                            <Table.Th>
-                              <Trans>Name</Trans>
-                            </Table.Th>
-                            <Table.Th w={80} ta="right">
-                              <Trans>QTY</Trans>
-                            </Table.Th>
-                            <Table.Th w={200} ta="right">
-                              <Trans>Revenue</Trans>
-                            </Table.Th>
-                            {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
-                              <Table.Th w={200} ta="right">
-                                <Trans>Profit</Trans>
-                              </Table.Th>
-                            )}
-                          </Table.Tr>
-                        </Table.Thead>
+              <Renderer visible={_groupByProducts.length > 0}>
+                <Table striped withRowBorders withTableBorder withColumnBorders stickyHeader>
+                  <Table.Thead>
+                    <Table.Tr>
+                      <Table.Th w={40}>#</Table.Th>
+                      <Table.Th>
+                        <Trans>Name</Trans>
+                      </Table.Th>
+                      <Table.Th w={80} ta="right">
+                        <Trans>QTY</Trans>
+                      </Table.Th>
+                      <Table.Th w={200} ta="right">
+                        <Trans>Revenue</Trans>
+                      </Table.Th>
+                      {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
+                        <Table.Th w={200} ta="right">
+                          <Trans>Profit</Trans>
+                        </Table.Th>
+                      )}
+                    </Table.Tr>
+                  </Table.Thead>
 
-                        <Table.Tbody>
-                          {_groupByProducts.map((productReport, i) => {
-                            return (
-                              <Table.Tr key={productReport.productId}>
-                                <Table.Td>{i + 1}</Table.Td>
-                                <Table.Td>
-                                  <Stack gap={3}>
-                                    <Anchor
-                                      fw={600}
-                                      c="dark"
-                                      component={Link}
-                                      href={`/${productReport.productType.toLowerCase()}s/${
-                                        productReport.productId
-                                      }`}
-                                    >
-                                      {productReport.productName}
-                                    </Anchor>
+                  <Table.Tbody>
+                    {_groupByProducts.map((productReport, i) => {
+                      return (
+                        <Table.Tr key={productReport.productId}>
+                          <Table.Td>{i + 1}</Table.Td>
+                          <Table.Td>
+                            <Stack gap={3}>
+                              <Anchor
+                                fw={600}
+                                c="dark"
+                                component={Link}
+                                href={`/${productReport.productType.toLowerCase()}s/${
+                                  productReport.productId
+                                }`}
+                              >
+                                {productReport.productName}
+                              </Anchor>
 
-                                    <RelatedItems items={productReport.items} />
-                                  </Stack>
-                                </Table.Td>
-                                <Table.Td w={80} ta="right">
-                                  <NumberFormat value={productReport.qtySold} />
-                                </Table.Td>
-                                <Table.Td w={200} ta="right">
-                                  <CurrencyFormat value={productReport.revenue} />
-                                </Table.Td>
-                                {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
-                                  <Table.Td w={200} ta="right">
-                                    <CurrencyFormat value={productReport.profit} />
-                                  </Table.Td>
-                                )}
-                              </Table.Tr>
-                            );
-                          })}
-                        </Table.Tbody>
-                      </Table>
-                    </Renderer>
-                  </Stack>
-                </ScrollArea.Autosize>
-              );
-            }}
-          </FlexSizeLegacy>
+                              <RelatedItems items={productReport.items} />
+                            </Stack>
+                          </Table.Td>
+                          <Table.Td w={80} ta="right">
+                            <NumberFormat value={productReport.qtySold} />
+                          </Table.Td>
+                          <Table.Td w={200} ta="right">
+                            <CurrencyFormat value={productReport.revenue} />
+                          </Table.Td>
+                          {workspace.hasPermission(WorkspacePermission.REPORTS_VIEW) && (
+                            <Table.Td w={200} ta="right">
+                              <CurrencyFormat value={productReport.profit} />
+                            </Table.Td>
+                          )}
+                        </Table.Tr>
+                      );
+                    })}
+                  </Table.Tbody>
+                </Table>
+              </Renderer>
+            </Stack>
+          </ScrollArea.Autosize>
         </Renderer>
       </Stack>
     </Card>

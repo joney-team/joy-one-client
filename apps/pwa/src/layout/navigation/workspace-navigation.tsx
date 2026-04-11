@@ -16,7 +16,6 @@ import {
   useWorkspaceModules,
   WorkspaceModuleId,
 } from "@/modules/workspaces/workspace-modules";
-import { nonLoading } from "@/utils/non-loading";
 import { String } from "@/utils/string.utils";
 import { Trans } from "@lingui/react/macro";
 import {
@@ -31,19 +30,11 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical } from "@tabler/icons-react";
-import dynamic from "next/dynamic";
 import { FC, Fragment, useMemo } from "react";
 import { Renderer } from "../../components/renderer";
 import { useNavigationWidth, workspaceLayoutConfig } from "../hooks/use-workspace-layout";
+import { WorkspaceNavigationDrawer } from "./workspace-navigation-drawer";
 import { WorkspaceNavigationMenu } from "./workspace-navigation-menu";
-
-const WorkspaceNavigationDrawer = dynamic(
-  () => import("./workspace-navigation-drawer").then((mod) => mod.WorkspaceNavigationDrawer),
-  {
-    ssr: false,
-    loading: nonLoading,
-  },
-);
 
 export const WorkspaceNavigation: FC = () => {
   const layout = useLayout();
