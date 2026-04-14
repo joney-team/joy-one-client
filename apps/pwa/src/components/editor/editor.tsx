@@ -49,6 +49,7 @@ interface EditorProps extends Partial<Omit<RichTextEditorProps, "defaultValue">>
   isNonWrapped?: boolean;
   readonly?: boolean;
   container?: BoxProps;
+  isRawContent?: boolean;
 }
 
 function InsertImageControl() {
@@ -105,6 +106,16 @@ export interface EditorRef {
   focus: () => void;
 }
 
+export const CommonExtensions = [
+  StarterKit.configure({ link: false }),
+  Link,
+  Superscript,
+  Subscript,
+  Highlight,
+  ImageResize,
+  TextAlign.configure({ types: ["heading", "paragraph"] }),
+];
+
 export const Editor = forwardRef<EditorRef, EditorProps>(
   (
     {
@@ -121,6 +132,7 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       readonly = false,
       container,
       autoFocus = false,
+      isRawContent = false,
       ...rest
     },
     ref,
@@ -135,25 +147,26 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
     }, delay ?? 0);
 
     const editorExtensions: Extensions = useMemo(() => {
-      const ext = [
-        StarterKit.configure({ link: false }),
-        Link,
-        Superscript,
-        Subscript,
-        Highlight,
-        ImageResize,
-        TextAlign.configure({ types: ["heading", "paragraph"] }),
-        getTaskListExtension(TipTapTaskList),
-        TaskItem.configure({ nested: true }),
+      const ext: Extensions = [
+        ...CommonExtensions,
         Placeholder.configure({
           placeholder,
         }),
-        MentionExtension,
-        AttachmentExtension,
       ];
 
+      if (!isRawContent) {
+        ext.push(
+          ...[
+            MentionExtension,
+            getTaskListExtension(TipTapTaskList),
+            TaskItem.configure({ nested: true }),
+            AttachmentExtension,
+          ],
+        );
+      }
+
       return ext;
-    }, [placeholder]);
+    }, [placeholder, isRawContent]);
 
     const editor = useEditor(
       {

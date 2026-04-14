@@ -32,7 +32,7 @@ import { useForm } from "@mantine/form";
 import { useDebouncedCallback } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
 import { IconCheck, IconEye } from "@tabler/icons-react";
-import { type JSONContent } from "@tiptap/react";
+import { generateHTML, type JSONContent } from "@tiptap/react";
 import { type FC } from "react";
 import CreatePostDocument from "../graphql/createPost.graphql";
 import { PostFragment } from "../graphql/fragmentPost.graphql";
@@ -53,7 +53,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
     slug: string;
     excerpt: string;
     content?: JSONContent | null;
-    contentHtml?: string;
     thumbnail?: string;
     category?: PostFragment["category"];
     customFieldValues?: CustomFieldValue[];
@@ -63,7 +62,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       slug: post?.slug || "",
       excerpt: post?.excerpt || "",
       content: post?.content || null,
-      contentHtml: post?.contentHtml || "",
       category: post?.category,
       customFieldValues: post?.customFieldValues || [],
       thumbnail: post?.thumbnail || "",
@@ -94,6 +92,8 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         ...rest,
         customFieldValues: getCustomFieldValue(customFieldValues),
         categoryId: category?._id || null,
+        content: values.content || null,
+        contentHtml: null,
       };
 
       if (post) {
@@ -117,7 +117,6 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         slug: postData?.slug || "",
         excerpt: postData?.excerpt || "",
         content: postData?.content || null,
-        contentHtml: postData?.contentHtml || "",
         category: postData?.category || null,
         customFieldValues: postData?.customFieldValues || [],
         thumbnail: postData?.thumbnail || "",
@@ -132,13 +131,15 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onPreview = () => {
     modals.open({
-      title: <ModalHead name={t`Preview`} icon={IconEye} />,
+      title: <ModalHead name={<Trans>Preview</Trans>} icon={IconEye} />,
       fullScreen: true,
       children: (
         <Group>
           <Box
             className="prose"
-            dangerouslySetInnerHTML={{ __html: form.values.contentHtml || "" }}
+            dangerouslySetInnerHTML={{
+              __html: form.values.content ? generateHTML(form.values.content, []) : "",
+            }}
           />
         </Group>
       ),
@@ -212,6 +213,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
               <Editor
                 isEnableToolbar
+                isRawContent
                 placeholder={t`Enter content`}
                 styles={{
                   root: {
@@ -223,7 +225,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
                   },
                 }}
                 defaultValue={form.values.content}
-                onChangeHTML={(value) => form.setFieldValue("contentHtml", value)}
+                onChangeJSON={(value) => form.setFieldValue("content", value)}
               />
             </Stack>
           </Card>
