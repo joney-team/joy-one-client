@@ -4,13 +4,14 @@ import { Badge as MantineBadge } from "@mantine/core";
 import { FC, Ref } from "react";
 
 export const Badge: FC<
-  MantineBadge.Props & {
+  Omit<MantineBadge.Props, "color"> & {
     onClick?: () => void;
     ref?: Ref<HTMLDivElement> | undefined;
+    color?: string | null;
   }
 > = ({ children, onClick, ...rest }) => {
   return (
-    <MantineBadge {...rest} onClick={onClick}>
+    <MantineBadge {...rest} color={rest.color || undefined} onClick={onClick}>
       {children}
     </MantineBadge>
   );
