@@ -66,6 +66,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       contentHtml: post?.contentHtml || "",
       category: post?.category,
       customFieldValues: post?.customFieldValues || [],
+      thumbnail: post?.thumbnail || "",
     },
   });
 
@@ -119,6 +120,7 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
         contentHtml: postData?.contentHtml || "",
         category: postData?.category || null,
         customFieldValues: postData?.customFieldValues || [],
+        thumbnail: postData?.thumbnail || "",
       });
 
       form.reset();

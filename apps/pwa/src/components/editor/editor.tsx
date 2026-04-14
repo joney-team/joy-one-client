@@ -221,7 +221,11 @@ export const Editor = forwardRef<EditorRef, EditorProps>(
       >
         <RichTextEditor {...rest} editor={editor} onPaste={onPaste}>
           {isEnableToolbar && !readonly && (
-            <RichTextEditor.Toolbar sticky stickyOffset="var(--docs-header-height)">
+            <RichTextEditor.Toolbar
+              sticky
+              stickyOffset="var(--docs-header-height)"
+              styles={{ toolbar: { zIndex: 10 } }}
+            >
               <RichTextEditor.ControlsGroup>
                 <RichTextEditor.Bold />
                 <RichTextEditor.Italic />
