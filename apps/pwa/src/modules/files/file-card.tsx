@@ -7,7 +7,7 @@ import {
   detectFileType,
   getFileSizeFromUrl,
 } from "@/modules/files/file-service";
-import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewer } from "@/modules/files/modals/modal-files-viewer";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
@@ -160,7 +160,7 @@ export const FileCard: FC<FileCardProps> = ({
 
   if (type === "preview") {
     return (
-      <ModalFileGallery>
+      <ModalFilesViewer>
         {(openGallery) => {
           return (
             <Card withBorder shadow="none" p={0} w={300} {...rest}>
@@ -186,12 +186,12 @@ export const FileCard: FC<FileCardProps> = ({
             </Card>
           );
         }}
-      </ModalFileGallery>
+      </ModalFilesViewer>
     );
   }
 
   return (
-    <ModalFileGallery>
+    <ModalFilesViewer>
       {(openGallery) => (
         <Card withBorder shadow="none" p={3} maw="100%" {...rest}>
           <Stat
@@ -200,6 +200,6 @@ export const FileCard: FC<FileCardProps> = ({
           />
         </Card>
       )}
-    </ModalFileGallery>
+    </ModalFilesViewer>
   );
 };

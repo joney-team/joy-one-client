@@ -11,7 +11,7 @@ import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";
 import { useRef, type FC } from "react";
 import { fileTypes } from "./files-constants";
-import { type ModalFileGalleryRef } from "./modals/modal-file-gallery";
+import { type ModalFilesViewerRef } from "./modals/modal-files-viewer";
 
 import { nonLoading } from "@/utils/non-loading";
 import dynamic from "next/dynamic";
@@ -19,7 +19,7 @@ import { FileFragment } from "./graphql/fragmentFile.graphql";
 import GetFilesDocument from "./graphql/getFiles.graphql";
 
 const ModalFileGallery = dynamic(
-  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("@/modules/files/modals/modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   {
     ssr: false,
     loading: nonLoading,
@@ -27,7 +27,7 @@ const ModalFileGallery = dynamic(
 );
 
 export const FilesManager: FC = () => {
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
   const { t } = useLingui();
 
   return (

@@ -7,7 +7,7 @@ import { OnModalPrompt } from "@/modals/modal-prompt";
 import ApproveCustomerKycDocument from "@/modules/customer-kycs/graphql/approveCustomerKyc.graphql";
 import { CustomerKycFragment } from "@/modules/customer-kycs/graphql/fragmentCustomerKyc.graphql";
 import RejectCustomerKycDocument from "@/modules/customer-kycs/graphql/rejectCustomerKyc.graphql";
-import { ModalFileGallery, ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewer, ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { useLocations } from "@/modules/locations/locations-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
@@ -47,7 +47,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
   const router = useRouter();
   const lastVersion = kyc.versions[kyc.versions.length - 1];
   const { renderVnLocation: renderLocation } = useLocations();
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
 
   const [approveCustomerKyc] = useMutation(ApproveCustomerKycDocument);
   const [rejectCustomerKyc] = useMutation(RejectCustomerKycDocument);
@@ -237,7 +237,7 @@ export const CustomerKycCard: FC<CustomerKycCardProps> = (props) => {
         })()}
       </Stack>
 
-      <ModalFileGallery ref={modalFileGalleryRef} />
+      <ModalFilesViewer ref={modalFileGalleryRef} />
     </Card>
   );
 };

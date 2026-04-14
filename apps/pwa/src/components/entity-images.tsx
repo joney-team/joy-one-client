@@ -1,7 +1,7 @@
 "use client";
 
 import { FileType } from "@/graphql/enums.graphql";
-import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewer } from "@/modules/files/modals/modal-files-viewer";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -102,7 +102,7 @@ const EntityImage: FC<EntityImageProps> = (props) => {
   const hover = useHover();
 
   return (
-    <ModalFileGallery>
+    <ModalFilesViewer>
       {(openGallery) => {
         return (
           <Card
@@ -195,6 +195,6 @@ const EntityImage: FC<EntityImageProps> = (props) => {
           </Card>
         );
       }}
-    </ModalFileGallery>
+    </ModalFilesViewer>
   );
 };

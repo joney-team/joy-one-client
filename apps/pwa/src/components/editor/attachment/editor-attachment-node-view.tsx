@@ -26,7 +26,7 @@ import {
 import { fileTypes } from "@/modules/files/files-constants";
 import GetFileByIdDocument from "@/modules/files/graphql/getFileById.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
-import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { type ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
@@ -36,12 +36,12 @@ import { AttachmentAttrs } from "./editor-attachment-types";
 import styles from "./editor-attachment.module.css";
 
 const ModalFileGallery = dynamic(
-  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("@/modules/files/modals/modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   { ssr: false, loading: nonLoading },
 );
 
 const AttachmentFile: FC<{ fileId: string }> = ({ fileId }) => {
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
 
   const audioRef = useRef<SpectrumVisualizerRef>(null);
   const [audioStatus, setAudioStatus] = useState<SpectrumVisualizerStatus>("none");

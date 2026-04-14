@@ -115,7 +115,7 @@ export const BookingCard: FC<BookingCardProps> = (props) => {
             <RelativeTimeFormat value={startTime} />
           </Text>
 
-          <Badge color={color(bookingStatus.color)} size="xs" fz={8} variant="light">
+          <Badge color={bookingStatus.color} size="xs" fz={8} variant="light">
             {t(bookingStatuses[booking.status].label)}
           </Badge>
         </Stack>

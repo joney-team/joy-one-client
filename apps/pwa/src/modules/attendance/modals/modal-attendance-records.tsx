@@ -8,7 +8,7 @@ import { Modal } from "@/components/modal/modal";
 import { EventType } from "@/graphql/enums.graphql";
 import { type ModalConfirmRef } from "@/modals/modal-confirm";
 import { useEventsListener } from "@/modules/events/event-service";
-import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { type ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { useWorkspaceMember } from "@/modules/workspace-members/hooks/use-workspace-member";
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { nonLoading } from "@/utils/non-loading";
@@ -33,7 +33,7 @@ const ModalConfirm = dynamic(
 );
 
 const ModalFileGallery = dynamic(
-  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("@/modules/files/modals/modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   {
     ssr: false,
     loading: nonLoading,
@@ -53,7 +53,7 @@ const AttendanceRecords: FC<ModalAttendanceRecordsState> = ({ userId, date }) =>
   const { t } = useLingui();
   const [selectedDate, setSelectedDate] = useState(date);
   const { member, loading: isMemberLoading, error: memberError } = useWorkspaceMember(userId);
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
   const modalConfirmRef = useRef<ModalConfirmRef>(null);
 
   const {

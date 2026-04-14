@@ -37,7 +37,7 @@ const FilePdfViewer = dynamic(() => import("../file-pdf-viewer").then((mod) => m
   loading: nonLoading,
 });
 
-export interface ModalFileGalleryArgs {
+export interface ModalFilesViewerArgs {
   files: FileFragment[] | { url: string; _id?: string; fileName?: string; type?: FileType }[];
   index?: number;
   readonly?: boolean;
@@ -46,18 +46,18 @@ export interface ModalFileGalleryArgs {
   background?: string;
 }
 
-export interface ModalFileGalleryRef {
-  open: (props: ModalFileGalleryArgs) => void;
+export interface ModalFilesViewerRef {
+  open: (props: ModalFilesViewerArgs) => void;
   close: () => void;
 }
 
-export interface ModalFileGalleryProps {
-  children?: (open: (args: ModalFileGalleryArgs) => void) => ReactNode;
+export interface ModalFilesViewerProps {
+  children?: (open: (args: ModalFilesViewerArgs) => void) => ReactNode;
 }
 
-export const ModalFileGallery = forwardRef<ModalFileGalleryRef, ModalFileGalleryProps>(
+export const ModalFilesViewer = forwardRef<ModalFilesViewerRef, ModalFilesViewerProps>(
   (props, ref) => {
-    const [args, setArgs] = useState<ModalFileGalleryArgs | null>(null);
+    const [args, setArgs] = useState<ModalFilesViewerArgs | null>(null);
     const [index, setIndex] = useState<number>(0);
     const layout = useLayout();
     const head = 60;

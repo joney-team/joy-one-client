@@ -9,7 +9,7 @@ import { configs } from "@/configs/layout.config";
 import { FileType } from "@/graphql/types.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { InternalFileCard } from "@/modules/files/internal-file-card";
-import { ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { Trans } from "@lingui/react/macro";
 import { Box, Card, em, Group, SimpleGrid, Stack, Text, ThemeIcon } from "@mantine/core";
@@ -28,13 +28,16 @@ import { getMineTypeAccept } from "../file-service";
 import { useUploadFile } from "../hooks/use-upload-file";
 
 import { useGraphqlList } from "@/components/list/use-graphql-list";
+import { onActionLoad } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
+import { zIndexes } from "@joy-one-client/config/layout";
 import dynamic from "next/dynamic";
 import { FileFragment } from "../graphql/fragmentFile.graphql";
 import GetFilesDocument from "../graphql/getFiles.graphql";
+import styles from "./modal-files.module.css";
 
 const ModalFileGallery = dynamic(
-  () => import("./modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("./modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   {
     ssr: false,
     loading: nonLoading,
@@ -54,13 +57,14 @@ export interface ModalFilesProps {
 export interface ModalFilesRef {
   open: (args: ModalFilesArgs) => void;
   close: () => void;
+  filesViewer: ModalFilesViewerRef;
 }
 
 export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref) => {
   const layout = useLayout();
   const colorScheme = useColorScheme();
   const uploadFile = useUploadFile();
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef | null>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef | null>(null);
 
   const [args, setArgs] = useState<ModalFilesArgs | null>(null);
 
@@ -74,6 +78,7 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
     query: GetFilesDocument,
     id: "fs",
     params,
+    isSkip: !args,
   });
 
   const [_selectedFiles, setSelectedFiles] = useState<string[]>([]);
@@ -81,7 +86,10 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
     .map((v) => files.data.find((f) => f._id === v))
     .filter((v) => !!v);
 
-  const onClose = () => setArgs(null);
+  const onClose = () => {
+    setArgs(null);
+    setSelectedFiles([]);
+  };
 
   const toggleSeleteFile = (file: Pick<FileFragment, "type" | "_id" | "url" | "path">) => {
     if (!args || (args.fileTypes && !args.fileTypes.includes(file.type))) return;
@@ -115,20 +123,20 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
   useImperativeHandle(ref, () => ({
     open: (p) => setArgs(p),
     close: onClose,
+    filesViewer: modalFileGalleryRef.current!,
   }));
 
   return (
     <Fragment>
-      {typeof props.children === "function" &&
-        props.children((inArgs) => {
-          setSelectedFiles([]);
-          setArgs(inArgs);
-        })}
+      {props.children?.((inArgs) => {
+        setSelectedFiles([]);
+        setArgs(inArgs);
+      })}
 
       <Modal
         size={1200}
         yOffset={10}
-        zIndex={300}
+        zIndex={zIndexes.commonModals + 100}
         opened={!!args}
         onClose={onClose}
         name={<Trans>Files</Trans>}
@@ -180,18 +188,29 @@ export const ModalFiles = forwardRef<ModalFilesRef, ModalFilesProps>((props, ref
             <Dropzone
               flex={1}
               accept={args?.fileTypes && getMineTypeAccept(args?.fileTypes)}
-              onDrop={async (_files) => {
-                for (const file of _files) {
-                  const uploadedFile = await uploadFile(file);
-                  await files.refetch();
-                  toggleSeleteFile(uploadedFile);
-                }
-              }}
+              className={styles.Dropzone}
+              onDrop={async (tempFiles) =>
+                onActionLoad({
+                  name: <Trans>Uploading...</Trans>,
+                  process: async () => {
+                    const uploadedFiles: Pick<FileFragment, "_id" | "type" | "path">[] = [];
+
+                    for (const file of tempFiles) {
+                      const uploadedFile = await uploadFile(file);
+                      uploadedFiles.push(uploadedFile);
+                    }
+
+                    await files.refetch();
+                    setSelectedFiles(uploadedFiles.map((f) => f._id));
+                    args?.onSelectedFiles(uploadedFiles);
+                  },
+                })
+              }
             >
               <Card
                 withBorder
                 shadow="none"
-                className="clickable"
+                className={styles.DropzoneContent}
                 style={{ borderStyle: "dashed" }}
               >
                 <Group gap={10} justify="center">

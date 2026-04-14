@@ -3,7 +3,7 @@
 import { EventType } from "@/graphql/enums.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { detectFileType } from "@/modules/files/file-service";
-import { type ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { type ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -22,7 +22,7 @@ import GetFilesDocument from "./graphql/getFiles.graphql";
 import RemoveFileDocument from "./graphql/removeFile.graphql";
 
 const ModalFileGallery = dynamic(
-  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("@/modules/files/modals/modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   {
     ssr: false,
     loading: nonLoading,
@@ -52,7 +52,7 @@ export interface FilesBoxRef {
 
 export const FilesBox = forwardRef<FilesBoxRef, FilesBoxProps>((props, ref) => {
   const openRef = useRef<() => void>(null);
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
 
   const [_rawFiles, setRawFiles] = useState<File[]>([]);
   const rawFiles = props.rawFiles || _rawFiles;

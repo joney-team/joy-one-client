@@ -1,5 +1,6 @@
 import { BookingStatus } from "@/graphql/enums.graphql";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import { MantineColor } from "@mantine/core";
 import {
   Icon,
   IconAnalyze,
@@ -12,7 +13,7 @@ import {
 
 export const bookingStatuses: Record<
   BookingStatus,
-  { label: MacroMessageDescriptor; color: string; icon: Icon }
+  { label: MacroMessageDescriptor; color: MantineColor; icon: Icon }
 > = {
   [BookingStatus.JustCreated]: {
     label: defineMessage`Just created`,

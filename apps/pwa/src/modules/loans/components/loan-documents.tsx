@@ -9,7 +9,7 @@ import { Renderer } from "@/components/renderer";
 import { SectionTitle } from "@/components/session-title";
 import { FileType, LoanStatus } from "@/graphql/enums.graphql";
 import { OnModalPrompt } from "@/modals/modal-prompt";
-import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewer } from "@/modules/files/modals/modal-files-viewer";
 import { LoanAssetDataInput } from "@/modules/loans/components/loan-asset-data-inputs";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { getGoogleMapLinkCoord } from "@/modules/locations/locations-service";
@@ -245,7 +245,7 @@ export const SignareCard: FC<{ url: string }> = (props) => {
   const hover = useHover();
 
   return (
-    <ModalFileGallery>
+    <ModalFilesViewer>
       {(openGallery) => (
         <Card
           withBorder
@@ -288,6 +288,6 @@ export const SignareCard: FC<{ url: string }> = (props) => {
           </Stack>
         </Card>
       )}
-    </ModalFileGallery>
+    </ModalFilesViewer>
   );
 };

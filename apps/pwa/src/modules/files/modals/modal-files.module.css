@@ -1,0 +1,11 @@
+.Dropzone {
+  & .DropzoneContent {
+    cursor: pointer;
+  }
+
+  &[data-accept] {
+    & .DropzoneContent {
+      border-color: var(--app-primary-color);
+    }
+  }
+}

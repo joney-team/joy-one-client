@@ -3,7 +3,7 @@
 import { FileType } from "@/graphql/enums.graphql";
 import { renderFileUrl } from "@/modules/files/files-utils";
 // import { ModalFileGallery } from "@/modules/files/modals/modal-file-gallery";
-import { ModalFileGalleryRef } from "@/modules/files/modals/modal-file-gallery";
+import { ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { nonLoading } from "@/utils/non-loading";
 import { ActionIcon, Card, Center, Group, Image, ThemeIcon } from "@mantine/core";
 import { Dropzone, IMAGE_MIME_TYPE } from "@mantine/dropzone";
@@ -14,7 +14,7 @@ import { FC, useRef, useState } from "react";
 import { Renderer } from "./renderer";
 
 const ModalFileGallery = dynamic(
-  () => import("@/modules/files/modals/modal-file-gallery").then((mod) => mod.ModalFileGallery),
+  () => import("@/modules/files/modals/modal-files-viewer").then((mod) => mod.ModalFilesViewer),
   { ssr: false, loading: nonLoading },
 );
 
@@ -43,7 +43,7 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
   const size = typeof h === "number" ? h * 0.5 : h;
   const openRef = useRef<() => void>(null);
   const [loadFailed, setLoadFailed] = useState(false);
-  const modalFileGalleryRef = useRef<ModalFileGalleryRef>(null);
+  const modalFileGalleryRef = useRef<ModalFilesViewerRef>(null);
 
   const ableView = !!props.src && !loadFailed;
   const hovered = hover.hovered && (ableView || !props.readonly);
@@ -92,16 +92,18 @@ export const EntityImage: FC<EntityImageProps> = (props) => {
         shadow="none"
         component="div"
       >
-        <Renderer visible={ableView}>
-          <Image
-            src={src}
-            h="100%"
-            w="100%"
-            fit={props.fit || "cover"}
-            flex={1}
-            onError={() => setLoadFailed(true)}
-          />
-        </Renderer>
+        <Image
+          src={src}
+          h="100%"
+          w="100%"
+          fit={props.fit || "cover"}
+          flex={1}
+          onError={() => setLoadFailed(true)}
+          onLoad={() => setLoadFailed(false)}
+          style={{
+            display: ableView ? "block" : "none",
+          }}
+        />
 
         <Renderer visible={!ableView}>
           <Center h="100%">

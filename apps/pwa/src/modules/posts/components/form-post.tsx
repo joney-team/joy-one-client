@@ -85,25 +85,25 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
 
   const onSubmit = form.onSubmit(async (values) => {
     try {
-      const { category, customFieldValues, ...dto } = values;
+      const { category, customFieldValues, ...rest } = values;
 
-      let _post: PostFragment | undefined = post;
+      let postData: PostFragment | undefined = post;
 
       const input: PostInput = {
-        ...dto,
+        ...rest,
         customFieldValues: getCustomFieldValue(customFieldValues),
         categoryId: category?._id || null,
       };
 
       if (post) {
-        _post = await client
+        postData = await client
           .mutate({
             mutation: UpdatePostDocument,
             variables: { postId: post._id, input },
           })
           .then((result) => result.data?.post);
       } else {
-        _post = await client
+        postData = await client
           .mutate({
             mutation: CreatePostDocument,
             variables: { input },
@@ -112,17 +112,17 @@ export const FormPost: FC<FormPostProps> = ({ post, onSuccess }) => {
       }
 
       form.setInitialValues({
-        title: _post?.title || "",
-        slug: _post?.slug || "",
-        excerpt: _post?.excerpt || "",
-        content: _post?.content || null,
-        contentHtml: _post?.contentHtml || "",
-        category: _post?.category || null,
-        customFieldValues: _post?.customFieldValues || [],
+        title: postData?.title || "",
+        slug: postData?.slug || "",
+        excerpt: postData?.excerpt || "",
+        content: postData?.content || null,
+        contentHtml: postData?.contentHtml || "",
+        category: postData?.category || null,
+        customFieldValues: postData?.customFieldValues || [],
       });
 
       form.reset();
-      if (_post) onSuccess?.(_post);
+      if (postData) onSuccess?.(postData);
     } catch (error) {
       onFormError(form, error);
     }

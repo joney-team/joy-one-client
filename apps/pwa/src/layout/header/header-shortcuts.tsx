@@ -1,5 +1,6 @@
 "use client";
 
+import { WorkspaceType } from "@/graphql/enums.graphql";
 import { type AppRouter, useRouter } from "@/hooks/use-router";
 import { useLayout } from "@/layout/layout-context";
 import { type ModalCreateBookingRef } from "@/modules/bookings/modals/modal-create-booking";
@@ -13,6 +14,7 @@ import {
   useAvailableWorkspaceModules,
   WorkspaceModuleId,
 } from "@/modules/workspaces/workspace-modules";
+import { nonLoading } from "@/utils/non-loading";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, Menu } from "@mantine/core";
 import {
@@ -20,19 +22,16 @@ import {
   IconBolt,
   IconCalculator,
   IconCalendarPlus,
-  IconCirclePlus,
   IconClipboardPlus,
   IconCreditCardPay,
   IconPlus,
   IconStackPush,
   IconUserPlus,
 } from "@tabler/icons-react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { type FC, Fragment, useRef } from "react";
 import { Button } from "../../components/buttons/button";
-import dynamic from "next/dynamic";
-import { nonLoading } from "@/utils/non-loading";
-import { WorkspaceType } from "@/graphql/enums.graphql";
 
 const ModalLoanCalculator = dynamic(
   () =>

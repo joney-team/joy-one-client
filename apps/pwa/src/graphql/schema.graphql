@@ -1129,7 +1129,6 @@ type EventsPaginated {
 }
 
 input EventsQuery {
-  locale: String
   ref: String
   type: EventType
   userId: String
