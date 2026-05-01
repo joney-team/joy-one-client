@@ -161,7 +161,7 @@ export const LoanDisburesement: FC<LoanDisburesementProps> = (props) => {
 
   return (
     <Stack align="center">
-      <Card shadow="xs" maw="100%" w={700}>
+      <Card shadow="xs" maw="100%" w={900}>
         <Stack>
           <Text fw={500} fz={em(14)} mb={-8} ta="center">
             <Trans>Payment method</Trans>
