@@ -47,6 +47,7 @@ import CreateProductDocument from "../graphql/createProduct.graphql";
 import { ProductFragment } from "../graphql/fragmentProduct.graphql";
 import UpdateProductDocument from "../graphql/updateProduct.graphql";
 import { productTypes } from "../products-constants";
+import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
 
 export type FormProductProps = {
   onDone?: (product: ProductFragment) => void | Promise<void>;
@@ -160,7 +161,7 @@ export const FormProduct: FC<
       unit: (value) => {
         if (!value) return t`Must be provided`;
       },
-      price: (value, values) => {
+      price: (value: number | undefined, values) => {
         if (typeof value !== "number") return t`Must be provided`;
         if (value < 0) return t`Minimum amount is ${0}`;
 
@@ -218,7 +219,7 @@ export const FormProduct: FC<
         combosExpireInDays: values.combosExpireInDays,
         content: values.content,
         isStockCheck: values.isStockCheck,
-        customFieldValues: values.customFieldValues,
+        customFieldValues: removeTypeName(values.customFieldValues),
         isHiddenInReceiptWhenNoPrice: values.isHiddenInReceiptWhenNoPrice,
         maxPrice: values.maxPrice,
         minPrice: values.minPrice,
