@@ -161,7 +161,7 @@ export const FormProduct: FC<
       unit: (value) => {
         if (!value) return t`Must be provided`;
       },
-      price: (value: number | undefined, values) => {
+      price: (value: number | undefined, values: any) => {
         if (typeof value !== "number") return t`Must be provided`;
         if (value < 0) return t`Minimum amount is ${0}`;
 
@@ -219,7 +219,10 @@ export const FormProduct: FC<
         combosExpireInDays: values.combosExpireInDays,
         content: values.content,
         isStockCheck: values.isStockCheck,
-        customFieldValues: removeTypeName(values.customFieldValues),
+        customFieldValues: values.customFieldValues.map((customFielValue) => ({
+          customFieldId: customFielValue.customFieldId,
+          value: customFielValue.value,
+        })),
         isHiddenInReceiptWhenNoPrice: values.isHiddenInReceiptWhenNoPrice,
         maxPrice: values.maxPrice,
         minPrice: values.minPrice,
