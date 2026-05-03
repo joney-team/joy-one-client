@@ -1,0 +1,96 @@
+---
+title: Promotions
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Promotions
+
+Create and manage discount campaigns, coupon codes, and automatic price rules to drive sales and reward loyal customers.
+
+## Promotion Types
+
+<Tabs items={['Percentage Discount', 'Fixed Amount', 'Buy X Get Y', 'Coupon Code']}>
+  <Tabs.Tab>
+    Discount a **percentage** off the order total or specific products.
+
+    _Example: 10% off all orders above 500,000 VND_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Deduct a **fixed amount** from the order total.
+
+    _Example: Deduct 50,000 VND for orders over 300,000 VND_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Buy a specified quantity to get free or discounted items.
+
+    _Example: Buy 2 coffees, get 1 free_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    A **unique code** customers enter at checkout to redeem a discount.
+
+    _Example: Enter `SUMMER25` for 25% off_
+  </Tabs.Tab>
+</Tabs>
+
+## Creating a Promotion
+
+<Steps>
+  ### Go to Promotions
+  Click **Promotions** in the left menu, then **+ New Promotion**.
+
+  ### Set basic info
+  - **Name** — internal name (e.g. "Tết Sale 2025")
+  - **Description** — shown to staff at checkout
+  - **Type** — choose from the promotion types above
+
+  ### Configure the discount rule
+  Fill in the discount value and conditions:
+  - Minimum order value
+  - Applicable products or categories
+  - Maximum uses (total or per customer)
+
+  ### Set validity period
+  Choose a start and end date/time. Leave end date blank for an open-ended promotion.
+
+  ### Add coupon codes (optional)
+  Generate a single code or bulk-generate unique one-time codes.
+
+  ### Activate
+  Toggle the promotion **Active** and click **Save**.
+</Steps>
+
+## Promotion Conditions
+
+| Condition | Description |
+|---|---|
+| Minimum order value | Only applies if cart total exceeds threshold |
+| Specific products | Discount only applies to listed items |
+| Specific categories | Discount applies to a category of products |
+| Customer segment | Only for customers with a specific tag/label |
+| Usage limit | Max total redemptions or per-customer limit |
+
+## Coupon Codes
+
+<Callout type="info">
+  Coupon codes are entered by staff at the point of sale or by customers in an online order form.
+</Callout>
+
+- Generate a **single shared code** (e.g. `NEWCUSTOMER`)
+- Or **bulk-generate unique codes** (e.g. for a mailing campaign)
+- Set a per-code usage limit (default: 1 use per code)
+
+## Applying Promotions at Checkout
+
+1. In the Order form, click **Apply Promotion**
+2. Enter a coupon code, or browse active promotions
+3. The discount is calculated and applied automatically
+4. Only one promotion can be active per order (configurable)
+
+## Reports
+
+View promotion performance:
+- Total uses
+- Total discount value given
+- Revenue generated from promoted orders
+- Top performing promotions

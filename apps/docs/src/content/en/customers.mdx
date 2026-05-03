@@ -1,0 +1,83 @@
+---
+title: Customers
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# Customers
+
+The Customers module is JoyOne's built-in CRM. Store and manage all information about your clients in one place — contacts, history, KYC documents, and more.
+
+## Customer Profile
+
+Each customer record contains:
+
+| Field | Description |
+|---|---|
+| **Name** | Full name or business name |
+| **Phone / Email** | Primary contact details |
+| **Tags** | Labels for segmentation (e.g. VIP, Wholesale) |
+| **Assigned staff** | Who is responsible for this customer |
+| **Custom fields** | Flexible fields defined per workspace |
+| **Notes** | Internal freeform notes |
+
+## Activity Timeline
+
+Every interaction is logged automatically:
+- Orders placed
+- Appointments booked
+- Messages sent/received
+- Tasks linked to this customer
+- Invoice history
+
+## Contacts
+
+A customer can have **multiple contacts** (e.g. different decision-makers in a company). Each contact has its own name, phone, email, and role.
+
+## KYC (Know Your Customer)
+
+<Callout type="info">
+  KYC is primarily used in financial or compliance-sensitive businesses. Enable it per workspace in **Settings → Customer Forms**.
+</Callout>
+
+Upload and verify identity documents:
+- ID card / Passport
+- Business registration certificate
+- Tax code
+- Other custom documents
+
+KYC status: **Pending → Verified → Rejected**
+
+## Customer Forms
+
+Create custom intake forms to collect data from customers. Forms can be shared via link or embedded on your website. Responses are automatically attached to the customer record.
+
+## Adding a Customer
+
+<Steps>
+  ### Go to Customers
+  Click **Customers** in the left navigation.
+
+  ### Create new
+  Click **+ New Customer** (top right).
+
+  ### Fill basic info
+  Enter name, phone, email, and any custom fields.
+
+  ### Save
+  Click **Save**. The customer is now searchable and can be linked to orders, tasks, and bookings.
+</Steps>
+
+## Import / Export
+
+- **Import** customers from CSV — download the template, fill it in, and upload.
+- **Export** the full customer list or a filtered subset to CSV at any time.
+
+## Segmentation & Search
+
+Use the search bar and filter panel to find customers by:
+- Name, phone, or email
+- Tags / Labels
+- Assigned staff
+- Last activity date
+- KYC status

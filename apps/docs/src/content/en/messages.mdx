@@ -1,0 +1,114 @@
+---
+title: Messages
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Messages
+
+JoyOne's Messages module brings all your customer conversations into one unified inbox — regardless of whether they contact you via **Zalo OA** or **Facebook Messenger**.
+
+## Supported Channels
+
+| Channel | Requirements |
+|---|---|
+| **Zalo Official Account (OA)** | Connect your Zalo OA via the Zalo OA plugin |
+| **Facebook Messenger** | Connect your Facebook Page via the Meta Pages plugin |
+
+## Unified Inbox
+
+All incoming messages from all connected channels appear in a single inbox — **Message Boxes**. You can filter by channel, status, or assigned staff.
+
+### Conversation States
+
+| State | Meaning |
+|---|---|
+| Open | Active conversation, needs response |
+| Pending | Waiting for customer reply |
+| Resolved | Conversation closed |
+| Spam | Marked as spam, hidden from main inbox |
+
+## Setting Up Channels
+
+<Tabs items={['Zalo OA', 'Facebook Messenger']}>
+  <Tabs.Tab>
+    <Steps>
+      ### Go to Plugins
+      Navigate to **Settings → Plugins → Zalo OA**.
+
+      ### Connect your OA
+      Click **Connect Zalo OA** and log in with your Zalo business account.
+
+      ### Authorize permissions
+      Grant the required permissions: send/receive messages, manage followers.
+
+      ### Done
+      Incoming Zalo OA messages now appear in your JoyOne inbox.
+    </Steps>
+
+    <Callout type="info">
+      You must be an admin of the Zalo Official Account to complete the connection.
+    </Callout>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    <Steps>
+      ### Go to Plugins
+      Navigate to **Settings → Plugins → Meta Pages**.
+
+      ### Connect your Page
+      Click **Connect Facebook Page** and log in with your Facebook business account.
+
+      ### Select the page
+      Choose the Facebook Page to connect from the dropdown.
+
+      ### Authorize permissions
+      Grant Messenger permissions (pages_messaging, pages_read_engagement).
+
+      ### Done
+      Facebook Messenger conversations now appear in your JoyOne inbox.
+    </Steps>
+
+    <Callout type="info">
+      You must be a Page admin to complete the connection. Only pages with Messenger enabled can be connected.
+    </Callout>
+  </Tabs.Tab>
+</Tabs>
+
+## Handling a Conversation
+
+1. Open **Messages** from the left menu
+2. Click any conversation to open it
+3. Read the message history on the right panel
+4. Type your reply and press **Send** (or `Ctrl+Enter`)
+5. Mark as **Resolved** when done
+
+## Assignment
+
+Assign conversations to specific staff members:
+- Click the **Assign** button in the conversation header
+- Select a team member
+- They receive a notification and the conversation appears in their queue
+
+## Customer Linking
+
+If the incoming message matches a known customer (by phone for Zalo, or by profile for Messenger), JoyOne automatically links the conversation to that customer record. You can view the customer's order history and profile without leaving the chat.
+
+## Quick Replies & Templates
+
+<Callout type="info">
+  Save frequently used responses as **Quick Replies** to respond faster. Available from the **⚡ Quick Reply** button in the message input area.
+</Callout>
+
+## Notifications
+
+Staff receive in-app and push notifications for:
+- New incoming messages
+- Messages assigned to them
+- Customer replies to resolved conversations
+
+## Limitations
+
+| Channel | Limitation |
+|---|---|
+| Zalo OA | Can only reply within 48 hours of last customer message (Zalo policy) |
+| Messenger | Standard Messaging window is 24 hours; use Message Tags for follow-ups |

@@ -1,0 +1,94 @@
+---
+title: Orders
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Orders
+
+The Orders module manages the full sales lifecycle — from draft quote to payment collection and delivery.
+
+## Order Types
+
+<Tabs items={['Sales Order', 'Management View']}>
+  <Tabs.Tab>
+    **Sales Orders** are created at point of sale — from the counter, a booking checkout, or online. They contain the items sold, the customer, discounts, and payment status.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Management View** is an overview for managers to see all orders across staff and branches, apply bulk actions, and run reports.
+  </Tabs.Tab>
+</Tabs>
+
+## Order Lifecycle
+
+```
+Draft → Confirmed → Processing → Completed
+                              ↘ Cancelled / Refunded
+```
+
+| Status | Description |
+|---|---|
+| **Draft** | Not yet submitted — editable |
+| **Confirmed** | Accepted, payment may be pending |
+| **Processing** | Being prepared or delivered |
+| **Completed** | Paid and fulfilled |
+| **Cancelled** | Order was voided |
+| **Refunded** | Payment returned to customer |
+
+## Creating an Order
+
+<Steps>
+  ### Go to Orders
+  Click **Orders** in the left menu, then **+ New Order**.
+
+  ### Select customer
+  Search by name, phone, or email. Create inline if needed.
+
+  ### Add items
+  Search your product catalog and add items. Adjust quantities and apply line-item discounts.
+
+  ### Apply promotions
+  Enter a coupon code or select an active promotion. Discount is calculated automatically.
+
+  ### Choose payment method
+  Cash, bank transfer, card, or split payment.
+
+  ### Confirm & pay
+  Click **Confirm Order** to lock it in, then **Mark as Paid** when payment is received.
+</Steps>
+
+## Payment
+
+| Method | Notes |
+|---|---|
+| Cash | Manual recording |
+| Bank Transfer | Reference number field |
+| Card | Integration with payment gateway (configured in Settings) |
+| Split | Combine any methods for partial payments |
+
+<Callout type="info">
+  Partial payments are supported. An order can be marked as **Partially Paid** while awaiting the remainder.
+</Callout>
+
+## Receipts & Invoices
+
+From any completed order you can:
+- **Print / download a receipt** (PDF)
+- **Issue an e-invoice** (via the E-Invoices plugin)
+
+## Order Linked Records
+
+Each order automatically links to:
+- The **customer** (order history visible on customer profile)
+- The **booking** (if order came from a checkout)
+- An **invoice** (if e-invoicing is enabled)
+- **Stock** (inventory is deducted on confirmation)
+
+## Filters & Reports
+
+Filter orders by:
+- Status, date range, assigned staff
+- Payment method, total range
+- Linked customer or product
+
+Export to CSV for accounting or reporting.

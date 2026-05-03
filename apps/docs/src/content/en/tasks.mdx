@@ -1,0 +1,81 @@
+---
+title: Task Management
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Task Management
+
+JoyOne's task module helps teams plan, track, and deliver work — with multiple views to match how your team operates.
+
+## Views
+
+<Tabs items={['Board', 'List', 'Gantt', 'Time Tracking']}>
+  <Tabs.Tab>
+    **Kanban Board** — Drag tasks between columns (e.g. To Do → In Progress → Done). Best for sprint-based teams. Each card shows the assignee, due date, priority, and linked customer or order.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **List View** — A flat, sortable table of all tasks. Filter by status, assignee, due date, or priority. Export to CSV with one click.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Gantt Chart** — Timeline view for project planning. Drag to resize task durations or shift start dates. Dependency lines show task relationships.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Time Tracking** — Log hours directly on a task. View per-task and per-member time reports. Useful for billing or payroll calculations.
+  </Tabs.Tab>
+</Tabs>
+
+## Creating a Task
+
+<Steps>
+  ### Open Task panel
+  Click **+ New Task** from any view, or press `T` as a keyboard shortcut.
+
+  ### Fill in details
+  - **Title** (required)
+  - **Assignees** — one or multiple team members
+  - **Due date** — pick from calendar
+  - **Priority** — Low / Medium / High / Urgent
+  - **Labels** — free-form tags for grouping
+
+  ### Link context (optional)
+  Attach the task to a **Customer**, **Order**, or **Booking** so it appears in the related record's timeline.
+
+  ### Save
+  Click **Create** or press `Ctrl+Enter`.
+</Steps>
+
+## Task States
+
+| State | Meaning |
+|---|---|
+| To Do | Not started |
+| In Progress | Being worked on |
+| In Review | Waiting for approval |
+| Done | Completed |
+| Cancelled | No longer needed |
+
+## Filters & Saved Views
+
+Use the filter bar to narrow tasks by:
+- Assignee, label, priority, status
+- Due date range
+- Linked customer or order
+
+Save any filter combination as a **Saved View** for quick access.
+
+## Notifications
+
+<Callout type="info">
+  Team members receive in-app and push notifications when they are assigned a task, mentioned in a comment, or when a task's due date is approaching.
+</Callout>
+
+## Keyboard Shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `T` | New task |
+| `F` | Open filters |
+| `G B` | Switch to Board view |
+| `G L` | Switch to List view |
+| `G G` | Switch to Gantt view |

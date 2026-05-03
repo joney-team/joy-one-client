@@ -1,0 +1,92 @@
+---
+title: Product Management
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Product Management
+
+Manage your entire product and service catalog — from simple items to complex combos, with stock tracking and category organization.
+
+## Product Types
+
+| Type | Description |
+|---|---|
+| **Product** | Physical or digital item with a price and optional stock |
+| **Service** | Non-physical offering (e.g. consultation, haircut) |
+| **Combo** | Bundled set of products/services sold together at a package price |
+
+## Product Fields
+
+| Field | Description |
+|---|---|
+| **Name** | Product display name |
+| **SKU** | Unique stock-keeping unit code |
+| **Category** | Hierarchical grouping |
+| **Price** | Selling price (supports multiple price tiers) |
+| **Cost** | Purchase/cost price for margin calculation |
+| **Unit** | e.g. pcs, kg, hour, session |
+| **Description** | Rich text description |
+| **Images** | Product photos |
+| **Status** | Active / Inactive / Out of Stock |
+
+## Categories
+
+Organize products into a tree of categories and sub-categories (e.g. **Beverages → Hot → Coffee**). Categories appear in the order form for easy selection.
+
+## Combos
+
+<Callout type="info">
+  Combos let you group multiple products or services into a single sellable package with a custom price.
+</Callout>
+
+To create a combo:
+1. Go to **Products → Combos**
+2. Click **+ New Combo**
+3. Add items and quantities
+4. Set the combo price (can be lower than the sum of individual prices)
+
+## Stock Management
+
+<Tabs items={['Stock Levels', 'Adjustments']}>
+  <Tabs.Tab>
+    View current stock for each product across all branches. Low-stock alerts are shown in the Dashboard and here.
+
+    | Column | Description |
+    |---|---|
+    | On Hand | Physical units in store |
+    | Reserved | Units committed to pending orders |
+    | Available | On Hand minus Reserved |
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Adjust stock manually for:
+    - Receiving new stock from supplier
+    - Writing off damaged/expired items
+    - Inter-branch transfers
+
+    Every adjustment is logged with a reason and the staff member who made it.
+  </Tabs.Tab>
+</Tabs>
+
+## Adding a Product
+
+<Steps>
+  ### Navigate to Products
+  Click **Products** in the left menu.
+
+  ### Create new
+  Click **+ New Product**.
+
+  ### Fill details
+  Enter name, SKU, category, price, and any other fields.
+
+  ### Set stock (if applicable)
+  Toggle **Track stock** on, then enter the opening quantity.
+
+  ### Save
+  Click **Save**. The product is immediately available in the order form.
+</Steps>
+
+## Import / Export
+
+Bulk-import products from CSV. Download the template, fill it in, and upload. All fields including images (by URL) are supported.

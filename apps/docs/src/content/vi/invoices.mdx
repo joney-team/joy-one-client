@@ -1,0 +1,78 @@
+---
+title: Hoá đơn
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# Hoá đơn
+
+Module hoá đơn của JoyOne giúp bạn tạo, gửi và theo dõi hoá đơn điện tử — tuân thủ đầy đủ quy định hoá đơn điện tử Việt Nam (Nghị định 123/2020/NĐ-CP).
+
+## Cách hoạt động
+
+Hoá đơn trong JoyOne được vận hành bởi **plugin Hoá đơn điện tử**, kết nối với nhà cung cấp hoá đơn điện tử được cấp phép. Sau khi bật, hoá đơn có thể được xuất trực tiếp từ đơn hàng.
+
+## Yêu cầu trước khi sử dụng
+
+<Callout type="warning">
+  Trước khi xuất hoá đơn điện tử, bạn phải cấu hình plugin tại **Cài đặt → Plugins → Hoá đơn điện tử** và kết nối thông tin tài khoản nhà cung cấp.
+</Callout>
+
+Cần thiết lập:
+1. Mã số thuế doanh nghiệp
+2. Tài khoản nhà cung cấp hoá đơn điện tử (ví dụ: VNPT, MISA, Viettel)
+3. Mẫu hoá đơn (do nhà cung cấp cung cấp)
+4. Chứng thư số (chữ kí số)
+
+## Xuất hoá đơn
+
+<Steps>
+  ### Hoàn thành đơn hàng
+  Hoá đơn chỉ có thể xuất từ đơn hàng ở trạng thái **Hoàn thành** hoặc **Đã xác nhận**.
+
+  ### Mở đơn hàng
+  Vào **Đơn hàng**, tìm đơn hàng cần xuất hoá đơn và mở ra.
+
+  ### Nhấn "Xuất hoá đơn"
+  Nhấn **Xuất hoá đơn** trong panel thao tác của đơn hàng.
+
+  ### Điền thông tin hoá đơn
+  - Tên và mã số thuế người mua (nếu B2B)
+  - Ký hiệu và mẫu hoá đơn (tự điền từ cấu hình plugin)
+  - Ghi chú (tuỳ chọn)
+
+  ### Gửi
+  Nhấn **Xuất**. Hoá đơn được gửi đến nhà cung cấp, ký số và trả về với số hoá đơn duy nhất.
+</Steps>
+
+## Trạng thái hoá đơn
+
+| Trạng thái | Mô tả |
+|---|---|
+| Nháp | Chưa gửi đến nhà cung cấp |
+| Đã phát hành | Đã gửi và được nhà cung cấp ký |
+| Đã gửi | Đã giao cho người mua qua email |
+| Đã huỷ | Bị huỷ bỏ (cần hoá đơn thay thế nếu bắt buộc) |
+
+## Gửi cho khách hàng
+
+Sau khi phát hành, gửi hoá đơn cho khách:
+- **Email** — đính kèm dưới dạng PDF
+- **Tải xuống** — chia sẻ file PDF hoặc XML thủ công
+
+## Huỷ hoá đơn
+
+<Callout type="warning">
+  Huỷ hoá đơn đã phát hành sẽ tạo biên bản huỷ. Tuỳ theo quy định, có thể cần phát hành hoá đơn thay thế.
+</Callout>
+
+Vào hoá đơn → **Huỷ hoá đơn** → nhập lí do. Cả bản gốc và biên bản huỷ đều được lưu giữ cho mục đích kiểm toán.
+
+## Danh sách hoá đơn
+
+Xem tất cả hoá đơn tại **Hoá đơn** trong menu trái. Lọc theo:
+- Trạng thái, khoảng ngày, mã đơn hàng
+- Tên khách hàng hoặc mã số thuế
+- Ký hiệu hoá đơn
+
+Xuất danh sách hoá đơn ra CSV cho kế toán.

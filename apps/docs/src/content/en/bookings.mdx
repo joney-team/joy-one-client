@@ -1,0 +1,74 @@
+---
+title: Scheduling
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Scheduling (Bookings)
+
+The Scheduling module lets you manage appointments, time slots, and reservations — for salons, clinics, training centres, consultancies, or any service-based business.
+
+## Views
+
+<Tabs items={['Calendar', 'List']}>
+  <Tabs.Tab>
+    **Calendar View** — Day, Week, and Month grids. Each appointment appears as a colour-coded block. Drag to reschedule. Click to view details or check in a customer.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **List View** — A flat, sortable table of all bookings. Good for filtering by staff, service, or date range.
+  </Tabs.Tab>
+</Tabs>
+
+## Creating a Booking
+
+<Steps>
+  ### Open the Bookings module
+  Click **Scheduling** in the left menu.
+
+  ### Click a time slot
+  Click directly on the calendar, or click **+ New Booking**.
+
+  ### Fill in details
+  - **Customer** — search existing customers or create a new one inline
+  - **Service** — select from your product/service catalog
+  - **Staff** — assign to a team member
+  - **Date & time** — start and end time
+  - **Notes** — internal or customer-facing notes
+
+  ### Confirm
+  Click **Save**. The booking appears on the calendar and the customer receives a notification (if enabled).
+</Steps>
+
+## Booking Statuses
+
+| Status | Meaning |
+|---|---|
+| Scheduled | Confirmed and upcoming |
+| Checked In | Customer arrived |
+| Completed | Service delivered |
+| No Show | Customer did not arrive |
+| Cancelled | Booking was cancelled |
+
+## Staff Availability
+
+Set working hours for each staff member under **Settings → Staff**. The calendar will only show available time slots when creating a booking.
+
+<Callout type="info">
+  Blocked times (e.g. lunch breaks, days off) are also respected — they appear as grey on the calendar.
+</Callout>
+
+## Reminders & Notifications
+
+Configure automatic reminders via:
+- In-app notification
+- Zalo OA message (if integrated)
+- Messenger message (if integrated)
+
+Reminder timing is set per workspace (e.g. 24 hours before, 2 hours before).
+
+## Linked Records
+
+Each booking is automatically linked to:
+- The **customer** record (appears in their activity timeline)
+- An **order** (if the booking is paid, an order is created)
+- A **task** (optionally, create a task for the responsible staff)

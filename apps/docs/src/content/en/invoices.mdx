@@ -1,0 +1,78 @@
+---
+title: Invoices
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# Invoices
+
+JoyOne's invoice module lets you generate, send, and track electronic invoices — fully compliant with Vietnamese e-invoice regulations (Nghị định 123/2020/NĐ-CP).
+
+## How It Works
+
+Invoices in JoyOne are powered by the **E-Invoices plugin**, which connects to a certified e-invoice provider. Once enabled, invoices can be issued directly from an order.
+
+## Prerequisites
+
+<Callout type="warning">
+  Before issuing e-invoices, you must configure the E-Invoices plugin under **Settings → Plugins → E-Invoices** and connect your e-invoice provider credentials.
+</Callout>
+
+Required setup:
+1. Tax code (Mã số thuế) of your business
+2. E-invoice provider account (e.g. VNPT, MISA, Viettel)
+3. Invoice template (provided by your e-invoice provider)
+4. Digital signature certificate
+
+## Issuing an Invoice
+
+<Steps>
+  ### Complete the order
+  An invoice can only be issued from an order in **Completed** or **Confirmed** status.
+
+  ### Open the order
+  Go to **Orders**, find the relevant order, and open it.
+
+  ### Click "Issue Invoice"
+  Click **Issue Invoice** in the order actions panel.
+
+  ### Fill invoice details
+  - Buyer name and tax code (if B2B)
+  - Invoice series and template (pre-filled from plugin config)
+  - Notes (optional)
+
+  ### Submit
+  Click **Issue**. The invoice is sent to your e-invoice provider, signed digitally, and returned with a unique invoice number.
+</Steps>
+
+## Invoice Statuses
+
+| Status | Description |
+|---|---|
+| Draft | Not yet submitted to provider |
+| Issued | Submitted and signed by provider |
+| Sent | Delivered to buyer by email |
+| Cancelled | Voided (requires replacement invoice if applicable) |
+
+## Sending to Customers
+
+After issuing, send the invoice to the customer:
+- **Email** — attached as a PDF
+- **Download** — share the PDF or XML file manually
+
+## Cancelling an Invoice
+
+<Callout type="warning">
+  Cancelling an issued invoice creates a cancellation record. Depending on regulations, a replacement invoice may be required.
+</Callout>
+
+Go to the invoice → **Cancel Invoice** → provide a reason. Both the original and cancellation records are kept for audit purposes.
+
+## Invoice List
+
+View all invoices under **Invoices** in the left menu. Filter by:
+- Status, date range, order reference
+- Customer name or tax code
+- Invoice series
+
+Export the invoice list to CSV for your accountant.

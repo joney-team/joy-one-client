@@ -1,0 +1,114 @@
+---
+title: Tin nhắn
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Tin nhắn
+
+Module Tin nhắn của JoyOne tập hợp tất cả cuộc hội thoại với khách hàng vào một hộp thư hợp nhất — dù họ liên hệ qua **Zalo OA** hay **Facebook Messenger**.
+
+## Kênh hỗ trợ
+
+| Kênh | Yêu cầu |
+|---|---|
+| **Zalo Official Account (OA)** | Kết nối Zalo OA qua plugin Zalo OA |
+| **Facebook Messenger** | Kết nối Fanpage Facebook qua plugin Meta Pages |
+
+## Hộp thư hợp nhất
+
+Tất cả tin nhắn đến từ mọi kênh đều xuất hiện trong một hộp thư duy nhất — **Message Boxes**. Lọc theo kênh, trạng thái hoặc nhân viên phụ trách.
+
+### Trạng thái hội thoại
+
+| Trạng thái | Ý nghĩa |
+|---|---|
+| Đang mở | Cuộc hội thoại chủ động, cần phản hồi |
+| Chờ | Đang chờ khách hàng phản hồi |
+| Đã giải quyết | Đã đóng hội thoại |
+| Spam | Được đánh dấu spam, ẩn khỏi hộp thư chính |
+
+## Kết nối kênh
+
+<Tabs items={['Zalo OA', 'Facebook Messenger']}>
+  <Tabs.Tab>
+    <Steps>
+      ### Vào Plugins
+      Vào **Cài đặt → Plugins → Zalo OA**.
+
+      ### Kết nối OA
+      Nhấn **Kết nối Zalo OA** và đăng nhập bằng tài khoản doanh nghiệp Zalo.
+
+      ### Cấp quyền
+      Cấp các quyền cần thiết: gửi/nhận tin nhắn, quản lí người theo dõi.
+
+      ### Hoàn tất
+      Tin nhắn Zalo OA đến sẽ xuất hiện trong hộp thư JoyOne.
+    </Steps>
+
+    <Callout type="info">
+      Bạn phải là admin của Zalo Official Account để hoàn tất kết nối.
+    </Callout>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    <Steps>
+      ### Vào Plugins
+      Vào **Cài đặt → Plugins → Meta Pages**.
+
+      ### Kết nối Fanpage
+      Nhấn **Kết nối Fanpage Facebook** và đăng nhập bằng tài khoản Facebook doanh nghiệp.
+
+      ### Chọn trang
+      Chọn Fanpage cần kết nối từ danh sách thả xuống.
+
+      ### Cấp quyền
+      Cấp quyền Messenger (pages_messaging, pages_read_engagement).
+
+      ### Hoàn tất
+      Tin nhắn Facebook Messenger sẽ xuất hiện trong hộp thư JoyOne.
+    </Steps>
+
+    <Callout type="info">
+      Bạn phải là admin của Fanpage để hoàn tất kết nối. Chỉ các trang đã bật Messenger mới có thể kết nối được.
+    </Callout>
+  </Tabs.Tab>
+</Tabs>
+
+## Xử lí hội thoại
+
+1. Mở **Tin nhắn** từ menu trái
+2. Nhấn vào bất kỳ hội thoại nào để mở
+3. Đọc lịch sử tin nhắn ở panel bên phải
+4. Gõ phản hồi và nhấn **Gửi** (hoặc `Ctrl+Enter`)
+5. Đánh dấu **Đã giải quyết** khi xong
+
+## Phân công
+
+Phân công hội thoại cho nhân viên cụ thể:
+- Nhấn nút **Phân công** trên thanh tiêu đề hội thoại
+- Chọn thành viên nhóm
+- Họ nhận thông báo và hội thoại xuất hiện trong hàng đợi của họ
+
+## Liên kết khách hàng
+
+Nếu tin nhắn đến khớp với khách hàng đã biết (theo số điện thoại với Zalo, theo profile với Messenger), JoyOne tự động liên kết hội thoại với hồ sơ khách. Bạn có thể xem lịch sử đơn hàng và hồ sơ khách mà không cần rời khỏi cửa sổ chat.
+
+## Trả lời nhanh & Mẫu tin nhắn
+
+<Callout type="info">
+  Lưu các câu trả lời thường dùng thành **Trả lời nhanh** để phản hồi nhanh hơn. Truy cập từ nút **⚡ Trả lời nhanh** trong ô nhập tin nhắn.
+</Callout>
+
+## Thông báo
+
+Nhân viên nhận thông báo trong ứng dụng và push notification khi:
+- Có tin nhắn mới đến
+- Hội thoại được phân công cho họ
+- Khách hàng phản hồi hội thoại đã đóng
+
+## Giới hạn nền tảng
+
+| Kênh | Giới hạn |
+|---|---|
+| Zalo OA | Chỉ có thể phản hồi trong vòng 48 giờ kể từ tin nhắn cuối của khách (chính sách Zalo) |
+| Messenger | Cửa sổ Gửi tin chuẩn là 24 giờ; dùng Message Tags cho các tin nhắn theo dõi |

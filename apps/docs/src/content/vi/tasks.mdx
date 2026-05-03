@@ -1,0 +1,81 @@
+---
+title: Quản lí công việc
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Quản lí công việc
+
+Module công việc của JoyOne giúp đội nhóm lập kế hoạch, theo dõi và hoàn thành công việc — với nhiều chế độ xem phù hợp cách làm việc của từng nhóm.
+
+## Các chế độ xem
+
+<Tabs items={['Bảng Kanban', 'Danh sách', 'Gantt', 'Theo dõi thời gian']}>
+  <Tabs.Tab>
+    **Bảng Kanban** — Kéo thả công việc giữa các cột (ví dụ: Chờ xử lí → Đang làm → Hoàn thành). Phù hợp với nhóm làm việc theo sprint. Mỗi thẻ hiển thị người phụ trách, hạn chót, độ ưu tiên, và liên kết khách hàng hoặc đơn hàng.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Danh sách** — Bảng phẳng, có thể sắp xếp tất cả công việc. Lọc theo trạng thái, người phụ trách, hạn chót hoặc độ ưu tiên. Xuất CSV chỉ một cú nhấp.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Biểu đồ Gantt** — Xem dòng thời gian cho lập kế hoạch dự án. Kéo để thay đổi thời lượng hoặc dời ngày bắt đầu. Các đường phụ thuộc thể hiện mối quan hệ giữa công việc.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Theo dõi thời gian** — Ghi nhật kí giờ làm trực tiếp trên công việc. Xem báo cáo thời gian theo từng công việc hoặc từng thành viên. Hữu ích cho tính toán thanh toán hoặc lương.
+  </Tabs.Tab>
+</Tabs>
+
+## Tạo công việc
+
+<Steps>
+  ### Mở panel Công việc
+  Nhấn **+ Công việc mới** từ bất kỳ chế độ xem nào, hoặc nhấn phím tắt `T`.
+
+  ### Điền thông tin
+  - **Tiêu đề** (bắt buộc)
+  - **Người phụ trách** — một hoặc nhiều thành viên
+  - **Hạn chót** — chọn từ lịch
+  - **Độ ưu tiên** — Thấp / Trung bình / Cao / Khẩn cấp
+  - **Nhãn** — thẻ tự do để nhóm công việc
+
+  ### Liên kết ngữ cảnh (tuỳ chọn)
+  Gắn công việc với **Khách hàng**, **Đơn hàng** hoặc **Lịch hẹn** để nó xuất hiện trong dòng thời gian của hồ sơ liên quan.
+
+  ### Lưu
+  Nhấn **Tạo** hoặc `Ctrl+Enter`.
+</Steps>
+
+## Trạng thái công việc
+
+| Trạng thái | Ý nghĩa |
+|---|---|
+| Chờ xử lí | Chưa bắt đầu |
+| Đang làm | Đang được thực hiện |
+| Chờ xem xét | Chờ phê duyệt |
+| Hoàn thành | Đã xong |
+| Huỷ | Không còn cần thiết |
+
+## Bộ lọc & Chế độ xem đã lưu
+
+Dùng thanh lọc để thu hẹp danh sách công việc theo:
+- Người phụ trách, nhãn, độ ưu tiên, trạng thái
+- Khoảng ngày hạn chót
+- Khách hàng hoặc đơn hàng liên kết
+
+Lưu bất kỳ kết hợp bộ lọc nào thành **Chế độ xem đã lưu** để truy cập nhanh.
+
+## Thông báo
+
+<Callout type="info">
+  Thành viên nhận thông báo trong ứng dụng và push notification khi được giao công việc, được nhắc đến trong bình luận, hoặc khi công việc sắp đến hạn.
+</Callout>
+
+## Phím tắt
+
+| Phím tắt | Hành động |
+|---|---|
+| `T` | Công việc mới |
+| `F` | Mở bộ lọc |
+| `G B` | Chuyển sang Kanban |
+| `G L` | Chuyển sang Danh sách |
+| `G G` | Chuyển sang Gantt |

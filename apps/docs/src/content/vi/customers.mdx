@@ -1,0 +1,83 @@
+---
+title: Khách hàng
+---
+
+import { Callout, Steps } from 'nextra/components'
+
+# Khách hàng
+
+Module Khách hàng là CRM tích hợp sẵn của JoyOne. Lưu trữ và quản lí toàn bộ thông tin về khách hàng — liên hệ, lịch sử giao dịch, tài liệu KYC và nhiều hơn nữa.
+
+## Hồ sơ khách hàng
+
+Mỗi hồ sơ khách hàng bao gồm:
+
+| Trường | Mô tả |
+|---|---|
+| **Tên** | Họ tên hoặc tên doanh nghiệp |
+| **Điện thoại / Email** | Thông tin liên hệ chính |
+| **Nhãn** | Nhãn phân loại (ví dụ: VIP, Sỉ, Thân thiết) |
+| **Nhân viên phụ trách** | Người chịu trách nhiệm chăm sóc khách hàng |
+| **Trường tuỳ chỉnh** | Các trường linh hoạt do workspace định nghĩa |
+| **Ghi chú** | Ghi chú nội bộ dạng tự do |
+
+## Dòng thời gian hoạt động
+
+Mọi tương tác được ghi lại tự động:
+- Đơn hàng đã đặt
+- Lịch hẹn đã đặt
+- Tin nhắn đã gửi/nhận
+- Công việc liên kết với khách hàng
+- Lịch sử hoá đơn
+
+## Danh sách liên hệ
+
+Một khách hàng có thể có **nhiều liên hệ** (ví dụ: nhiều người ra quyết định trong một công ty). Mỗi liên hệ có tên, điện thoại, email và vai trò riêng.
+
+## KYC (Xác minh danh tính)
+
+<Callout type="info">
+  KYC chủ yếu dùng cho các doanh nghiệp trong lĩnh vực tài chính hoặc cần tuân thủ quy định. Bật tính năng này theo workspace tại **Cài đặt → Biểu mẫu khách hàng**.
+</Callout>
+
+Tải lên và xác minh giấy tờ:
+- CMND / CCCD / Hộ chiếu
+- Giấy chứng nhận đăng kí kinh doanh
+- Mã số thuế
+- Các tài liệu tuỳ chỉnh khác
+
+Trạng thái KYC: **Chờ xử lí → Đã xác minh → Từ chối**
+
+## Biểu mẫu khách hàng
+
+Tạo biểu mẫu thu thập thông tin tuỳ chỉnh từ khách hàng. Biểu mẫu có thể chia sẻ qua link hoặc nhúng vào website. Phản hồi được tự động gắn vào hồ sơ khách hàng.
+
+## Thêm khách hàng mới
+
+<Steps>
+  ### Vào mục Khách hàng
+  Nhấn **Khách hàng** trong thanh điều hướng trái.
+
+  ### Tạo mới
+  Nhấn **+ Khách hàng mới** (góc trên phải).
+
+  ### Điền thông tin cơ bản
+  Nhập tên, điện thoại, email và các trường tuỳ chỉnh.
+
+  ### Lưu
+  Nhấn **Lưu**. Khách hàng ngay lập tức có thể tìm kiếm và liên kết với đơn hàng, công việc, lịch hẹn.
+</Steps>
+
+## Import / Export
+
+- **Import** danh sách khách hàng từ CSV — tải template, điền thông tin và tải lên.
+- **Export** toàn bộ danh sách hoặc một tập đã lọc ra CSV bất kỳ lúc nào.
+
+## Phân loại & Tìm kiếm
+
+Dùng thanh tìm kiếm và panel lọc để tìm khách hàng theo:
+- Tên, điện thoại hoặc email
+- Nhãn / Phân loại
+- Nhân viên phụ trách
+- Ngày hoạt động gần nhất
+- Trạng thái KYC

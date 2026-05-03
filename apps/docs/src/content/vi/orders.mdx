@@ -1,0 +1,94 @@
+---
+title: Đơn hàng
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Đơn hàng
+
+Module Đơn hàng quản lí toàn bộ vòng đời bán hàng — từ báo giá nháp đến thu tiền và giao hàng.
+
+## Loại đơn hàng
+
+<Tabs items={['Đơn bán hàng', 'Góc nhìn quản lí']}>
+  <Tabs.Tab>
+    **Đơn bán hàng** được tạo tại điểm bán — từ quầy, thanh toán sau lịch hẹn hoặc đặt hàng online. Chứa danh sách hàng, khách hàng, giảm giá và trạng thái thanh toán.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Góc nhìn quản lí** là tổng quan cho quản lí để xem tất cả đơn hàng theo nhân viên và chi nhánh, thực hiện thao tác hàng loạt và xem báo cáo.
+  </Tabs.Tab>
+</Tabs>
+
+## Vòng đời đơn hàng
+
+```
+Nháp → Đã xác nhận → Đang xử lí → Hoàn thành
+                                 ↘ Đã huỷ / Hoàn tiền
+```
+
+| Trạng thái | Mô tả |
+|---|---|
+| **Nháp** | Chưa gửi — còn chỉnh sửa được |
+| **Đã xác nhận** | Đã chấp nhận, có thể chưa thanh toán |
+| **Đang xử lí** | Đang chuẩn bị hoặc giao hàng |
+| **Hoàn thành** | Đã thanh toán và thực hiện |
+| **Đã huỷ** | Đơn hàng đã bị huỷ bỏ |
+| **Hoàn tiền** | Đã hoàn trả tiền cho khách |
+
+## Tạo đơn hàng
+
+<Steps>
+  ### Vào mục Đơn hàng
+  Nhấn **Đơn hàng** trong menu trái, rồi nhấn **+ Đơn hàng mới**.
+
+  ### Chọn khách hàng
+  Tìm theo tên, điện thoại hoặc email. Tạo nhanh nếu chưa có.
+
+  ### Thêm hàng hoá
+  Tìm trong danh mục sản phẩm và thêm vào đơn. Điều chỉnh số lượng và áp dụng giảm giá theo dòng.
+
+  ### Áp dụng khuyến mãi
+  Nhập mã giảm giá hoặc chọn chương trình khuyến mãi đang hoạt động. Chiết khấu được tính tự động.
+
+  ### Chọn phương thức thanh toán
+  Tiền mặt, chuyển khoản, thẻ hoặc thanh toán kết hợp.
+
+  ### Xác nhận & Thu tiền
+  Nhấn **Xác nhận đơn hàng** để khoá lại, rồi nhấn **Đánh dấu đã thanh toán** khi nhận được tiền.
+</Steps>
+
+## Thanh toán
+
+| Phương thức | Ghi chú |
+|---|---|
+| Tiền mặt | Ghi nhận thủ công |
+| Chuyển khoản | Có trường nhập số tham chiếu |
+| Thẻ | Tích hợp với cổng thanh toán (cấu hình trong Cài đặt) |
+| Kết hợp | Kết hợp bất kỳ phương thức nào cho thanh toán một phần |
+
+<Callout type="info">
+  Thanh toán một phần được hỗ trợ. Đơn hàng có thể được đánh dấu là **Thanh toán một phần** trong khi chờ phần còn lại.
+</Callout>
+
+## Biên lai & Hoá đơn
+
+Từ bất kỳ đơn hàng hoàn thành nào bạn có thể:
+- **In / tải biên lai** (PDF)
+- **Xuất hoá đơn điện tử** (qua plugin Hoá đơn điện tử)
+
+## Hồ sơ liên kết
+
+Mỗi đơn hàng tự động liên kết với:
+- **Khách hàng** (lịch sử đơn hàng hiển thị trên hồ sơ khách)
+- **Lịch hẹn** (nếu đơn hàng từ thanh toán sau lịch hẹn)
+- **Hoá đơn** (nếu bật xuất hoá đơn điện tử)
+- **Kho hàng** (tồn kho bị trừ khi xác nhận đơn)
+
+## Bộ lọc & Báo cáo
+
+Lọc đơn hàng theo:
+- Trạng thái, khoảng ngày, nhân viên phụ trách
+- Phương thức thanh toán, khoảng tổng tiền
+- Khách hàng hoặc sản phẩm liên kết
+
+Xuất CSV cho kế toán hoặc báo cáo.

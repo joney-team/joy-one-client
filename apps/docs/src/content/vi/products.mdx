@@ -1,0 +1,92 @@
+---
+title: Quản lí sản phẩm
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Quản lí sản phẩm
+
+Quản lí toàn bộ danh mục sản phẩm và dịch vụ — từ sản phẩm đơn giản đến combo phức tạp, với theo dõi tồn kho và phân loại theo danh mục.
+
+## Loại sản phẩm
+
+| Loại | Mô tả |
+|---|---|
+| **Sản phẩm** | Hàng hoá vật lí hoặc kĩ thuật số với giá và tồn kho tuỳ chọn |
+| **Dịch vụ** | Dịch vụ phi vật lí (ví dụ: tư vấn, cắt tóc) |
+| **Combo** | Bộ sản phẩm/dịch vụ đóng gói bán cùng nhau với giá trọn gói |
+
+## Các trường thông tin sản phẩm
+
+| Trường | Mô tả |
+|---|---|
+| **Tên** | Tên hiển thị của sản phẩm |
+| **Mã SKU** | Mã định danh hàng hoá duy nhất |
+| **Danh mục** | Phân loại theo cấu trúc cây |
+| **Giá bán** | Giá niêm yết (hỗ trợ nhiều mức giá) |
+| **Giá vốn** | Giá nhập để tính lợi nhuận |
+| **Đơn vị** | ví dụ: cái, kg, giờ, buổi |
+| **Mô tả** | Mô tả dạng văn bản phong phú |
+| **Hình ảnh** | Ảnh sản phẩm |
+| **Trạng thái** | Đang bán / Ngừng bán / Hết hàng |
+
+## Danh mục
+
+Tổ chức sản phẩm thành cây danh mục và danh mục con (ví dụ: **Đồ uống → Nóng → Cà phê**). Danh mục xuất hiện trong form đặt hàng để dễ dàng lựa chọn.
+
+## Combo
+
+<Callout type="info">
+  Combo cho phép gom nhiều sản phẩm hoặc dịch vụ thành một gói bán duy nhất với giá tuỳ chỉnh.
+</Callout>
+
+Để tạo combo:
+1. Vào **Sản phẩm → Combo**
+2. Nhấn **+ Combo mới**
+3. Thêm các mặt hàng và số lượng
+4. Đặt giá combo (có thể thấp hơn tổng giá từng món)
+
+## Quản lí tồn kho
+
+<Tabs items={['Mức tồn kho', 'Điều chỉnh kho']}>
+  <Tabs.Tab>
+    Xem tồn kho hiện tại của từng sản phẩm trên tất cả chi nhánh. Cảnh báo hàng sắp hết được hiển thị trên Dashboard và tại đây.
+
+    | Cột | Mô tả |
+    |---|---|
+    | Thực tế | Số lượng vật lí trong kho |
+    | Đã đặt | Số lượng cam kết cho đơn hàng đang chờ |
+    | Khả dụng | Thực tế trừ Đã đặt |
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Điều chỉnh kho thủ công cho:
+    - Nhập hàng mới từ nhà cung cấp
+    - Xuất hàng hỏng/hết hạn
+    - Chuyển kho giữa các chi nhánh
+
+    Mọi điều chỉnh được ghi lại kèm lí do và nhân viên thực hiện.
+  </Tabs.Tab>
+</Tabs>
+
+## Thêm sản phẩm mới
+
+<Steps>
+  ### Vào mục Sản phẩm
+  Nhấn **Sản phẩm** trong menu trái.
+
+  ### Tạo mới
+  Nhấn **+ Sản phẩm mới**.
+
+  ### Điền thông tin
+  Nhập tên, SKU, danh mục, giá và các trường khác.
+
+  ### Thiết lập tồn kho (nếu cần)
+  Bật **Theo dõi kho**, sau đó nhập số lượng ban đầu.
+
+  ### Lưu
+  Nhấn **Lưu**. Sản phẩm ngay lập tức có thể sử dụng trong form đặt hàng.
+</Steps>
+
+## Import / Export
+
+Import hàng loạt sản phẩm từ CSV. Tải template, điền thông tin và tải lên. Tất cả các trường bao gồm hình ảnh (theo URL) đều được hỗ trợ.

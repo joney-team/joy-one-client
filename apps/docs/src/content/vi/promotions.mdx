@@ -1,0 +1,96 @@
+---
+title: Khuyến mãi
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Khuyến mãi
+
+Tạo và quản lí các chương trình giảm giá, mã coupon và quy tắc giá tự động để thúc đẩy doanh số và chăm sóc khách hàng thân thiết.
+
+## Loại khuyến mãi
+
+<Tabs items={['Giảm theo %', 'Giảm tiền cố định', 'Mua X tặng Y', 'Mã coupon']}>
+  <Tabs.Tab>
+    Giảm **phần trăm** trên tổng đơn hàng hoặc sản phẩm cụ thể.
+
+    _Ví dụ: Giảm 10% cho đơn hàng trên 500.000đ_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Trừ một **số tiền cố định** từ tổng đơn.
+
+    _Ví dụ: Giảm 50.000đ cho đơn hàng trên 300.000đ_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Mua đủ số lượng quy định để nhận hàng miễn phí hoặc được giảm giá.
+
+    _Ví dụ: Mua 2 cà phê, tặng 1_
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Mã duy nhất** khách hàng nhập khi thanh toán để nhận ưu đãi.
+
+    _Ví dụ: Nhập `TET2025` để giảm 25%_
+  </Tabs.Tab>
+</Tabs>
+
+## Tạo chương trình khuyến mãi
+
+<Steps>
+  ### Vào mục Khuyến mãi
+  Nhấn **Khuyến mãi** trong menu trái, rồi nhấn **+ Khuyến mãi mới**.
+
+  ### Thiết lập thông tin cơ bản
+  - **Tên** — tên nội bộ (ví dụ: "Sale Tết 2025")
+  - **Mô tả** — hiển thị cho nhân viên tại quầy thanh toán
+  - **Loại** — chọn từ các loại khuyến mãi ở trên
+
+  ### Cấu hình quy tắc giảm giá
+  Điền giá trị giảm và điều kiện:
+  - Giá trị đơn hàng tối thiểu
+  - Sản phẩm hoặc danh mục được áp dụng
+  - Số lần sử dụng tối đa (tổng hoặc theo khách)
+
+  ### Đặt thời gian hiệu lực
+  Chọn ngày/giờ bắt đầu và kết thúc. Để trống ngày kết thúc nếu không giới hạn thời gian.
+
+  ### Thêm mã coupon (tuỳ chọn)
+  Tạo một mã dùng chung hoặc tạo hàng loạt mã sử dụng một lần.
+
+  ### Kích hoạt
+  Bật trạng thái **Đang hoạt động** và nhấn **Lưu**.
+</Steps>
+
+## Điều kiện áp dụng
+
+| Điều kiện | Mô tả |
+|---|---|
+| Giá trị đơn tối thiểu | Chỉ áp dụng khi giỏ hàng đạt ngưỡng |
+| Sản phẩm cụ thể | Giảm giá chỉ cho các mặt hàng được liệt kê |
+| Danh mục cụ thể | Giảm giá cho toàn bộ danh mục sản phẩm |
+| Phân khúc khách hàng | Chỉ dành cho khách có nhãn/phân loại cụ thể |
+| Giới hạn sử dụng | Số lần dùng tối đa (tổng hoặc theo khách) |
+
+## Mã coupon
+
+<Callout type="info">
+  Mã coupon được nhập bởi nhân viên tại điểm bán hoặc khách hàng trong form đặt hàng online.
+</Callout>
+
+- Tạo **một mã dùng chung** (ví dụ: `KHACHMOI`)
+- Hoặc **tạo hàng loạt mã duy nhất** (ví dụ: cho chiến dịch email)
+- Thiết lập giới hạn sử dụng mỗi mã (mặc định: 1 lần mỗi mã)
+
+## Áp dụng khuyến mãi khi thanh toán
+
+1. Trong form Đơn hàng, nhấn **Áp dụng khuyến mãi**
+2. Nhập mã coupon, hoặc duyệt danh sách khuyến mãi đang hoạt động
+3. Chiết khấu được tính và áp dụng tự động
+4. Chỉ một khuyến mãi có thể áp dụng cho mỗi đơn (có thể cấu hình)
+
+## Báo cáo hiệu quả
+
+Xem hiệu quả của từng chương trình:
+- Tổng số lần sử dụng
+- Tổng giá trị giảm giá đã cho
+- Doanh thu từ các đơn hàng được áp dụng
+- Các chương trình hoạt động tốt nhất

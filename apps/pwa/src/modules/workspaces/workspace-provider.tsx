@@ -55,14 +55,11 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
     [workspaceMembersData, workspaceId],
   );
 
-  const select = async (workspaceId: string) => {
+  const select = async (selectedWorkspaceId: string) => {
     startAppLoading("initial-workspace");
-    setIsInitialized(true);
     client.cache.reset();
-    const success = await initialize(workspaceId);
-    if (success) {
-      emitInternalEvent(InternalEvent.WORKSPACE_CHANGED, workspaceId);
-    }
+    const success = await initialize(selectedWorkspaceId);
+    if (success) emitInternalEvent(InternalEvent.WORKSPACE_CHANGED, workspaceId);
   };
 
   const create = async (input: CreateWorkspaceInput) => {
@@ -176,7 +173,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
         initialize(currentWorkspaceId);
       } else {
         setWorkspaceId(undefined);
-        setIsInitialized(false);
+        setIsInitialized(true);
         endAppLoading("initial-workspace");
       }
     }

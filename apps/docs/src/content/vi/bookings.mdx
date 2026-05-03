@@ -1,0 +1,74 @@
+---
+title: Đặt lịch
+---
+
+import { Callout, Steps, Tabs } from 'nextra/components'
+
+# Đặt lịch
+
+Module Đặt lịch giúp bạn quản lí cuộc hẹn, khung giờ và đặt chỗ — cho salon, phòng khám, trung tâm đào tạo, tư vấn hoặc bất kỳ doanh nghiệp dịch vụ nào.
+
+## Chế độ xem
+
+<Tabs items={['Lịch', 'Danh sách']}>
+  <Tabs.Tab>
+    **Chế độ Lịch** — Lưới Ngày, Tuần và Tháng. Mỗi cuộc hẹn hiện ra dưới dạng khối màu. Kéo để đổi lịch. Nhấn để xem chi tiết hoặc check-in khách hàng.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    **Danh sách** — Bảng phẳng, có thể sắp xếp tất cả lịch hẹn. Phù hợp để lọc theo nhân viên, dịch vụ hoặc khoảng thời gian.
+  </Tabs.Tab>
+</Tabs>
+
+## Tạo lịch hẹn
+
+<Steps>
+  ### Mở module Đặt lịch
+  Nhấn **Đặt lịch** trong menu trái.
+
+  ### Nhấn vào khung giờ
+  Nhấn trực tiếp lên lịch, hoặc nhấn **+ Lịch hẹn mới**.
+
+  ### Điền thông tin
+  - **Khách hàng** — tìm khách hàng hiện có hoặc tạo mới ngay tại chỗ
+  - **Dịch vụ** — chọn từ danh mục sản phẩm/dịch vụ
+  - **Nhân viên** — chỉ định cho thành viên nhóm
+  - **Ngày & giờ** — thời gian bắt đầu và kết thúc
+  - **Ghi chú** — ghi chú nội bộ hoặc cho khách
+
+  ### Xác nhận
+  Nhấn **Lưu**. Lịch hẹn xuất hiện trên lịch và khách hàng nhận thông báo (nếu được bật).
+</Steps>
+
+## Trạng thái lịch hẹn
+
+| Trạng thái | Ý nghĩa |
+|---|---|
+| Đã đặt | Đã xác nhận và sắp tới |
+| Đã đến | Khách hàng đã có mặt |
+| Hoàn thành | Đã cung cấp dịch vụ |
+| Vắng mặt | Khách hàng không đến |
+| Đã huỷ | Lịch hẹn bị huỷ |
+
+## Lịch làm việc của nhân viên
+
+Thiết lập giờ làm việc cho từng nhân viên tại **Cài đặt → Nhân viên**. Lịch chỉ hiển thị các khung giờ còn trống khi tạo lịch hẹn.
+
+<Callout type="info">
+  Thời gian bị chặn (ví dụ: giờ nghỉ trưa, ngày nghỉ) cũng được áp dụng — chúng hiển thị màu xám trên lịch.
+</Callout>
+
+## Nhắc nhở & Thông báo
+
+Cấu hình nhắc nhở tự động qua:
+- Thông báo trong ứng dụng
+- Tin nhắn Zalo OA (nếu đã tích hợp)
+- Tin nhắn Messenger (nếu đã tích hợp)
+
+Thời gian nhắc nhở được cài đặt theo workspace (ví dụ: 24 giờ trước, 2 giờ trước).
+
+## Hồ sơ liên kết
+
+Mỗi lịch hẹn được tự động liên kết với:
+- Hồ sơ **khách hàng** (xuất hiện trong dòng thời gian của họ)
+- **Đơn hàng** (nếu lịch hẹn có thanh toán, đơn hàng được tạo tự động)
+- **Công việc** (tuỳ chọn, tạo công việc cho nhân viên phụ trách)
