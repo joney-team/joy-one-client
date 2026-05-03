@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(auth\\\\\\)/\\\\\\(admin\\\\\\))",
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(workspace\\\\\\))",
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(workspace-bare\\\\\\))",
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(public\\\\\\))",
+      "Bash(npx tsc *)"
+    ]
+  }
+}

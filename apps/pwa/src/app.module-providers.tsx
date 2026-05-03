@@ -11,25 +11,6 @@ import { FC, PropsWithChildren, useMemo } from "react";
 import { useApp } from "./app.context";
 import { nonLoading } from "./utils/non-loading";
 
-const UserAuthorization = dynamic(
-  () => import("./modules/auth/components/user-authorization").then((mod) => mod.UserAuthorization),
-  {
-    ssr: false,
-    loading: nonLoading,
-  },
-);
-
-const WorkspaceAuthorization = dynamic(
-  () =>
-    import("./modules/workspaces/workspace-authorization").then(
-      (mod) => mod.WorkspaceAuthorization,
-    ),
-  {
-    ssr: false,
-    loading: nonLoading,
-  },
-);
-
 const PreloadResource = dynamic(() => import("./components/preload-source"), {
   ssr: false,
   loading: nonLoading,
@@ -96,9 +77,6 @@ const AppModuleProviders: FC<PropsWithChildren> = (props) => {
           <PreloadResource />
           <SearchEngine />
           <InAppNotification />
-
-          <UserAuthorization />
-          <WorkspaceAuthorization />
         </ModalsProvider>
 
         <Notifications position="top-right" zIndex={zIndexes.notifications} />

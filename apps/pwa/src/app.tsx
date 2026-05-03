@@ -1,6 +1,5 @@
 "use client";
 
-import { AppLoading } from "@/components/app-loading/app-loading";
 import LangProvider from "@/modules/lang/lang-provider";
 import { wait } from "@/utils/common.utils";
 import config from "@joy-one-client/config";
@@ -41,6 +40,11 @@ import { nonLoading } from "./utils/non-loading";
 if (config.SENTRY_DSN) {
   Sentry.init({ dsn: config.SENTRY_DSN, release: packageJson.version });
 }
+
+const AppLoading = dynamic(
+  () => import("@/components/app-loading/app-loading").then((mod) => mod.AppLoading),
+  { ssr: false, loading: nonLoading },
+);
 
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
 const AppModuleProviders = dynamic(() => import("@/app.module-providers"));

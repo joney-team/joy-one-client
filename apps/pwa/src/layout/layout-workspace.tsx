@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouteRule } from "@/hooks/use-router";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { Stack } from "@mantine/core";
@@ -72,20 +71,15 @@ const WorkspaceLayoutResizing = () => {
 export const LayoutWorkspace: FC = () => {
   const layout = useLayout();
   const workspace = useWorkspace();
-  const routeRule = useRouteRule();
-
-  if (!routeRule.workspace) return null;
 
   return (
     <Fragment>
       <LayoutWorkspaceCssVariables />
       <LayoutWorkspaceHeadroom />
 
-      {!routeRule.isHideHeader && (
-        <Stack gap={0} id="workspace-header" className={styles.WorkspaceHeader}>
-          {workspace.isAvailable && <WorkspaceHeader />}
-        </Stack>
-      )}
+      <Stack gap={0} id="workspace-header" className={styles.WorkspaceHeader}>
+        {workspace.isAvailable && <WorkspaceHeader />}
+      </Stack>
 
       <Stack id="workspace-navigation" className={styles.WorkspaceNavigation}>
         {workspace.isAvailable && <WorkspaceNavigation />}

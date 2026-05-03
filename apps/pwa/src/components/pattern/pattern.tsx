@@ -12,7 +12,7 @@ export const Pattern: FC<PatternProps> = (props) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    ref.current?.style.setProperty("--pattern-color", props.color ?? "var(--app-primary-color)");
+    ref.current?.style.setProperty("--pattern-color", props.color || "#0063ff");
   }, [props.color]);
 
   return (

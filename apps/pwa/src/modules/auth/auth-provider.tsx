@@ -1,6 +1,7 @@
 "use client";
 
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
+import { endAppLoading } from "@/components/app-loading/app-loading";
 import { useApp } from "@/app.context";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { StorageKey } from "@/constants/storage-key";
@@ -139,6 +140,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
     }
 
     setIsInitialized(true);
+    endAppLoading("auth");
     return authResult;
   };
 

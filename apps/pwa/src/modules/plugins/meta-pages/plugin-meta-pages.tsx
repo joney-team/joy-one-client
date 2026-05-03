@@ -2,7 +2,6 @@
 
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { onFacebookLogin } from "@/modules/auth/auth-service";
-import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useApolloClient } from "@apollo/client/react";
@@ -22,26 +21,40 @@ import {
   em,
 } from "@mantine/core";
 import { IconCirclesRelation, IconLinkPlus, IconPuzzle } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { Avatar } from "../../../components/avatar";
 import { Button } from "../../../components/buttons/button";
 import { Image } from "../../../components/image";
 import DisconnectMetaPageDocument from "./graphql/disconnectMetaPage.graphql";
 import GetMetaPagesInfosDocument from "./graphql/getMetaPagesInfos.graphql";
 import { useMetaPages } from "./hooks/use-meta-pages";
+import { ModalConnectMetaPages, ModalConnectMetaPagesRef } from "./modal-connect-meta-pages";
 
 export const PluginMetaPages: FC = () => {
   const workspace = useWorkspace();
   const client = useApolloClient();
   const { metaPages, loading } = useMetaPages();
+  const modalConnectMetaPagesRef = useRef<ModalConnectMetaPagesRef>(null);
 
   const color = useColor();
 
   if (loading) return <Skeleton height={150} />;
 
-  if (metaPages.length === 0)
+  if (metaPages.length === 0) {
+    const onConnect = async () => {
+      const authResponse = await onFacebookLogin();
+      const { data } = await client.query({
+        query: GetMetaPagesInfosDocument,
+        variables: { accessToken: authResponse.accessToken },
+        fetchPolicy: "network-only",
+      });
+      const pages = data?.getMetaPagesInfos ?? [];
+      modalConnectMetaPagesRef.current?.open({ pages, accessToken: authResponse.accessToken });
+    };
+
     return (
       <Stack align="center" py={20}>
+        <ModalConnectMetaPages ref={modalConnectMetaPagesRef} />
         <Group gap={30} mb={20}>
           <Avatar workspace={workspace.member.workspace} size={55} />
           <ThemeIcon variant="transparent" size="lg" color="dark">
@@ -59,28 +72,23 @@ export const PluginMetaPages: FC = () => {
           <Trans>Easy & quick setup</Trans>
         </Text>
 
-        <WithConnectMetaPagesModal>
-          {(open) => {
-            const onConnect = async () => {
-              const authResponse = await onFacebookLogin();
-              const { data } = await client.query({
-                query: GetMetaPagesInfosDocument,
-                variables: { accessToken: authResponse.accessToken },
-                fetchPolicy: "network-only",
-              });
-              const pages = data?.getMetaPagesInfos ?? [];
-              open({ pages, accessToken: authResponse.accessToken });
-            };
-
-            return (
-              <Button mt={10} type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
-                <Trans>Connect</Trans>
-              </Button>
-            );
-          }}
-        </WithConnectMetaPagesModal>
+        <Button mt={10} type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
+          <Trans>Connect</Trans>
+        </Button>
       </Stack>
     );
+  }
+
+  const onConnect = async () => {
+    const authResponse = await onFacebookLogin();
+    const { data } = await client.query({
+      query: GetMetaPagesInfosDocument,
+      variables: { accessToken: authResponse.accessToken },
+      fetchPolicy: "network-only",
+    });
+    const pages = data?.getMetaPagesInfos ?? [];
+    modalConnectMetaPagesRef.current?.open({ pages, accessToken: authResponse.accessToken });
+  };
 
   return (
     <Stack gap={30}>
@@ -122,28 +130,11 @@ export const PluginMetaPages: FC = () => {
           );
         })}
 
-        <WithConnectMetaPagesModal>
-          {(open) => {
-            const onConnect = async () => {
-              const authResponse = await onFacebookLogin();
-              const { data } = await client.query({
-                query: GetMetaPagesInfosDocument,
-                variables: { accessToken: authResponse.accessToken },
-                fetchPolicy: "network-only",
-              });
-              const pages = data?.getMetaPagesInfos ?? [];
-              open({ pages, accessToken: authResponse.accessToken });
-            };
-
-            return (
-              <Center>
-                <Button type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
-                  <Trans>Connect more</Trans>
-                </Button>
-              </Center>
-            );
-          }}
-        </WithConnectMetaPagesModal>
+        <Center>
+          <Button type="submit" onClick={onConnect} leftIcon={IconLinkPlus}>
+            <Trans>Connect more</Trans>
+          </Button>
+        </Center>
       </SimpleGrid>
     </Stack>
   );

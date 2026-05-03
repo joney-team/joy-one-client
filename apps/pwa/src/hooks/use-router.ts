@@ -1,12 +1,10 @@
 "use client";
 
-import { defaultRouteRule, routeRules } from "@/configs/routes.config";
 import {
   AppRouterInstance,
   NavigateOptions,
 } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { useRouter as useNextRouter, usePathname } from "next/navigation";
-import { useMemo } from "react";
 
 export interface AppRouter extends Omit<AppRouterInstance, "push"> {
   pathname: string;
@@ -142,16 +140,3 @@ export const useRouter = (): AppRouter => {
   };
 };
 
-export const useRouteRule = () => {
-  const pathname = usePathname();
-
-  return useMemo(() => {
-    const rule = Object.keys(routeRules).find((key) => pathname.startsWith(key));
-
-    if (rule && routeRules[rule]) {
-      return routeRules[rule];
-    }
-
-    return defaultRouteRule;
-  }, [pathname]);
-};

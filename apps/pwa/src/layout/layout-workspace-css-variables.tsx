@@ -1,7 +1,6 @@
 "use client";
 
 import { StorageKey } from "@/constants/storage-key";
-import { useRouteRule } from "@/hooks/use-router";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { zIndexes } from "@joy-one-client/config/layout";
@@ -14,7 +13,6 @@ export const LayoutWorkspaceCssVariables: FC = () => {
   const color = useColor();
   const layout = useLayout();
 
-  const routeRule = useRouteRule();
   const pathname = usePathname();
   const params = useParams();
 
@@ -30,7 +28,7 @@ export const LayoutWorkspaceCssVariables: FC = () => {
 
   useEffect(() => {
     const navigationHeight =
-      layout.view === "mobile" && (isDetailPage || routeRule.isHideNavigation)
+      layout.view === "mobile" && isDetailPage
         ? 0
         : layout.isStandalone
           ? workspaceLayoutConfig.standaloneNavigationHeight
@@ -41,7 +39,7 @@ export const LayoutWorkspaceCssVariables: FC = () => {
     const navigationWidth =
       navigationWidthStorage || workspaceLayoutConfig.defaultNavigationExpandedWidth;
 
-    const headerHeight = routeRule.isHideHeader ? 0 : workspaceLayoutConfig.headerHeight;
+    const headerHeight = workspaceLayoutConfig.headerHeight;
 
     const layoutWidth = `calc(100dvw - ${navigationWidth}px)`;
     const layoutHeight = `calc(100dvh - ${headerHeight}px)`;
@@ -64,7 +62,7 @@ export const LayoutWorkspaceCssVariables: FC = () => {
         document.documentElement.style.removeProperty(key);
       });
     };
-  }, [routeRule, pathname, params, navigationWidthStorage]);
+  }, [pathname, params, navigationWidthStorage]);
 
   useEffect(() => {
     const zIndexVariables = Object.entries(zIndexes).reduce(

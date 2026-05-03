@@ -3,13 +3,16 @@
 import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
-import { WithConnectMetaPagesModal } from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
+import {
+  ModalConnectMetaPages,
+  ModalConnectMetaPagesRef,
+} from "@/modules/plugins/meta-pages/modal-connect-meta-pages";
 import { useApolloClient } from "@apollo/client/react";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconMessage, IconPuzzle } from "@tabler/icons-react";
-import { FC } from "react";
+import { FC, useRef } from "react";
 import { onFacebookLogin } from "../auth/auth-service";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { useMessageHubs } from "./message-hubs/hooks/use-message-hubs";
@@ -20,41 +23,38 @@ const ModalConnectPlugins: FC = () => {
   const client = useApolloClient();
   const workspace = useWorkspace();
   const { createMessageHub } = useMessageHubs();
+  const metaPagesRef = useRef<ModalConnectMetaPagesRef>(null);
 
   const close = () => {
     modals.close("ModalConnectPlugins");
   };
 
+  const onConnectMetaPages = async () => {
+    const authResponse = await onFacebookLogin();
+    const result = await client.query({
+      query: GetMetaPagesInfosDocument,
+      variables: { accessToken: authResponse.accessToken },
+      fetchPolicy: "network-only",
+    });
+    metaPagesRef.current?.open({
+      pages: result.data?.getMetaPagesInfos ?? [],
+      accessToken: authResponse.accessToken,
+    });
+    close();
+  };
+
   return (
     <Stack className="ModalConnectPlugins">
-      <WithConnectMetaPagesModal>
-        {(open) => {
-          const onConnect = async () => {
-            const authResponse = await onFacebookLogin();
-            const result = await client.query({
-              query: GetMetaPagesInfosDocument,
-              variables: { accessToken: authResponse.accessToken },
-              fetchPolicy: "network-only",
-            });
-            open({
-              pages: result.data?.getMetaPagesInfos ?? [],
-              accessToken: authResponse.accessToken,
-            });
-            close();
-          };
+      <ModalConnectMetaPages ref={metaPagesRef} />
 
-          return (
-            <Card withBorder shadow="none" p={10} style={{ cursor: "pointer" }} onClick={onConnect}>
-              <Group>
-                <Image w={40} src="/images/plugins-meta-pages.svg" />
-                <Text>
-                  <Trans>Meta pages</Trans>
-                </Text>
-              </Group>
-            </Card>
-          );
-        }}
-      </WithConnectMetaPagesModal>
+      <Card withBorder shadow="none" p={10} style={{ cursor: "pointer" }} onClick={onConnectMetaPages}>
+        <Group>
+          <Image w={40} src="/images/plugins-meta-pages.svg" />
+          <Text>
+            <Trans>Meta pages</Trans>
+          </Text>
+        </Group>
+      </Card>
 
       <Card
         withBorder

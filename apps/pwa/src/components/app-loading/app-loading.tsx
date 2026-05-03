@@ -1,9 +1,11 @@
+"use client";
+
 import { useEffect, useRef, type FC } from "react";
 import { useApp } from "@/app.context";
 import OverlayLoading from "@/components/overlay-loading";
-import { useRouteRule } from "@/hooks/use-router";
 import { eventsEmitter } from "@/modules/events/event-service";
 import { useForceUpdate } from "@mantine/hooks";
+import { usePathname } from "next/navigation";
 
 export const endAppLoading = (type: string) => {
   eventsEmitter.emit("end-loading", type);
@@ -13,11 +15,13 @@ export const startAppLoading = (type: string) => {
   eventsEmitter.emit("start-loading", type);
 };
 
-const initialLoading = ["lang"];
+const initialLoading = ["lang", "auth"];
+
+const PUBLIC_PATHS = ["/dev", "/docs", "/customer-forms/new"];
 
 export const AppLoading: FC = () => {
   const forceUpdate = useForceUpdate();
-  const routeRule = useRouteRule();
+  const pathname = usePathname();
   const app = useApp();
   const loading = useRef<string[]>(initialLoading);
 
@@ -38,12 +42,14 @@ export const AppLoading: FC = () => {
   }, []);
 
   useEffect(() => {
-    if (app.isInitialized && routeRule.auth === "public") {
-      loading.current = loading.current.filter((item) => !initialLoading.includes(item));
+    const isPublic = PUBLIC_PATHS.some((p) => pathname.startsWith(p));
+    if (app.isInitialized && isPublic) {
+      loading.current = [];
       forceUpdate();
     }
-  }, [routeRule.auth, app.isInitialized]);
+  }, [pathname, app.isInitialized]);
 
   if (loading.current.length === 0) return null;
+
   return <OverlayLoading enabled />;
 };
