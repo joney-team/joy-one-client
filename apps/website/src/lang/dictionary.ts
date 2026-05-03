@@ -269,6 +269,10 @@ export const dictionaries: Dictionaries = {
     vi: "MSDN",
     en: "Tax code"
   },
+  'documentation': {
+    vi: "Tài liệu",
+    en: "Documentation"
+  },
   'use_device_language': {
     vi: "Sử dụng ngôn ngữ của thiết bị",
     en: "Use device language"

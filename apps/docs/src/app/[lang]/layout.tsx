@@ -50,8 +50,6 @@ const RootLayout: FC<LayoutProps> = async ({ children, params }: LayoutProps) =>
           </div>
         </div>
       }
-      projectLink="https://github.com/vercel/swr"
-      chatLink="https://discord.com"
     >
       <LocaleSwitch lite />
     </Navbar>

@@ -27,13 +27,9 @@ export const Header: FC = () => {
           Phiên bản máy tính
         </Anchor> */}
 
-        {/* <Anchor href="#" c="dark">
-          TÀI LIỆU
+        <Anchor href="https://docs.joyone.vn" c="dark" tt="uppercase" target="_blank" rel="noreferrer">
+          {t("documentation")}
         </Anchor>
-
-        <Anchor href="#" c="dark">
-          TEAMMATES
-        </Anchor> */}
 
         <Group>
           <Anchor href={config.APP_URL + "?authType=signin"}>

@@ -56,6 +56,10 @@ export const Footer: FC = () => {
           </Anchor>
 
           <Group mt={20}>
+            <Anchor ta="center" c="white" href="https://docs.joyone.vn" target="_blank" rel="noreferrer">
+              {t("documentation")}
+            </Anchor>
+
             <Anchor ta="center" c="white" component={Link} href="/privacy-policy">
               {t("privacy_policy")}
             </Anchor>
