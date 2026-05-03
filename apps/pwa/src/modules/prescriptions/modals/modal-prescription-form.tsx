@@ -6,7 +6,6 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { Renderer } from "@/components/renderer";
 import { ProductType } from "@/graphql/enums.graphql";
 import { PrescriptionInput, PrescriptionItemInput } from "@/graphql/types.graphql";
-import { getView } from "@/layout/layout-service";
 import { PrintButton } from "@/modals/modal-printer";
 import { CustomerInput } from "@/modules/customers/components/customer-input";
 import { PrescriptionSelector } from "@/modules/prescriptions/components/prescription-selector";
@@ -375,7 +374,6 @@ export const OnModalPrescriptionForm = (props: ModalPrescriptionFormProps) => {
       <ModalPrescriptionForm {...props} onClose={() => modals.close("ModalPrescriptionForm")} />
     ),
     size: "xl",
-    fullScreen: getView() === "mobile",
     zIndex: zIndexes.commonModals,
   });
 };

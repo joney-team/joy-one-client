@@ -1,6 +1,5 @@
 "use client";
 
-import { getGlobal } from "@/global";
 import { useDebouncedCallback, useForceUpdate } from "@mantine/hooks";
 import { usePathname } from "next/navigation";
 import { FC, PropsWithChildren, useEffect, useRef, useState } from "react";
@@ -92,7 +91,6 @@ const LayoutProvider: FC<PropsWithChildren> = (props) => {
     },
     resetComponents: () => setComponents({}),
   };
-  getGlobal()._view = context.view;
 
   return <Context.Provider value={context}>{props.children}</Context.Provider>;
 };

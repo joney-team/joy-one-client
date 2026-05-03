@@ -3,14 +3,6 @@ import { StorageKey } from "@/constants/storage-key";
 import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
 
-export const setSessionId = (sessionId: string) => {
-  sessionStorage.setItem(StorageKey.SESSION_ID, sessionId);
-};
-
-export const getSessionId = () => {
-  return sessionStorage.getItem(StorageKey.SESSION_ID);
-};
-
 export const setWorkspaceAuthSessionId = (sessionId: string) => {
   sessionStorage.setItem(StorageKey.WORKSPACE_AUTH_SESSION_ID, sessionId);
 };

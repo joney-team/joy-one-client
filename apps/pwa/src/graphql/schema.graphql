@@ -60,6 +60,15 @@ enum AppLocale {
   vi
 }
 
+type AppMetadata {
+  color: String
+  colorShape: Float
+  icon: String!
+  isExtended: Boolean!
+  name: String!
+  workspaceId: String
+}
+
 input AssignCustomerInput {
   userIds: [String!]!
 }
@@ -2756,6 +2765,7 @@ type Query {
   ): ActivitiesPaginated!
   getActivityById(id: String!): Activity!
   getAppConfig: AppConfig!
+  getAppMetadata(domain: String): AppMetadata!
   getAttendanceRecordById(id: String!): AttendanceRecord!
   getAttendanceRecords(
     ids: [String!]

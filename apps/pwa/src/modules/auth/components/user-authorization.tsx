@@ -11,7 +11,8 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useColor } from "@/modules/theme/use-color";
 import { Trans } from "@lingui/react/macro";
-import { Card, Divider, em, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
+import { Avatar, Card, Divider, em, Group, ScrollArea, Stack, Text, Title } from "@mantine/core";
+import { IconBuilding } from "@tabler/icons-react";
 import { FC, Fragment, useEffect, useState } from "react";
 import { useApp } from "../../../app.context";
 import { FormForgotPassword } from "./form-forgot-password";
@@ -68,7 +69,9 @@ export const UserAuthorization: FC = () => {
           <Group justify="space-between" wrap="nowrap">
             <Group align="center" wrap="nowrap" gap={layout.view === "desktop" ? 16 : 8}>
               {app.metadata.isExtended ? (
-                <Image src={app.metadata.appIcon} h={logoSize} w={logoSize} />
+                <Avatar src={app.metadata.icon} h={logoSize} w={logoSize}>
+                  <IconBuilding />
+                </Avatar>
               ) : (
                 <Animate
                   src="/animate/symbol-idle.json"
@@ -78,11 +81,9 @@ export const UserAuthorization: FC = () => {
 
               <Stack gap={0}>
                 <Title fz={{ base: 22, md: 28 }} fw={800} c={color("primary")}>
-                  {app.metadata.appName || "Joy One"}
+                  {app.metadata.name || "Joy One"}
                 </Title>
-                <Text fz={{ base: 12, md: 14 }} c="gray">
-                  Enjoy Work in One Place
-                </Text>
+                <Text fz={{ base: 12, md: 14 }}>Enjoy Work in One Place</Text>
               </Stack>
             </Group>
 

@@ -1,0 +1,10 @@
+query GetAppMetadata($domain: String) {
+  appMetadata: getAppMetadata(domain: $domain) {
+    name
+    icon
+    color
+    colorShape
+    workspaceId
+    isExtended
+  }
+}

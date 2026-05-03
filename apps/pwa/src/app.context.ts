@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import type { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
-import type { AppMetadata } from "./types";
+import { AppMetadata } from "./graphql/types.graphql";
 
 export interface UseApp {
   isInitialized: boolean;

@@ -2,7 +2,6 @@
 
 import { useApp } from "@/app.context";
 import { endAppLoading, startAppLoading } from "@/components/app-loading/app-loading";
-import { defaultMetadata, getMetadata, setMetadata } from "@/configs/metadata.config";
 import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
 import { CreateWorkspaceInput } from "@/graphql/types.graphql";
@@ -12,7 +11,6 @@ import { useAuth } from "@/modules/auth/auth-context";
 import { useEventsListener } from "@/modules/events/event-service";
 import { JoinWorkspaceWithInviteCodeDocument } from "@/modules/workspace-members/graphql/joinWorkspaceWithInviteCode.graphql";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { isExtendedApp } from "@/service";
 import { useApolloClient, useLazyQuery, useMutation } from "@apollo/client/react";
 import { removeParams } from "@joy-one-client/utils/location-query";
 import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
@@ -168,17 +166,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
 
   useEffect(() => {
     if (!member) return;
-
     app.joinWorkspaceRoom(member.workspaceId);
-
-    if (!isExtendedApp()) {
-      setMetadata({
-        ...getMetadata(),
-        appColor: member.workspace.appColor || defaultMetadata.appColor,
-        appName: member.workspace.appName || defaultMetadata.appName,
-        appIcon: member.workspace.appIcon || defaultMetadata.appIcon,
-      });
-    }
   }, [member]);
 
   useEffect(() => {

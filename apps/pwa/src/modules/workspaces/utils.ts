@@ -1,14 +1,3 @@
-import type { AppMetadata } from "@/types";
-
-import { defaultMetadata } from "@/configs/metadata.config";
-import { restServerClient } from "../apis/rest-server";
-import { renderFileUrl } from "../files/files-utils";
-import { WorkspaceFragment } from "./graphql/fragmentWorkspace.graphql";
-
-export function encodeWorkspace(params: { workspaceCode: string; code: string; entity: string }) {
-  return `${params.workspaceCode}${params.code}${params.entity}`;
-}
-
 export function decodeWorkspace(input: string, plainCode?: string) {
   // Validate input
   if (typeof input !== "string" || input.length === 0) {
@@ -41,48 +30,4 @@ export function renderEntityCode(workspaceCode?: string, plainCode?: string | nu
   } catch (error) {
     return workspaceCode || "";
   }
-}
-
-let metadatas: { [metdataKey: string]: AppMetadata } = {};
-
-export async function getWorkspaceMetadata(args: { host?: string; workspaceId?: string }) {
-  const metadataKey = args.workspaceId || args.host;
-
-  if (!metadataKey) return defaultMetadata;
-  if (metadataKey && metadatas[metadataKey]) return metadatas[metadataKey];
-
-  const url = args.workspaceId
-    ? `/workspaces/ids/${args.workspaceId}`
-    : `/workspaces/domains/${args.host}`;
-
-  const workspace = await restServerClient.get<WorkspaceFragment>(url).catch((error) => {
-    console.error(
-      `[${new Date().toLocaleTimeString("vi")}] getWorkspaceMetadata error`,
-      error.message,
-    );
-    return null;
-  });
-
-  if (metadataKey && workspace) {
-    const metadata: AppMetadata = {
-      ...defaultMetadata,
-      title: workspace.appName || "JoyOne",
-      siteName: workspace.appName || "JoyOne",
-      favicon: renderFileUrl(workspace.appIcon) || "/favicon.ico",
-      webURL: `https://${workspace.appDomain}`,
-      appColor: workspace.appColor ?? "",
-      appColorShape: workspace.appColorShape ?? 6,
-      appName: workspace.appName ?? "",
-      workspaceId: workspace._id,
-      isExtended: true,
-      thumbnailURL: renderFileUrl(
-        workspace.cover || workspace.appIcon || defaultMetadata.thumbnailURL,
-      ),
-      appIcon: renderFileUrl(workspace.appIcon || defaultMetadata.appIcon),
-    };
-
-    return metadata;
-  }
-
-  return defaultMetadata;
 }

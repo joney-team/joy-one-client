@@ -5,19 +5,16 @@ import { wait } from "@/utils/common.utils";
 import config from "@joy-one-client/config";
 import * as Sentry from "@sentry/react";
 import dynamic from "next/dynamic";
-import { useEffect, useMemo, useState, type FC, type PropsWithChildren } from "react";
-import { v4 as uuid } from "uuid";
+import { useEffect, useMemo, useRef, useState, type FC, type PropsWithChildren } from "react";
 import packageJson from "../package.json";
-import { AppContext } from "./app.context";
+import { AppContext, type UseApp } from "./app.context";
 import { StorageKey } from "./constants/storage-key";
-import { getGlobal } from "./global";
 import { getLocalStorage } from "./hooks/use-local-storage";
 import { usePageTitle } from "./hooks/use-page-title";
 import { socket } from "./modules/apis/rest-client";
 import { eventsEmitter } from "./modules/events/event-service";
 import { LocationsProvider } from "./modules/locations/locations-provider";
 import { getAppConfig } from "./service";
-import type { AppMetadata } from "./types";
 
 import "@mantine/charts/styles.css";
 import "@mantine/core/styles.css";
@@ -47,9 +44,11 @@ const AppLoading = dynamic(
 );
 
 const LayoutProvider = dynamic(() => import("@/layout/layout-provider"));
+
 const AppModuleProviders = dynamic(() => import("@/app.module-providers"));
 
 const AuthProvider = dynamic(() => import("@/modules/auth/auth-provider"));
+
 const WorkspaceProvider = dynamic(() => import("@/modules/workspaces/workspace-provider"));
 
 const EscapeHandler = dynamic(() => import("@/hooks/use-escape").then((mod) => mod.EscapeHandler), {
@@ -78,26 +77,19 @@ const NavigationProgress = dynamic(
   { ssr: false, loading: nonLoading },
 );
 
-export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => {
-  const global = getGlobal();
-  const [metadata, setMetadata] = useState(props.metadata);
-  global._metadata = metadata;
-
+export const App: FC<PropsWithChildren<Pick<UseApp, "metadata">>> = (props) => {
   usePageTitle();
 
   const [isInitialized, setIsInitialized] = useState(false);
-  const [config, setConfig] = useState<AppConfigFragment>();
+  const config = useRef<AppConfigFragment | null>(null);
 
   const fetchAppConfig = async () => {
     await new Promise<AppConfigFragment>((resolve) => {
       const process = async () => {
         try {
-          const global = getGlobal();
-          const config = await getAppConfig();
-          global._appConfig = config;
-          global._sessionId = uuid();
-          setConfig(config);
-          resolve(config);
+          const configResult = await getAppConfig();
+          config.current = configResult;
+          resolve(config.current);
         } catch (error) {
           await wait(3000);
           process();
@@ -136,9 +128,6 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   useEffect(() => {
     const onEventNew = (event: EventFragment) => {
-      const global = getGlobal();
-      const clientSessionId = global._sessionId as string;
-      if (event.sessionId && event.sessionId !== clientSessionId) return;
       eventsEmitter.emit(event.type, event);
     };
 
@@ -154,23 +143,11 @@ export const App: FC<PropsWithChildren<{ metadata: AppMetadata }>> = (props) => 
 
   useEffect(() => {
     fetchAppConfig();
-
-    const onMessage = (ev: MessageEvent<any>) => {
-      if (ev.data.type === "change_metadata") {
-        setMetadata(ev.data.metadata);
-      }
-    };
-
-    window.addEventListener("message", onMessage);
-
-    return () => {
-      window.removeEventListener("message", onMessage);
-    };
   }, []);
 
   const context = useMemo(
     () => ({
-      config: config!,
+      config: config.current!,
       isInitialized,
       metadata: props.metadata,
       joinWorkspaceRoom,

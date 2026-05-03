@@ -1,8 +1,6 @@
 "use client";
 
-import { getGlobal } from "@/global";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
-import { type AppMetadata } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { Trans } from "@lingui/react/macro";
 import { notifications } from "@mantine/notifications";
@@ -17,9 +15,7 @@ export function onActionLoad<T = any>(args: {
   isShowCompleted?: boolean;
   onFinished?: (result: T, notificationId: string) => Promise<any> | any;
 }): Promise<T> {
-  const global = getGlobal();
-  const metadata = global._metadata as AppMetadata;
-  const color = metadata?.appColor ? metadata.appColor : args.color || "primary";
+  const color = "primary";
   const isShowCompleted = typeof args.isShowCompleted === "boolean" ? args.isShowCompleted : true;
 
   return new Promise(async (resolve, reject) => {

@@ -1,8 +1,8 @@
 "use client";
 
 import { onAppChannelMessage, postAppChannelMessage } from "@/app.channel";
-import { endAppLoading } from "@/components/app-loading/app-loading";
 import { useApp } from "@/app.context";
+import { endAppLoading } from "@/components/app-loading/app-loading";
 import { firebaseAuth, getFirebaseMessaging } from "@/configs/firebase.config";
 import { StorageKey } from "@/constants/storage-key";
 import { EventType } from "@/graphql/enums.graphql";
@@ -46,18 +46,15 @@ import {
   serverSignOutOtherDevices,
   serverSignUpWithEmailPassword,
 } from "./auth-server";
-import {
-  getSessionId,
-  onFacebookLogin,
-  setSessionId,
-  setWorkspaceAuthSessionId,
-} from "./auth-service";
+import { onFacebookLogin, setWorkspaceAuthSessionId } from "./auth-service";
 import type { AuthContext } from "./auth-types";
 import AuthUserDocument from "./graphql/authUser.graphql";
 import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
 import SetLocaleDocument from "./graphql/setLocale.graphql";
 import SignOutDocument from "./graphql/signOut.graphql";
 import UpdateUserProfileDocument from "./graphql/updateUserProfile.graphql";
+
+let isFbInitialized = false;
 
 const AuthProvider: FC<PropsWithChildren> = (props) => {
   const client = useApolloClient();
@@ -81,20 +78,21 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
       const action = async (retry: number) => {
         try {
           const global = getGlobal();
-          if (global.FBInitialized) return resolve(true);
+          if (isFbInitialized) return resolve(true);
 
           const FB = global.FB;
-          const isInitialized = !!global.FBInitialized;
-          if (isInitialized || !global.FB || !global._appConfig) {
+          const isInitialized = !!isFbInitialized;
+          if (isInitialized || !global.FB || !app.config) {
             await wait(1000);
             action(0);
           } else {
             FB.init({
-              appId: global._appConfig.metaAppId,
-              version: global._appConfig.metaAppVersion,
+              appId: app.config.metaAppId,
+              version: app.config.metaAppVersion,
               xfbml: true,
             });
             resolve(true);
+            isFbInitialized = true;
           }
         } catch (error) {
           if (retry > 3) return reject(error);
@@ -110,7 +108,6 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   const initialize = async (type: "reconnect" | "init" | "auth") => {
     let authResult: AuthUserFragment | undefined = undefined;
     initializeMetaPages();
-    setSessionId(uuid());
 
     const authStatusResult = await serverCheckAuthStatus();
 
@@ -257,28 +254,16 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
       let notificationToken = "";
 
-      const global = getGlobal();
-      const isElectronApp = global.electron;
-
-      if (isElectronApp) {
-        await new Promise((resolve) => {
-          global.electron?.getFCMToken("getFCMToken", (_: any, token: string) => {
-            notificationToken = token;
-            resolve(true);
-          });
+      const firebaseMessaging = getFirebaseMessaging();
+      notificationToken = await getToken(firebaseMessaging)
+        .catch(async () => {
+          await wait(1000);
+          return getToken(firebaseMessaging);
+        })
+        .catch((error) => {
+          console.error(error);
+          throw Error(t`Not receiving notification token. Please try again.`);
         });
-      } else {
-        const firebaseMessaging = getFirebaseMessaging();
-        notificationToken = await getToken(firebaseMessaging)
-          .catch(async () => {
-            await wait(1000);
-            return getToken(firebaseMessaging);
-          })
-          .catch((error) => {
-            console.error(error);
-            throw Error(t`Not receiving notification token. Please try again.`);
-          });
-      }
 
       const updatedDevice = await setDeviceNotificationToken({
         variables: {
@@ -349,8 +334,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
   useEventsListener(
     [EventType.UserProfileUpdated],
     (event) => {
-      const sessionId = getSessionId();
-      if (event.userId === user?._id && event.sessionId !== sessionId) {
+      if (event.userId === user?._id) {
         setUser(event.data);
       }
     },

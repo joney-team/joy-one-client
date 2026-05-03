@@ -1,7 +1,6 @@
 "use client";
 
 import { StorageKey } from "@/constants/storage-key";
-import { getGlobal } from "@/global";
 import { getLocalStorage } from "@/hooks/use-local-storage";
 import {
   ApolloClient,
@@ -76,13 +75,11 @@ const httpLink = new HttpLink({ uri: "/api/graphql" });
 const authMiddleware = new SetContextLink(async ({ headers }) => {
   const workspaceId = getLocalStorage(StorageKey.WORKSPACE_ID);
   const deviceId = getLocalStorage(StorageKey.DEVICE_ID);
-  const sessionId = getGlobal()._sessionId;
   const locale = getClientLocale();
 
   const extendHeaders = {
     "X-Workspace-Id": workspaceId,
     "X-Device-Id": deviceId,
-    "X-Session-Id": sessionId,
     "Accept-Language": locale,
   };
 

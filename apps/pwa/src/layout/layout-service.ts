@@ -1,14 +1,9 @@
-import { getGlobal } from "@/global";
 import { ViewportType } from "@/types";
 
 export const getViewType = (width: number): ViewportType => {
   if (width < 1024) return "mobile";
   if (width <= 1190) return "tablet";
   return "desktop";
-};
-
-export let getView: () => ViewportType = () => {
-  return getGlobal()._view || "mobile";
 };
 
 export const getViewSize = () => {

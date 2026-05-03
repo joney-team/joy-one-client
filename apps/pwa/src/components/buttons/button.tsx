@@ -132,34 +132,6 @@ export const Button: FC<ButtonProps> = ({
     return {};
   }, [rest.color]);
 
-  const buttonColor = useMemo(() => {
-    if (rest.variant === "light" && rest.color && rest.color.startsWith("#")) {
-      return alpha(color(rest.color), 0.15);
-    }
-
-    if (rest.variant === "subtle" && !rest.color) {
-      return "primary.5";
-    }
-
-    return rest.color;
-  }, [rest.color, rest.variant]);
-
-  const contentColor = useMemo(() => {
-    if (rest.color) {
-      if (rest.variant === "light") {
-        return color(rest.color);
-      }
-
-      return rest.c;
-    }
-
-    if (rest.variant === "light") {
-      return color("primary.6");
-    }
-
-    return rest.c;
-  }, [rest.color, rest.variant]);
-
   if (visible === false) return null;
 
   return (
@@ -207,8 +179,6 @@ export const Button: FC<ButtonProps> = ({
         },
         ...rest.styles,
       }}
-      color={buttonColor}
-      c={contentColor}
     >
       {label ?? children}
     </ButtonMantine>

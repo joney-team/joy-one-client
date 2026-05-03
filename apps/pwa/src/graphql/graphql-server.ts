@@ -1,5 +1,3 @@
-"use client";
-
 import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
 import environment from "@joy-one-client/config";
 

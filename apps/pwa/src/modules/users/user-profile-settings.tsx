@@ -12,7 +12,6 @@ import { SectionTitle } from "@/components/session-title";
 import { AppLocale, EventType } from "@/graphql/enums.graphql";
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
-import { getSessionId } from "@/modules/auth/auth-service";
 import { useEventsListener } from "@/modules/events/event-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale, localeNames } from "@/modules/lang/lang-service";
@@ -66,12 +65,10 @@ export const UserProfileSettings: FC = () => {
   useEventsListener(
     [EventType.UserProfileUpdated],
     (event) => {
-      const sessionId = getSessionId();
-      if (event.userId === auth.user!._id && event.sessionId !== sessionId) {
-        form.setValues(event.data);
-      }
+      if (auth.user._id !== event.ref) return;
+      form.setValues(event.data);
     },
-    [],
+    [auth],
   );
 
   return (

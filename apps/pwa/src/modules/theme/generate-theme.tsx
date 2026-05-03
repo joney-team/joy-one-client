@@ -1,12 +1,11 @@
 "use client";
 
-import type { AppLocale } from "@/graphql/types.graphql";
-import { type AppMetadata } from "@/types";
+import type { AppLocale, AppMetadata } from "@/graphql/types.graphql";
 import config from "@joy-one-client/config";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
-import { generateColors } from "@mantine/colors-generator";
+import { generateColors, generateColorsMap } from "@mantine/colors-generator";
 import {
   ActionIcon,
   Badge,
@@ -38,14 +37,16 @@ export const generateTheme = (args: {
   colorName?: string;
 }) => {
   const { metadata, locale } = args;
-  const primaryColors = generateColors(
-    metadata.appColor && metadata.appColor.startsWith("#")
-      ? metadata.appColor
-      : config.PRIMARY_COLOR,
-  );
+
+  const primaryColor =
+    metadata.color && metadata.color.startsWith("#") ? metadata.color : config.PRIMARY_COLOR;
+
+  const primaryColors = generateColors(primaryColor);
+
+  const { baseColorIndex } = generateColorsMap(primaryColor);
 
   const primaryColorName = args.colorName || "primary";
-  const primaryShade = metadata.appColorShape || 6;
+  const primaryShade = metadata.colorShape || baseColorIndex;
 
   return createTheme({
     fontFamily: "Inter, sans-serif",

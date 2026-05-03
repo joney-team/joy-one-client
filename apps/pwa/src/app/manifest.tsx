@@ -1,5 +1,4 @@
-import { renderFileUrl } from "@/modules/files/files-utils";
-import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
+import { getAppMetadata } from "@/modules/metadata/metadata-service";
 import { isExtendedApp } from "@/service";
 import { MetadataRoute } from "next";
 import { headers } from "next/headers";
@@ -7,32 +6,29 @@ import { headers } from "next/headers";
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   if (isExtendedApp()) {
     const { get } = await headers();
-    const metadata = await getWorkspaceMetadata({
-      host: get("host") as string,
-      workspaceId: get("x-workspace-id") as string,
+    const metadata = await getAppMetadata({
+      domain: get("host"),
     });
 
-    const _manifest: MetadataRoute.Manifest = {
-      name: metadata.appName || metadata.siteName,
-      short_name: metadata.appName || metadata.siteName,
+    return {
+      name: metadata.name,
+      short_name: metadata.name,
       display: "standalone",
       start_url: "/",
       background_color: "#ffffff",
       theme_color: "#ffffff",
       icons: [
         {
-          src: renderFileUrl(metadata.appIcon)!,
+          src: metadata.icon,
           sizes: "any",
           type: "image/png",
         },
       ],
     };
-
-    return _manifest;
   }
 
   return {
-    name: "JoyOne",
+    name: "JoyOne1",
     short_name: "JoyOne",
     description: "Trợ thủ Chăm sóc khánh hàng - Quản lí doanh nghiệp",
     start_url: "/",

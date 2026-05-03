@@ -34,12 +34,15 @@ import { WorkspaceInput } from "@/graphql/types.graphql";
 import UpdateWorkspaceDocument from "@/modules/workspaces/graphql/updateWorkspace.graphql";
 import { normalizeWorkspaceInput } from "@/modules/workspaces/workspaces-service";
 import config from "@joy-one-client/config";
+import { generateColorsMap } from "@mantine/colors-generator";
+import { Container } from "@/components/container";
 
 export const WorkspaceAppSettings: FC = () => {
   const workspace = useWorkspace();
   const app = useApp();
   const uploadFile = useUploadFile();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { baseColorIndex } = generateColorsMap(app.metadata.color ?? config.PRIMARY_COLOR);
 
   const form = useForm<
     Pick<WorkspaceInput, "appDomain" | "appName" | "appColor" | "appColorShape"> & {
@@ -50,7 +53,8 @@ export const WorkspaceAppSettings: FC = () => {
       appDomain: workspace.member.workspace.appDomain || "",
       appName: workspace.member.workspace.appName || "",
       appColor: workspace.member.workspace.appColor || config.PRIMARY_COLOR,
-      appColorShape: workspace.member.workspace.appColorShape || 6,
+      appColorShape:
+        workspace.member.workspace.appColorShape || app.metadata.colorShape || baseColorIndex,
     } as any,
     validate: {
       appDomain: (value) => {
@@ -110,8 +114,6 @@ export const WorkspaceAppSettings: FC = () => {
 
     setIsSubmitting(false);
   });
-
-  console.log("form.values.appColor", form.values.appColor);
 
   return (
     <Stack>
@@ -255,5 +257,15 @@ export const WorkspaceAppSettings: FC = () => {
         </Button>
       </Center>
     </Stack>
+  );
+};
+
+export const WorkspaceAppSettingsPage: FC = () => {
+  return (
+    <Container p="md">
+      <Card shadow="xs">
+        <WorkspaceAppSettings />
+      </Card>
+    </Container>
   );
 };

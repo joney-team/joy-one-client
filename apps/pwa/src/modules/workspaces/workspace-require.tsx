@@ -59,15 +59,15 @@ export const WorkspaceRequire: FC = () => {
               w={80}
               h={80}
               workspace={{
-                name: app.metadata.appName || app.metadata.title,
-                logo: app.metadata.isExtended ? (app.metadata.appIcon ?? "") : "/brandname.png",
-                appColor: app.metadata.appColor ?? "",
+                name: app.metadata.name,
+                logo: app.metadata.isExtended ? (app.metadata.icon ?? "") : "/brandname.png",
+                appColor: app.metadata.color ?? "",
               }}
               radius={10}
             />
 
-            <Text c={app.metadata.appColor ?? undefined} ta="center" fz={em(25)} fw={500}>
-              {app.metadata.appName}
+            <Text c={app.metadata.color ?? undefined} ta="center" fz={em(25)} fw={500}>
+              {app.metadata.name}
             </Text>
           </Stack>
 
@@ -78,8 +78,8 @@ export const WorkspaceRequire: FC = () => {
           ) : (
             <Text ta="center" fz={em(15)} fw={500}>
               <Trans>
-                You are not a member of {app.metadata.appName || "Workspace"}. Please contact the
-                administrator for support
+                You are not a member of {app.metadata.name}. Please contact the administrator for
+                support
               </Trans>
             </Text>
           )}

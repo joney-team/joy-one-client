@@ -137,7 +137,7 @@ export interface AppCurrency {
   symbolPosition?: "prefix" | "suffix";
 }
 
-export interface AppMetadata {
+export interface PageMetadata {
   title: string;
   webURL: string;
   thumbnailURL: string;

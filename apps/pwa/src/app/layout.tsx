@@ -5,61 +5,54 @@ import { headers } from "next/headers";
 
 import type { Metadata } from "next";
 
-import { getWorkspaceMetadata } from "@/modules/workspaces/utils";
-import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types";
 import { ScriptsAnalytics } from "@/components/analytics/scripts-analytics";
+import { type TemplateString } from "next/dist/lib/metadata/types/metadata-types";
 
-import { defaultMetadata } from "@/configs/metadata.config";
-import type { AppMetadata } from "@/types";
-
-import { isExtendedApp } from "@/service";
 import { GraphqlProvider } from "@/graphql/graphql-provider";
+import { AppMetadata } from "@/graphql/types.graphql";
+import { defaultAppMetadata } from "@/modules/metadata/metadata-constants";
+import { getAppMetadata } from "@/modules/metadata/metadata-service";
+import { isExtendedApp } from "@/service";
 
 export async function generateMetadata(): Promise<Metadata> {
-  let metadata: AppMetadata = defaultMetadata;
+  let metadata: AppMetadata = defaultAppMetadata;
 
   if (isExtendedApp()) {
     const { get } = await headers();
 
-    metadata = await getWorkspaceMetadata({
-      host: get("host") as string,
-      workspaceId: get("x-workspace-id") as string,
+    metadata = await getAppMetadata({
+      domain: get("host") as string,
     });
   }
 
   const title: TemplateString = {
-    template: `%s - ${metadata.title}`,
-    default: metadata.title,
+    template: `%s - ${metadata.name}`,
+    default: metadata.name,
   };
 
   return {
     title,
-    description: metadata.description,
     icons: {
-      icon: metadata.favicon,
-      shortcut: metadata.favicon,
+      icon: metadata.icon,
+      shortcut: metadata.icon,
       other: {
-        rel: metadata.favicon,
-        url: metadata.favicon,
+        rel: metadata.icon,
+        url: metadata.icon,
       },
     },
     openGraph: {
       title: title,
-      description: metadata.description,
-      images: metadata.thumbnailURL,
+      images: metadata.icon,
     },
   };
 }
 
 export default async function RootLayout(props: Readonly<{ children: React.ReactNode }>) {
-  let metadata: AppMetadata = defaultMetadata;
+  let metadata: AppMetadata = defaultAppMetadata;
 
   if (isExtendedApp()) {
-    const _headers = await headers();
-    metadata = await getWorkspaceMetadata({
-      host: _headers.get("host") as string,
-      workspaceId: _headers.get("x-workspace-id") as string,
-    });
+    const { get } = await headers();
+    metadata = await getAppMetadata({ domain: get("host") });
   }
 
   return (

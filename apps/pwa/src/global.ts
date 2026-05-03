@@ -1,14 +1,7 @@
-import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
-import type { AppMetadata, ViewportType } from "./types";
+"use client";
 
 export interface Global extends Window {
   FB: any;
-  FBInitialized: boolean;
-  electron: any;
-  _appConfig: AppConfigFragment;
-  _metadata: AppMetadata;
-  _sessionId: string;
-  _view: ViewportType;
 }
 
 let serverGlobal = {} as Global;

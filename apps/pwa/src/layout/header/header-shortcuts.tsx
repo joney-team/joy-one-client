@@ -139,7 +139,6 @@ export const WorkspaceHeaderShortcutsContent: FC<{ modals: ShortcutModals }> = (
   const { isModuleAvailable, getModule } = useAvailableWorkspaceModules();
   const layout = useLayout();
   const router = useRouter();
-  const color = useColor();
 
   const availableShortcuts = shortcuts.filter((shortcut) => {
     const isHasPermission = !shortcut.permission || workspace.hasPermission(shortcut.permission);

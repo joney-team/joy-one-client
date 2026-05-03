@@ -14,9 +14,9 @@ export const ButtonLanguage: FC = () => {
     <ModalLanguage>
       {(open) => {
         return (
-          <Anchor fz="xs" ta="center" c="gray" onClick={open}>
+          <Anchor fz="xs" ta="center" c="dark" onClick={open}>
             <Group align="center" gap={0}>
-              <ThemeIcon variant="transparent" color="gray">
+              <ThemeIcon variant="transparent" c="dark">
                 <IconWorld size={16} strokeWidth={1.5} />
               </ThemeIcon>
               {localeNames[lang.locale]}

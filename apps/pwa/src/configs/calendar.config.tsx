@@ -2,12 +2,12 @@
 
 import dayjs from "dayjs";
 
-import { getView } from "@/layout/layout-service";
+import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans } from "@lingui/react/macro";
-import { Fragment } from "react";
+import { Fragment, useMemo } from "react";
 import { dayjsLocalizer, type CalendarProps } from "react-big-calendar";
 
 export interface CalendarEvent {
@@ -54,45 +54,51 @@ export const calendarDayJsLocalizer = dayjsLocalizer(dayjs);
 export const useCalendarProps = (): CalendarProps<CalendarEvent> => {
   const auth = useAuth();
   const lang = useLang();
+  const layout = useLayout();
 
-  return {
-    localizer: calendarDayJsLocalizer,
-    step: 15,
-    messages: {
-      allDay: <Trans>All</Trans>,
-      previous: "<",
-      next: ">",
-      today: <Trans>Today</Trans>,
-      month: <Trans>Month</Trans>,
-      week: <Trans>Week</Trans>,
-      day: <Trans>Day</Trans>,
-      agenda: <Trans>Agenda</Trans>,
-      date: <Trans>Date</Trans>,
-      time: <Trans>Time</Trans>,
-      event: <Trans>Event</Trans>,
-      noEventsInRange: <Trans>No events in range</Trans>,
-    },
-    components: {
-      event: Event,
-    },
-    formats: {
-      timeGutterFormat: (date, culture) => {
-        const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
-        return calendarDayJsLocalizer.format(date, format, culture);
+  const props = useMemo<CalendarProps<CalendarEvent>>(
+    () => ({
+      localizer: calendarDayJsLocalizer,
+      step: 15,
+      messages: {
+        allDay: <Trans>All</Trans>,
+        previous: "<",
+        next: ">",
+        today: <Trans>Today</Trans>,
+        month: <Trans>Month</Trans>,
+        week: <Trans>Week</Trans>,
+        day: <Trans>Day</Trans>,
+        agenda: <Trans>Agenda</Trans>,
+        date: <Trans>Date</Trans>,
+        time: <Trans>Time</Trans>,
+        event: <Trans>Event</Trans>,
+        noEventsInRange: <Trans>No events in range</Trans>,
       },
-      dayFormat: (date) => {
-        if (getView() === "mobile") return DateTime.format(date, { weekday: "short" });
-        return DateTime.format(date, { locale: lang.locale });
+      components: {
+        event: Event,
       },
-      eventTimeRangeFormat: (date, culture) => {
-        const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
+      formats: {
+        timeGutterFormat: (date, culture) => {
+          const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
+          return calendarDayJsLocalizer.format(date, format, culture);
+        },
+        dayFormat: (date) => {
+          if (layout.view === "mobile") return DateTime.format(date, { weekday: "short" });
+          return DateTime.format(date, { locale: lang.locale });
+        },
+        eventTimeRangeFormat: (date, culture) => {
+          const format = auth.user?.settings?.isTwelveHour ? "hh:mm A" : "HH:mm";
 
-        return (
-          calendarDayJsLocalizer.format(date.start, format, culture) +
-          " - " +
-          calendarDayJsLocalizer.format(date.end, format, culture)
-        );
+          return (
+            calendarDayJsLocalizer.format(date.start, format, culture) +
+            " - " +
+            calendarDayJsLocalizer.format(date.end, format, culture)
+          );
+        },
       },
-    },
-  };
+    }),
+    [auth.user?.settings, layout.view, lang.locale],
+  );
+
+  return props;
 };
