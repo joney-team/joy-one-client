@@ -9,7 +9,6 @@ export enum StorageKey {
   META_ACCESS_TOKEN = "_m_at",
   LOCALE = "_locale",
   SESSION_ID = "_s_id",
-  WORKSPACE_AUTH_SESSION_ID = "_ws_sid",
   LAYOUT_NAVIGATION_WIDTH = "_l_nw",
   DASHBOARD_BOOKINGS_QUERY = "_db_bq",
   DEVICE_IDENTIFY_ID = "_di_id",

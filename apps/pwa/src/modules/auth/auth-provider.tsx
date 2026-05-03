@@ -29,7 +29,6 @@ import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { getToken } from "firebase/messaging";
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
 import { getGlobal } from "../../global";
 import { DeviceFragment } from "../devices/graphql/fragmentDevice.graphql";
 import SetDeviceLocaleDocument from "../devices/graphql/setDeviceLocale.graphql";
@@ -46,7 +45,7 @@ import {
   serverSignOutOtherDevices,
   serverSignUpWithEmailPassword,
 } from "./auth-server";
-import { onFacebookLogin, setWorkspaceAuthSessionId } from "./auth-service";
+import { onFacebookLogin } from "./auth-service";
 import type { AuthContext } from "./auth-types";
 import AuthUserDocument from "./graphql/authUser.graphql";
 import { AuthUserFragment } from "./graphql/fragmentAuthUser.graphql";
@@ -84,7 +83,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
           const isInitialized = !!isFbInitialized;
           if (isInitialized || !global.FB || !app.config) {
             await wait(1000);
-            action(0);
+            action(retry + 1);
           } else {
             FB.init({
               appId: app.config.metaAppId,
@@ -95,7 +94,7 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
             isFbInitialized = true;
           }
         } catch (error) {
-          if (retry > 3) return reject(error);
+          if (retry > 5) return reject(error);
           await wait(1000);
           action(retry + 1);
         }
@@ -107,15 +106,11 @@ const AuthProvider: FC<PropsWithChildren> = (props) => {
 
   const initialize = async (type: "reconnect" | "init" | "auth") => {
     let authResult: AuthUserFragment | undefined = undefined;
-    initializeMetaPages();
-
-    const authStatusResult = await serverCheckAuthStatus();
-
-    if (type === "auth") {
-      setWorkspaceAuthSessionId(uuid());
-    }
+    initializeMetaPages().catch((error) => console.warn(`Initialize meta pages failed`, error));
 
     try {
+      const authStatusResult = await serverCheckAuthStatus();
+
       // Device
       const device = await prepareDevice();
       setDevice(device);

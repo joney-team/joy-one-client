@@ -1,15 +1,6 @@
 import { configs } from "@/configs/layout.config";
-import { StorageKey } from "@/constants/storage-key";
 import { t } from "@lingui/core/macro";
 import { getGlobal } from "../../global";
-
-export const setWorkspaceAuthSessionId = (sessionId: string) => {
-  sessionStorage.setItem(StorageKey.WORKSPACE_AUTH_SESSION_ID, sessionId);
-};
-
-export const getWorkspaceAuthSessionId = () => {
-  return sessionStorage.getItem(StorageKey.WORKSPACE_AUTH_SESSION_ID);
-};
 
 export const onFacebookLogin = async () => {
   const global = getGlobal();

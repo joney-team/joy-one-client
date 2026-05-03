@@ -177,6 +177,7 @@ const WorkspaceProvider: FC<PropsWithChildren> = (props) => {
       } else {
         setWorkspaceId(undefined);
         setIsInitialized(false);
+        endAppLoading("initial-workspace");
       }
     }
   }, [auth.user?._id, auth.isInitialized, workspaceId]);
