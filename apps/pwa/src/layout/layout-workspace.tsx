@@ -27,7 +27,7 @@ const WorkspaceHeader = dynamic(
 
 const HorizontalLayoutResizing = dynamic(
   () =>
-    import("../components/layout-resizing/HorizontalLayoutResizing").then(
+    import("../components/layout-resizing/horizontal-layout-resizing").then(
       (m) => m.HorizontalLayoutResizing,
     ),
   {

@@ -7,7 +7,7 @@ import { ganttConfig } from "./gantt-tasks-config";
 import { useGantt } from "./gantt-tasks-context";
 import { GanttProvider } from "./gantt-tasks-provider";
 
-import { HorizontalLayoutResizing } from "@/components/layout-resizing/HorizontalLayoutResizing";
+import { HorizontalLayoutResizing } from "@/components/layout-resizing/horizontal-layout-resizing";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import { useSessionStorage } from "@mantine/hooks";

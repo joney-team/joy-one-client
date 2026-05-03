@@ -9,6 +9,7 @@ export const zIndexes = {
   commonModals: 180,
   modalPayReceipt: 181,
   modalPrinter: 182,
-  modalConfirmation: 200,
   taskMenu: 190,
+  workspaceNavigationDrawer: 200,
+  modalConfirmation: 200,
 };

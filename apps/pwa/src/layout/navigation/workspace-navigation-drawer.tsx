@@ -36,6 +36,7 @@ import Link from "next/link";
 import { FC, Fragment, ReactNode, useMemo } from "react";
 import { Avatar } from "../../components/avatar";
 import { useNavigationWidth } from "../hooks/use-workspace-layout";
+import { zIndexes } from "@joy-one-client/config/layout";
 
 interface WorkspaceNavigationDrawerProps {
   style?: MantineStyleProp;
@@ -140,6 +141,7 @@ export const WorkspaceNavigationDrawer: FC<WorkspaceNavigationDrawerProps> = (pr
         withCloseButton={false}
         size={260}
         p={0}
+        zIndex={zIndexes.workspaceNavigationDrawer}
         styles={{
           body: {
             padding: 8,

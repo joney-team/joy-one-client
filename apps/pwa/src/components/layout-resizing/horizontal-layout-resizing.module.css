@@ -2,7 +2,7 @@
   top: 0;
   bottom: 0;
   cursor: col-resize;
-  z-index: 500;
+  z-index: 150;
 
   &::before {
     content: "";

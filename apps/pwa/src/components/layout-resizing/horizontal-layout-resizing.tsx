@@ -1,8 +1,8 @@
 "use client";
 
 import { classNames } from "@/utils/ui.utils";
-import { FC, Fragment, useEffect, useRef, useState } from "react";
-import styles from "./HorizontalLayoutResizing.module.css";
+import { FC, Fragment, MouseEventHandler, useEffect, useRef, useState } from "react";
+import styles from "./horizontal-layout-resizing.module.css";
 
 export interface HorizontalLayoutResizingProps {
   value: number;
@@ -77,26 +77,29 @@ export const HorizontalLayoutResizing: FC<HorizontalLayoutResizingProps> = ({
     };
   }, [isResizing, onFinished]);
 
+  const onMouseDown: MouseEventHandler<HTMLDivElement> = (e) => {
+    capturePosition.current = e.clientX - value;
+    setIsResizing(true);
+    e.preventDefault();
+  };
+
   return (
     <Fragment>
-      <div
-        className={classNames(styles.SplitPointer, {
-          [styles.isResizing]: isResizing,
-        })}
-        style={{ left: `${value - pointerSize / 2}px`, width: pointerSize, height, position }}
-        onMouseDown={(e) => {
-          capturePosition.current = e.clientX - value;
-          setIsResizing(true);
-          e.preventDefault();
-        }}
-      />
-
       <div
         style={{ left: `${value - 1}px`, height, position }}
         ref={dividerRef}
         className={classNames(styles.Divider, {
           [styles.isResizing]: isResizing,
         })}
+        onMouseDown={onMouseDown}
+      />
+
+      <div
+        className={classNames(styles.SplitPointer, {
+          [styles.isResizing]: isResizing,
+        })}
+        style={{ left: `${value - pointerSize / 2}px`, width: pointerSize, height, position }}
+        onMouseDown={onMouseDown}
       />
     </Fragment>
   );
