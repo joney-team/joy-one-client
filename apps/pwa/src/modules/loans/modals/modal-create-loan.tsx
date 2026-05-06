@@ -212,7 +212,7 @@ export const ModalCreateLoan = forwardRef<
 
   const onSubmit = form.onSubmit(async (values) => {
     if (!customer) return;
-    const location = await getGeolocation();
+    const location = await getGeolocation().catch(() => null);
     const loanPackage = loanPackages.find(
       (p) => p.assetTypes.includes(values.assetType) && p.days === values.packageDays,
     );
@@ -235,10 +235,12 @@ export const ModalCreateLoan = forwardRef<
             accountNumber: values.payment_accountNumber,
             accountBankId: values.payment_accountBankId,
           },
-          coord: {
-            lat: location.coords.latitude,
-            lng: location.coords.longitude,
-          },
+          coord: location
+            ? {
+                lat: location.coords.latitude,
+                lng: location.coords.longitude,
+              }
+            : null,
         },
       },
     });
