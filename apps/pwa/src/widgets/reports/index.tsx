@@ -110,6 +110,7 @@ export const ReportWidgets: FC = () => {
           toTime: queryReport.toTime,
           period: queryReport.period,
           userId: queryReport.userId,
+          workspaceBranchIds: queryReport.workspaceBranchIds,
         },
       },
     });
