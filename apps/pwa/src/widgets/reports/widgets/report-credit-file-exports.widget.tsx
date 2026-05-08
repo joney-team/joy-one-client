@@ -109,7 +109,7 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
         .replace(/:/g, "-");
 
       const fileName = String.capitalizeFirstLetter(
-        `${t`Reports`} ${t`Income expense`} ${t`From`} ${formatDate(props.ctx.fromTime)} ${t`To`} ${formatDate(props.ctx.toTime)} - ${exportedAt}`,
+        `${t`Reports`} ${t`Income expense`} ${t`From`} ${formatDate(props.ctx.fromTime)} ${t`To`} ${formatDate(props.ctx.toTime)}`,
       );
 
       await createFileExport({
@@ -181,74 +181,76 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
             <Trans>No exports yet</Trans>
           </Text>
         ) : (
-          <ScrollArea flex={1}>
+          <ScrollArea flex={1} offsetScrollbars>
             <Stack gap={6}>
               {exports.map((item) => (
-                <Group key={item._id} justify="space-between" wrap="nowrap" gap="xs">
-                  <Stack gap={2} style={{ minWidth: 0 }}>
-                    <Text size="xs" truncate>
-                      {item.fileName || t`Credit report`}
-                    </Text>
-                    <Text size="xs" c="dimmed">
-                      {item.createdAt
-                        ? DateTime.format(item.createdAt, {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                          })
-                        : "—"}
-                    </Text>
-                  </Stack>
+                <Card withBorder shadow="none" p="xs">
+                  <Group key={item._id} justify="space-between" wrap="nowrap" gap="xs">
+                    <Stack gap={2} style={{ minWidth: 0 }}>
+                      <Text size="xs" truncate>
+                        {item.fileName || t`Credit report`}
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        {item.createdAt
+                          ? DateTime.format(item.createdAt, {
+                              dateStyle: "short",
+                              timeStyle: "short",
+                            })
+                          : "—"}
+                      </Text>
+                    </Stack>
 
-                  <Group gap={6} wrap="nowrap">
-                    <StatusBadge status={item.status as FileExportStatus} />
+                    <Group gap={6} wrap="nowrap">
+                      <StatusBadge status={item.status as FileExportStatus} />
 
-                    {item.status === FileExportStatus.Processing && <Loader size={14} />}
+                      {item.status === FileExportStatus.Processing && <Loader size={14} />}
 
-                    {item.status === FileExportStatus.Finished && (
-                      <Tooltip label={t`Download`}>
+                      {item.status === FileExportStatus.Finished && (
+                        <Tooltip label={t`Download`}>
+                          <ActionIcon
+                            variant="subtle"
+                            color="green"
+                            loading={downloadingId === item._id}
+                            onClick={async () => {
+                              try {
+                                setDownloadingId(item._id);
+                                await downloadExport(item._id, item.fileName);
+                              } catch (error) {
+                                onError(error);
+                              } finally {
+                                setDownloadingId(null);
+                              }
+                            }}
+                          >
+                            <IconCloudDownload size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+
+                      {item.status === FileExportStatus.Failed && (
+                        <Tooltip label={item.error || t`Retry`}>
+                          <ActionIcon
+                            variant="subtle"
+                            color="red"
+                            onClick={() => handleRetry(item._id)}
+                          >
+                            <IconRefresh size={16} />
+                          </ActionIcon>
+                        </Tooltip>
+                      )}
+
+                      <Tooltip label={t`Delete`}>
                         <ActionIcon
                           variant="subtle"
-                          color="green"
-                          loading={downloadingId === item._id}
-                          onClick={async () => {
-                            try {
-                              setDownloadingId(item._id);
-                              await downloadExport(item._id, item.fileName);
-                            } catch (error) {
-                              onError(error);
-                            } finally {
-                              setDownloadingId(null);
-                            }
-                          }}
+                          color="gray"
+                          onClick={() => handleDelete(item._id, item.fileName)}
                         >
-                          <IconCloudDownload size={16} />
+                          <IconTrash size={16} />
                         </ActionIcon>
                       </Tooltip>
-                    )}
-
-                    {item.status === FileExportStatus.Failed && (
-                      <Tooltip label={item.error || t`Retry`}>
-                        <ActionIcon
-                          variant="subtle"
-                          color="red"
-                          onClick={() => handleRetry(item._id)}
-                        >
-                          <IconRefresh size={16} />
-                        </ActionIcon>
-                      </Tooltip>
-                    )}
-
-                    <Tooltip label={t`Delete`}>
-                      <ActionIcon
-                        variant="subtle"
-                        color="gray"
-                        onClick={() => handleDelete(item._id, item.fileName)}
-                      >
-                        <IconTrash size={16} />
-                      </ActionIcon>
-                    </Tooltip>
+                    </Group>
                   </Group>
-                </Group>
+                </Card>
               ))}
             </Stack>
           </ScrollArea>
