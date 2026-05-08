@@ -142,6 +142,7 @@ export function Selector<T extends SelectOption>(props: SelectorProps<T>) {
     query: query ?? emptyDocument,
     params: queryParams,
     isSkip: !query || !combobox.dropdownOpened,
+    ignoreSearchParams: true,
   });
 
   const options = useMemo(() => {

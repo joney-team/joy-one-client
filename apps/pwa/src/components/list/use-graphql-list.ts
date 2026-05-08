@@ -27,6 +27,7 @@ export interface UseGraphqlListArgs<T extends BaseData = BaseData> {
   normalizeParams?: (params?: Record<string, any>) => Record<string, any>;
   debug?: boolean;
   fetchPolicy?: "cache-first" | "cache-and-network" | "network-only" | "no-cache";
+  ignoreSearchParams?: boolean;
 }
 
 export type UseGraphqlListData<T extends BaseData = BaseData> = {
@@ -47,6 +48,7 @@ export const useGraphqlList = <T extends BaseData>({
   isSkip = false,
   autoFetch = true,
   normalizeParams,
+  ignoreSearchParams = false,
   ...args
 }: UseGraphqlListArgs<T>) => {
   const { t } = useLingui();
@@ -75,7 +77,7 @@ export const useGraphqlList = <T extends BaseData>({
           else combine[_key] = value;
         }
       });
-    } else {
+    } else if (!ignoreSearchParams) {
       searchs.forEach((value, key) => {
         const prefix = key.split("-");
         if (prefix.length === 1) combine[key] = value;
@@ -83,7 +85,7 @@ export const useGraphqlList = <T extends BaseData>({
     }
 
     return combine;
-  }, [searchs, listKey, args.params]);
+  }, [searchs, listKey, args.params, ignoreSearchParams]);
 
   const variables = useMemo(() => {
     return {

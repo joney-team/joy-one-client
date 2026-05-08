@@ -174,7 +174,7 @@ export const ReportWidgets: FC = () => {
       <Group gap={10}>
         <ButtonSelect
           icon={IconClock}
-          value={queryReport.period}
+          value={searchs.get("period") || Period.Month}
           options={[
             {
               label: <Trans>Date</Trans>,

@@ -416,6 +416,7 @@ input CreateFileExportInput {
   contextArgs: JSONObject!
   contextType: FileExportContextType!
   fileName: String
+  locale: AppLocale
 }
 
 input CreateLoanInput {
@@ -1189,8 +1190,8 @@ type FileExport {
   customFieldValues: [CustomFieldValue!]
   error: String
   fileName: String
-  fileUrl: String
   isArchived: Boolean
+  locale: AppLocale
   refs: [String!]
   source: EntitySource
   status: FileExportStatus!
@@ -1857,6 +1858,7 @@ type Mutation {
   defaultAttendanceCaptureRecord(input: DefaultRecordAttendanceInput!): AttendanceRecord!
   deleteCategory(id: String!): Boolean!
   deleteCustomField(id: String!): Boolean!
+  deleteFileExport(exportId: String!): Boolean!
   deleteMessageBox(boxId: String!): Boolean!
   deletePluginAiAssistant(id: String!): Boolean!
   deletePluginMessageHub(id: String!): Boolean!

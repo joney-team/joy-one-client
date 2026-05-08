@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/buttons/button";
+import { DateFormat } from "@/components/format/date-format";
 import { SectionTitle } from "@/components/session-title";
 import { EventType, FileExportContextType, FileExportStatus } from "@/graphql/enums.graphql";
 import { onConfirmModal } from "@/hooks/use-confirm-modal";
@@ -100,14 +101,6 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
       const formatDate = (time: number) =>
         DateTime.format(time, { locale, dateStyle: "short" }).replace(/\//g, "-");
 
-      const exportedAt = DateTime.format(Date.now(), {
-        locale,
-        dateStyle: "short",
-        timeStyle: "short",
-      })
-        .replace(/\//g, "-")
-        .replace(/:/g, "-");
-
       const fileName = String.capitalizeFirstLetter(
         `${t`Reports`} ${t`Income expense`} ${t`From`} ${formatDate(props.ctx.fromTime)} ${t`To`} ${formatDate(props.ctx.toTime)}`,
       );
@@ -193,17 +186,14 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
                 <Card key={item._id} withBorder shadow="none" p="xs">
                   <Group justify="space-between" wrap="nowrap" gap="xs">
                     <Stack gap={2} style={{ minWidth: 0 }}>
-                      <Text size="xs" truncate>
-                        {item.fileName || t`Credit report`}
+                      <Text size="sm" truncate>
+                        {item.fileName || <Trans>Credit report</Trans>}
                       </Text>
-                      <Text size="xs" c="dimmed">
-                        {item.createdAt
-                          ? DateTime.format(item.createdAt, {
-                              dateStyle: "short",
-                              timeStyle: "short",
-                            })
-                          : "—"}
-                      </Text>
+                      {item.createdAt && (
+                        <Text size="xs" c="dimmed">
+                          <DateFormat value={item.createdAt} />
+                        </Text>
+                      )}
                     </Stack>
 
                     <Group gap={6} wrap="nowrap">
