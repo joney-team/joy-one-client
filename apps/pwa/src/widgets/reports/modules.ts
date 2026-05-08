@@ -22,7 +22,6 @@ import {
 } from "@tabler/icons-react";
 import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { ReportWidgetsContext, ReportWidgetType } from "./types";
-import { ReportCreditWidget } from "./widgets/report-credit.widget";
 import { ReportCreditFileExportsWidget } from "./widgets/report-credit-file-exports.widget";
 import { ReportProductsWidget } from "./widgets/report-products.widget";
 
@@ -184,20 +183,6 @@ export const useReportWidgetModules = (): {
           },
         },
         component: ReportProductsWidget,
-      },
-      [ReportWidgetType.LOANS_RECEIPTS]: {
-        config: {
-          workspaceTypes: [WorkspaceType.Credit],
-          name: () => t`Credit report`,
-          icon: IconReport,
-          layout: {
-            initH: 3,
-            initW: 6,
-            minW: 4,
-            minH: 3,
-          },
-        },
-        component: ReportCreditWidget,
       },
       [ReportWidgetType.CREDIT_FILE_EXPORTS]: {
         config: {
