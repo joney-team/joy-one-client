@@ -184,8 +184,8 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
           <ScrollArea flex={1} offsetScrollbars>
             <Stack gap={6}>
               {exports.map((item) => (
-                <Card withBorder shadow="none" p="xs">
-                  <Group key={item._id} justify="space-between" wrap="nowrap" gap="xs">
+                <Card key={item._id} withBorder shadow="none" p="xs">
+                  <Group justify="space-between" wrap="nowrap" gap="xs">
                     <Stack gap={2} style={{ minWidth: 0 }}>
                       <Text size="xs" truncate>
                         {item.fileName || t`Credit report`}

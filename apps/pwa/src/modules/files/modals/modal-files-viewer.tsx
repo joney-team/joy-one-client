@@ -261,7 +261,7 @@ export const ModalFilesViewer = forwardRef<ModalFilesViewerRef, ModalFilesViewer
                     );
                   }
 
-                  if (renderFile.type === FileType.Pdf) {
+                  if (renderFile.type === FileType.Pdf || activeFile.type === FileType.Pdf) {
                     return <FilePdfViewer file={activeFile} />;
                   }
 

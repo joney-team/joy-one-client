@@ -37,8 +37,11 @@ export const renderFileUrl = (raw?: string | null) => {
   if (resource.images.includes(raw.trim())) return raw;
 
   if (raw.includes("blob") || raw.indexOf("https") === 0 || raw.indexOf("http") === 0) return raw;
-  if (raw.startsWith(fileSchema))
+
+  if (raw.startsWith(fileSchema)) {
     return raw.replace(fileSchema, `${config.API_CLIENT_SIDE_URL}/files/`);
+  }
+
   return `${config.API_CLIENT_SIDE_URL}/files/${raw}`;
 };
 
