@@ -22,11 +22,11 @@ export type ColumnItemRenderer<FieldValue, Data> = FC<{
 }>;
 
 export type ExportToExcelItem = {
-  text?: string | undefined;
-  imageUrl?: string | undefined;
-  money?: number | undefined;
-  number?: number | undefined;
-  date?: number;
+  text?: string | null;
+  imageUrl?: string | null;
+  money?: number | null;
+  number?: number | null;
+  date?: number | null;
 };
 
 export type ExportToExcelOutput = ExportToExcelItem | (ExportToExcelItem & { col: string })[];

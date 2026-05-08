@@ -1380,13 +1380,13 @@ enum LoanPackageType {
 }
 
 type LoanPayment {
-  accountBankId: String!
+  accountBankId: Float!
   accountName: String!
   accountNumber: String!
 }
 
 input LoanPaymentInput {
-  accountBankId: String!
+  accountBankId: Float!
   accountName: String!
   accountNumber: String!
 }

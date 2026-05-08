@@ -52,6 +52,7 @@ import { LoanFragment } from "./graphql/fragmentLoan.graphql";
 import GetLoansDocument from "./graphql/getLoans.graphql";
 import { loanAssetTypes, loanPackageTypes, loanStatuses } from "./loans-constants";
 import { type ModalCreateLoanRef } from "./modals/modal-create-loan";
+import { useLang } from "../lang/lang-context";
 
 const ModalUpdateWorkspaceBranch = dynamic(
   () =>
@@ -81,11 +82,12 @@ interface LoanListProps {
 export const LoanList: FC<LoanListProps> = (props) => {
   const { t } = useLingui();
   const client = useApolloClient();
-  const { workspaceSetting } = useWorkspaceSetting();
   const color = useColor();
   const location = useLocations();
   const modalCreateLoanRef = useRef<ModalCreateLoanRef>(null);
   const modalUpdateWorkspaceBranchRef = useRef<ModalUpdateWorkspaceBranchRef>(null);
+  const lang = useLang();
+  const { workspaceSetting } = useWorkspaceSetting();
   const [archiveLoans] = useMutation(BulkArchiveLoansDocument);
 
   return (
@@ -260,7 +262,19 @@ export const LoanList: FC<LoanListProps> = (props) => {
                 </Stack>
               );
             },
-            exportToExcel: false,
+            exportToExcel: (_, loan) => {
+              const { end } = DateTime.getRange(new Date(), "day");
+              const diff = DateTime.toSeconds(end) - DateTime.getNowInSeconds();
+              return [
+                { col: t`Payment date`, date: loan.nextReceiptAt },
+                {
+                  col: t`Late payment`,
+                  text: loan.nextReceiptAt
+                    ? DateTime.formatRelative(loan.nextReceiptAt - diff, lang.locale)
+                    : "",
+                },
+              ];
+            },
           },
           status: {
             defaultWidth: 180,
