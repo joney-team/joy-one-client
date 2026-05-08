@@ -166,7 +166,13 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
       <Stack h="100%" gap="sm">
         <SectionTitle name={<Trans>Export credit report</Trans>} icon={IconFileExport}>
           <Group justify="end" flex={1}>
-            <Button leftIcon={IconFileExport} onClick={handleCreate} loading={isCreating} fz={12}>
+            <Button
+              size="compact-sm"
+              leftIcon={IconFileExport}
+              onClick={handleCreate}
+              loading={isCreating}
+              fz={12}
+            >
               <Trans>Request export</Trans>
             </Button>
           </Group>
