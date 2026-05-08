@@ -180,6 +180,9 @@ export const EventType = {
   CustomFieldsUpdated: 'CUSTOM_FIELDS_UPDATED',
   EInvoiceCreated: 'E_INVOICE_CREATED',
   EInvoiceRemoved: 'E_INVOICE_REMOVED',
+  FileExportFailed: 'FILE_EXPORT_FAILED',
+  FileExportFinished: 'FILE_EXPORT_FINISHED',
+  FileExportNew: 'FILE_EXPORT_NEW',
   FileNew: 'FILE_NEW',
   FileRemoved: 'FILE_REMOVED',
   LoansApproved: 'LOANS_APPROVED',
@@ -326,6 +329,19 @@ export const EventVariant = {
 } as const;
 
 export type EventVariant = typeof EventVariant[keyof typeof EventVariant];
+export const FileExportContextType = {
+  CreditReport: 'CREDIT_REPORT'
+} as const;
+
+export type FileExportContextType = typeof FileExportContextType[keyof typeof FileExportContextType];
+export const FileExportStatus = {
+  Failed: 'FAILED',
+  Finished: 'FINISHED',
+  Idle: 'IDLE',
+  Processing: 'PROCESSING'
+} as const;
+
+export type FileExportStatus = typeof FileExportStatus[keyof typeof FileExportStatus];
 /** Available file types */
 export const FileType = {
   Audio: 'AUDIO',

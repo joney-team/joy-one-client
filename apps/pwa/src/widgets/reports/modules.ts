@@ -23,6 +23,7 @@ import {
 import { chartWidget, chartWidgetlayoutConfig } from "../common/chart.widget";
 import { ReportWidgetsContext, ReportWidgetType } from "./types";
 import { ReportCreditWidget } from "./widgets/report-credit.widget";
+import { ReportCreditFileExportsWidget } from "./widgets/report-credit-file-exports.widget";
 import { ReportProductsWidget } from "./widgets/report-products.widget";
 
 export const useReportWidgetModules = (): {
@@ -197,6 +198,20 @@ export const useReportWidgetModules = (): {
           },
         },
         component: ReportCreditWidget,
+      },
+      [ReportWidgetType.CREDIT_FILE_EXPORTS]: {
+        config: {
+          workspaceTypes: [WorkspaceType.Credit],
+          name: () => t`Export credit report`,
+          icon: IconReport,
+          layout: {
+            initH: 10,
+            initW: 6,
+            minH: 10,
+            minW: 6,
+          },
+        },
+        component: ReportCreditFileExportsWidget,
       },
       [ReportWidgetType.LOANS_NEW_CHART]: {
         config: {

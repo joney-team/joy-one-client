@@ -1,0 +1,7 @@
+#import "./fragmentFileExport.graphql"
+
+mutation CreateFileExport($input: CreateFileExportInput!) {
+  fileExport: createFileExport(input: $input) {
+    ...FileExport
+  }
+}

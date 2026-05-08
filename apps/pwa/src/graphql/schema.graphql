@@ -412,6 +412,12 @@ input CoordinatesInput {
   lng: Float!
 }
 
+input CreateFileExportInput {
+  contextArgs: JSONObject!
+  contextType: FileExportContextType!
+  fileName: String
+}
+
 input CreateLoanInput {
   amount: Float!
   assetData: JSONObject
@@ -988,6 +994,9 @@ enum EventType {
   CUSTOM_FIELDS_UPDATED
   E_INVOICE_CREATED
   E_INVOICE_REMOVED
+  FILE_EXPORT_FAILED
+  FILE_EXPORT_FINISHED
+  FILE_EXPORT_NEW
   FILE_NEW
   FILE_REMOVED
   LOANS_APPROVED
@@ -1170,6 +1179,40 @@ type File {
   updatedAt: Float
   uploadByUserId: String
   url: String!
+}
+
+type FileExport {
+  _id: String!
+  contextArgs: JSONObject
+  contextType: FileExportContextType!
+  createdAt: Float
+  customFieldValues: [CustomFieldValue!]
+  error: String
+  fileName: String
+  fileUrl: String
+  isArchived: Boolean
+  refs: [String!]
+  source: EntitySource
+  status: FileExportStatus!
+  updatedAt: Float
+  userId: String!
+  workspaceId: String!
+}
+
+enum FileExportContextType {
+  CREDIT_REPORT
+}
+
+type FileExportList {
+  results: [FileExport!]!
+  total: Float!
+}
+
+enum FileExportStatus {
+  FAILED
+  FINISHED
+  IDLE
+  PROCESSING
 }
 
 """Available file types"""
@@ -1794,6 +1837,7 @@ type Mutation {
   createCustomerForm(input: CustomerFormInput!): CustomerForm!
   createEInvoice(input: GenerateEInvoiceDataInput!): EInvoice!
   createEInvoiceProvider(input: CreatePluginEInvoiceProviderInput!): PluginEInvoiceProvider!
+  createFileExport(input: CreateFileExportInput!): FileExport!
   createLoan(input: CreateLoanInput!): Loan!
   createOrder(input: OrderInput!): Order!
   createPartner(input: PartnerInput!): Partner!
@@ -1863,6 +1907,7 @@ type Mutation {
   requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
   rescheduleBooking(assigneeUserIds: [String!], createdAt: Float, customerId: String, endTime: Float!, note: String, prevBookingId: String!, reasonForCancellation: String, startTime: Float!, status: BookingStatus!, title: String, workspaceBranchId: String): Booking!
   resetEInvoicesProviderTemplates(providerId: String!): PluginEInvoiceProvider!
+  retryFileExport(exportId: String!): FileExport!
   revertApproveLoan(id: String!): Loan!
   revertFulfilledLoan(id: String!): Loan!
   revertLiquidationLoan(id: String!): Loan!
@@ -3049,6 +3094,39 @@ type Query {
   getEventById(id: String!): Event!
   getEvents(ids: [String!], limit: Float = 30, offset: Float, query: EventsQuery): EventsPaginated!
   getFileById(fileId: String!): File!
+  getFileExport(exportId: String!): FileExport!
+  getFileExports(
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+  ): FileExportList!
   getFiles(
     ids: [String!]
     limit: Float = 30

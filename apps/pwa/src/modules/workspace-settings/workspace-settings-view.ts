@@ -489,8 +489,13 @@ const workspaceDefaultViews: { [key in WorkspaceType]?: WorkspaceView } = {
         state: null,
       },
       { __typename: "DisplayWidget", id: "", type: ReportWidgetType.LOANS_NEW_CHART, state: null },
-
       { __typename: "DisplayWidget", id: "", type: ReportWidgetType.LOANS_RECEIPTS, state: null },
+      {
+        __typename: "DisplayWidget",
+        id: "",
+        type: ReportWidgetType.CREDIT_FILE_EXPORTS,
+        state: null,
+      },
     ],
   },
 };

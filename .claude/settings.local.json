@@ -5,7 +5,16 @@
       "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(workspace\\\\\\))",
       "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(workspace-bare\\\\\\))",
       "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/\\\\\\(public\\\\\\))",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(find /Users/jasontran/joney/joy-one-server/src/file-exports -type f | head -50)",
+      "Read(//Users/jasontran/joney/joy-one-server/src/file-exports/**)",
+      "Bash(xargs ls)",
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/modules/file-exports/graphql)",
+      "Bash(mkdir -p /Users/jasontran/joney/joy-one-client/apps/pwa/src/app/api/file-exports/\\\\[exportId\\\\]/download)"
+    ],
+    "additionalDirectories": [
+      "/Users/jasontran/joney/joy-one-client/apps/pwa/src/modules/file-exports",
+      "/Users/jasontran/joney/joy-one-client/apps/pwa/src/app/api/file-exports/[exportId]"
     ]
   }
 }

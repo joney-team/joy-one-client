@@ -1,0 +1,7 @@
+#import "./fragmentFileExport.graphql"
+
+mutation RetryFileExport($exportId: String!) {
+  fileExport: retryFileExport(exportId: $exportId) {
+    ...FileExport
+  }
+}

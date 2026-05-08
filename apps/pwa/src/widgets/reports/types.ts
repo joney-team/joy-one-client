@@ -23,6 +23,7 @@ export enum ReportWidgetType {
   LOANS_FULFILLED_AMOUNT_CHART = "LOANS_FULFILLED_AMOUNT_CHART",
   LOANS_NEW_CUSTOMERS_AND_FULFILLED = "LOANS_NEW_CUSTOMERS_AND_FULFILLED",
   LOANS_FULFILLED_NEW = "LOANS_FULFILLED_NEW",
+  CREDIT_FILE_EXPORTS = "CREDIT_FILE_EXPORTS",
 }
 
 export interface ReportWidgetsContext {
@@ -36,4 +37,5 @@ export interface ReportWidgetsContext {
   workspace: WorkspaceContext;
   workspaceSetting: WorkspaceSettingFragment;
   currency?: CurrencyData;
+  workspaceBranchIds?: string[];
 }

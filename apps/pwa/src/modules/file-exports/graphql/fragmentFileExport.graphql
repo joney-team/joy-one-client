@@ -1,0 +1,11 @@
+fragment FileExport on FileExport {
+  _id
+  contextType
+  contextArgs
+  fileName
+  status
+  error
+  createdAt
+  updatedAt
+  userId
+}

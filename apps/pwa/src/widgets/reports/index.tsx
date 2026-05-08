@@ -164,6 +164,7 @@ export const ReportWidgets: FC = () => {
     workspace,
     workspaceSetting: workspaceSetting!,
     currency,
+    workspaceBranchIds: queryReport.workspaceBranchIds,
   };
 
   if (!workspaceSetting) return null;
