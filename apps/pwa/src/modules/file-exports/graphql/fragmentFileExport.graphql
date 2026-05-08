@@ -1,3 +1,5 @@
+#import "../../workspace-members/graphql/fragmentWorkspaceMember.graphql"
+
 fragment FileExport on FileExport {
   _id
   contextType
@@ -8,4 +10,7 @@ fragment FileExport on FileExport {
   createdAt
   updatedAt
   userId
+  createdByUser {
+    ...WorkspaceMember
+  }
 }

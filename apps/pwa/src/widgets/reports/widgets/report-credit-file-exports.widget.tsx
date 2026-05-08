@@ -191,7 +191,14 @@ export const ReportCreditFileExportsWidget: FC<WidgetProps<ReportWidgetsContext>
                       </Text>
                       {item.createdAt && (
                         <Text size="xs" c="dimmed">
-                          <DateFormat value={item.createdAt} />
+                          • <Trans>Time</Trans>: <DateFormat value={item.createdAt} />
+                        </Text>
+                      )}
+                      {item.createdByUser && (
+                        <Text size="xs" c="dimmed">
+                          • <Trans>Requester</Trans>
+                          {": "}
+                          {item.createdByUser.memberDisplayName || item.createdByUser.name}
                         </Text>
                       )}
                     </Stack>

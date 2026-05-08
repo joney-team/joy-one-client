@@ -1187,6 +1187,7 @@ type FileExport {
   contextArgs: JSONObject
   contextType: FileExportContextType!
   createdAt: Float
+  createdByUser: WorkspaceMember
   customFieldValues: [CustomFieldValue!]
   error: String
   fileName: String
