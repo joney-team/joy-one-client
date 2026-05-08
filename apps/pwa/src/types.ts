@@ -61,19 +61,6 @@ export interface ResponseList<T> {
   count: number;
 }
 
-export enum Period {
-  DATE = "date",
-  WEEK = "week",
-  MONTH = "month",
-  YEAR = "year",
-}
-
-export enum Gender {
-  MALE = "MALE",
-  FEMALE = "FEMALE",
-  OTHER = "OTHER",
-}
-
 export interface Coordinates {
   lat: number;
   lng: number;

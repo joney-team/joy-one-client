@@ -1,12 +1,11 @@
 "use client";
 
-import { WorkspaceType } from "@/graphql/enums.graphql";
+import { Period, WorkspaceType } from "@/graphql/enums.graphql";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import {
   reportConvertMoneyAmount,
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
-import { Period } from "@/types";
 import { round } from "@/utils/number.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { t } from "@lingui/core/macro";
@@ -42,7 +41,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           ctx.timeSeries.data?.period.map((r) => r.data.receipts.revenue) || [],
         onClick: (ctx) =>
           ctx.router.push(`/reports`, {
-            period: Period.DATE,
+            period: Period.Date,
             date: DateTime.toSeconds(new Date()),
           }),
         boxColor: (ctx) => {
@@ -69,7 +68,7 @@ export const dashboardWidgetModules: EWidgetModules<DashboardWidgetType, Dashboa
           ctx.timeSeries.data?.period.map((r) => r.data.customers.total) || [],
         onClick: (ctx) =>
           ctx.router.push(`/customers`, {
-            "cus-timeRangeCreatedAt": `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
+            "cus-timeRangeCreatedAt": `${Period.Date}-${DateTime.toSeconds(new Date())}`,
           }),
       }),
     },

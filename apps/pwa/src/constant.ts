@@ -1,7 +1,8 @@
 import { defineMessage, MacroMessageDescriptor, t } from "@lingui/core/macro";
 import { MantineColor } from "@mantine/core";
 import { Icon, IconGenderBigender, IconGenderFemale, IconGenderMale } from "@tabler/icons-react";
-import { AppEntity, CalendarView, DynamicSelectionOperator, Gender } from "./types";
+import { Gender } from "./graphql/enums.graphql";
+import { AppEntity, CalendarView, DynamicSelectionOperator } from "./types";
 
 export const appEntities: Record<AppEntity, { name: MacroMessageDescriptor }> = {
   [AppEntity.CUSTOMERS]: { name: defineMessage`Customers` },
@@ -44,12 +45,12 @@ export const dynamicSelectionOperators: Record<DynamicSelectionOperator, { name:
 export const genders: Record<
   Gender,
   {
-    name: () => string;
+    name: MacroMessageDescriptor;
     color: MantineColor;
     icon: Icon;
   }
 > = {
-  [Gender.MALE]: { name: () => t`Male`, color: "blue", icon: IconGenderMale },
-  [Gender.FEMALE]: { name: () => t`Female`, color: "pink", icon: IconGenderFemale },
-  [Gender.OTHER]: { name: () => t`Other`, color: "orange", icon: IconGenderBigender },
+  [Gender.Male]: { name: defineMessage`Male`, color: "blue", icon: IconGenderMale },
+  [Gender.Female]: { name: defineMessage`Female`, color: "pink", icon: IconGenderFemale },
+  [Gender.Other]: { name: defineMessage`Other`, color: "orange", icon: IconGenderBigender },
 };

@@ -4,9 +4,8 @@ import { ButtonSelect } from "@/components/buttons/button-select";
 import { Empty } from "@/components/empty";
 import { SectionTitle } from "@/components/session-title";
 import { StorageKey } from "@/constants/storage-key";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, Period } from "@/graphql/enums.graphql";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
-import { Period } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -51,7 +50,7 @@ export const DashboardBookings: FC = () => {
   const { data: todayBookings, refetch } = useQuery(GetBookingsDocument, {
     variables: {
       query: {
-        timeRangeStartTime: `${Period.DATE}-${DateTime.toSeconds(new Date())}`,
+        timeRangeStartTime: `${Period.Date}-${DateTime.toSeconds(new Date())}`,
         getAll: true,
       },
     },

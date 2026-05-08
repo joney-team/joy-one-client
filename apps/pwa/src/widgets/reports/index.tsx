@@ -167,6 +167,8 @@ export const ReportWidgets: FC = () => {
     workspaceBranchIds: queryReport.workspaceBranchIds,
   };
 
+  const searchPeriod = searchs.get("period") || Period.Month;
+
   if (!workspaceSetting) return null;
 
   return (
@@ -196,32 +198,32 @@ export const ReportWidgets: FC = () => {
             if (typeof value !== "string") return;
             router.setQuery("period", value, true);
           }}
-          onClear={!!searchs.get("period") ? undefined : () => router.removeQuery("period", true)}
+          onClear={searchs.get("period") ? () => router.removeQuery("period", true) : undefined}
         />
 
         <ButtonSelect
           icon={IconClock}
           label={(function () {
             const date = DateTime.normalizeDate(queryReport.date ?? new Date());
-            if (queryReport.period === Period.Month)
+            if (searchPeriod === Period.Month)
               return `${date.getMonth() + 1}/${date.getFullYear()}`;
-            if (queryReport.period === Period.Year) return `${date.getFullYear()}`;
-            if (queryReport.period === Period.Date) return <DateFormat value={date} type="date" />;
+            if (searchPeriod === Period.Year) return `${date.getFullYear()}`;
+            if (searchPeriod === Period.Date) return <DateFormat value={date} type="date" />;
           })()}
           isActive
-          onClear={() => router.removeQueries(["date"], true)}
+          onClear={searchs.get("date") ? () => router.removeQueries(["date"], true) : undefined}
           onClick={() =>
             OnModalDatePicker({
-              period: queryReport.period,
+              period: searchPeriod,
               date: DateTime.normalizeDate(queryReport.date ?? new Date()),
               onSelected:
-                queryReport.period === Period.Date
+                searchPeriod === Period.Date
                   ? (date) => {
                       router.setQueries({ date: DateTime.toSeconds(date).toString() }, true);
                     }
                   : undefined,
               onRangeSelected:
-                queryReport.period !== Period.Date
+                searchPeriod !== Period.Date
                   ? (range) => {
                       if (range && range[0]) {
                         router.setQueries({ date: DateTime.toSeconds(range[0]).toString() }, true);

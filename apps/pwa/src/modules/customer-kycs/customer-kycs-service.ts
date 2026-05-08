@@ -1,4 +1,4 @@
-import { Gender } from "@/types";
+import { Gender } from "@/graphql/enums.graphql";
 import { DateTime } from "@joy-one-client/utils/date-time";
 
 export const parseCidDate = (d: string) => {
@@ -13,15 +13,15 @@ export const decodeCid = (cid: string) => {
   ).split("|");
 
   const genderMatching: { [key: string]: Gender } = {
-    Nam: Gender.MALE,
-    Nữ: Gender.FEMALE,
+    Nam: Gender.Male,
+    Nữ: Gender.Female,
   };
 
   return {
     cidNumber,
     cidFullName,
     cidBirthday: parseCidDate(cidBirthday),
-    cidGender: genderMatching[cidGender] || Gender.OTHER,
+    cidGender: genderMatching[cidGender] || Gender.Other,
     address,
     cidCreatedAt: parseCidDate(cidCreatedAt),
   };

@@ -1,13 +1,8 @@
 export type RawDate = Date | string | number;
-export type DateTimeUnit =
-  | "day"
-  | "date"
-  | "week"
-  | "month"
-  | "year"
-  | "hour"
-  | "minute"
-  | "second";
+
+type DateTimeUnitLower = "day" | "date" | "week" | "month" | "year" | "hour" | "minute" | "second";
+
+export type DateTimeUnit = DateTimeUnitLower | Uppercase<DateTimeUnitLower>;
 
 export class DateTime {
   static isValid(raw: RawDate): boolean {

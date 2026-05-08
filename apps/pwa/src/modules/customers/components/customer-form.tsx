@@ -22,13 +22,12 @@ import { FC, useEffect } from "react";
 import { Form } from "@/components/form";
 import { DateInput } from "@/components/inputs/date-input";
 import { genders } from "@/constant";
-import { AppLocale, WorkspaceType } from "@/graphql/enums.graphql";
+import { AppLocale, Gender, WorkspaceType } from "@/graphql/enums.graphql";
 import { CustomerInput } from "@/graphql/types.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { getClientLocale } from "@/modules/lang/lang-service";
 import { WorkspaceBranchInput } from "@/modules/workspace-branches/workspace-branch-input";
 import { WorkspaceMembersInput } from "@/modules/workspace-members/components/workspace-members-input";
-import { Gender } from "@/types";
 import { useMutation } from "@apollo/client/react";
 import { normalizeObject } from "@joy-one-client/utils/object";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
@@ -213,7 +212,7 @@ export const CustomerForm: FC<CustomerFormProps> = (props) => {
             label={<Trans>Gender</Trans>}
             searchable
             data={Object.values(Gender).map((gender) => ({
-              label: genders[gender].name(),
+              label: t(genders[gender].name),
               value: gender,
             }))}
             {...form.getInputProps("gender")}

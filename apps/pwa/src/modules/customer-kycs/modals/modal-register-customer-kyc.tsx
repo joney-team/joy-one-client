@@ -5,10 +5,10 @@ import { WithCamera } from "@/components/camera";
 import { EntityImage } from "@/components/entity-image";
 import { Modal } from "@/components/modal/modal";
 import { genders } from "@/constant";
+import { Gender } from "@/graphql/enums.graphql";
 import { CustomerKycInput } from "@/graphql/types.graphql";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
-import { Gender } from "@/types";
 import { useMutation } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
@@ -277,7 +277,7 @@ export const WithModalRegisterCustomerKyc: FC<{
                         {...form.getInputProps("cidGender")}
                         data={Object.values(Gender).map((v) => ({
                           value: v,
-                          label: genders[v].name(),
+                          label: t(genders[v].name),
                         }))}
                       />
 

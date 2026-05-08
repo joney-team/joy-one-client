@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/buttons/button";
 import { ModalHead } from "@/components/modal/modal-head";
-import { Period } from "@/types";
+import { Period } from "@/graphql/enums.graphql";
 import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { DateTime } from "@joy-one-client/utils/date-time";
@@ -40,7 +40,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
   const { t } = useLingui();
 
   if (props.onRangeSelected) {
-    if (props.period === Period.WEEK) {
+    if (props.period === Period.Week) {
       return (
         <Stack align="center" justify="center">
           <Card p="md" withBorder>
@@ -94,7 +94,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
       );
     }
 
-    if (props.period === Period.MONTH) {
+    if (props.period === Period.Month) {
       return (
         <Stack align="center" justify="center">
           <Card p="md" withBorder>
@@ -147,7 +147,7 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
       );
     }
 
-    if (props.period === Period.YEAR) {
+    if (props.period === Period.Year) {
       return (
         <Stack align="center" justify="center">
           <NumberInput
@@ -270,16 +270,17 @@ export const ModalDatePicker: FC<ModalDatePickerProps> = (props) => {
 };
 
 export const OnModalDatePicker = (props: ModalDatePickerProps) => {
+  const period = props.period?.toUpperCase();
   return modals.open({
     modalId: "date-picker",
     title: (
       <ModalHead
         name={
-          props.period === Period.MONTH ? (
+          period === Period.Month ? (
             <Trans>Select month</Trans>
-          ) : props.period === Period.WEEK ? (
+          ) : period === Period.Week ? (
             <Trans>Select week</Trans>
-          ) : props.period === Period.YEAR ? (
+          ) : period === Period.Year ? (
             <Trans>Select year</Trans>
           ) : (
             <Trans>Select date</Trans>
@@ -288,7 +289,7 @@ export const OnModalDatePicker = (props: ModalDatePickerProps) => {
         icon={IconCalendar}
       />
     ),
-    children: <ModalDatePicker {...props} />,
+    children: <ModalDatePicker {...props} period={period} />,
     yOffset: 10,
     zIndex: zIndexes.commonModals + 1,
   });

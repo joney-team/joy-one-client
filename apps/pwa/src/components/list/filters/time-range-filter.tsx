@@ -5,7 +5,6 @@ import { Menu, MenuDropdown, Text } from "@mantine/core";
 import { DateFormat } from "@/components/format/date-format";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useColor } from "@/modules/theme/use-color";
-import { Period } from "@/types";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
 import { Trans } from "@lingui/react/macro";
@@ -19,6 +18,7 @@ import {
 import { FC, Fragment, useMemo, useState } from "react";
 import { useListContext } from "../list-context";
 import { FilterProps } from "./types";
+import { Period } from "@/graphql/enums.graphql";
 
 export interface TimeRangeFilterConfig {}
 
@@ -37,7 +37,7 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
   const { period, fromDate, toDate } = useMemo(() => {
     if (filterRangeValue) {
       return {
-        period: Period.DATE,
+        period: Period.Date,
         fromDate: filterValue.split("-")[0],
         toDate: filterValue.split("-")[1],
       };
@@ -58,14 +58,14 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
     {
       label: <Trans>Date</Trans>,
       icon: IconCalendar,
-      value: Period.DATE,
+      value: Period.Date,
       onClick: () =>
         OnModalDatePicker({
           onSelected(date) {
             if (!date) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.DATE}-${DateTime.toSeconds(date)}`,
+              [filterPeriodKey]: `${Period.Date}-${DateTime.toSeconds(date)}`,
             });
           },
         }),
@@ -73,15 +73,15 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
     {
       label: <Trans>Month</Trans>,
       icon: IconCalendarMonth,
-      value: Period.MONTH,
+      value: Period.Month,
       onClick: () =>
         OnModalDatePicker({
-          period: Period.MONTH,
+          period: Period.Month,
           onRangeSelected: (date) => {
             if (!date || !date[0]) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.MONTH}-${DateTime.toSeconds(date[0])}`,
+              [filterPeriodKey]: `${Period.Month}-${DateTime.toSeconds(date[0])}`,
             });
           },
         }),
@@ -89,15 +89,15 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
     {
       label: <Trans>Year</Trans>,
       icon: IconCalendarEvent,
-      value: Period.YEAR,
+      value: Period.Year,
       onClick: () =>
         OnModalDatePicker({
-          period: Period.YEAR,
+          period: Period.Year,
           onRangeSelected: (date) => {
             if (!date || !date[0]) return;
             list.setParams({
               [filterRangeKey]: null,
-              [filterPeriodKey]: `${Period.YEAR}-${DateTime.toSeconds(date[0])}`,
+              [filterPeriodKey]: `${Period.Year}-${DateTime.toSeconds(date[0])}`,
             });
           },
         }),
@@ -131,17 +131,17 @@ export const TimeRangeFilter: FC<FilterProps> = ({ column, wrapper: Wrapper }) =
         </Fragment>
       );
 
-    if (period === Period.DATE) {
+    if (period === Period.Date) {
       return <DateFormat value={fromDate} type="date" />;
     }
 
-    if (period === Period.MONTH) {
+    if (period === Period.Month) {
       return (
         <DateFormat value={fromDate} type="custom" format={{ month: "2-digit", year: "2-digit" }} />
       );
     }
 
-    if (period === Period.YEAR) {
+    if (period === Period.Year) {
       return <DateFormat value={fromDate} type="custom" format={{ year: "numeric" }} />;
     }
   }, [filterRangeKey, period, fromDate, toDate]);

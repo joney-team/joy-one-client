@@ -368,7 +368,7 @@ export const LoanDetail: NextPage = () => {
                   visible={!!customer?.gender}
                   content={
                     <Text truncate="end" fz={16} fw={500} maw={250}>
-                      {customer.gender ? genders[customer.gender].name() : "--"}
+                      {customer.gender ? t(genders[customer.gender].name) : "--"}
                     </Text>
                   }
                 />

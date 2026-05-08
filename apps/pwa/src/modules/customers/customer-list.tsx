@@ -7,12 +7,11 @@ import { codeColumn } from "@/components/list/columns/code-column";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { genders } from "@/constant";
-import { EventType } from "@/graphql/enums.graphql";
+import { EventType, Gender } from "@/graphql/enums.graphql";
 import { CustomerCard } from "@/modules/customers/components/customer-card";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { Gender } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import {
   IconEye,
@@ -40,6 +39,7 @@ const ModalCustomer = dynamic(
 );
 
 export const CustomerList: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const modalCustomerRef = useRef<ModalCustomerRef>(null);
 
@@ -70,7 +70,7 @@ export const CustomerList: FC = () => {
               name: <Trans>Gender</Trans>,
               icon: IconGenderBigender,
               options: Object.values(Gender).map((gender) => ({
-                label: genders[gender].name(),
+                label: t(genders[gender].name),
                 value: gender,
                 color: genders[gender].color,
                 icon: genders[gender].icon,
