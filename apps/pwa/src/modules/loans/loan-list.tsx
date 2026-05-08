@@ -265,13 +265,15 @@ export const LoanList: FC<LoanListProps> = (props) => {
             exportToExcel: (_, loan) => {
               const { end } = DateTime.getRange(new Date(), "day");
               const diff = DateTime.toSeconds(end) - DateTime.getNowInSeconds();
+              const day = loan.nextReceiptAt
+                ? Math.round((DateTime.getNowInSeconds() - (loan.nextReceiptAt - diff)) / 86400)
+                : null;
+
               return [
                 { col: t`Payment date`, date: loan.nextReceiptAt },
                 {
                   col: t`Late payment`,
-                  text: loan.nextReceiptAt
-                    ? DateTime.formatRelative(loan.nextReceiptAt - diff, lang.locale)
-                    : "",
+                  number: day,
                 },
               ];
             },
