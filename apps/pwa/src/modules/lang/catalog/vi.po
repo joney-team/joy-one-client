@@ -308,10 +308,6 @@ msgstr "Địa chỉ"
 msgid "Admin"
 msgstr "Quản trị viên"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:500
-msgid "Advance payment"
-msgstr "Ứng trước"
-
 #: src/modals/modal-printer.tsx:611
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:281
 msgid "Advice"
@@ -543,7 +539,7 @@ msgid "Are you sure you want to continue? This action cannot be undone."
 msgstr "Bạn có chắc chắn tiếp tục? Hành động này không thể hoàn tác."
 
 #. placeholder {0}: fileName || exportId
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:150
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:143
 msgid "Are you sure you want to delete <0>{0}</0>? This action cannot be undone."
 msgstr "Bạn có chắc chắn muốn xóa <0>{0}</0>? Hành động này không thể hoàn tác."
 
@@ -862,7 +858,6 @@ msgstr "Biểu đồ lịch hẹn"
 #: src/modules/workspace-branches/workspace-branch-column.tsx:26
 #: src/modules/workspace-members/workspace-member-list.tsx:161
 #: src/widgets/reports/index.tsx:367
-#: src/widgets/reports/widgets/report-credit.widget.tsx:464
 msgid "Branch"
 msgstr "Chi nhánh"
 
@@ -1492,7 +1487,7 @@ msgstr "Tạo hồ sơ vay"
 msgid "Create model"
 msgstr "Tạo mẫu"
 
-#: src/components/selector.tsx:374
+#: src/components/selector.tsx:375
 #: src/modules/message-boxes/message-boxes-integrate.tsx:86
 #: src/modules/products/components/form-product.tsx:719
 #: src/modules/workspace-api-apps/workspace-api-app-list.tsx:63
@@ -1594,7 +1589,6 @@ msgstr "Tín dụng"
 msgid "Credit history"
 msgstr "Lịch sử tín dụng"
 
-#: src/widgets/reports/modules.ts:191
 #: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:190
 msgid "Credit report"
 msgstr "Báo cáo tín dụng"
@@ -1684,7 +1678,6 @@ msgstr "Tuỳ chỉnh trạng thái"
 #: src/modules/tags/tags-constants.ts:12
 #: src/modules/tasks/components/task-detail/task-detail-properties.tsx:330
 #: src/modules/tasks/views/list/list-task-row-head.tsx:27
-#: src/widgets/reports/widgets/report-credit.widget.tsx:469
 msgid "Customer"
 msgstr "Khách hàng"
 
@@ -1833,12 +1826,12 @@ msgstr "Xác định các vị trí được phép để chấm công"
 
 #: src/modules/loans/loan-detail.tsx:648
 #: src/modules/prescriptions/modals/modal-prescription-form.tsx:360
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:156
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:241
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:149
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:245
 msgid "Delete"
 msgstr "Xóa"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:148
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:141
 msgid "Delete export"
 msgstr "Xóa bản xuất"
 
@@ -1965,7 +1958,7 @@ msgstr "Tài liệu"
 msgid "Documents"
 msgstr "Tài liệu"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:208
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:212
 msgid "Download"
 msgstr "Tải xuống"
 
@@ -2361,12 +2354,11 @@ msgid "Expired"
 msgstr "Hết hạn"
 
 #: src/components/list/components/export-button.tsx:225
-#: src/widgets/reports/widgets/report-credit.widget.tsx:683
 msgid "Export"
 msgstr "Xuất"
 
-#: src/widgets/reports/modules.ts:205
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:167
+#: src/widgets/reports/modules.ts:190
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:160
 msgid "Export credit report"
 msgstr "Xuất báo cáo thu chi"
 
@@ -2374,7 +2366,6 @@ msgstr "Xuất báo cáo thu chi"
 #: src/components/list/components/export-button.tsx:205
 #: src/components/list/components/export-button.tsx:210
 #: src/modules/workspace-roles/workspace-roles-constants.ts:156
-#: src/widgets/reports/widgets/report-credit.widget.tsx:302
 msgid "Export data"
 msgstr "Xuất dữ liệu"
 
@@ -2386,7 +2377,7 @@ msgstr "Xuất hóa đơn điện tử"
 msgid "Export E-Invoice"
 msgstr "Xuất hóa đơn điện tử"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:49
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:50
 msgid "Failed"
 msgstr "Thất bại"
 
@@ -2484,7 +2475,7 @@ msgstr "Tập tin"
 msgid "Filter"
 msgstr "Lọc"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:48
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:49
 msgid "Finished"
 msgstr "Hoàn thành"
 
@@ -2529,8 +2520,7 @@ msgstr "Số khung"
 
 #: src/modules/loans/components/loan-payments.tsx:214
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:144
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:112
-#: src/widgets/reports/widgets/report-credit.widget.tsx:647
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:105
 msgid "From"
 msgstr "Từ"
 
@@ -2777,8 +2767,7 @@ msgstr "Bao gồm khách hàng"
 msgid "Income"
 msgstr "Thu"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:112
-#: src/widgets/reports/widgets/report-credit.widget.tsx:647
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:105
 msgid "Income expense"
 msgstr "Thu chi"
 
@@ -2884,10 +2873,6 @@ msgstr "Lãi"
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:204
 msgid "Interest days"
 msgstr "Ngày lãi"
-
-#: src/widgets/reports/widgets/report-credit.widget.tsx:479
-msgid "Interest income"
-msgstr "Thu lãi"
 
 #: src/modules/loans/components/loan-receipt-card.tsx:216
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:210
@@ -3177,7 +3162,7 @@ msgstr "Danh sách"
 msgid "List combos"
 msgstr "Danh sách combo"
 
-#: src/components/list/use-graphql-list.ts:157
+#: src/components/list/use-graphql-list.ts:159
 msgid "Load data failed."
 msgstr "Tải dữ liệu không thành công."
 
@@ -3333,7 +3318,7 @@ msgstr "Hoàn tác từ chối"
 #: src/modules/loans/loan-list.tsx:97
 #: src/modules/workspace-roles/workspace-roles-config.ts:7
 #: src/modules/workspaces/workspace-modules.tsx:231
-#: src/widgets/reports/modules.ts:242
+#: src/widgets/reports/modules.ts:227
 msgid "Loans"
 msgstr "Hồ sơ vay"
 
@@ -3353,21 +3338,21 @@ msgstr "Dư nợ quá hạn"
 msgid "Loans debt total"
 msgstr "Tổng dư nợ"
 
-#: src/widgets/reports/modules.ts:240
-#: src/widgets/reports/modules.ts:276
+#: src/widgets/reports/modules.ts:225
+#: src/widgets/reports/modules.ts:261
 msgid "Loans fulfilled"
 msgstr "Hồ sơ vay đã giải ngân"
 
 #: src/widgets/dashboard/modules.ts:317
-#: src/widgets/reports/modules.ts:248
+#: src/widgets/reports/modules.ts:233
 msgid "Loans fulfilled amount chart"
 msgstr "Biểu đồ số tiền giải ngân"
 
-#: src/widgets/reports/modules.ts:350
+#: src/widgets/reports/modules.ts:335
 msgid "Loans fulfilled new"
 msgstr "Số hồ sơ vay giải ngân là KH mới"
 
-#: src/widgets/reports/modules.ts:219
+#: src/widgets/reports/modules.ts:204
 msgid "Loans new and fulfilled chart"
 msgstr "Biểu đồ số lượng hồ sơ mới"
 
@@ -3437,7 +3422,6 @@ msgstr "Vị trí chính"
 #: src/modules/workspace-branches/workspace-branch-selector.tsx:32
 #: src/modules/workspace-members/workspace-member-list.tsx:54
 #: src/widgets/reports/index.tsx:344
-#: src/widgets/reports/widgets/report-credit.widget.tsx:397
 msgid "Main office"
 msgstr "Trụ sở chính"
 
@@ -3590,7 +3574,6 @@ msgstr "Trung bình"
 #: src/modules/products/product-detail.tsx:176
 #: src/modules/workspace-roles/workspace-roles-constants.ts:10
 #: src/modules/workspace-roles/workspace-roles-constants.ts:19
-#: src/widgets/reports/widgets/report-credit.widget.tsx:474
 msgid "Member"
 msgstr "Thành viên"
 
@@ -3733,7 +3716,7 @@ msgstr "Thứ hai"
 #: src/modules/receipts/receipt-card.tsx:431
 #: src/modules/receipts/receipt-card.tsx:440
 #: src/modules/receipts/receipt-list.tsx:151
-#: src/widgets/reports/modules.ts:270
+#: src/widgets/reports/modules.ts:255
 msgid "Money amount"
 msgstr "Số tiền"
 
@@ -3919,13 +3902,13 @@ msgstr "Cần cập nhật thông tin tài khoản ngân hàng nhận thanh toá
 msgid "Negative"
 msgstr "Nguy hiểm"
 
-#: src/widgets/reports/modules.ts:105
-#: src/widgets/reports/modules.ts:123
-#: src/widgets/reports/modules.ts:128
+#: src/widgets/reports/modules.ts:104
+#: src/widgets/reports/modules.ts:122
+#: src/widgets/reports/modules.ts:127
 msgid "New customers"
 msgstr "Khách hàng mới"
 
-#: src/widgets/reports/modules.ts:332
+#: src/widgets/reports/modules.ts:317
 msgid "New customers and fulfilled"
 msgstr "Số khách mới đã giải ngân"
 
@@ -3933,7 +3916,7 @@ msgstr "Số khách mới đã giải ngân"
 msgid "New customers chart"
 msgstr "Biểu đồ khách hàng mới"
 
-#: src/widgets/reports/modules.ts:239
+#: src/widgets/reports/modules.ts:224
 msgid "New loan contracts"
 msgstr "Hợp đồng vay mới"
 
@@ -4019,7 +4002,7 @@ msgstr "Không có dữ liệu để xuất"
 msgid "No events in range"
 msgstr "Không có sự kiện"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:181
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:180
 msgid "No exports yet"
 msgstr "Chưa có bản xuất nào"
 
@@ -4047,7 +4030,7 @@ msgstr "Không có hình ảnh"
 msgid "No messages"
 msgstr "Không có tin nhắn"
 
-#: src/components/selector.tsx:351
+#: src/components/selector.tsx:352
 msgid "No results"
 msgstr "Không có kết quả"
 
@@ -4417,7 +4400,7 @@ msgstr "PDF"
 #: src/modules/customer-kycs/customer-kyc-constants.tsx:9
 #: src/modules/loans/loans-constants.tsx:30
 #: src/modules/receipts/receipt-constants.tsx:34
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:46
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:47
 msgid "Pending"
 msgstr "Đang xử lí"
 
@@ -4613,14 +4596,6 @@ msgstr "Tiền gốc"
 msgid "Principal amount"
 msgstr "Số tiền gốc"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:493
-msgid "Principal expense"
-msgstr "Chi gốc"
-
-#: src/widgets/reports/widgets/report-credit.widget.tsx:486
-msgid "Principal income"
-msgstr "Thu gốc"
-
 #: src/components/printer/printer.tsx:138
 #: src/modals/modal-printer.tsx:162
 #: src/modules/orders/order-card.tsx:265
@@ -4673,7 +4648,7 @@ msgstr "Chính sách bảo mật"
 #: src/modules/loans/loan-list-tabs.tsx:37
 #: src/modules/orders/orders-constants.tsx:9
 #: src/utils/actions.tsx:24
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:47
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:48
 msgid "Processing"
 msgstr "Đang xử lý"
 
@@ -4733,7 +4708,7 @@ msgstr "Voucher sản phẩm"
 msgid "Products"
 msgstr "Sản phẩm"
 
-#: src/widgets/reports/modules.ts:177
+#: src/widgets/reports/modules.ts:176
 msgid "Products services"
 msgstr "Sản phẩm dịch vụ"
 
@@ -4882,7 +4857,6 @@ msgstr "Lý do hủy bỏ"
 #: src/modules/receipts/receipt-card.tsx:298
 #: src/modules/receipts/receipt-detail.tsx:173
 #: src/modules/search/search-engine.tsx:131
-#: src/widgets/reports/widgets/report-credit.widget.tsx:506
 #: src/widgets/reports/widgets/report-products.widget.tsx:290
 msgid "Receipt"
 msgstr "Hoá đơn"
@@ -5062,32 +5036,31 @@ msgstr "Đổi tên"
 msgid "Reply"
 msgstr "Trả lời"
 
-#: src/widgets/reports/widgets/report-credit.widget.tsx:678
-msgid "Report income and expenditure"
-msgstr "Báo cáo thu chi"
-
-#: src/widgets/reports/modules.ts:304
+#: src/widgets/reports/modules.ts:289
 msgid "Report loans capital"
 msgstr "Tổng thu gốc"
 
-#: src/widgets/reports/modules.ts:318
+#: src/widgets/reports/modules.ts:303
 msgid "Report loans expense"
 msgstr "Tổng giải ngân"
 
-#: src/widgets/reports/modules.ts:290
+#: src/widgets/reports/modules.ts:275
 msgid "Report loans fee"
 msgstr "Tổng thu lãi"
 
 #: src/modules/workspace-roles/workspace-roles-config.ts:267
 #: src/modules/workspaces/workspace-modules.tsx:468
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:112
-#: src/widgets/reports/widgets/report-credit.widget.tsx:647
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:105
 msgid "Reports"
 msgstr "Báo cáo"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:170
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:169
 msgid "Request export"
 msgstr "Yêu cầu xuất"
+
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:199
+msgid "Requester"
+msgstr "Người yêu cầu"
 
 #: src/modals/modal-input.tsx:95
 #: src/modules/plugins/ai-assistants/modal-create-plugin-ai-assistant.tsx:77
@@ -5140,7 +5113,7 @@ msgstr "Đặt lại mẫu"
 msgid "Resize widget layout"
 msgstr "Thay đổi bố cục widget"
 
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:230
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:234
 msgid "Retry"
 msgstr "Thử lại"
 
@@ -5154,18 +5127,18 @@ msgstr "Thử lại ngay bây giờ"
 msgid "Return"
 msgstr "Trở về"
 
-#: src/widgets/reports/modules.ts:37
-#: src/widgets/reports/modules.ts:100
+#: src/widgets/reports/modules.ts:36
+#: src/widgets/reports/modules.ts:99
 #: src/widgets/reports/widgets/report-products.widget.tsx:186
 msgid "Revenue"
 msgstr "Doanh thu"
 
-#: src/widgets/reports/modules.ts:61
+#: src/widgets/reports/modules.ts:60
 msgid "Revenue average"
 msgstr "Doanh thu trung bình"
 
 #: src/widgets/dashboard/modules.ts:93
-#: src/widgets/reports/modules.ts:81
+#: src/widgets/reports/modules.ts:80
 msgid "Revenue chart"
 msgstr "Biểu đồ doanh thu"
 
@@ -5275,7 +5248,7 @@ msgstr "Cuộn đến ngày bắt đầu"
 msgid "Scroll to today"
 msgstr "Di chuyển đến ngày hôm nay"
 
-#: src/components/selector.tsx:300
+#: src/components/selector.tsx:301
 #: src/layout/header/workspace-header.tsx:103
 #: src/layout/header/workspace-header.tsx:172
 #: src/modules/search/search-engine.tsx:258
@@ -5824,7 +5797,7 @@ msgstr "Trạng thái công việc"
 
 #: src/constant.ts:10
 #: src/modules/workspaces/workspace-modules.tsx:205
-#: src/widgets/reports/modules.ts:141
+#: src/widgets/reports/modules.ts:140
 msgid "Tasks"
 msgstr "Công việc"
 
@@ -5832,7 +5805,7 @@ msgstr "Công việc"
 msgid "Tasks chart"
 msgstr "Biểu đồ công việc"
 
-#: src/widgets/reports/modules.ts:153
+#: src/widgets/reports/modules.ts:152
 msgid "Tasks completed rate"
 msgstr "Tỷ lệ hoàn thành công việc"
 
@@ -5978,7 +5951,7 @@ msgstr "Phiếu dịch vụ"
 #: src/modules/product-combos/product-combo-list.tsx:41
 #: src/modules/product-stocks/product-stock-list.tsx:33
 #: src/modules/tasks/modals/modal-task-time-tracking.tsx:174
-#: src/widgets/reports/widgets/report-credit.widget.tsx:459
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:194
 msgid "Time"
 msgstr "Thời gian"
 
@@ -6031,8 +6004,7 @@ msgstr "Tiêu đề"
 
 #: src/modules/loans/components/loan-payments.tsx:220
 #: src/modules/loans/modals/modal-loan-liquidation.tsx:151
-#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:112
-#: src/widgets/reports/widgets/report-credit.widget.tsx:650
+#: src/widgets/reports/widgets/report-credit-file-exports.widget.tsx:105
 msgid "To"
 msgstr "Đến"
 
@@ -6090,7 +6062,6 @@ msgstr "Ngày mai"
 #: src/modules/orders/order-card.tsx:240
 #: src/modules/orders/orders-sale/components/order-sale-checkout.tsx:57
 #: src/modules/product-stocks/modals/modal-product-stock-in.tsx:262
-#: src/widgets/reports/widgets/report-credit.widget.tsx:545
 msgid "Total"
 msgstr "Tổng cộng"
 
@@ -6161,7 +6132,7 @@ msgstr "Loại"
 msgid "Type and press [enter]"
 msgstr "Nhập và nhấn [enter]"
 
-#: src/components/selector.tsx:349
+#: src/components/selector.tsx:350
 #: src/modules/search/search-engine.tsx:272
 msgid "Type something to search"
 msgstr "Nhập nội dung nào đó để tìm kiếm"
