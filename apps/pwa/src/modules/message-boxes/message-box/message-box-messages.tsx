@@ -21,8 +21,7 @@ import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-membe
 import { String } from "@/utils/string.utils";
 import { DateTime } from "@joy-one-client/utils/date-time";
 import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Card,
@@ -47,6 +46,7 @@ export const MessageBoxMessages: FC<{
   box: MessageBoxFragment;
   height: number;
 }> = (props) => {
+  const { t } = useLingui();
   const color = useColor();
   const colorScheme = useColorScheme();
   const messageRef = useRef<HTMLDivElement>(null);

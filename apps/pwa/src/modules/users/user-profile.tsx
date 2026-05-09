@@ -11,8 +11,7 @@ import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Divider, Group, Space, Stack, Text, ThemeIcon, em, rem } from "@mantine/core";
 import {
   Icon,
@@ -31,6 +30,7 @@ import { useRouter } from "next/navigation";
 import { type FC, useEffect } from "react";
 
 export const Profile: FC = () => {
+  const { t } = useLingui();
   const auth = useAuth();
   const app = useApp();
   const workspace = useWorkspace();

@@ -6,8 +6,7 @@ import { CurrencyFormat } from "@/components/format/currency-format";
 import { useLayout } from "@/layout/layout-context";
 import { CustomerSelector } from "@/modules/customers/components/customer-selector";
 import { WorkspaceMemberInput } from "@/modules/workspace-members/components/workspace-member-input";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Divider, Group, Skeleton, Stack, Text, Tooltip } from "@mantine/core";
 import {
   IconCashRegister,
@@ -25,6 +24,7 @@ import { OrderSalePromotions } from "./order-sale-promotions";
 import { OrderSaleTip } from "./order-sale-tip";
 
 export const OrderSaleCheckout: FC = () => {
+  const { t } = useLingui();
   const orderSale = userOrdersManagement();
   const { view } = useLayout();
 

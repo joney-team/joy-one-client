@@ -1,6 +1,7 @@
 "use client";
 
-import { t } from "@lingui/core/macro";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Button, Group, SimpleGrid, Stack, Switch, ThemeIcon } from "@mantine/core";
 import { IconDimensions } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -9,13 +10,13 @@ import { PrinterComponentProps, PrinterSettings, PrintSize } from "./printer-typ
 export const printerSizeClasses: Record<
   PrintSize,
   {
-    label: () => string;
+    label: MacroMessageDescriptor;
     width: number;
   }
 > = {
-  [PrintSize.SMALL]: { label: () => t`Small`, width: 200 },
-  [PrintSize.MEDIUM]: { label: () => t`Medium`, width: 300 },
-  [PrintSize.LARGE]: { label: () => t`Large`, width: 800 },
+  [PrintSize.SMALL]: { label: defineMessage`Small`, width: 200 },
+  [PrintSize.MEDIUM]: { label: defineMessage`Medium`, width: 300 },
+  [PrintSize.LARGE]: { label: defineMessage`Large`, width: 800 },
 };
 
 type PrinterSettingsBarProps = PrinterComponentProps & {
@@ -23,6 +24,8 @@ type PrinterSettingsBarProps = PrinterComponentProps & {
 };
 
 export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setSettings }) => {
+  const { t } = useLingui();
+
   return (
     <Stack>
       <SimpleGrid cols={4}>
@@ -106,7 +109,7 @@ export const PrinterSettingsBar: FC<PrinterSettingsBarProps> = ({ settings, setS
               fw={400}
               onClick={() => setSettings({ size: _size })}
             >
-              {printerSizeClasses[_size].label()}
+              {t(printerSizeClasses[_size].label)}
             </Button>
           );
         })}

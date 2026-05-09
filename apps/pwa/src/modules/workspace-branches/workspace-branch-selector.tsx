@@ -5,8 +5,7 @@ import { searchArray, searchEntity } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Combobox, Group, Stack, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
@@ -24,6 +23,7 @@ export const WorkspaceBranchSelector: FC<WorkspaceBranchSelectorProps> = ({
   isShowRoot,
   ...props
 }) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const isFullAccess = workspace.hasPermission(WorkspacePermission.WORKSPACE_BRANCHES_FULL_ACCESS);
 

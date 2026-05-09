@@ -14,8 +14,7 @@ import GetWorkspaceMembersDocument from "@/modules/workspace-members/graphql/get
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -76,6 +75,7 @@ const MenuItem = ({
 };
 
 export const TaskMenuAssignee: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
+  const { t } = useLingui();
   const { member } = useWorkspace();
   const scrollRef = useRef<HTMLDivElement>(null);
 

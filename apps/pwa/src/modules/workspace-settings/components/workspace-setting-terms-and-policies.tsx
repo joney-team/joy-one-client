@@ -1,17 +1,19 @@
 "use client";
 
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Anchor, Card, Group, SimpleGrid, Text } from "@mantine/core";
 import { IconEye } from "@tabler/icons-react";
 import Link from "next/link";
 import { FC } from "react";
 
-const docNames: Record<string, () => string> = {
-  "terms-of-service": () => t`Terms of service`,
-  "privacy-policy": () => t`Privacy policy`,
-};
-
 export const WorkspaceTermsAndPolicies: FC = () => {
+  const { t } = useLingui();
+
+  const docNames: Record<string, () => string> = {
+    "terms-of-service": () => t`Terms of service`,
+    "privacy-policy": () => t`Privacy policy`,
+  };
+
   return (
     <SimpleGrid cols={{ md: 2 }}>
       {Object.entries(docNames).map(([doc, name]) => (

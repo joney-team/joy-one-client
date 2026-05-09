@@ -18,7 +18,6 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
@@ -240,6 +239,7 @@ export const LoanDocuments: FC<LoanDocumentsProps> = (props) => {
 };
 
 export const SignareCard: FC<{ url: string }> = (props) => {
+  const { t } = useLingui();
   const { url } = props;
   const theme = useMantineTheme();
   const hover = useHover();

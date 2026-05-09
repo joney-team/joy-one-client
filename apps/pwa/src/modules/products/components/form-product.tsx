@@ -14,7 +14,6 @@ import { ProductSelector } from "@/modules/products/components/product-selector"
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -73,6 +72,7 @@ const FormProductCombo: FC<{
   onChange: (combo: ProductCombo) => void;
   onRemove: () => void;
 }> = (props) => {
+  const { t } = useLingui();
   const { combo, onChange } = props;
 
   return (

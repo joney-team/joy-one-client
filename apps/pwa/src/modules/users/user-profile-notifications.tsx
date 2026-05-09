@@ -3,12 +3,13 @@
 import { useLayout } from "@/layout/layout-context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { onActionLoad } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconBell } from "@tabler/icons-react";
 import { type FC, useEffect } from "react";
 
 export const UserProfileNotifications: FC = () => {
+  const { t } = useLingui();
   const auth = useAuth();
   const layout = useLayout();
 

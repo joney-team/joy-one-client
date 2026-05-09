@@ -4,14 +4,14 @@ import { Button } from "@/components/buttons/button";
 import { CurrencyFormat } from "@/components/format/currency-format";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, Skeleton, Text } from "@mantine/core";
 import { IconCoin, IconPencil, IconPlus } from "@tabler/icons-react";
 import { FC } from "react";
 import { userOrdersManagement } from "../../orders-management/orders-management-context";
 
 export const OrderSaleTip: FC = () => {
+  const { t } = useLingui();
   const { workspaceSetting } = useWorkspaceSetting();
   const orderSale = userOrdersManagement();
   const tipAmount = orderSale.activeOrder?.tipAmount ?? 0;

@@ -5,7 +5,7 @@ import { NavigationTabs } from "@/components/navigation-tabs";
 import { EventType, ProductType } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { useQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Skeleton, Stack } from "@mantine/core";
 import { IconPackage, IconSettings } from "@tabler/icons-react";
 import { FC, Fragment, PropsWithChildren } from "react";
@@ -14,6 +14,7 @@ import GetProductsDocument from "../products/graphql/getProducts.graphql";
 import { ProductCombosOnboarding } from "./product-combos-onboarding";
 
 export const ProductComboLayout: FC<PropsWithChildren> = (props) => {
+  const { t } = useLingui();
   const router = useRouter();
 
   const { data, loading, error, refetch } = useQuery(GetProductsDocument, {

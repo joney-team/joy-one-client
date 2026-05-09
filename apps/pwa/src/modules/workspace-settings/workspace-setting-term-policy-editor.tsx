@@ -2,7 +2,7 @@
 
 import { useRouter } from "@/hooks/use-router";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, Stack, Title } from "@mantine/core";
 import { useDebouncedValue } from "@mantine/hooks";
 import { IconChevronLeft } from "@tabler/icons-react";
@@ -17,6 +17,7 @@ interface WorkspaceSettingTermsPoliciesEditorProps {
 export const WorkspaceSettingTermsPoliciesEditor: FC<WorkspaceSettingTermsPoliciesEditorProps> = (
   props,
 ) => {
+  const { t } = useLingui();
   const { updateWorkspaceSetting, workspaceSetting } = useWorkspaceSetting();
   const router = useRouter();
 

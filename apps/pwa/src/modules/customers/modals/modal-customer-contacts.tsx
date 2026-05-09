@@ -10,8 +10,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
 import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -39,6 +38,7 @@ interface ModalCustomerContactsProps {
 }
 
 export const ModalCustomerContacts: FC<ModalCustomerContactsProps> = (props) => {
+  const { t } = useLingui();
   const [contacts, handlers] = useListState(props.contacts.contacts);
   const workspace = useWorkspace();
   const client = useApolloClient();

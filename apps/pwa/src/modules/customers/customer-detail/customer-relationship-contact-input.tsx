@@ -1,7 +1,6 @@
 "use client";
 
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -30,6 +29,7 @@ interface CustomerRelationshipContactInputProps
 export const CustomerRelationshipContactInput: FC<CustomerRelationshipContactInputProps> = (
   props
 ) => {
+  const { t } = useLingui();
   const contacts = props.value || [];
 
   let _props = { ...props } as any;

@@ -7,7 +7,7 @@ import { WorkspaceBranchInput } from "@/graphql/types.graphql";
 import { FormBankAccount } from "@/modules/plugins/banks/form-bank-account";
 import { useMutation } from "@apollo/client/react";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Stack, Tabs, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
@@ -18,6 +18,7 @@ import { WorkspaceBranchFragment } from "../graphql/fragmentWorkspaceBranch.grap
 import UpdateWorkspaceBranchDocument from "../graphql/updateWorkspaceBranch.graphql";
 
 export const WorkspaceBranchModal: FC<{ branch?: WorkspaceBranchFragment }> = ({ branch }) => {
+  const { t } = useLingui();
   const [loading, setLoading] = useState(false);
 
   const [updateWorkspaceBranch] = useMutation(UpdateWorkspaceBranchDocument);

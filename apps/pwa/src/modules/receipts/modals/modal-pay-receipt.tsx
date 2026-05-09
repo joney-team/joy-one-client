@@ -38,8 +38,7 @@ import { removeAccents } from "@/utils/string.utils";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { loadImage } from "@joy-one-client/utils/assets";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -95,6 +94,7 @@ export interface ModalPayReceiptRef {
 }
 
 const ModalPayReceiptContent: FC<ModalPayReceiptArgs> = (props) => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const client = useApolloClient();
   const { workspaceSetting } = useWorkspaceSetting();

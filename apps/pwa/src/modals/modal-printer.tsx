@@ -23,8 +23,8 @@ import { useApolloClient } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { loadImage } from "@joy-one-client/utils/assets";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -73,12 +73,14 @@ export enum PrintSize {
   LARGE = "LARGE",
 }
 
-function printSizeLabel(size?: PrintSize) {
-  return {
-    [PrintSize.LARGE]: t`Large`,
-    [PrintSize.MEDIUM]: t`Medium`,
-    [PrintSize.SMALL]: t`Small`,
-  }[size || PrintSize.MEDIUM];
+const printSizeLabels: Record<PrintSize, MacroMessageDescriptor> = {
+  [PrintSize.LARGE]: defineMessage`Large`,
+  [PrintSize.MEDIUM]: defineMessage`Medium`,
+  [PrintSize.SMALL]: defineMessage`Small`,
+};
+
+function printSizeLabel(size?: PrintSize): MacroMessageDescriptor {
+  return printSizeLabels[size || PrintSize.MEDIUM];
 }
 
 interface PrintSettings {
@@ -129,6 +131,7 @@ export const ModalPrinter = forwardRef<
   ModalPrinterRef,
   { children?: (ref: ModalPrinterRef) => ReactNode }
 >((props, ref) => {
+  const { t } = useLingui();
   const forceUpdate = useForceUpdate();
   const printSettings = getPrintSettings();
   const workspace = useWorkspace();
@@ -702,7 +705,7 @@ export const ModalPrinter = forwardRef<
                             changePrintSettings({ ...printSettings, size: _size });
                           }}
                         >
-                          {printSizeLabel(_size)}
+                          {t(printSizeLabel(_size))}
                         </Button>
                       );
                     })}
@@ -733,6 +736,7 @@ export const ModalPrinter = forwardRef<
 });
 
 export const PrintButton: FC<PrinterArgs> = (args) => {
+  const { t } = useLingui();
   const theme = useMantineTheme();
 
   return (

@@ -18,8 +18,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useLazyQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Anchor,
@@ -59,6 +58,7 @@ const EventsList = dynamic(
 const UserInformation: FC<{ user: UserPublicInformationFragment; onClose: () => void }> = (
   props,
 ) => {
+  const { t } = useLingui();
   const { user } = props;
   const [tab, setTab] = useState<string>("activity");
 

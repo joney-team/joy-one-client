@@ -9,7 +9,7 @@ import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";
 import { IconAnalyze, IconClipboardList } from "@tabler/icons-react";
@@ -39,6 +39,7 @@ const ModalRescheduleBooking = dynamic(
 );
 
 export const DashboardBookings: FC = () => {
+  const { t } = useLingui();
   const modalCancelBookingRef = useRef<ModalCancelBookingRef>(null);
   const modalRescheduleBookingRef = useRef<ModalRescheduleBookingRef>(null);
 

@@ -5,7 +5,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import config from "@joy-one-client/config";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { IconCopy, IconCopyCheck, IconMessageUser, IconX } from "@tabler/icons-react";
@@ -14,6 +14,7 @@ import { WorkspaceBranchFragment } from "../../workspace-branches/graphql/fragme
 import { Trans } from "@lingui/react/macro";
 
 const ModalCustomerFormLink: FC = () => {
+  const { t } = useLingui();
   const color = useColor();
   const workspace = useWorkspace();
   const [workspaceBranch, setWorkspaceBranch] = useState<Pick<

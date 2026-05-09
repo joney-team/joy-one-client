@@ -1,6 +1,5 @@
 import { UseGraphqlList, UseGraphqlListArgs } from "@/components/list/use-graphql-list";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
-import { ResponseList } from "@/types";
 import type { Icon } from "@tabler/icons-react";
 import type { FC, ReactNode } from "react";
 import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-filter";
@@ -87,11 +86,6 @@ export interface ListBulkAction<Data> {
   permission?: WorkspacePermission;
   available?: (data: Data[]) => boolean;
 }
-
-export type ListFetch<Data = any> = (
-  params: any,
-  controller?: AbortController,
-) => Promise<ResponseList<Data & { id?: string; _id?: string }>>;
 
 export type ListProps<Data extends BaseData = any> = {
   id: string;

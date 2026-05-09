@@ -4,8 +4,7 @@ import { Image } from "@/components/image";
 import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
   Group,
@@ -63,6 +62,7 @@ export const pluginAiAssistantProviders: {
 export const ModalCreatePluginAiAssistant: FC<{
   plugin?: PluginAiAssistantFragment;
 }> = ({ plugin }) => {
+  const { t } = useLingui();
   const client = useApolloClient();
   const [loading, setLoading] = useState(false);
   const color = useColor();

@@ -4,8 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { searchEntity } from "@/modules/search/search-service";
 import { AppEntity } from "@/types";
 import { useQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Combobox, Group, Text } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, ReactNode } from "react";
@@ -20,6 +19,7 @@ interface PrescriptionSelectorProps {
 }
 
 export const PrescriptionSelector: FC<PrescriptionSelectorProps> = (props) => {
+  const { t } = useLingui();
   const { data: prescriptionsData, client } = useQuery(GetPrescriptionsDocument, {
     variables: {
       limit: 9,

@@ -10,7 +10,7 @@ import {
 import { ModalFilesViewer } from "@/modules/files/modals/modal-files-viewer";
 import { formatBytes, getFileName } from "@/utils/file.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Avatar,
@@ -109,6 +109,7 @@ export const FileCard: FC<FileCardProps> = ({
   }, []);
 
   const Stat: FC<{ embbedAvatar?: boolean; onView: () => void }> = (props) => {
+    const { t } = useLingui();
     return (
       <Group gap={8} wrap="nowrap">
         <Avatar

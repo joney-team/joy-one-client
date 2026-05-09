@@ -11,8 +11,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { getDnsRecordName, getMainDomain, isDomain } from "@/utils/string.utils";
 import { useMutation } from "@apollo/client/react";
 import { swatches } from "@joy-one-client/config/colors";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
   Center,
@@ -38,6 +37,7 @@ import { generateColorsMap } from "@mantine/colors-generator";
 import { Container } from "@/components/container";
 
 export const WorkspaceAppSettings: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const app = useApp();
   const uploadFile = useUploadFile();

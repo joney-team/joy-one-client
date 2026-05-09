@@ -3,8 +3,7 @@
 import { CategoryType } from "@/graphql/enums.graphql";
 import { graphqlClient } from "@/graphql/graphql-client";
 import { onActionLoad } from "@/utils/actions";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, Popover, TextInput } from "@mantine/core";
 import { IconPlus } from "@tabler/icons-react";
 import { FC, PropsWithChildren, useState } from "react";
@@ -17,6 +16,7 @@ interface QuickCreateCategoryProps {
 }
 
 export const QuickCreateCategory: FC<PropsWithChildren<QuickCreateCategoryProps>> = (props) => {
+  const { t } = useLingui();
   const [opened, setOpened] = useState(false);
 
   const children = props.children ? (

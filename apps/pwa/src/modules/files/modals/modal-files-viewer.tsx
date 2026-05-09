@@ -14,8 +14,7 @@ import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { formatBytes } from "@joy-one-client/utils/files";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Anchor, em, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import {
   IconBrowser,
@@ -57,6 +56,7 @@ export interface ModalFilesViewerProps {
 
 export const ModalFilesViewer = forwardRef<ModalFilesViewerRef, ModalFilesViewerProps>(
   (props, ref) => {
+    const { t } = useLingui();
     const [args, setArgs] = useState<ModalFilesViewerArgs | null>(null);
     const [index, setIndex] = useState<number>(0);
     const layout = useLayout();

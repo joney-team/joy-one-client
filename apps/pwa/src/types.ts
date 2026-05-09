@@ -1,79 +1,9 @@
-import { CustomFieldValue } from "./graphql/types.graphql";
-import { WorkspaceBranchFragment } from "./modules/workspace-branches/graphql/fragmentWorkspaceBranch.graphql";
-import { WorkspaceMemberFragment } from "./modules/workspace-members/graphql/fragmentWorkspaceMember.graphql";
-
-export interface RelatedEntity {
-  entity: AppEntity;
-  id: string;
-}
-
-export interface BaseEntity {
-  createdAt: number;
-  updatedAt?: number;
-  workspaceId?: string;
-  lastInteractionAt?: number;
-  isArchived?: boolean;
-  createdByUser?: WorkspaceMemberFragment;
-  createdByUserId?: string;
-  assigneeUserIds?: string[];
-  assigneeUsers?: WorkspaceMemberFragment[];
-  workspaceBranchId?: string;
-  workspaceBranch?: Pick<WorkspaceBranchFragment, "_id" | "name" | "hotline">;
-  relatedEntities?: RelatedEntity[];
-  customFields?: CustomFieldValue[];
-}
-
-export interface BaseMongoEntity extends BaseEntity {
-  _id: string;
-}
-
-export interface BasePostgresEntity extends BaseEntity {
-  id: string;
-}
-
-export interface ObjectData {
-  [fieldName: string]: any;
-}
-
-export interface Query {
-  offset?: number;
-  limit?: number;
-  getAll?: boolean;
-  sort?: string;
-}
-
-export interface WorkSlot {
-  id: string;
-  dayWeek: number;
-  startHour: number;
-  startMin: number;
-  endHour: number;
-  endMin: number;
-  groupId?: string;
-  bg?: string;
-  borderColor?: string;
-  title?: string;
-  temp?: boolean;
-}
-
-export interface ResponseList<T> {
-  data: T[];
-  count: number;
-}
-
 export interface Coordinates {
   lat: number;
   lng: number;
 }
 
 export type ViewportType = "desktop" | "tablet" | "mobile";
-
-export interface ViewWidget<T = string> {
-  id: string;
-  type: T;
-  state?: any;
-  defaultState?: any;
-}
 
 export enum AppEntity {
   CUSTOMERS = "C",
@@ -151,8 +81,3 @@ export interface DynamicSelection<ValueType = any> {
   value: ValueType[];
 }
 
-export type DeepWithoutTypename<T> = T extends object
-  ? {
-      [K in keyof T as Exclude<K, "__typename">]: DeepWithoutTypename<T[K]>;
-    }
-  : T;

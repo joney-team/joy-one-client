@@ -1,8 +1,9 @@
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { useWorkspace } from "../workspaces/workspace-context";
 import { WorkspaceType } from "@/graphql/enums.graphql";
 
 export const useOrderFeatureName = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
 
   if (

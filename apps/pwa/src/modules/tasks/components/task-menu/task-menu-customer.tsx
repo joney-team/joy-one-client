@@ -11,8 +11,7 @@ import GetCustomersDocument from "@/modules/customers/graphql/getCustomers.graph
 import { searchEntity } from "@/modules/search/search-service";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { useDebouncedState } from "@mantine/hooks";
 import { IconSearch } from "@tabler/icons-react";
 import { Fragment, useCallback, useEffect, useRef, useState } from "react";
@@ -69,6 +68,7 @@ const MenuItem = ({
 };
 
 export const TaskMenuCustomer: TaskMenuComponent = ({ task, groupVariables, updateTask }) => {
+  const { t } = useLingui();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const [selected, setSelected] = useState<TaskFragment["customer"]>(task.customer ?? null);

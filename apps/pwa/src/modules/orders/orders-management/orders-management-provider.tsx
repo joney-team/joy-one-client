@@ -9,8 +9,7 @@ import { ModalPayReceipt } from "@/modules/receipts/modals/modal-pay-receipt";
 import { onArchive } from "@/utils/actions";
 import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client/react";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   readLocalStorageValue,
   useLocalStorage,
@@ -85,6 +84,7 @@ const getCurrentState = (): OrdersManagementState => {
 interface OrdersManagementProps extends PropsWithChildren {}
 
 export const OrdersManagementProvider: FC<OrdersManagementProps> = (props) => {
+  const { t } = useLingui();
   const router = useRouter();
   const client = useApolloClient();
 

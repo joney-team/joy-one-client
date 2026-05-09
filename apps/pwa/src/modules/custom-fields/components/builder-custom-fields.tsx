@@ -5,7 +5,7 @@ import { CustomFieldValue } from "@/graphql/types.graphql";
 import { useEventsListener } from "@/modules/events/event-service";
 import { AppEntity } from "@/types";
 import { useQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Card, InputWrapper, SimpleGrid, Switch } from "@mantine/core";
 import { FC, Fragment, ReactNode } from "react";
 import { CustomFieldFragment } from "../graphql/fragmentCustomField.graphql";
@@ -26,6 +26,7 @@ export interface BuilderCustomFieldsProps {
 }
 
 export const BuilderCustomFields: FC<BuilderCustomFieldsProps> = (props) => {
+  const { t } = useLingui();
   const { data: customFields, refetch } = useQuery(GetCustomFieldsDocument, {
     variables: {
       query: {

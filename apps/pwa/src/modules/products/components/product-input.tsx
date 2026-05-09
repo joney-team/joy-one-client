@@ -1,6 +1,6 @@
 "use client";
 
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, Input, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import { type FC } from "react";
@@ -16,6 +16,7 @@ interface ProductInputProps extends Omit<InputWrapperProps, "value" | "onChange"
 }
 
 export const ProductInput: FC<ProductInputProps> = (props) => {
+  const { t } = useLingui();
   const { value, onChange, disabled, ...rest } = props;
 
   return (

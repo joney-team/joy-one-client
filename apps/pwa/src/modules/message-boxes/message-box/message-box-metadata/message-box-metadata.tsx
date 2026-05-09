@@ -16,8 +16,7 @@ import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useAvailableWorkspaceModules } from "@/modules/workspaces/workspace-modules";
 import { useApolloClient } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Accordion,
   ActionIcon,
@@ -57,6 +56,7 @@ const accordionItems: AccordionItem[] = [
 ];
 
 export const MetadataMessageBox: FC<{ box: MessageBoxFragment }> = ({ box }) => {
+  const { t } = useLingui();
   const client = useApolloClient();
   const workspace = useWorkspace();
   const modalCreateBookingRef = useRef<ModalCreateBookingRef>(null);

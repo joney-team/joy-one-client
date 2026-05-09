@@ -11,8 +11,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { zIndexes } from "@joy-one-client/config/layout";
 import { Currency } from "@joy-one-client/utils/currency";
 import { DateTime } from "@joy-one-client/utils/date-time";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,
   Group,
@@ -68,6 +67,7 @@ export interface ModalInputRef {
 }
 
 const InputForm: FC<InputModalState & { onClose: () => void }> = (state) => {
+  const { t } = useLingui();
   const color = useColor();
   const args = state.args || {};
   const { workspaceSetting } = useWorkspaceSetting();

@@ -11,7 +11,7 @@ import SearchDocument from "@/modules/search/graphql/search.graphql";
 import { useColor } from "@/modules/theme/use-color";
 import { AppEntity } from "@/types";
 import { useLazyQuery } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Card, Group, Popover, Stack, Text, TextInput } from "@mantine/core";
 import { useClickOutside, useThrottledValue } from "@mantine/hooks";
 import { IconSearch, IconUserSquareRounded } from "@tabler/icons-react";
@@ -25,6 +25,7 @@ const latestProductsParams = {
 };
 
 export const OrderSaleSearchBox: FC = () => {
+  const { t } = useLingui();
   const color = useColor();
   const orderSale = userOrdersManagement();
   const [isOpened, setIsOpened] = useState(false);

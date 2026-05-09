@@ -2,7 +2,6 @@ import { Container } from "@/components/container";
 import { SectionTitle } from "@/components/session-title";
 import { WorkspaceSettingImportLoans } from "@/modules/workspace-settings/components/workspace-setting-import-loans";
 import { WorkspacetSettingLoans } from "@/modules/workspace-settings/components/workspace-setting-loans";
-import { t } from "@lingui/core/macro";
 import { Card, Stack } from "@mantine/core";
 import { IconCreditCardPay, IconFileImport, IconReportMoney } from "@tabler/icons-react";
 import { type FC } from "react";

@@ -4,7 +4,7 @@ import { NavigationTabs } from "@/components/navigation-tabs";
 import { LoanStatus } from "@/graphql/enums.graphql";
 import { useRouter } from "@/hooks/use-router";
 import { renderLoanList } from "@/modules/loans/loan-list";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { Stack } from "@mantine/core";
 import {
   IconAnalyze,
@@ -16,6 +16,7 @@ import { useSearchParams } from "next/navigation";
 import { FC, useMemo } from "react";
 
 export const LoanListTabs: FC = () => {
+  const { t } = useLingui();
   const router = useRouter();
   const searchs = useSearchParams();
 
@@ -60,7 +61,7 @@ export const LoanListTabs: FC = () => {
         components: renderLoanList(),
       },
     ],
-    [],
+    [t],
   );
 
   const activeTabId = searchs.get("ltab") || "active";

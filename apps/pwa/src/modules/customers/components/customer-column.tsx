@@ -5,7 +5,7 @@ import { Column } from "@/components/list/types";
 import { useRouter } from "@/hooks/use-router";
 import { AppEntity } from "@/types";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text, Tooltip } from "@mantine/core";
 import { IconUserSquareRounded } from "@tabler/icons-react";
 import { searchEntity } from "../../search/search-service";
@@ -22,6 +22,7 @@ export function customerColumn<T = any>(args?: CustomerColumnArgs<T>): Column {
     name: args?.name || <Trans>Customer</Trans>,
     defaultWidth: args?.defaultWidth || 230,
     render: ({ value }) => {
+      const { t } = useLingui();
       const router = useRouter();
       const workspace = useWorkspace();
       const name = value?.name || t`Guest`;

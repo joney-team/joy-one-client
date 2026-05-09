@@ -17,8 +17,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Group, Menu, Skeleton, Space, Stack, Text } from "@mantine/core";
 import { useDebouncedCallback } from "@mantine/hooks";
 import {
@@ -65,6 +64,7 @@ const StatusCard: FC<{
   onRemoveStatus?: () => void;
   readonly?: boolean;
 }> = (props) => {
+  const { t } = useLingui();
   const isCreateNew = !props.status.name && !props.status.color;
   const [openedColorMenu, setOpenedColorMenu] = useState(isCreateNew);
 

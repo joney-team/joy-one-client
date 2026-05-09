@@ -35,7 +35,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import { limitCharacters } from "@joy-one-client/utils/string";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
 import { TaskSelectionBox } from "../../../components/task-selections/task-selection-box";
 import { useTasksQuery } from "../../../hooks/use-tasks-query";
@@ -76,6 +76,7 @@ const GanttTaskEstimatedTime = dynamic(
 );
 
 const GanttTaskContent: FC = () => {
+  const { t } = useLingui();
   const {
     task,
     nextTask,

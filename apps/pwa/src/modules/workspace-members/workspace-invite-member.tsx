@@ -6,7 +6,7 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import config from "@joy-one-client/config";
 import { t } from "@lingui/core/macro";
-import { Trans } from "@lingui/react/macro";
+import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,
   Card,
@@ -44,6 +44,7 @@ export const WorkspaceInviteMember: FC = () => {
 };
 
 const CreateMemberInvitationLink: FC = () => {
+  const { t } = useLingui();
   const workspace = useWorkspace();
   const invitationLink = `${config.APP_URL}/join/${workspace.member.workspace.inviteCode}`;
 

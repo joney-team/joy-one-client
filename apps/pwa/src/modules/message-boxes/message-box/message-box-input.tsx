@@ -7,7 +7,7 @@ import { FileCard } from "@/modules/files/file-card";
 import { parseFile } from "@/modules/files/files-utils";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { useApolloClient } from "@apollo/client/react";
-import { t } from "@lingui/core/macro";
+import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, em, Group, ScrollArea, Stack, Text, Textarea, Title } from "@mantine/core";
 import {
   Dropzone,
@@ -25,6 +25,7 @@ import SendImageToMessageBoxDocument from "../graphql/sendImageToMessageBox.grap
 import SendTextToMessageBoxDocument from "../graphql/sendTextToMessageBox.graphql";
 
 export const InputMessageBox: FC<{ box: MessageBoxFragment }> = (props) => {
+  const { t } = useLingui();
   const textInputRef = useRef<HTMLTextAreaElement>(null);
   const forceUpdate = useForceUpdate();
   const uploadFile = useUploadFile();
