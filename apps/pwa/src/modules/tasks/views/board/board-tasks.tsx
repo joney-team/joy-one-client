@@ -13,7 +13,7 @@ import { IconPlus } from "@tabler/icons-react";
 import dynamic from "next/dynamic";
 import { FC, Fragment, PropsWithChildren, useEffect, useMemo, useRef } from "react";
 import { useFolderStatuses } from "../../hooks/use-task-statuses";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { requestAnimationFrameTimes } from "@joy-one/utils/request-animation-frame";
 
 const ModalConfigureStatuses = dynamic(
   () =>

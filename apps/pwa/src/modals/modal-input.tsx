@@ -8,9 +8,9 @@ import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { Currency } from "@joy-one-client/utils/currency";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { zIndexes } from "@joy-one/config/layout";
+import { Currency } from "@joy-one/utils/currency";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,

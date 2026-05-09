@@ -5,7 +5,7 @@ import { Errored } from "@/components/errored";
 import { AttendanceSettingLocationInput } from "@/graphql/types.graphql";
 import { nonLoading } from "@/utils/non-loading";
 import { useMutation } from "@apollo/client/react";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Group, InputWrapper, Skeleton, Stack, Text } from "@mantine/core";
 import { IconEdit, IconPlus, IconTrash } from "@tabler/icons-react";

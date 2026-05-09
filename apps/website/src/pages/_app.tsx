@@ -3,7 +3,7 @@
 import "@mantine/core/styles.css";
 
 import { ChatBox } from "@/components/chatbox";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { createTheme, MantineColorsTuple, MantineProvider } from "@mantine/core";
 import { IconX } from "@tabler/icons-react";
 import type { AppProps } from "next/app";

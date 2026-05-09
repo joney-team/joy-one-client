@@ -5,7 +5,7 @@ import { GetTasksQueryVariables } from "@/modules/tasks/graphql/getTasks.graphql
 import { useTaskStatuses } from "@/modules/tasks/hooks/use-task-statuses";
 import { DefaultTaskStatusId } from "@/modules/tasks/tasks-types";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import {
   createContext,
   FC,

@@ -1,5 +1,5 @@
-import { ApiInstance } from "@joy-one-client/apis";
-import environment from "@joy-one-client/config";
+import { ApiInstance } from "@joy-one/apis";
+import environment from "@joy-one/config";
 import { io } from "socket.io-client";
 import { getClientLocale } from "../lang/lang-service";
 

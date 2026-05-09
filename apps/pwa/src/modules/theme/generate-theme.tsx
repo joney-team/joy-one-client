@@ -1,9 +1,9 @@
 "use client";
 
 import type { AppLocale, AppMetadata } from "@/graphql/types.graphql";
-import config from "@joy-one-client/config";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import config from "@joy-one/config";
+import { zIndexes } from "@joy-one/config/layout";
+import { DateTime } from "@joy-one/utils/date-time";
 import { t } from "@lingui/core/macro";
 import { generateColors, generateColorsMap } from "@mantine/colors-generator";
 import {

@@ -46,7 +46,7 @@ import CreateProductDocument from "../graphql/createProduct.graphql";
 import { ProductFragment } from "../graphql/fragmentProduct.graphql";
 import UpdateProductDocument from "../graphql/updateProduct.graphql";
 import { productTypes } from "../products-constants";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 
 export type FormProductProps = {
   onDone?: (product: ProductFragment) => void | Promise<void>;

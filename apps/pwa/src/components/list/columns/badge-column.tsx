@@ -1,7 +1,7 @@
 import { Badge } from "@/components/badge";
 import { Circle } from "@/components/circle";
 import { useColor } from "@/modules/theme/use-color";
-import { objUnselect } from "@joy-one-client/utils/object";
+import { objUnselect } from "@joy-one/utils/object";
 import { BadgeProps, Group, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";
 import { Column } from "../types";

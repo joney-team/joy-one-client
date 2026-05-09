@@ -31,7 +31,7 @@ import type { ModalCreateTaskRef } from "@/modules/tasks/modals/modal-create-tas
 import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { useTaskMenu } from "../../components/task-menu/task-menu";

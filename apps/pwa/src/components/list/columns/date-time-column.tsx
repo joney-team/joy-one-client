@@ -2,7 +2,7 @@
 
 import { DateFormat } from "@/components/format/date-format";
 import { getClientLocale } from "@/modules/lang/lang-service";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconClock } from "@tabler/icons-react";

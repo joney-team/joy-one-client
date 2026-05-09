@@ -1,7 +1,7 @@
 "use client";
 
 import { ViewportType } from "@/types";
-import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
+import { capitalizeFirstLetter } from "@joy-one/utils/string";
 import { Column, ColumnState, ListProps, ListViewState } from "./types";
 
 export const getIn = (obj: any, path: string) => {

@@ -11,7 +11,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useQuery } from "@apollo/client/react";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { generateColors } from "@mantine/colors-generator";
 import {

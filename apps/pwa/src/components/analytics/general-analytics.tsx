@@ -4,7 +4,7 @@ import { useApp } from "@/app.context";
 import { useAuth } from "@/modules/auth/auth-context";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useActivatedWorkspaceModule } from "@/modules/workspaces/workspace-modules";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { useDebouncedCallback } from "@mantine/hooks";
 import * as Sentry from "@sentry/react";
 import { useEffect, type FC } from "react";

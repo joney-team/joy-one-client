@@ -2,7 +2,7 @@
 
 import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { useLayout } from "@/layout/layout-context";
-import { shiftSelect } from "@joy-one-client/utils/array";
+import { shiftSelect } from "@joy-one/utils/array";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,
@@ -25,7 +25,7 @@ import { Context } from "./list-context";
 import { cleanObject, generateDefaultViewState } from "./list-utils";
 
 import { nonLoading } from "@/utils/non-loading";
-import { type BaseData, getId } from "@joy-one-client/utils/base-data";
+import { type BaseData, getId } from "@joy-one/utils/base-data";
 import dynamic from "next/dynamic";
 import { Badge } from "../badge";
 import { Column, ColumnState, ListContext, ListProps, ListViewState, TableColumn } from "./types";

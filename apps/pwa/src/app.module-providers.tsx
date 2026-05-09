@@ -2,7 +2,7 @@
 
 import { useLang } from "@/modules/lang/lang-context";
 import { generateTheme } from "@/modules/theme/generate-theme";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { MantineProvider } from "@mantine/core";
 import { DatesProvider } from "@mantine/dates";
 import { ModalsProvider } from "@mantine/modals";

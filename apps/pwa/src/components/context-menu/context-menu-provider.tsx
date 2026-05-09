@@ -12,8 +12,8 @@ import {
   OpenContextMenuArgs,
 } from "./context-menu-types";
 
-import { getId, type BaseData } from "@joy-one-client/utils/base-data";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { getId, type BaseData } from "@joy-one/utils/base-data";
+import { requestAnimationFrameTimes } from "@joy-one/utils/request-animation-frame";
 import { placeDropdownMenuByMouseEvent, placeDropdownMenuByTarget } from "./context-menu-helpers";
 import styles from "./context-menu.module.css";
 

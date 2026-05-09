@@ -5,7 +5,7 @@ import { onFacebookLogin } from "@/modules/auth/auth-service";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useApolloClient } from "@apollo/client/react";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans } from "@lingui/react/macro";
 import {
   Anchor,

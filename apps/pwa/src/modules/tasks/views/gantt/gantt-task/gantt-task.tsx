@@ -34,7 +34,7 @@ import GetTasksDocument, { GetTasksQueryVariables } from "@/modules/tasks/graphq
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
-import { limitCharacters } from "@joy-one-client/utils/string";
+import { limitCharacters } from "@joy-one/utils/string";
 import { useLingui } from "@lingui/react/macro";
 import dynamic from "next/dynamic";
 import { TaskSelectionBox } from "../../../components/task-selections/task-selection-box";

@@ -2,7 +2,7 @@
 
 import { renderPage } from "@/layout/layout-page";
 import { useColor } from "@/modules/theme/use-color";
-import { backgroundColors } from "@joy-one-client/config/colors";
+import { backgroundColors } from "@joy-one/config/colors";
 import { Stack } from "@mantine/core";
 
 const Content = renderPage(() =>

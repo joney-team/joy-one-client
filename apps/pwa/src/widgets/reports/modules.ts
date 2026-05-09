@@ -5,7 +5,7 @@ import {
 } from "@/modules/reports/reports-utils";
 import { numberWidget, numberWidgetlayoutConfig } from "@/widgets/common/number.widget";
 import { EWidgetModules } from "@/widgets/widgets-types";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
 import {
   IconBusinessplan,

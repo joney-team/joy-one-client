@@ -2,7 +2,7 @@
 
 import { configs } from "@/configs/layout.config";
 import LangProvider from "@/modules/lang/lang-provider";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans } from "@lingui/react/macro";
 import { generateColors } from "@mantine/colors-generator";
 import {

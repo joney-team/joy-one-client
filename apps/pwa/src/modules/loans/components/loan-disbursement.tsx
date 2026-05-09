@@ -22,7 +22,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { String } from "@/utils/string.utils";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Blockquote,

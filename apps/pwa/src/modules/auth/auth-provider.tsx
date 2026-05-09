@@ -23,7 +23,7 @@ import { useLang } from "@/modules/lang/lang-context";
 import { wait } from "@/utils/common.utils";
 import { onError, onErrorLog } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 import { useLingui } from "@lingui/react/macro";
 import * as Sentry from "@sentry/react";
 import { GithubAuthProvider, GoogleAuthProvider, signInWithPopup } from "firebase/auth";

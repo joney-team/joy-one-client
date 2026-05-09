@@ -1,5 +1,5 @@
 import { Gender } from "@/graphql/enums.graphql";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 
 export const parseCidDate = (d: string) => {
   if (!d) return null;

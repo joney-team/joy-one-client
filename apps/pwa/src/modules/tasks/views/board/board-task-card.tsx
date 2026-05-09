@@ -56,7 +56,7 @@ import { taskPriorities } from "../../tasks-constants";
 
 import { Avatar } from "@/components/avatar";
 import { Badge } from "@/components/badge";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { useRouter } from "next/navigation";
 import { GetTasksQueryVariables } from "../../graphql/getTasks.graphql";
 import { useTaskStatuses } from "../../hooks/use-task-statuses";

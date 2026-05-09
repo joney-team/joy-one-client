@@ -11,7 +11,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { nonLoading } from "@/utils/non-loading";
 import { classNames } from "@/utils/ui.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Drawer, Group, Indicator, Stack, Text, ThemeIcon } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";

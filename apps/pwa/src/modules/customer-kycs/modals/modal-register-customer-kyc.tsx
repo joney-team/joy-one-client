@@ -10,7 +10,7 @@ import { CustomerKycInput } from "@/graphql/types.graphql";
 import { optionsFilter } from "@/modules/theme/generate-theme";
 import { detectQrCode } from "@/modules/tools/tools-service";
 import { useMutation } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,

@@ -6,7 +6,7 @@ import { Errored } from "@/components/errored";
 import { useColor } from "@/modules/theme/use-color";
 import { getErrorMessage } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { formatBytes } from "@joy-one-client/utils/files";
+import { formatBytes } from "@joy-one/utils/files";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,

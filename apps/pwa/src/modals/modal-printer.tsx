@@ -20,9 +20,9 @@ import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { uppercase } from "@/utils/string.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { loadImage } from "@joy-one-client/utils/assets";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { zIndexes } from "@joy-one/config/layout";
+import { loadImage } from "@joy-one/utils/assets";
+import { DateTime } from "@joy-one/utils/date-time";
 import { defineMessage, MacroMessageDescriptor } from "@lingui/core/macro";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {

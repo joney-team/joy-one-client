@@ -4,7 +4,7 @@ import { EntityImages } from "@/components/entity-images";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { restClient } from "@/modules/apis/rest-client";
 import { useLang } from "@/modules/lang/lang-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Group, InputWrapper, SimpleGrid, TextInput, Tooltip } from "@mantine/core";
 import { IconCursorText, IconLockPlus } from "@tabler/icons-react";

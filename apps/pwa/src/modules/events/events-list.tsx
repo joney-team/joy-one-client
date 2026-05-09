@@ -16,7 +16,7 @@ import {
   ModalUserInformationRef,
 } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Avatar } from "../../components/avatar";
 import { ButtonViewMore } from "../../components/buttons/button-view-more";

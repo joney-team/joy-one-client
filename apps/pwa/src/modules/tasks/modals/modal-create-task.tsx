@@ -2,7 +2,7 @@
 
 import { Modal } from "@/components/modal/modal";
 import { useColor } from "@/modules/theme/use-color";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconChevronRight, IconFolder, IconStack2, IconStackPush } from "@tabler/icons-react";

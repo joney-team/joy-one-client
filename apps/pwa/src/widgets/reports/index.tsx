@@ -19,7 +19,7 @@ import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-work
 import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-settings-view";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useApolloClient, useLazyQuery, useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Group, Loader, Stack, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {

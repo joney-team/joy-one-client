@@ -8,7 +8,7 @@ import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { useMutation } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Center, NumberInput, Slider, Stack, Text } from "@mantine/core";
 import { DateInput } from "@mantine/dates";

@@ -6,7 +6,7 @@ import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { ModalTagForm } from "@/modules/tags/modals/modal-tag-form";
 import { QuickCreateTaskInput } from "@/modules/tasks/components/quick-create-task-input";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, alpha, Group, rgba, Stack, Text, Tooltip } from "@mantine/core";
 import {

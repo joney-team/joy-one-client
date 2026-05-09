@@ -2,7 +2,7 @@ import { AttendanceRecordStatus, AttendanceRecordType } from "@/graphql/enums.gr
 import { type WorkspaceMemberFragment } from "../workspace-members/graphql/fragmentWorkspaceMember.graphql";
 import { type AttendanceRecordFragment } from "./graphql/fragmentAttendanceRecord.graphql";
 import { WorkspaceSettingFragment } from "../workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
-import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
+import { DateTime, RawDate } from "@joy-one/utils/date-time";
 import { WorkingDayInterval } from "@/graphql/types.graphql";
 import { getMinutesFromStringTime } from "@/components/time-slots/time-slots.utils";
 

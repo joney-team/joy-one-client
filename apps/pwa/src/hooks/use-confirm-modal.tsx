@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { Divider, Group, Stack, ThemeIcon, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";

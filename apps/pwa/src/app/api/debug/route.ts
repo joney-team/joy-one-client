@@ -1,6 +1,6 @@
 "use server";
 
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 export async function GET() {
   return new Response(

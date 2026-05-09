@@ -3,7 +3,7 @@ import type { AppRouter } from "@/hooks/use-router";
 import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
 import { WorkspaceSettingFragment } from "@/modules/workspace-settings/graphql/fragmentWorkspaceSetting.graphql";
 import type { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
-import { CurrencyData } from "@joy-one-client/utils/currency";
+import { CurrencyData } from "@joy-one/utils/currency";
 
 export enum ReportWidgetType {
   TASKS = "TASKS",

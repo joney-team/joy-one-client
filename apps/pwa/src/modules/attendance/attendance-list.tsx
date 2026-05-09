@@ -11,7 +11,7 @@ import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Card, Group, Stack, Table, Text } from "@mantine/core";
 import { IconTable } from "@tabler/icons-react";

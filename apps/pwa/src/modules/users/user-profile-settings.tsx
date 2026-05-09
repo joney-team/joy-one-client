@@ -16,7 +16,7 @@ import { useEventsListener } from "@/modules/events/event-service";
 import { useLang } from "@/modules/lang/lang-context";
 import { getClientLocale, localeNames } from "@/modules/lang/lang-service";
 import { onActionLoad } from "@/utils/actions";
-import { normalizeObject } from "@joy-one-client/utils/object";
+import { normalizeObject } from "@joy-one/utils/object";
 import { Trans } from "@lingui/react/macro";
 import {
   Card,

@@ -1,5 +1,5 @@
 import { Circle } from "@/components/circle";
-import { objUnselect } from "@joy-one-client/utils/object";
+import { objUnselect } from "@joy-one/utils/object";
 import { Group, Text } from "@mantine/core";
 import { Icon, IconChartBubble } from "@tabler/icons-react";
 import { Column } from "../types";

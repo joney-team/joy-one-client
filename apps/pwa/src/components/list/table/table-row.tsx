@@ -6,7 +6,7 @@ import { CSSProperties } from "react";
 import { getIn, getValuePath } from "../list-utils";
 
 import { useContextMenu } from "@/components/context-menu/context-menu";
-import { type BaseData } from "@joy-one-client/utils/base-data";
+import { type BaseData } from "@joy-one/utils/base-data";
 import { useListContext } from "../list-context";
 import styles from "./table.module.css";
 

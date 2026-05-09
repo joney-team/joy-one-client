@@ -2,7 +2,7 @@
 
 import { Renderer } from "@/components/renderer";
 import { useQuery } from "@apollo/client/react";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, CopyButton, Group, Text, ThemeIcon, Tooltip } from "@mantine/core";
 import {

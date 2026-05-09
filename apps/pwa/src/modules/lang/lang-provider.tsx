@@ -9,7 +9,7 @@ import "dayjs/locale/vi";
 import updateLocale from "dayjs/plugin/updateLocale";
 
 import { onReconnected } from "@/modules/events/event-service";
-import { runWithDelay } from "@joy-one-client/utils/run-with-delay";
+import { runWithDelay } from "@joy-one/utils/run-with-delay";
 import { I18nProvider } from "@lingui/react";
 import { deleteCookie, setCookie } from "cookies-next/client";
 

@@ -6,7 +6,7 @@ import type { DynamicSelectorFilterConfig } from "./filters/dynamic-selector-fil
 import type { StaticSelectorFilterConfig } from "./filters/static-selector-filter";
 import type { TextFilterConfig } from "./filters/text-filter";
 import type { TimeRangeFilterConfig } from "./filters/time-range-filter";
-import { BaseData } from "@joy-one-client/utils/base-data";
+import { BaseData } from "@joy-one/utils/base-data";
 import { TypedDocumentNode } from "@apollo/client";
 
 export type ListSort = {

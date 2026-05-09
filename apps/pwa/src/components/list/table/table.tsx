@@ -4,7 +4,7 @@ import { Empty } from "@/components/empty";
 import { Errored } from "@/components/errored";
 import { TableColumn } from "@/components/list/types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { type BaseData, getId } from "@joy-one-client/utils/base-data";
+import { type BaseData, getId } from "@joy-one/utils/base-data";
 import { Checkbox, Group, Loader, Stack } from "@mantine/core";
 import { CSSProperties, useEffect, useMemo, useRef } from "react";
 import { ListTableHead } from "./table-head";

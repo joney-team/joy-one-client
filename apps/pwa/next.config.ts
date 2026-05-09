@@ -1,5 +1,5 @@
 import { NextConfig } from "next";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 const nextConfig: NextConfig = {
   output: "standalone",

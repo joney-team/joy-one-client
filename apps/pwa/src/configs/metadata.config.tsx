@@ -1,5 +1,5 @@
 import { type PageMetadata } from "@/types";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 export const defaultMetadata: PageMetadata = {
   isExtended: false,

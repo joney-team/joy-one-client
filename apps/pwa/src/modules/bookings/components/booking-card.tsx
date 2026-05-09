@@ -6,7 +6,7 @@ import { BookingStatus } from "@/graphql/enums.graphql";
 import { getBookingTitle } from "@/modules/bookings/booking-utils";
 import { OnModalUpdateBooking } from "@/modules/bookings/modals/modal-update-booking";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

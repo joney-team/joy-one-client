@@ -1,7 +1,7 @@
 "use client";
 
 import { renderFileUrl } from "@/modules/files/files-utils";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans } from "@lingui/react/macro";
 import { Center, ImageProps, Image as MantineImage, Stack } from "@mantine/core";
 import { FC, useState } from "react";

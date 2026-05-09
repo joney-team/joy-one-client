@@ -5,7 +5,7 @@ import { Fragment, useEffect, useMemo, useRef, type FC } from "react";
 
 import { DateFormat } from "@/components/format/date-format";
 import { ModalConfirm, ModalConfirmRef } from "@/modals/modal-confirm";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Stack, Text } from "@mantine/core";
 import { IconClockPlay } from "@tabler/icons-react";

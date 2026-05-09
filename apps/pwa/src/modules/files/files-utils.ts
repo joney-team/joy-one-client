@@ -1,7 +1,7 @@
 import resource from "@/app.resource.json";
 import { FileType } from "@/graphql/enums.graphql";
-import config from "@joy-one-client/config";
-import { isObjectID } from "@joy-one-client/utils/string";
+import config from "@joy-one/config";
+import { isObjectID } from "@joy-one/utils/string";
 
 export const fileSchema = "jof://";
 

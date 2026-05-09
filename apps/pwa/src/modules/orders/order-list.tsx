@@ -11,7 +11,7 @@ import { OrderCard } from "@/modules/orders/order-card";
 import { userColumn } from "@/modules/users/user-column";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { nonLoading } from "@/utils/non-loading";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { ActionIcon, Stack, Tooltip } from "@mantine/core";
 import { IconCalendarDown, IconCashRegister, IconEdit } from "@tabler/icons-react";
 import dynamic from "next/dynamic";

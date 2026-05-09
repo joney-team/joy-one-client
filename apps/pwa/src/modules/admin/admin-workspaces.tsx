@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { List } from "@/components/list";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { WorkspaceType } from "@/graphql/enums.graphql";
-import { formatBytes } from "@joy-one-client/utils/files";
+import { formatBytes } from "@joy-one/utils/files";
 import { useLingui } from "@lingui/react/macro";
 import { Group, Stack, Text } from "@mantine/core";
 import { type FC } from "react";

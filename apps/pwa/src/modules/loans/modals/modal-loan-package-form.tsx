@@ -5,7 +5,7 @@ import { Modal } from "@/components/modal/modal";
 import { LoanAssetType, LoanPackageType } from "@/graphql/enums.graphql";
 import { LoanPackage } from "@/graphql/types.graphql";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { Currency } from "@joy-one-client/utils/currency";
+import { Currency } from "@joy-one/utils/currency";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

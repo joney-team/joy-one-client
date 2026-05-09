@@ -36,8 +36,8 @@ import { nonLoading } from "@/utils/non-loading";
 import { round } from "@/utils/number.utils";
 import { removeAccents } from "@/utils/string.utils";
 import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { loadImage } from "@joy-one-client/utils/assets";
+import { zIndexes } from "@joy-one/config/layout";
+import { loadImage } from "@joy-one/utils/assets";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

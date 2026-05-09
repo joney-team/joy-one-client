@@ -9,7 +9,7 @@ import { LoanAssetType } from "@/graphql/enums.graphql";
 import { renderLoanPeriod } from "@/modules/loans/loans-service";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
 import { useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,

@@ -8,7 +8,7 @@ import { EventType, Period } from "@/graphql/enums.graphql";
 import { BookingCard } from "@/modules/bookings/components/booking-card";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { useLingui } from "@lingui/react/macro";
 import { Group, SimpleGrid, Stack } from "@mantine/core";
 import { useLocalStorage } from "@mantine/hooks";

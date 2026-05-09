@@ -1,4 +1,4 @@
-import type { BaseData } from "@joy-one-client/utils/base-data";
+import type { BaseData } from "@joy-one/utils/base-data";
 import type { ComponentType, FC, MouseEvent, ReactNode, RefObject } from "react";
 import type { PlaceDropdownMenuOptions } from "./context-menu-helpers";
 

@@ -3,7 +3,7 @@
 import { Circle } from "@/components/circle";
 import FlexContainer from "@/components/flex-container/flex-container";
 import { useColor } from "@/modules/theme/use-color";
-import { scrollToElementById } from "@joy-one-client/utils/scrollToElementById";
+import { scrollToElementById } from "@joy-one/utils/scrollToElementById";
 import { ActionIcon, Box, Divider, Group, Stack, Text } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { IconX } from "@tabler/icons-react";

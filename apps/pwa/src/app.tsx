@@ -2,7 +2,7 @@
 
 import LangProvider from "@/modules/lang/lang-provider";
 import { wait } from "@/utils/common.utils";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import * as Sentry from "@sentry/react";
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useRef, useState, type FC, type PropsWithChildren } from "react";

@@ -2,7 +2,7 @@
 
 import { useLayout } from "@/layout/layout-context";
 import { onError } from "@/utils/exceptions.utils";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Box, Group, Portal, Text } from "@mantine/core";
 import { FC, Fragment, ReactNode, useRef, useState } from "react";
 import { Camera } from "./camera";

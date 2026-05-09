@@ -1,5 +1,5 @@
 {
-  "name": "@joy-one-client/apis",
+  "name": "@joy-one/apis",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,6 @@
   "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "axios": "^1.9.0",
-    "@joy-one-client/config": "workspace:*"
+    "@joy-one/config": "workspace:*"
   }
 }

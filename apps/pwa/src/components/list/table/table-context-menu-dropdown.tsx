@@ -2,7 +2,7 @@
 
 import { ContextMenuDropdownComponent } from "@/components/context-menu/context-menu-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getId } from "@joy-one-client/utils/base-data";
+import { getId } from "@joy-one/utils/base-data";
 import { Trans } from "@lingui/react/macro";
 import { Box, Card, Stack, Text } from "@mantine/core";
 import { Icon } from "@tabler/icons-react";

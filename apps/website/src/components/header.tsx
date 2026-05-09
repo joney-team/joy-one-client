@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { useLang } from "@/lang/hooks";
 import { Anchor, Button, Group, Image } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";

@@ -4,7 +4,7 @@ const nextConfig = {
     locales: ["en", "vi"],
     defaultLocale: "en",
   },
-  transpilePackages: ["@joy-one-client/config"],
+  transpilePackages: ["@joy-one/config"],
   output: "standalone",
 };
 

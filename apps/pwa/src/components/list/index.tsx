@@ -1,6 +1,6 @@
 "use client";
 
-import type { BaseData } from "@joy-one-client/utils/base-data";
+import type { BaseData } from "@joy-one/utils/base-data";
 import { Skeleton } from "@mantine/core";
 import dynamic from "next/dynamic";
 import { ListProps } from "./types";

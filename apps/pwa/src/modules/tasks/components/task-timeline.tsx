@@ -2,7 +2,7 @@
 
 import { Fragment, type FC } from "react";
 import { TaskFragment } from "../graphql/fragmentTask.graphql";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { DateFormat } from "@/components/format/date-format";
 
 export const TaskTimeline: FC<{ task: Pick<TaskFragment, "startDate" | "dueDate"> }> = ({

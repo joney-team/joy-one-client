@@ -4,7 +4,7 @@ import { Button } from "@/components/buttons/button";
 import { NumberFormat } from "@/components/format/number-format";
 import { Renderer } from "@/components/renderer";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { getId } from "@joy-one-client/utils/base-data";
+import { getId } from "@joy-one/utils/base-data";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Text, Tooltip } from "@mantine/core";
 import { IconStack2, IconTrash, IconX } from "@tabler/icons-react";

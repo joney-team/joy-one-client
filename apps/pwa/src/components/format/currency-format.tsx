@@ -2,7 +2,7 @@
 
 import { useLang } from "@/modules/lang/lang-context";
 import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-workspace-setting";
-import { Currency } from "@joy-one-client/utils/currency";
+import { Currency } from "@joy-one/utils/currency";
 import { FC, Fragment } from "react";
 
 export interface CurrencyFormatProps {

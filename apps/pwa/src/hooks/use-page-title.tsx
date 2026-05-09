@@ -1,6 +1,6 @@
 "use client";
 
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { requestAnimationFrameTimes } from "@joy-one/utils/request-animation-frame";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef } from "react";
 

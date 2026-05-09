@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 interface CircularProgressProps {
   progress: number; // 0 to 1

@@ -11,7 +11,7 @@ import ConnectZaloOaCallbackDocument from "@/modules/plugins/zalo-oas/graphql/co
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { useApolloClient } from "@apollo/client/react";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans } from "@lingui/react/macro";
 import { Anchor, Center, Group, Stack, Text, ThemeIcon, Title, em } from "@mantine/core";
 import { IconCirclesRelation } from "@tabler/icons-react";

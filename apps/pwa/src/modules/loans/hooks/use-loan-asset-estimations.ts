@@ -1,5 +1,5 @@
 import { useQuery } from "@apollo/client/react";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 import GetLoanAssetEstimationsDocument from "../graphql/getLoanAssetEstimations.graphql";
 import SetLoanAssetEstimationsDocument from "../graphql/setLoanAssetEstimations.graphql";
 import { LoanAssetEstimation, LoanAssetEstimations } from "../loans-types";

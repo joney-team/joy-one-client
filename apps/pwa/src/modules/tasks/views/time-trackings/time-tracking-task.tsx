@@ -4,7 +4,7 @@ import { Avatar } from "@/components/avatar";
 import { Renderer } from "@/components/renderer";
 import { useColor } from "@/modules/theme/use-color";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Card, Group, Stack, Text, Tooltip } from "@mantine/core";
 import { useForceUpdate, useHover } from "@mantine/hooks";
 import { useRouter } from "next/navigation";

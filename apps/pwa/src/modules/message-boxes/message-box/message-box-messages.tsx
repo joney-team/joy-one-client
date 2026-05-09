@@ -19,8 +19,8 @@ import { useColorScheme } from "@/modules/theme/use-color-scheme";
 import { ModalUserInformation } from "@/modules/users/modals/modal-user-information";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { String } from "@/utils/string.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { DateTime } from "@joy-one/utils/date-time";
+import { requestAnimationFrameTimes } from "@joy-one/utils/request-animation-frame";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Anchor,

@@ -1,6 +1,6 @@
 "use client";
 
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 export const getClarity = () => {
   return (window as any).clarity;

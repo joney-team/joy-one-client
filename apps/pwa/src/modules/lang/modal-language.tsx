@@ -6,7 +6,7 @@ import { AppLocale } from "@/graphql/enums.graphql";
 import { useLang } from "@/modules/lang/lang-context";
 import { localeNames } from "@/modules/lang/lang-service";
 import { useColor } from "@/modules/theme/use-color";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { Card, em, Group, Stack, Text, ThemeIcon, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";

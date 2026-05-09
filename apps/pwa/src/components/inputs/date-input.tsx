@@ -1,7 +1,7 @@
 "use client";
 
 import { useLang } from "@/modules/lang/lang-context";
-import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
+import { DateTime, RawDate } from "@joy-one/utils/date-time";
 import {
   DateInput as MantineDateInput,
   DateInputProps as MantineDateInputProps,

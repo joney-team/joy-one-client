@@ -14,7 +14,7 @@ import { LoanAssetEstimation, LoanAssetEstimations } from "@/modules/loans/loans
 import { ModalLoanAssetEstimationForm } from "@/modules/loans/modals/modal-loan-asset-estimation-form";
 import { convertExcelToJson } from "@/modules/tools/tools-service";
 import { wait } from "@/utils/common.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Skeleton, Stack, Table, Text, Tooltip } from "@mantine/core";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";

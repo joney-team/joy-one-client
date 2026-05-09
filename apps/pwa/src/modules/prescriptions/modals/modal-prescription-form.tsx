@@ -15,7 +15,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onArchive } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

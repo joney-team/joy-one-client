@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { useLang } from "@/lang/hooks";
 import { Anchor, Box, Button, Container, Group, Image, rem, Stack, Text } from "@mantine/core";
 import { IconChevronRight } from "@tabler/icons-react";

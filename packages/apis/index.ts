@@ -1,4 +1,4 @@
-import environment from "@joy-one-client/config";
+import environment from "@joy-one/config";
 import axios, { AxiosRequestConfig, type AxiosInstance } from "axios";
 
 interface ApiInstanceOptions {

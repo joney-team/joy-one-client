@@ -13,7 +13,7 @@ import { useWorkspaceMember } from "@/modules/workspace-members/hooks/use-worksp
 import { WorkspaceMemberRoleName } from "@/modules/workspace-roles/components/workspace-role-name";
 import { nonLoading } from "@/utils/non-loading";
 import { useQuery } from "@apollo/client/react";
-import { DateTime, type RawDate } from "@joy-one-client/utils/date-time";
+import { DateTime, type RawDate } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Group, Skeleton, Stack, Text } from "@mantine/core";
 import { IconCalendarCheck, IconChevronLeft, IconChevronRight } from "@tabler/icons-react";

@@ -2,7 +2,7 @@
 
 import { useColor } from "@/modules/theme/use-color";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Card, Group, SimpleGrid, Stack, Text, alpha, em } from "@mantine/core";
 import { useHover } from "@mantine/hooks";
 import { FC } from "react";

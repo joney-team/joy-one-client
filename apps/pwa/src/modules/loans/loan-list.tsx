@@ -21,7 +21,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { AppEntity } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { useApolloClient, useMutation } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Anchor, Group, Progress, Stack, Text, Tooltip } from "@mantine/core";
 import {

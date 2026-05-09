@@ -12,8 +12,8 @@ import { onActionLoad } from "@/utils/actions";
 import { onError } from "@/utils/exceptions.utils";
 import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
-import { formatBytes } from "@joy-one-client/utils/files";
+import { zIndexes } from "@joy-one/config/layout";
+import { formatBytes } from "@joy-one/utils/files";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Anchor, em, Group, Loader, SimpleGrid, Stack, Text } from "@mantine/core";
 import {

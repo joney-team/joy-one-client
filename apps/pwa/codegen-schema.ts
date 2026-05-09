@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 import type { CodegenConfig } from "@graphql-codegen/cli";
 

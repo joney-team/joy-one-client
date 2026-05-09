@@ -1,6 +1,6 @@
 "use client";
 
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { type DependencyList, useEffect } from "react";
 
 export const appChannel = new BroadcastChannel(config.APP_URL + config.ENV);

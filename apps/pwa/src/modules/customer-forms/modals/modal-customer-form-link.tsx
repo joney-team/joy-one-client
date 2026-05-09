@@ -4,7 +4,7 @@ import { ModalHead } from "@/components/modal/modal-head";
 import { useColor } from "@/modules/theme/use-color";
 import { WorkspaceBranchSelector } from "@/modules/workspace-branches/workspace-branch-selector";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { useLingui } from "@lingui/react/macro";
 import { ActionIcon, CopyButton, Group, Input, InputWrapper, Stack, Tooltip } from "@mantine/core";
 import { modals } from "@mantine/modals";

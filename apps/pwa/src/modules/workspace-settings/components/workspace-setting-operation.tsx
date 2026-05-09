@@ -13,8 +13,8 @@ import { searchGetAvailableEntities } from "@/modules/search/search-service";
 import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-types";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
-import { Currency } from "@joy-one-client/utils/currency";
-import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
+import { Currency } from "@joy-one/utils/currency";
+import { renderWeekdayFromISO } from "@joy-one/utils/date-time-render";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,

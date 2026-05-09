@@ -5,7 +5,7 @@ import { ReactionsCount } from "@/graphql/types.graphql";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient, useMutation } from "@apollo/client/react";
-import { getId } from "@joy-one-client/utils/base-data";
+import { getId } from "@joy-one/utils/base-data";
 import { type DocumentNode } from "graphql";
 import { useCallback, useMemo, useState } from "react";
 import { useAuth } from "../auth/auth-context";

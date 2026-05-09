@@ -1,4 +1,4 @@
-import type { DateTimeUnit } from "@joy-one-client/utils/date-time";
+import type { DateTimeUnit } from "@joy-one/utils/date-time";
 import type { SetStateAction } from "react";
 import type { Dispatch } from "react";
 import type { getDateRangeBreakdown } from "./gantt-tasks-utils";

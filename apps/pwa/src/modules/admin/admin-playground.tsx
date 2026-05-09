@@ -12,7 +12,7 @@ import { onConfirmModal } from "@/hooks/use-confirm-modal";
 import { InputModalType, ModalInput } from "@/modals/modal-input";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
-import { renderWeekdayFromISO } from "@joy-one-client/utils/date-time-render";
+import { renderWeekdayFromISO } from "@joy-one/utils/date-time-render";
 import { Card, FileInput, Group, Paper, Stack, Text, TextInput } from "@mantine/core";
 import { IconClipboard, IconPlus } from "@tabler/icons-react";
 import { useMemo, useRef, useState, type FC } from "react";

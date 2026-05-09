@@ -14,7 +14,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation, useQuery } from "@apollo/client/react";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

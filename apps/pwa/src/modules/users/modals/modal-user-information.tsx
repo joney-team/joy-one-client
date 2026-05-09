@@ -17,7 +17,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { nonLoading } from "@/utils/non-loading";
 import { getAvatarInitials } from "@/utils/string.utils";
 import { useLazyQuery } from "@apollo/client/react";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

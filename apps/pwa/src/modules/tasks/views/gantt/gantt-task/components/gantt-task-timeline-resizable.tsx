@@ -6,7 +6,7 @@ import { FC, ReactNode, RefObject, useEffect, useRef } from "react";
 
 import GetTasksDocument from "@/modules/tasks/graphql/getTasks.graphql";
 import { useApolloClient } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { IconChevronCompactLeft } from "@tabler/icons-react";
 import { UpdateTask, useUpdateTasks } from "../../../../hooks/use-update-tasks";
 import { ganttConfig } from "../../gantt-tasks-config";

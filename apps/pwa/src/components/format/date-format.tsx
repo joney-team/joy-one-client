@@ -5,7 +5,7 @@ import { Fragment, useMemo } from "react";
 
 import { useAuth } from "@/modules/auth/auth-context";
 import { useLang } from "@/modules/lang/lang-context";
-import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
+import { DateTime, RawDate } from "@joy-one/utils/date-time";
 
 type DateFormatProps = { value: RawDate } & (
   | {

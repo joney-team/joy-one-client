@@ -9,7 +9,7 @@ import { WorkspacePermission } from "@/modules/workspace-roles/workspace-roles-t
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useApolloClient } from "@apollo/client/react";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

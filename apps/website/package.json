@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@joy-one-client/config": "workspace:^",
+    "@joy-one/config": "workspace:^",
     "@mantine/core": "^7.15.2",
     "@mantine/hooks": "^7.15.2",
     "@tabler/icons-react": "^3.4.0",

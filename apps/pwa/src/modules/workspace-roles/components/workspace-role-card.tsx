@@ -5,7 +5,7 @@ import {
   WorkspaceDefaultRoleId,
   WorkspacePermission,
 } from "@/modules/workspace-roles/workspace-roles-types";
-import { stringable } from "@joy-one-client/utils/string";
+import { stringable } from "@joy-one/utils/string";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, em, Group, Stack, Text, ThemeIcon } from "@mantine/core";
 import { IconAccessible, IconPencil } from "@tabler/icons-react";

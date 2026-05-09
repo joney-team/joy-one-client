@@ -7,7 +7,7 @@ import { emitInternalEvent, InternalEvent } from "@/hooks/use-internal-event";
 import { ModalConfirm, type ModalConfirmRef } from "@/modals/modal-confirm";
 import { TagFragment } from "@/modules/tags/graphql/fragmentTag.graphql";
 import { TaskTagFolderSelector } from "@/modules/tasks/components/task-tag-folder-selector";
-import { isDiff } from "@joy-one-client/utils/object";
+import { isDiff } from "@joy-one/utils/object";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Center, Divider, Group, Menu, Text, Tooltip } from "@mantine/core";
 import {

@@ -22,7 +22,12 @@
       "Bash(pnpm remove *)",
       "Bash(pnpm update *)",
       "Bash(ls /Users/jasontran/joney/joy-one-server/src/ | head -20)",
-      "Read(//Users/jasontran/joney/joy-one-server/src/**)"
+      "Read(//Users/jasontran/joney/joy-one-server/src/**)",
+      "Bash(cat /Users/jasontran/joney/joy-one-server/package.json)",
+      "Read(//Users/jasontran/joney/joy-one-server/**)",
+      "Bash(git remote *)",
+      "Bash(git fetch *)",
+      "Bash(git subtree *)"
     ],
     "additionalDirectories": [
       "/Users/jasontran/joney/joy-one-client/apps/pwa/src/modules/file-exports",

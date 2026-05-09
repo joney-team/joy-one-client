@@ -1,6 +1,6 @@
 import { getMinutesFromStringTime } from "@/components/time-slots/time-slots.utils";
 import { WorkingDayInterval } from "@/graphql/types.graphql";
-import { DateTime, RawDate } from "@joy-one-client/utils/date-time";
+import { DateTime, RawDate } from "@joy-one/utils/date-time";
 
 export const isInWorkingDayInterval = (
   date: RawDate,

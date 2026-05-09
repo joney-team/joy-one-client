@@ -30,7 +30,7 @@ import { useUploadFile } from "../hooks/use-upload-file";
 import { useGraphqlList } from "@/components/list/use-graphql-list";
 import { onActionLoad } from "@/utils/actions";
 import { nonLoading } from "@/utils/non-loading";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import dynamic from "next/dynamic";
 import { FileFragment } from "../graphql/fragmentFile.graphql";
 import GetFilesDocument from "../graphql/getFiles.graphql";

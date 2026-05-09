@@ -4,7 +4,7 @@ import { MetricsReportFragment } from "@/modules/reports/graphql/fragmentMetrics
 import { TimeSeriesReportFragment } from "@/modules/reports/graphql/fragmentTimeSeriesReport.graphql";
 import { WorkspaceContext } from "@/modules/workspaces/workspaces-types";
 import { UseFetch } from "@/utils/use-fetch.util";
-import { CurrencyData } from "@joy-one-client/utils/currency";
+import { CurrencyData } from "@joy-one/utils/currency";
 
 export enum DashboardWidgetType {
   TODAY_REVENUE = "TODAY_REVENUE",

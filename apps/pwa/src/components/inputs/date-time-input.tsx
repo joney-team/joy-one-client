@@ -1,6 +1,6 @@
 "use client";
 
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { ActionIcon, Group, InputWrapper, InputWrapperProps } from "@mantine/core";
 import { TimeInput } from "@mantine/dates";
 import { IconChevronDown, IconClock } from "@tabler/icons-react";

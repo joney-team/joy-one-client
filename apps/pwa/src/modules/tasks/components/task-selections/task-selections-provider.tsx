@@ -2,7 +2,7 @@
 
 import { nonLoading } from "@/utils/non-loading";
 import { useApolloClient } from "@apollo/client/react";
-import { shiftSelect } from "@joy-one-client/utils/array";
+import { shiftSelect } from "@joy-one/utils/array";
 import dynamic from "next/dynamic";
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import GetTasksDocument from "../../graphql/getTasks.graphql";

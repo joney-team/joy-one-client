@@ -4,9 +4,9 @@ import { useApolloClient, useMutation, useQuery } from "@apollo/client/react";
 
 import { UpdateWorkspaceSettingInput, WorkspaceView } from "@/graphql/types.graphql";
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
-import { Currency } from "@joy-one-client/utils/currency";
-import { normalizeObject } from "@joy-one-client/utils/object";
-import { removeTypeName } from "@joy-one-client/utils/remove-type-name";
+import { Currency } from "@joy-one/utils/currency";
+import { normalizeObject } from "@joy-one/utils/object";
+import { removeTypeName } from "@joy-one/utils/remove-type-name";
 import { useMemo } from "react";
 import { WorkspaceSettingFragment } from "../graphql/fragmentWorkspaceSetting.graphql";
 import GetWorkspaceSettingDocument from "../graphql/getWorkspaceSetting.graphql";

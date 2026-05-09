@@ -1,7 +1,7 @@
 "use client";
 
 import { useColor } from "@/modules/theme/use-color";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Menu, useMantineColorScheme } from "@mantine/core";
 import { useColorScheme } from "@mantine/hooks";

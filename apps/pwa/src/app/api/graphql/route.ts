@@ -1,7 +1,7 @@
 "use server";
 
 import { StorageKey } from "@/constants/storage-key";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { cookies } from "next/headers";
 
 const forwardHeaders = ["x-device-id", "x-session-id", "x-workspace-id", "accept-language"];

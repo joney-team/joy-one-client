@@ -1,7 +1,7 @@
 import { LoanReceiptData } from "../loans-types";
 
 import { ReceiptFragment } from "@/modules/receipts/graphql/fragmentReceipt.graphql";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { LoanFragment } from "../graphql/fragmentLoan.graphql";
 import { ReceiptStatus } from "@/graphql/enums.graphql";
 

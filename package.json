@@ -1,8 +1,12 @@
 {
-  "name": "joy-one-client",
+  "name": "joy-one",
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "dev:pwa": "pnpm --filter joy-one-pwa dev",
+    "dev:server": "pnpm --filter joy-one-server dev",
+    "build:pwa": "pnpm --filter joy-one-pwa build",
+    "build:server": "pnpm --filter joy-one-server build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

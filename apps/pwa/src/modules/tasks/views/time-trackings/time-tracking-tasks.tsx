@@ -9,7 +9,7 @@ import { useTasks } from "@/modules/tasks/tasks-context";
 import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-members-hooks";
 import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { ActionIcon, Card, Divider, Group, ScrollArea, Stack, Text, Tooltip } from "@mantine/core";
 import { IconStopwatch } from "@tabler/icons-react";

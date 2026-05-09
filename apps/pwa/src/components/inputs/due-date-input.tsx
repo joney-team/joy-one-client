@@ -3,7 +3,7 @@
 import { configs } from "@/configs/layout.config";
 import { useLang } from "@/modules/lang/lang-context";
 import { useColorScheme } from "@/modules/theme/use-color-scheme";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import {
   ActionIcon,

@@ -1,6 +1,6 @@
 import { getGradient, getThemeColor, MantineTheme, useMantineTheme } from "@mantine/core";
 import { useColorScheme } from "./use-color-scheme";
-import { backgroundColors } from "@joy-one-client/config/colors";
+import { backgroundColors } from "@joy-one/config/colors";
 import { useMemo } from "react";
 
 export const getColor = (theme: MantineTheme, color?: string) => {

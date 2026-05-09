@@ -14,7 +14,7 @@ import { ActivitiesProps } from "./activities-types";
 import { Avatar } from "@/components/avatar";
 import { isEmptyContent } from "@/components/editor/editor-utils";
 import { VoiceInput } from "@/components/inputs/voice-input/voice-input";
-import { createObjectId } from "@joy-one-client/utils/object-id";
+import { createObjectId } from "@joy-one/utils/object-id";
 import { useFileDialog } from "@mantine/hooks";
 import { setRefFile } from "../files/file-service";
 import { renderFileUrl } from "../files/files-utils";

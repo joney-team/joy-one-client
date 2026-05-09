@@ -1,6 +1,6 @@
 "use client";
 
-import { BaseData } from "@joy-one-client/utils/base-data";
+import { BaseData } from "@joy-one/utils/base-data";
 import { createContext, useContext } from "react";
 import { ContextMenuType } from "./context-menu-types";
 

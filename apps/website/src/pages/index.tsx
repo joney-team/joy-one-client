@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import {

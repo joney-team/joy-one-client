@@ -1,4 +1,4 @@
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { AppConfigFragment } from "./configs/fragmentAppConfig.graphql";
 import GetAppConfigDocument from "./configs/getAppConfig.graphql";
 import { graphqlClient } from "./graphql/graphql-client";

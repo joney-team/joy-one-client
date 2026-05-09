@@ -1,6 +1,6 @@
 import { Circle } from "@/components/circle";
 import { useColor } from "@/modules/theme/use-color";
-import { objUnselect } from "@joy-one-client/utils/object";
+import { objUnselect } from "@joy-one/utils/object";
 import { useLingui } from "@lingui/react/macro";
 import { Card, ComboboxDropdownProps, Group, Text } from "@mantine/core";
 import { IconProgress } from "@tabler/icons-react";

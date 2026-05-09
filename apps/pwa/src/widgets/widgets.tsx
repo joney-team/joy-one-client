@@ -19,7 +19,7 @@ import { Empty } from "@/components/empty";
 import { useNavigationWidth } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
 import { isDiff } from "@/utils/object.utils";
-import { getId } from "@joy-one-client/utils/base-data";
+import { getId } from "@joy-one/utils/base-data";
 import { Trans } from "@lingui/react/macro";
 import { useClickOutside, useLocalStorage } from "@mantine/hooks";
 import { IconPencil, IconPlusMinus, IconRefresh, IconTrash } from "@tabler/icons-react";

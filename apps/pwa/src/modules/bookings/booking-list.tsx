@@ -20,7 +20,7 @@ import { useWorkspaceMembers } from "@/modules/workspace-members/workspace-membe
 import { CalendarView } from "@/types";
 import { nonLoading } from "@/utils/non-loading";
 import { ObjectUtils } from "@/utils/object.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   ActionIcon,

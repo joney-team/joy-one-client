@@ -13,7 +13,7 @@ import { WorkspaceMemberFragment } from "@/modules/workspace-members/graphql/fra
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { useMutation } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Group, InputWrapper, Stack, Text, ThemeIcon } from "@mantine/core";
 import { DateInput, TimeInput } from "@mantine/dates";

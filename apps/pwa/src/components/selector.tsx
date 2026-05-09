@@ -5,7 +5,7 @@ import { useColor } from "@/modules/theme/use-color";
 import { wait } from "@/utils/common.utils";
 import { onError } from "@/utils/exceptions.utils";
 import { gql, TypedDocumentNode } from "@apollo/client";
-import { BaseData, getId } from "@joy-one-client/utils/base-data";
+import { BaseData, getId } from "@joy-one/utils/base-data";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Center,

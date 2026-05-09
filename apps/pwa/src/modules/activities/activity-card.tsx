@@ -40,7 +40,7 @@ import { NumberFormat } from "@/components/format/number-format";
 import { ReactionType } from "@/graphql/enums.graphql";
 import { AppEntity } from "@/types";
 import { wait } from "@/utils/common.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useAuth } from "../auth/auth-context";

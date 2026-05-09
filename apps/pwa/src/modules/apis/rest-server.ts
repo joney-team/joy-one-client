@@ -1,3 +1,3 @@
-import { ApiInstance } from "@joy-one-client/apis";
+import { ApiInstance } from "@joy-one/apis";
 
 export const restServerClient = new ApiInstance({ isServerSide: true });

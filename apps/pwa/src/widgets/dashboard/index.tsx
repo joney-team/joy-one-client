@@ -13,7 +13,7 @@ import { getDefaultWorkspaceView } from "@/modules/workspace-settings/workspace-
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { useFetch } from "@/utils/use-fetch.util";
 import { useApolloClient } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Stack } from "@mantine/core";
 import { FC, useMemo } from "react";
 import { Widgets } from "../widgets";

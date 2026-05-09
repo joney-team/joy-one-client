@@ -6,7 +6,7 @@ import { FileFragment } from "@/modules/files/graphql/fragmentFile.graphql";
 import { useUploadFile } from "@/modules/files/hooks/use-upload-file";
 import { useColor } from "@/modules/theme/use-color";
 import { onError } from "@/utils/exceptions.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Group, Menu, Text, ThemeIcon } from "@mantine/core";
 import { useForceUpdate } from "@mantine/hooks";
 import { IconMicrophone, IconPlayerPauseFilled, IconPlayerPlayFilled } from "@tabler/icons-react";

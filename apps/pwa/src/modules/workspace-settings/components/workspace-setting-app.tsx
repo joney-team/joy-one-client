@@ -10,7 +10,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onError } from "@/utils/exceptions.utils";
 import { getDnsRecordName, getMainDomain, isDomain } from "@/utils/string.utils";
 import { useMutation } from "@apollo/client/react";
-import { swatches } from "@joy-one-client/config/colors";
+import { swatches } from "@joy-one/config/colors";
 import { Trans, useLingui } from "@lingui/react/macro";
 import {
   Card,
@@ -32,7 +32,7 @@ import { FC, useState } from "react";
 import { WorkspaceInput } from "@/graphql/types.graphql";
 import UpdateWorkspaceDocument from "@/modules/workspaces/graphql/updateWorkspace.graphql";
 import { normalizeWorkspaceInput } from "@/modules/workspaces/workspaces-service";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 import { generateColorsMap } from "@mantine/colors-generator";
 import { Container } from "@/components/container";
 

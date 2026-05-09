@@ -8,9 +8,9 @@ import { useWorkspaceSetting } from "@/modules/workspace-settings/hooks/use-work
 import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { onActionLoad } from "@/utils/actions";
 import { useApolloClient } from "@apollo/client/react";
-import { Currency } from "@joy-one-client/utils/currency";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { downloadJSON } from "@joy-one-client/utils/files";
+import { Currency } from "@joy-one/utils/currency";
+import { DateTime } from "@joy-one/utils/date-time";
+import { downloadJSON } from "@joy-one/utils/files";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { Center, parseThemeColor, Select, Stack, useMantineTheme } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";

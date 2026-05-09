@@ -1,4 +1,4 @@
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { MouseEvent } from "react";
 
 export interface PlaceDropdownMenuArgs {

@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { useContextMenu } from "./context-menu";
 import { ContextMenuProps } from "./context-menu-types";
 
-import { getId } from "@joy-one-client/utils/base-data";
+import { getId } from "@joy-one/utils/base-data";
 import { placeDropdownMenuByMouseEvent, placeDropdownMenuByTarget } from "./context-menu-helpers";
 
 export const ContextMenuDropdown = ({

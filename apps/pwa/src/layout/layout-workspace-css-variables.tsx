@@ -3,7 +3,7 @@
 import { StorageKey } from "@/constants/storage-key";
 import { workspaceLayoutConfig } from "@/layout/hooks/use-workspace-layout";
 import { useLayout } from "@/layout/layout-context";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { useLocalStorage } from "@mantine/hooks";
 import { useParams, usePathname } from "next/navigation";
 import { FC, useEffect, useMemo } from "react";

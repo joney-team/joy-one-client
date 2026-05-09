@@ -1,6 +1,6 @@
 "use client";
 
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { ActionIcon } from "@mantine/core";
 import {
   TimeInput as MantineTimeInput,

@@ -1,4 +1,4 @@
-import { getFileSizeFromUrl } from "@joy-one-client/utils/files";
+import { getFileSizeFromUrl } from "@joy-one/utils/files";
 import { useEffect, useState } from "react";
 
 export const useFileSize = (url: string | null) => {

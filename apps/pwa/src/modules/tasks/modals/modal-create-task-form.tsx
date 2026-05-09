@@ -10,7 +10,7 @@ import { useWorkspace } from "@/modules/workspaces/workspace-context";
 import { AppEntity } from "@/types";
 import { onError } from "@/utils/exceptions.utils";
 import { useLazyQuery, useMutation } from "@apollo/client/react";
-import { createObjectId } from "@joy-one-client/utils/object-id";
+import { createObjectId } from "@joy-one/utils/object-id";
 import { Plural, Trans, useLingui } from "@lingui/react/macro";
 import { Center, Group, Skeleton, Stack } from "@mantine/core";
 import { useForm } from "@mantine/form";

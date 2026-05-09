@@ -4,7 +4,7 @@ import { useApp } from "@/app.context";
 import { Loader } from "@mantine/core";
 import { type FC } from "react";
 import { Animate } from "./animate/animate";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 
 interface OverlayLoadingProps {
   enabled?: boolean;

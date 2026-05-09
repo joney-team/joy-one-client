@@ -9,7 +9,7 @@ import GetTasksDocument from "@/modules/tasks/graphql/getTasks.graphql";
 import { UpdateTask, useUpdateTasks } from "@/modules/tasks/hooks/use-update-tasks";
 import { useColor } from "@/modules/theme/use-color";
 import { useApolloClient } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { alpha, Group, Text } from "@mantine/core";
 import { ganttConfig } from "../../gantt-tasks-config";
 import { useGantt } from "../../gantt-tasks-context";

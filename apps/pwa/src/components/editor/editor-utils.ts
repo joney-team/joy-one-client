@@ -1,5 +1,5 @@
 import { computePosition, flip, shift } from "@floating-ui/react-dom";
-import { zIndexes } from "@joy-one-client/config/layout";
+import { zIndexes } from "@joy-one/config/layout";
 import { Editor, posToDOMRect } from "@tiptap/react";
 
 export const parseEditorJSON = (rawValue?: string | null): object | null => {

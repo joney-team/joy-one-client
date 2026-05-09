@@ -5,7 +5,7 @@ import { List } from "@/components/list";
 import { dateTimeColumn } from "@/components/list/columns/date-time-column";
 import { enumColumn } from "@/components/list/columns/enum-column";
 import { FileType } from "@/graphql/enums.graphql";
-import { formatBytes } from "@joy-one-client/utils/files";
+import { formatBytes } from "@joy-one/utils/files";
 import { Trans, useLingui } from "@lingui/react/macro";
 import { ActionIcon, Image, Stack } from "@mantine/core";
 import { IconFile } from "@tabler/icons-react";

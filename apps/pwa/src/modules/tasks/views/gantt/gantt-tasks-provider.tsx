@@ -1,8 +1,8 @@
 "use client";
 
 import { wait } from "@/utils/common.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { requestAnimationFrameTimes } from "@joy-one-client/utils/request-animation-frame";
+import { DateTime } from "@joy-one/utils/date-time";
+import { requestAnimationFrameTimes } from "@joy-one/utils/request-animation-frame";
 import { useLingui } from "@lingui/react/macro";
 import { useThrottledCallback } from "@mantine/hooks";
 import { usePathname } from "next/navigation";

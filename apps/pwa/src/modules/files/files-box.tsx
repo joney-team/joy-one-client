@@ -6,7 +6,7 @@ import { detectFileType } from "@/modules/files/file-service";
 import { type ModalFilesViewerRef } from "@/modules/files/modals/modal-files-viewer";
 import { nonLoading } from "@/utils/non-loading";
 import { useMutation, useQuery } from "@apollo/client/react";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { Trans } from "@lingui/react/macro";
 import { Card, CardProps, em, Group, Stack, StackProps, Text, ThemeIcon } from "@mantine/core";
 import { Dropzone } from "@mantine/dropzone";

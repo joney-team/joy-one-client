@@ -1,6 +1,6 @@
 import { type FC } from "react";
 import Script from "next/script";
-import config from "@joy-one-client/config";
+import config from "@joy-one/config";
 
 export const ScriptsAnalytics: FC = () => {
   if (!config.ANALYTICS_KEY) return null;

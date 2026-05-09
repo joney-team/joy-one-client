@@ -5,8 +5,8 @@ import { Menu, MenuDropdown, Text } from "@mantine/core";
 import { DateFormat } from "@/components/format/date-format";
 import { OnModalDatePicker } from "@/modals/modal-date-picker";
 import { useColor } from "@/modules/theme/use-color";
-import { DateTime } from "@joy-one-client/utils/date-time";
-import { capitalizeFirstLetter } from "@joy-one-client/utils/string";
+import { DateTime } from "@joy-one/utils/date-time";
+import { capitalizeFirstLetter } from "@joy-one/utils/string";
 import { Trans } from "@lingui/react/macro";
 import { Group } from "@mantine/core";
 import {

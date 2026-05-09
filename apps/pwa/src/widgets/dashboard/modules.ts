@@ -7,7 +7,7 @@ import {
   reportConvertMoneyAmountUnit,
 } from "@/modules/reports/reports-utils";
 import { round } from "@/utils/number.utils";
-import { DateTime } from "@joy-one-client/utils/date-time";
+import { DateTime } from "@joy-one/utils/date-time";
 import { t } from "@lingui/core/macro";
 import {
   IconBusinessplan,
