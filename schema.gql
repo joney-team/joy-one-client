@@ -1,0 +1,5062 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+interface SearchResult {
+  id: String!
+  entity: String!
+}
+
+type AppConfig {
+  name: String!
+  version: String!
+  timeZone: String!
+  UTC: String!
+  workspaceDomainIP: String!
+  metaAppId: String!
+  metaAppScope: [String!]!
+  metaAppVersion: String!
+  zaloAppId: String!
+}
+
+type BookingsTimeSeriesReport {
+  total: Float!
+  completed: Float!
+  canceled: Float!
+  transferred: Float!
+  inProgress: Float!
+}
+
+type BookingsMetricsReport {
+  todayCount: Float!
+  userBookingsCount: Float!
+}
+
+type CustomerRelationshipContact {
+  name: String!
+  phone: String!
+  type: String!
+}
+
+type CustomersTimeSeriesReport {
+  total: Float!
+  newIds: [String!]!
+}
+
+type CustomersMetricsReport {
+  newCustomersToday: Float!
+}
+
+type Coordinates {
+  lat: Float!
+  lng: Float!
+}
+
+type VnLocation {
+  id: String!
+  type: LocationType!
+  name: String!
+  fullName: String!
+  parentId: String
+  externalId: String
+}
+
+"""The type of location (province, district, ward)"""
+enum LocationType {
+  province
+  district
+  ward
+}
+
+type Location {
+  provinceId: String
+  districtId: String
+  wardId: String
+  address: String
+  coordinates: Coordinates
+}
+
+type LoanPayment {
+  accountName: String!
+  accountNumber: String!
+  accountBankId: Float!
+}
+
+type LoanPaymentPeriod {
+  period: Float!
+  startTime: Float!
+  endTime: Float!
+  totalAmount: Float!
+  fee: Float!
+  capitalAmount: Float!
+  remainCapitalAmount: Float!
+  note: String
+}
+
+type LateInterestRate {
+  lateDays: Float!
+  rate: Float!
+}
+
+type LoanPackage {
+  id: String!
+  assetTypes: [LoanAssetType!]!
+  type: LoanPackageType!
+
+  """1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày"""
+  days: Float!
+
+  """Số ngày trong kỳ vay (10, 15, 30)"""
+  periodDaysOptions: [Float!]!
+
+  """Chi phí vay"""
+  contractFee: Float!
+
+  """Tỷ lệ trả gốc"""
+  unFixedCapitalRates: [[Float!]!]!
+
+  """Lãi phạt"""
+  lateInterestRates: [LateInterestRate!]!
+  description: String
+  liquidationFeeRate: Float
+}
+
+"""Available loan asset types"""
+enum LoanAssetType {
+  ICLOUD
+  MOTOBIKE_REGISTRATION
+  CAR_REGISTRATION
+  BUSINESS_PERMIT
+  LAND_CERTIFICATE
+}
+
+enum LoanPackageType {
+  FIXED_CAPITAL
+  UNFIXED_CAPITAL
+  INSTALLMENT
+}
+
+type LoanSettings {
+  loanPackages: [LoanPackage!]!
+  assetEstimationPriceSpreadRate: Float
+  liquidationFeeRate: Float
+  warningReceiptBeforeDays: Float
+  contractPdfUrl: String
+  contractLiquidationPdfUrl: String
+  receiptPdfUrl: String
+  isAutoSelectWorkspaceBranch: Boolean
+}
+
+type LoansMetricsReportContracts {
+  activated: Float!
+  overdue: Float!
+  pending: Float!
+}
+
+type LoansMetricsReportDebt {
+  total: Float!
+  notDueYet: Float!
+  overdue: Float!
+}
+
+type LoansMetricsReport {
+  contracts: LoansMetricsReportContracts!
+  debt: LoansMetricsReportDebt!
+}
+
+type LoansTimeSeriesReportInformation {
+  id: String!
+  amount: Float!
+  customerId: String!
+}
+
+type LoansTimeSeriesReportContracts {
+  new: Float!
+  fulfilled: Float!
+  fulfilledAmount: Float!
+}
+
+type LoansTimeSeriesReport {
+  newLoans: [LoansTimeSeriesReportInformation!]!
+  fulfilledLoans: [LoansTimeSeriesReportInformation!]!
+  contracts: LoansTimeSeriesReportContracts!
+}
+
+type LoanLiquidationCalculated {
+  capitalAmount: Float!
+  paidAmount: Float!
+  avancedPaymentAmount: Float!
+  remainCapitalAmount: Float!
+  remainCapitalAmountFeePercent: Float!
+  remainCapitalAmountFee: Float!
+  period: Float!
+  periodFeePerDay: Float!
+  periodFeeAmount: Float!
+  periodFeeDays: Float!
+  periodStartAt: Float!
+  feeAmount: Float!
+  lateInterestAmount: Float!
+}
+
+type LoanPaymentProgress {
+  receiptId: String!
+  amount: Float!
+  time: Float
+  isCompleted: Boolean!
+}
+
+type LoanReceiptReport {
+  period: Float
+  capital: Float!
+  fee: Float!
+  expense: Float!
+}
+
+type LoanMetadata {
+  cidNumber: String
+  cidVnLocation: Location
+  cidLocation: Location
+}
+
+type LoanPaymentPlanResultPaymentPeriod {
+  periodDays: Float!
+  periods: [LoanPaymentPeriod!]!
+}
+
+type LoanPaymentPlanResult {
+  loanPackage: LoanPackage!
+  paymentPeriods: [LoanPaymentPlanResultPaymentPeriod!]!
+}
+
+type LoanAssetEstimations {
+  id: String!
+  brands: [JSONObject!]!
+  models: [JSONObject!]!
+  colors: [JSONObject!]!
+  estimations: [JSONObject!]!
+}
+
+"""
+The `JSONObject` scalar type represents JSON objects as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSONObject
+
+type CustomFieldValue {
+  type: CustomFieldType!
+  key: String
+  config: JSONObject
+  customFieldId: String!
+  value: AnyType
+}
+
+"""Available custom field types"""
+enum CustomFieldType {
+  TEXT
+  NUMBER
+  DATE
+  SELECT
+  MULTI_SELECT
+  TEXTAREA
+  FILE
+  SWITCH
+}
+
+"""The `AnyType` scalar type represents any value without restrictions."""
+scalar AnyType
+
+type ProductSupply {
+  productId: String!
+  quantity: Float!
+}
+
+type RelatedEntity {
+  entity: String!
+  id: String
+  data: JSONObject
+  index: Boolean
+}
+
+type WorkspaceInviteInformation {
+  workspaceId: String!
+  type: WorkspaceType!
+  name: String!
+  logo: String
+  hotline: String
+  phone: String
+  appColor: String
+}
+
+"""Available workspace types"""
+enum WorkspaceType {
+  SOFTWARE
+  BUSINESS
+  HOSPITAL
+  CLINIC
+  DENTAL
+  SPA
+  BEAUTY_SALON
+  CREDIT
+}
+
+type Workspace {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  type: WorkspaceType!
+  code: String!
+  logo: String
+  location: Location
+  hotline: String
+  phone: String
+  inherit: Boolean
+  appName: String
+  appIcon: String
+  appDomain: String
+  appColor: String
+  appColorShape: Float
+  inviteCode: String
+  locale: AppLocale
+  cover: String
+  branches: Float!
+}
+
+"""Available entity sources"""
+enum EntitySource {
+  INTERNAL
+  IMPORT
+  ZALO_OA
+}
+
+"""Available locales"""
+enum AppLocale {
+  vi
+  en
+}
+
+type UserSettings {
+  locale: AppLocale
+  timezoneId: String
+  timezoneUtc: String
+  isStartOfWeekSunday: Boolean
+  isTwelveHour: Boolean
+}
+
+type UserAuthProvider {
+  uid: String!
+  providerId: String
+  username: String
+}
+
+type WorkspaceRole {
+  _id: String!
+  name: String!
+  color: String
+  description: String
+  permissions: [String!]!
+  isEditable: Boolean!
+}
+
+type UserMutualWorkspace {
+  _id: String!
+  name: String!
+  type: WorkspaceType!
+  logo: String
+  color: String
+  displayName: String
+  roles: [WorkspaceRole!]!
+  memberId: String!
+  memberColor: String
+}
+
+type UserPublicInformation {
+  _id: String!
+  name: String!
+  email: String
+  avatar: String
+  birthday: Float
+  phone: String
+  color: String
+  lastSignInAt: Float
+  providers: [UserAuthProvider!]!
+  mutualWorkspaces: [UserMutualWorkspace!]!
+}
+
+type WorkspaceMemberOnlineStatus {
+  userId: String!
+  isOnline: Boolean!
+}
+
+type WorkspaceMemberRole {
+  _id: String!
+  name: String!
+  color: String
+}
+
+type WorkspaceMemberWorkspaceBranchInfo {
+  _id: String!
+  name: String!
+  hotline: String
+}
+
+type WorkspaceMember {
+  _id: String!
+  userId: String!
+  name: String!
+  email: String!
+  memberId: String
+  workspaceId: String!
+  workspace: Workspace!
+  workspaceBranches: [WorkspaceMemberWorkspaceBranchInfo!]!
+  memberDisplayName: String
+  userDisplayName: String
+  avatar: String
+  phone: String
+  color: String
+  roleIds: [String!]!
+  roles: [WorkspaceMemberRole!]!
+  permissions: [String!]!
+  workingTimeType: WorkspaceMemberWorkingTimeType
+  joinedAt: Float
+}
+
+"""The working time type of the workspace member"""
+enum WorkspaceMemberWorkingTimeType {
+  FULLTIME
+  FREELANCER
+}
+
+type OrderDiscount {
+  amount: Float!
+  type: OrderDiscountType!
+  productId: String
+  productQuantity: Float
+  productComboId: String
+  promotionId: String
+}
+
+"""Order discount type"""
+enum OrderDiscountType {
+  DIRECT
+  COMBO
+  PROMOTION
+}
+
+type OrdersMetricsReport {
+  todayOrders: Float!
+}
+
+type OrderItemProduct {
+  _id: String!
+  type: ProductType!
+  name: String!
+  price: Float!
+  unit: String
+  code: String
+  displayName: String
+  image: String
+  minPrice: Float
+  maxPrice: Float
+  defaultQtyPerUse: Float
+  isHiddenInReceiptWhenNoPrice: Boolean
+}
+
+"""Available product types"""
+enum ProductType {
+  PRODUCT
+  SERVICE
+  COMBO
+  VOUCHER
+}
+
+type OrderItem {
+  productId: String!
+  product: OrderItemProduct!
+  quantity: Float!
+  price: Float!
+  note: String
+  assigneeUserIds: [String!]
+  revenue: Float!
+  revenueRate: Float!
+  assigneeUsers: [WorkspaceMember!]!
+}
+
+type ReceiptReportRelatedEntity {
+  type: String!
+  data: AnyType!
+}
+
+type ReceiptReportItem {
+  ref: String!
+  time: Float!
+  userId: String
+  relatedEntities: [ReceiptReportRelatedEntity!]!
+  revenue: Float!
+  profit: Float!
+  loan: LoanReceiptReport
+}
+
+type ReceiptsTimeSeriesReport {
+  revenue: Float!
+  totalRevenue: Float!
+  totalProfit: Float!
+  totalReceipts: Float!
+  items: [ReceiptReportItem!]!
+  loanCapital: Float!
+  loanFee: Float!
+  loanExpense: Float!
+}
+
+type ReceiptsMetricsReport {
+  revenueToday: Float!
+}
+
+type Customer {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  code: String!
+  codePrefix: String
+  plainCode: String
+  name: String!
+  birthday: Float
+  birthdayDate: Float
+  birthdayMonth: Float
+  phone: String
+  avatar: String
+  email: String
+  location: Location
+  vnLocation: Location
+  vnSecondaryLocation: Location
+  secondaryLocation: Location
+  presenterCustomerId: String
+  gender: Gender
+  medicalHistory: [String!]
+  assigneeUserIds: [String!]
+  tagIds: [String!]
+  salaryAmount: Float
+  relatedCustomerIds: [String!]
+  relationshipContacts: [CustomerRelationshipContact!]
+  lastCheckin: Float
+  socialFacebookUrl: String
+  workspaceBranch: WorkspaceBranch
+  workspaceBranchId: String
+  presenterCustomer: Customer
+  assigneeUsers: [WorkspaceMember!]!
+  vnPrevLocationFullAddress: String
+  vnPrevSecondaryLocationFullAddress: String
+  vnLocationFullAddress: String
+  vnSecondaryLocationFullAddress: String
+}
+
+"""Available genders"""
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+type Tag {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: TagType!
+  name: String!
+  slug: String!
+  order: Float!
+  color: String
+}
+
+"""Available tag types"""
+enum TagType {
+  CUSTOMER
+  MESSAGE_BOX
+  TASK_FOLDER
+  TASK
+}
+
+type Partner {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  phone: String
+  logo: String
+  email: String
+}
+
+type Task {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  code: String!
+  parentId: String
+  description: String
+  status: String!
+  priority: TaskPriority
+  startDate: Float
+  dueDate: Float
+  childStartDate: Float
+  childDueDate: Float
+  assigneeUserIds: [String!]!
+  relatedUserIds: [String!]!
+  partnerIds: [String!]!
+  order: Float!
+  points: Float
+  customerId: String
+  folderId: String
+  tagIds: [String!]!
+  closedAt: Float
+  timeTrackings: [TaskTimeTracking!]
+  estimatedTime: Float
+  childEstimatedTime: Float
+  progress: Float!
+  childProgress: Float!
+  childCount: Float!
+  childOrder: TaskChildOrder!
+  childTimeline: TaskChildTimeline
+  mentionedUserIds: [String!]!
+  customer: Customer
+  folder: Tag
+  tags: [Tag!]!
+  partners: [Partner!]!
+  parent: Task
+  statuses: [TaskStatus!]!
+  assigneeUsers: [WorkspaceMember!]!
+  customFields: [CustomField!]!
+}
+
+"""Available task priorities"""
+enum TaskPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+type TaskStatus {
+  id: String!
+  name: String
+  color: String
+  order: Float!
+  progress: Float!
+  contextId: String
+  contextType: TaskContextType
+}
+
+"""Available task statuses context types"""
+enum TaskContextType {
+  FOLDER
+}
+
+type TasksTimeSeriesReport {
+  total: Float!
+  hasDueDate: Float!
+  completed: Float!
+  overdue: Float!
+}
+
+type TasksMetricsReport {
+  todo: Float!
+  inProgress: Float!
+  overdue: Float!
+}
+
+type TaskTimeTracking {
+  id: String!
+  workspaceId: String!
+  userId: String!
+  user: WorkspaceMember
+  note: String
+  startAt: Float!
+  endAt: Float
+}
+
+type SiblingTasks {
+  next: Task
+  previous: Task
+}
+
+type SyncTaskResult {
+  task: Task!
+  updateInfos: [String!]!
+}
+
+type TaskChildOrder {
+  first: Float
+  last: Float
+}
+
+type TaskChildTimeline {
+  startDate: Float
+  dueDate: Float
+}
+
+type CombineTimeSeriesReport {
+  fromTime: Float!
+  toTime: Float!
+  customers: CustomersTimeSeriesReport!
+  bookings: BookingsTimeSeriesReport!
+  receipts: ReceiptsTimeSeriesReport!
+  tasks: TasksTimeSeriesReport!
+  loans: LoansTimeSeriesReport!
+}
+
+type CombineMetricsReport {
+  loans: LoansMetricsReport!
+  tasks: TasksMetricsReport!
+  receipts: ReceiptsMetricsReport!
+  customers: CustomersMetricsReport!
+  bookings: BookingsMetricsReport!
+  orders: OrdersMetricsReport!
+}
+
+type MessageAttachment {
+  type: MessageAttachmentType!
+  url: String
+  raw: AnyType
+}
+
+"""Type of the message attachment"""
+enum MessageAttachmentType {
+  IMAGE
+  VIDEO
+  AUDIO
+  FILE
+  UNKNOWN
+  STICKER
+}
+
+type MessageBoxPlatform {
+  id: String!
+  name: String!
+  type: MessageBoxPlatformType!
+  image: String
+  enabled: Boolean!
+}
+
+"""Platform type of the message box"""
+enum MessageBoxPlatformType {
+  ZALO
+  META_PAGE
+  MESSAGE_HUB
+}
+
+type ReactionCount {
+  type: ReactionType!
+  count: Float!
+  userIds: [String!]!
+}
+
+"""Available reaction types"""
+enum ReactionType {
+  LIKE
+  LOVE
+  LAUGH
+  SURPRISE
+  EYES
+  ANGRY
+  SAD
+  DISLIKE
+}
+
+type ReactionsCount {
+  reactions: [ReactionCount!]!
+}
+
+type Activity {
+  _id: String!
+  contextType: String!
+  contextId: String!
+  type: ActivityType!
+  content: String
+  contentLastModifiedAt: Float
+  data: JSONObject
+  parentId: String
+  childCount: Float
+  isPinned: Boolean
+  pinnedAt: Float
+  pinnedByUserId: String
+  pinnedByUser: WorkspaceMember!
+  createdByUser: WorkspaceMember!
+  createdAt: Float
+  reactionsCount: ReactionsCount!
+  updatedAt: Float
+}
+
+"""Available activity types"""
+enum ActivityType {
+  COMMON
+  COMMENT
+}
+
+type Reaction {
+  userId: String!
+  user: WorkspaceMember!
+  type: ReactionType!
+  createdAt: Float!
+}
+
+type PluginExternalStorage {
+  provider: PluginExternalStorageProvider!
+  region: String
+  bucketName: String
+  endpointUrl: String
+  size: Float
+  isDisabled: Boolean
+}
+
+"""Available external storage providers"""
+enum PluginExternalStorageProvider {
+  AWS_S3
+}
+
+type SignUploadUrlResponse {
+  dna: String!
+  signedUrl: String!
+}
+
+type FileUploadSigned {
+  signedUrl: String!
+  dna: String!
+  isUseExternalStorage: Boolean!
+}
+
+type File {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: FileType!
+  fileName: String!
+  path: String!
+  thumbnail: String
+  externalUrl: String
+  relativePath: String
+  size: Float
+  ref: String
+  uploadByUserId: String
+  url: String!
+}
+
+"""Available file types"""
+enum FileType {
+  PHOTO
+  VIDEO
+  AUDIO
+  PDF
+  MS_WORD
+  MS_EXCEL
+  MS_POWERPOINT
+  UNKNOWN
+}
+
+type BankInformation {
+  id: Float!
+  name: String!
+  code: String!
+  bin: String!
+  shortName: String!
+  logo: String!
+  transferSupported: Float!
+  lookupSupported: Float!
+  short_name: String!
+  support: Float!
+  isTransfer: Float!
+  swift_code: String
+}
+
+type BankInforationsResult {
+  results: [BankInformation!]!
+  total: Float!
+}
+
+type GetBankAccountInformationResult {
+  accountName: String!
+}
+
+type PluginBankAccount {
+  bankId: Float!
+  accountNumber: String!
+  accountName: String
+}
+
+type WorkspaceBranchSettings {
+  bankAccount: PluginBankAccount
+}
+
+type WorkspaceBranch {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  hotline: String
+  location: Location!
+  settings: WorkspaceBranchSettings
+}
+
+type MailerAccount {
+  user: String!
+  pass: String!
+}
+
+type WorkingDayInterval {
+  """Format: HH:mm"""
+  start: String!
+
+  """Format: HH:mm"""
+  end: String!
+  id: String!
+
+  """
+  1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday
+  """
+  day: Float!
+  shift: String
+}
+
+type WorkspaceSearchSettings {
+  hideEntities: [String!]
+}
+
+type DisplayWidget {
+  id: String!
+  type: String!
+  state: JSONObject
+}
+
+type WorkspaceViewComponent {
+  id: String!
+  type: String!
+  moduleId: String
+  dividerName: String
+}
+
+type WorkspaceView {
+  menu: [WorkspaceViewComponent!]
+  dashboardWidgets: [DisplayWidget!]
+  reportWidgets: [DisplayWidget!]
+}
+
+type WorkspaceSchedule {
+  timezone: String
+  workingDays: [WorkingDayInterval!]!
+}
+
+type WorkspaceSetting {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  schedule: WorkspaceSchedule
+  bankAccount: PluginBankAccount
+  mailer: MailerAccount
+  bookingsAutoRemindCustomerBookingBeforeDays: Float
+  allowTip: Boolean
+  allowDuplicateBookings: Boolean
+  memberPermissions: [String!]
+  bookingsAutoRemindCustomerBookingTime: String
+  loanSettings: LoanSettings
+  termsOfService: String
+  privacyPolicy: String
+  receiptImagesRequired: Boolean
+  receiptPaymentMethodDefault: ReceiptPaymentMethod
+  view: WorkspaceView
+  searchSettings: WorkspaceSearchSettings
+  currencyCode: String
+  isAuthSessionRestricted: Boolean
+  zaloOaGmfGroupSettings: JSONObject
+  allowPayTicketMultipleTimes: Boolean
+}
+
+"""Receipt payment method"""
+enum ReceiptPaymentMethod {
+  CASH
+  BANK_TRANSFER
+  BANK_CARD
+}
+
+type ActivitiesPaginated {
+  total: Float!
+  results: [Activity!]!
+}
+
+type FilesPaginated {
+  total: Float!
+  results: [File!]!
+}
+
+type WorkspaceBranchesPaginated {
+  total: Float!
+  results: [WorkspaceBranch!]!
+}
+
+type WorkspaceMembersPaginated {
+  total: Float!
+  results: [WorkspaceMember!]!
+}
+
+type ReactionsPaginated {
+  total: Float!
+  results: [Reaction!]!
+}
+
+type Device {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  identifyId: String
+  locale: AppLocale
+  userAgent: String!
+  lastActiveAt: Float!
+  userId: String
+  deviceName: String
+  ua: DeviceUserAgent
+  notificationToken: String
+}
+
+type VerifyRenewPasswordResult {
+  email: String!
+}
+
+type Message {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: MessageType!
+  boxId: String!
+  id: String
+  userId: String
+  senderId: String
+  text: String
+  resource: MessageResource
+  resouceId: String
+  attachments: [MessageAttachment!]!
+  status: MessageStatus
+  failedReason: String
+  user: WorkspaceMember
+}
+
+"""Type of the message"""
+enum MessageType {
+  RECEIVE
+  SEND
+}
+
+"""The resource from which the message is sent"""
+enum MessageResource {
+  WEBHOOK
+  INTERNAL
+  AI_ASSISTANT
+}
+
+"""Status of the message"""
+enum MessageStatus {
+  PENDING
+  SENT
+  READED
+  SENT_FAILED
+}
+
+type MetaPageCategory {
+  id: String!
+  name: String!
+}
+
+type MetaPageInfo {
+  pageId: String!
+  name: String!
+  categories: [MetaPageCategory!]!
+  status: MetaPageInfoStatus!
+  avatar: String
+}
+
+"""Connection status of the Meta Page"""
+enum MetaPageInfoStatus {
+  CONNECTED
+  NOT_CONNECTED
+  CONNECTED_WITH_OTHER_WORKSPACE
+}
+
+type MetaPage {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  id: String!
+  name: String!
+  logo: String
+  tasks: [String!]
+  category: String
+  categories: [MetaPageCategory!]
+  status: MetaPageStatus!
+  isDisabled: Boolean
+}
+
+"""Status of the Meta Page connection"""
+enum MetaPageStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type MessageBox {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  ref: String!
+  senderId: String!
+  senderName: String
+  senderAvatar: String
+  customerId: String
+  assigneeUserId: String
+  platformId: String
+  phone: String
+  platformType: MessageBoxPlatformType!
+  lastInteractionAt: Float
+  expireAt: Float
+  status: MessageBoxStatus
+  aiAssistantconversationId: String
+  aiAssistantDisabled: Boolean
+  customer: Customer
+  assigneeUser: WorkspaceMember
+  lastMessage: Message
+}
+
+"""Status of the message box"""
+enum MessageBoxStatus {
+  WAITING
+  IN_PROGRESS
+  CLOSED
+  EXPIRED
+}
+
+type ZaloOaInfo {
+  name: String!
+  description: String
+  avatar: String!
+  oa_id: String!
+  is_verified: Boolean!
+  package_name: String!
+  package_valid_through_date: String!
+  cate_name: String!
+}
+
+type ZaloOaGmfGroup {
+  isAdminNotificationEnabled: Boolean
+  name: String!
+  avatar: String!
+  group_id: String!
+  group_link: String!
+  group_description: String!
+  total_member: Float!
+  status: ZaloOaGmfGroupStatus!
+}
+
+"""Status of Zalo OA GMF Group"""
+enum ZaloOaGmfGroupStatus {
+  enabled
+  disabled
+}
+
+type ConnectZaloOaResponse {
+  url: String!
+}
+
+type PluginZaloOa {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  id: String!
+  isDefault: Boolean!
+  znsTemplateIds: JSONObject
+  znsTemplateStatues: JSONObject
+  status: PluginZaloOaStatus!
+  info: ZaloOaInfo!
+  isDisabled: Boolean
+}
+
+"""Status of Zalo OA connection"""
+enum PluginZaloOaStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type WorkspaceApiApp {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  memberId: String!
+  userId: String!
+  secretKey: String!
+  enabled: Boolean!
+  authVersion: Float!
+  member: WorkspaceMember!
+}
+
+type CustomerForm {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  phone: String!
+  email: String
+  dynamicData: AnyType
+  location: Location
+  vnLocation: Location
+  status: CustomerFormStatus!
+  cancelReason: String
+  workspaceBranch: WorkspaceBranch
+  workspaceBranchId: String
+  workspaceId: String!
+}
+
+"""Available customer form statuses"""
+enum CustomerFormStatus {
+  PENDING
+  COMPLETED
+  CANCELLED
+}
+
+type CustomerKycVersion {
+  id: String!
+  frontOfCidImage: String!
+  backOfCidImage: String!
+  portraitImage: String!
+  cidNumber: String!
+  cidFullName: String!
+  cidLocation: Location
+  cidVnLocation: Location
+  cidRaw: String
+  cidGender: Gender!
+  cidBirthday: Float!
+  cidCreatedAt: Float
+  createdAt: Float!
+  rejectReason: String
+  status: CustomerKycStatus!
+}
+
+"""Customer KYC status"""
+enum CustomerKycStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+type CustomerKyc {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  customerId: String!
+  cidNumber: String
+  versions: [CustomerKycVersion!]!
+  status: CustomerKycStatus!
+  customer: Customer!
+  cidVnLocation: String
+}
+
+type Receipt {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  code: String!
+  ref: String!
+  type: ReceiptType!
+  amount: Float!
+  tipAmount: AnyType
+  giveAmount: AnyType
+  paidAt: Float
+  relatedCustomerId: String
+  relatedCustomer: Customer
+  relatedTicketId: String
+  relatedOrderId: String
+  relatedLoanId: String
+  relatedLoanCode: String
+  relatedPartnerId: String
+  cashierUserId: String
+  disbursementUserId: String
+  note: String
+  data: AnyType
+  assigneeUserIds: [String!]
+  paymentMethod: ReceiptPaymentMethod
+  expireAt: Float
+  status: ReceiptStatus!
+  dataChanged: JSONObject
+  isFixedAmount: Boolean
+  workspaceBranch: WorkspaceBranch
+  cashierUser: WorkspaceMember
+  disbursementUser: WorkspaceMember
+}
+
+"""Receipt type"""
+enum ReceiptType {
+  EXPENSE
+  INCOME
+}
+
+"""Receipt status"""
+enum ReceiptStatus {
+  PENDING
+  PAID
+}
+
+type Product {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]!
+  name: String!
+  code: String
+  content: String
+  displayName: String
+  image: String
+  productCode: String
+  tags: [String!]!
+  supplies: [ProductSupplyResult!]!
+  unit: String!
+  price: Float!
+  minPrice: Float
+  maxPrice: Float
+  defaultQtyPerUse: Float
+  isStockCheck: Boolean
+  warningOutOfDateBeforeDays: Float
+  warningOutOfStockQty: Float
+  categoryId: String
+  inStock: Float
+  isHiddenInReceiptWhenNoPrice: Boolean
+  type: ProductType!
+  combosExpireInDays: Float
+  voucherAmount: Float
+  voucherExpireInDays: Float
+  voucherExcludeProductIds: [String!]
+  voucherIncludeProductIds: [String!]
+  category: Category
+  combos: [ProductComboResult!]!
+  voucherIncludeProducts: [Product!]!
+  voucherExcludeProducts: [Product!]!
+  stock: ProductStockResult!
+}
+
+type ProductStockResult {
+  quantity: Float!
+}
+
+type ProductComboResult {
+  productId: String!
+  quantity: Float!
+  product: Product!
+}
+
+type ProductSupplyResult {
+  productId: String!
+  quantity: Float!
+  product: Product!
+}
+
+type ProductComboHistoryRecord {
+  productRefId: String!
+  quantity: Float!
+}
+
+type ProductComboRefResult {
+  productRefId: String!
+  productRefRevenue: Float!
+  quantity: Float!
+  quantityUsed: Float!
+  product: Product!
+}
+
+type ProductComboHistory {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  productComboId: String!
+  ref: String!
+  orderId: String
+  note: String
+  used: [ProductComboHistoryRecord!]
+  records: [ProductComboHistoryRecord!]
+}
+
+type ProductCombo {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  productId: String!
+  customerId: String!
+  sourceType: ProductComboSourceType!
+  sourceId: String!
+  expireAt: Float
+  status: ProductComboStatus!
+  customer: Customer!
+  product: Product!
+  productRefs: [ProductComboRefResult!]!
+  history: [ProductComboHistory!]!
+}
+
+"""Product combo source type"""
+enum ProductComboSourceType {
+  ORDER
+  MANUAL
+}
+
+"""Product combo status"""
+enum ProductComboStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+  SOURCE_UNAVAILABLE
+  OUT_OF_STOCK
+}
+
+type ProductStock {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  code: String
+  productId: String!
+  product: Product!
+  quantity: Float!
+  remainQuantity: Float!
+  expireAt: Float!
+  costPrice: Float!
+  note: String
+  records: AnyType!
+  createdByUser: WorkspaceMember!
+}
+
+type ProductStockRecord {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  ref: String
+  stockCode: String!
+  type: ProductStockRecordType!
+  quantity: Float!
+  productId: String!
+  product: Product!
+  productStockId: String!
+  relatedProductId: String
+  relatedProduct: Product
+  relatedOrderId: String
+  note: String
+  createdByUser: WorkspaceMember
+}
+
+"""Product stock record type"""
+enum ProductStockRecordType {
+  STOCK_IN
+  STOCK_OUT
+}
+
+type DynamicSelection {
+  entity: String
+  operator: DynamicSelectionOperator!
+  value: [AnyType!]!
+}
+
+"""DynamicSelectionOperator"""
+enum DynamicSelectionOperator {
+  INCLUDES
+  EXCLUDES
+}
+
+type Promotion {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  name: String!
+  description: String
+  image: String
+  limitPerCustomer: Float
+  type: PromotionType!
+  value: Float!
+  productsSelection: DynamicSelection
+  customersSelection: DynamicSelection
+  expireAt: Float
+  status: PromotionStatus!
+  customFieldValues: [CustomFieldValue!]
+}
+
+"""Promotion type"""
+enum PromotionType {
+  DISCOUNT_RATE
+  DISCOUNT_AMOUNT
+}
+
+"""Promotion status"""
+enum PromotionStatus {
+  ACTIVE
+  CLOSED
+  EXPIRED
+}
+
+type Order {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  code: String!
+  type: OrderType
+  paymentStatus: OrderPaymentStatus!
+  comboIds: [String!]
+  promotionIds: [String!]
+  discounts: [OrderDiscount!]!
+  assigneeUserIds: [String!]
+  paidAmount: Float!
+  totalAmount: Float!
+  note: String
+  relatedCustomerId: String
+  relatedCustomer: Customer
+  relatedUserIds: [String!]
+  isFulfilled: Boolean
+  tipAmount: Float
+  directDiscount: Float
+  createdByUser: WorkspaceMember
+  assigneeUsers: [WorkspaceMember!]!
+  combos: [ProductCombo!]!
+  promotions: [Promotion!]!
+  items: [OrderItem!]!
+  workspaceBranchId: String
+}
+
+"""Order type"""
+enum OrderType {
+  COMMON
+}
+
+"""Order payment status"""
+enum OrderPaymentStatus {
+  PROCESSING
+  COMPLETED
+}
+
+type Loan {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  id: String!
+  relatedEntities: [RelatedEntity!]
+  code: String!
+  customerId: String!
+  customerCidNumber: String
+  workspaceBranchId: String
+  amount: Float!
+  packageId: String!
+  package: LoanPackage!
+  packagePeriodDays: Float!
+  paymentPeriods: [LoanPaymentPeriod!]
+  assetType: LoanAssetType!
+  assetData: AnyType
+  status: LoanStatus!
+  rejectReason: String
+  signature: String
+  payment: LoanPayment
+  coord: Coordinates
+  fulfilledAt: Float
+  isLiquidated: Boolean
+  nextReceiptAt: Float
+  paymentProgress: [LoanPaymentProgress!]
+  metadata: LoanMetadata
+  isHasLateInterestReceipt: Boolean
+  customer: Customer!
+  workspaceBranch: WorkspaceBranch
+}
+
+"""Available loan statuses"""
+enum LoanStatus {
+  PENDING_SIGN
+  PENDING
+  APPROVED
+  FULFILLED
+  REJECTED
+  COMPLETED
+  OVERDUE
+}
+
+type UserNotificationStat {
+  unListViewed: Float!
+  count: Float!
+}
+
+type Notification {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  icon: NotificationIcon
+  title: String!
+  titleParams: JSONObject
+  body: String!
+  bodyParams: JSONObject
+  route: String
+  image: String
+  type: NotificationType!
+  status: NotificationStatus!
+}
+
+"""Icon of the notification"""
+enum NotificationIcon {
+  MESSAGE
+}
+
+"""Type of the notification"""
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}
+
+"""Status of the notification"""
+enum NotificationStatus {
+  JUST_CREATED
+  LIST_VIEWED
+  READED
+}
+
+type Booking {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  title: String
+  note: String
+  customerId: String
+  assigneeUserIds: [String!]!
+  workspaceId: String!
+  startTime: Float!
+  endTime: Float!
+  reasonForCancellation: String
+  transferToBookingId: String
+  status: BookingStatus!
+  assigneeUsers: [WorkspaceMember!]!
+  customer: Customer
+}
+
+"""Booking statuses"""
+enum BookingStatus {
+  JUST_CREATED
+  CHECK_IN
+  IN_PROGRESS
+  RESCHEDULED
+  COMPLETED
+  CANCELLED
+}
+
+type TaskMetrics {
+  contextType: TaskContextType!
+  contextId: String
+  estimatedTime: Float
+  progress: Float
+  totalTasks: Float
+  inProgressTasks: Float
+  startDate: Float
+  dueDate: Float
+  overdueTasks: Float
+}
+
+type Report {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: ReportType!
+  ref: String!
+  fromTime: Float!
+  toTime: Float!
+  workspaceBranchIds: [String!]
+  userId: String
+  data: AnyType
+  dto: AnyType
+  status: ReportStatus!
+}
+
+"""Report types"""
+enum ReportType {
+  TIME_SERIES
+  METRICS
+}
+
+"""Report status values"""
+enum ReportStatus {
+  JUST_CREATED
+  SYNCED
+  SYNCING
+}
+
+type CustomField {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: CustomFieldType!
+  key: String
+  label: String!
+  order: Float!
+  config: JSONObject
+  description: String
+  placeholder: String
+  entities: [String!]!
+}
+
+type Category {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]!
+  name: String!
+  slug: String!
+  icon: String
+  thumbnail: String
+  description: String
+  parentId: String
+  order: Float!
+  type: CategoryType!
+  customFields: [CustomField!]
+}
+
+"""Available category types"""
+enum CategoryType {
+  COMMON
+  PRODUCTS
+  POSTS
+}
+
+type Post {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]!
+  title: String!
+  slug: String!
+  excerpt: String
+  content: JSONObject
+  contentHtml: String
+  thumbnail: String
+  meta: JSONObject
+  publishedAt: Float
+  categoryId: String
+  productId: String
+  category: Category
+}
+
+type PrescriptionItemQty {
+  morning: Float
+  noon: Float
+  afternoon: Float
+}
+
+type PrescriptionItem {
+  productId: String
+  name: String!
+  unit: String!
+  qty: PrescriptionItemQty!
+  days: Float!
+  note: String
+}
+
+type Prescription {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  name: String!
+  items: [PrescriptionItem!]!
+  note: String
+}
+
+type AttendanceRecordLocation {
+  name: String!
+  coordinates: Coordinates!
+}
+
+type AttendanceSettingLocation {
+  id: String!
+  name: String!
+  allowedDistanceInMeters: Float!
+  coordinates: Coordinates!
+}
+
+type AttendanceRecord {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  deviceId: String!
+  userId: String!
+  workspaceId: String!
+  time: Float!
+  type: AttendanceRecordType!
+  method: AttendanceRecordMethod!
+  status: AttendanceRecordStatus!
+  locationCoordinates: Coordinates
+  locationId: String
+  photoUrl: String
+  note: String
+  rejectedAt: Float
+  rejectedByUserId: String
+  rejectedReason: String
+  approvedAt: Float
+  approvedByUserId: String
+  member: WorkspaceMember!
+  device: Device!
+  location: AttendanceRecordLocation
+  approvedBy: WorkspaceMember
+  rejectedBy: WorkspaceMember
+}
+
+"""Attendance record type"""
+enum AttendanceRecordType {
+  CHECK_IN
+  CHECK_OUT
+}
+
+"""Attendance record method"""
+enum AttendanceRecordMethod {
+  DEFAULT
+  MANUAL
+}
+
+"""Attendance record status"""
+enum AttendanceRecordStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+type AttendanceSetting {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  locations: [AttendanceSettingLocation!]
+}
+
+type AttendanceRecordsPaginated {
+  total: Float!
+  results: [AttendanceRecord!]!
+}
+
+type DeviceBrowser {
+  name: String
+  version: String
+}
+
+type DeviceInformation {
+  model: String
+  type: String
+  vendor: String
+}
+
+type DeviceEngine {
+  name: String
+  version: String
+}
+
+type DeviceIOS {
+  name: String
+  version: String
+}
+
+type DeviceCPU {
+  architecture: String
+}
+
+type DeviceUserAgent {
+  ua: String!
+  browser: DeviceBrowser!
+  device: DeviceInformation!
+  engine: DeviceEngine!
+  os: DeviceIOS!
+  cpu: DeviceCPU!
+}
+
+type DevicesPaginated {
+  total: Float!
+  results: [Device!]!
+}
+
+type AuthUser {
+  _id: String!
+  name: String!
+  email: String!
+  avatar: String
+  role: UserRole!
+  locale: AppLocale
+  settings: UserSettings
+  phone: String
+  isEmailVerified: Boolean
+  birthday: Float
+  isPasswordProvided: Boolean!
+}
+
+"""Available roles of a user"""
+enum UserRole {
+  ADMIN
+  BUSINESS_PARTNER
+  SYS_ADMIN
+  TESTER
+  MEMBER
+}
+
+type AuthTokenResult {
+  accessToken: String!
+  refreshToken: String!
+}
+
+type CustomersPaginated {
+  total: Float!
+  results: [Customer!]!
+}
+
+type MessageHubWidgetWelcome {
+  id: String!
+  type: ChannelWidgetWelcomeInputType!
+  isRequired: Boolean
+  label: String!
+  fieldName: String!
+  description: String
+  placeholder: String
+}
+
+"""Type of welcome input in channel widget"""
+enum ChannelWidgetWelcomeInputType {
+  TEXT
+  NUMBER
+  NAME
+  PHONE
+  EMAIL
+}
+
+type MessageHubWidgetSettings {
+  color: String
+  position: MessageHubWidgetPosition
+  chatIcon: String
+  locale: String
+  brandName: String
+  brandLogo: String
+  welcomMessage: String
+  welcomSubMessage: String
+  welcomeInputs: [MessageHubWidgetWelcome!]
+}
+
+"""Position of the widget on the client screen"""
+enum MessageHubWidgetPosition {
+  LEFT
+  RIGHT
+}
+
+type PluginMessageHubScript {
+  src: String!
+  html: String!
+}
+
+type PluginMessageHubDirect {
+  src: String!
+}
+
+type PluginMessageHub {
+  _id: String!
+  name: String!
+  ref: String
+  webhookUrl: String!
+  widgetSettings: MessageHubWidgetSettings!
+  script: PluginMessageHubScript!
+  direct: PluginMessageHubDirect!
+}
+
+type MessageBoxesPaginated {
+  total: Float!
+  results: [MessageBox!]!
+}
+
+type MessagesPaginated {
+  total: Float!
+  results: [Message!]!
+}
+
+type BookingsPaginated {
+  total: Float!
+  results: [Booking!]!
+}
+
+type CategoriesPaginated {
+  total: Float!
+  results: [Category!]!
+}
+
+type CustomFieldsPaginated {
+  total: Float!
+  results: [CustomField!]!
+}
+
+type CustomerContactInformation {
+  name: String!
+  phones: [String!]!
+}
+
+type CustomerContact {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  customerId: String!
+  contacts: [CustomerContactInformation!]!
+}
+
+type CustomerFormsPaginated {
+  total: Float!
+  results: [CustomerForm!]!
+}
+
+type CustomerKycsPaginated {
+  total: Float!
+  results: [CustomerKyc!]!
+}
+
+type NotificationsPaginated {
+  total: Float!
+  results: [Notification!]!
+}
+
+type ProductStockRecordPaginated {
+  total: Float!
+  results: [ProductStockRecord!]!
+}
+
+type ProductStocksPaginated {
+  total: Float!
+  results: [ProductStock!]!
+}
+
+type ProductsPaginated {
+  total: Float!
+  results: [Product!]!
+}
+
+type ProductCombosPaginated {
+  total: Float!
+  results: [ProductCombo!]!
+}
+
+type PromotionsPaginated {
+  total: Float!
+  results: [Promotion!]!
+}
+
+type OrdersPaginated {
+  total: Float!
+  results: [Order!]!
+}
+
+type PartnersPaginated {
+  total: Float!
+  results: [Partner!]!
+}
+
+type ReceiptsPaginated {
+  total: Float!
+  results: [Receipt!]!
+}
+
+type LoansPaginated {
+  total: Float!
+  results: [Loan!]!
+}
+
+type TagsPaginated {
+  total: Float!
+  results: [Tag!]!
+}
+
+type TasksPaginated {
+  total: Float!
+  results: [Task!]!
+}
+
+type ConfigTaskStatuses {
+  statuses: [TaskStatus!]!
+  workspaceStatuses: [TaskStatus!]!
+  isInherited: Boolean!
+}
+
+type Event {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  channel: EventChannel
+  type: EventType!
+  time: Float!
+  actionType: EventDataActionType
+  userId: String
+  ref: String
+  data: JSONObject
+  persist: Boolean
+  variant: EventVariant
+  sessionId: String
+  user: WorkspaceMember
+  relatedEntities: [RelatedEntity!]!
+  typeName: String
+}
+
+"""Available event channels"""
+enum EventChannel {
+  WORKSPACE
+  PERSONAL
+  NONE
+}
+
+"""Available event types"""
+enum EventType {
+  CUSTOM_FIELDS_NEW
+  CUSTOM_FIELDS_UPDATED
+  CUSTOM_FIELDS_REMOVED
+  WORKSPACE_NEW
+  WORKSPACE_UPDATED
+  WORKSPACE_ARCHIVED
+  WORKSPACE_INVITE_CODE_UPDATED
+  WORKSPACE_STATS_UPDATED
+  WORKSPACE_SETTING_UPDATED
+  WORKSPACE_BRANCH_NEW
+  WORKSPACE_BRANCH_UPDATED
+  WORKSPACE_BRANCH_ARCHIVED
+  WORKSPACE_ROLES_NEW
+  WORKSPACE_ROLES_UPDATED
+  WORKSPACE_ROLES_REMOVED
+  WORKSPACE_BILLINGS_DEPOSITED
+  WORKSPACE_BILLINGS_WITHDRAWN
+  WORKSPACE_BILLINGS_PAYMENT_NEW
+  WORKSPACE_BILLINGS_CASHBACK_NEW
+  WORKSPACE_BILLINGS_PAYMENT_PAID
+  WORKSPACE_API_APP_CREATED
+  WORKSPACE_API_APP_UPDATED
+  WORKSPACE_API_APP_ARCHIVED
+  WORKSPACE_SUBSCRIPTION_UPDATED
+  WORKSPACE_MEMBER_JOINED
+  WORKSPACE_MEMBER_LEAVED
+  WORKSPACE_MEMBER_UPDATED
+  WORKSPACE_MEMBER_ASSIGN_ROLES
+  WORKSPACE_MEMBER_SYNCED
+  WORKSPACE_MEMBER_TRANSFER_OWNER
+  WORKSPACE_MEMBER_ONLINE
+  WORKSPACE_MEMBER_OFFLINE
+  CUSTOMER_NEW
+  CUSTOMER_UPDATED
+  CUSTOMER_ASSIGN_TO_USER
+  CUSTOMER_UNASSIGN_USER
+  CUSTOMER_CONTACTS_UPDATED
+  CUSTOMER_ARCHIVED
+  CUSTOMER_BULK_UPDATE_WORKSPACE_BRANCH
+  CUSTOMER_FORM_NEW
+  CUSTOMER_FORM_UPDATED
+  CUSTOMER_FORM_ARCHIVED
+  BOOKING_NEW
+  BOOKING_UPDATED
+  BOOKING_CHECKIN
+  BOOKING_IN_PROGRESS
+  BOOKING_COMPLETED
+  BOOKING_CANCELLED
+  COMMENT_NEW
+  COMMENT_UPDATED
+  COMMENT_REMOVED
+  COMMENT_PINNED
+  COMMENT_UNPINNED
+  TAGS_ARCHIVED
+  TAGS_UPDATED
+  TAG_NEW
+  PRODUCT_NEW
+  PRODUCT_UPDATE
+  PRODUCT_ARCHIVED
+  REPORT_TIME_SERIES_SYNCED
+  REPORT_METRICS_SYNCED
+  PRODUCT_STOCK_IN
+  PRODUCT_STOCK_IN_REVERT
+  PRODUCT_STOCK_OUT
+  PRODUCT_STOCK_OUT_REVERT
+  PRODUCT_STOCK_IN_MULTIPLE
+  PRODUCT_VOUCHERS_NEW
+  PRODUCT_COMBO_NEW
+  PRODUCT_COMBO_UPDATE
+  NOTIFICATION_NEW
+  NOTIFICATION_READED
+  NOTIFICATION_LIST_VIEWED
+  NOTIFICATION_CLEANED
+  PARTNER_NEW
+  PARTNER_UPDATED
+  PARTNER_ARCHIVED
+  TASK_NEW
+  TASK_NAME_UPDATED
+  TASK_DESCRIPTION_UPDATED
+  TASK_PRIORITY_UPDATED
+  TASK_STATUS_UPDATED
+  TASK_ASSIGNED
+  TASK_ARCHIVED
+  TASKS_UPDATED
+  TASK_SYNCED
+  TASK_METRIC_SYNCED
+  FILE_NEW
+  FILE_REMOVED
+  RECEIPT_NEW
+  RECEIPT_PAID
+  RECEIPT_UPDATED
+  RECEIPT_DISBURSEMENT
+  RECEIPT_ARCHIVED
+  RECEIPT_UNARCHIVED
+  RECEIPT_SYNCED
+  RECEIPT_CHANGE_WORKSPACE_BRANCH
+  RECEIPT_REVERT_PAYMENT
+  PRODUCT_SUPPLY_RECORD_NEW
+  PLUGIN_ZALO_OA_ACTIVE
+  PLUGIN_ZALO_OA_INACTIVE
+  PLUGIN_ZALO_OA_UPDATED
+  PLUGIN_ZALO_OA_REMOVED
+  PLUGIN_ZALO_OA_ENABLED
+  PLUGIN_ZALO_OA_DISABLED
+  PLUGIN_META_PAGES_UPDATED
+  PLUGIN_META_PAGES_DISCONNECTED
+  PRESCRIPTIONS_NEW
+  PRESCRIPTIONS_UPDATED
+  PRESCRIPTIONS_REMOVED
+  MESSAGE_BOX_NEW
+  MESSAGE_BOX_WAITING
+  MESSAGE_BOX_NEW_MESSAGE
+  MESSAGE_BOX_IN_PROGRESS
+  MESSAGE_BOX_REMOVED
+  MESSAGE_BOX_CLOSED
+  MESSAGE_BOX_UPDATED
+  MESSAGE_BOXES_PLATFORMS_UPDATED
+  MESSAGE_NEW
+  MESSAGE_UPDATED
+  TABLE_SLOT_NEW
+  TABLE_SLOT_UPDATED
+  TABLE_SLOT_ARCHIVED
+  BANK_TRANSACTION_PAID
+  BANK_TRANSACTION_FULFILLED
+  BANK_TRANSACTION_CANCELLED
+  BANK_TRANSACTION_FAILED
+  CUSTOMER_KYC_PENDING
+  CUSTOMER_KYC_APPROVED
+  CUSTOMER_KYC_REJECTED
+  LOANS_JUST_CREATED
+  LOANS_PENDING
+  LOANS_APPROVED
+  LOANS_APPROVED_REVERTED
+  LOANS_FULFILLED_REVERTED
+  LOANS_REJECTED
+  LOANS_REVERT_REJECTED
+  LOANS_UPDATED
+  LOANS_SYNCED
+  LOANS_FULFILLED
+  LOANS_COMPLETED
+  LOANS_ARCHIVED
+  LOANS_LIQUIDATION
+  LOANS_REVERT_LIQUIDATION
+  LOANS_CHANGE_WORKSPACE_BRANCH
+  PLUGIN_MESSAGE_HUBS_NEW
+  PLUGIN_MESSAGE_HUBS_UPDATED
+  PLUGIN_MESSAGE_HUBS_REMOVED
+  PLUGIN_AI_ASSISTANTS_NEW
+  PLUGIN_AI_ASSISTANTS_UPDATED
+  PLUGIN_AI_ASSISTANTS_REMOVED
+  USER_PROFILE_UPDATED
+  USER_ONLINE
+  USER_OFFLINE
+  ORDER_NEW
+  ORDER_UPDATED
+  ORDER_ARCHIVED
+  ORDER_SYNCED
+  POST_NEW
+  POST_UPDATED
+  POST_ARCHIVED
+  CATEGORY_NEW
+  CATEGORY_UPDATED
+  CATEGORY_ARCHIVED
+  PROMOTION_NEW
+  PROMOTION_UPDATED
+  PROMOTION_ARCHIVED
+  E_INVOICE_CREATED
+  E_INVOICE_REMOVED
+  ACTIVITY_NEW
+  ACTIVITY_UPDATED
+  ACTIVITY_ARCHIVED
+  ACTIVITY_SYNCED
+  REACTION_ADDED
+  REACTION_REMOVED
+  ATTENDANCE_RECORD_NEW
+  ATTENDANCE_RECORD_APPROVED
+  ATTENDANCE_RECORD_REJECTED
+  ATTENDANCE_SETTING_UPDATED
+  FILE_EXPORT_NEW
+  FILE_EXPORT_FINISHED
+  FILE_EXPORT_FAILED
+}
+
+"""Available event data action types"""
+enum EventDataActionType {
+  CREATE
+  UPDATE
+  ARCHIVED
+}
+
+"""Available event variants"""
+enum EventVariant {
+  INFO
+  WARNING
+  NEGATIVE
+  POSITIVE
+}
+
+type EventsPaginated {
+  total: Float!
+  results: [Event!]!
+}
+
+type FileExport {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  workspaceId: String!
+  userId: String!
+  contextType: FileExportContextType!
+  contextArgs: JSONObject
+  fileName: String
+  locale: AppLocale
+  status: FileExportStatus!
+  error: String
+  createdByUser: WorkspaceMember
+}
+
+enum FileExportContextType {
+  CREDIT_REPORT
+}
+
+enum FileExportStatus {
+  IDLE
+  PROCESSING
+  FAILED
+  FINISHED
+}
+
+type FileExportList {
+  total: Float!
+  results: [FileExport!]!
+}
+
+type PluginAiAssistant {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  providerName: String
+  provider: PluginAiAssistantProvider!
+  apiKey: String!
+  enabled: Boolean!
+  status: PluginAiAssistantStatus!
+}
+
+"""Provider of the AI assistant plugin"""
+enum PluginAiAssistantProvider {
+  DIFY
+  VONIC_DIFY
+}
+
+"""Status of the AI assistant plugin"""
+enum PluginAiAssistantStatus {
+  ACTIVE
+  INACTIVE
+}
+
+type PluginAiAssistantsPaginated {
+  total: Float!
+  results: [PluginAiAssistant!]!
+}
+
+type EInvoice {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  providerId: String!
+  provider: PluginEInvoicesProviderType!
+  receiptId: String!
+  receiptCode: String!
+  invoiceId: String!
+  invoiceData: JSONObject
+  providerData: JSONObject
+  url: String
+  isCancelled: Boolean
+  providerInformation: PluginEInvoiceProviderInformation!
+}
+
+"""Available plugin e-invoices provider types"""
+enum PluginEInvoicesProviderType {
+  MATBAO
+  MATBAO_DEMO
+}
+
+type PluginEInvoiceProvider {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  type: PluginEInvoicesProviderType!
+  apiUrl: String
+  status: PluginEInvoicesProviderStatus!
+  templates: JSONObject!
+  name: String!
+  logo: String!
+}
+
+"""Status of the plugin e-invoices provider"""
+enum PluginEInvoicesProviderStatus {
+  ACTIVE
+  AUTH_FAILED
+  INACTIVE
+}
+
+type PluginEInvoiceProviderInformation {
+  type: String!
+  name: String!
+  logo: String!
+  isDemo: Boolean
+  apiUrl: String!
+  defaultTemplates: JSONObject
+}
+
+type PluginEInvoicesPaginated {
+  total: Float!
+  results: [EInvoice!]!
+}
+
+type SearchResultBase implements SearchResult {
+  id: String!
+  entity: String!
+}
+
+type SearchResultOrders implements SearchResult {
+  id: String!
+  entity: String!
+  code: String!
+}
+
+type SearchResultTags implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  type: String!
+}
+
+type SearchResultPrescriptions implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  note: String!
+}
+
+type SearchResultReceipt implements SearchResult {
+  id: String!
+  entity: String!
+  code: String!
+  note: String!
+}
+
+type SearchResultTask implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  code: String!
+}
+
+type SearchResultWorkspaceMember implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  email: String!
+  avatar: String
+  phone: String
+  color: String
+  memberId: String
+  userId: String!
+}
+
+type SearchResultWorkspaceBranch implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  hotline: String
+}
+
+type SearchResultCustomer implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  code: String!
+  phone: String
+  avatar: String
+}
+
+type SearchResultProduct implements SearchResult {
+  id: String!
+  entity: String!
+  type: ProductType!
+  name: String!
+  price: Float!
+  unit: String
+  code: String
+  displayName: String
+  image: String
+  minPrice: Float
+  maxPrice: Float
+  defaultQtyPerUse: Float
+  isHiddenInReceiptWhenNoPrice: Boolean
+}
+
+type SearchResultPartner implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+  phone: String
+}
+
+type SearchResultCategory implements SearchResult {
+  id: String!
+  entity: String!
+  name: String!
+}
+
+type SearchResultLoan implements SearchResult {
+  id: String!
+  entity: String!
+  code: String!
+  customerName: String!
+  customerPhone: String
+  imeil: String
+  status: String
+}
+
+type PostsPaginated {
+  total: Float!
+  results: [Post!]!
+}
+
+type PrescriptionsPaginated {
+  total: Float!
+  results: [Prescription!]!
+}
+
+type MetricsReport {
+  _id: String!
+  type: ReportType!
+  ref: String!
+  fromTime: Float!
+  toTime: Float!
+  workspaceBranchIds: [String!]
+  userId: String
+  data: CombineMetricsReport!
+  dto: AnyType
+  status: ReportStatus!
+  updatedAt: Float
+}
+
+type TimeSeriesReport {
+  _id: String!
+  type: ReportType!
+  ref: String!
+  fromTime: Float!
+  toTime: Float!
+  workspaceBranchIds: [String!]
+  userId: String
+  data: CombineTimeSeriesReport!
+  dto: AnyType
+  status: ReportStatus!
+  updatedAt: Float
+}
+
+type TimeSeriesReports {
+  total: Float!
+  results: [TimeSeriesReport!]!
+}
+
+type WorkspaceStatWorkspaceInformation {
+  _id: String!
+  name: String!
+  logo: String
+  appColor: String
+  type: WorkspaceType!
+}
+
+type WorkspaceStat {
+  refs: [String!]
+  createdAt: Float
+  updatedAt: Float
+  isArchived: Boolean
+  source: EntitySource
+  _id: String!
+  customFieldValues: [CustomFieldValue!]
+  storageUsage: Float!
+  members: Float!
+  bookings: Float!
+  customers: Float!
+  orders: Float!
+  metaPages: Float!
+  zaloOas: Float!
+  messageHubs: Float!
+  workspace: WorkspaceStatWorkspaceInformation!
+  type: WorkspaceType!
+}
+
+type WorkspaceStatsPaginated {
+  total: Float!
+  results: [WorkspaceStat!]!
+}
+
+type TimeZone {
+  id: String!
+  value: String!
+  abbr: String!
+  offset: Float!
+  text: String!
+  utc: [String!]!
+}
+
+type WorkspaceApiAppsPaginated {
+  total: Float!
+  results: [WorkspaceApiApp!]!
+}
+
+type AppMetadata {
+  name: String!
+  icon: String!
+  color: String
+  colorShape: Float
+  workspaceId: String
+  isExtended: Boolean!
+}
+
+type Query {
+  getAppConfig: AppConfig!
+  testErrorNotFound: String!
+  getDevices(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): DevicesPaginated!
+  getDeviceByIdentifyId(identifyId: String!): Device
+  getFileById(fileId: String!): File!
+  getFiles(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): FilesPaginated!
+  getPluginExternalStorage: PluginExternalStorage
+  authUser: AuthUser!
+  getWorkspaceById(id: String!): Workspace!
+  workspace: Workspace!
+  getWorkspaceInviteInformation(inviteCode: String!): WorkspaceInviteInformation!
+  getRandomWorkspaceCode(name: String!): String!
+  getWorkspaceMembers(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    ignoreSelf: Boolean
+    userId: [String!]
+  ): WorkspaceMembersPaginated!
+  getWorkspaceMemberByUserId(userId: String!): WorkspaceMember!
+  getUserPublicInformation(userId: String!): UserPublicInformation!
+  getWorkspaceMembersByIds(ids: [String!]!): [WorkspaceMember!]!
+  getUserWorkspaceMember: WorkspaceMember!
+  getUserWorkspaceMembers: [WorkspaceMember!]!
+  getWorkspaceMembersOnlineStatus: [WorkspaceMemberOnlineStatus!]!
+  getWorkspaceBranches(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): WorkspaceBranchesPaginated!
+  getWorkspaceBranchById(id: String!): WorkspaceBranch!
+  getWorkspaceBranchesByIds(ids: [String!]!): [WorkspaceBranch!]!
+  getWorkspaceSetting: WorkspaceSetting!
+  getWorkspaceRoles: [WorkspaceRole!]!
+  getPartners(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PartnersPaginated!
+  getPartner(id: String!): Partner!
+  getZaloZnsTemplateConfigs: JSONObject!
+  getZaloOas: [PluginZaloOa!]!
+  getZaloOaById(oaId: String!): PluginZaloOa!
+  getOaGmfGroups: [ZaloOaGmfGroup!]!
+  getMessageBoxPlatforms: [MessageBoxPlatform!]!
+  getMessageBoxes(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): MessageBoxesPaginated!
+  getMessageBoxesByIds(ids: [String!]!): [MessageBox!]!
+  getMessageBoxById(id: String!): MessageBox!
+  getMessages(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): MessagesPaginated!
+  getMetaPages: [MetaPage!]!
+  getMetaPagesInfos(accessToken: String!): [MetaPageInfo!]!
+  getPluginMessageHubs: [PluginMessageHub!]!
+  getCustomers(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): CustomersPaginated!
+  getCustomersByIds(ids: [String!]!): [Customer!]!
+  isCustomerPhoneExisted(phone: String!): Boolean!
+  getCustomerById(id: String!): Customer!
+  getCustomerByCode(code: String!): Customer!
+  getBankInformations: BankInforationsResult!
+  getBankInformation(bankId: Float!): BankInformation
+  getBankAccountInformation(input: GetBankAccountInformationInput!): GetBankAccountInformationResult!
+  getProductById(id: String!): Product!
+  getProducts(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): ProductsPaginated!
+  getProductsByIds(ids: [String!]!): [Product!]!
+  getProduct(id: String!): Product!
+  getCategoryBySlug(slug: String!): Category!
+  getCategoriesByIds(ids: [String!]!): [Category!]!
+  getCategoryById(id: String!): Category!
+  getCategories(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): CategoriesPaginated!
+  getProductStocks(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): ProductStocksPaginated!
+  getProductStockRecords(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): ProductStockRecordPaginated!
+  getFileExports(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): FileExportList!
+  getFileExport(exportId: String!): FileExport!
+  getReceipts(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): ReceiptsPaginated!
+  getReceiptById(id: String!): Receipt!
+  getReceiptByCode(code: String!): Receipt!
+  getProductCombos(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): ProductCombosPaginated!
+  getCustomerProductCombos(customerId: String!): [ProductCombo!]!
+  getProductCombo(id: String!): ProductCombo!
+  getProductCombosByIds(ids: [String!]!): [ProductCombo!]!
+  getOrders(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): OrdersPaginated!
+  getOrderById(id: String!): Order!
+  getOrderByCode(code: String!): Order!
+  getOrdersByIds(ids: [String!]!): [Order!]!
+  calculateOrder(input: OrderInput!): Order!
+  getPromotions(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PromotionsPaginated!
+  getPromotionsByIds(ids: [String!]!): [Promotion!]!
+  getAvailableCustomerPromotions(customerId: String!): [Promotion!]!
+  getLoanAssetEstimations: LoanAssetEstimations!
+  getLoanById(id: String!): Loan!
+  getLoanByCode(code: String!): Loan!
+  calculateLoanPaymentPlan(input: CalculateLoanPaymentPlanInput!): LoanPaymentPlanResult!
+  getLoans(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): LoansPaginated!
+  liquidateLoanCalculate(id: String!): LoanLiquidationCalculated!
+  getCustomerKyc(customerId: String!): CustomerKyc
+  getCustomerKycs(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): CustomerKycsPaginated!
+  getNotifications(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): NotificationsPaginated!
+  getNotificationStat: UserNotificationStat!
+  getCustomerForms(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): CustomerFormsPaginated!
+  getCustomerFormById(id: String!): CustomerForm!
+  getBooking(id: String!): Booking!
+  getBookings(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): BookingsPaginated!
+  getEventById(id: String!): Event!
+  getEvents(query: EventsQuery, ids: [String!], limit: Float = 30, offset: Float): EventsPaginated!
+  getCustomerContacts(customerId: String!): CustomerContact!
+  getTaskMetrics(contextType: TaskContextType!, contextId: String): TaskMetrics!
+  getTaskStatuses(contextType: TaskContextType, contextId: String, mode: GetTaskStatusesMode): ConfigTaskStatuses!
+  getTaskByCode(code: String!): Task!
+  getSiblingTasks(_id: String!): SiblingTasks!
+  getTaskById(_id: String!): Task!
+  getTasks(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    isProgressOnly: Boolean
+    isClosedOnly: Boolean
+    status: String
+    folderId: String
+    priority: TaskPriority
+    parentId: String
+    assigneeUserIds: [String!]
+    partnerIds: [String!]
+    tagIds: [String!]
+    all: Boolean
+    fromTrackingTime: Float
+    toTrackingTime: Float
+  ): TasksPaginated!
+  getTasksCount(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    isProgressOnly: Boolean
+    isClosedOnly: Boolean
+    status: String
+    folderId: String
+    priority: TaskPriority
+    parentId: String
+    assigneeUserIds: [String!]
+    partnerIds: [String!]
+    tagIds: [String!]
+    all: Boolean
+    fromTrackingTime: Float
+    toTrackingTime: Float
+  ): Float!
+  getTagBySlug(slug: String!): Tag!
+  getTags(query: GetTagsQuery, ids: [String!], limit: Float = 30, offset: Float): TagsPaginated!
+  getTimeSeriesReports(input: ExportTimeSeriesReportInput!): TimeSeriesReports!
+  getTimeSeriesReport(id: String!): TimeSeriesReport!
+  getMetricsReport: MetricsReport!
+  getVnLocations: [VnLocation!]!
+  getEInvoices(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PluginEInvoicesPaginated!
+  getEInvoicesProviderInformations: [PluginEInvoiceProviderInformation!]!
+  getEInvoiceProviders: [PluginEInvoiceProvider!]!
+  getEInvoiceTemplateVariables: JSONObject!
+  getPrescriptions(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PrescriptionsPaginated!
+  search(query: String!, limit: Int, entities: [String!], filter: JSONObject): [SearchResult!]!
+  availableSearchEntities: [String!]!
+  getTimeZones: [TimeZone!]!
+  getPluginAiAssistants(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PluginAiAssistantsPaginated!
+  getWorkspaceApiApps(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): WorkspaceApiAppsPaginated!
+  getPostById(id: String!): Post!
+  generatePostSlug(input: GenerateSlugInput!): String!
+  getPosts(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): PostsPaginated!
+  getCustomFields(query: CustomFieldsQuery, ids: [String!], limit: Float = 30, offset: Float): CustomFieldsPaginated!
+  getCustomFieldById(id: String!): CustomField!
+  getWorkspaceStats(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): WorkspaceStatsPaginated!
+  getWorkspaceStat: WorkspaceStat!
+  getActivities(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    contextType: String!
+    contextId: String!
+    type: ActivityType
+    parentId: String
+  ): ActivitiesPaginated!
+  getActivityById(id: String!): Activity!
+  reactionsCount(entity: String!, entityId: String!): ReactionsCount!
+  reactions(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+    entity: String!
+    entityId: String!
+  ): ReactionsPaginated!
+  getAttendanceSetting: AttendanceSetting!
+  getAttendanceRecordById(id: String!): AttendanceRecord!
+  getAttendanceRecords(
+    """
+    Dynamic query object supporting advanced filtering and sorting:
+        
+        FILTERING:
+        - Direct field filters: workspaceId="user123", isArchived=false, category="electronics"
+        - Multiple values: assigneeUserIds="user1,user2,user3" (comma-separated)
+        - ID filtering: ids="id1,id2,id3" (comma-separated entity IDs)
+        - Range filtering: range<FieldName>="from-to" (e.g., rangePrice="10.99-99.99")
+        - Time range filtering: timeRange<FieldName>="period-timestamp" (e.g., timeRangeCreatedAt="month-1640995200")
+        
+        SORTING:
+        - sort<FieldName>="ASC" or sort<FieldName>="DESC" (e.g., sortPrice="DESC")
+        - Numeric sorting: sort<FieldName>=1 (ASC) or sort<FieldName>=-1 (DESC)
+        
+        PAGINATION & SPECIAL:
+        - limit: Max results (default: 30)
+        - offset: Skip results (default: 0) 
+        - getAll: Return all results if supportGetAll=true
+        - workspaceBranchIds: Filter by specific branches
+        - workspaceBranchId: Single branch filter
+        
+        EXAMPLES:
+        - { "rangePrice": "10-100", "sortPrice": "DESC", "category": "electronics" }
+        - { "timeRangeCreatedAt": "week-1640995200", "sortCreatedAt": "DESC" }
+    """
+    query: JSONObject
+    ids: [String!]
+    limit: Float = 30
+    offset: Float
+  ): AttendanceRecordsPaginated!
+  getAttendanceRecordsForToday: [AttendanceRecord!]!
+  getAppMetadata(domain: String): AppMetadata!
+}
+
+input GetBankAccountInformationInput {
+  bin: String!
+  accountNumber: String!
+}
+
+input OrderInput {
+  id: String
+  type: OrderType!
+  items: [OrderItemInput!]!
+  comboIds: [String!]
+  promotionIds: [String!]
+  assigneeUserIds: [String!]
+  directDiscount: Float
+  note: String
+  relatedCustomerId: String
+  relatedUserIds: [String!]
+  workspaceBranchId: String
+}
+
+input OrderItemInput {
+  productId: String!
+  quantity: Float!
+  price: Float
+  note: String
+  assigneeUserIds: [String!]
+}
+
+input CalculateLoanPaymentPlanInput {
+  packageId: String!
+  amount: Float!
+  startTime: Float
+}
+
+input EventsQuery {
+  ref: String
+  userId: String
+  type: EventType
+}
+
+"""Available task statuses modes"""
+enum GetTaskStatusesMode {
+  EDIT
+  VIEW
+}
+
+input GetTagsQuery {
+  type: TagType
+}
+
+input ExportTimeSeriesReportInput {
+  period: Period!
+  userId: String
+  fromTime: Float!
+  toTime: Float!
+  workspaceBranchIds: [String!]
+  forceUpdate: Boolean
+}
+
+"""Available periods for reports"""
+enum Period {
+  DATE
+  WEEK
+  MONTH
+  YEAR
+}
+
+input GenerateSlugInput {
+  title: String!
+}
+
+input CustomFieldsQuery {
+  label: String
+  key: String
+  entities: [String!]
+}
+
+type Mutation {
+  adminAction(action: AdminAction!): Boolean!
+  registerDevice(input: RegisterDeviceInput!): Device!
+  setDeviceLocale(input: SetDeviceLocaleInput!): Device!
+  setDeviceNotificationToken(input: SetDeviceNotificationTokenInput!): Device!
+  setLocale(input: SetUserLocaleInput!): Boolean!
+  signPersonalUpload(input: SignUploadInput!): FileUploadSigned!
+  signUpload(input: SignUploadInput!): FileUploadSigned!
+  verifyExternalStorageDna(input: VerifyExternalStorageDnaInput!): File!
+  removeFile(id: String!): Boolean!
+  setPluginExternalStorage(input: SetPluginExternalStorageInput!): PluginExternalStorage!
+  healthcheckPluginExternalStorage: Boolean!
+  removePluginExternalStorage: Boolean!
+  pluginExternalStorageSignUploadUrl(input: PluginExternalStorageSignUploadUrlInput!): SignUploadUrlResponse!
+  toggleDisablePluginExternalStorage: Boolean!
+  fetchExternalStorageSize: Float!
+  signUpWithEmailPassword(input: AuthSignUpWithEmailPasswordInput!): AuthTokenResult!
+  signInWithEmailPassword(input: AuthSignInWithEmailPasswordInput!): AuthTokenResult!
+  signInWithFirebase(input: AuthSignInWithFirebaseInput!): AuthTokenResult!
+  updateUserProfile(input: UpdateUserProfileInput!): AuthUser!
+  updateUserPassword(input: UpdateUserPasswordInput!): Boolean!
+  renewPassword(input: AuthRenewPasswordByCodeInput!): Boolean!
+  requestRenewPassword(input: AuthRequestRenewUserPasswordInput!): Boolean!
+  verifyRenewPasswordCode(input: AuthVerifyRenewPasswordCodeInput!): VerifyRenewPasswordResult!
+  signOut: Boolean!
+  signOutOtherDevices: AuthTokenResult!
+  refreshToken(input: AuthRefreshTokenInput!): AuthTokenResult!
+  createWorkspace(input: CreateWorkspaceInput!): Workspace!
+  archiveWorkspace: Boolean!
+  updateWorkspace(input: WorkspaceInput!): Workspace!
+  generateWorkspaceInviteCode: String!
+  updateWorkspaceMember(input: UpdateWorkspaceMemberInput!, memberId: String!): WorkspaceMember!
+  assignWorkspaceMemberRoles(memberId: String!, roleIds: [String!]!): WorkspaceMember!
+  removeWorkspaceMember(memberId: String!): Boolean!
+  transferWorkspaceOwner(input: TransferOwnerInput!): Boolean!
+  joinWorkspaceWithInviteCode(inviteCode: String!): String!
+  createWorkspaceBranch(input: WorkspaceBranchInput!): WorkspaceBranch!
+  updateWorkspaceBranch(input: WorkspaceBranchInput!, id: String!): WorkspaceBranch!
+  updateWorkspaceSetting(input: UpdateWorkspaceSettingInput!): WorkspaceSetting!
+  createWorkspaceRole(input: WorkspaceRoleInput!): WorkspaceRole!
+  updateWorkspaceRole(id: String!, input: WorkspaceRoleInput!): WorkspaceRole!
+  deleteWorkspaceRole(id: String!): Boolean!
+  createPartner(input: PartnerInput!): Partner!
+  updatePartner(id: String!, input: PartnerInput!): Partner!
+  archivePartner(id: String!): Boolean!
+  connectZaloOa: ConnectZaloOaResponse!
+  connectZaloOaCallback(code: String!): PluginZaloOa!
+  reconnectZaloOa(id: String!): PluginZaloOa!
+  updateZaloOa(id: String!, input: UpdatePluginZaloOaInput!): PluginZaloOa!
+  toggleEnableZaloOa(id: String!): PluginZaloOa!
+  removeZaloOa(id: String!): Boolean!
+  setZaloOaDefault(id: String!): PluginZaloOa!
+  sendZNS(input: PluginZaloOaSendZnsInput!): Boolean!
+  sendTextToMessageBox(boxId: String!, text: String!): Boolean!
+  sendImageToMessageBox(boxId: String!, url: String!, text: String): Boolean!
+  sendFileToMessageBox(boxId: String!, url: String!, text: String): Boolean!
+  setMessageBoxCustomer(boxId: String!, customerId: String): MessageBox!
+  switchMessageBoxAiAssistant(boxId: String!, disabled: Boolean!): MessageBox!
+  assignUserToMessageBox(boxId: String!, userId: String): MessageBox!
+  closeMessageBox(boxId: String!): MessageBox!
+  deleteMessageBox(boxId: String!): Boolean!
+  connectMetaPages(accessToken: String!): [MetaPage!]!
+  disconnectMetaPage(id: String!): Boolean!
+  createPluginMessageHub(input: PluginMessageHubInput!): PluginMessageHub!
+  updatePluginMessageHub(id: String!, input: PluginMessageHubInput!): PluginMessageHub!
+  deletePluginMessageHub(id: String!): Boolean!
+  bulkUpdateCustomerWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Customer!]!
+  createCustomer(input: CustomerInput!): Customer!
+  updateCustomer(id: String!, input: CustomerInput!): Customer!
+  assignCustomer(id: String!, input: AssignCustomerInput!): Customer!
+  archiveCustomer(id: String!): Boolean!
+  pluginMailerSendTestMail(input: TestSendMailInput!): Boolean!
+  createProduct(input: ProductInput!): Product!
+  updateProduct(id: String!, input: ProductInput!): Product!
+  archiveProduct(id: String!): Boolean!
+  interactProduct(id: String!): Boolean!
+  generateCategorySlug(input: GenerateCategorySlugInput!): String!
+  createCategory(input: CategoryInput!): Category!
+  updateCategory(id: String!, input: CategoryInput!): Category!
+  deleteCategory(id: String!): Boolean!
+  interactCategory(id: String!): Boolean!
+  bulkProductsStockIn(input: BulkProductsStockInInput!): [String!]!
+  productStockIn(input: ProductStockInInput!): [String!]!
+  productStockOut(input: ProductStockOutInput!): [String!]!
+  createFileExport(input: CreateFileExportInput!): FileExport!
+  retryFileExport(exportId: String!): FileExport!
+  deleteFileExport(exportId: String!): Boolean!
+  createReceipt(input: CreateReceiptInput!): Receipt!
+  updateReceipt(id: String!, input: UpdateReceiptInput!): Receipt!
+  payReceipt(id: String!, input: PayReceiptInput!): Receipt!
+  disburseReceipt(id: String!, input: DisburseReceiptInput!): Receipt!
+  partialPaymentReceipt(id: String!, input: PartialPaymentInput!): [Receipt!]!
+  archiveReceipt(id: String!): Receipt!
+  revertPaymentReceipt(id: String!): Receipt!
+  useProductCombo(id: String!, input: UseProductComboInput!): ProductCombo!
+  revertProductComboHistory(historyId: String!): Boolean!
+  createOrder(input: OrderInput!): Order!
+  updateOrder(id: String!, input: OrderInput!): Order!
+  payOrder(id: String!, amount: Float!, tipAmount: Float): String!
+  syncOrder(id: String!): Order!
+  archiveOrder(id: String!): Order!
+  createPromotion(input: PromotionInput!): Promotion!
+  updatePromotion(promotionId: String!, input: PromotionInput!): Promotion!
+  updatePromotionStatus(promotionId: String!, status: PromotionStatus!): Promotion!
+  setLoanAssetEstimations(input: SetLoanAssetEstimationsInput!): LoanAssetEstimations!
+  createLoan(input: CreateLoanInput!): Loan!
+  signLoan(id: String!, input: SignLoanInput!): Loan!
+  bulkUpdateLoanWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [Loan!]!
+  updateLoanAmount(id: String!, input: UpdateLoanAmountInput!): Loan!
+  updateLoanAssetData(id: String!, input: UpdateLoanAssetDataInput!): Loan!
+  updateLoanPackage(id: String!, input: UpdateLoanPackageInput!): Loan!
+  approveLoan(id: String!): Loan!
+  rejectLoan(input: RejectLoanInput!, id: String!): [Loan!]!
+  bulkRejectLoans(input: BulkRejectLoanInput!): [Loan!]!
+  bulkRevertRejectedLoans(loanIds: [String!]!): [Loan!]!
+  archiveLoan(id: String!): Loan!
+  bulkArchiveLoans(input: BulkArchiveLoansInput!): [String!]!
+  healthCheckLoan(id: String!): Loan!
+  fulfillLoan(input: FulfillLoanInput!, id: String!): Loan!
+  liquidateLoan(id: String!): String!
+  revertLiquidationLoan(id: String!): Loan!
+  revertFulfilledLoan(id: String!): Loan!
+  revertApproveLoan(id: String!): Loan!
+  registerCustomerKyc(customerId: String!, input: CustomerKycInput!): CustomerKyc!
+  approveCustomerKyc(customerId: String!): CustomerKyc!
+  rejectCustomerKyc(customerId: String!, input: RejectCustomerKycInput!): CustomerKyc!
+  cleanNotifications: Boolean!
+  markAllNotificationsAsReaded: Boolean!
+  markNotificationAsReaded(id: String!): Notification!
+  createCustomerForm(input: CustomerFormInput!): CustomerForm!
+  updateCustomerForm(id: String!, input: CustomerFormInput!): CustomerForm!
+  archiveCustomerForm(id: String!): CustomerForm!
+  bulkArchiveCustomerForms(input: BulkArchiveInput!): [CustomerForm!]!
+  bulkUpdateCustomerFormWorkspaceBranch(input: BulkUpdateWorkspaceBranchInput!): [CustomerForm!]!
+  createBooking(title: String, note: String, startTime: Float!, endTime: Float!, status: BookingStatus!, reasonForCancellation: String, assigneeUserIds: [String!], customerId: String, createdAt: Float, workspaceBranchId: String): Booking!
+  updateBooking(id: String!, title: String, note: String, assigneeUserIds: [String!], customerId: String): Booking!
+  rescheduleBooking(title: String, note: String, startTime: Float!, endTime: Float!, status: BookingStatus!, reasonForCancellation: String, assigneeUserIds: [String!], customerId: String, createdAt: Float, workspaceBranchId: String, prevBookingId: String!): Booking!
+  cancelBooking(id: String!, reason: String!): Booking!
+  setCustomerContacts(customerId: String!, input: SetCustomerContactsInput!): CustomerContact!
+  updateTaskStatuses(contextType: TaskContextType, contextId: String, isInherited: Boolean, statuses: [TaskStatusInput!]!): [TaskStatus!]!
+  createTask(input: CreateTaskInput!): Task!
+  duplicateTask(_id: String!, overwrite: CreateTaskInput): Task!
+  bulkUpdateTasks(items: [UpdateTaskInput!]!): [Task!]!
+  syncTask(_id: String!): SyncTaskResult!
+  createTag(input: TagInput!): Tag!
+  bulkUpdateTags(items: [UpdateTagInput!]!): [Tag!]!
+  removeTag(id: String!): Boolean!
+  interactTag(id: String!): Boolean!
+  createEInvoice(input: GenerateEInvoiceDataInput!): EInvoice!
+  generateEInvoiceData(input: GenerateEInvoiceDataInput!): EInvoice!
+  cancelEInvoice(invoiceId: String!): EInvoice!
+  createEInvoiceProvider(input: CreatePluginEInvoiceProviderInput!): PluginEInvoiceProvider!
+  updateEInvoiceProvider(providerId: String!, input: UpdatePluginEInvoiceProviderInput!): PluginEInvoiceProvider!
+  archiveEInvoiceProvider(providerId: String!): Boolean!
+  healthcheckEInvoicesProvider(providerId: String!): PluginEInvoiceProvider!
+  resetEInvoicesProviderTemplates(providerId: String!): PluginEInvoiceProvider!
+  createPrescription(input: PrescriptionInput!): Prescription!
+  updatePrescription(id: String!, input: PrescriptionInput!): Prescription!
+  deletePrescription(id: String!): Boolean!
+  interactPrescription(id: String!): Boolean!
+  createPluginAiAssistant(input: CreatePluginAiAssistantInput!): PluginAiAssistant!
+  updatePluginAiAssistant(id: String!, input: UpdatePluginAiAssistantInput!): PluginAiAssistant!
+  deletePluginAiAssistant(id: String!): Boolean!
+  createWorkspaceApiApp(input: WorkspaceApiAppInput!): WorkspaceApiApp!
+  updateWorkspaceApiApp(id: String!, input: WorkspaceApiAppInput!): WorkspaceApiApp!
+  archiveWorkspaceApiApp(id: String!): Boolean!
+  regenerateWorkspaceApiAppSecret(id: String!): WorkspaceApiApp!
+  createPost(input: PostInput!): Post!
+  updatePost(id: String!, input: PostInput!): Post!
+  bulkArchivePosts(ids: [String!]!): Boolean!
+  archivePost(id: String!): Boolean!
+  createCustomField(input: CustomFieldInput!): CustomField!
+  updateCustomField(id: String!, input: CustomFieldInput!): CustomField!
+  deleteCustomField(id: String!): Boolean!
+  addActivity(contextType: String!, contextId: String!, type: ActivityType!, content: String, parentId: String): Activity!
+  updateActivity(id: String!, content: String): Activity!
+  archiveActivity(id: String!): Activity!
+  addReaction(type: ReactionType!, entity: String!, entityId: String!): Boolean!
+  removeReaction(entity: String!, entityId: String!, type: ReactionType!): Boolean!
+  updateAttendanceSetting(input: UpdateAttendanceSettingInput!): AttendanceSetting!
+  defaultAttendanceCaptureRecord(input: DefaultRecordAttendanceInput!): AttendanceRecord!
+  requestAttendanceCaptureRecord(input: RecordAttendanceInput!, time: Float!, type: AttendanceRecordType!): AttendanceRecord!
+  approveAttendanceRecord(id: String!): AttendanceRecord!
+  rejectAttendanceRecord(id: String!, input: RejectAttendanceRecordInput!): AttendanceRecord!
+}
+
+"""Available admin actions"""
+enum AdminAction {
+  RESET_CACHE
+  SEARCH_REINDEX
+  SYNC_LOANS
+  PURE_REPORTS
+  SYNC_RECEIPTS
+  AGGREGATE_WORKSPACE_STATS
+}
+
+input RegisterDeviceInput {
+  identifyId: String!
+  locale: AppLocale
+  deviceName: String
+}
+
+input SetDeviceLocaleInput {
+  locale: AppLocale!
+}
+
+input SetDeviceNotificationTokenInput {
+  notificationToken: String!
+}
+
+input SetUserLocaleInput {
+  locale: AppLocale
+}
+
+input SignUploadInput {
+  fileName: String!
+  refs: [String!]
+  id: String
+}
+
+input VerifyExternalStorageDnaInput {
+  dna: String!
+}
+
+input SetPluginExternalStorageInput {
+  provider: PluginExternalStorageProvider!
+  accessKeyId: String
+  secretAccessKey: String
+  region: String
+  bucketName: String
+  endpointUrl: String
+}
+
+input PluginExternalStorageSignUploadUrlInput {
+  fileName: String!
+  refs: [String!]
+  id: String
+}
+
+input AuthSignUpWithEmailPasswordInput {
+  name: String!
+  email: String!
+  plainPassword: String!
+  avatar: String
+}
+
+input AuthSignInWithEmailPasswordInput {
+  email: String!
+  password: String!
+}
+
+input AuthSignInWithFirebaseInput {
+  idToken: String!
+  username: String
+}
+
+input UpdateUserProfileInput {
+  name: String!
+  avatar: String
+  color: String
+  birthday: Float
+  phone: String
+  email: String
+  settings: UserSettingsInput
+}
+
+input UserSettingsInput {
+  locale: AppLocale
+  timezoneId: String
+  timezoneUtc: String
+  isStartOfWeekSunday: Boolean
+  isTwelveHour: Boolean
+}
+
+input UpdateUserPasswordInput {
+  plainPassword: String!
+  password: String!
+}
+
+input AuthRenewPasswordByCodeInput {
+  code: String!
+  plainPassword: String!
+}
+
+input AuthRequestRenewUserPasswordInput {
+  email: String!
+}
+
+input AuthVerifyRenewPasswordCodeInput {
+  code: String!
+}
+
+input AuthRefreshTokenInput {
+  refreshToken: String!
+}
+
+input CreateWorkspaceInput {
+  name: String!
+  type: WorkspaceType!
+  logo: String
+  location: LocationInput
+  hotline: String
+  phone: String
+  appIcon: String
+  appDomain: String
+  appName: String
+  appColor: String
+  appColorShape: Float
+  locale: AppLocale
+  code: String!
+  refCode: String
+}
+
+input LocationInput {
+  provinceId: String
+  districtId: String
+  wardId: String
+  address: String
+  coordinates: CoordinatesInput
+}
+
+input CoordinatesInput {
+  lat: Float!
+  lng: Float!
+}
+
+input WorkspaceInput {
+  name: String!
+  type: WorkspaceType!
+  logo: String
+  location: LocationInput
+  hotline: String
+  phone: String
+  appIcon: String
+  appDomain: String
+  appName: String
+  appColor: String
+  appColorShape: Float
+  locale: AppLocale
+}
+
+input UpdateWorkspaceMemberInput {
+  displayName: String
+  color: String
+  workingTimeType: WorkspaceMemberWorkingTimeType
+  workspaceBranchIds: [String!]
+}
+
+input TransferOwnerInput {
+  userId: String!
+}
+
+input WorkspaceBranchInput {
+  name: String!
+  hotline: String
+  location: LocationInput
+  settings: WorkspaceBranchSettingsInput
+}
+
+input WorkspaceBranchSettingsInput {
+  bankAccount: PluginBankAccountInput
+}
+
+input PluginBankAccountInput {
+  bankId: Float!
+  accountNumber: String!
+  accountName: String
+}
+
+input UpdateWorkspaceSettingInput {
+  schedule: WorkspaceScheduleInput
+  bankAccount: PluginBankAccountInput
+  mailer: MailerAccountInput
+  bookingsAutoRemindCustomerBookingBeforeDays: Float
+  allowTip: Boolean
+  allowDuplicateBookings: Boolean
+  memberPermissions: [String!]
+  bookingsAutoRemindCustomerBookingTime: String
+  loanSettings: LoanSettingsInput
+  termsOfService: String
+  privacyPolicy: String
+  receiptImagesRequired: Boolean
+  receiptPaymentMethodDefault: ReceiptPaymentMethod
+  view: WorkspaceViewInput
+  searchSettings: WorkspaceSearchSettingsInput
+  currencyCode: String
+  isAuthSessionRestricted: Boolean
+  zaloOaGmfGroupSettings: JSONObject
+  allowPayTicketMultipleTimes: Boolean
+}
+
+input WorkspaceScheduleInput {
+  timezone: String
+  workingDays: [WorkingDayIntervalInput!]!
+}
+
+input WorkingDayIntervalInput {
+  """Format: HH:mm"""
+  start: String!
+
+  """Format: HH:mm"""
+  end: String!
+  id: String!
+
+  """
+  1: Monday, 2: Tuesday, 3: Wednesday, 4: Thursday, 5: Friday, 6: Saturday, 7: Sunday
+  """
+  day: Float!
+  shift: String
+}
+
+input MailerAccountInput {
+  user: String!
+  pass: String!
+}
+
+input LoanSettingsInput {
+  loanPackages: [LoanPackageInput!]!
+  assetEstimationPriceSpreadRate: Float
+  liquidationFeeRate: Float
+  warningReceiptBeforeDays: Float
+  contractPdfUrl: String
+  contractLiquidationPdfUrl: String
+  receiptPdfUrl: String
+  isAutoSelectWorkspaceBranch: Boolean
+}
+
+input LoanPackageInput {
+  id: String!
+  assetTypes: [LoanAssetType!]!
+  type: LoanPackageType!
+
+  """1 tháng, 2 tháng, 3 tháng, 6 tháng, 12 tháng -> Quy đổi ra ngày"""
+  days: Float!
+
+  """Số ngày trong kỳ vay (10, 15, 30)"""
+  periodDaysOptions: [Float!]!
+
+  """Chi phí vay"""
+  contractFee: Float!
+
+  """Tỷ lệ trả gốc"""
+  unFixedCapitalRates: [[Float!]!]!
+
+  """Lãi phạt"""
+  lateInterestRates: [LateInterestRateInput!]!
+  description: String
+  liquidationFeeRate: Float
+}
+
+input LateInterestRateInput {
+  lateDays: Float!
+  rate: Float!
+}
+
+input WorkspaceViewInput {
+  menu: [WorkspaceViewComponentInput!]
+  dashboardWidgets: [DisplayWidgetInput!]
+  reportWidgets: [DisplayWidgetInput!]
+}
+
+input WorkspaceViewComponentInput {
+  id: String!
+  type: String!
+  moduleId: String
+  dividerName: String
+}
+
+input DisplayWidgetInput {
+  id: String!
+  type: String!
+  state: JSONObject
+}
+
+input WorkspaceSearchSettingsInput {
+  hideEntities: [String!]
+}
+
+input WorkspaceRoleInput {
+  name: String!
+  description: String
+  color: String
+  permissions: [String!]!
+}
+
+input PartnerInput {
+  name: String!
+  phone: String
+  logo: String
+  email: String
+}
+
+input UpdatePluginZaloOaInput {
+  znsTemplateIds: JSONObject
+  znsTemplateStatues: JSONObject
+}
+
+input PluginZaloOaSendZnsInput {
+  isTesting: Boolean
+  code: String
+  phoneNumber: String!
+  templateId: PluginZaloOaZNSTemplateId!
+  data: JSONObject!
+}
+
+"""Template IDs for Zalo OA ZNS messages"""
+enum PluginZaloOaZNSTemplateId {
+  BOOKING
+  CUSTOMER_BIRTHDAY
+  OTP
+  LOAN_FULFILLED
+  LOAN_RECEIPT_PAID
+  LOAN_RECEIPT_PARTIAL_PAY
+  LOAN_RECEIPT_REMIND
+}
+
+input PluginMessageHubInput {
+  name: String!
+  widgetSettings: ChannelWidgetSettingsInput!
+}
+
+input ChannelWidgetSettingsInput {
+  color: String
+  position: MessageHubWidgetPosition
+  chatIcon: String
+  locale: String
+  brandName: String
+  brandLogo: String
+  welcomMessage: String
+  welcomSubMessage: String
+  welcomeInputs: [MessageHubWidgetWelcomeInput!]
+}
+
+input MessageHubWidgetWelcomeInput {
+  id: String!
+  type: ChannelWidgetWelcomeInputType!
+  isRequired: Boolean
+  label: String!
+  fieldName: String!
+  description: String
+  placeholder: String
+}
+
+input BulkUpdateWorkspaceBranchInput {
+  ids: [String!]!
+  workspaceBranchId: String
+}
+
+input CustomerInput {
+  name: String!
+  plainCode: String
+  birthday: Float
+  phone: String
+  avatar: String
+  email: String
+  socialFacebookUrl: String
+  location: LocationInput
+  secondaryLocation: LocationInput
+  vnLocation: LocationInput
+  vnSecondaryLocation: LocationInput
+  presenterCustomerId: String
+  salaryAmount: Float
+  relatedCustomerIds: [String!]
+  relationshipContacts: [CustomerRelationshipContactInput!]
+  gender: Gender
+  medicalHistory: [String!]
+  assigneeUserIds: [String!]
+  tagIds: [String!]
+  createdAt: Float
+  source: EntitySource
+  workspaceBranchId: String
+}
+
+input CustomerRelationshipContactInput {
+  name: String!
+  phone: String!
+  type: String!
+}
+
+input AssignCustomerInput {
+  userIds: [String!]!
+}
+
+input TestSendMailInput {
+  to: String!
+  accountUser: String!
+  accountPass: String!
+}
+
+input ProductInput {
+  name: String!
+  code: String
+  content: String
+  displayName: String
+  image: String
+  tags: [String!]
+  unit: String!
+  price: Float!
+  minPrice: Float
+  maxPrice: Float
+  type: ProductType!
+  productCode: String
+  defaultQtyPerUse: Float
+  isStockCheck: Boolean
+  isHiddenInReceiptWhenNoPrice: Boolean
+  warningOutOfDateBeforeDays: Float
+  warningOutOfStockQty: Float
+  categoryId: String
+  supplies: [ProductSupplyInput!]
+  combos: [ProductComboInput!]
+  combosExpireInDays: Float
+  voucherAmount: Float
+  voucherExpireInDays: Float
+  voucherExcludeProductIds: [String!]
+  voucherIncludeProductIds: [String!]
+  customFieldValues: [CustomFieldValueInput!]
+}
+
+input ProductSupplyInput {
+  productId: String!
+  quantity: Float!
+}
+
+input ProductComboInput {
+  productId: String!
+  quantity: Float!
+}
+
+input CustomFieldValueInput {
+  customFieldId: String!
+  value: AnyType
+}
+
+input GenerateCategorySlugInput {
+  name: String!
+}
+
+input CategoryInput {
+  name: String!
+  type: CategoryType
+  slug: String
+  icon: String
+  thumbnail: String
+  description: String
+  parentId: String
+  order: Float
+  customFieldValues: [CustomFieldValueInput!]
+}
+
+input BulkProductsStockInInput {
+  stocks: [ProductStockInInput!]!
+}
+
+input ProductStockInInput {
+  ref: String
+  productId: String!
+  quantity: Float!
+  note: String
+  relatedOrderId: String
+  relatedProductId: String
+  code: String
+  costPrice: Float
+  expireAt: Float
+}
+
+input ProductStockOutInput {
+  ref: String
+  productId: String!
+  quantity: Float!
+  note: String
+  relatedOrderId: String
+  relatedProductId: String
+  stockId: String
+}
+
+input CreateFileExportInput {
+  contextType: FileExportContextType!
+  contextArgs: JSONObject!
+  fileName: String
+  locale: AppLocale
+}
+
+input CreateReceiptInput {
+  amount: Float!
+  type: ReceiptType!
+  ref: String
+  tipAmount: Float
+  relatedTicketId: String
+  relatedOrderId: String
+  relatedCustomerId: String
+  relatedLoanId: String
+  relatedPartnerId: String
+  note: String
+  data: AnyType
+  assigneeUserIds: [String!]
+  expireAt: Float
+  relatedEntities: [RelatedEntityInput!]
+  workspaceBranchId: String
+}
+
+input RelatedEntityInput {
+  entity: String!
+  id: String
+  data: JSONObject
+  index: Boolean
+}
+
+input UpdateReceiptInput {
+  amount: Float!
+  data: JSONObject
+  expireAt: Float
+  note: String
+  cashierUserId: String
+  assigneeUserIds: [String!]
+  tipAmount: Float
+  relatedCustomerId: String
+  paymentMethod: ReceiptPaymentMethod
+  paidAt: Float
+  isFixedAmount: Boolean
+}
+
+input PayReceiptInput {
+  paymentMethod: ReceiptPaymentMethod
+  giveAmount: Float
+}
+
+input DisburseReceiptInput {
+  paymentMethod: ReceiptPaymentMethod
+  relatedCustomerId: String
+  relatedLoanId: String
+}
+
+input PartialPaymentInput {
+  amount: Float!
+  nextExpireAt: Float
+}
+
+input UseProductComboInput {
+  ref: String!
+  records: [ProductComboHistoryRecordInput!]!
+  orderId: String
+  note: String
+}
+
+input ProductComboHistoryRecordInput {
+  productRefId: String!
+  quantity: Float!
+}
+
+input PromotionInput {
+  name: String!
+  description: String
+  image: String
+  expireAt: Float
+  limitPerCustomer: Float
+  type: PromotionType!
+  value: Float!
+  productsSelection: DynamicSelectionInput
+  customersSelection: DynamicSelectionInput
+  status: PromotionStatus
+  customFieldValues: [CustomFieldValueInput!]
+}
+
+input DynamicSelectionInput {
+  entity: String
+  operator: DynamicSelectionOperator!
+  value: [AnyType!]!
+}
+
+input SetLoanAssetEstimationsInput {
+  brands: [JSONObject!]!
+  models: [JSONObject!]!
+  colors: [JSONObject!]!
+  estimations: [JSONObject!]!
+}
+
+input CreateLoanInput {
+  customerId: String!
+  amount: Float!
+  assetType: LoanAssetType!
+  packageId: String!
+  packagePeriodDays: Float
+  assetData: JSONObject
+  payment: LoanPaymentInput
+  coord: CoordinatesInput
+  workspaceBranchId: String
+  source: EntitySource
+}
+
+input LoanPaymentInput {
+  accountName: String!
+  accountNumber: String!
+  accountBankId: Float!
+}
+
+input SignLoanInput {
+  signature: String!
+}
+
+input UpdateLoanAmountInput {
+  amount: Float!
+}
+
+input UpdateLoanAssetDataInput {
+  assetData: JSONObject!
+}
+
+input UpdateLoanPackageInput {
+  packageId: String!
+  packagePeriodDays: Float
+}
+
+input RejectLoanInput {
+  reason: String!
+}
+
+input BulkRejectLoanInput {
+  loanIds: [String!]!
+  reason: String!
+}
+
+input BulkArchiveLoansInput {
+  loanIds: [String!]!
+}
+
+input FulfillLoanInput {
+  receiptFileIds: [String!]!
+  paymentMethod: ReceiptPaymentMethod!
+  fulfilledAt: Float
+}
+
+input CustomerKycInput {
+  cidNumber: String!
+  cidFullName: String!
+  cidLocation: LocationInput
+  cidVnLocation: LocationInput
+  cidCreatedAt: Float
+  cidGender: Gender!
+  cidBirthday: Float!
+  cidRaw: String
+  frontOfCidImage: String!
+  backOfCidImage: String!
+  portraitImage: String!
+}
+
+input RejectCustomerKycInput {
+  reason: String!
+}
+
+input CustomerFormInput {
+  name: String!
+  phone: String!
+  workspaceId: String!
+  workspaceBranchId: String
+  email: String
+  dynamicData: AnyType
+  status: CustomerFormStatus
+  location: LocationInput
+  vnLocation: LocationInput
+  cancelReason: String
+}
+
+input BulkArchiveInput {
+  ids: [String!]!
+}
+
+input SetCustomerContactsInput {
+  contacts: [CustomerContactInput!]!
+}
+
+input CustomerContactInput {
+  name: String!
+  phones: [String!]!
+}
+
+input TaskStatusInput {
+  id: String!
+  name: String
+  color: String
+  order: Float
+}
+
+input CreateTaskInput {
+  _id: String
+  name: String
+  parentId: String
+  description: String
+  customerId: String
+  status: String
+  priority: TaskPriority
+  startDate: Float
+  dueDate: Float
+  order: Float
+  points: Float
+  assigneeUserIds: [String!]
+  partnerIds: [String!]
+  tagIds: [String!]
+  folderId: String
+  timeTrackings: [TaskTimeTrackingInput!]
+  estimatedTime: Float
+  isArchived: Boolean
+  workspaceBranchId: String
+}
+
+input TaskTimeTrackingInput {
+  id: String!
+  workspaceId: String!
+  userId: String!
+  note: String
+  startAt: Float!
+  endAt: Float
+}
+
+input UpdateTaskInput {
+  _id: String!
+  name: String
+  parentId: String
+  description: String
+  customerId: String
+  status: String
+  priority: TaskPriority
+  startDate: Float
+  dueDate: Float
+  order: Float
+  points: Float
+  assigneeUserIds: [String!]
+  partnerIds: [String!]
+  tagIds: [String!]
+  folderId: String
+  timeTrackings: [TaskTimeTrackingInput!]
+  estimatedTime: Float
+  isArchived: Boolean
+  workspaceBranchId: String
+}
+
+input TagInput {
+  name: String!
+  color: String
+  order: Float
+  type: TagType!
+}
+
+input UpdateTagInput {
+  _id: String!
+  name: String
+  color: String
+  order: Float
+}
+
+input GenerateEInvoiceDataInput {
+  receiptId: String!
+}
+
+input CreatePluginEInvoiceProviderInput {
+  type: PluginEInvoicesProviderType!
+  auth: JSONObject!
+  templates: JSONObject!
+  apiUrl: String
+}
+
+input UpdatePluginEInvoiceProviderInput {
+  type: PluginEInvoicesProviderType
+  auth: JSONObject
+  templates: JSONObject
+  apiUrl: String
+}
+
+input PrescriptionInput {
+  name: String!
+  items: [PrescriptionItemInput!]!
+  note: String
+}
+
+input PrescriptionItemInput {
+  productId: String
+  name: String!
+  unit: String!
+  qty: PrescriptionItemQtyInput!
+  days: Float!
+  note: String
+}
+
+input PrescriptionItemQtyInput {
+  morning: Float
+  noon: Float
+  afternoon: Float
+}
+
+input CreatePluginAiAssistantInput {
+  provider: PluginAiAssistantProvider!
+  apiKey: String!
+}
+
+input UpdatePluginAiAssistantInput {
+  provider: PluginAiAssistantProvider
+  apiKey: String
+  enabled: Boolean!
+}
+
+input WorkspaceApiAppInput {
+  name: String!
+  roleIds: [String!]!
+  workspaceBranchIds: [String!]
+  enabled: Boolean!
+}
+
+input PostInput {
+  title: String!
+  slug: String
+  excerpt: String
+  content: JSONObject
+  contentHtml: String
+  thumbnail: String
+  meta: AnyType
+  categoryId: String
+  productId: String
+  customFieldValues: [CustomFieldValueInput!]
+}
+
+input CustomFieldInput {
+  type: CustomFieldType!
+  label: String!
+  key: String
+  placeholder: String
+  description: String
+  config: JSONObject
+  entities: [String!]!
+  order: Float
+}
+
+input UpdateAttendanceSettingInput {
+  locations: [AttendanceSettingLocationInput!]
+  allowedDistanceInMeters: Float
+}
+
+input AttendanceSettingLocationInput {
+  id: String!
+  name: String!
+  allowedDistanceInMeters: Float!
+  coordinates: CoordinatesInput!
+}
+
+input DefaultRecordAttendanceInput {
+  photoUrl: String
+  locationCoordinates: CoordinatesInput
+}
+
+input RecordAttendanceInput {
+  photoUrl: String
+  locationCoordinates: CoordinatesInput
+  note: String
+}
+
+input RejectAttendanceRecordInput {
+  reason: String
+}

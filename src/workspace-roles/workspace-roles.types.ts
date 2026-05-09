@@ -1,0 +1,127 @@
+import { Field, InputType, registerEnumType } from '@nestjs/graphql';
+import { IsArray, IsOptional, IsString } from 'class-validator';
+
+export enum WorkspacePermission {
+  CUSTOM_FIELDS_MANAGER = 'CFSM',
+
+  CUSTOMERS_VIEW = 'CV',
+  CUSTOMERS_VIEW_CONTACT = 'CVC',
+  CUSTOMERS_CREATE = 'CC',
+  CUSTOMERS_UPDATE_INFO = 'CUI',
+  CUSTOMERS_ASSIGN = 'CA',
+  CUSTOMERS_ARCHIVE = 'CAR',
+
+  CUSTOMER_FORMS_MANAGER = 'CFM',
+
+  CUSTOMER_KYCS_MANAGER = 'CKM',
+
+  LOANS_VIEW = 'LV',
+  LOANS_APPROVE = 'LA',
+  LOANS_APPROVED_REVERTED = 'LAPR',
+  LOANS_FULFILLED_REVERTED = 'LFR',
+  LOANS_FULFILL = 'LF',
+  LOANS_CREATOR = 'LC',
+  LOANS_PAY = 'LP',
+  LOANS_ARCHIVE = 'LAR',
+  LOANS_UPDATE_WORKSPACE_BRANCH = 'LUWB',
+  LOANS_CUSTOM_FULFILLED_AT = 'LUAD',
+
+  BOOKING_VIEW = 'BKV',
+  BOOKING_MANAGER = 'BKM',
+
+  RECEIPTS_VIEW = 'RV',
+  RECEIPTS_CREATE = 'RC',
+  RECEIPTS_UPDATE = 'RU',
+  RECEIPTS_CENSORSHIP = 'RCN',
+  RECEIPTS_ARCHIVE = 'RAR',
+  RECEIPTS_REVERT_PAYMENT = 'RPRP',
+  RECEIPTS_EXPORT_E_INVOICE = 'RREI',
+
+  PRODUCTS_SERVICES_WRITE = 'PSW',
+
+  PARTNERS_WRITE = 'PW',
+
+  HRM_SALARIES_MANAGER = 'HSM',
+
+  WORKSPACE_MEMBERS_VIEW = 'WMV',
+  WORKSPACE_MEMBERS_MANAGER = 'WMW',
+
+  WORKSPACE_ROLES_MANAGER = 'WRM',
+  WORKSPACE_SETTINGS = 'WS',
+
+  WORKSPACE_BILLINGS_MANAGER = 'WBM',
+
+  REPORTS_VIEW = 'RPV',
+
+  WORKSPACE_BRANCHES_FULL_ACCESS = 'WBFA',
+
+  PRESCRIPTIONS_WRITE = 'PWRT',
+
+  MESSAGE_BOXES_MANAGER = 'MBM',
+
+  TABLE_SLOTS_WRITE = 'TSW',
+
+  COUPONS_MANAGER = 'CM',
+
+  VOUCHERS_MANAGER = 'VM',
+
+  ORDERS_VIEW = 'OV',
+  ORDERS_CREATE = 'OC',
+  ORDERS_UPDATE = 'OU',
+  ORDERS_ARCHIVE = 'OAR',
+
+  PRODUCT_STOCK_VIEW = 'PSV',
+  PRODUCT_STOCK_IN = 'PSI',
+  PRODUCT_STOCK_OUT = 'PSO',
+  PRODUCT_STOCK_IN_REVERT = 'PSIR',
+  PRODUCT_STOCK_OUT_REVERT = 'PSOR',
+
+  PRODUCT_COMBOS_VIEW = 'PCV',
+  PRODUCT_COMBOS_MANAGER = 'PCM',
+
+  EXPORT_DATA = 'ED',
+
+  POSTS_VIEW = 'PV',
+  POSTS_MANAGER = 'PM',
+
+  CATEGORIES_VIEW = 'CTEV',
+  CATEGORIES_MANAGER = 'CTEM',
+
+  PROMOTIONS_VIEW = 'PRV',
+  PROMOTIONS_MANAGER = 'PRM',
+
+  ATTENDANCE_RECORDS_MANAGER = 'ARM',
+}
+
+@InputType()
+export class WorkspaceRoleInput {
+  @Field()
+  @IsString()
+  name: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @Field({ nullable: true })
+  @IsString()
+  @IsOptional()
+  color?: string;
+
+  @Field(() => [String])
+  @IsArray()
+  @IsString({ each: true })
+  permissions: WorkspacePermission[];
+}
+
+export enum WorkspaceDefaultRoleId {
+  OWNER = 'OWNER',
+  ADMIN = 'ADMIN',
+  MEMBER = 'MEMBER',
+}
+
+registerEnumType(WorkspaceDefaultRoleId, {
+  name: 'WorkspaceDefaultRoleId',
+  description: 'Available default roles of a workspace',
+});

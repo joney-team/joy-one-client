@@ -1,0 +1,79 @@
+<mjml>
+  <mj-head>
+    <mj-title>{{wsName}}</mj-title>
+    <mj-preview></mj-preview>
+
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-all>
+      <mj-text font-weight="400" font-size="15px" color="#637381" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif"></mj-text>
+      <mj-body width="650px" background-color="#f6f8fc"></mj-body>
+      <mj-button background-color="#1d72fe" color="white"></mj-button>
+    </mj-attributes>
+
+    <mj-style inline="inline">
+      .body-section {
+        -webkit-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+        -moz-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+        box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      }
+    </mj-style>
+
+  </mj-head>
+  <mj-body>
+    <mj-section full-width="full-width"></mj-section>
+
+    <mj-wrapper background-color="white" padding-top="0" padding-bottom="0" css-class="body-section">
+      <!-- Start Header -->
+      <mj-section padding="0" padding-top="20px">
+        <mj-column padding-top="10px">
+          <mj-image src="{{wsLogo}}" width="150px" alt="" padding="0" />
+        </mj-column>
+      </mj-section>
+      <!-- End Header -->
+
+      <!-- Start Body -->
+      <mj-section padding-top="0">
+        <mj-column>
+          <mj-text>
+            <strong>{{customerName}}</strong> thân mến!
+          </mj-text>
+          
+          <mj-text>
+            Bạn có lịch hẹn vào ngày <strong>{{date}}</strong>
+            <br />
+            <br />
+
+            Rất cảm ơn <strong>{{customerName}}</strong> đã tin tưởng và lựa chọn dịch vụ tại <strong>{{wsName}}</strong>
+            <br />
+            <br />
+
+            Hẹn sớm gặp <strong>{{customerName}}</strong> ạ.
+            <br />
+            <br />
+
+            Trân trọng cảm ơn và chúc <strong>{{customerName}}</strong> một ngày tốt lành ạ!
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <!-- End Body -->
+
+      <!-- Start Footer  -->
+      <mj-section text-align="left">
+        <mj-column>
+          <mj-text font-weight="700" padding-bottom="0">
+            {{wsName}}
+          </mj-text>
+
+          <mj-text>
+            Địa chỉ: {{wsAddress}}
+            <br />
+            Hotline: {{wsHotline}}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <!-- End Footer  -->
+
+    </mj-wrapper>
+    <mj-section full-width="full-width"></mj-section>
+  </mj-body>
+</mjml>
