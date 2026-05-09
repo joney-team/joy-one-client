@@ -1,0 +1,183 @@
+name: Build & Release Server
+
+on:
+  push:
+    branches: ['staging', 'production']
+  workflow_dispatch:
+
+env:
+  DOCKERFILE_PATH: Dockerfile
+
+jobs:
+  build-and-push:
+    name: Build and push
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image_name: ${{ steps.meta.outputs.image_name }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Update buildVersion with run number
+        run: |
+          node -e "
+          const fs = require('fs');
+          const pkg = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
+          pkg.buildVersion = '${{ github.run_number }}';
+          fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+          echo "Updated buildVersion to ${{ github.run_number }}"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Extract version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Server version: $VERSION"
+
+      - name: Generate image tags
+        id: meta
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          RUN_NUMBER="${{ github.run_number }}"
+
+          # Set IMAGE_NAME: include branch name only for non-production branches
+          if [[ "${BRANCH_NAME}" == "production" ]]; then
+            IMAGE_NAME="joy-one-server"
+          else
+            IMAGE_NAME="joy-one-server-${BRANCH_NAME}"
+          fi
+
+          IMAGE_TAG="${{ vars.DOCKERHUB_USERNAME }}/${IMAGE_NAME}"
+          GIT_REF="${{ github.ref }}"
+          GIT_SHA="${{ github.sha }}"
+          PACKAGE_VERSION="${{ steps.version.outputs.version }}"
+
+          # Replace last version segment with RUN_NUMBER (e.g., 3.0.0 -> 3.0.123)
+          VERSION_BASE="${PACKAGE_VERSION%.*}"
+          VERSION_WITH_RUN="${VERSION_BASE}.${RUN_NUMBER}"
+
+          # Always tag as latest
+          TAGS="${IMAGE_TAG}:latest,${IMAGE_TAG}:v${VERSION_WITH_RUN}"
+
+          # Full image name for release
+          IMAGE_NAME_FULL="${IMAGE_TAG}:v${VERSION_WITH_RUN}"
+
+          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
+          echo "image_tag=${IMAGE_TAG}" >> $GITHUB_OUTPUT
+          echo "package_version=${PACKAGE_VERSION}" >> $GITHUB_OUTPUT
+          echo "image_name=${IMAGE_NAME_FULL}" >> $GITHUB_OUTPUT
+          echo "Generated tags: ${TAGS}"
+          echo "Image name for release: ${IMAGE_NAME_FULL}"
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ${{ env.DOCKERFILE_PATH }}
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+
+  release-dokploy:
+    name: Release Dokploy
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Prepare release environment
+        id: release-environment
+        run: |
+          BRANCH_NAME="${{ github.ref_name }}"
+          DOKPLOY_CONFIG="${{ vars.DOKPLOY }}"
+
+          # Set token
+          echo "dokploy_token=${{ secrets.DOKPLOY_TOKEN }}" >> $GITHUB_OUTPUT
+
+          # Write config to temporary file for parsing
+          echo "$DOKPLOY_CONFIG" > /tmp/dokploy.env
+
+          # Extract the section for the current branch and parse values
+          export BRANCH_NAME
+          node << 'EOF'
+          const fs = require('fs');
+
+          const branchName = process.env.BRANCH_NAME;
+          const envContent = fs.readFileSync('/tmp/dokploy.env', 'utf8');
+
+          // Parse environment variables for the current branch
+          // New format: sections are marked by comments like #staging, #production
+          const lines = envContent.split('\n');
+          let inSection = false;
+          const envVars = {};
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            
+            // Check if this is a section comment (e.g., #staging, #production)
+            if (trimmed.startsWith('#')) {
+              // Extract branch name from comment (remove # and whitespace)
+              const commentBranch = trimmed.replace(/^#\s*/, '').toLowerCase();
+              if (commentBranch === branchName.toLowerCase()) {
+                inSection = true;
+                continue;
+              } else if (inSection) {
+                // We've hit a new section, stop parsing
+                break;
+              }
+            } else if (inSection) {
+              // Skip empty lines
+              if (trimmed === '') continue;
+              
+              // Parse key=value pairs
+              const match = trimmed.match(/^([^=]+)=(.*)$/);
+              if (match) {
+                const key = match[1].trim();
+                const value = match[2].trim();
+                envVars[key] = value;
+              }
+            }
+          }
+
+          // Output values to GitHub Actions output
+          const outputFile = process.env.GITHUB_OUTPUT;
+          if (outputFile) {
+            if (envVars.URL) {
+              fs.appendFileSync(outputFile, `dokploy_url=${envVars.URL}\n`, 'utf8');
+            }
+            if (envVars.SERVER_IDS) {
+              fs.appendFileSync(outputFile, `dokploy_app_ids=${envVars.SERVER_IDS}\n`, 'utf8');
+            }
+          }
+
+          console.log(`Parsed Dokploy config for ${branchName} environment`);
+          console.log('Extracted variables:', Object.keys(envVars).join(', '));
+          EOF
+
+          # Clean up
+          rm -f /tmp/dokploy.env
+
+      - name: Run release Dokploy
+        env:
+          DOKPLOY_TOKEN: ${{ steps.release-environment.outputs.dokploy_token }}
+          DOKPLOY_URL: ${{ steps.release-environment.outputs.dokploy_url }}
+          DOKPLOY_IMAGE: ${{ needs.build-and-push.outputs.image_name }}
+          DOKPLOY_APPLICATION_IDS: ${{ steps.release-environment.outputs.dokploy_app_ids }}
+        run: node .github/release-dokploy.js

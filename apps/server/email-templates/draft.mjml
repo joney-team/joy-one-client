@@ -1,0 +1,97 @@
+<mjml>
+  <mj-head>
+
+    <mj-html-attributes>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="text-color" text-color="#000000"></mj-html-attribute>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-family" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans','Helvetica Neue', sans-serif"></mj-html-attribute>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-size" font-size="14px"></mj-html-attribute>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="line-height" line-height="1.7"></mj-html-attribute>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="font-weight" font-weight="400"></mj-html-attribute>
+      <mj-html-attribute class="easy-email" multiple-attributes="false" attribute-name="responsive" responsive="true"></mj-html-attribute>
+
+    </mj-html-attributes>
+
+    <mj-style>
+      .body-section {
+        -webkit-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+        -moz-box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+        box-shadow: 1px 4px 11px 0px rgba(0, 0, 0, 0.15);
+      }
+    </mj-style>
+
+    <mj-breakpoint width="480px" />
+
+    <mj-attributes>
+      <mj-all font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" />
+      <mj-text font-weight="400" font-size="15px" color="#637381" line-height="24px" font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" />
+      <mj-body width="650px" background-color="#f6f8fc" />
+      <mj-button background-color="#1d72fe" color="white" />
+      <mj-all font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans','Helvetica Neue', sans-serif" />
+      <mj-text font-size="14px" />
+      <mj-text color="#000000" />
+      <mj-text line-height="1.7" />
+      <mj-text font-weight="400" />
+
+    </mj-attributes>
+  </mj-head>
+  <mj-body background-color="#efeeea" width="600px">
+    <mj-section padding="20px 0px 20px 0px" border="none" direction="ltr" text-align="center" background-repeat="repeat" background-size="auto" background-position="top center" full-width="full-width"></mj-section>
+    <mj-wrapper border="none" direction="ltr" text-align="center" background-color="white" css-class="body-section" padding="0px 0px 0px 0px">
+      <mj-raw>
+        <!-- Start Header -->
+      </mj-raw>
+      <mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" padding="20px 0px 0px 0px">
+        <mj-column border="none" vertical-align="top" padding="10px 0px 0px 0px">
+          <mj-image align="center" height="auto" src="{{wsLogo}}" width="150px" padding="0px 0px 0px 0px"></mj-image>
+        </mj-column>
+      </mj-section>
+      <mj-raw>
+        <!-- End Header -->
+      </mj-raw>
+      <mj-raw>
+        <!-- Start Body -->
+      </mj-raw>
+      <mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" padding="0px 0px 20px 0px">
+        <mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px">
+          <mj-text align="left" padding="10px 25px 10px 25px"><strong>{{customerName}}</strong> thân mến!</mj-text>
+          <mj-text align="left" padding="10px 25px 10px 25px">Bạn có lịch hẹn vào ngày <strong>{{date}}</strong>
+            <br />
+            <br />
+
+            Rất cảm ơn <strong>{{customerName}}</strong> đã tin tưởng và lựa chọn dịch vụ tại <strong>{{wsName}}</strong>
+            <br />
+            <br />
+
+            Hẹn sớm gặp <strong>{{customerName}}</strong> ạ.
+            <br />
+            <br />
+
+            Trân trọng cảm ơn và chúc <strong>{{customerName}}</strong> một ngày tốt lành ạ!</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section padding="0px" text-align="left">
+        <mj-column>
+          <mj-button align="center" background-color="#414141" color="#ffffff" font-weight="normal" border-radius="3px" padding="10px 25px 10px 25px" inner-padding="10px 25px 10px 25px" line-height="120%" target="_blank" vertical-align="middle" border="none" text-align="center" href="#">Button</mj-button>
+        </mj-column>
+      </mj-section>
+      <mj-raw>
+        <!-- End Body -->
+      </mj-raw>
+      <mj-raw>
+        <!-- Start Footer -->
+      </mj-raw>
+      <mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="left" padding="20px 0px 20px 0px">
+        <mj-column border="none" vertical-align="top" padding="0px 0px 0px 0px">
+          <mj-text align="left" font-weight="700" padding="10px 25px 0px 25px">{{wsName}}</mj-text>
+          <mj-text align="left" padding="10px 25px 10px 25px">Địa chỉ: {{wsAddress}}
+            <br />
+            Hotline: {{wsHotline}}</mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-raw>
+        <!-- End Footer -->
+      </mj-raw>
+    </mj-wrapper>
+    <mj-section background-repeat="repeat" background-size="auto" background-position="top center" border="none" direction="ltr" text-align="center" full-width="full-width" padding="20px 0px 20px 0px"></mj-section>
+  </mj-body>
+</mjml>
